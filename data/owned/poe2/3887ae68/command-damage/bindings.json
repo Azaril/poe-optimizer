@@ -1,0 +1,293 @@
+{
+  "schema_version": 1,
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-amulet-bonus-snapshot-v1",
+    "schema_version": 6,
+    "content_sha256": "3e3d5b3fe04f9ad555118f7ca2e0bc0850bf339346200878d5584ea6b879f151",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "c423d01fd9cc7638800feeb47e36ddbf15162bb9882e11ad374490e2a03c306e",
+  "rules": "6895c5df9967366193d9f8a7c5b4f4932ff2266721c3b51ee2f41f15c6080dcf",
+  "mapping": "12c3e0f6a92cc573cf15ad27d100f802779b078615a6c57da13269400fc815c7",
+  "roles": "5726ec779fede38c0078118076e2158d520da59924f7b08e98ca0c871dfda907",
+  "normalization": "d4a573c191a00068f857d5bf3b059758a9963f9c9076dff978cef9b1ba03f54d",
+  "before": "4526f13e139cc0bc24f99ba12382331afbda4513677118fa377f3b31c8905cbe",
+  "release": "pob-3887ae68-command-damage-v1",
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "channels": {
+    "player": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003302"
+    },
+    "actor": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003303"
+    },
+    "action": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003304"
+    },
+    "commandable": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032eb"
+    }
+  },
+  "programs": {
+    "passive": "ordinary-command-damage",
+    "player": "player-owned-command-damage",
+    "actor": "sniper-received-command-damage",
+    "eligibility": "commandable-action-fact",
+    "action": "conditional-command-damage"
+  },
+  "nodes": [
+    {
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000edd"
+      },
+      "source_id": "25927",
+      "amount": 20,
+      "program": "ordinary-command-damage"
+    },
+    {
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010e4"
+      },
+      "source_id": "32847",
+      "amount": 20,
+      "program": "ordinary-command-damage"
+    },
+    {
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000139d"
+      },
+      "source_id": "41511",
+      "amount": 15,
+      "program": "ordinary-command-damage"
+    }
+  ],
+  "actions": {
+    "basic": {
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000021"
+      },
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000021"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000022"
+        }
+      },
+      "commandable": false
+    },
+    "gas": {
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000024"
+      },
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000024"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000025"
+        }
+      },
+      "commandable": true
+    }
+  },
+  "gas_stat_sets": [
+    {
+      "id": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000032ec"
+      },
+      "source_index": 1,
+      "label": "Impact",
+      "scope": "sniper_gas_shot_statset_0"
+    },
+    {
+      "id": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000032ed"
+      },
+      "source_index": 2,
+      "label": "Poison Cloud",
+      "scope": "sniper_gas_shot_statset_1"
+    },
+    {
+      "id": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000032ee"
+      },
+      "source_index": 3,
+      "label": "Explosion",
+      "scope": "sniper_gas_shot_statset_2"
+    }
+  ],
+  "actor": {
+    "kind": "actor",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003091"
+  },
+  "actor_slot": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000012"
+      }
+    },
+    "slot": {
+      "kind": "actor_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000001f"
+    }
+  },
+  "summon": {
+    "kind": "skill",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000012"
+  },
+  "physical": {
+    "kind": "gem",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000011"
+  },
+  "part": {
+    "kind": "action_part",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000007"
+  },
+  "mode": {
+    "kind": "action_mode",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000008"
+  },
+  "basic_stat_set": {
+    "kind": "action_stat_set",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000009"
+  },
+  "scope": {
+    "whole_build_parity": false,
+    "final_damage_claimed": false,
+    "effective_transforms_proved_absent": false,
+    "incoming_contributor_inventory_closed": false,
+    "query_changes": 0,
+    "routing_changes": 0,
+    "default_definition_only": true,
+    "source_status": "awaiting-source"
+  }
+}

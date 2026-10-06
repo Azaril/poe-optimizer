@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "before": "05628c005d8a1035179520b27e6a36ee8e81edac198943259bdfbcce979a57fb",
+  "release": "pob-3887ae68-sniper-population-readiness-v1",
+  "owner": {
+    "kind": "definition",
+    "value": {
+      "kind": "skill",
+      "value": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000012"
+      }
+    }
+  },
+  "programs": {
+    "facts": "ordinary-population-inputs",
+    "requirements": "ordinary-population-requirements"
+  },
+  "scope": {
+    "owned_rule_partition_only": true,
+    "new_definitions": 0,
+    "new_stats": 0,
+    "new_effects": 0,
+    "removed_effects": 0,
+    "closed_rule_owners": 0,
+    "evaluation_bundle_added": false,
+    "native_complete_builds": 0,
+    "new_source_parity_claim": false
+  }
+}

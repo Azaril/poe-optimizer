@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "sniper-population-readiness-v1",
+  "before": "05628c005d8a1035179520b27e6a36ee8e81edac198943259bdfbcce979a57fb",
+  "release": "pob-3887ae68-sniper-population-readiness-v1",
+  "scope": {
+    "owned_rule_partition_only": true,
+    "new_definitions": 0,
+    "new_stats": 0,
+    "new_effects": 0,
+    "removed_effects": 0,
+    "closed_rule_owners": 0,
+    "evaluation_bundle_added": false,
+    "native_complete_builds": 0,
+    "new_source_parity_claim": false
+  },
+  "artifacts": [
+    {
+      "file": "bindings.json",
+      "bytes": 851,
+      "sha256": "84ab7e3639a02da68cae02ac6326fb2a5b8f1f8ab0d8bd94fa7f52eccd6f91a2"
+    },
+    {
+      "file": "dependencies.json",
+      "bytes": 90956,
+      "sha256": "09a20e44aaeca1d38c867cbc5f3e2f4b7b2c04abee3391a56b1d48fe45d1cd55"
+    },
+    {
+      "file": "partition.json",
+      "bytes": 20304,
+      "sha256": "18652ee1052e3b20d2f5fa5b145c8086af34b85cb667610cd78dab91830c0101"
+    }
+  ],
+  "proof": "Exact typed reachable dependency subsequences and reversible original-index reconstruction; full endpoint inverse equals the authenticated predecessor. No numerical expression, effect, declaration, owner closure or input changes.",
+  "recommended_phases": {
+    "ordinary-population-inputs": "PreparationFacts",
+    "ordinary-population-requirements": "Execution"
+  },
+  "phase_scope": "Recommendations for consumers; this rule-only endpoint carries no evaluation bundle or stage fragment."
+}

@@ -339,3 +339,12 @@ consumers while preserving one native execution path.
 The decision changes a structural guarantee of generated-context evaluation.
 Agreement authorizes designing the narrow versioned contract; it does not authorize reducing
 coverage checks, inventing source-gem membership, or claiming original-build parity.
+
+**2026-10-06 integration checkpoint.** The actual Sniper population program
+bundled preparation facts with an execution-only level requirement. The
+[published partition](../data/owned/poe2/3887ae68/sniper-population-readiness/README.md)
+now separates their exact reachable subgraphs and reconstructs the full predecessor.
+Native tests consume these stored programs through checked readiness and retain
+the requirement on independent roots. This implements the accepted boundary;
+owner/contributor coverage remains Partial and no complete evaluation bundle is
+claimed. See the [current checkpoint](implementation.md) for evidence and next work.

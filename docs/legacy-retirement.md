@@ -479,6 +479,18 @@ coefficients and numerical recovery do not establish domain laws. Lossless
 storage compression needs full-domain equality and explicit boundaries; runtime
 formulas additionally need valid-input and deterministic rounding evidence.
 
+The Command component's V20 integration exposed a mixed-phase owned program in
+the published Sniper data. `ordinary-population-inputs` previously bundled actor
+projection/grant creation with a character-level requirement. The
+[population partition](../data/owned/poe2/3887ae68/sniper-population-readiness/README.md)
+now keeps only the exact factual dependency subgraph there and preserves the
+requirement in a separate execution program. It eliminates the bundled live body
+instead of adding a test-only rewrite or relaxing readiness validation. Full input
+and receipt reconstruction protect the predecessor; its historical artifacts and
+useful component tests remain replayable. Actual owner/incoming coverage remains
+open. Apply this phase audit to the next selected real program that blocks
+integration, without treating a data partition as new game-mechanic authority.
+
 The item-property routing audit supplies another concrete boundary. Focus's
 temporary scaled LIST is discarded by the source merge operation, and generic
 late slot copies occur after ordinary property preparation. A final source
@@ -487,8 +499,12 @@ Retain the original consumer and phase evidence before deciding whether these
 are intentional mechanics or incidental reference behavior; do not implement
 Lua list merging or replay a final store as the native specification. Separately,
 Necromantic Talisman's explicit Amulet recipient routing is an admitted
-combination the current direct Player rule does not yet represent. Prove and
-model recipient applicability independently of numerical scaling. The
+combination the current direct Player rule does not yet represent. The bounded
+Talisman witness now proves ordinary diversion, independent early Player copies
+and actual minion-store delivery. Minion property consumption and copied-property
+game intent remain separate questions. Model recipient applicability independently
+of numerical scaling; the existing copy-eligibility fact is not a general
+recipient classification. The
 [implementation plan](implementation.md#next-executable-work) tracks both the
 bounded source proof and the native routing obligation.
 

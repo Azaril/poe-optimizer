@@ -74,12 +74,65 @@ pub fn run_with_payloads(
     stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
     extra: Value,
 ) {
+    run_with_scope(
+        prior_path,
+        out,
+        authoring,
+        effects,
+        payload_files,
+        stage,
+        PublicationScope {
+            closed_existing_rule_owners: 0,
+            passive_refinement: false,
+            extra,
+        },
+    );
+}
+
+/// Describes reviewed owner-inventory refinements, independently of new
+/// Complete producer owners and the still-open whole-build contributor census.
+pub struct PublicationScope {
+    pub closed_existing_rule_owners: usize,
+    pub passive_refinement: bool,
+    pub extra: Value,
+}
+
+pub fn run_with_scope(
+    prior_path: PathBuf,
+    out: PathBuf,
+    authoring: &Path,
+    effects: &[&str],
+    payload_files: &[&str],
+    stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
+    scope: PublicationScope,
+) {
     assert!(!out.exists(), "evidence is immutable");
     let prior_files = release::inventory(&prior_path);
     let prior = release::load(&prior_path);
     // This gate includes exact source report authentication. An awaiting-source
     // packet must fail before the output directory or package is created.
     let next = stage(&prior);
+    let closed = prior
+        .input()
+        .recipe
+        .rules
+        .owners
+        .iter()
+        .filter(|old| {
+            !old.programs.is_complete()
+                && next
+                    .input()
+                    .recipe
+                    .rules
+                    .owners
+                    .iter()
+                    .any(|new| new.owner == old.owner && new.programs.is_complete())
+        })
+        .count();
+    assert_eq!(
+        closed, scope.closed_existing_rule_owners,
+        "exact prior Partial-to-Complete owner transitions; newly introduced owners are separate"
+    );
     fs::create_dir_all(&out).unwrap();
     write(out.join("endpoint.json"), next.input());
     write(out.join("receipt.json"), next.receipt());
@@ -176,11 +229,11 @@ pub fn run_with_payloads(
     let mut validation = json!({
         "before":prior.receipt().input,"after":next.receipt().input,"originals":originals,
         "queries":110,"artifacts":18,"rebuild_byte_identical":true,"prior_unchanged":true,
-        "closed_rule_owners":0,"retired_input_issues":0,"complete_original_builds":0,
-        "evaluation_bundle_added":false,"receiving_fragment_only":true,
+        "closed_rule_owners":scope.closed_existing_rule_owners,"retired_input_issues":0,"complete_original_builds":0,
+        "evaluation_bundle_added":false,"receiving_fragment_only":!scope.passive_refinement,
         "authoring_payloads_excluded":true,"provenance_preserved":true,
     });
-    for (key, value) in extra.as_object().unwrap() {
+    for (key, value) in scope.extra.as_object().unwrap() {
         assert!(
             validation
                 .as_object_mut()

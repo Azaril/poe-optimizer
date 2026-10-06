@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-05, including published Arsonist/Frost Mage/Reaver topology
+Snapshot: 2026-10-06, including published Arsonist/Frost Mage/Reaver topology
 and physical inventories, stable deferred V3 attachment, Sniper count/reservation,
 reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables,
 native readiness, source-property ownership, Ice source-input fragments and
@@ -11,8 +11,9 @@ conditional minion Action delivery, corrected per-effect Gem supply classificati
 exact manual Direct support targets, native Action Area eligibility, Rapid Casting
 contributions, Encroaching cost factors, real Offering/Prolonged Duration actions,
 actual zero-factor Amulet transport evidence, published Offering final-input
-assembly, the bounded stages-V4 local-item extension and the real pre-Amulet
-aggregation/receiver, and the
+assembly, the bounded stages-V4 local-item extension, the real pre-Amulet
+aggregation/receiver, conditional Command damage and the population program
+partition, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -190,6 +191,24 @@ now replaces the literal 32e4 boundary with its real Stat-owned reducer and
 Player receiver. Five new native checks pass, including actual Passive inputs,
 missing-coverage refusal and parallel replay. Contributor/owner inventories
 remain finite component boundaries; no complete original is claimed.
+
+The [Command damage packet](../data/owned/poe2/3887ae68/command-damage/README.md)
+adds three real passive contributions through the existing native rule engine.
+Player aggregation, exact Actor transport and Action eligibility remain separate:
+Basic contributes zero and the reviewed Gas stat sets receive 55 percentage points.
+This closes three default passive bodies, not incoming coverage or final damage.
+No game-specific Rust branch or Lua runtime dependency is added.
+
+Integrating that component under current readiness checks exposed an older owned
+program that combined actor preparation with an execution-only level requirement.
+The [population partition](../data/owned/poe2/3887ae68/sniper-population-readiness/README.md)
+now separates those exact effects in published data, with minimal dependency
+subgraphs and complete reconstruction of the predecessor. Native tests use the
+actual new bodies and prove that the level requirement survives independently of
+the factual outputs. Definitions and imports stay unchanged. Skill coverage is
+still Partial; the split alone supplies no complete production readiness bundle.
+This uses the accepted one-graph preparation/execution design, with no additional
+evaluator or fixture-only replacement of a game rule.
 
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference
@@ -436,7 +455,12 @@ preparation must not derive inputs by replaying PoB's final modifier store.
 Recipient applicability is a separate unfinished obligation: the admitted
 Amulet/Necromantic Talisman combination diverts the original record, while the
 current direct Minion-level rule still delivers to Player unconditionally.
-That owner remains Partial. The [current checkpoint](implementation.md#subsequent-checkpoint-item-property-lifetime-and-routing-audit)
+The dedicated Talisman witness now proves this diversion separately from early
+Player copying, including connected removal controls, exact minion-store
+transport and unchanged unhooked outputs. It does not establish a minion
+gem-level consumer or the intended game law for copied properties. Native
+recipient applicability remains open and separate from copy eligibility.
+That owner remains Partial. The [current checkpoint](implementation.md#subsequent-checkpoint-ordinary-amulet-recipient-diversion)
 records the exact evidence, diagnostic control limits and next routing work.
 
 The reviewed Direct-input adapter now imports raw level and quality from exact

@@ -1,10 +1,150 @@
-> Historical snapshots through the Prolonged Duration/Offering topology checkpoint on 2026-10-05.
+> Historical snapshots through Amulet aggregation and property-routing evidence on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: Amulet aggregation and property routing
+
+The accepted preset-owned exact generated-input bindings remain implemented.
+Requested participation and the
+[V2 generated-source accounting proposal](owned-generated-skill-dispositions-proposal.md)
+remain separate pending decisions. Neither public policy is implemented.
+
+The [Amulet snapshot packet](../data/owned/poe2/3887ae68/amulet-bonus-snapshot/README.md)
+publishes one ordinary Actor rule owned by existing Stat 32e4 and one explicit
+Player receiver. It sums the pre-copy Add stream in percentage points, then
+derives the scalar consumed by the existing Amulet-copy rule. The reducer's
+program inventory is Complete; incoming contributor coverage is not. Existing
+Passive, item and Gem owners retain their exact bodies and Partial closures.
+No definition, slot, table, engine operation or alternative evaluator is added.
+Schema V6, operations V20 and stages V4 remain unchanged.
+
+The native graph now joins the real reducer and actual Mystic Attunement program
+to item arithmetic, ordinary/supported source preparation and Offering final
+inputs. No literal pre-Amulet value remains in this new component. Contribution
+and scalar channels freeze separately; late writes and feedback are errors,
+not silently excluded values. A proved empty set sums to zero; missing coverage
+does not. Component-only owner/placement/receiving inventories and isolated
+Passive topology remain explicit, so this is not a complete Original05 request.
+
+Source02 passes in **452.78 seconds**: nineteen cases, three fixed lifecycle
+observations, both JIT modes, five unchanged originals and independent replays.
+All four raw/compared reports are byte-identical at **64,324,391 bytes**, SHA256
+447d75d7014819fb20b730329e15fa918953b99b306ab9a482043e1289b7c7db.
+The **1,311,277-byte** committed projection binds actual selected environments,
+original Sum/store returns, source candidates and exact physical copy transport;
+its SHA256 is 37422bea16928ee93cfabf9dd51c3e6c0c4683ff5eaf68e9057c7f0bf5e78b2e.
+The self-copy control observes pre-copy 100 and post-copy 200 while retaining
+copy factor 1. Other controls prove the real Passive 25, combined 125, removals
+and absence. Custom item lines do not establish roll legality.
+
+Source01 failed because our control added Ritualist notable 7068 to a different
+class without a connected ascendancy path; PoB correctly pruned it. Source02
+uses an explicit connected Huntress/Ritualist diagnostic context and verifies
+actual class/path membership. Removing the notable restores that diagnostic
+baseline, not Original05. Original bytes, source calculation functions, lifecycle
+and zero numerical tolerance are unchanged. The earlier historical Amulet
+witness remains intact for its distinct four-lane/source-line evidence; this
+new witness extends its breadth and actual Passive controls.
+
+Publication01 passes in **28.68 seconds**. The reviewed full endpoint adds only
+the new owner/receiver after an unpublished Partial-owner rebinding stage.
+Exact temporary/predecessor inverses preserve every other rule, receiver, schema,
+allocation, import contract and query. Public append-only migration permissions
+are unchanged. Rebuilding reproduces eighteen artifacts; all five original
+sources, local identities, obligation correspondence and 110 query rows survive.
+The package has no evaluation bundle or embedded source/readiness evidence.
+
+All **five native tests pass in 10.77 seconds**. They cover empty aggregation, the actual 25% contribution,
+both support tiers, per-record copy rounding, independent Offering
+raw inputs and item removal, exact missing/Partial refusals, late writers,
+early reads, feedback, A/B/A scratch reuse and four-worker Rayon replay.
+Both ordinary authoring tests pass. The extracted fixture contains no nested
+tests; the seven historical Offering and five Bidding checks retain their names
+and pass after extraction. Strict workspace/all-feature/all-target Clippy and
+all eight package formatting checks, active-document links and git diff checks
+pass. No production Rust changed, so the
+prior WASM compilation evidence remains applicable but was not rerun here.
+
+Receipts: runs/owned-amulet-bonus-source-02.log,
+runs/owned-amulet-bonus-authoring-01.log,
+runs/owned-amulet-bonus-publication-01.log,
+runs/owned-amulet-bonus-native-01.log,
+runs/owned-amulet-bonus-offering-regressions-02.log,
+runs/owned-amulet-bonus-bidding-regressions-01.log and
+runs/owned-amulet-bonus-clippy-02.log. Earlier failed receipts remain diagnostic;
+Clippy01's single-element loops and needless borrows were corrected without
+changing semantics. Exact pushed-head hosted CI remains a separate gate.
+**Complete native original builds remain 0/5**; Original05's five selected
+issues and 79 configuration-linked origins are unchanged.
+
+### Subsequent checkpoint: item-property lifetime and routing audit
+
+The new optional PoB test
+`late_slot_property::late_slot_copies_do_not_reassemble_prepared_gems` passes
+in **398.33 seconds** against the unchanged pinned runtime. Source02 includes
+nineteen cases, three fixed lifecycle observations, both JIT modes, all five
+originals and independent replays. The original Helmet property is consumed
+before preparation completes; its removal changes Offering's level from 22 to
+21. A separately cloned diagnostic Ring contributes one ordinary level, but
+its later 100%/150% copies leave the prepared level at 23. Original Tabulate,
+application, assembly, late Sum/copy/store calls and displayed gem-level
+component sums are joined by actual source and physical object identity.
+
+The Ring controls establish reference transport and timing, not legal item
+rolls or additional canonical `30ca` template membership. Hooked/unhooked
+comparisons cover scalar outputs and all captured physical skill inputs and
+lookup rows, including unselected Ice. No calculation method is replaced.
+Query inventory sorting is report-only; source execution and numeric order
+remain untouched. All four raw/compared Source02 reports are byte-identical
+at **3,185,897 bytes**, SHA256
+90b4b6ef7f5a01496e9889445f03b5d780895eb65e306dba9bd37d4a388fcc1f.
+Source01 also passed (405.17 seconds); Source02 adds the reviewed input/lookup
+noninterference assertions and reproduces exactly the same report bytes.
+
+Use `POE_LATE_SLOT_PROPERTY_SOURCE_OUT` with a fresh directory and the exact
+test above in PoB target `owned_djinn_support_preparation_source`. Current
+evidence is `runs/owned-late-slot-property-source-02`; compile, execution and
+strict targeted Clippy receipts are `runs/owned-late-slot-compile-02.log`,
+`runs/owned-late-slot-source-02.log` and `runs/owned-late-slot-clippy-01.log`.
+Formatting and document links pass. Historical witnesses remain unchanged.
+No native rules, engine code, release identities or original fixtures change.
+
+The static audit additionally distinguishes Focus's discarded scaled LIST
+from Necromantic Talisman's actual Amulet recipient diversion. Focus still
+needs its own bounded dynamic transport proof. Talisman applicability is the
+next substantive native routing obligation below; the late-copy evidence
+does not complete that route, the shared Modifier owner or any original build.
+**The checked baseline and 0/5 complete native-build result remain unchanged.**
+
+### Subsequent checkpoint: ordinary Amulet recipient diversion
+
+The optional test
+`talisman_property::talisman_routes_ordinary_properties_independently_of_early_copies`
+passes in **433.30 seconds**. Its twenty-one cases include all five unchanged
+originals and replays, connected allocation controls and unhooked comparisons,
+with three fixed lifecycle observations in both JIT modes. All four retained
+raw/compared reports are byte-identical at **3,373,272 bytes**, SHA256
+51f2518f0aca9daabc1bd9e0bfa74479d86cc72d5459af5bc72bff212eaf671c.
+Evidence: runs/owned-talisman-property-source-01; execution receipt:
+runs/owned-talisman-source-01.log.
+
+Adding the connected Talisman allocation to the diagnostic baseline removes
+the ordinary Amulet level property from actual Player preparation: Offering
+changes from 22 to 21. A separate 100% early Boots-copy control changes those
+values to 23 and 22 respectively. Removing that supplier restores 21 under
+Talisman. The witness joins original diversion, Player copy, property lookup,
+preparation and exact minion-store transport calls. It proves delivery to the
+minion store, not a minion gem-level consumer. Custom item lines do not prove
+roll legality, and observed source copying is not automatically a game law.
+
+Native recipient applicability remains open. Keep it distinct from Amulet-copy
+eligibility `32e3` and the pre-copy scalar `32e4`; neither expresses universal
+ordinary-property destination. The Modifier owner remains Partial. This source
+checkpoint changes no native release identity or original-build result.
 
 ## Archived 2026-10-05 checkpoint: real Offering actions and Prolonged Duration
 
@@ -330,7 +470,7 @@ also confirms that ordinary cost and reservation factors are different channels;
 Magnified cannot supply Sniper's reservation multiplier. Updated architecture,
 overview, rule and cleanup documents distinguish these meanings, current V20
 capabilities, historical checkpoints and remaining public decisions. The
-[session register](#session-follow-up-register-2026-10-0405) captures recent owner
+[session register](implementation.md#session-follow-up-register-2026-10-0405) captures recent owner
 requests without starting a second cleanup plan.
 
 Strict workspace/all-target/all-feature Clippy passes in 7.37 seconds

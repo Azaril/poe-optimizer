@@ -1,5 +1,7 @@
 //! Observe actual minion physical calcDamage calls, without replacing source methods.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/command_damage_source.rs"]
+mod command_damage;
 #[path = "support/json_evidence.rs"]
 mod json_evidence;
 #[allow(dead_code)]

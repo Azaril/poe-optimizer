@@ -25,6 +25,8 @@ mod rapid_casting;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
+#[path = "support/talisman_property_source.rs"]
+mod talisman_property;
 
 use mlua::{Function, Lua, LuaSerdeExt, Value};
 use poe_optimizer_core::build_identity::BuildLineage;

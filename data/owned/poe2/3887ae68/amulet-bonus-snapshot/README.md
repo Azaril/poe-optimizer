@@ -101,7 +101,11 @@ runs/owned-amulet-bonus-snapshot-01/package, input
 4526f13e139cc0bc24f99ba12382331afbda4513677118fa377f3b31c8905cbe,
 with 18 files / 60,842,780 bytes / 103 provenance rows and no evaluation bundle.
 
-The next blocker is actual selected item/source contributor and owner coverage,
-especially Modifier 30ca's earlier Focus and later non-Amulet copy semantics.
-Later ModDB values cannot be fed into already prepared inputs without a proved
-phase relationship. Complete native original builds remain **0/5**.
+The subsequent late-slot Source02 witness proves that its diagnostic copies
+do not change already-prepared gem inputs. Focus's separate merge branch still
+needs its own dynamic proof. The next substantive `30ca` gap is ordinary
+recipient applicability: Necromantic Talisman diverts original Amulet records,
+while the current direct native rule delivers to Player unconditionally.
+See the [current plan](../../../../../docs/implementation.md) for those separate
+obligations and the unchanged contributor/owner gates. Complete native original
+builds remain **0/5**.

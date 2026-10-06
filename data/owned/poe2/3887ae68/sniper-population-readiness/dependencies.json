@@ -1,0 +1,2566 @@
+{
+  "schema_version": 1,
+  "prior_receipt": {
+    "schema_version": 1,
+    "document_kind": "owned_data_release",
+    "input": "05628c005d8a1035179520b27e6a36ee8e81edac198943259bdfbcce979a57fb",
+    "registry": "fca3de6689794092f11657b09a8176caf26a72567b4e536103eeabfc5f9904eb",
+    "definitions": {
+      "game": "poe2",
+      "release": "pob-3887ae68-command-damage-v1",
+      "schema_version": 6,
+      "content_sha256": "5470c110b0ffb6c1f24eb7fee19ba80f4bc65be841d3ad295338fd5fbb3a05cf",
+      "semantics_version": "owned-mechanics-skill-inputs-v1"
+    },
+    "rules": "b56762e914943c6d9648acb9a50a6d5eb0c3cb80484657bff0b70d181709677a",
+    "compiled_rules": "cf23b0aba4756fe324ee74d84c6ce85dca1d015d56799a01ae7ceda7abe38427",
+    "routing": "4931b5cff90cbb73041cbdbdb77d783e7445a23b7db9c92aba741b589b172f80",
+    "mapping": "3ffc22bad9de76a21fbab8202f662ecddb2f46986d501cc5eb7dc992d8f90b7a",
+    "roles": "ff0fc29ea99cf360328b02ae6b98bbd0ae256a74c4bf29e853789eed24b0c1c2",
+    "normalization": "9241afb05476e382b6cd29cc2ce1a94f00253a42ed0d6caad0519a20fc051c12",
+    "rewards": "75850b14b0dd4dea0395428b73e12d3b5b1aa943a3b641953c375a0e96de1494",
+    "items": "f006e392daf7d05705e5de780a20777b8d6006d134f5d585c2e7e13fcc69d99f",
+    "item_source": "b4ef66cf401a435c8c9353e5e28205fa73c3167ee299539a058bebc6a77366b6",
+    "tree": "43d59d48361e01200ee9270b072ed59c561bd5b51c3b50a2da40fc3429692e5a",
+    "source": {
+      "system": "path_of_building2",
+      "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+      "files": [
+        {
+          "path": "src/Classes/ConfigTab.lua",
+          "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+        },
+        {
+          "path": "src/Classes/Item.lua",
+          "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+        },
+        {
+          "path": "src/Classes/ItemsTab.lua",
+          "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+        },
+        {
+          "path": "src/Classes/PassiveSpec.lua",
+          "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+        },
+        {
+          "path": "src/Classes/PassiveTree.lua",
+          "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+        },
+        {
+          "path": "src/Classes/SkillsTab.lua",
+          "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+        },
+        {
+          "path": "src/Data/Assets.lua",
+          "sha256": "d57230441d6205f001466a1c3a0d4458ddda0a1ccf9f685345f0f0fa2d5154ba"
+        },
+        {
+          "path": "src/Data/Bases/amulet.lua",
+          "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+        },
+        {
+          "path": "src/Data/Bases/axe.lua",
+          "sha256": "285b9cca5c877ff55d4863e9a02432ea5ddecf85063ecfdda1ff84bc9ba1656e"
+        },
+        {
+          "path": "src/Data/Bases/belt.lua",
+          "sha256": "74f5846300ea7cb88f5589e62cb73affe147d7870411efcd885090d9c1ea850e"
+        },
+        {
+          "path": "src/Data/Bases/body.lua",
+          "sha256": "0d3156d893bcfca1eb8c9b299f2a28c62a1d4c9f1d3a39f3a087cac18d23e9cd"
+        },
+        {
+          "path": "src/Data/Bases/boots.lua",
+          "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+        },
+        {
+          "path": "src/Data/Bases/bow.lua",
+          "sha256": "6bd10dbe0dbfea1638ea8f15f828cfa99d294dbf832bcab8f8472990154f725e"
+        },
+        {
+          "path": "src/Data/Bases/claw.lua",
+          "sha256": "fc771b343199a85505401868fd34320dc6117266d6672637e1757430262c18cb"
+        },
+        {
+          "path": "src/Data/Bases/crossbow.lua",
+          "sha256": "e9988fbc6b482c36bfc0865afc441952df3de4013061629952377472723590a6"
+        },
+        {
+          "path": "src/Data/Bases/dagger.lua",
+          "sha256": "a3b81d4868f7d556bd4ba412e1edabb931f5a4240283e6e351dacd9419b50c8e"
+        },
+        {
+          "path": "src/Data/Bases/fishing.lua",
+          "sha256": "53f70fb8e80c64f593152b3b12504ab9320ad188dc8753003ac6e751d50c40bb"
+        },
+        {
+          "path": "src/Data/Bases/flail.lua",
+          "sha256": "1fa7b45de89051684ccd534b96866279ebb7290be2e49e7421e6702a269a75d9"
+        },
+        {
+          "path": "src/Data/Bases/flask.lua",
+          "sha256": "ed025daab24f4964874296c5e5eb0855f1b90a4063b4a69cc8a65fef7c293cc7"
+        },
+        {
+          "path": "src/Data/Bases/focus.lua",
+          "sha256": "b5a315245cc0f9f11657f7fdab751e5ed5306166df54c2c19ef83295b876820e"
+        },
+        {
+          "path": "src/Data/Bases/gloves.lua",
+          "sha256": "05b91c71f9292f120482355447566db285cb513f6b506e349e9a29efa0b329f2"
+        },
+        {
+          "path": "src/Data/Bases/helmet.lua",
+          "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+        },
+        {
+          "path": "src/Data/Bases/incursionlimb.lua",
+          "sha256": "1df6a73c327b7ccbbb9172ec4fdec905015aeb168084e53ef0f00544a16c6763"
+        },
+        {
+          "path": "src/Data/Bases/jewel.lua",
+          "sha256": "b9fe5096276439717b9f24e7e389279f2ef88c3f518ee2443cfbf73494e7d442"
+        },
+        {
+          "path": "src/Data/Bases/mace.lua",
+          "sha256": "d3bb896069429fcff68d4e04ff517e49ad290cfc70b26fdbe8db3406c8392fec"
+        },
+        {
+          "path": "src/Data/Bases/quiver.lua",
+          "sha256": "7d100d232b052507f734256f36625552e4cdccff963a690b643af5d35e552721"
+        },
+        {
+          "path": "src/Data/Bases/ring.lua",
+          "sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382"
+        },
+        {
+          "path": "src/Data/Bases/sceptre.lua",
+          "sha256": "3a232d7eff8ed199a7c738623de52fd1bd6540051283fda174472fd4295d9ae0"
+        },
+        {
+          "path": "src/Data/Bases/shield.lua",
+          "sha256": "d4628eed0450bdeaeec8ea10b4960aa0e5e5705829b6c53500069ebfcef478ef"
+        },
+        {
+          "path": "src/Data/Bases/spear.lua",
+          "sha256": "8cb6acac3e44d924ffe3ac5522fae408697fa322f02f99896edfca8f49e62268"
+        },
+        {
+          "path": "src/Data/Bases/staff.lua",
+          "sha256": "6b04f45c0763088f865b8902733cecc6126829871a6766955a953a54cd657bf7"
+        },
+        {
+          "path": "src/Data/Bases/sword.lua",
+          "sha256": "8bb14bdafc5fa6c243f7bc0b7b8d611183b629828f361e84c3e64e72a071df06"
+        },
+        {
+          "path": "src/Data/Bases/talisman.lua",
+          "sha256": "4e721181ba512ab359a9b1b5e5afa4a8c6666332dbbad1d2f3432243fe8d8191"
+        },
+        {
+          "path": "src/Data/Bases/wand.lua",
+          "sha256": "6549a279abfc376d3efc90458cefe45857ad5129f6a848c401a5d614f6d6535c"
+        },
+        {
+          "path": "src/Data/BossSkills.lua",
+          "sha256": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d"
+        },
+        {
+          "path": "src/Data/Bosses.lua",
+          "sha256": "831a328c0c554687b5f3c40e1ff8a4ee905457f8b940baab236fab9281415ed3"
+        },
+        {
+          "path": "src/Data/Gems.lua",
+          "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+        },
+        {
+          "path": "src/Data/Global.lua",
+          "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+        },
+        {
+          "path": "src/Data/Minions.lua",
+          "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+        },
+        {
+          "path": "src/Data/Misc.lua",
+          "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+        },
+        {
+          "path": "src/Data/ModScalability.lua",
+          "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+        },
+        {
+          "path": "src/Data/QuestRewards.lua",
+          "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af"
+        },
+        {
+          "path": "src/Data/SkillStatMap.lua",
+          "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+        },
+        {
+          "path": "src/Data/Skills/SkillAssets.lua",
+          "sha256": "6fab71e4a5f07e04bd363472374fe059f8ae1cdd77c126357f3adceff8f145ed"
+        },
+        {
+          "path": "src/Data/Skills/act_dex.lua",
+          "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+        },
+        {
+          "path": "src/Data/Skills/act_int.lua",
+          "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+        },
+        {
+          "path": "src/Data/Skills/act_str.lua",
+          "sha256": "7da86ad169055e234fcfdd82ded89c2b4cf883ed3d1b217ef25533ad64ebeeed"
+        },
+        {
+          "path": "src/Data/Skills/minion.lua",
+          "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+        },
+        {
+          "path": "src/Data/Skills/other.lua",
+          "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+        },
+        {
+          "path": "src/Data/Skills/spectre.lua",
+          "sha256": "3bc57d7abee172364977c174884cdf3d2d94980c70e3b12b7ae65c62bd726603"
+        },
+        {
+          "path": "src/Data/Skills/sup_dex.lua",
+          "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac"
+        },
+        {
+          "path": "src/Data/Skills/sup_int.lua",
+          "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+        },
+        {
+          "path": "src/Data/Skills/sup_str.lua",
+          "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+        },
+        {
+          "path": "src/Modules/CalcActiveSkill.lua",
+          "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+        },
+        {
+          "path": "src/Modules/CalcDefence.lua",
+          "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+        },
+        {
+          "path": "src/Modules/CalcTools.lua",
+          "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+        },
+        {
+          "path": "src/Modules/Common.lua",
+          "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+        },
+        {
+          "path": "src/Modules/ConfigOptions.lua",
+          "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+        },
+        {
+          "path": "src/Modules/Data.lua",
+          "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+        },
+        {
+          "path": "src/Modules/ItemTools.lua",
+          "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+        },
+        {
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+        },
+        {
+          "path": "src/TreeData/0_5/tree.json",
+          "sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95"
+        }
+      ]
+    },
+    "provenance": [
+      {
+        "kind": "explicit-actor-ability-supply",
+        "prior_input": "751754e24a65031251c4047e97e4999a0114f87e750d662ae1a085129409a1d4",
+        "authoring_input": "3a3520db2ca7da3648ab491e1fcc45946dcc6ca21c10d4db761e3a4cbd75beb0"
+      },
+      {
+        "kind": "explicit-cleric-ability-supply",
+        "prior_input": "36b82e2924aa5a34cd2a35d01d395d462ea637527e24b39f64d84cf2a0deb07f",
+        "authoring_input": "4d3bd83d841bd2fd7a9fb5ea6f150ca3bc7d2ab71d64395da1d7657e2e0faf3e"
+      },
+      {
+        "kind": "explicit-effective-input-authoring",
+        "prior_input": "ccaa8ceb07792a512fdde523c981b479b7a9c9a6292443cbc0ca4dd34aee22a8",
+        "authoring_input": "a20ff1e4fb4fc1f7e646b2409164979a893b35128c9d73c0f0f826a5b97051ec"
+      },
+      {
+        "kind": "explicit-effective-gem-raw-normalization",
+        "prior_input": "bb501a9181af6cf4c93828fb753a37cb107f3d61c26c0f82a5bf20ffac4245c0",
+        "authoring_input": "dfebd3005093f55c9c1c591243ea34bb6e95787a435d974d50c6e002066bf1d2"
+      },
+      {
+        "kind": "physical-gem-ordinary-quality-kind-census",
+        "prior_input": "90208367c88c36cf2e20fad88573430bc7bfc13c56f9002c2570ab9eaf133ced",
+        "authoring_input": "59bf25881b438e3579eec00d99891e430ca11a1f6aafee52f0aacabfb701f930"
+      },
+      {
+        "kind": "explicit-legacy-gem-corruption-flags",
+        "prior_input": "e4254877a62e2f62c24bb4ee03ca5ca69040890f19c89b0b96ab74153251c23b",
+        "authoring_input": "f446a8c65d7c39c4603fa00b98fd80e53df6bd30169e5722a4eedbbb274b9094"
+      },
+      {
+        "kind": "explicit-stat-set-primary-physical-inputs",
+        "prior_input": "e1128e349928a1a6ee57fc07189143c1c30da65535e84b00cef4b5f3cd91efb1",
+        "authoring_input": "1ed5bf34d75f72365bebb300e6bb3f3350102370712dc962f4f0c1ae1bae8857"
+      },
+      {
+        "kind": "explicit-saved-group-support-order",
+        "prior_input": "f303c57eff31c6d0a42cb8f00634fb5b80544ec2fff3a3f74c98fcc5fd3f8710",
+        "authoring_input": "a288020c49bef7f5c771bc7443ff1ce6cb0abd85bbb192e5cafdfac067aa12d1"
+      },
+      {
+        "kind": "explicit-ordinary-itemset-membership",
+        "prior_input": "86dd5ac81ac894d6674121cbf22ebc726d11bbe23376da7e6904103828648f5a",
+        "authoring_input": "35ea817dbff25d9d313a4d71d8ffac857b5762d8a63c374b4e6b1a9ba482033d"
+      },
+      {
+        "kind": "explicit-empty-passive-socket-membership",
+        "prior_input": "5045973b11caa31e185cdbf2894f223b80d7400be5b0a2f8c47a2dbcd6220884",
+        "authoring_input": "d6513fca1b65befdb45f1190ac73c44a33703a1357b25015d91dce2beb1005af"
+      },
+      {
+        "kind": "explicit-global-minion-gem-level",
+        "prior_input": "023f6927cdce2b4ee6b26b2f9e43b97c8837a02336d142e85981d35b4b0652bb",
+        "authoring_input": "c2ece0825ba13a7f2f6d85e3a4f8a286a411f40f856a362162ac2509fa4b509c"
+      },
+      {
+        "kind": "explicit-modifier-category-inputs",
+        "prior_input": "a184dedb3eaa110145fe382200c158529a563c72449dcd93e36c6f8b1cdbee56",
+        "authoring_input": "faea4c5db7cf91b83f41263127bf47145f64c356e30286d577e709667945c29e"
+      },
+      {
+        "kind": "explicit-modifier-category-input-inventory",
+        "prior_input": "af9be8eb910b46398e3a16e012ef9c46d72cdd8a689ae12df5d268b0bd502d48",
+        "authoring_input": "656373424e5bec6e359a4b61a4714a7507853b46854cf4a5a9ca216e8588b953"
+      },
+      {
+        "kind": "explicit-item-level-absence",
+        "prior_input": "6640af4390c83fccc4d99bf3dc42030b468ac23343b761ef5b376f5dea856a0c",
+        "authoring_input": "384376f2a2224861f63796531465bffdaabaac0352d40bc816b10c931e9e59a5"
+      },
+      {
+        "kind": "explicit-increased-movement-speed",
+        "prior_input": "5c765a2528d844bbdef1c1671b26312412c664a354b6b300d15735f5a5727192",
+        "authoring_input": "dbae83d876e063f2ec9da4e85db8bd6c2bc43077a94e0d4705e8f7e96f0faa5b"
+      },
+      {
+        "kind": "explicit-flat-life",
+        "prior_input": "db7cb3798f8aeb87fed0d780e4fa658a0bb35d7568ee79a25f1a671eaa66da08",
+        "authoring_input": "aa25912b98439b387921ca4337d2f593beaad37917457a5ee3c63fb661acb4a2"
+      },
+      {
+        "kind": "explicit-singleton-item-modifier-membership",
+        "prior_input": "fc9fe72366ebf991c0eca8fd40d3c3e857e6e412f0414a674d334e752d24c2c4",
+        "authoring_input": "b160938f4b70c5617bc7467c96681f2118495d7440405634e407ce0b8d09ec63"
+      },
+      {
+        "kind": "explicit-ordinary-item-catalyst-inputs",
+        "prior_input": "288592e1cf04639d14adde8db0a37f91ecdc1437bf2ade94a307c83f4a46c6ec",
+        "authoring_input": "32168f05fdeae14b01dbb4706f0f86f8a73e86f9be72328e1da5a0d44c720423"
+      },
+      {
+        "kind": "explicit-ordinary-item-inputs",
+        "prior_input": "21d2bf11de0819d9d86eb5040b59684d145d431b8d3384d24e7b27ced0349efa",
+        "authoring_input": "35ab4f9564f22e05c28b78a4f35eed744a9b6448bd91f7dcc2751ce71a7e1972"
+      },
+      {
+        "kind": "explicit-requested-metric-identities",
+        "prior_input": "6e7f65c0424e13405da05668cf2ad7be7b27da6fe5455a25f38e68494193d6db",
+        "authoring_input": "a8c587045e83852493b2c2415a7a108018671f2ca947f60fb86ca5caeda2b46c"
+      },
+      {
+        "kind": "explicit-single-support-physical-inventory",
+        "prior_input": "e1df54d9cea85f6eeb82f6006f73ef677aa94ced78f0ba613c127ef2855fe2c4",
+        "authoring_input": "1b549e1ce3cb56104cc103ab3c04200bc20b7e24cd5fb1d36398855ed15abdc5"
+      },
+      {
+        "kind": "independent-saved-allocation-access",
+        "prior_input": "78288d1fc467e0d09298c97cf1dd8d99c499b988ed0427094f39ad78c19ddeb4",
+        "authoring_input": "4318bd4b45b55e82e86c5e2a5dd1ed3f3a40af2277bee0877e18df2ec7ccb4d7"
+      },
+      {
+        "kind": "independent-scoped-saved-allocation-access",
+        "prior_input": "af2319c3f0318d416bf63c2cc84864a8260d0d1873649f4bc630a7ed2d628fab",
+        "authoring_input": "0d878c448f6fc7968d2c7b6f3f3e9dbc1b4f4bf977681f79e6e5da23c03c1d29"
+      },
+      {
+        "kind": "explicit-armour-item-inputs",
+        "prior_input": "ab3eae4922d428400f6703b1253f19ad42081d6076b7ef905fe582c6ebc4217e",
+        "authoring_input": "4b23f2caad619a47ab7177444df8ba3ec8a67cfcb9acc188bf1c5154f289e259"
+      },
+      {
+        "kind": "explicit-ranged-spirit",
+        "prior_input": "5c36990abf1ab7821853e7d1277f51fed9f61b18e6bc8b191149207e86eb2734",
+        "authoring_input": "edf0810e8461bb7bdebb52d6b4ffc0ac717f3e1c301f8f64ad0ddaaf632bf8ef"
+      },
+      {
+        "kind": "explicit-solar-item-inputs",
+        "prior_input": "2bc9d6db42f4a877f2ba3054cbb45df145fbbfb0f638fe51acff4fe0b38590a9",
+        "authoring_input": "d8e65a1d19b1d8bccb802054e6d77b868a8db2ccd9b472a926b9beae58c2f38f"
+      },
+      {
+        "kind": "explicit-cold-category-inputs",
+        "prior_input": "de4a72d7f7a604c7469f5c7021ac32fd8473e615b6210ee841f2b9f8f71af3fb",
+        "authoring_input": "b8f7a218fd515a79557f5e2a0e7f865eeed6d3693719ff941ce567dd0c273635"
+      },
+      {
+        "kind": "explicit-cold-category-input-inventory",
+        "prior_input": "7e7baddacc7f195fa19fd896fef99e2974544bf3cbb3d6c7e5f76b1ce850b76c",
+        "authoring_input": "5b99f87a1dda15c7c951859501a011ae719e1c207d9937ee6e5143257e588fac"
+      },
+      {
+        "kind": "explicit-sapphire-input-census-correction",
+        "prior_input": "8c240aca1f8f3bfcce6406c36070f696b0553f601eb4bf4755f6588190ee365e",
+        "authoring_input": "c304ca9e8d478627498e83426f44502555430fc144f27faf57cb72f643aab79b"
+      },
+      {
+        "kind": "explicit-sapphire-item-inputs",
+        "prior_input": "cca221063beb6267a6ba8095a843addc2b69fedc63f493cd3f91c18b37495082",
+        "authoring_input": "925fb0441ece2fe06174416419364bf2e0357e7dea60b0ab7a2b7e387632eef1"
+      },
+      {
+        "kind": "explicit-fine-belt-modifiers",
+        "prior_input": "2d3f2c2b0fcb5cdd81b86d1174c7ae7f54ba523727f78666e8c6f69a4c8b562f",
+        "authoring_input": "7c5eba78f55808385c55ce158b330075a690610407dd8444aa286bb1f9a531c8"
+      },
+      {
+        "kind": "explicit-fine-belt-item-inputs",
+        "prior_input": "9b9f25511f05f2963c5f46cd0cea0b921ab2c1335407a95b0045453183dbc074",
+        "authoring_input": "1f05821d559a216e11369744455e641a155ea5c0be7921aa5ef3029bd9802294"
+      },
+      {
+        "kind": "explicit-fixed-spell-damage",
+        "prior_input": "a1931151bd06b9950816b052ef7915f7f6fbe89db2b2503d579f9989407bbfe8",
+        "authoring_input": "bba043301ba92632417903b2a970e4df7125b0d8a33eef3f86fb92361be5b405"
+      },
+      {
+        "kind": "explicit-item-firebolt-raw-input-schema",
+        "prior_input": "fbd81d74bf8178297f4457f9fd4bf74c72781717dfb70c4a132373cda17bf31b",
+        "authoring_input": "ac7a16c4c038bc3539b1167894fc1c8f5655a98b6a80b2e14611fbdc09dd3fba"
+      },
+      {
+        "kind": "explicit-item-firebolt-raw-grant",
+        "prior_input": "8f123ed26b8f9a71534e43493049b4b8d86f7bd88b132317b963f51b86e32022",
+        "authoring_input": "803877392b9ee52afb1adb39e7c8567f0d2c7d42b0de481b877db558aba27341"
+      },
+      {
+        "kind": "explicit-ashen-staff-item-inputs",
+        "prior_input": "4a015c44c25637a5d1af581b3fef0b37ffc078021b9b5ac60ea7d5d9c46db5b4",
+        "authoring_input": "ea30c393a64924c81f802ad0765a5b8125de1a2a8792f197f307b27a70aedab9"
+      },
+      {
+        "kind": "explicit-default-enemy-level",
+        "prior_input": "f8ad928b7e5ba61c4c425ef36a0f0353f376c0e2f42f94e28451917857fc329a",
+        "authoring_input": "0c91e5f421a7d22c6f96b60a2630802a401f51920e6bfbcb82884e530e22956a"
+      },
+      {
+        "kind": "explicit-configuration-reward-inventory",
+        "prior_input": "d5f4c54ba5bdd09b9f097b761afe5ac2f46fb70de8dfda9bbdb398f42af14648",
+        "authoring_input": "91ffef909c67968f762848a1474576439456b08a59848c5003e84d271630e20b"
+      },
+      {
+        "kind": "explicit-default-encounter",
+        "prior_input": "461d84d41069081dd049dfa5056a758e8103a68be6546baba75e596e3449d8b3",
+        "authoring_input": "29f4034f5e1ac497fae5fa46f33b63c230e2d63db5651dac5a4a48360fecd243"
+      },
+      {
+        "kind": "explicit-character-reward-inventory",
+        "prior_input": "c5a71d274ab77696e65be588ba57758a53a7f5870b39d80cdfad01e25a1619ea",
+        "authoring_input": "0d6f71d9278af99ab4b2c98b9b298e89fabbd3dcbfb563c708e1a0d930654606"
+      },
+      {
+        "kind": "explicit-configuration-resistance-inputs",
+        "prior_input": "ad6a01300b11230fb452b52fe36c04343ac1daf9109a68a5e43a11f986bd32ef",
+        "authoring_input": "71365bb3fe8e6677d33199292077ee115704cf4e944fcfb1bed9d8b72695133b"
+      },
+      {
+        "kind": "explicit-configuration-rating-inputs",
+        "prior_input": "c294533a5130dc86bf5d519df731fb115f4a455208eaf8171ea3710aee7d3a9a",
+        "authoring_input": "36b21f3f602ace545370d3388388f1d3c558ceb84fadda25b1cab9686a0b5531"
+      },
+      {
+        "kind": "explicit-fixed-fire-damage",
+        "prior_input": "4e81b3ba1994c7a2052cb336a9efeba0baedeae11eed477b6d9a503390ad86ad",
+        "authoring_input": "31e032eaf19e7073ad59d6a2ece2b2fcd0671384520537ffe9e19e24bf1131b9"
+      },
+      {
+        "kind": "explicit-ruby-item-inputs",
+        "prior_input": "043b0f0466aa2fa8516e985a5660e2deeb4e061dac9f8999f15624d48e4435d5",
+        "authoring_input": "4ad96afeb79e1462e4f016e3cd75b8bd03f15f7281d7c4392d9c05b1a8b9b89c"
+      },
+      {
+        "kind": "explicit-ordinary-passive-jewel-placement",
+        "prior_input": "c0fb8d454f210859b27e9f863ef90e59c3c83491a0caab2ce93d804be5065cbb",
+        "authoring_input": "295d32ec22b2f0a9342e404fb09b02fecc54f3b72b5b5aad70c5773e823a6cb9"
+      },
+      {
+        "kind": "explicit-empty-character-rune-selections",
+        "prior_input": "db2b4088044fe8c0b995029699091d0fb75f960937dba478c72cb491f2964de7",
+        "authoring_input": "bb18b36406ce039b6a5133e1da760645fe1f3fc05b1033d7eb4e3bf7e817e61a"
+      },
+      {
+        "kind": "physical-support-inventory",
+        "prior_input": "7ef336de52a8ee2d4ed976db212676d91aada0e79f0be95834a3fd9fa03d51c8",
+        "authoring_input": "44160c6d736d79c70f795c70bafd245f307bc708a23369da3eb808705d3e61ac"
+      },
+      {
+        "kind": "intrinsic-minion-attack-source",
+        "prior_input": "4b1a87c2142b2cec33f7e61f9b79a15fe20dc62937c84f4bcaab4a74707b6022",
+        "authoring_input": "4873e483a111d9c96826380343d882d71698d04a9c11b7b75f2f7e7db01147fb"
+      },
+      {
+        "kind": "native-minion-hit-chance-with-block-configuration",
+        "prior_input": "89f2873909e64acc16b94dc3352e5b985d956db45a9f27f0c9387031da7b4975",
+        "authoring_input": "07cbf4150201706dbfdcf3f950b4a5eaa473c9d704d8ba6f9cf0893a79237f2d"
+      },
+      {
+        "kind": "nonphysical-skill-support-inventory",
+        "prior_input": "c772262e92a1de5176dd22e15740818d04edf9d7220d80ad6299cf24fb484cef",
+        "authoring_input": "84c7252b32310de039dfad4cfb4c7b2e6b50c5f4aa65ec31e8af709ff1938e31"
+      },
+      {
+        "kind": "declare-partial-pain-offering-skill",
+        "prior_input": "deaddd9c4f482ec91686d5c3421051ad654d868cc73ac173401697e81d0216fe",
+        "authoring_input": "86b791260a5d10be94516899abeafb2a24e4336452db382c49cf20b84b71047e"
+      },
+      {
+        "kind": "native-pain-offering-damage-applications",
+        "prior_input": "03e1eb6e0acf736daf7fb5586e5924d8d82efd6faddd03b5784ee13b4e3f0ae4",
+        "authoring_input": "8ad1941e37f6408fc6138dbada7ffcbb07fb2cc2dfae925dd7382b04d8b13c52"
+      },
+      {
+        "kind": "ordinary-passive-minion-damage",
+        "prior_input": "922ddfc5b0767d1a7938df807fe0680cfeb661cb84844dccae394ed30f6d32ec",
+        "authoring_input": "063d91d2c6b1b437322e2d81b2dfea87a9023dfac871385eb1331c40806c9d14"
+      },
+      {
+        "kind": "empty-authored-payload-inventory",
+        "prior_input": "d582613eb3dbed617178c4600a2a699daff95bba4924882cac9cacf9c54b7b3a",
+        "authoring_input": "2c628f3645eed8d8a1ac434e9999f93cea8e31546f501fb53b6e2acbddb2531c"
+      },
+      {
+        "kind": "explicit-incoming-damage-inputs",
+        "prior_input": "530f8c3d4ff7e5a7f62cc0d16666ca97975b0e36eba878bfce62249c91fa9d30",
+        "authoring_input": "450db5e48eee19889aaab4b57155b747172975a5135ef33c97804c0e29d3efe8"
+      },
+      {
+        "kind": "physical-primary-skill-usage",
+        "prior_input": "ec33fc021fcb6ec5d228be2030fc8976b3d4f4a34dffdf90f63c8bc8994226e1",
+        "authoring_input": "e739cc7a12506a0df0b2824ca4831a73843ccf72e82c21e76a6737540de4fa6e"
+      },
+      {
+        "kind": "minion-physical-inputs",
+        "prior_input": "58c869ddf0f45ea7fa9672c80e50484579a6e4a391dedd72a8e20e0b4d0971e1",
+        "authoring_input": "50a36dd4716cd31eb6764981cdccc1cb2e3a11a12616c2188c1c98bbec7ec82f"
+      },
+      {
+        "kind": "active-physical-inventory-with-pending-usage",
+        "prior_input": "228a5f9bd06415324d0a35e31b51c6bc92701cc83180df03f88b04646556651d",
+        "authoring_input": "4cf408e1f1025ed4201d5070ea9c26da30d8796470ef958640ce2aed3e16711d"
+      },
+      {
+        "kind": "manual-direct-source-inputs",
+        "prior_input": "9d1bc37d2b119d37c87bb2542e4bdbb6e0c46415677864afc4dbcc49413f35ec",
+        "authoring_input": "1cc5c0631c9ad4b4d87ce80f6d0b07ad24168642279dfe0b70469cfd679d1bfa"
+      },
+      {
+        "kind": "manual-direct-raw-input-source-policy",
+        "prior_input": "b54bcf57480f566ccb0787f10616853d964a64a18a08babea4cb996b5327faaa",
+        "authoring_input": "581444d1ecefd011bcf7b92c94ab58924ea93b44bc5c636ba5f3d7ba8033a653"
+      },
+      {
+        "kind": "frost-bomb-physical-and-primary-usage-inputs",
+        "prior_input": "ecb094bfa13e5c4a28b158a99ce46616a6bada7351515842a4c9b74d28627d7a",
+        "authoring_input": "a81273b52d3802ae9722d653ea861862a0638cd0c2a08efc3682ff42c107fb03"
+      },
+      {
+        "kind": "frost-bomb-physical-and-primary-usage-inputs",
+        "prior_input": "6305fc725a078d40c056e979efcbf26dbf6dd5ed343385b62c2bb6c07891a3a8",
+        "authoring_input": "468e1f1ad1d727626df5d935a778fb6f00132f9a2ee6055471077dd8a8594f45"
+      },
+      {
+        "kind": "sniper-requested-count-and-flat-reservation-component",
+        "prior_input": "80c07986489bdac79d7b126d53be95cf1c55a204a2a408fccfacbe0d19e7b691",
+        "authoring_input": "cab0bf08014c590e93616a55e36bd6741874ef2a52068098f65e50f7abb0a07e"
+      },
+      {
+        "kind": "sniper-count-and-flat-spirit-reservation",
+        "prior_input": "754e10fe0d66a208608128e51ed21555b939a23098612a3bcee888aa96856a87",
+        "authoring_input": "6dd76fefa821590c5d0e5068ecd3f0c346f7b4827a1bfcc323db2fb792ebc514"
+      },
+      {
+        "kind": "ice-nova-constructed-action-correspondence",
+        "prior_input": "cf0c042a29fb16d82b49b5d38bd896b5210cec39d190884174597ae35a5d6bc0",
+        "authoring_input": "d6fa87fe12e3251f1bcb0847386625a9a2cf6a0f6579fc92741d2a3fad2132f4"
+      },
+      {
+        "kind": "ice-nova-action-correspondence",
+        "prior_input": "4e1031dafb4b5decbfa667ab48a5a3cf53006a838607546de0dcd8412af02d99",
+        "authoring_input": "769f23e8ad04651ea0b696b8459edbb9f3c142260f0e32af13742c78f950a39a"
+      },
+      {
+        "kind": "ice-nova-physical-inventory-with-deferred-usage",
+        "prior_input": "3b05c2cadd9cd68184f5c602a75afaaeb938e4319333fe62fdf3cc1e29f1c184",
+        "authoring_input": "f976c08ed20bb4b5bcb2569daf8deb58f265fd4ba277e8f6adb04ccb2b459b90"
+      },
+      {
+        "kind": "sniper-physical-inventory-with-deferred-usage",
+        "prior_input": "4b1823e1ac6fa26f9115764ebb1b77b2066aec0bf778e8e19919fb65713e07b0",
+        "authoring_input": "c083e0e987ddde7b22aed814015eeff7db3014cc986e0a1596ec5524ed5aa016"
+      },
+      {
+        "kind": "skeletal-first-child-topology",
+        "prior_input": "2c215cce13539ec9a3f9d35fae361f22cf5bef1a0e935f4d852adfe180600ddf",
+        "authoring_input": "500d3126a6f05dd1a6e4113890ccb4d5354e1c8f08b599972057c325e206e2ab"
+      },
+      {
+        "kind": "skeletal-physical-inventories-with-deferred-usage",
+        "prior_input": "2f6e105deea4a3851c6b30bb9e531f6ce11f093b90a7d418a77ec8ccb8af45df",
+        "authoring_input": "1f2c3a9d3414a892e4055bc3b010d2b90fb0f2b90322accae4ef30d7f693b4f4"
+      },
+      {
+        "kind": "manual-djinn-command-and-actor-topology",
+        "prior_input": "1d58362e0a808164fa7d554b665c60abb52d943a17f1a4c66cd6b8edb141d42e",
+        "authoring_input": "8169b83ee6ccfc2865743a5a6ab07d516ccfb6dfa0636552a4f3a31dc875acdc"
+      },
+      {
+        "kind": "manual-djinn-actions-with-deferred-usage",
+        "prior_input": "507ea66d8df3a62fca3f56b3d8a8a2a0fb4c8f0b85a80ea6ff065a0c567c6b0a",
+        "authoring_input": "1f6edb0b31e823a05b523e0afd6ea88bfa5013deef79c8712bf2b34a6cfb42ad"
+      },
+      {
+        "kind": "authored-skill-membership",
+        "prior_input": "a4d3d92595168b44d6f86af649311770b87ac0858e5c3f42f90b039813c547d2",
+        "authoring_input": "35970683f9d85df70951ab7e2439e8f32d43486cdc1bd3013db4275c4b4cc895"
+      },
+      {
+        "kind": "skeletal-requested-counts",
+        "prior_input": "a4f1a7a617ae301759880bfad6e4669795f4109c922850d93ab5a8dfce54c66a",
+        "authoring_input": "9089fb21d7e97ea2d4e9c720f7bbf2c741f0afcd5683152c42a8160135a1b4ff"
+      },
+      {
+        "kind": "allocation-djinn-raw-supply",
+        "prior_input": "7aaa6b658827d4d083ffbf4616ae9b4339ae3c6561b4b07bddba9323c2cf9b9d",
+        "authoring_input": "99d8e96c6b02af0948c7ace80572b78921f3a7d2c5f16e042a34d54114499519"
+      },
+      {
+        "kind": "source-bound-djinn-tree-grants",
+        "prior_input": "890b6b4d5c32b806ecfc96a16e25350507a291b1d5a854bc2dd440548125b20e",
+        "authoring_input": "f0e9dc245a7e19b7dcae7bcfacefa3f5f904c62e14edcf678658a3aa80e2b947"
+      },
+      {
+        "kind": "ice-nova-intrinsic-schema-and-rules",
+        "prior_input": "82aa58ffa676aa4c038392395b618e5506a351c6c8679f19add3fd58ffd5068d",
+        "authoring_input": "71a957a97a517ef3a47722a3fe8111e9da410b2a2ec570f99508a3b404b18b55"
+      },
+      {
+        "kind": "source-bound-ice-nova-intrinsics",
+        "prior_input": "d62ebbe8ce61df0e72c777fe174ad88527502d9282a0454b3feb096b94b4a0ab",
+        "authoring_input": "47c767a3abb4ed2ee47b95ca2713ed0233951696f370fb1c575327a454bf48d8"
+      },
+      {
+        "kind": "ice-nova-raw-prepared-source-final-level-fragments",
+        "prior_input": "179b0cd3decbfc79bd0c52ae087597ae5e7a3fc008b35c2638519c5236cf2191",
+        "authoring_input": "1b02056a7e91a32615aa4626a5d1cbfd2891f6014869a2795b2165ccdb4c47cb"
+      },
+      {
+        "kind": "source-bound-ice-nova-source-inputs",
+        "prior_input": "faf4ea53e1bc8cb2745528d7aa10dc79918824f26f0a2027b0b889555e16dec6",
+        "authoring_input": "ed58a02eac3e9a4f7f7b8af9b36ec4d89ae981ead9933782c10059fc6f9eb082"
+      },
+      {
+        "kind": "selected-amulet-minion-level-copy-fragments",
+        "prior_input": "35bffde445888c725e153f42b43fe1f30330bd7216db2bc7ee780b9ab2a54fd3",
+        "authoring_input": "1dda184ff3d30282c9dcddfb8082aca52c027356c022e0cab3b879670959cff6"
+      },
+      {
+        "kind": "source-bound-amulet-level-copy",
+        "prior_input": "d777059a02e56547d3b63236588ec704dd510cebc65891c9c3136727dc66a2ff",
+        "authoring_input": "a0ab2bddfa1f9edcf836c004079686f69c6532f0b496378568264709fc5ec6da"
+      },
+      {
+        "kind": "source-bound-plain-minion-owner-closure",
+        "prior_input": "f604070539924fd7961becce302d0db5ae49d683a88bdb73c57ed59e0c63b809",
+        "authoring_input": "72e5fb4cc3f9b3725ec9c4023d777e8230a8bc057137b02e3e8c85018c9a0cb6"
+      },
+      {
+        "kind": "source-bound-plain-minion-life-passives",
+        "prior_input": "75d4189c657a3a39e4c80fe3d6358aeb7a6e2a42b1caba6a22f3643f216c0857",
+        "authoring_input": "80a01beabab24927b859da7d5174191bc7892b8ac9b92ee5bcd68e656ce35564"
+      },
+      {
+        "kind": "source-bound-flat-resource-rewards",
+        "prior_input": "ac2cab1855e111822d6c85b1ab4a674f7a65ecfbc3f9a2fee6553ec9fbb0491a",
+        "authoring_input": "d09029ec8e8b6c9bc18aa5d0bdf0611c4a5db07f76491e8d957111a42d7d976c"
+      },
+      {
+        "kind": "source-bound-permanent-reward-effects",
+        "prior_input": "0ab77c776cdf17d2e93d04f25d06280165a82b724604fddfa16c752fe1b42f20",
+        "authoring_input": "c80c2048bafd4a9ac643356bfb3f374014dddb98e590fcab9ba7c349268c5ea2"
+      },
+      {
+        "kind": "source-bound-command-cooldown",
+        "prior_input": "3d125227980142c7b9d046d5d5b73bcc1bdf20c1a3b2502b4c5571df1c1887a0",
+        "authoring_input": "0c90109ad2e0539054fec5e983f2de3a43f835c7500c7a629def7ee290b6af4d"
+      },
+      {
+        "kind": "source-bound-generated-raw-quality",
+        "prior_input": "e77ecaa55284d1dd888f3ad65145e735269fe589fc387076cbd711a8eb114244",
+        "authoring_input": "6364ff48cd0d8cec38e7868d6030bb2945df9db481b6f676ce409bd3bf925da1"
+      },
+      {
+        "kind": "generated-preset-raw-input-source-policy",
+        "prior_input": "2653e8d8fdd06c903950500043f507727fafc5ae19d4a85b0f98f4be4fc55bff",
+        "authoring_input": "400503027a9ab0249e97e6db42d3d5b6ba16d78988215a3ec51ede2306ebb53a"
+      },
+      {
+        "kind": "occurrence-requested-counts",
+        "prior_input": "26b4ecd72e81fd40031e477aaa24a19ad0c4601afbc9f43e13101319bb801bfa",
+        "authoring_input": "c22b3e4db637739a41dfe9513e508865941687ad11f2e8ddb88ef45a3ffd2460"
+      },
+      {
+        "kind": "reviewed-source-presentation",
+        "prior_input": "b9cb97af0e536456b2c7531da666fc7c8e93842aa1c73e7404ea4229bae55b42",
+        "authoring_input": "f542e4e9c31caf08587d3d12f014aeacc5ce918ce865a4790edf99e88f33f154"
+      },
+      {
+        "kind": "source-bound-reward-recovery-inputs",
+        "prior_input": "07dc985c86fc2dc2467281e920b902b21f99d7fbedc720105c550f177b631b51",
+        "authoring_input": "d486796aba4ae8afc091ece7b12e031826b0fd5110cc992520fcceaec9ad7de3"
+      },
+      {
+        "kind": "source-bound-growing-swarm",
+        "prior_input": "f4ee5d5682ab009c024e5fcf57950cbab41640f72a3d83a25cef49be972b1fc8",
+        "authoring_input": "71116f9cac353676ed2d6c8b4d05a0d6c46d3ddca16d57b5680ccb2d668459b1"
+      },
+      {
+        "kind": "bidding-support-delivery-v1",
+        "prior_input": "caa08fd53b2902cbf6b6362daa478bba843aad00944a173fe3a8a4a85fc5cc58",
+        "authoring_input": "e9186f566fce2cea47dc7b806f5c7d2c6706942af6596d6ac427f8b9f727c736"
+      },
+      {
+        "kind": "gem-executable-memberships-v1",
+        "prior_input": "de46fe9435a23fea98cb5184f14adcff47eda81f9d81007cf1cc00d5d2a4fb9d",
+        "authoring_input": "ace69113c5864a36bac4a68e2364a8c058c0bc956debf12eec2fd6ef1dbd3882"
+      },
+      {
+        "kind": "manual-direct-support-target-correspondence-v1",
+        "prior_input": "2a9935bf63de91702021c10b43bd692d97bcae787cf709c07d827ab00fb40074",
+        "authoring_input": "6041bbe2f05a46ab4ac4c6fa666bd765187a8e557022ec1d2025ce8ab4137302"
+      },
+      {
+        "kind": "magnified-area-support-delivery-v1",
+        "prior_input": "7f365df6c162b5d1c9cf45aca32531ee5a647f0ace4e7b1b53e411e6b98d53bc",
+        "authoring_input": "24174c1a8674ba0ecdf89d7c4aa7a34d79c51d1d27c1d1a5e716e43ba0da09c7"
+      },
+      {
+        "kind": "action-area-eligibility-v1",
+        "prior_input": "f835888002f4212f9aa663cd86aa6a7abff6e0b5b2a971863642017d3d689881",
+        "authoring_input": "6011b2e23359571b38d33122ecf27bbc62c12f556bcd006bdd2f2feca615d773"
+      },
+      {
+        "kind": "rapid-casting-support-delivery-v1",
+        "prior_input": "24102ca51d8bb47eefa72e91d7c97d2c3faae4088bd34805f6f9c4cce762afdf",
+        "authoring_input": "2388caa4560e239322b21895c84619a7c64c70fdc580b6ea97265760da6aca58"
+      },
+      {
+        "kind": "encroaching-ground-support-delivery-v1",
+        "prior_input": "a2390918bfc53bebc71c8fd7d8d783f691b7947abfc996653e7f2680a2b6d087",
+        "authoring_input": "3ccadd57ba9803e9abc3d866ecd2fad74c5e3c9968b87a0a0ca023100b5abaa8"
+      },
+      {
+        "kind": "prolonged-duration-support-delivery-v1",
+        "prior_input": "3200e616c4c4de00733c0cd064dfd4dc8cf11b56519fe348e4d03787f9943f18",
+        "authoring_input": "f6c0964fb4deea63d8c28a5684f60c9df4718182ea79121fa21b9c99e08ac076"
+      },
+      {
+        "kind": "offering-final-inputs-v1",
+        "prior_input": "a9c7e639ca97d18646d3e91adbb4201f93ff40a906c8e5278498208ab60895e2",
+        "authoring_input": "327c7aaa1e2f3b283584eaf115a19bed067a6efa4c3067c015cdeda75cb4b542"
+      },
+      {
+        "kind": "amulet-bonus-snapshot-v1",
+        "prior_input": "9a2d363f69c9895f3b6dc87165a3dda74f859a753d936ee2b2cca057608c01d4",
+        "authoring_input": "4c01f7ceee6d826bae394eef5de3ecb31cb178dec0e2d99d7e559c4403831edc"
+      },
+      {
+        "kind": "source-bound-command-damage",
+        "prior_input": "4526f13e139cc0bc24f99ba12382331afbda4513677118fa377f3b31c8905cbe",
+        "authoring_input": "1aed71038a01046d1271158c1c5ce4422e73f79b10f8d18ad3fa2d44013fe422"
+      }
+    ],
+    "query_sets": 5,
+    "query_rows": 110,
+    "query_policy_bytes": 8946527,
+    "artifacts": [
+      {
+        "file": "registry.json",
+        "bytes": 3521556,
+        "sha256": "b81e98fb1c4b9c50c3d387a9a1b83db4fca025cd9e4b08a6c2cf396caad87296"
+      },
+      {
+        "file": "schema.json",
+        "bytes": 31738280,
+        "sha256": "5470c110b0ffb6c1f24eb7fee19ba80f4bc65be841d3ad295338fd5fbb3a05cf"
+      },
+      {
+        "file": "rules.json",
+        "bytes": 14279507,
+        "sha256": "1e9cabc0add07bd716f4779322413c039f6f220b2dfa57a0d5305f24f4467213"
+      },
+      {
+        "file": "routing.json",
+        "bytes": 15899,
+        "sha256": "83f7ac29431ce19d92c3461d4efaedb75ec94e90fe5f013c373906f5fd0ce620"
+      },
+      {
+        "file": "manifest.json",
+        "bytes": 1499,
+        "sha256": "f12e6bf0d622221e23884c313c8582ebb94ef9d0a78150680d05b143459e91a0"
+      },
+      {
+        "file": "mapping.json",
+        "bytes": 3947025,
+        "sha256": "eacd233ea0a922829e9a62cee0486f99e3813d437987dd64be3e950943da1a71"
+      },
+      {
+        "file": "roles.json",
+        "bytes": 331189,
+        "sha256": "d8180b944f826a82e691586ed887862eef6e772893cc4d2f9c346a8ca75617e5"
+      },
+      {
+        "file": "normalization.json",
+        "bytes": 1783104,
+        "sha256": "c15470996d9e51c99fc0bc2b06da3f787df8e716297060e82cec821535e39634"
+      },
+      {
+        "file": "rewards.json",
+        "bytes": 27996,
+        "sha256": "e174027444b301a6470f1690c8f170d753bf2e52506ca58c6e870f9483f276fa"
+      },
+      {
+        "file": "items.json",
+        "bytes": 1622402,
+        "sha256": "4a5cb580669574ee82eb3c08fc029bd163ec0fcac34963fe114586db7f4c86a9"
+      },
+      {
+        "file": "item-source.json",
+        "bytes": 1411123,
+        "sha256": "2252bd9a8dc57d776b024fb699e995c44e889d885eeb845ed5a13dccbd98f676"
+      },
+      {
+        "file": "queries-original-01.json",
+        "bytes": 4710,
+        "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+      },
+      {
+        "file": "queries-original-02.json",
+        "bytes": 7130,
+        "sha256": "eb2691aa77552e1729de12621b7564ce45ba78f6f97d0d880f0dfba474b007ca"
+      },
+      {
+        "file": "queries-original-03.json",
+        "bytes": 4710,
+        "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+      },
+      {
+        "file": "queries-original-04.json",
+        "bytes": 4710,
+        "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+      },
+      {
+        "file": "queries-original-05.json",
+        "bytes": 9732,
+        "sha256": "4b520d4204aa9a4124b9a8963af1c7cc445c18218766655cca21686993f69fa0"
+      },
+      {
+        "file": "tree-normalization.json",
+        "bytes": 2101983,
+        "sha256": "f16421cbbd824d440120e76ab7abcc426ac9b8859f85ee2e84c27c5b8ec7029f"
+      }
+    ]
+  },
+  "prior_rules_release": "pob-3887ae68-components",
+  "owner": {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "skill",
+        "value": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000012"
+        }
+      }
+    },
+    "programs": {
+      "members": [
+        {
+          "id": "ordinary-population-inputs",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "level",
+              "value_type": {
+                "kind": "integer"
+              },
+              "source": {
+                "kind": "parameter",
+                "value": {
+                  "slot": {
+                    "declaration": {
+                      "kind": "skill",
+                      "definition": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000012"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000013"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "quality",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "source": {
+                "kind": "parameter",
+                "value": {
+                  "slot": {
+                    "declaration": {
+                      "kind": "skill",
+                      "definition": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000012"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000014"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "character-level",
+              "value_type": {
+                "kind": "integer"
+              },
+              "source": {
+                "kind": "character_level"
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "level",
+              "expression": {
+                "kind": "read",
+                "input": "level"
+              }
+            },
+            {
+              "id": "quality",
+              "expression": {
+                "kind": "read",
+                "input": "quality"
+              }
+            },
+            {
+              "id": "character-level",
+              "expression": {
+                "kind": "read",
+                "input": "character-level"
+              }
+            },
+            {
+              "id": "actor-level",
+              "expression": {
+                "kind": "lookup_integer_table",
+                "table": "sniper.actor-level",
+                "key": "level"
+              }
+            },
+            {
+              "id": "required-level",
+              "expression": {
+                "kind": "lookup_integer_table",
+                "table": "sniper.required-character-level",
+                "key": "level"
+              }
+            },
+            {
+              "id": "level-eligible",
+              "expression": {
+                "kind": "compare",
+                "operation": "greater_or_equal",
+                "left": "character-level",
+                "right": "required-level"
+              }
+            },
+            {
+              "id": "quality-more",
+              "expression": {
+                "kind": "percent_as_factor",
+                "percent": "quality-rounded",
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000001"
+                }
+              }
+            },
+            {
+              "id": "one",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 1.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "quality-factor",
+              "expression": {
+                "kind": "add",
+                "left": "one",
+                "right": "quality-more"
+              }
+            },
+            {
+              "id": "active",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "boolean",
+                  "value": true
+                }
+              }
+            },
+            {
+              "id": "quality-coefficient",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 1.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "quality-bonus",
+              "expression": {
+                "kind": "scale",
+                "value": "quality",
+                "factor": "quality-coefficient"
+              }
+            },
+            {
+              "id": "quality-rounded",
+              "expression": {
+                "kind": "round",
+                "value": "quality-bonus",
+                "quantum": {
+                  "value": 1.0,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                },
+                "mode": "truncate"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "project-actor-level",
+              "when": null,
+              "effect": {
+                "kind": "project_actor_stat",
+                "actor": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000012"
+                    }
+                  },
+                  "slot": {
+                    "kind": "actor_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000001f"
+                  }
+                },
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000001c"
+                },
+                "value": "actor-level"
+              }
+            },
+            {
+              "id": "project-quality-factor",
+              "when": null,
+              "effect": {
+                "kind": "project_actor_stat",
+                "actor": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000012"
+                    }
+                  },
+                  "slot": {
+                    "kind": "actor_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000001f"
+                  }
+                },
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000001d"
+                },
+                "value": "quality-factor"
+              }
+            },
+            {
+              "id": "activate-population",
+              "when": null,
+              "effect": {
+                "kind": "activate_grant",
+                "slot": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000012"
+                    }
+                  },
+                  "slot": {
+                    "kind": "grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000020"
+                  }
+                },
+                "enabled": "active"
+              }
+            },
+            {
+              "id": "character-level-requirement",
+              "when": null,
+              "effect": {
+                "kind": "requirement",
+                "satisfied": "level-eligible",
+                "code": "required-character-level"
+              }
+            }
+          ]
+        },
+        {
+          "id": "intrinsic-reservation-coefficients",
+          "context": "action",
+          "reads": [
+            {
+              "id": "level",
+              "value_type": {
+                "kind": "integer"
+              },
+              "source": {
+                "kind": "parameter",
+                "value": {
+                  "slot": {
+                    "declaration": {
+                      "kind": "skill",
+                      "definition": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000012"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000013"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "level",
+              "expression": {
+                "kind": "read",
+                "input": "level"
+              }
+            },
+            {
+              "id": "reservation",
+              "expression": {
+                "kind": "lookup_integer_table",
+                "table": "sniper.spirit-reservation",
+                "key": "level"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "reservation",
+              "when": null,
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000001e"
+                },
+                "value": "reservation"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sniper-ordinary-flat-reservation",
+          "context": "action",
+          "reads": [
+            {
+              "id": "base",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000004"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000001e"
+                  }
+                }
+              }
+            },
+            {
+              "id": "selected-count",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000295a"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "skill",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000326c"
+                  }
+                }
+              }
+            },
+            {
+              "id": "extra-spirit",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000004"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000326d"
+                  }
+                }
+              }
+            },
+            {
+              "id": "reservation-multiplier",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000326e"
+                  }
+                }
+              }
+            },
+            {
+              "id": "reserved-increased",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000326f"
+                  }
+                }
+              }
+            },
+            {
+              "id": "reserved-more",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003270"
+                  }
+                }
+              }
+            },
+            {
+              "id": "efficiency-increased",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003271"
+                  }
+                }
+              }
+            },
+            {
+              "id": "efficiency-more",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003272"
+                  }
+                }
+              }
+            },
+            {
+              "id": "free-count",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000295a"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003273"
+                  }
+                }
+              }
+            },
+            {
+              "id": "has-reservation",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003276"
+                  }
+                }
+              }
+            },
+            {
+              "id": "reservation-becomes-cost",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003277"
+                  }
+                }
+              }
+            },
+            {
+              "id": "mana-cost-gain-as-reservation",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003278"
+                  }
+                }
+              }
+            },
+            {
+              "id": "flat-base-override-present",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003279"
+                  }
+                }
+              }
+            },
+            {
+              "id": "flat-forced-present",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000327a"
+                  }
+                }
+              }
+            },
+            {
+              "id": "active-mine-count-present",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000327b"
+                  }
+                }
+              }
+            },
+            {
+              "id": "spirit-to-life-conversion-active",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000327c"
+                  }
+                }
+              }
+            },
+            {
+              "id": "multiple-reservation",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000327d"
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "base",
+              "expression": {
+                "kind": "read",
+                "input": "base"
+              }
+            },
+            {
+              "id": "selected-count",
+              "expression": {
+                "kind": "read",
+                "input": "selected-count"
+              }
+            },
+            {
+              "id": "extra-spirit",
+              "expression": {
+                "kind": "read",
+                "input": "extra-spirit"
+              }
+            },
+            {
+              "id": "reservation-multiplier",
+              "expression": {
+                "kind": "read",
+                "input": "reservation-multiplier"
+              }
+            },
+            {
+              "id": "reserved-increased",
+              "expression": {
+                "kind": "read",
+                "input": "reserved-increased"
+              }
+            },
+            {
+              "id": "reserved-more",
+              "expression": {
+                "kind": "read",
+                "input": "reserved-more"
+              }
+            },
+            {
+              "id": "efficiency-increased",
+              "expression": {
+                "kind": "read",
+                "input": "efficiency-increased"
+              }
+            },
+            {
+              "id": "efficiency-more",
+              "expression": {
+                "kind": "read",
+                "input": "efficiency-more"
+              }
+            },
+            {
+              "id": "free-count",
+              "expression": {
+                "kind": "read",
+                "input": "free-count"
+              }
+            },
+            {
+              "id": "has-reservation",
+              "expression": {
+                "kind": "read",
+                "input": "has-reservation"
+              }
+            },
+            {
+              "id": "reservation-becomes-cost",
+              "expression": {
+                "kind": "read",
+                "input": "reservation-becomes-cost"
+              }
+            },
+            {
+              "id": "mana-cost-gain-as-reservation",
+              "expression": {
+                "kind": "read",
+                "input": "mana-cost-gain-as-reservation"
+              }
+            },
+            {
+              "id": "flat-base-override-present",
+              "expression": {
+                "kind": "read",
+                "input": "flat-base-override-present"
+              }
+            },
+            {
+              "id": "flat-forced-present",
+              "expression": {
+                "kind": "read",
+                "input": "flat-forced-present"
+              }
+            },
+            {
+              "id": "active-mine-count-present",
+              "expression": {
+                "kind": "read",
+                "input": "active-mine-count-present"
+              }
+            },
+            {
+              "id": "spirit-to-life-conversion-active",
+              "expression": {
+                "kind": "read",
+                "input": "spirit-to-life-conversion-active"
+              }
+            },
+            {
+              "id": "multiple-reservation",
+              "expression": {
+                "kind": "read",
+                "input": "multiple-reservation"
+              }
+            },
+            {
+              "id": "zero",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000004"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "half",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0.5,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000004"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "zero-percent",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "minus-hundred-percent",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": -100.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "hundred-percent",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 100.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "one-percent",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 1.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "one-factor",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 1.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "zero-factor",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "hundred-factor",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 100.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "ten-thousand-factor",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 10000.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "floor-bias",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0.0001,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "one-count",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 1.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000295a"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "zero-count",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000295a"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "mult-scaled",
+              "expression": {
+                "kind": "scale",
+                "value": "reservation-multiplier",
+                "factor": "ten-thousand-factor"
+              }
+            },
+            {
+              "id": "mult-biased",
+              "expression": {
+                "kind": "add",
+                "left": "mult-scaled",
+                "right": "floor-bias"
+              }
+            },
+            {
+              "id": "mult-floored",
+              "expression": {
+                "kind": "round",
+                "value": "mult-biased",
+                "quantum": {
+                  "value": 1.0,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                },
+                "mode": "floor"
+              }
+            },
+            {
+              "id": "mult",
+              "expression": {
+                "kind": "divide_factor",
+                "value": "mult-floored",
+                "divisor": "ten-thousand-factor"
+              }
+            },
+            {
+              "id": "base-flat",
+              "expression": {
+                "kind": "add",
+                "left": "base",
+                "right": "extra-spirit"
+              }
+            },
+            {
+              "id": "base-flat-val",
+              "expression": {
+                "kind": "scale",
+                "value": "base-flat",
+                "factor": "mult"
+              }
+            },
+            {
+              "id": "more-positive",
+              "expression": {
+                "kind": "compare",
+                "operation": "greater",
+                "left": "reserved-more",
+                "right": "zero-factor"
+              }
+            },
+            {
+              "id": "inc-above-minus-hundred",
+              "expression": {
+                "kind": "compare",
+                "operation": "greater",
+                "left": "reserved-increased",
+                "right": "minus-hundred-percent"
+              }
+            },
+            {
+              "id": "base-zero",
+              "expression": {
+                "kind": "compare",
+                "operation": "equal",
+                "left": "base-flat-val",
+                "right": "zero"
+              }
+            },
+            {
+              "id": "base-nonzero",
+              "expression": {
+                "kind": "not",
+                "value": "base-zero"
+              }
+            },
+            {
+              "id": "nonzero-branch",
+              "expression": {
+                "kind": "all",
+                "values": [
+                  "more-positive",
+                  "inc-above-minus-hundred",
+                  "base-nonzero"
+                ]
+              }
+            },
+            {
+              "id": "inc-plus-hundred",
+              "expression": {
+                "kind": "add",
+                "left": "hundred-percent",
+                "right": "reserved-increased"
+              }
+            },
+            {
+              "id": "inc-number",
+              "expression": {
+                "kind": "ratio",
+                "numerator": "inc-plus-hundred",
+                "denominator": "one-percent",
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000001"
+                }
+              }
+            },
+            {
+              "id": "with-inc-numerator",
+              "expression": {
+                "kind": "scale",
+                "value": "base-flat-val",
+                "factor": "inc-number"
+              }
+            },
+            {
+              "id": "with-inc",
+              "expression": {
+                "kind": "divide_factor",
+                "value": "with-inc-numerator",
+                "divisor": "hundred-factor"
+              }
+            },
+            {
+              "id": "with-more",
+              "expression": {
+                "kind": "scale",
+                "value": "with-inc",
+                "factor": "reserved-more"
+              }
+            },
+            {
+              "id": "clamped-efficiency",
+              "expression": {
+                "kind": "maximum",
+                "left": "efficiency-increased",
+                "right": "minus-hundred-percent"
+              }
+            },
+            {
+              "id": "efficiency-fraction",
+              "expression": {
+                "kind": "percent_as_factor",
+                "percent": "clamped-efficiency",
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000001"
+                }
+              }
+            },
+            {
+              "id": "efficiency-denominator",
+              "expression": {
+                "kind": "add",
+                "left": "one-factor",
+                "right": "efficiency-fraction"
+              }
+            },
+            {
+              "id": "with-efficiency",
+              "expression": {
+                "kind": "divide_factor",
+                "value": "with-more",
+                "divisor": "efficiency-denominator"
+              }
+            },
+            {
+              "id": "with-efficiency-more",
+              "expression": {
+                "kind": "divide_factor",
+                "value": "with-efficiency",
+                "divisor": "efficiency-more"
+              }
+            },
+            {
+              "id": "round-biased",
+              "expression": {
+                "kind": "add",
+                "left": "with-efficiency-more",
+                "right": "half"
+              }
+            },
+            {
+              "id": "rounded",
+              "expression": {
+                "kind": "round",
+                "value": "round-biased",
+                "quantum": {
+                  "value": 1.0,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000004"
+                  }
+                },
+                "mode": "floor"
+              }
+            },
+            {
+              "id": "rounded-clamped",
+              "expression": {
+                "kind": "maximum",
+                "left": "rounded",
+                "right": "zero"
+              }
+            },
+            {
+              "id": "per-use",
+              "expression": {
+                "kind": "select",
+                "condition": "nonzero-branch",
+                "when_true": "rounded-clamped",
+                "when_false": "zero"
+              }
+            },
+            {
+              "id": "paid-count",
+              "expression": {
+                "kind": "subtract",
+                "left": "selected-count",
+                "right": "free-count"
+              }
+            },
+            {
+              "id": "paid-count-clamped",
+              "expression": {
+                "kind": "maximum",
+                "left": "paid-count",
+                "right": "zero-count"
+              }
+            },
+            {
+              "id": "paid-count-factor",
+              "expression": {
+                "kind": "ratio",
+                "numerator": "paid-count-clamped",
+                "denominator": "one-count",
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000001"
+                }
+              }
+            },
+            {
+              "id": "counted",
+              "expression": {
+                "kind": "scale",
+                "value": "per-use",
+                "factor": "paid-count-factor"
+              }
+            },
+            {
+              "id": "no-reservation-becomes-cost",
+              "expression": {
+                "kind": "not",
+                "value": "reservation-becomes-cost"
+              }
+            },
+            {
+              "id": "no-mana-cost-gain-as-reservation",
+              "expression": {
+                "kind": "not",
+                "value": "mana-cost-gain-as-reservation"
+              }
+            },
+            {
+              "id": "no-flat-base-override-present",
+              "expression": {
+                "kind": "not",
+                "value": "flat-base-override-present"
+              }
+            },
+            {
+              "id": "no-flat-forced-present",
+              "expression": {
+                "kind": "not",
+                "value": "flat-forced-present"
+              }
+            },
+            {
+              "id": "no-active-mine-count-present",
+              "expression": {
+                "kind": "not",
+                "value": "active-mine-count-present"
+              }
+            },
+            {
+              "id": "no-spirit-transfer",
+              "expression": {
+                "kind": "not",
+                "value": "spirit-to-life-conversion-active"
+              }
+            },
+            {
+              "id": "ordinary-flat-branch",
+              "expression": {
+                "kind": "all",
+                "values": [
+                  "has-reservation",
+                  "multiple-reservation",
+                  "no-reservation-becomes-cost",
+                  "no-mana-cost-gain-as-reservation",
+                  "no-flat-base-override-present",
+                  "no-flat-forced-present",
+                  "no-active-mine-count-present",
+                  "no-spirit-transfer"
+                ]
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "ordinary-flat-branch-required",
+              "when": null,
+              "effect": {
+                "kind": "requirement",
+                "satisfied": "ordinary-flat-branch",
+                "code": "ordinary-flat-reservation-branch-required"
+              }
+            },
+            {
+              "id": "per-use-flat",
+              "when": "ordinary-flat-branch",
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003274"
+                },
+                "value": "per-use"
+              }
+            },
+            {
+              "id": "counted-flat",
+              "when": "ordinary-flat-branch",
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003275"
+                },
+                "value": "counted"
+              }
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "partial",
+        "value": {
+          "gaps": [
+            {
+              "subject": {
+                "kind": "definition",
+                "value": {
+                  "kind": "skill",
+                  "value": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000012"
+                  }
+                }
+              },
+              "facet": "game_rules",
+              "code": "remaining-game-effects-not-converted"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
