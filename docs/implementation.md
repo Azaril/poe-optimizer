@@ -39,142 +39,121 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: Offering final inputs and local item preparation
+## Latest implementation checkpoint: pre-Amulet bonus aggregation
 
-The accepted preset-owned exact generated-input bindings remain implemented,
-including provider-level authority. Requested participation and the
+The accepted preset-owned exact generated-input bindings remain implemented.
+Requested participation and the
 [V2 generated-source accounting proposal](owned-generated-skill-dispositions-proposal.md)
 remain separate pending decisions. Neither public policy is implemented.
 
-The [Offering final-input packet](../data/owned/poe2/3887ae68/offering-final-inputs/README.md)
-publishes one new source-assembly program and replaces one existing primary-supply
-body on physical Gem `086b`. Structural activation remains identical; the
-unchanged ordinary preparation computes `30ac/30ad`. Post-census assembly now
-projects generated Skill parameters `3223/3224` directly. Historical physical-final
-Stats `3225/3226` had no writers and only the old primary-supply reads; the exact
-whole-input census proves those executable consumers are now removed. Their
-descriptors remain allocated and unconsumed. No definition, slot, table, receiver
-or rule operation is added, and no existing Partial closure is promoted.
+The [Amulet snapshot packet](../data/owned/poe2/3887ae68/amulet-bonus-snapshot/README.md)
+publishes one ordinary Actor rule owned by existing Stat 32e4 and one explicit
+Player receiver. It sums the pre-copy Add stream in percentage points, then
+derives the scalar consumed by the existing Amulet-copy rule. The reducer's
+program inventory is Complete; incoming contributor coverage is not. Existing
+Passive, item and Gem owners retain their exact bodies and Partial closures.
+No definition, slot, table, engine operation or alternative evaluator is added.
+Schema V6, operations V20 and stages V4 remain unchanged.
 
-The guard requires exact integral level coverage within the reviewed 1–40 table
-and preserves quality within the existing parameter domain. It authors no
-gameplay level cap, natural-maximum fallback, arbitrary table recovery or new
-supported-quality default. The source-property and readiness fragments remain
-finite authoring references, outside the runtime/import package. Complete
-incoming properties, source coverage and the pre-Amulet snapshot `32e4` remain
-unresolved; no evaluation bundle or complete build is claimed.
+The native graph now joins the real reducer and actual Mystic Attunement program
+to item arithmetic, ordinary/supported source preparation and Offering final
+inputs. No literal pre-Amulet value remains in this new component. Contribution
+and scalar channels freeze separately; late writes and feedback are errors,
+not silently excluded values. A proved empty set sums to zero; missing coverage
+does not. Component-only owner/placement/receiving inventories and isolated
+Passive topology remain explicit, so this is not a complete Original05 request.
 
-The optional source04 witness passes in **412.73 seconds** over 26 cases, three
-fixed lifecycle observations and both JIT modes. All four raw/compared files
-are byte-identical at **3,514,069 bytes**, SHA256
-`a2f421af709896c79ae6c6a6229b128492e1d8a08b10e7299cad9fcaae8a1610`.
-Original method call/return hooks authenticate ordinary Gem-property consumption,
-the supported-property cache, physical sources and exact Amulet copy transport.
-Five unchanged originals, independent repeats, unhooked contrasts, both Prolonged
-tiers, raw inputs, independent Offering copies and item-removal/copy controls
-remain explicit. The committed **1,230,541-byte** projection preserves source JSON
-number types, with SHA256
-`561d1f727efc5f2e3ad7c7dac8869453320eb9c185f8dd932598e5cf3dea323d`.
-It proves final quality input preservation, not a quality-effect recipe.
-Source01–03 failed on observer assumptions; no PoB formula, lifecycle, numerical
-tolerance or original build changed to obtain the source04 pass.
+Source02 passes in **452.78 seconds**: nineteen cases, three fixed lifecycle
+observations, both JIT modes, five unchanged originals and independent replays.
+All four raw/compared reports are byte-identical at **64,324,391 bytes**, SHA256
+447d75d7014819fb20b730329e15fa918953b99b306ab9a482043e1289b7c7db.
+The **1,311,277-byte** committed projection binds actual selected environments,
+original Sum/store returns, source candidates and exact physical copy transport;
+its SHA256 is 37422bea16928ee93cfabf9dd51c3e6c0c4683ff5eaf68e9057c7f0bf5e78b2e.
+The self-copy control observes pre-copy 100 and post-copy 200 while retaining
+copy factor 1. Other controls prove the real Passive 25, combined 125, removals
+and absence. Custom item lines do not establish roll legality.
 
-The actual item programs require typed local preparation outputs on EquipmentUse
-and Modifier occurrences. The [bounded stages V4 implementation](owned-preparation-item-facts.md)
-permits only their declared local `Derive` destinations and retains all owner,
-readiness, output and dependency checks. Defaults, V1–V3 authority, schema V6 and
-operations V20 stay unchanged. Data's **25 stage/readiness tests and 22 receiving
-tests pass**, as do **three private Engine readiness tests**. No Engine execution
-algorithm or second preparation evaluator was added.
+Source01 failed because our control added Ritualist notable 7068 to a different
+class without a connected ascendancy path; PoB correctly pruned it. Source02
+uses an explicit connected Huntress/Ritualist diagnostic context and verifies
+actual class/path membership. Removing the notable restores that diagnostic
+baseline, not Original05. Original bytes, source calculation functions, lifecycle
+and zero numerical tolerance are unchanged. The earlier historical Amulet
+witness remains intact for its distinct four-lane/source-line evidence; this
+new witness extends its breadth and actual Passive controls.
 
-All **seven native tests pass in 8.98 seconds**. They execute actual published
-item/copy programs and canonical rolls in one graph: original level/quality
-`22/0` selects damage-table value `62`. Controls cover independent physical
-sources, item rolls/removal, the explicit snapshot boundary, both support tiers,
-removal/disablement, exact invalid/missing-input refusals, actual Partial-owner
-refusal, A/B/A scratch reuse and four-worker Rayon replay. No final22/0 fixture
-producer remains. Native01 omitted receiving V3 in the fixture; native02 scheduled
-generated predicate facts before their exact entering grant. Explicit receiving,
-stage and frozen-channel fixture corrections resolved those failures without
-weakening production checks. The real `32e4` producer and complete incoming
-contributor/owner coverage remain outside this finite component.
+Publication01 passes in **28.68 seconds**. The reviewed full endpoint adds only
+the new owner/receiver after an unpublished Partial-owner rebinding stage.
+Exact temporary/predecessor inverses preserve every other rule, receiver, schema,
+allocation, import contract and query. Public append-only migration permissions
+are unchanged. Rebuilding reproduces eighteen artifacts; all five original
+sources, local identities, obligation correspondence and 110 query rows survive.
+The package has no evaluation bundle or embedded source/readiness evidence.
 
-Publication03 passes in **27.73 seconds** and reproduces all eighteen artifacts.
-An explicit `owner-replacement.json` authoring overlay replaces the reviewed
-program through full endpoint assembly. An unpublished append-only stage supplies
-checked identity rebinding; the public migration API still rejects program
-rewrites. Exact inverses preserve all other rule bodies, closures, schemas,
-allocations and import contracts. The five original sources, local identities,
-obligation correspondence and 110 query rows survive release-identity rebinding.
-No input issue, numerical owner or whole-build gate is closed by this publication.
+All **five native tests pass in 10.77 seconds**. They cover empty aggregation, the actual 25% contribution,
+both support tiers, per-record copy rounding, independent Offering
+raw inputs and item removal, exact missing/Partial refusals, late writers,
+early reads, feedback, A/B/A scratch reuse and four-worker Rayon replay.
+Both ordinary authoring tests pass. The extracted fixture contains no nested
+tests; the seven historical Offering and five Bidding checks retain their names
+and pass after extraction. Strict workspace/all-feature/all-target Clippy and
+all eight package formatting checks, active-document links and git diff checks
+pass. No production Rust changed, so the
+prior WASM compilation evidence remains applicable but was not rerun here.
 
-Receipts: `runs/owned-offering-property-source-04.log`,
-`runs/owned-offering-publication-03.log`,
-`runs/owned-offering-item-readiness-data-03.log`,
-`runs/owned-offering-item-readiness-engine-01.log` and
-`runs/owned-offering-native-03.log`. Public Engine readiness (14 tests) and
-source properties (15 tests) pass, including budget failure/recovery and
-A/B/A/Rayon, in `runs/owned-offering-engine-regressions-01.log`.
-Historical Action (4), Encroaching (5), Magnified (6), Prolonged (7) and Rapid (5)
-native tests pass in `runs/owned-offering-native-regressions-01.log`.
-Bidding's five native regressions pass in
-`runs/owned-offering-bidding-regressions-01.log`; nine ordinary authoring tests
-pass in `runs/owned-offering-authored-regressions-01.log`. Strict workspace,
-all-target/all-feature Clippy passes in `runs/owned-offering-clippy-03.log`.
-Both minimal Engine/Data and full Core/Data/Engine/Import WASM library checks
-pass (`runs/owned-offering-wasm-minimal-01.log`, `runs/owned-offering-wasm-01.log`);
-these are compilation checks, not new cross-platform numerical evidence.
-The numeric Amulet fixture now reads its three authored fragments directly,
-removing an unnecessary dependency on the publication/migration test module.
-Clippy's earlier receipts retain the redundant-borrow/lifetime/module diagnostics;
-no arithmetic or production API changed for their fixes.
-All eight package formatting checks and local links/anchors in seven active
-documents pass, as does `git diff --check`. After test-helper cleanup, Amulet's
-nine tests pass (`runs/owned-offering-amulet-regressions-01.log`) and the seven
-Offering tests pass again in 9.22 seconds (`runs/owned-offering-native-04.log`).
-Exact pushed-head hosted CI remains a separate gate.
-**Complete native original builds remain 0/5**, with Original05's
-five selected issues and 79 configuration-linked origins unchanged.
+Receipts: runs/owned-amulet-bonus-source-02.log,
+runs/owned-amulet-bonus-authoring-01.log,
+runs/owned-amulet-bonus-publication-01.log,
+runs/owned-amulet-bonus-native-01.log,
+runs/owned-amulet-bonus-offering-regressions-02.log,
+runs/owned-amulet-bonus-bidding-regressions-01.log and
+runs/owned-amulet-bonus-clippy-02.log. Earlier failed receipts remain diagnostic;
+Clippy01's single-element loops and needless borrows were corrected without
+changing semantics. Exact pushed-head hosted CI remains a separate gate.
+**Complete native original builds remain 0/5**; Original05's five selected
+issues and 79 configuration-linked origins are unchanged.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-offering-final-inputs-03/package` as the integration baseline.
+Use `runs/owned-amulet-bonus-snapshot-01/package` as the integration baseline.
 Current imports are its `original-01` through `original-05` siblings. The checked
 publication retains the exact Direct-target normalization authority and historical
 provider/raw-input receipts. Sidecars are V20 for Originals01/05 and V19 for the others;
 this is distinct from native schema V6 and operations V20.
 
-Its immediate predecessor is `runs/owned-prolonged-duration-support-delivery-01/package`,
-input `a9c7e639ca97d18646d3e91adbb4201f93ff40a906c8e5278498208ab60895e2`.
-Run `publish_offering_final_inputs_preserving_five_originals` in
-`tests/owned_offering_final_inputs.rs` with explicit
-`POE_OPTIMIZER_TEST_OFFERING_INPUTS_PRIOR` and fresh `POE_OPTIMIZER_TEST_OFFERING_INPUTS_OUTPUT` paths.
-The [packet's reproduction instructions](../data/owned/poe2/3887ae68/offering-final-inputs/README.md#source-evidence-and-reproduction)
-identify the required authenticated source04 evidence. Native checks set
-`POE_OPTIMIZER_TEST_OFFERING_INPUTS_RELEASE` to this package and use the
-`native::offering_inputs_` filter with `--ignored`.
+Its immediate predecessor is runs/owned-offering-final-inputs-03/package,
+input 9a2d363f69c9895f3b6dc87165a3dda74f859a753d936ee2b2cca057608c01d4.
+Run publish_amulet_bonus_snapshot_preserving_five_originals in
+tests/owned_amulet_bonus_snapshot.rs with explicit
+POE_OPTIMIZER_TEST_AMULET_SNAPSHOT_PRIOR and fresh
+POE_OPTIMIZER_TEST_AMULET_SNAPSHOT_OUTPUT paths. The
+[packet's reproduction instructions](../data/owned/poe2/3887ae68/amulet-bonus-snapshot/README.md#reproduction)
+identify authenticated source02 evidence. Native checks set
+POE_OPTIMIZER_TEST_AMULET_SNAPSHOT_RELEASE to this package and use the
+native::amulet_snapshot_ filter with --ignored.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `9a2d363f69c9895f3b6dc87165a3dda74f859a753d936ee2b2cca057608c01d4` |
+| Release input | `4526f13e139cc0bc24f99ba12382331afbda4513677118fa377f3b31c8905cbe` |
 | Registry | `c423d01fd9cc7638800feeb47e36ddbf15162bb9882e11ad374490e2a03c306e` |
-| Definitions content | `292eb6cc0b03dc62f93f2d3cde1d3ad8cda5f4883be228deb49bbccc13a8bc01` |
-| Rules | `48dc5057071c08cdc7a50c4a035bb59c71a0ac653b7eea4ec1f8a2a6e6d64575` |
-| Compiled rules | `f3a09808e9a357c163096dca5ed85e8d073947594300f4ed7956c354091c3bc8` |
-| Routing | `06516cdde6be43f45f17d02594c42b8f763fcf468ffa74fe579ff7839b734303` |
-| Mapping | `e548397136925482789f346d04310a1d10b55aaaad9b3f59404e8beb3692a3dd` |
-| Skill roles | `dd5a294f3f1d70f8a89c8abf738a8879050516fd66a99ff0db886f9093fb6667` |
-| Normalization | `b97e5eafce43688a98d179f7a59c49687b071d9e11965ab84899ed0ab1bd0e4c` |
-| Rewards | `8764ebd9daa035188bde0dda7807567b5def341ac88697d44bc2a7099f20b8c4` |
-| Items | `674e0930242cd44beb5dd2d469187f70038eb9162a993b76220e46bb830fb8f4` |
-| Item source | `283696e340616338f87cd5cfb7f4ef150c5e5c69952af889bf1971df3c3fece1` |
-| Tree policy | `5568b1b23ff401aeca565e077bbc2e27fd5dcb9e238e900f9144b23c338895be` |
-| Authoring commitment | `327c7aaa1e2f3b283584eaf115a19bed067a6efa4c3067c015cdeda75cb4b542` |
+| Definitions content | `3e3d5b3fe04f9ad555118f7ca2e0bc0850bf339346200878d5584ea6b879f151` |
+| Rules | `6895c5df9967366193d9f8a7c5b4f4932ff2266721c3b51ee2f41f15c6080dcf` |
+| Compiled rules | `bc248ea7e6558a8da1ff4565d63de4c74158f7d4158906f23c9006fabbeed4a8` |
+| Routing | `ef07f22b9ac4281e4f338084c5858f0176a67567729be8a2716eb52afefdcc09` |
+| Mapping | `12c3e0f6a92cc573cf15ad27d100f802779b078615a6c57da13269400fc815c7` |
+| Skill roles | `5726ec779fede38c0078118076e2158d520da59924f7b08e98ca0c871dfda907` |
+| Normalization | `d4a573c191a00068f857d5bf3b059758a9963f9c9076dff978cef9b1ba03f54d` |
+| Rewards | `592d3da6e0ff8bbc162c9e7d7609e0e638d3c589b3645bef3b6ff41a682e5f7b` |
+| Items | `5a376055ef76a648692bb867b1241b3f277361672ea965f03e109e2c2f9e54bb` |
+| Item source | `e4657eebce7f23f7e32d32236169bdd1d7621df4ef4c201f9b27c479396806c4` |
+| Tree policy | `5ea1cdb81b7bf2affa7a22e141b710aa0533e9f7571d05aa8092576acff61d7e` |
+| Authoring commitment | `4c01f7ceee6d826bae394eef5de3ecb31cb178dec0e2d99d7e559c4403831edc` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,841,233 bytes** with 102 provenance rows.
-The definitions release is `pob-3887ae68-offering-final-inputs-v1`.
+The eighteen package files total **60,842,780 bytes** with 103 provenance rows.
+The definitions release is `pob-3887ae68-amulet-bonus-snapshot-v1`.
 The registry ends at `3301`. Mechanics and integration remain Partial;
 there is no evaluation bundle. Source-property, readiness and preparation
 fragments remain authoring data, not separately loadable complete evaluators.
@@ -267,8 +246,8 @@ preset-owned raw-input bindings and the pending participation model.
 
 After approval, implement that bounded proof using the existing private Import
 seams. In parallel, numerical integration should
-use the published real Offering output/recipient topology and finish the
-pre-Amulet producer/contributor census described below. Settle ordinary-cost reduction and
+use the published real Offering output/recipient topology and complete actual
+incoming contributor and selected-owner coverage described below. Settle ordinary-cost reduction and
 rounding only with contrasting valid-domain inputs. Do not invent a parent Action or use source
 absence to close ground growth. A required new public recipient/participation
 contract must remain a reviewed design decision.
@@ -288,13 +267,25 @@ in one plan; do not restore final22/0 literals or pass intermediate values throu
 a second evaluator. Stages V4's bounded local facts preserve production ownership
 and dependency checks.
 
-The next numerical blocker is a real producer for the required pre-Amulet
-aggregate `32e4` and a complete census of its incoming contributors. Reuse the
-existing copy program and owned stage boundary. Establish ordinary item, external
-and supported-property inventories before replacing finite test closure with
-actual release authority. The item/template/Gem owners remain Partial; complete
-source and numerical coverage still precede a real Original05 evaluation. Final
-duration, payable cost and recipient scaling remain subsequent consumers.
+The [Amulet snapshot reducer](../data/owned/poe2/3887ae68/amulet-bonus-snapshot/README.md)
+is now published and integrated. The next numerical blocker is **actual selected
+item/source contributor and owner coverage**, not another producer for 32e4.
+Keep using the real reducer, existing copy program and explicit stage boundary.
+Establish ordinary item, external and supported-property inventories before
+replacing finite test closure with actual release authority. The global
+selected-owner gate still refuses scalar/reduction reads if another selected
+owner is Partial; a measured empty source bucket cannot override that gate.
+
+Prioritize selected Modifier 30ca's remaining phase-specific behavior: Focus
+preprocessing at CalcSetup1473–1484 and later non-Amulet copies at
+CalcPerform1490–1539. Helmet is an actual Original05 occurrence. Observe the
+original late-copy delivery relative to already prepared Gem inputs before
+connecting any contribution; final ModDB presence alone does not establish an
+earlier level bonus. Completing a real selected owner is more useful now than
+adding an absent jewellery-bonus family. Final Offering duration, payable cost
+and recipient scaling remain subsequent consumers with their own original-call,
+incoming-coverage and rounding evidence. Any new public contract remains a
+reviewed design decision.
 
 Historical `3225/3226` descriptors now have no executable consumers or writers.
 The published structural primary-supply activation remains exact; post-census
@@ -510,9 +501,10 @@ numerical outputs when game intent remains unresolved.
 
    The ordinary Minion-level Amulet copy and finite placement facts have authored
    fragments.
-   The new original-source snapshot census is proved, but native aggregate
-   authority still requires complete actual contributors and owner coverage
-   before joining item arithmetic into source preparation.
+   Source02 now extends the historical snapshot census to all five originals
+   and actual Ritualist controls. The native reducer is published and joins
+   item arithmetic to source preparation in the finite component; actual
+   contributor and selected-owner coverage still gate real-build authority.
    The current compiler uses a whole-selected-plan completeness flag for scalar
    Stat reads, contribution reductions and modifier transforms. Any selected
    owner/topology gap makes these reads `IncompleteContributors`; completing the
@@ -763,7 +755,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
 | Selected passive receiving | Growing Swarm's complete default two-effect owner and Sniper receiving are published through existing contracts. Conditional/unconditional cooldown sums stay distinct; final duration, area/radius, other minion receivers and complete contributor coverage remain open. [Packet and limits](../data/owned/poe2/3887ae68/growing-swarm/README.md). |
-| Selected support delivery | Magnified Area I/II contributions and actual per-Action Area eligibility are published and validated for fourteen contexts, with scratch/Rayon isolation. Rapid Casting I/II now publishes cast-speed contributions and passes both-stat-set/independent-root checks using the same contracts. Encroaching now delivers factor 1.1 on existing channel 32fa with exact mixed-family source/native checks; ground growth and source subtotal-rounding authority remain unresolved. Prolonged I/II now supplies duration/cost factors on real Offering and Ice actions; final inputs, final timing and application-lifetime transfer remain open. Primary Summon delivery, final radius/resource costs and complete owner/receiving inventories remain open. Keep ordinary resource-cost factors separate from reservation factors. [Delivery](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md) and [eligibility](../data/owned/poe2/3887ae68/action-area-eligibility/README.md). |
+| Selected support delivery | Magnified Area I/II contributions and actual per-Action Area eligibility are published and validated for fourteen contexts, with scratch/Rayon isolation. Rapid Casting I/II now publishes cast-speed contributions and passes both-stat-set/independent-root checks using the same contracts. Encroaching now delivers factor 1.1 on existing channel 32fa with exact mixed-family source/native checks; ground growth and source subtotal-rounding authority remain unresolved. Prolonged I/II now supplies duration/cost factors on real Offering and Ice actions; Offering final-input production is published; complete contributor coverage, other final-input domains, final timing and application-lifetime transfer remain open. Primary Summon delivery, final radius/resource costs and complete owner/receiving inventories remain open. Keep ordinary resource-cost factors separate from reservation factors. [Delivery](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md) and [eligibility](../data/owned/poe2/3887ae68/action-area-eligibility/README.md). |
 | Support catalogue/supply boundary | Corrected one offline producer and its validators; published 568 Known Gem replacements from a full 966-Gem census. Primary associations stay in Import, non-support candidates and Partial closures survive. Bidding consumes actual corrected data; the historical Ice Nova component retains named finite isolation until rebased. Hidden-helper semantics and complete genuine supply remain open. [Retirement/integration gate](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05). |
 | Exact Direct support targets | Shared V2 source proof resolves 40 saved targets/eleven order sequences, retiring eight selected Original01 and six selected Original05 issues. Absent source is required; explicit-empty raw records stay Pending. Input values, usage, activation, full origin inventory and numerical readiness remain independent. [Evidence](owned-djinn-provider-evidence.md#exact-manual-support-targets). |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |
@@ -772,7 +764,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
 | Attribute grouping and source caches | Finite-stage architecture accepted; ordered attribute groups and numerical integration unfinished. The synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability and a reviewed domain law. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | V18 and the later stale V20 future-version assertion are corrected; the earlier six-hour combined Windows compile is replaced by five test suites on both OSes. [Run 37325666494](https://github.com/Azaril/poe-optimizer/actions/runs/37325666494) at `167aa1aa` passed all twelve validation/test jobs, with its final aggregate jobs failing hosted-runner acquisition. The completed `e613014` run failed both workspace shards only on the V20 assertion fixed in `53a719b`; Windows Import lost runner communication and Ubuntu Engine did not acquire a runner. At 2026-10-06 01:35 UTC, `f11a57c` run 37379670680 has both OS Import/Engine/workspace shards passed; validation/CLI/PoB still run on both OSes, without failure annotations. `51364f7` run 37398696716 is pending with zero jobs; the prior pending `6370065` run was coalesced before starting. Exact pushed-head hosted success remains open. Infrastructure annotations do not justify dropping coverage or changing tests. Retain every package/target and required aggregate check. |
+| CI regression, timeout and infrastructure | V18 and the later stale V20 future-version assertion are corrected; the earlier six-hour combined Windows compile is replaced by five test suites on both OSes. [Run 37325666494](https://github.com/Azaril/poe-optimizer/actions/runs/37325666494) at `167aa1aa` passed all twelve validation/test jobs, with its final aggregate jobs failing hosted-runner acquisition. The completed `e613014` run failed both workspace shards only on the V20 assertion fixed in `53a719b`; Windows Import lost runner communication and Ubuntu Engine did not acquire a runner. At 2026-10-06 02:55 UTC, `f11a57c` run 37379670680 has nine successful jobs: all Ubuntu jobs and Windows Import/Engine/workspace. Windows validation/CLI/PoB remain running, with no failed job. `fe985a5` run 37402864057 is pending behind it; main retains the running workflow and coalesces pending revisions. Exact pushed-head hosted success remains open. Infrastructure annotations do not justify dropping coverage or changing tests. Retain every package/target and required aggregate check. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 | Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |

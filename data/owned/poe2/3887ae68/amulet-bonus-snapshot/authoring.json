@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "before": "9a2d363f69c9895f3b6dc87165a3dda74f859a753d936ee2b2cca057608c01d4",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-offering-final-inputs-v1",
+    "schema_version": 6,
+    "content_sha256": "292eb6cc0b03dc62f93f2d3cde1d3ad8cda5f4883be228deb49bbccc13a8bc01",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "c423d01fd9cc7638800feeb47e36ddbf15162bb9882e11ad374490e2a03c306e",
+  "rules": "48dc5057071c08cdc7a50c4a035bb59c71a0ac653b7eea4ec1f8a2a6e6d64575",
+  "mapping": "e548397136925482789f346d04310a1d10b55aaaad9b3f59404e8beb3692a3dd",
+  "roles": "dd5a294f3f1d70f8a89c8abf738a8879050516fd66a99ff0db886f9093fb6667",
+  "normalization": "b97e5eafce43688a98d179f7a59c49687b071d9e11965ab84899ed0ab1bd0e4c",
+  "release": "pob-3887ae68-amulet-bonus-snapshot-v1",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "registry_last_issued_before": 13057,
+  "registry_last_issued_after": 13057,
+  "allocated_definitions": 0,
+  "new_programs": 1,
+  "new_receivers": 1,
+  "scope": {
+    "snapshot_aggregation": true,
+    "incoming_contributor_closure": false,
+    "existing_owner_closures_changed": false,
+    "post_copy_values_reused_as_input": false,
+    "complete_build_parity": false,
+    "source_status": "amulet-bonus-snapshot-source-02-passed"
+  },
+  "assets": [
+    {
+      "path": "bindings.json",
+      "sha256": "03045c01a74465f43d898bdb63b051e386319a99482d570a5300c651c048f04d"
+    },
+    {
+      "path": "dependencies.json",
+      "sha256": "145213e356da5d902e3fdf2256f0dc5d89143baee9d404e3d839350849d736e9"
+    },
+    {
+      "path": "snapshot-authoring.json",
+      "sha256": "18dbb452612265ba57fff4c7ab8e6371c9ec4be685f7b249ec7ac73c55b3ad08"
+    },
+    {
+      "path": "readiness.json",
+      "sha256": "ae871a93f9762c23fb6d5a2a8951970453563eaa5dc7020ab0f00c98464505a3"
+    },
+    {
+      "path": "source-vectors.json",
+      "sha256": "37422bea16928ee93cfabf9dd51c3e6c0c4683ff5eaf68e9057c7f0bf5e78b2e"
+    }
+  ]
+}

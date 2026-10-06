@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "before": "9a2d363f69c9895f3b6dc87165a3dda74f859a753d936ee2b2cca057608c01d4",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-offering-final-inputs-v1",
+    "schema_version": 6,
+    "content_sha256": "292eb6cc0b03dc62f93f2d3cde1d3ad8cda5f4883be228deb49bbccc13a8bc01",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "release": "pob-3887ae68-amulet-bonus-snapshot-v1",
+  "channels": {
+    "pre_amulet_percent": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032e4"
+    }
+  },
+  "units": {
+    "percent": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000002"
+    }
+  },
+  "passive": {
+    "definition": {
+      "kind": "passive_node",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001b09"
+    },
+    "source_node": 7068,
+    "program": "mystic-attunement-amulet-percent"
+  },
+  "snapshot": {
+    "program": "pre-amulet-bonus-snapshot",
+    "receiver": "player-pre-amulet-bonus-snapshot"
+  },
+  "scope": {
+    "snapshot_aggregation": true,
+    "incoming_contributor_closure": false,
+    "existing_owner_closures_changed": false,
+    "post_copy_values_reused_as_input": false,
+    "complete_build_parity": false,
+    "source_status": "amulet-bonus-snapshot-source-02-passed"
+  }
+}

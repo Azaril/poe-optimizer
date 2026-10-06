@@ -464,8 +464,13 @@ those Stats remain. Their historical descriptors stay allocated and unconsumed;
 there is no fallback path or unsupported schema-removal API. Source04 and
 publication03 pass, with an exact owner/inverse proof and no relaxation of the
 append-only migration API. All seven native component tests now pass using real
-item programs and source assembly; the actual snapshot producer and complete
-contributor coverage remain open independently of this runtime-consumer removal.
+item programs and source assembly. The next published snapshot packet now
+replaces that component's literal 32e4 boundary with the real Stat-owned reducer
+and Player receiver; all five new native checks pass. The old bounded fixture
+remains an independent numerical reference, with construction extracted once
+and its original seven tests retained. No production fallback or new engine
+branch exists. Complete contributor/selected-owner coverage remains open
+independently of this runtime-consumer removal.
 
 The [scaling-data investigation](owned-scaling-data-investigation.md) extends this
 audit to source interpolation and formula metadata. Resolved samples and runtime

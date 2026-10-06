@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "reference_only": true,
+  "stages": [
+    {
+      "id": "pre-amulet-contributors",
+      "predecessors": []
+    },
+    {
+      "id": "pre-amulet-snapshot",
+      "predecessors": [
+        "pre-amulet-contributors"
+      ]
+    },
+    {
+      "id": "amulet-copy",
+      "predecessors": [
+        "pre-amulet-snapshot"
+      ]
+    }
+  ],
+  "programs": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001b09"
+          }
+        }
+      },
+      "program": "mystic-attunement-amulet-percent",
+      "stage": "pre-amulet-contributors"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032e4"
+          }
+        }
+      },
+      "program": "pre-amulet-bonus-snapshot",
+      "stage": "pre-amulet-snapshot"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "modifier",
+          "value": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000030ca"
+          }
+        }
+      },
+      "program": "amulet-copy-minion-gem-level",
+      "stage": "amulet-copy"
+    }
+  ],
+  "readiness": {
+    "programs": {
+      "members": [
+        {
+          "owner": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001b09"
+              }
+            }
+          },
+          "program": "mystic-attunement-amulet-percent",
+          "phase": "structural",
+          "role": "preparation_facts",
+          "outputs": [
+            {
+              "kind": "contributions",
+              "scope": "actor",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032e4"
+              },
+              "contribution": "add"
+            }
+          ]
+        },
+        {
+          "owner": {
+            "kind": "definition",
+            "value": {
+              "kind": "stat",
+              "value": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032e4"
+              }
+            }
+          },
+          "program": "pre-amulet-bonus-snapshot",
+          "phase": "structural",
+          "role": "preparation_facts",
+          "outputs": [
+            {
+              "kind": "stat",
+              "scope": "actor",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032e4"
+              }
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "partial",
+        "value": {
+          "gaps": [
+            {
+              "subject": {
+                "kind": "definition",
+                "value": {
+                  "kind": "stat",
+                  "value": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032e4"
+                  }
+                }
+              },
+              "facet": "game_rules",
+              "code": "schedule-fragment-only"
+            }
+          ]
+        }
+      }
+    },
+    "skills": []
+  },
+  "frozen_channels": [
+    {
+      "channel": {
+        "kind": "contributions",
+        "scope": "actor",
+        "stat": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032e4"
+        },
+        "contribution": "add"
+      },
+      "stage": "pre-amulet-contributors"
+    },
+    {
+      "channel": {
+        "kind": "stat",
+        "scope": "actor",
+        "stat": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032e4"
+        }
+      },
+      "stage": "pre-amulet-snapshot"
+    }
+  ]
+}

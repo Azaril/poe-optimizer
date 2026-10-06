@@ -1,5 +1,7 @@
 //! Original source support admission, distinct from numerical delivery or native build parity.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/amulet_bonus_snapshot_source.rs"]
+mod amulet_bonus_snapshot;
 #[path = "support/area_eligibility_source.rs"]
 mod area_eligibility;
 #[path = "support/bidding_support_source.rs"]

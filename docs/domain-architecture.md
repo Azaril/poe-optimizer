@@ -675,6 +675,13 @@ direct contributors; a direct-only inventory is insufficient unless the declared
 domain proves the earlier paths absent. These are typed data dependencies and
 ordinary rule effects, not source execution order or a second evaluator.
 
+Shared aggregation laws belong to stat-owned programs with explicit receiver
+targets, not incidental class or skill owners. Contribution streams and scalar
+results are distinct channels. Freezing a channel rejects later potential writers;
+it does not select a historical subset of a stream. A mechanic with pre-copy and
+post-copy quantities must declare those semantic inputs separately and preserve
+complete incoming coverage for each reduction.
+
 Equipment-template facts can stand for a positive placement match only when
 complete legal destination declarations establish that equivalence. Both
 character-slot and socket destinations matter. A separately proved incompatible

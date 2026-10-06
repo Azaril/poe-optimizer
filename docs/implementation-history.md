@@ -19856,3 +19856,100 @@ The remaining work and proposed reporting seam are linked below.
 
 Prior raw-input publication evidence is retained in
 [implementation history](implementation-history.md#generated-preset-raw-input-publication-checkpoint-2026-10-05).
+
+## 2026-10-05 — Offering final inputs and local item preparation (fe985a5)
+
+The accepted preset-owned exact generated-input bindings remain implemented,
+including provider-level authority. Requested participation and the
+[V2 generated-source accounting proposal](owned-generated-skill-dispositions-proposal.md)
+remain separate pending decisions. Neither public policy is implemented.
+
+The [Offering final-input packet](../data/owned/poe2/3887ae68/offering-final-inputs/README.md)
+publishes one new source-assembly program and replaces one existing primary-supply
+body on physical Gem `086b`. Structural activation remains identical; the
+unchanged ordinary preparation computes `30ac/30ad`. Post-census assembly now
+projects generated Skill parameters `3223/3224` directly. Historical physical-final
+Stats `3225/3226` had no writers and only the old primary-supply reads; the exact
+whole-input census proves those executable consumers are now removed. Their
+descriptors remain allocated and unconsumed. No definition, slot, table, receiver
+or rule operation is added, and no existing Partial closure is promoted.
+
+The guard requires exact integral level coverage within the reviewed 1–40 table
+and preserves quality within the existing parameter domain. It authors no
+gameplay level cap, natural-maximum fallback, arbitrary table recovery or new
+supported-quality default. The source-property and readiness fragments remain
+finite authoring references, outside the runtime/import package. Complete
+incoming properties, source coverage and the pre-Amulet snapshot `32e4` remain
+unresolved; no evaluation bundle or complete build is claimed.
+
+The optional source04 witness passes in **412.73 seconds** over 26 cases, three
+fixed lifecycle observations and both JIT modes. All four raw/compared files
+are byte-identical at **3,514,069 bytes**, SHA256
+`a2f421af709896c79ae6c6a6229b128492e1d8a08b10e7299cad9fcaae8a1610`.
+Original method call/return hooks authenticate ordinary Gem-property consumption,
+the supported-property cache, physical sources and exact Amulet copy transport.
+Five unchanged originals, independent repeats, unhooked contrasts, both Prolonged
+tiers, raw inputs, independent Offering copies and item-removal/copy controls
+remain explicit. The committed **1,230,541-byte** projection preserves source JSON
+number types, with SHA256
+`561d1f727efc5f2e3ad7c7dac8869453320eb9c185f8dd932598e5cf3dea323d`.
+It proves final quality input preservation, not a quality-effect recipe.
+Source01–03 failed on observer assumptions; no PoB formula, lifecycle, numerical
+tolerance or original build changed to obtain the source04 pass.
+
+The actual item programs require typed local preparation outputs on EquipmentUse
+and Modifier occurrences. The [bounded stages V4 implementation](owned-preparation-item-facts.md)
+permits only their declared local `Derive` destinations and retains all owner,
+readiness, output and dependency checks. Defaults, V1–V3 authority, schema V6 and
+operations V20 stay unchanged. Data's **25 stage/readiness tests and 22 receiving
+tests pass**, as do **three private Engine readiness tests**. No Engine execution
+algorithm or second preparation evaluator was added.
+
+All **seven native tests pass in 8.98 seconds**. They execute actual published
+item/copy programs and canonical rolls in one graph: original level/quality
+`22/0` selects damage-table value `62`. Controls cover independent physical
+sources, item rolls/removal, the explicit snapshot boundary, both support tiers,
+removal/disablement, exact invalid/missing-input refusals, actual Partial-owner
+refusal, A/B/A scratch reuse and four-worker Rayon replay. No final22/0 fixture
+producer remains. Native01 omitted receiving V3 in the fixture; native02 scheduled
+generated predicate facts before their exact entering grant. Explicit receiving,
+stage and frozen-channel fixture corrections resolved those failures without
+weakening production checks. The real `32e4` producer and complete incoming
+contributor/owner coverage remain outside this finite component.
+
+Publication03 passes in **27.73 seconds** and reproduces all eighteen artifacts.
+An explicit `owner-replacement.json` authoring overlay replaces the reviewed
+program through full endpoint assembly. An unpublished append-only stage supplies
+checked identity rebinding; the public migration API still rejects program
+rewrites. Exact inverses preserve all other rule bodies, closures, schemas,
+allocations and import contracts. The five original sources, local identities,
+obligation correspondence and 110 query rows survive release-identity rebinding.
+No input issue, numerical owner or whole-build gate is closed by this publication.
+
+Receipts: `runs/owned-offering-property-source-04.log`,
+`runs/owned-offering-publication-03.log`,
+`runs/owned-offering-item-readiness-data-03.log`,
+`runs/owned-offering-item-readiness-engine-01.log` and
+`runs/owned-offering-native-03.log`. Public Engine readiness (14 tests) and
+source properties (15 tests) pass, including budget failure/recovery and
+A/B/A/Rayon, in `runs/owned-offering-engine-regressions-01.log`.
+Historical Action (4), Encroaching (5), Magnified (6), Prolonged (7) and Rapid (5)
+native tests pass in `runs/owned-offering-native-regressions-01.log`.
+Bidding's five native regressions pass in
+`runs/owned-offering-bidding-regressions-01.log`; nine ordinary authoring tests
+pass in `runs/owned-offering-authored-regressions-01.log`. Strict workspace,
+all-target/all-feature Clippy passes in `runs/owned-offering-clippy-03.log`.
+Both minimal Engine/Data and full Core/Data/Engine/Import WASM library checks
+pass (`runs/owned-offering-wasm-minimal-01.log`, `runs/owned-offering-wasm-01.log`);
+these are compilation checks, not new cross-platform numerical evidence.
+The numeric Amulet fixture now reads its three authored fragments directly,
+removing an unnecessary dependency on the publication/migration test module.
+Clippy's earlier receipts retain the redundant-borrow/lifetime/module diagnostics;
+no arithmetic or production API changed for their fixes.
+All eight package formatting checks and local links/anchors in seven active
+documents pass, as does `git diff --check`. After test-helper cleanup, Amulet's
+nine tests pass (`runs/owned-offering-amulet-regressions-01.log`) and the seven
+Offering tests pass again in 9.22 seconds (`runs/owned-offering-native-04.log`).
+Exact pushed-head hosted CI remains a separate gate.
+**Complete native original builds remain 0/5**, with Original05's
+five selected issues and 79 configuration-linked origins unchanged.

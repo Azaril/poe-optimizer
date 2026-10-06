@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "before": "9a2d363f69c9895f3b6dc87165a3dda74f859a753d936ee2b2cca057608c01d4",
+  "release": "pob-3887ae68-amulet-bonus-snapshot-v1",
+  "reason": "amulet-bonus-snapshot",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1",
+    "operations_version": "owned-domain-operations-v20"
+  },
+  "owners": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032e4"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "pre-amulet-bonus-snapshot",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "incoming",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contributions",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000032e4"
+                    },
+                    "contribution": "add",
+                    "reduction": "sum",
+                    "empty": {
+                      "kind": "quantity",
+                      "value": {
+                        "value": 0.0,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000002"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "percent",
+                "expression": {
+                  "kind": "read",
+                  "input": "incoming"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "snapshot",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032e4"
+                  },
+                  "value": "percent"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "complete"
+        }
+      }
+    }
+  ],
+  "receivers": [
+    {
+      "id": "player-pre-amulet-bonus-snapshot",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000032e4"
+      },
+      "program": "pre-amulet-bonus-snapshot",
+      "targets": [
+        {
+          "kind": "player"
+        }
+      ]
+    }
+  ]
+}

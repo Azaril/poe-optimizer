@@ -11,7 +11,8 @@ conditional minion Action delivery, corrected per-effect Gem supply classificati
 exact manual Direct support targets, native Action Area eligibility, Rapid Casting
 contributions, Encroaching cost factors, real Offering/Prolonged Duration actions,
 actual zero-factor Amulet transport evidence, published Offering final-input
-assembly and the bounded stages-V4 local-item extension, and the
+assembly, the bounded stages-V4 local-item extension and the real pre-Amulet
+aggregation/receiver, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -183,9 +184,12 @@ now replaces the old primary-supply reads of unwritten final Stats `3225/3226`
 with post-census projection of computed physical inputs into `3223/3224`.
 Structural supply and ordinary input preparation remain exact. Source,
 publication and all seven native item-to-source component checks pass. The
-fixture uses actual item programs and canonical rolls in one graph,
-but an explicit `32e4` pre-Amulet snapshot and finite contributor inventories
-remain boundaries. No complete original or final formula is claimed.
+fixture uses actual item programs and canonical rolls in one graph. The
+[snapshot packet](../data/owned/poe2/3887ae68/amulet-bonus-snapshot/README.md)
+now replaces the literal 32e4 boundary with its real Stat-owned reducer and
+Player receiver. Five new native checks pass, including actual Passive inputs,
+missing-coverage refusal and parallel replay. Contributor/owner inventories
+remain finite component boundaries; no complete original is claimed.
 
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference
@@ -419,9 +423,11 @@ existing Minion-level modifier. It reuses the numerical rule evaluator: divide
 the required pre-copy percentage by 100, retain identity/unscalable values, or
 floor each scaled record. Four complete placement declarations and six typed
 eligibility programs distinguish the two Amulet bases from other item types.
-The actual Mystic Attunement rule contributes 25 percentage points, but the real
-snapshot aggregation and complete contributor inventory are not yet published.
-Finite tests declare their scalar or aggregation boundary explicitly. No new
+The actual Mystic Attunement rule contributes 25 percentage points. Its separate
+Stat-owned snapshot reducer and Player receiver are now published using existing
+operations. The new component joins them to actual item and Offering programs;
+incoming contributor and existing owner coverage remain incomplete. Historical
+tests retain their explicit scalar boundary as a numerical reference. No new
 Lua loading, item parser, raw-input storage or production Rust branch was added.
 
 The reviewed Direct-input adapter now imports raw level and quality from exact
@@ -632,10 +638,10 @@ Pain Offering-specific opcode or hard-coded sample-build bonus.
 
 This exercises lookup, inputs, activation, ownership and reduction as separate
 concepts. The table and delivered modifier agree with fresh original PoB controls.
-The final-input assembly is now published with actual ordinary/supported-property
-source evidence and a passing native item-to-generated-input component. The real
-pre-Amulet snapshot producer, complete contributor inventories and resolved
-recipient scaling remain open. Finite tests explicitly supply those boundaries;
+The final-input assembly and pre-Amulet snapshot producer are now published
+with original-source evidence and a passing joined native component. Complete
+contributor inventories, selected-owner coverage and resolved recipient scaling
+remain open. Finite tests explicitly declare those remaining boundaries;
 the real build remains unresolved. See the
 [authored family](../data/owned/poe2/3887ae68/pain-offering/README.md).
 

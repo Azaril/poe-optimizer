@@ -36,11 +36,19 @@ use std::{
 pub type Plan = OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>;
 /// Explicit opt-in components for joined finite fixtures. Historical worlds use
 /// the empty defaults and retain their existing stage and input configuration.
-#[derive(Default)]
 pub struct PlanComponents {
     pub tables: Vec<IntegerRuleTable>,
-    pub receivers: Vec<StatReceiver>,
+    pub receivers: DeclaredSet<StatReceiver>,
     pub source_properties: Option<SourcePropertyPreparationInput>,
+}
+impl Default for PlanComponents {
+    fn default() -> Self {
+        Self {
+            tables: vec![],
+            receivers: DeclaredSet::complete(vec![]),
+            source_properties: None,
+        }
+    }
 }
 pub fn key(s: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(s).unwrap()
@@ -1084,7 +1092,7 @@ impl World {
                 definitions: definitions.identity().clone(),
                 tables: components.tables,
                 owners: self.owners.clone(),
-                receivers: DeclaredSet::complete(components.receivers),
+                receivers: components.receivers,
                 effect_applications: Some(empty()),
             },
             definitions.as_ref(),
