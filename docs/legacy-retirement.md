@@ -598,6 +598,14 @@ The complete table remains exact data, pending the separate lossless scaling-dat
 investigation. Other profiles, final Life equations and contributor completeness
 remain outside this publication's authority.
 
+The [passive Life delivery publication](../data/owned/poe2/3887ae68/minion-life-increase/README.md)
+also uses canonical `311a`, with the Increase contribution kind. It reuses the
+existing Player carrier and aggregation operations. The actual item-to-Sniper
+input fixture is now shared by its original tests and the Life delivery tests;
+both suites pass after extraction. This joins preparation and Actor mechanics
+without duplicating the fixture, adding an alternate runtime path or closing
+unknown contributor inventories.
+
 The two physical support source witnesses now share one Rust process supervisor
 and physical XML/origin proof. Rapid's pinned Lua observer remains a named
 historical witness; its removal requires reproducing its exact certificate or

@@ -1,10 +1,101 @@
-> Historical snapshots through native Gigantic Life/Damage contributions on 2026-10-06.
+> Historical snapshots through intrinsic Life and physical Sniper final inputs on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: intrinsic Life and physical Sniper final inputs
+
+The [intrinsic Life packet](../data/owned/poe2/3887ae68/minion-life-source/README.md)
+injects the complete 100-row allied Life table and the reviewed profile's scale.
+The existing Actor level drives lookup, scale and floor, producing an Add
+contribution on canonical Life `311a`. Gigantic now contributes its Life Multiply
+on that same stat. Redundant channel `330a` keeps only historical identity: no
+live reader, writer, receiver or alias remains. Damage continues on `330b`.
+No definition ID, engine operation or public contract was added. Exact owner
+replacement and full recipe inverse checks preserve all other rules and Partial
+coverage. The allied profile is admitted explicitly; Lua missingness, hostile
+fallback and table recovery are not native gameplay inputs.
+
+The original-call Life witness passes in **367.20 seconds** across nine controls
+and twenty complete loads per JIT mode. It captures original table selection,
+unrounded initializer locals, the stored base-Life record and its actual consumer.
+Fresh repeats, warm restoration and independent unhooked comparisons agree.
+JIT-on/off reports are byte-identical: **4,028,670 bytes**, SHA256
+`b535580839c82e27f9f286fbb531b9e9cc29abaed8805efcc3b5e775ea58acc9`.
+The canonical LF observer is authenticated; an earlier CRLF witness remains
+diagnostic. Saved-level controls exercise floor order, including `82.5 -> 82`.
+The level-40 control probes source/owned bounds, not an obtainable physical gem.
+
+The [Sniper final-input packet](../data/owned/poe2/3887ae68/sniper-final-inputs/README.md)
+then adds one Gem-owned final-input program using existing source preparation,
+census and projection operations. Its native component joins actual Crown/Solar
+programs, the pre-Amulet snapshot and ordinary-item routing to final Skill
+level/quality and Actor-level projection. Original05's recorded inputs give
+`20 + 0 + 1 + 1 + 0 = 22`, quality 0 and Actor level 44. There is no literal
+final-level producer or synthetic Sniper parent Action in this joined component.
+Population execution follows final assembly; final parameters remain Execution
+requirements. Early minion support admission is not proved by that ordering.
+
+Both publications pass (**28.37 / 25.76 seconds**) and preserve all five originals,
+their exact local identities and **110 queries**. Each rebuild has eighteen
+byte-identical files. Selected issue counts remain **106 / 117 / 109 / 122 / 5**,
+passive defaults remain **42/55**, and complete native builds remain **0/5**.
+Neither packet completes an owner or incoming contributor inventory. Source,
+readiness and source-property fragments remain authoring references, not a
+complete evaluation bundle. Real support-origin issue `01de` stays Pending;
+the native Sniper test's empty support inventory is an explicit finite boundary.
+
+All **six Life native tests pass in 23.41 seconds** and all **five Sniper
+native tests pass in 14.87 seconds**. They cover injected data and bounds,
+actual item removal/restoration, independent raw inputs and occurrences, missing
+and Partial prerequisites, absent support inventory, A/B/A scratch reuse and
+four-worker Rayon replay. Known raw quality is preserved when a missing item
+snapshot prevents final level. The Life fixture now installs the exact current
+population facts and requirements bodies and authenticates both lookup tables;
+its explicitly supplied final parent level remains a separate component boundary.
+These tests prove component contributions and projections, not final Life totals.
+Authored checks, targeted strict CLI/PoB Clippy and all eight package formatting
+checks pass. Production Rust/Lua calculation code remains unchanged; authored
+rules supply the new behavior.
+
+Retained failures explain the repairs: CLI build01 found test-only type/ownership
+errors; Life native01 rejected the historical fixture's retired combined population
+body; Sniper native01 overbroadly rejected known quality when testing missing level.
+The corrected tests retain the production readiness and ownership guards. The
+first CLI Clippy pass found two test iterator style issues; both are corrected,
+and the affected native/authoring checks pass again after recompilation.
+Evidence: `runs/owned-life-sniper-native-build-{01,02,03,04,05}.log`,
+`runs/owned-minion-intrinsic-life-source-{01,02}`,
+`runs/owned-minion-life-source-{authoring,publication}-01.log`,
+`runs/owned-minion-life-source-native-{01,02,03}.log`,
+`runs/owned-sniper-final-inputs-authoring-{01,02,03}.log`,
+`runs/owned-sniper-final-inputs-publication-01.log`,
+`runs/owned-sniper-final-inputs-native-{01,02}.log`, the two new publications'
+`validation.json`, `runs/owned-minion-life-source-style-regression-01.log`, and
+the CLI/PoB Clippy logs.
+
+Reproduce CLI targets `owned_minion_life_source` and `owned_sniper_final_inputs`
+using the optimized checked test profile and `--no-run`. Their ignored publication
+tests read `POE_OPTIMIZER_TEST_MINION_LIFE_SOURCE_PRIOR/OUTPUT` and
+`POE_OPTIMIZER_TEST_SNIPER_INPUTS_PRIOR/OUTPUT`; the respective `*_RELEASE`
+variables select the immutable endpoint for `native::` tests. The optional PoB
+target remains `owned_minion_physical_damage_source`, with exact ignored test
+`intrinsic_minion_life_observes_original_table_and_base` and fresh
+`POE_MINION_INTRINSIC_LIFE_SOURCE_OUT` directory. Never rebuild a live executable.
+
+**Next numerical blocker:** receive actual passive Life Increase contributions
+from Player `32e5` into Actor Life `311a`. Six published default owners correspond
+to the original consumer's six records totaling 44 percentage points. Existing
+Actor rules can aggregate and contribute this value; a final-scalar StatReceiver
+would be the wrong contract. Authenticate source transport and removal controls,
+retain incoming completeness gates, and prove one delivery per Actor occurrence.
+Final Life still requires all relevant contributors, branches and rounding.
+Support origins, selected-owner closure and the pending participation/resource
+decisions remain independent complete-build blockers. Do not fabricate an Action
+request or use measured source absence to bypass them.
 
 ## Archived 2026-10-06 checkpoint: native Gigantic Life/Damage contributions
 

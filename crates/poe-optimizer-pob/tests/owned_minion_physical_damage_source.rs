@@ -2554,6 +2554,10 @@ fn without_selected_level_items(xml: &str) -> String {
 }
 
 fn run_intrinsic_life_child(root: &Path, out: &Path, enabled: bool) {
+    run_actor_life_child(root, out, enabled, false);
+}
+
+fn run_actor_life_child(root: &Path, out: &Path, enabled: bool, delivery: bool) {
     assert_eq!(
         pinned::manifest_sha256(),
         "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
@@ -2600,13 +2604,64 @@ fn run_intrinsic_life_child(root: &Path, out: &Path, enabled: bool) {
             gem_attribute(&ordinary, SNIPER, "level", &level.to_string()),
         );
     }
+    if delivery {
+        let empty = ["19006", "229", "39461", "54453", "1218", "40894"]
+            .into_iter()
+            .fold(original.clone(), |xml, id| remove_node(&xml, id));
+        cases = vec![
+            Case {
+                name: "original-05".into(),
+                xml: original.clone(),
+                warm: None,
+                original: true,
+            },
+            Case {
+                name: "repeat-original-05".into(),
+                xml: original.clone(),
+                warm: None,
+                original: true,
+            },
+            Case {
+                name: "warm-empty-to-original".into(),
+                xml: original.clone(),
+                warm: Some(empty.clone()),
+                original: true,
+            },
+            Case {
+                name: "without-life-229".into(),
+                xml: remove_node(&original, "229"),
+                warm: None,
+                original: false,
+            },
+            Case {
+                name: "without-life-1218".into(),
+                xml: remove_node(&original, "1218"),
+                warm: None,
+                original: false,
+            },
+            Case {
+                name: "without-six-life-nodes".into(),
+                xml: empty,
+                warm: None,
+                original: false,
+            },
+            Case {
+                name: "sniper-calcs-selected".into(),
+                xml: calcs_input(&original, "skill_number", "number", "3"),
+                warm: None,
+                original: false,
+            },
+        ];
+    }
     let mut observations = vec![];
     let mut definitions = None;
     for case in &cases {
-        eprintln!("Intrinsic Life source case {}", case.name);
+        eprintln!("Actor Life source case {}", case.name);
         let before = |lua: &Lua| {
             lua.globals().set("physicalDamageJit", enabled)?;
             lua.globals().set("physicalDamageBenefitEvidence", true)?;
+            lua.globals()
+                .set("physicalDamageLifeDeliveryEvidence", delivery)?;
             lua.globals()
                 .set("physicalDamageIntrinsicLifeEvidence", true)?;
             lua.load("if physicalDamageJit then jit.on() else jit.off();jit.flush() end")
@@ -2713,6 +2768,12 @@ fn run_intrinsic_life_child(root: &Path, out: &Path, enabled: bool) {
         "capture":{"original_table_selection":true,"original_base_initializer":true,
             "original_life_consumer":true,"copied_formula_as_evidence":false,"unhooked_controls":true},
         "definitions":definitions.unwrap(),"cases":observations});
+    if delivery {
+        report["capture"]["original_minion_modifier_list"] = json!(true);
+        report["capture"]["original_modifier_insertion"] = json!(true);
+        report["scope"]["passive_life_delivery_only"] = json!(true);
+        report["scope"]["removal_may_prune_other_nodes"] = json!(true);
+    }
     let mode = if enabled { "on" } else { "off" };
     fs::write(
         out.join(format!("source-jit-{mode}-raw.json")),
@@ -2725,7 +2786,11 @@ fn run_intrinsic_life_child(root: &Path, out: &Path, enabled: bool) {
     let bytes = serde_json::to_vec(&report).unwrap();
     assert!(bytes.len() <= 16 * 1024 * 1024);
     fs::write(out.join(format!("source-jit-{mode}.json")), bytes).unwrap();
-    check_intrinsic_life(&report);
+    if delivery {
+        check_life_delivery(&report);
+    } else {
+        check_intrinsic_life(&report);
+    }
     assert_eq!(fs::read_to_string(fixture).unwrap(), original);
 }
 
@@ -2859,6 +2924,175 @@ fn check_intrinsic_life(report: &Json) {
                 calls.last().unwrap()["post_return_life"],
                 actor["gigantic_benefits"]["actor_output_life"]
             );
+        }
+    }
+}
+
+const LIFE_DELIVERY_TEST: &str = "minion_life_increase_observes_original_delivery";
+const LIFE_DELIVERY_CHILD: &str = "POE_MINION_LIFE_DELIVERY_SOURCE_CHILD";
+
+#[test]
+#[ignore = "requires complete pinned PoB runtime; actual passive Life delivery"]
+fn minion_life_increase_observes_original_delivery() {
+    run_life_source_modes(
+        LIFE_DELIVERY_TEST,
+        LIFE_DELIVERY_CHILD,
+        "POE_MINION_LIFE_DELIVERY_SOURCE_OUT",
+        "runs/owned-minion-life-delivery-source-01",
+        run_life_delivery_child,
+    );
+}
+fn run_life_delivery_child(root: &Path, out: &Path, enabled: bool) {
+    run_actor_life_child(root, out, enabled, true);
+}
+fn check_life_delivery(report: &Json) {
+    let cases = rows(&report["cases"]);
+    assert_eq!(cases.len(), 7);
+    for index in [1, 2] {
+        assert_eq!(cases[0]["xml_sha256"], cases[index]["xml_sha256"]);
+        assert_eq!(
+            json_evidence::first_difference(&cases[0]["state"], &cases[index]["state"], "replay"),
+            None
+        );
+    }
+    let all = BTreeMap::from([
+        ("Tree:19006", 6),
+        ("Tree:229", 6),
+        ("Tree:39461", 6),
+        ("Tree:54453", 6),
+        ("Tree:1218", 10),
+        ("Tree:40894", 10),
+    ]);
+    for (index, case) in cases.iter().enumerate() {
+        for field in [
+            "original_functions_preserved",
+            "loaded_state_preserved",
+            "cached_outputs_preserved",
+            "saved_specs_preserved",
+            "fresh_actor_construction",
+            "query_state_preserved",
+            "intrinsic_life_methods_preserved",
+            "life_delivery_methods_preserved",
+        ] {
+            assert_eq!(case["state"][field], true, "{} {field}", case["name"]);
+        }
+        assert_eq!(case["state"]["source_actor_level_mutated"], false);
+        assert_eq!(case["state"]["business_method_wrappers"], false);
+        assert_eq!(case["state"]["benefit_snapshot"], case["unhooked"]);
+        for mode in ["main", "calcs"] {
+            let actors: Vec<_> = rows(&case["state"][mode]["actors"])
+                .iter()
+                .filter(|a| a["actor_profile"] == "RaisedSkeletonSniper")
+                .collect();
+            assert_eq!(actors.len(), 1);
+            let actor = actors[0];
+            let selected = mode == "main" || index == 6;
+            assert_eq!(actor["is_environment_minion"], selected);
+            assert_eq!(actor["actor_level"], 44);
+            assert_eq!(actor["effective_level"], 22);
+            let delivery = &actor["life_delivery"];
+            let transfers = rows(&delivery["transfers"]);
+            let calls = rows(&actor["gigantic_benefits"]["original_life_calls"]);
+            if !selected {
+                assert!(transfers.is_empty() && calls.is_empty());
+                continue;
+            }
+            assert!(!transfers.is_empty() && !calls.is_empty());
+            let mut expected = all.clone();
+            if index == 3 {
+                expected.remove("Tree:229");
+            }
+            if index == 4 {
+                expected.remove("Tree:1218");
+            }
+            if index == 5 {
+                expected.clear();
+            }
+            let expected_total: i64 = expected.values().sum();
+            let mut delivered = BTreeMap::new();
+            let mut parent_calls = 0;
+            for transfer in transfers {
+                assert_eq!(transfer["selected"], true);
+                assert_eq!(transfer["exact_parent"], true);
+                assert_eq!(transfer["exact_summoner"], true);
+                assert_eq!(transfer["exact_parent_cfg"], true);
+                assert_eq!(transfer["source"], actor["source_occurrence"]);
+                assert_eq!(transfer["list_return_observed"], true);
+                assert_eq!(transfer["list_caller_line"], 1162);
+                let listed = rows(&transfer["listed_life"]);
+                let inserted = rows(&transfer["inserted_life"]);
+                if transfer["parent_skill_store"] == true {
+                    parent_calls += 1;
+                    assert_eq!(transfer["caller_line"], 1854);
+                    assert_eq!(listed.len(), expected.len());
+                    assert_eq!(inserted.len(), expected.len());
+                } else {
+                    assert!(listed.is_empty() && inserted.is_empty());
+                }
+                for row in listed {
+                    assert_eq!(row["recipient_type"], json!({"present":false}));
+                    let record = &row["record"];
+                    let source = record["source"].as_str().unwrap();
+                    assert_eq!(record["name"], "Life");
+                    assert_eq!(record["type"], "INC");
+                    assert_eq!(record["value"], expected[source]);
+                    assert_eq!(record["flags"], 0);
+                    assert_eq!(record["keyword_flags"], 0);
+                    assert!(rows(&record["tags"]).is_empty());
+                    let provider = &row["provider"];
+                    assert_eq!(provider["tree_source"], true);
+                    assert_eq!(provider["allocated"], true);
+                    let id: u64 = source.strip_prefix("Tree:").unwrap().parse().unwrap();
+                    assert_eq!(provider["node_id"], id);
+                    assert!(rows(&delivery["allocated_node_ids"]).contains(&json!(id)));
+                    let matches = rows(&provider["matches"]);
+                    assert_eq!(matches.len(), 1);
+                    assert_eq!(matches[0]["record"], *record);
+                    let inserted: Vec<_> = inserted
+                        .iter()
+                        .filter(|i| i["payload_index"] == row["payload_index"])
+                        .collect();
+                    assert_eq!(inserted.len(), 1);
+                    let inserted = inserted[0];
+                    assert_eq!(inserted["record"], *record);
+                    assert_eq!(inserted["provider"], *provider);
+                    assert_eq!(inserted["addmod_caller_line"], 1164);
+                    assert_eq!(inserted["exact_list_payload"], true);
+                    assert_eq!(inserted["exact_actor_store"], true);
+                    assert_eq!(inserted["stored_identity_count"], 1);
+                    assert!(delivered.insert(source, record).is_none());
+                }
+            }
+            assert_eq!(parent_calls, 1);
+            assert_eq!(delivered.len(), expected.len());
+            for call in calls {
+                assert_eq!(call["source"], actor["source_occurrence"]);
+                assert_eq!(call["exact_actor_store"], true);
+                assert_eq!(call["exact_actor_output"], true);
+                let c = &call["computation"];
+                assert_eq!(c["increased"], expected_total);
+                assert_eq!(c["base"], 1615);
+                assert_eq!(c["life_after_assignment"], call["return_life"]);
+                assert_eq!(call["return_life"], call["post_return_life"]);
+                let eligible = rows(&c["life_increase_delivery"]["eligible"]);
+                assert_eq!(eligible.len(), expected.len());
+                let mut seen = std::collections::BTreeSet::new();
+                for row in eligible {
+                    let source = row["record"]["source"].as_str().unwrap();
+                    assert!(seen.insert(source));
+                    assert_eq!(row["actual_transfer_count"], 1);
+                    assert_eq!(row["record"], *delivered[source]);
+                    assert_eq!(row["value"], expected[source]);
+                }
+            }
+            for removed in match index {
+                3 => vec![229],
+                4 => vec![1218],
+                5 => vec![19006, 229, 39461, 54453, 1218, 40894],
+                _ => vec![],
+            } {
+                assert!(!rows(&delivery["allocated_node_ids"]).contains(&json!(removed)));
+            }
         }
     }
 }

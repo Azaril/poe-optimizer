@@ -1,0 +1,171 @@
+{
+  "schema_version": 5,
+  "before": "42093c008380228bd8a002a0869ba199e46530689477cf223bdc8b4d0754c980",
+  "release": "pob-3887ae68-minion-life-increase-v1",
+  "reason": "finite-actor-received-minion-life-increase",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v20",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "schema": [],
+  "owners": [
+    {
+      "owner": {
+        "kind": "slot",
+        "value": {
+          "kind": "actor",
+          "value": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000012"
+              }
+            },
+            "slot": {
+              "kind": "actor_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000001f"
+            }
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "received-minion-life-increase",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contributions",
+                  "value": {
+                    "entity": "player",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000032e5"
+                    },
+                    "contribution": "increase",
+                    "reduction": "sum",
+                    "empty": {
+                      "kind": "quantity",
+                      "value": {
+                        "value": 0.0,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000002"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "increase"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "life-increase",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000311a"
+                  },
+                  "contribution": "increase",
+                  "value": "increase"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "slot",
+                  "value": {
+                    "kind": "actor",
+                    "value": {
+                      "declaration": {
+                        "kind": "skill",
+                        "definition": {
+                          "kind": "skill",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000012"
+                        }
+                      },
+                      "slot": {
+                        "kind": "actor_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000001f"
+                      }
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "remaining-game-effects-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "tables": [],
+  "receivers": [],
+  "query_targets": [],
+  "evaluation": null
+}

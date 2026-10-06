@@ -39,110 +39,92 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: intrinsic Life and physical Sniper final inputs
+## Latest checkpoint: passive Life delivery joined to actual Sniper inputs
 
-The [intrinsic Life packet](../data/owned/poe2/3887ae68/minion-life-source/README.md)
-injects the complete 100-row allied Life table and the reviewed profile's scale.
-The existing Actor level drives lookup, scale and floor, producing an Add
-contribution on canonical Life `311a`. Gigantic now contributes its Life Multiply
-on that same stat. Redundant channel `330a` keeps only historical identity: no
-live reader, writer, receiver or alias remains. Damage continues on `330b`.
-No definition ID, engine operation or public contract was added. Exact owner
-replacement and full recipe inverse checks preserve all other rules and Partial
-coverage. The allied profile is admitted explicitly; Lua missingness, hostile
-fallback and table recovery are not native gameplay inputs.
+The [Life Increase packet](../data/owned/poe2/3887ae68/minion-life-increase/README.md)
+adds one Actor program: sum the Player-carried Minion Life Increase contributions
+on `32e5`, then contribute that percentage to canonical Actor Life `311a` once.
+It reuses existing typed operations and the exact Sniper provider `001f`.
+No definition, StatReceiver, query, public contract or owner closure changes.
+All six existing passive bodies remain exact, including their paired Damage
+programs. Other profiles and complete contributor inventories remain unadmitted.
 
-The original-call Life witness passes in **367.20 seconds** across nine controls
-and twenty complete loads per JIT mode. It captures original table selection,
-unrounded initializer locals, the stored base-Life record and its actual consumer.
-Fresh repeats, warm restoration and independent unhooked comparisons agree.
-JIT-on/off reports are byte-identical: **4,028,670 bytes**, SHA256
-`b535580839c82e27f9f286fbb531b9e9cc29abaed8805efcc3b5e775ea58acc9`.
-The canonical LF observer is authenticated; an earlier CRLF witness remains
-diagnostic. Saved-level controls exercise floor order, including `82.5 -> 82`.
-The level-40 control probes source/owned bounds, not an obtainable physical gem.
+The original-call witness passes in **270.88 seconds** across seven controls and
+sixteen complete loads per JIT mode. It observes actual original modifier lookup,
+payload insertion into the exact Actor store, and original Life consumption.
+Repeated/warm/unhooked results agree; JIT-on/off reports are byte-identical:
+**2,806,146 bytes**, SHA256
+`13f35f199e0609a54c50466a1dafc110118a70419fd62a2df4811244de279057`.
+Actual Increase is 44 normally, 38 without node229, 34 without1218 and zero
+without all six Life nodes. Those removals also prune Gigantic or a cooldown
+notable; the actual allocation census is retained and no isolated total-Life
+delta is claimed. Unselected CALCS keeps absent execution/output distinct from
+zero. Bounded authored projections retain Life facts and source joins while full
+reference reports remain authenticated offline.
 
-The [Sniper final-input packet](../data/owned/poe2/3887ae68/sniper-final-inputs/README.md)
-then adds one Gem-owned final-input program using existing source preparation,
-census and projection operations. Its native component joins actual Crown/Solar
-programs, the pre-Amulet snapshot and ordinary-item routing to final Skill
-level/quality and Actor-level projection. Original05's recorded inputs give
-`20 + 0 + 1 + 1 + 0 = 22`, quality 0 and Actor level 44. There is no literal
-final-level producer or synthetic Sniper parent Action in this joined component.
-Population execution follows final assembly; final parameters remain Execution
-requirements. Early minion support admission is not proved by that ordering.
+The native component now joins **actual items -> source preparation/census ->
+final Sniper inputs -> Actor level -> intrinsic Life and passive Life delivery**
+in one plan. It has no final-level literal or fabricated Sniper parent Action.
+The previously tested Sniper fixture is shared between both targets; its default
+stage behavior is unchanged. Six passive sources and two independent Sniper
+occurrences are explicit component inventories. The source-derived removal
+vectors, item removal, differing raw inputs/quality, missing/Partial contributors,
+missing delivery, occurrence removal, A/B/A scratch and four-worker replay pass.
+The sum identity zero is tested only for a complete empty inventory; an unknown
+source cannot silently become zero. These are contributions, not a final Life pool.
 
-Both publications pass (**28.37 / 25.76 seconds**) and preserve all five originals,
-their exact local identities and **110 queries**. Each rebuild has eighteen
-byte-identical files. Selected issue counts remain **106 / 117 / 109 / 122 / 5**,
-passive defaults remain **42/55**, and complete native builds remain **0/5**.
-Neither packet completes an owner or incoming contributor inventory. Source,
-readiness and source-property fragments remain authoring references, not a
-complete evaluation bundle. Real support-origin issue `01de` stays Pending;
-the native Sniper test's empty support inventory is an explicit finite boundary.
+Publication01 passes in **25.72 seconds**, preserving all five original imports,
+exact local identities, all **110 queries** and eighteen byte-identical rebuilt
+files. Issues stay **106 / 117 / 109 / 122 / 5**, selected passive defaults stay
+**42/55**, and complete native builds remain **0/5**. The real Actor owner and
+incoming inventories remain Partial. No evaluation bundle or real support-origin
+closure was added. The five new native tests pass in **12.94 seconds**; all five
+historical Sniper tests pass in **10.90 seconds** after fixture extraction.
+Authored checks, targeted strict CLI/PoB Clippy, and all eight package formatting
+checks pass. CLI build01 caught a test-only moved-value assignment and two unused
+imports; build02 passes after correction. No production Rust/Lua code changed.
 
-All **six Life native tests pass in 23.41 seconds** and all **five Sniper
-native tests pass in 14.87 seconds**. They cover injected data and bounds,
-actual item removal/restoration, independent raw inputs and occurrences, missing
-and Partial prerequisites, absent support inventory, A/B/A scratch reuse and
-four-worker Rayon replay. Known raw quality is preserved when a missing item
-snapshot prevents final level. The Life fixture now installs the exact current
-population facts and requirements bodies and authenticates both lookup tables;
-its explicitly supplied final parent level remains a separate component boundary.
-These tests prove component contributions and projections, not final Life totals.
-Authored checks, targeted strict CLI/PoB Clippy and all eight package formatting
-checks pass. Production Rust/Lua calculation code remains unchanged; authored
-rules supply the new behavior.
+Evidence: `runs/owned-minion-life-delivery-source-{build,clippy}-01.log`,
+`runs/owned-minion-life-delivery-source-01`,
+`runs/owned-minion-life-increase-native-build-{01,02}.log`,
+`runs/owned-minion-life-increase-{authoring,publication,native,clippy}-01.log`,
+`runs/owned-sniper-inputs-shared-fixture-native-01.log`, and the new publication's
+`validation.json`. Compile CLI target `owned_minion_life_increase` with `--no-run`
+under the optimized checked test profile. Its ignored publication uses
+`POE_OPTIMIZER_TEST_MINION_LIFE_INCREASE_PRIOR/OUTPUT`; the `*_RELEASE` variable
+selects the immutable package for `native::` tests. The optional source target is
+`owned_minion_physical_damage_source`, exact ignored test
+`minion_life_increase_observes_original_delivery`, with fresh
+`POE_MINION_LIFE_DELIVERY_SOURCE_OUT`. Never rebuild a live executable.
 
-Retained failures explain the repairs: CLI build01 found test-only type/ownership
-errors; Life native01 rejected the historical fixture's retired combined population
-body; Sniper native01 overbroadly rejected known quality when testing missing level.
-The corrected tests retain the production readiness and ownership guards. The
-first CLI Clippy pass found two test iterator style issues; both are corrected,
-and the affected native/authoring checks pass again after recompilation.
-Evidence: `runs/owned-life-sniper-native-build-{01,02,03,04,05}.log`,
-`runs/owned-minion-intrinsic-life-source-{01,02}`,
-`runs/owned-minion-life-source-{authoring,publication}-01.log`,
-`runs/owned-minion-life-source-native-{01,02,03}.log`,
-`runs/owned-sniper-final-inputs-authoring-{01,02,03}.log`,
-`runs/owned-sniper-final-inputs-publication-01.log`,
-`runs/owned-sniper-final-inputs-native-{01,02}.log`, the two new publications'
-`validation.json`, `runs/owned-minion-life-source-style-regression-01.log`, and
-the CLI/PoB Clippy logs.
+**Next real-build blocker:** selected ordinary item/provider coverage. Crown
+template `1f1c` and Solar template `2343` still have Partial default programs and
+declaration inventories. Minion-level Modifier `30ca` has implemented numerical
+bodies but unresolved encoding, transforms, admission, routing/copy and external
+contributor obligations. Authenticate the remaining mandatory branch/applicability
+exclusions and template declarations under existing contracts before closing
+those owners. Another successful selected frame is not a complete inventory.
+The concrete audit is `runs/owned-life-increase-next-blocker-audit-01.md`.
 
-Reproduce CLI targets `owned_minion_life_source` and `owned_sniper_final_inputs`
-using the optimized checked test profile and `--no-run`. Their ignored publication
-tests read `POE_OPTIMIZER_TEST_MINION_LIFE_SOURCE_PRIOR/OUTPUT` and
-`POE_OPTIMIZER_TEST_SNIPER_INPUTS_PRIOR/OUTPUT`; the respective `*_RELEASE`
-variables select the immutable endpoint for `native::` tests. The optional PoB
-target remains `owned_minion_physical_damage_source`, with exact ignored test
-`intrinsic_minion_life_observes_original_table_and_base` and fresh
-`POE_MINION_INTRINSIC_LIFE_SOURCE_OUT` directory. Never rebuild a live executable.
-
-**Next numerical blocker:** receive actual passive Life Increase contributions
-from Player `32e5` into Actor Life `311a`. Six published default owners correspond
-to the original consumer's six records totaling 44 percentage points. Existing
-Actor rules can aggregate and contribute this value; a final-scalar StatReceiver
-would be the wrong contract. Authenticate source transport and removal controls,
-retain incoming completeness gates, and prove one delivery per Actor occurrence.
-Final Life still requires all relevant contributors, branches and rounding.
-Support origins, selected-owner closure and the pending participation/resource
-decisions remain independent complete-build blockers. Do not fabricate an Action
-request or use measured source absence to bypass them.
+Final Life still needs all relevant contributors, branches and rounding. The
+pending participation/disposition/resource decisions and real support origins
+remain independent complete-build blockers. Population facts now consume final
+Execution parameters; early minion support admission needs contrasting actual
+supports before any phase/contract change. Do not fabricate Action demand or
+weaken coverage/readiness to make a build appear complete.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-sniper-final-inputs-01/package` as the integration baseline. Its
+Use `runs/owned-minion-life-increase-01/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
 native schema V6 and operations V20 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-minion-life-source-01/package`, input
-`e085c4a216f08f655c99e3f1a438656d2d1937d64ca5c22cd3e451e54948b580`, built on
-`runs/owned-gigantic-benefits-01/package`. The
-[Sniper input packet](../data/owned/poe2/3887ae68/sniper-final-inputs/README.md)
-records the exact final transition. Historical Minion Life, ordinary routing and other
+Its immediate predecessor is `runs/owned-sniper-final-inputs-01/package`, input
+`42093c008380228bd8a002a0869ba199e46530689477cf223bdc8b4d0754c980`.
+The [Life Increase packet](../data/owned/poe2/3887ae68/minion-life-increase/README.md)
+records the exact transition. Historical Minion Life, ordinary routing and other
 endpoint-specific tests retain their own documented publication paths; each
 successor carries their combined data. Those paths authenticate historical
 receipts, not separate production evaluator modes.
@@ -150,24 +132,24 @@ receipts, not separate production evaluator modes.
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `42093c008380228bd8a002a0869ba199e46530689477cf223bdc8b4d0754c980` |
+| Release input | `09fc26f77d45d78ed7558fa18bc394c2fdeaca23dc25150f7019371c207e05ed` |
 | Registry | `b8a7c9b6a7585bdeeebee78c693a52ff4974f7b9154974573831005425886720` |
-| Definitions content | `8d292dbc3a1f22a1b999c42b47e84d965802237affd55df1e78499b0b3dd429c` |
-| Rules | `cdca7b9a3fac7840b8dfc0eac6e3e32ff44a9619bb90fa7fd70be0b775798568` |
-| Compiled rules | `9f7bda5089d6402e8291bfadc25cbb68bdb1ede6ae5dc77b236fb177c697dfa6` |
-| Routing | `8c85dd954132a25e9497e9a18af650471d284f2c19a8f0754c9bb3f05e4c3f08` |
-| Mapping | `a792a8f9ce828281d311c7e706dad6165cded709b5cb8427ef27609bb4a4be26` |
-| Skill roles | `5add3b7f97962982371d1481ae98fa801981685f5727582eac253aa8576feb3f` |
-| Normalization | `298cff0647138d9e7dc9fb2ae10346cc96619ba8d12b8fd7a4a3d38f433761d5` |
-| Rewards | `085803d1305be600364928dff70b6c6fbf971cc8bb5a6a88a2e0b2d219d82514` |
-| Items | `427f04c3609ba4737e9d5dea70d1a242958dfa50ac0b5d08f92d3ffeb07bb019` |
-| Item source | `a98158212db148a9ab25635fa8cf206a21f99a4da00cc5ec8c8af6e43ba8eef7` |
-| Tree policy | `f8edcbd9670f1144314c363b751d739c48382da39e24936e1b2161af44eb5910` |
-| Authoring commitment | `34a4dbf1c9061c832273ed5ea86158207deaaa39c1fecd0e0215c7d38347134f` |
+| Definitions content | `352a126549a1ce811e8f120e2a562e05e89e6033418fb98f2d74e4f375713b60` |
+| Rules | `33ef80c84c81abcf92c8963dfaa74ba4d797d8307fac0da3cc15ff487b28ee76` |
+| Compiled rules | `41129e7d465e1e72b48dbb4dc0c3856e300e5a521f2e2ab40afa203612a37d9f` |
+| Routing | `dba2acccab35fb8c48fd4638111e6ec60b01ebefe262964817ca545a2470bdc9` |
+| Mapping | `fd653db14f7962083a75cccf2f432e2c9616d745e044c0c54cde9cf49eca7680` |
+| Skill roles | `ee4b3347a77741bb1c4c72fd99fd4ed0386f41aabd8f034ebf3afaf0edf2ea7b` |
+| Normalization | `01f6e6514aba0c5002028f01dd77aab6da039e1b49ff0d3811cc2ffe062673b8` |
+| Rewards | `53d112ed3d765fba8b95db425c782295c937235d761b9761ea80abef27494b10` |
+| Items | `f22df4d57c3816f1f24613d70abbb0e3d92525b72e08a7f66b12e0a7e3afa93e` |
+| Item source | `3ce90a01e49e27a2e8f0d2ed061169c6989c77af082e4961a2c2251800837f75` |
+| Tree policy | `598f1b000ac253d0cb2bc67ae92d64e3b11f568e6f16573d4bd2b6664a5e04a2` |
+| Authoring commitment | `a3afb07c0fc64c8d5d11cf58b24d6fc35ce38d94e9f75dfb14191e9d0a1b993b` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,876,533 bytes**, with 111 provenance rows.
-Definitions use `pob-3887ae68-sniper-final-inputs-v1`; the independent rules release
+The eighteen package files total **60,877,717 bytes**, with 112 provenance rows.
+Definitions use `pob-3887ae68-minion-life-increase-v1`; the independent rules release
 remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `330b`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
@@ -578,27 +560,23 @@ numerical outputs when game intent remains unresolved.
    native presentation-name rule. Full fresh item construction and actual
    other-hand placement predicates remain independent proof obligations.
 
-   **Next numerical consumer:** intrinsic allied-minion base Life. The published
-   `3307` grants, `3308` Boolean, `3309` efficiency and one-per-Actor factors
-   `330a/330b` now pass source, publication and native checks. Their exact finite
-   Sniper recipient does not establish other profiles or complete contributors.
-   Preserve the existing Actor owner as Partial until all its programs are known.
+   **Published Life components:** intrinsic base and passive Increase now use
+   canonical Life `311a`; Gigantic contributes its Multiply to the same stat.
+   Historical `330a` has no live references, while Damage uses `330b`. The exact
+   injected 100-row allied table and 0.55 profile scale produce base1615 at Actor
+   level44, and original delivery validates the six-passive Increase44 stream.
+   Native integration uses actual physical final-input assembly and population
+   programs. Exact dense tables remain valid during the lossless segment study;
+   hostile/replacement profiles still need separate admission and data.
 
-   Inject the exact allied-Life level table and profile Life scale, using existing
-   Actor level `001c`, lookup, scale and floor operations. Pinned source uses a
-   100-entry allied table and Sniper profile scale 0.55; Original05's actual Life
-   call observes base 1615 at Actor level 44. Authenticate the whole curve/profile
-   and independent level boundaries before publishing that intrinsic domain.
-   Hostile/replacement table selection needs separate coverage; no implicit allied
-   default. Exact dense tables remain valid while the planned lossless segment
-   investigation proceeds. Then use the existing exact-recipient contract for
-   Player-carried Life Increase `32e5`. The six-node subtotal 44 is not a final pool.
    Complete Life must account for extra/total contributions, Increase, More,
    conversion, overrides, relevant branches, rounding/minimum and full ownership.
-   Observed zeros alone do not establish universal absence. The ignored audit
-   `runs/owned-minion-life-next-blocker-audit-01.md` records source locations and
-   current owned IDs. Parent final-input production and query-independent resource
-   demand remain complete-build blockers alongside this numerical work.
+   Observed zeros alone do not establish universal absence. Prioritize actual
+   Crown/Solar template and Modifier30ca coverage next, as detailed in the latest
+   checkpoint and `runs/owned-life-increase-next-blocker-audit-01.md`. Physical
+   final-input programs exist; unresolved selected providers and incoming coverage
+   still prevent a real complete request. Query-independent resource demand is
+   a separate pending design decision.
 
    Before final damage aggregation, settle the concrete precision/grouping
    question: Source02's Gigantic plus quality-one factors yield 1.21, while

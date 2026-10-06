@@ -13,7 +13,8 @@ contributions, Encroaching cost factors, real Offering/Prolonged Duration action
 actual zero-factor Amulet transport evidence, published Offering final-input
 assembly, the bounded stages-V4 local-item extension, the real pre-Amulet
 aggregation/receiver, conditional Command damage, the population program
-partition, canonical intrinsic minion Life and physical Sniper final inputs, and the
+partition, canonical intrinsic minion Life, physical Sniper final inputs,
+passive Life Increase delivery, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -750,8 +751,8 @@ Multiply now uses that same stat; obsolete channel `330a` retains historical
 identity with no live reader, writer or alias. This removes a redundant runtime
 path without adding an engine operation. The selected profile and bounds are
 explicit; neither source absence nor a fallback chooses a profile or level.
-This is intrinsic base Life, not the complete Life pool. Recipient delivery of
-the six published passive Increase sources and final equations remain open.
+This supplies intrinsic base Life; final equations and complete contributor
+coverage remain open.
 
 The [physical Sniper input packet](../data/owned/poe2/3887ae68/sniper-final-inputs/README.md)
 uses the same prepared-source assembly as Offering. Actual item rules feed the
@@ -763,6 +764,16 @@ inventory does not resolve Original05's Pending support origins or grant
 complete contributor coverage. Final parameters remain Execution requirements;
 early minion support admission is a separate integration obligation. The runtime
 continues to use one graph and one native rule engine.
+
+The [Life Increase packet](../data/owned/poe2/3887ae68/minion-life-increase/README.md)
+joins those inputs to actual passive delivery in that same plan. One Actor rule
+sums Player-carried Minion Life Increase (`32e5`) and contributes the result once
+to canonical Actor Life (`311a`). The six passive producers retain their exact
+bodies, including paired Damage contributions. The source witness observes
+original delivery into the Actor store and original Life consumption. A complete
+empty contributor inventory produces zero; missing or Partial coverage stays
+unresolved. This uses existing typed operations without a new runtime contract.
+The real Actor owner remains Partial, and final Life is not yet published.
 
 The [resource-obligation proposal](owned-resource-obligations-proposal.md) remains
 pending. It addresses the current reservation component's dependence on requested

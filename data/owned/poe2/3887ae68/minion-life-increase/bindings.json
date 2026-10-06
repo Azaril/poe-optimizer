@@ -1,0 +1,159 @@
+{
+  "before": "42093c008380228bd8a002a0869ba199e46530689477cf223bdc8b4d0754c980",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-sniper-final-inputs-v1",
+    "schema_version": 6,
+    "content_sha256": "8d292dbc3a1f22a1b999c42b47e84d965802237affd55df1e78499b0b3dd429c",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "b8a7c9b6a7585bdeeebee78c693a52ff4974f7b9154974573831005425886720",
+  "rules": "cdca7b9a3fac7840b8dfc0eac6e3e32ff44a9619bb90fa7fd70be0b775798568",
+  "mapping": "a792a8f9ce828281d311c7e706dad6165cded709b5cb8427ef27609bb4a4be26",
+  "roles": "5add3b7f97962982371d1481ae98fa801981685f5727582eac253aa8576feb3f",
+  "normalization": "298cff0647138d9e7dc9fb2ae10346cc96619ba8d12b8fd7a4a3d38f433761d5",
+  "schema_version": 1,
+  "release": "pob-3887ae68-minion-life-increase-v1",
+  "program": "received-minion-life-increase",
+  "carrier": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000032e5"
+  },
+  "life": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000311a"
+  },
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "actor_slot": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000012"
+      }
+    },
+    "slot": {
+      "kind": "actor_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000001f"
+    }
+  },
+  "actor_definition": {
+    "kind": "actor",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003091"
+  },
+  "nodes": [
+    {
+      "source_id": "19006",
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000cf8"
+      },
+      "amount": 6
+    },
+    {
+      "source_id": "229",
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000dfb"
+      },
+      "amount": 6
+    },
+    {
+      "source_id": "39461",
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001311"
+      },
+      "amount": 6
+    },
+    {
+      "source_id": "54453",
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001791"
+      },
+      "amount": 6
+    },
+    {
+      "source_id": "1218",
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000aef"
+      },
+      "amount": 10
+    },
+    {
+      "source_id": "40894",
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001372"
+      },
+      "amount": 10
+    }
+  ],
+  "scope": {
+    "whole_build_parity": false,
+    "whole_life_result": false,
+    "incoming_contributor_inventory_closed": false,
+    "actor_owner_closed": false,
+    "additional_actor_profiles_admitted": false,
+    "receiver_profiles": [
+      "RaisedSkeletonSniper"
+    ],
+    "new_definitions": 0,
+    "new_receivers": 0,
+    "query_changes": 0,
+    "routing_changes": 0
+  }
+}

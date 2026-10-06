@@ -221,6 +221,21 @@ local function intrinsicLifeDefinitions(env)
   global_table_identity=table==data.monsterAllyLifeTable,global_profile_identity=profile==data.minions.RaisedSkeletonSniper}
  assert(equal(table,saved) and equal(profile,before));return result
 end
+local function allocatedIds(env)
+ local ids={};for id in pairs(env.spec.allocNodes) do ids[#ids+1]=id end;table.sort(ids);return ids
+end
+local function lifeProvider(env,mod)
+ local id=mod.source and tonumber(mod.source:match("^Tree:(%d+)$"))
+ if not id then return {tree_source=false} end
+ local node=env.spec.allocNodes[id];local matches={}
+ if node then for _,outer in ipairs(node.modList or {}) do
+  local inner=outer.name=="MinionModifier" and type(outer.value)=="table" and outer.value.mod
+  if inner and inner.name=="Life" and inner.type=="INC" then
+   matches[#matches+1]={record=modRecord(inner),exact_delivered_object=inner==mod}
+  end
+ end end
+ return {tree_source=true,node_id=id,allocated=node~=nil,matches=matches}
+end
 local function benefitSnapshot()
  local function frame(env)
   local actors={}
@@ -236,7 +251,8 @@ local function benefitSnapshot()
    end
   end
   return {combat=not not env.mode_combat,buffs=not not env.mode_buffs,effective=not not env.mode_effective,
-   actors=actors,player_output=scalars(env.player.output)}
+   actors=actors,player_output=scalars(env.player.output),
+   allocated_node_ids=physicalDamageLifeDeliveryEvidence and allocatedIds(env) or nil}
  end
  assert(debug.gethook()==nil)
  return {main=frame(build.calcsTab.mainEnv),calcs=frame(build.calcsTab.calcsEnv)}
@@ -268,20 +284,26 @@ if physicalDamageBenefitEvidence then
  methods[#methods+1]={calcs,"doActorLifeManaSpirit","Modules/CalcDefence.lua",74}
  methods[#methods+1]={calcs,"defence","Modules/CalcDefence.lua",789}
 end
+if physicalDamageLifeDeliveryEvidence then
+ methods[#methods+1]={common.classes.ModStore,"List","Classes/ModStore.lua",321}
+ methods[#methods+1]={common.classes.ModDB,"AddMod","Classes/ModDB.lua",31}
+end
 if physicalDamagePhase=="before" then
  local refs={};for i,row in ipairs(methods) do refs[i]=original(row[1][row[2]],row[3],row[4]) end
  local calcDamage=original(upvalue(calcs.offence,"calcDamage"),"Modules/CalcOffence.lua",178)
  local mergeBuff=original(upvalue(calcs.perform,"mergeBuff"),"Modules/CalcPerform.lua",42)
  local cooldown=physicalDamageCommandEvidence and original(calcSkillCooldown,"Modules/CalcOffence.lua",410)
  local initMinion=physicalDamageIntrinsicLifeEvidence and original(upvalue(calcs.perform,"initMinionModDB"),"Modules/CalcPerform.lua",1049)
+ local transferMinion=physicalDamageLifeDeliveryEvidence and original(upvalue(calcs.perform,"addMinionModifiers"),"Modules/CalcPerform.lua",1161)
  local priorActors={}
  for _,env in ipairs({build.calcsTab.mainEnv,build.calcsTab.calcsEnv}) do if env then for _,active in ipairs(env.player.activeSkillList) do if active.minion then priorActors[active.minion]=true end end end end
  local oldHook,oldMask,oldCount=debug.gethook();assert(oldHook==nil)
  local auth={refs=refs,calc_damage=calcDamage,merge_buff=mergeBuff,previous_actors=priorActors,captures={},calls={},base_calls={},buff_events={},count=0,line_events=0,
   cooldown=cooldown,cooldown_calls={},command_recipients={},life_calls={},
   init_minion=initMinion,life_selections={},life_initializers={},life_base_objects={},
+  transfer_minion=transferMinion,life_transfers={},life_delivered_objects={},
   intrinsic_definitions=physicalDamageIntrinsicLifeEvidence and intrinsicLifeDefinitions({data=data}) or nil}
- local pending,lifePending,selectionPending,initPending
+ local pending,lifePending,selectionPending,initPending,deliveryPending
  local baseHookMask=physicalDamageBenefitEvidence and "cr" or "r"
  local function relevant(active)
   return not physicalDamageCommandEvidence and active and active.actor and active.actor.minionData and active.activeEffect.grantedEffect.id=="MinionMeleeBow"
@@ -292,6 +314,59 @@ if physicalDamagePhase=="before" then
  end
  local function hook(event,line)
   local f=debug.getinfo(2,"f").func
+  if physicalDamageLifeDeliveryEvidence then
+   if f==transferMinion then
+    local vars={};for i=1,160 do local name,value=debug.getlocal(2,i);if not name then break end;vars[name]=value end
+    local actor=vars.minion
+    if actor and actor.type=="RaisedSkeletonSniper" then
+     if event=="call" then
+      assert(not deliveryPending)
+      local caller=debug.getinfo(3,"flS");local outer={};for i=1,160 do local name,value=debug.getlocal(3,i);if not name then break end;outer[name]=value end
+      if caller.func~=calcs.perform then original(caller.func,"Modules/CalcPerform.lua",3365) end
+      local env=assert(outer.env);local active=assert(actor.mainSkill.summonSkill)
+      deliveryPending={actor=actor,env=env,store=actor.modDB,source_store=vars.modList,cfg=vars.skillCfg,payloads={},
+       row={caller_line=caller.currentline,mode=env.mode,selected=actor==env.minion,actor_profile=actor.type,
+        source=sourceOccurrence(active),exact_parent=actor.parent==env.player,exact_summoner=active.minion==actor,
+        parent_skill_store=vars.modList==active.skillModList,exact_parent_cfg=vars.skillCfg==active.skillCfg,
+        listed_life={},inserted_life={}}}
+     elseif event=="return" then
+      assert(deliveryPending and deliveryPending.actor==actor and deliveryPending.row.list_return_observed)
+      assert(actor.modDB==deliveryPending.store)
+      local list=auth.life_transfers[actor] or {};auth.life_transfers[actor]=list;list[#list+1]=deliveryPending.row
+      assert(#list<=64);deliveryPending=nil
+     end
+    end
+    return
+   elseif event=="return" and (f==common.classes.ModStore.List or f==common.classes.ModDB.AddMod) then
+    local caller=debug.getinfo(3,"fl")
+    if caller and caller.func==transferMinion and deliveryPending then
+     local vars={};for i=1,160 do local name,value=debug.getlocal(2,i);if not name then break end;vars[name]=value end
+     local outer={};for i=1,160 do local name,value=debug.getlocal(3,i);if not name then break end;outer[name]=value end
+     local d=deliveryPending;assert(outer.minion==d.actor and outer.modList==d.source_store and outer.skillCfg==d.cfg)
+     if f==common.classes.ModStore.List then
+      assert(vars.self==d.source_store and vars.cfg==d.cfg and vars.n==1 and caller.currentline==1162 and not d.row.list_return_observed)
+      d.row.list_return_observed=true;d.row.list_caller_line=caller.currentline;d.row.all_payload_count=#vars.result
+      for index,value in ipairs(vars.result) do
+       if value.mod and value.mod.name=="Life" then
+        assert(not d.payloads[value]);d.payloads[value]={index=index,mod=value.mod}
+        d.row.listed_life[#d.row.listed_life+1]={payload_index=index,recipient_type={present=value.type~=nil,value=value.type},
+         record=modRecord(value.mod),provider=lifeProvider(d.env,value.mod)}
+       end
+      end
+     elseif vars.mod.name=="Life" then
+      local payload=assert(d.payloads[outer.value]);assert(vars.self==d.store and payload.mod==vars.mod)
+      local count=0;for _,mod in ipairs(d.store.mods.Life or {}) do if mod==vars.mod then count=count+1 end end
+      assert(count>=1)
+      d.row.inserted_life[#d.row.inserted_life+1]={payload_index=payload.index,record=modRecord(vars.mod),
+       addmod_caller_line=caller.currentline,exact_list_payload=true,exact_actor_store=d.store.actor==d.actor,
+       stored_identity_count=count,provider=lifeProvider(d.env,vars.mod)}
+      local objects=auth.life_delivered_objects[d.actor] or {};auth.life_delivered_objects[d.actor]=objects
+      objects[vars.mod]=(objects[vars.mod] or 0)+1
+     end
+    end
+    return
+   end
+  end
   if physicalDamageIntrinsicLifeEvidence then
    if f==calcs.buildActiveSkillModList or f==initMinion then
     local vars={};for i=1,160 do local name,value=debug.getlocal(2,i);if not name then break end;vars[name]=value end
@@ -382,6 +457,13 @@ if physicalDamagePhase=="before" then
        for _,entry in ipairs(vars.modDB:Tabulate("BASE",nil,"Life")) do if entry.mod==originalBase then matches=matches+1 end end
        assert(matches==1);row.computation.intrinsic_base={original_record_is_eligible=true,record=modRecord(originalBase),
         eligible_base_records=records(vars.modDB,"BASE",nil,"Life")}
+      end
+      if physicalDamageLifeDeliveryEvidence then
+       local eligible={};local objects=auth.life_delivered_objects[actor] or {}
+       for _,entry in ipairs(vars.modDB:Tabulate("INC",nil,"Life")) do
+        eligible[#eligible+1]={value=entry.value,record=modRecord(entry.mod),actual_transfer_count=objects[entry.mod] or 0}
+       end
+       row.computation.life_increase_delivery={eligible=eligible,raw_increase=records(vars.modDB,"INC",nil,"Life")}
       end
       checked();assert(actor.output==lifePending.output)
      elseif event=="return" then
@@ -496,11 +578,12 @@ if physicalDamagePhase=="before" then
  local enabled=jit.status();jit.flush();assert(jit.status()==enabled);debug.sethook(hook,baseHookMask)
  physicalDamageAuth=auth
  return function()
-  assert(debug.gethook()==hook and not pending and not lifePending and not selectionPending and not initPending);debug.sethook(oldHook,oldMask,oldCount);assert(jit.status()==enabled)
+  assert(debug.gethook()==hook and not pending and not lifePending and not selectionPending and not initPending and not deliveryPending);debug.sethook(oldHook,oldMask,oldCount);assert(jit.status()==enabled)
   for i,row in ipairs(methods) do assert(row[1][row[2]]==refs[i]) end
   assert(upvalue(calcs.offence,"calcDamage")==calcDamage and upvalue(calcs.perform,"mergeBuff")==mergeBuff);auth.finished=true
   if physicalDamageCommandEvidence then assert(calcSkillCooldown==cooldown) end
   if physicalDamageIntrinsicLifeEvidence then assert(upvalue(calcs.perform,"initMinionModDB")==initMinion) end
+  if physicalDamageLifeDeliveryEvidence then assert(upvalue(calcs.perform,"addMinionModifiers")==transferMinion) end
  end
 end
 local auth=assert(physicalDamageAuth);assert(auth.finished)
@@ -564,7 +647,9 @@ local function environment(env)
      exact_parent=actor.parent==env.player,exact_summoner=summoner.minion==actor} or nil,
     intrinsic_life=physicalDamageIntrinsicLifeEvidence and actor.type=="RaisedSkeletonSniper" and {
      table_selections=auth.life_selections[actor] or {},initializers=auth.life_initializers[actor] or {},
-     facts=intrinsicLifeFacts(env,summoner)} or nil}
+     facts=intrinsicLifeFacts(env,summoner)} or nil,
+    life_delivery=physicalDamageLifeDeliveryEvidence and actor.type=="RaisedSkeletonSniper" and {
+     transfers=auth.life_transfers[actor] or {},allocated_node_ids=allocatedIds(env)} or nil}
    actorStates[#actorStates+1]={actor=actor,level=actor.level,weapon=actor.weaponData1,state=clone(actor.weaponData1)}
   end
  end
@@ -629,6 +714,10 @@ if physicalDamageIntrinsicLifeEvidence then
  assert(equal(result.intrinsic_life_definitions,intrinsicLifeDefinitions(calcsEnv)))
  assert(upvalue(calcs.perform,"initMinionModDB")==auth.init_minion)
  result.intrinsic_life_methods_preserved=true
+end
+if physicalDamageLifeDeliveryEvidence then
+ assert(upvalue(calcs.perform,"addMinionModifiers")==auth.transfer_minion)
+ result.life_delivery_methods_preserved=true
 end
 if physicalDamageCommandEvidence then
  local commandFamily={}

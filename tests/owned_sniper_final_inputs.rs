@@ -1,6 +1,7 @@
 //! Physical Sniper raw inputs through actual item preparation and final assembly.
 #[path = "support/owned_sniper_final_inputs.rs"]
-mod family;
+mod sniper_family;
+use sniper_family as family;
 #[path = "support/owned_release_migration_preservation.rs"]
 mod migration_preservation;
 #[path = "support/owned_sniper_final_inputs_native.rs"]
