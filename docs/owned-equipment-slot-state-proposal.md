@@ -1,6 +1,7 @@
 # Equipment slot reads for shared Player state
 
-**Status:** Accepted on 2026-10-06; implementation pending. No IDs allocated.
+**Status:** Accepted and implemented on 2026-10-06. Game-state producers remain
+unpublished; no IDs allocated and no Class coverage changed.
 **Date:** 2026-10-06.
 **Decision owner:** Project owner.
 
@@ -29,8 +30,9 @@ RuleReadSource::PlayerEquipmentSlot {
 }
 ```
 
-Names are provisional. The public semantic decision is the cross-entity read
-authority and its absence behavior, not this spelling. Initially permit the
+The implemented DTO uses `PlayerEquipmentSlotRead` for these three alternatives.
+The public semantic decision is the cross-entity read
+authority and its absence behavior. Initially permit the
 read only in an explicit existing-Player Actor application. Do not implicitly
 apply it to owned minions, source-property scopes or arbitrary provider programs.
 The Stat/Capability must declare EquipmentUse scope and its exact type/unit.
@@ -111,13 +113,26 @@ selected the shared Player slot read in direct response to this proposal. This
 expands the current same-Actor read boundary. It does not approve a game-specific
 unarmed formula, complete any Class, or adopt source cache/UI behavior.
 
-Implementation remains pending. First extract/reuse the slot resolver from
-`crates/poe-optimizer-engine/src/owned_plan/compile/sources.rs:86`–`141` and add
-typed validation beside `owned_rules/existing_actors.rs`. Add focused tests for
-empty/occupied caster slots, identical templates in opposite hands, active and
-inactive alternatives, ambiguous/unknown occupants, missing computed values,
-forbidden raw parameter access, and query-independent shared state. Keep
-two-handed legality and unsupported special replacements explicitly incomplete.
-Then author the ordinary shared-state inputs and original-call evidence before
-reconsidering Class closure. No compatibility version or duplicate path is
-required merely to preserve an obsolete current format.
+Core/Data/Engine now implement this relation in current operations V21. The
+cold resolver in `owned_plan/compile/equipment_slots.rs` is shared with Action
+source selection and caches each requested slot. Data validates every reader,
+including unused owners and packages without an Actor application inventory.
+The invocation binder separately requires the actual existing Player: listing
+an Actor definition does not authorize an owned minion using that definition.
+Computed reads join ordinary concrete dependencies and EquipmentUse stage
+channels; occupancy does not fabricate a computed producer.
+
+Validation passes: one Core wire test, five new Actor storage tests, two new
+stage tests and eight Engine tests. The Engine checks empty/occupied caster
+slots, identical templates in opposite hands, active/inactive alternatives,
+ambiguous/unknown occupants, missing outputs, raw compiler authority, cycles,
+stage order, query independence, A/B/A scratch reuse and Rayon workers. Existing
+Action selection, Actor, readiness and participation regressions also pass.
+Evidence is under `runs/owned-player-slot-*.log`.
+
+No current game package uses the new reads yet. Next author the ordinary
+shared-state inputs and original-call evidence before reconsidering Class
+closure. Two-handed legality and unsupported replacements remain incomplete.
+No compatibility version or duplicate implementation was added. The whole-rule
+reader census consumes the existing bounded work budget; diagnostic resource
+counts can change even where stored rule bytes and content identity do not.

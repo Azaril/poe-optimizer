@@ -82,61 +82,30 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                             "equipment selector has non-equipment origin".into(),
                         ));
                     };
-                    let input = self.request.build().input();
-                    charge(&mut self.work, input.equipment.len())?;
-                    let mut occupied = None;
-                    let mut ambiguous = false;
-                    // Inspect authored occupancy before consulting discovered providers.
-                    // An unresolved provider must not disappear into the empty branch.
-                    for row in &input.equipment {
-                        if row.destination != EquipmentDestination::CharacterSlot(slot.clone()) {
-                            continue;
-                        }
-                        let active = match &row.scope {
-                            LoadoutScope::Shared => true,
-                            LoadoutScope::Selected { loadouts } => {
-                                charge(&mut self.work, loadouts.len())?;
-                                loadouts.contains(&input.active_weapon_loadout)
-                            }
-                        };
-                        if active && occupied.replace(row.id).is_some() {
-                            ambiguous = true;
-                        }
-                    }
-                    if ambiguous {
-                        (
-                            missing(PlanGapReason::UnsupportedRelation),
-                            Some(primary),
-                            alternative(selector, when_ineligible)?,
-                            None,
-                        )
-                    } else if let Some(equipment) = occupied {
-                        let provider = root(ProviderRoot::EquipmentUse(equipment));
-                        let resolution = self.resolver.provider(&provider)?;
-                        charge(&mut self.work, resolution.work_used())?;
-                        let source = if resolution.into_value().is_some() {
+                    match self.equipment_slot(slot)? {
+                        equipment_slots::EquipmentSlotState::Occupied(equipment) => (
                             PendingRead::Value(PlanValueKey::Capability {
                                 entity: ConcreteEntity::EquipmentUse(equipment),
                                 capability: capability.clone(),
-                            })
-                        } else {
-                            missing(PlanGapReason::UnresolvedTopology)
-                        };
-                        (
-                            source,
+                            }),
                             Some(primary),
                             alternative(selector, when_ineligible)?,
                             Some(equipment),
-                        )
-                    } else {
-                        (
+                        ),
+                        equipment_slots::EquipmentSlotState::Unresolved { occupant, reason } => (
+                            missing(reason),
+                            Some(primary),
+                            alternative(selector, when_ineligible)?,
+                            occupant,
+                        ),
+                        equipment_slots::EquipmentSlotState::Empty => (
                             PendingRead::Ready(ReadBinding::Constant(Some(
                                 ParameterValue::Boolean(true),
                             ))),
                             alternative(selector, when_empty)?,
                             None,
                             None,
-                        )
+                        ),
                     }
                 }
             };

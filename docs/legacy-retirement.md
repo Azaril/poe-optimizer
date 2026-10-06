@@ -66,6 +66,14 @@ not a second activation store. Import's compiled usage source now distinguishes
 occurrence, strict containing-group and genuine override recipes; no fabricated
 occurrence fallback is retained for independent group inputs.
 
+The accepted Player slot-read implementation extracts one bounded authored-slot
+resolver from Action routing and reuses it for shared Actor programs. There is
+no second equipment-selection path, copied raw-item input store, or Lua-shaped
+runtime value. The current V21 contract changes in place. No game-state formula
+or new compatibility branch accompanies the API; its production data remains
+unpublished. Whole-package read validation now charges previously uncounted
+census work, so resource diagnostics are not promised to remain byte-identical.
+
 The current V5 release migration now handles V21 directly, retaining actual
 ordered-query and Actor applicability data. A V20 downgrade or a new migration
 version solely for this schema append would add no useful behavior and is not

@@ -645,6 +645,20 @@ impl Access<'_> {
         self.used.entries(p.effects.len(), self.limits)?;
         for read in &p.reads {
             match &read.source {
+                RuleReadSource::PlayerEquipmentSlot { read, .. } => match read {
+                    PlayerEquipmentSlotRead::Occupied => {}
+                    PlayerEquipmentSlotRead::Stat { stat } => {
+                        self.stat(RuleEntityKind::EquipmentUse, stat, stage, false)?;
+                    }
+                    PlayerEquipmentSlotRead::Capability { capability } => self.channel(
+                        StageChannel::Capability {
+                            scope: RuleEntityKind::EquipmentUse,
+                            capability: capability.clone(),
+                        },
+                        stage,
+                        false,
+                    )?,
+                },
                 RuleReadSource::Stat { entity, stat } => {
                     self.stat(scope(*entity, p.context, source)?, stat, stage, false)?
                 }

@@ -8,7 +8,7 @@ use crate::{
 use poe_optimizer_core::{
     owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},
     owned_definitions::*,
-    owned_rules::{RuleEffectKind, RuleEntity, RuleReadSource},
+    owned_rules::{PlayerEquipmentSlotRead, RuleEffectKind, RuleEntity, RuleReadSource},
     owned_schema::*,
     owned_stages::StageChannel,
     owned_support_outputs::*,
@@ -188,6 +188,10 @@ impl Check<'_> {
                 self.used.work(program.effects.len(), self.limits)?;
                 for read in &program.reads {
                     match &read.source {
+                        RuleReadSource::PlayerEquipmentSlot {
+                            read: PlayerEquipmentSlotRead::Stat { stat },
+                            ..
+                        } => self.forbid(stat, "final type output cannot be an equipment stat")?,
                         RuleReadSource::Stat { entity, stat } if self.is_output(stat)? => {
                             let skill =
                                 matches!(entity, RuleEntity::Skill | RuleEntity::AssignedSkill)

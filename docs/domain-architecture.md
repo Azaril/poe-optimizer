@@ -222,8 +222,11 @@ class facts, shared initialization, equipment state and per-Action source
 selection. Existing equipment-to-Player delivery is reusable, but general hand
 state uses the accepted [Player slot relation](owned-equipment-slot-state-proposal.md):
 read validated occupancy and the exact equipped occurrence's computed values,
-without crossing raw parameter ownership. Implementation remains pending.
-Do not derive shared state
+without crossing raw parameter ownership. Core/Data/Engine implement this in
+current V21 through one bounded cold resolver shared with Action selection.
+Only actual existing-Player applications have this authority; their computed
+reads join the normal dependency and stage checks. Game-state data publication
+remains open. Do not derive shared state
 from which metric or Action a user queries, or close Class coverage merely by
 moving its unfinished responsibility into a generic Actor marker.
 

@@ -711,6 +711,39 @@ fn read<I: DefinitionSchemaIndex>(
             entity: e,
             stat: id,
         } => stat(id, *e, p.context, owner, index, path)?.clone(),
+        RuleReadSource::PlayerEquipmentSlot { slot, read } => {
+            check(
+                p.context == RuleEntityKind::Actor
+                    && matches!(
+                        owner,
+                        SchemaSubject::Definition(DefinitionAddress::Actor(_))
+                    ),
+                path,
+                "Player equipment slot read requires an Actor owner and context",
+            )?;
+            known(index.definition(slot), path)?;
+            match read {
+                PlayerEquipmentSlotRead::Occupied => ComputedValueType::Boolean,
+                PlayerEquipmentSlotRead::Stat { stat } => {
+                    let schema = known(index.definition(stat), path)?;
+                    check(
+                        schema.targets.contains(&RuleEntityKind::EquipmentUse),
+                        path,
+                        "Player equipment slot stat must support EquipmentUse",
+                    )?;
+                    schema.value.clone()
+                }
+                PlayerEquipmentSlotRead::Capability { capability } => {
+                    let schema = known(index.definition(capability), path)?;
+                    check(
+                        schema.targets.contains(&RuleEntityKind::EquipmentUse),
+                        path,
+                        "Player equipment slot capability must support EquipmentUse",
+                    )?;
+                    ComputedValueType::Boolean
+                }
+            }
+        }
         RuleReadSource::ModifierTransforms { stat: id, initial } => {
             let value = modifier_factor(id, p.context, owner, index, path)?;
             let initial_value = modifier_factor(initial, p.context, owner, index, path)?;
@@ -1099,6 +1132,13 @@ fn program<I: DefinitionSchemaIndex>(
     let mut reads = Vec::with_capacity(p.reads.len());
     let mut read_index = BTreeMap::new();
     for r in &p.reads {
+        if matches!(r.source, RuleReadSource::PlayerEquipmentSlot { .. }) {
+            check(
+                operations.supports_player_equipment_slots(),
+                "operations_version",
+                "Player equipment slot reads require owned-domain-operations-v21",
+            )?;
+        }
         if matches!(
             r.source,
             RuleReadSource::ActionPartIs { .. }

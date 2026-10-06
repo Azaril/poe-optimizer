@@ -47,59 +47,67 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest checkpoint: requested participation and residual Class audit
+## Latest checkpoint: shared Player equipment slots and loaded Class proof
 
-The accepted [participation contract](owned-skill-participation-proposal.md) now
-has a native Core/Data/Engine implementation. `SkillReadiness.participation`
-optionally names a Boolean Skill stat produced by an ordinary early usage rule.
-The common execution gate follows exact provider and Actor ancestry; mechanical
-supply and preparation remain independent. Missing values stay unresolved,
-false cannot conceal coverage gaps, and a true preference cannot manufacture a
-provider. This extends current stages V4 / operations V21 in place. The renamed
-readiness type has no compatibility alias or parallel implementation.
+The accepted [Player slot relation](owned-equipment-slot-state-proposal.md) is
+implemented in Core/Data/Engine. Shared Player Actor rules can read occupancy
+and the selected EquipmentUse's computed Stat/Capability values. One bounded
+cold resolver serves both these reads and Action source selection; no equipment
+scan enters the numerical hot path. Unknown/ambiguous occupants cannot become
+empty, and missing outputs do not become zero or false. Empty computed reads
+remain unresolved but can be guarded by an ordinary lazy branch.
 
-Import now supports a strict containing-group value independently of an
-occurrence value. This permits saved group and Gem enabled values to reach
-separate typed policy parameters without an override discarding one. Missing,
-malformed and false values keep their own meaning; the importer adds no Boolean
-formula, source default or whole-usage closure. The production data packet has
-not yet adopted these declarations: real-build participation publication remains
-open, along with global switches and reporting intent.
+Storage validates every reader against current V21 and explicit Player
+applicability; concrete binding separately checks the actual existing Player
+invocation. An Actor definition reused for an owned actor cannot inherit this
+authority. Computed reads join ordinary stage and cycle dependencies. The
+whole-rule reader census uses existing work limits; diagnostic resource counts
+can change without altering stored rule bytes. No duplicate resolver, raw-item
+store, Lua runtime behavior, compatibility alias or new format version was added.
 
-The [Class coverage audit](owned-class-coverage-audit.md) confirms the residual
-class facts and actual action/skill/provider gates, but withholds closure.
-Shared equipment-derived Actor state needs explicit slot-sensitive authority;
-existing equipment-to-Player delivery alone cannot distinguish identical
-items in opposite hands. A bounded loaded-tree witness must also authenticate
-`characterData` selection and all eight class rows. No Class marker or game-data
-identity changed in this checkpoint.
+The [loaded Class witness](owned-class-coverage-audit.md) also passes. All eight
+actual loaded class rows and their ascendancy metadata match the pinned JSON
+catalogue. `characterData` is absent; original base initialization uses the exact
+selected class row. All five unchanged originals plus an independent Original05
+repeat agree with fresh unhooked loads and across JIT modes: 24 total loads in
+86.96s. Both reports are 1,635,614 bytes, SHA-256
+`8cbd3841d48b7ac98d9f10668e1ca14f7e80b0a17d9f4bf466786550376103d2`,
+under `runs/owned-loaded-class-tables-source-01/`. This authenticates acquisition
+and the original initializer; it does not certify all eight selected calculations,
+full output graphs, warm caches or complete builds.
 
-Validation passes: one Core participation test; 33 Data stage tests (seven
-new); nine Engine participation tests; existing preparation (14), source-property
-(15), Offering usage (six), project composition (32), and preset-intent (10)
-regressions; and all 290 Import normalization tests (three new). One optional
-source-backed Offering observation check was not run. Failed fixture runs are
-retained; repairs supplied required declarations, tested Partial ownership at
-its actual boundary, and used the original stored rule identity. Production
-authority and completeness checks were not relaxed.
+Focused validation passes: one Core wire test; 35 Data stage tests and 10 Actor
+storage tests; eight new Engine slot tests plus existing Action selection (7),
+Actor ownership (7), readiness (14) and participation (9) regressions. These
+include query independence, repeated/loadout equipment, actual invocation
+authority, missing producers, cycles and A/B/A plus Rayon scratch reuse. Logs:
+`runs/owned-player-slot-*.log`. The first Data build exposed a missing enum import;
+it was corrected before the passing run. The optional PoB build still reports
+the previously recorded Windows LNK4098 packaging warning; execution passes.
 
-Evidence: `runs/owned-participation-{core-tests-01,data-tests-01,engine-tests-03,import-tests-01}.log`
-and the named preparation/source-property/usage/project/preset target logs.
-The unchanged five-build replay passes in **6.16 seconds**, retaining all 110
-queries, imported values, IDs, allocator state and saved selections. Evidence:
-`runs/owned-participation-corpus-01/validation.json` and
-`runs/owned-participation-corpus-tests-01.log`. Strict workspace/all-features/
-all-targets Clippy, all five changed-package formatting checks, both WASM library
-checks and the compiled owned-only dependency boundary check pass. Logs:
-`runs/owned-participation-{clippy-01,fmt-01,wasm-01,wasm-02,boundaries-01}.log`.
-GitHub validation remains in progress; local success is not a CI result.
+The unchanged five-build import replay passes in **5.85s**, preserving all 110
+queries, values, IDs, allocator state and saved selections. Evidence:
+`runs/owned-player-slot-corpus-01/validation.json` and
+`runs/owned-player-slot-corpus-tests-01.log`. Strict workspace/all-features/
+all-targets Clippy, all four changed-package formatting checks, both WASM
+library checks and the compiled owned-only dependency boundary check pass.
+Logs: `runs/owned-player-slot-{clippy-01,fmt-01,wasm-01,wasm-02,boundaries-01}.log`.
+At the pre-push GitHub check, `81227b8` was still running and `da49f3f` pending;
+local success is not a CI result for this checkpoint.
 
-**Next actual blocker:** publish the authenticated participation inputs and
-rules for the real corpus, preserving effect-only controls and the selected
-reference-preview distinction. In parallel, obtain the bounded loaded-tree
-proof and implement the accepted shared Player slot-read contract before any Class closure.
-BASE/INC membership and ordering, inherent-bonus controls and final Player Life
-remain unresolved. Complete native builds remain **0/5**.
+**Next actual blocker:** physical-primary usage transport allows only one policy
+per Gem and retains separate Boolean/numeric paths. Reuse the existing typed
+multiple-policy mechanism, change the current format and regenerate, then
+publish the first complete participation input/rule packet for Sniper. Keep its
+count and effect-specific switches independent. Other skills with Partial input
+inventories need genuine inventory closure before readiness publication; a
+smaller generated-only transport packet would not finish participation.
+
+In parallel, use the implemented slot relation to author and authenticate shared
+equipment-state producers. Do not close Class coverage by moving responsibility
+to a generic Actor marker. BASE/INC membership and ordering, inherent-bonus
+controls and final Player Life remain unresolved. No game data or registry IDs
+changed here. Complete native builds remain **0/5**.
 
 ## Checked baseline and original-build results
 
@@ -203,10 +211,11 @@ validation pass; no additional whole-build closure is claimed.
 
 **Class audit result:** [closure is withheld](owned-class-coverage-audit.md).
 All eight residual class program inventories and the real separate action gates
-were reviewed. Before a data-only closure, authenticate the actual loaded
-`characterData`/class-table selection and give shared equipment-derived Actor
-conditions explicit input/producer ownership. Reuse existing equipment delivery
-and Actor rules through the accepted [Player slot relation](owned-equipment-slot-state-proposal.md); do not
+were reviewed. The actual loaded class-table branch and all eight rows are now
+authenticated, and the accepted slot relation is implemented. Before a data-only
+closure, give shared equipment-derived Actor conditions explicit producer
+ownership and source evidence. Reuse existing equipment delivery
+and Actor rules through the [Player slot relation](owned-equipment-slot-state-proposal.md); do not
 substitute Action query selection or template identity for hand state. Keep all
 eight Class markers and shared Actor `332a` Partial. The audit records exact
 source readers, current consumers and the smallest proof/control work.
@@ -868,18 +877,36 @@ allocated and no class-specific default is inferred. The checked game packet
 moves intrinsic Life out of eight Classes, preserving remaining Partial coverage.
 Future non-Player targets still require ancestry, readiness and activation proof.
 
-**Accepted 2026-10-06:** [shared Player equipment-slot reads](owned-equipment-slot-state-proposal.md).
+**Accepted and implemented 2026-10-06:** [shared Player equipment-slot reads](owned-equipment-slot-state-proposal.md).
 Expose validated occupancy and the exact selected EquipmentUse's computed
 Stat/Capability to existing-Player Actor programs. Reuse one bounded relation
 resolver with Action routing. Empty, unresolved and ambiguous slots stay distinct;
 raw item parameters and game equipment legality retain their existing owners.
-Implementation and validation are the next shared-state work, not completed here.
+Core/Data/Engine validation passes, including actual invocation authority, stage
+and cycle dependencies, query independence and parallel worker reuse. Game-state
+producer publication and source evidence remain the next shared-state work.
 
 **Accepted and native consumer implemented 2026-10-06:** [requested Skill participation](owned-skill-participation-proposal.md).
 The consumer preserves mechanical supply for preparation and uses existing typed
 usage to gate execution and descendants. Core/Data/Engine share the exact
 occurrence gate. Authenticated real-build input/rule publication and composed
 preset-to-participation integration remain open.
+
+**Next implementation blocker:** physical-primary usage import still admits only
+one policy per Gem and splits Boolean/numeric recipes. Reuse the existing typed
+multiple-policy mechanism already used by Direct/generated occurrences; change
+the current format and regenerate, without compatibility branches. Preserve
+physical input inventory proof separately. This is implementation within the
+accepted ownership model, not permission to add preview overrides or defaults.
+Then publish a separate participation policy with required group/occurrence
+Boolean inputs and an ordinary early `All` derivation for Sniper `0012`, whose
+required input inventory is Complete. Retain count policy `326a`, parameter
+`326b`, stat `326c` and physical supply `0011` → `0016` → `0012`.
+No new IDs are allocated. The Djinn, Firebolt, Offering, Frost Bomb and other
+skeletal skills still have Partial parameter inventories; merely importing new
+participation facts cannot establish their execution readiness. Preserve all
+five imports and 110 queries; test scenario overrides, dormant exact sources,
+false group/Gem preferences, descendants, scratch/Rayon, and Partial refusal.
 
 **Accepted 2026-10-06:** [explicit generated-source field accounting](owned-generated-skill-dispositions-proposal.md).
 Use the existing Import policy and a separate private proof pass, preserving
@@ -925,7 +952,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases; important ignored tests are not automatically exercised by ordinary CI. |
 | Historical replay retirement | Reimport with the one current implementation and retain useful stored source evidence. Seventeen older ignored publication harnesses need consumer review: rebase useful assertions to current semantics or remove obsolete scaffolding, rather than add compatibility paths. Declaration integrity and source parity remain required. [Retirement/migration inventory](legacy-retirement.md#historical-publication-replay-migration-2026-10-05). |
 | Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. Shared exact-provider proof now serves raw quality and requested-count import independently. Same-definition allocations in different presets remain distinct. Enabled/global/reporting dispositions and usage inventory closure remain open. [Contract and gates](owned-generated-skill-usage-proposal.md). |
-| Requested participation | [Public consumer contract](owned-skill-participation-proposal.md) accepted: keep mechanical supply separate from whole-Skill execution intent, using existing typed usage and one graph. Native consumer and shared gates are implemented; real-build input/rule publication remains open. PoB selected-group preview bypasses/fallbacks require explicit reference controls, not native defaults. |
+| Requested participation | [Public consumer contract](owned-skill-participation-proposal.md) and native shared gates are implemented. Next unify current physical-primary usage into multiple typed policies, then publish Sniper participation without merging count/effect controls. Other skills' Partial parameter inventories still block readiness. Real-build publication remains open. PoB selected-group preview bypasses/fallbacks require explicit reference controls, not native defaults. |
 | Resource ownership and demand | [Resource-obligation proposal](owned-resource-obligations-proposal.md) awaits owner review. Ordinary sustained reservation should be independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Define Skill support recipients and contrast cost conversion, mines and stance/toggle selection; then migrate the current Action reservation bodies and validate query invariance. Gigantic's producer/status and isolated Life/Damage-factor packets are published; final reservation delivery remains open. |
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
@@ -942,7 +969,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
 | Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation; BASE/INC membership and the global query inventory remain Partial. Next finish actual contributor coverage. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | Earlier V18/V20 expectation regressions and the combined Windows compile bottleneck are fixed. Run [37409208353](https://github.com/Azaril/poe-optimizer/actions/runs/37409208353) at `230494e` completed all twelve Windows/Linux jobs successfully. Windows PoB's combined compilation/test step took 3h28m40s, within its prior successful duration range; no hang or failure was found. At the pre-push check, the older `024bac0` run was still active. Local checks for this checkpoint pass, but CI success for the current `main` revision is not yet confirmed. Read the latest [main workflow runs](https://github.com/Azaril/poe-optimizer/actions/workflows/rust.yml) before treating a newer revision as green; pending runs can be superseded by the next checkpoint. Main retains running validation and coalesces pending revisions. Separate compile/test timings before choosing further sharding. Keep every package/target and required aggregate check; infrastructure delays do not justify dropping coverage. |
+| CI regression, timeout and infrastructure | Earlier V18/V20 expectation regressions and the combined Windows compile bottleneck are fixed. Run [37409208353](https://github.com/Azaril/poe-optimizer/actions/runs/37409208353) at `230494e` completed all twelve Windows/Linux jobs successfully. Windows PoB's combined compilation/test step took 3h28m40s, within its prior successful duration range; no hang or failure was found. At this pre-push check, run37514924385 at `da49f3f` was pending behind active run37499216040 at `81227b8`. Local checks for this checkpoint pass, but CI success for the current `main` revision is not yet confirmed. Read the latest [main workflow runs](https://github.com/Azaril/poe-optimizer/actions/workflows/rust.yml) before treating a newer revision as green; pending runs can be superseded by the next checkpoint. Main retains running validation and coalesces pending revisions. Separate compile/test timings before choosing further sharding. Keep every package/target and required aggregate check; infrastructure delays do not justify dropping coverage. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 | Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |

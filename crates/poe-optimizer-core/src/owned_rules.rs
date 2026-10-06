@@ -157,6 +157,10 @@ impl RuleOperationsVersion {
     pub const fn supports_skill_participation(self) -> bool {
         self.revision() >= 21
     }
+    /// Read-only slot state in an explicit existing-Player Actor application.
+    pub const fn supports_player_equipment_slots(self) -> bool {
+        self.revision() >= 21
+    }
     /// Artifact domains are frozen explicitly, even where capabilities overlap.
     pub const fn effect_plan_domain(self) -> &'static str {
         match self {
@@ -553,6 +557,20 @@ pub enum ContributionReduction {
     Sum,
     Product,
 }
+/// A selected occurrence's computed outputs, never its raw item parameters.
+/// Empty slots have occupancy false and no Stat/Capability value.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum PlayerEquipmentSlotRead {
+    Occupied,
+    Stat { stat: StatDefId },
+    Capability { capability: CapabilityDefId },
+}
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(
     tag = "kind",
@@ -586,6 +604,13 @@ pub enum RuleReadSource {
     /// Exact player ascendancy membership; an explicitly absent ascendancy is false.
     CharacterAscendancyIs {
         ascendancy: AscendancyDefId,
+    },
+    /// Resolve an exact slot in the active Player equipment relation. Requires
+    /// operations V21 and an explicit existing-Player Actor rule application.
+    /// This does not establish equipment legality or supply a missing value.
+    PlayerEquipmentSlot {
+        slot: EquipmentSlotDefId,
+        read: PlayerEquipmentSlotRead,
     },
     /// Exact selected part of the current Action, not its source Skill or a
     /// reference UI selection. Requires Action context and operations v20.

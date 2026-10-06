@@ -3,6 +3,9 @@ use poe_optimizer_core::{
 };
 use poe_optimizer_data::{owned_rules::*, owned_schema::*};
 
+#[path = "support/owned_player_equipment_slots.rs"]
+mod equipment_slots;
+
 fn key(s: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(s).unwrap()
 }

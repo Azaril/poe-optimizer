@@ -5,6 +5,7 @@ use poe_optimizer_data::owned_stages::OwnedEvaluationStages;
 #[cfg(test)]
 mod deferred_tests;
 mod effect_applications;
+mod equipment_slots;
 mod generated_inputs;
 mod ordered;
 mod participation;
@@ -123,6 +124,7 @@ struct Builder<'a, I> {
     stages: Option<&'a OwnedEvaluationStages>,
     readiness_gates: BTreeMap<readiness::GateContextKey, Vec<PendingRead>>,
     readiness_skills: BTreeMap<ProviderKey, GeneratedSkillKey>,
+    equipment_slots: BTreeMap<EquipmentSlotDefId, equipment_slots::EquipmentSlotState>,
     symbolic_routes: Vec<(usize, PendingRead)>,
     deferred_support_programs: BTreeSet<(SupportAssignmentId, GemDefId, OwnedDefinitionKey)>,
     deferred_source_programs: BTreeSet<source_properties::SourceProgramKey>,
@@ -797,6 +799,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             stages: None,
             readiness_gates: BTreeMap::new(),
             readiness_skills: BTreeMap::new(),
+            equipment_slots: BTreeMap::new(),
             symbolic_routes: vec![],
             deferred_support_programs: BTreeSet::new(),
             deferred_source_programs: BTreeSet::new(),

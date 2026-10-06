@@ -145,6 +145,12 @@ pub(super) fn read<I: DefinitionSchemaIndex>(
             reduction: *reduction,
             empty: empty.clone(),
         }),
+        RuleReadSource::PlayerEquipmentSlot { .. } => {
+            return Err(fail(
+                path,
+                "Player equipment slot read is not an effect-application authority",
+            ));
+        }
         RuleReadSource::Parameter { .. }
         | RuleReadSource::Choice { .. }
         | RuleReadSource::GemLevel

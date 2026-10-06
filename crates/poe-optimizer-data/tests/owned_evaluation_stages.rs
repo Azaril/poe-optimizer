@@ -9,6 +9,9 @@ use poe_optimizer_core::{
 };
 use poe_optimizer_data::{owned_routing::*, owned_rules::*, owned_schema::*, owned_stages::*};
 
+#[path = "support/owned_equipment_slot_stages.rs"]
+mod equipment_slot_stages;
+
 fn key(s: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(s).unwrap()
 }

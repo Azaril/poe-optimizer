@@ -1,8 +1,8 @@
 # Remaining Class coverage audit
 
-Status: audited on 2026-10-06 at `81227b8`; closure withheld. The follow-up shared
-Player slot-read contract was accepted on 2026-10-06; implementation is pending.
-This audit does not publish data or change Class coverage.
+Status: audited on 2026-10-06 at `81227b8`; updated after the loaded-class witness
+and accepted Player slot-read implementation passed. Class closure is withheld.
+This audit does not publish game data or change Class coverage.
 
 The checked baseline is `runs/owned-player-rule-ownership-01/package`, input
 `344d3a2c278844c6ea9b2d1f2e27edde492e23392f8500aec5f3f3baf533051f`.
@@ -20,12 +20,12 @@ not account for all shared equipment-derived Actor state. The source derives
 initialization inventory documented for Actor `332a`. Merely retaining that
 Actor's generic Partial marker would not establish ownership of these branches.
 
-There is also an acquisition-proof gap: the class converter authenticates
-`tree.json`, whereas the source constructor normally loads `tree.lua`, and
-calculation prefers a loaded `characterData` table when present. Existing
-retained reports do not explicitly bind that alternative to the complete loaded
-eight-class catalogue. Keep Class Partial until this small proof and the shared
-state ownership are established.
+The acquisition-proof gap is now resolved: the original constructor's loaded
+`tree.lua` class rows match the authenticated `tree.json` catalogue, and
+`characterData` is absent. Original initialization selects the actual class
+row. Shared slot-read authority is also implemented and tested. Keep Class
+Partial until shared equipment-state producer ownership and its independent
+evidence are established; these two completed prerequisites alone are not closure.
 
 ## Class facts and metadata
 
@@ -82,12 +82,22 @@ captures the Witch/Sorceress root. The intrinsic-Life report captures all class
 rows and the shared initializer, but does not explicitly record the preferred
 class-table branch. Neither report should be extended by interpretation.
 
-The smallest additional evidence is a bounded capture after the original tree
-constructor: all eight actual class rows, the explicit presence/absence and
-identity of `characterData`, and the exact table used for the original base
-initializer. Authenticate both source files and compare the selected fields to
-the existing finite class catalogue. A full new calculation harness or copied
-formula is unnecessary.
+The new bounded witness `owned_loaded_class_tables` captures the original tree
+constructor before and after its metadata additions, plus the original class
+initializer. All eight raw class rows and ascendancy metadata match the pinned
+catalogue. `characterData` is explicitly absent, and the original base records
+retain exact object provenance to the selected `tree.classes[classId]` row.
+Constructor-added aliases and start-node IDs are accounted for separately.
+
+Evidence: `runs/owned-loaded-class-tables-source-01/source-jit-{off,on}.json`.
+Both reports contain 1,635,614 bytes and SHA-256
+`8cbd3841d48b7ac98d9f10668e1ca14f7e80b0a17d9f4bf466786550376103d2`.
+All five unchanged originals, an independent repeat of Original05, and fresh
+unhooked comparisons pass: 12 complete loads per JIT mode, 24 total, in 86.96s.
+Scalar outputs, saved selection and items remain exact. The observation uses
+the existing reference bootstrap and no business-method wrappers or copied
+initializer. It does not select all eight classes in calculation, inspect the
+full output graph, settle warm caches or certify native whole-build parity.
 
 ## Actual action and provider gates
 
@@ -102,10 +112,10 @@ The independent gates are enforced by the normal plan:
 - `crates/poe-optimizer-engine/src/owned_plan/compile.rs:2237`–`2265` emits
   `MissingRouting` for an absent action-output routing record and
   `PartialRouting` for an incomplete routes inventory.
-- `compile/sources.rs:45`–`63` checks incomplete selector membership. Its
-  equipment-selection path at lines 86–141 checks authored active-loadout
-  occupancy before provider resolution. An unresolved or ambiguous equipped
-  item cannot disappear into an empty-slot fallback.
+- `compile/sources.rs` checks incomplete selector membership. Its equipment
+  selection now shares `compile/equipment_slots.rs` with Player reads: authored
+  active-loadout occupancy is checked before provider resolution. An unresolved
+  or ambiguous equipped item cannot disappear into an empty-slot fallback.
 - `compile.rs:1350`–`1377` checks each actual discovered provider's rule owner.
   Missing/Partial skill, item, modifier, passive or ascendancy ownership remains
   mandatory independently of the Class owner.
@@ -159,10 +169,12 @@ template property delivered from an actual equipment use. An empty reduction
 must still have complete membership and normal whole-plan coverage; no producer
 absence may become an invented false condition.
 
-The remaining obstacle is **slot-sensitive input authority**, not arithmetic:
+The audit originally identified **slot-sensitive input authority**, rather than
+arithmetic, as the missing mechanism:
 
-- `RuleReadSource` has no equipment-destination or slot-occupancy predicate.
-  Equipment rules can read their own item/modifier/quality inputs and computed
+- Before the accepted extension, `RuleReadSource` had no equipment-destination
+  or slot-occupancy predicate. Equipment rules can read their own item/modifier/
+  quality inputs and computed
   values, but cannot distinguish one identical template used in Weapon 1 from
   the same template used in Weapon 2. Equipment providers bind template/modifier
   owners; destination slots do not instantiate a separate slot-rule owner.
@@ -179,28 +191,28 @@ The remaining obstacle is **slot-sensitive input authority**, not arithmetic:
 
 For a proven template restricted to one slot, existing delivery may suffice for
 a bounded component. It does not solve the general hand-state problem, and this
-audit does not recommend another example-build-specific restriction. Therefore
-a full ordinary hand-state implementation cannot currently be expressed through
-data delivery alone. The follow-up
+audit does not recommend another example-build-specific restriction. The follow-up
 [slot-state decision](owned-equipment-slot-state-proposal.md), accepted on
 2026-10-06, permits a shared Player Actor to read the explicit slot relation and
-the selected occurrence's computed Stat/Capability values. Implementation must
-reuse the existing active-loadout/ambiguity checks and keep item profile presence
-separate from occupancy. The accepted contract remains unimplemented; it does not
-close any equipment-state owner or Class.
+the selected occurrence's computed Stat/Capability values. It requires reuse of
+active-loadout/ambiguity checks and keeps item profile presence separate from
+occupancy. Core/Data/Engine now implement that shared resolver,
+exact existing-Player invocation authority, computed dependency binding and
+stage checks. Focused empty/occupied, ambiguous/unknown, repeated/loadout,
+query-independent and Rayon controls pass. No equipment-state formula has yet
+been published, so this does not close any equipment-state owner or Class.
 
 ## Next actions
 
-1. Obtain the small loaded-class/`characterData` witness described above; retain
-   existing source and native attribute/attack proofs.
-2. Implement the accepted bounded slot-state input authority, using existing
-   provider delivery and shared Actor rules wherever possible. Give unfinished
+1. Done: loaded-class/`characterData` witness, with existing source and native
+   attribute/attack proofs retained.
+2. Done: accepted bounded slot-state input authority and focused native tests.
+   Next use existing provider delivery and shared Actor rules to give unfinished
    ordinary, disabled-weapon, off-hand and special-source conditions explicit
    owners; do not add a marker merely to remove the Class marker.
-3. Test occupied caster versus empty hand, both hand destinations for one
-   compatible template, active/inactive loadouts, missing/ambiguous providers,
-   and unrelated action selection. Preserve Partial refusal for unsupported
-   special replacements.
+3. Publish authenticated shared-state producers with contrasting ordinary and
+   special-source controls. Preserve Partial refusal for unsupported replacements
+   and retain the slot tests independently of game-specific formula evidence.
 4. Only then publish a Class-intrinsic closure with no numerical-body changes,
    exact predecessor inverse, independent action/provider/Actor refusal controls,
    and all-five input/query preservation. Complete final attributes and final

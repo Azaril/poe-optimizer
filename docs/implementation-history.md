@@ -1,10 +1,64 @@
-> Historical snapshots through the shared Player ownership checkpoint on 2026-10-06.
+> Historical snapshots through the participation checkpoint on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: requested participation and residual Class audit
+
+The accepted [participation contract](owned-skill-participation-proposal.md) now
+has a native Core/Data/Engine implementation. `SkillReadiness.participation`
+optionally names a Boolean Skill stat produced by an ordinary early usage rule.
+The common execution gate follows exact provider and Actor ancestry; mechanical
+supply and preparation remain independent. Missing values stay unresolved,
+false cannot conceal coverage gaps, and a true preference cannot manufacture a
+provider. This extends current stages V4 / operations V21 in place. The renamed
+readiness type has no compatibility alias or parallel implementation.
+
+Import now supports a strict containing-group value independently of an
+occurrence value. This permits saved group and Gem enabled values to reach
+separate typed policy parameters without an override discarding one. Missing,
+malformed and false values keep their own meaning; the importer adds no Boolean
+formula, source default or whole-usage closure. The production data packet has
+not yet adopted these declarations: real-build participation publication remains
+open, along with global switches and reporting intent.
+
+The [Class coverage audit](owned-class-coverage-audit.md) confirms the residual
+class facts and actual action/skill/provider gates, but withholds closure.
+Shared equipment-derived Actor state needs explicit slot-sensitive authority;
+existing equipment-to-Player delivery alone cannot distinguish identical
+items in opposite hands. A bounded loaded-tree witness must also authenticate
+`characterData` selection and all eight class rows. No Class marker or game-data
+identity changed in this checkpoint.
+
+Validation passes: one Core participation test; 33 Data stage tests (seven
+new); nine Engine participation tests; existing preparation (14), source-property
+(15), Offering usage (six), project composition (32), and preset-intent (10)
+regressions; and all 290 Import normalization tests (three new). One optional
+source-backed Offering observation check was not run. Failed fixture runs are
+retained; repairs supplied required declarations, tested Partial ownership at
+its actual boundary, and used the original stored rule identity. Production
+authority and completeness checks were not relaxed.
+
+Evidence: `runs/owned-participation-{core-tests-01,data-tests-01,engine-tests-03,import-tests-01}.log`
+and the named preparation/source-property/usage/project/preset target logs.
+The unchanged five-build replay passes in **6.16 seconds**, retaining all 110
+queries, imported values, IDs, allocator state and saved selections. Evidence:
+`runs/owned-participation-corpus-01/validation.json` and
+`runs/owned-participation-corpus-tests-01.log`. Strict workspace/all-features/
+all-targets Clippy, all five changed-package formatting checks, both WASM library
+checks and the compiled owned-only dependency boundary check pass. Logs:
+`runs/owned-participation-{clippy-01,fmt-01,wasm-01,wasm-02,boundaries-01}.log`.
+GitHub validation remains in progress; local success is not a CI result.
+
+**Next actual blocker:** publish the authenticated participation inputs and
+rules for the real corpus, preserving effect-only controls and the selected
+reference-preview distinction. In parallel, obtain the bounded loaded-tree
+proof and implement the accepted shared Player slot-read contract before any Class closure.
+BASE/INC membership and ordering, inherent-bonus controls and final Player Life
+remain unresolved. Complete native builds remain **0/5**.
 
 ## Archived 2026-10-06 checkpoint: shared Player rules, generated accounting and attribute factors
 

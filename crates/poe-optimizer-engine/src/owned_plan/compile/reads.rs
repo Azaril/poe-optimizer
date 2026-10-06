@@ -435,6 +435,9 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 ));
             }
             RuleReadSource::Parameter { slot } => return self.parameter_read(slot, c, owner),
+            RuleReadSource::PlayerEquipmentSlot { slot, read } => {
+                return self.player_equipment_read(slot, read, c);
+            }
             RuleReadSource::Choice { slot } => return self.choice_read(slot, c, owner),
             RuleReadSource::CharacterLevel => {
                 let character = &self.request.build().input().character;

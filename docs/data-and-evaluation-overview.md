@@ -21,7 +21,8 @@ placement, component-scalability reconciliation, intrinsic Player Life,
 Strength-derived inherent Life, six ordinary attribute consumers over the V21
 query boundary, guarded empty-MORE producers, the shared default class-start
 closure, once-per-Player Actor rule ownership, generated-field accounting,
-native requested-participation gates, strict group-value projection, and the
+native requested-participation gates, strict group-value projection, shared
+Player equipment-slot reads, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -50,8 +51,14 @@ from the historical 79; all five selected input issues remain. Complete native
 builds remain **0/5**. The [participation contract](owned-skill-participation-proposal.md)
 now has a native consumer on the existing graph; real-build data publication
 and saved-field combination remain open. The [Class audit](owned-class-coverage-audit.md)
-keeps coverage Partial pending loaded-tree evidence and shared equipment-state
-input ownership.
+keeps coverage Partial pending authenticated shared equipment-state producers.
+The loaded-tree witness now proves all eight catalogue rows and the actual
+class-table branch against both JIT modes; `characterData` is absent.
+The accepted slot-read boundary now runs natively, sharing its bounded cold
+resolver with Action routing. Empty, unresolved and ambiguous occupants retain
+distinct outcomes; computed values use the exact selected EquipmentUse and
+ordinary stage/dependency checks. No production state formula or Class closure
+is implied by implementing the read boundary.
 
 ## Lua compatibility cleanup and semantic authority
 
@@ -503,6 +510,12 @@ including false, without falling back to the Gem. It supplies no combination
 formula or source default. The checked production package has no participation
 declarations yet; publishing authenticated rules and inputs for real builds is
 still required.
+The immediate Import blocker is physical-primary transport: its current single
+policy per Gem and Boolean/numeric split cannot preserve independent count and
+participation policies. Reuse the existing typed multiple-policy mechanism and
+regenerate current artifacts. Sniper has complete required input declarations;
+other skills with Partial inventories must remain unresolved even after their
+saved enabled values can be transported.
 An absent contribution inventory cannot silently become zero or multiplier one.
 Current contribution coverage is conservative across the whole selected plan.
 The compiler seals one completeness flag after discovering providers, owners,

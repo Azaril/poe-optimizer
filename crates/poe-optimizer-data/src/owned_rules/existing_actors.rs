@@ -8,15 +8,18 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
     limits: RuleStorageLimits,
     usage: &mut RuleStorageUse,
 ) -> Result<(), RuleStorageError> {
+    if let Some(registry) = &input.existing_actor_rules {
+        add(
+            &mut usage.existing_actor_applications,
+            registry.members.len(),
+        )?;
+        usage.check(limits)?;
+    }
+    slot_reads(input, index, limits, usage)?;
     let Some(registry) = &input.existing_actor_rules else {
         return Ok(());
     };
     let invalid = RuleStorageError::Structure;
-    add(
-        &mut usage.existing_actor_applications,
-        registry.members.len(),
-    )?;
-    usage.check(limits)?;
     work(usage, limits, input.owners.len() + registry.members.len())?;
     let mut owners = BTreeMap::new();
     for row in &input.owners {
@@ -90,7 +93,8 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                     RuleReadSource::CharacterLevel
                     | RuleReadSource::EnemyLevel
                     | RuleReadSource::CharacterClassIs { .. }
-                    | RuleReadSource::CharacterAscendancyIs { .. } => true,
+                    | RuleReadSource::CharacterAscendancyIs { .. }
+                    | RuleReadSource::PlayerEquipmentSlot { .. } => true,
                     RuleReadSource::Stat { entity, .. }
                     | RuleReadSource::Capability { entity, .. }
                     | RuleReadSource::Contributions { entity, .. }
@@ -130,6 +134,106 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
         add(&mut usage.gaps, gaps.len())?;
     }
     usage.check(limits)
+}
+
+/// Scan even an absent application registry. A new read cannot acquire Player
+/// authority by being placed on an ordinary Actor/provider or an unused owner.
+fn slot_reads<I: DefinitionSchemaIndex>(
+    input: &RulePackageInput,
+    index: &I,
+    limits: RuleStorageLimits,
+    usage: &mut RuleStorageUse,
+) -> Result<(), RuleStorageError> {
+    let invalid = RuleStorageError::Structure;
+    let mut player_owners = BTreeSet::new();
+    if let Some(registry) = &input.existing_actor_rules {
+        work(usage, limits, registry.members.len())?;
+        for application in &registry.members {
+            if application.targets == [ExistingActorRuleTarget::Player] {
+                player_owners.insert(&application.owner);
+            }
+        }
+    }
+    work(usage, limits, input.owners.len())?;
+    for owner in &input.owners {
+        work(usage, limits, owner.programs.members.len())?;
+        for program in &owner.programs.members {
+            work(usage, limits, program.reads.len())?;
+            for row in &program.reads {
+                let RuleReadSource::PlayerEquipmentSlot { slot, read } = &row.source else {
+                    continue;
+                };
+                if !RuleOperationsVersion::parse(input.operations_version.as_str())
+                    .is_some_and(RuleOperationsVersion::supports_player_equipment_slots)
+                {
+                    return Err(invalid(
+                        "Player equipment slot reads require operations V21",
+                    ));
+                }
+                if program.context != RuleEntityKind::Actor
+                    || !matches!(&owner.owner,
+                        SchemaSubject::Definition(DefinitionAddress::Actor(actor))
+                        if player_owners.contains(actor))
+                {
+                    return Err(invalid(
+                        "Player equipment slot reads require an existing Player Actor application",
+                    ));
+                }
+                if slot.namespace() != &input.namespace
+                    || !matches!(index.definition(slot), SchemaLookup::Known(_))
+                {
+                    return Err(invalid(
+                        "Player equipment slot must be known and in the package namespace",
+                    ));
+                }
+                let valid = match read {
+                    PlayerEquipmentSlotRead::Occupied => {
+                        row.value_type == ComputedValueType::Boolean
+                    }
+                    PlayerEquipmentSlotRead::Stat { stat } => {
+                        let SchemaLookup::Known(schema) = index.definition(stat) else {
+                            return Err(invalid("Player equipment stat must be known"));
+                        };
+                        work(usage, limits, schema.targets.len())?;
+                        stat.namespace() == &input.namespace
+                            && schema.targets.contains(&RuleEntityKind::EquipmentUse)
+                            && schema.value == row.value_type
+                    }
+                    PlayerEquipmentSlotRead::Capability { capability } => {
+                        let SchemaLookup::Known(schema) = index.definition(capability) else {
+                            return Err(invalid("Player equipment capability must be known"));
+                        };
+                        work(usage, limits, schema.targets.len())?;
+                        capability.namespace() == &input.namespace
+                            && schema.targets.contains(&RuleEntityKind::EquipmentUse)
+                            && row.value_type == ComputedValueType::Boolean
+                    }
+                };
+                if !valid {
+                    return Err(invalid(
+                        "Player equipment output must match its declared EquipmentUse type and scope",
+                    ));
+                }
+            }
+        }
+    }
+    if let Some(applications) = &input.effect_applications {
+        work(usage, limits, applications.members.len())?;
+        for application in &applications.members {
+            work(usage, limits, application.program.reads.len())?;
+            if application
+                .program
+                .reads
+                .iter()
+                .any(|row| matches!(row.source, RuleReadSource::PlayerEquipmentSlot { .. }))
+            {
+                return Err(invalid(
+                    "effect applications cannot read Player equipment slots",
+                ));
+            }
+        }
+    }
+    Ok(())
 }
 
 fn actor_entity(entity: RuleEntity) -> bool {
