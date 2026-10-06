@@ -1,0 +1,70 @@
+{
+  "before": "7722280b6ee96e99f8c86f21924b6f28a991c908d12f73268b49640f04aedc61",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ordinary-item-routing-v1",
+    "schema_version": 6,
+    "content_sha256": "dea6f64f1ddc3501cfafdfa2db4d30f995327dda155ed34aa49e69f7d030fe2b",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "bf2cfe8c8a889c51f2c71133fa04743a8abd02fc845000779adcd66bb2660d1e",
+  "rules": "a794972f6a88a6213866302df382d5c7d5237f48f7cef4e97fe807a07d9f1c5f",
+  "mapping": "3962a163fac9a107ea0dc8bddefcab58f398662beed12f1ea1c42caebef367b8",
+  "roles": "e0d096daf4424ea20a81cd24ca2803fabcfc397ac1c87be181ba56bd46a6fa57",
+  "normalization": "d7a28247fa7b1da79c8b4952a847303a1c94492c12fe43f6767df2177e5ef3f2",
+  "schema_version": 1,
+  "release": "pob-3887ae68-minion-life-passives-v1",
+  "life_increase": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000032e5"
+  },
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "program": "ordinary-minion-life",
+  "nodes": [
+    {
+      "source_id": "1218",
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000aef"
+      },
+      "amount": 10
+    },
+    {
+      "source_id": "40894",
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001372"
+      },
+      "amount": 10
+    }
+  ],
+  "scope": {
+    "whole_build_parity": false,
+    "whole_life_result": false,
+    "effective_transforms_proved_absent": false,
+    "incoming_contributor_inventory_closed": false,
+    "published_scalar_reducers": 0,
+    "published_receivers": 0,
+    "query_changes": 0,
+    "routing_changes": 0
+  }
+}

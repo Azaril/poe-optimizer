@@ -210,6 +210,24 @@ still Partial; the split alone supplies no complete production readiness bundle.
 This uses the accepted one-graph preparation/execution design, with no additional
 evaluator or fixture-only replacement of a game rule.
 
+The [ordinary item routing packet](../data/owned/poe2/3887ae68/ordinary-item-routing/README.md)
+adds a separate Player retention factor and per-item Boolean applicability fact.
+Injected Passive and template rules produce them; the direct Minion-level
+contribution requires the fact. Existing copy eligibility and the pre-copy
+snapshot keep their meanings. The real native graph checks diversion, independent
+copies, repeated sources and missing/Partial refusals. This is a data change using
+existing stages V4 and operations V20, with no Lua behavior in the runtime.
+The remaining owner, incoming-contributor and minion-consumer gaps remain explicit.
+
+The [Minion Life defaults](../data/owned/poe2/3887ae68/minion-life-passives/README.md)
+add two ordinary passive programs to the existing Minion Life Increase channel.
+Each contributes 10 percentage points; the prior four 6% Life/Damage bodies are
+unchanged. Their default owner and declaration inventories are complete, while
+occurrence transformations and final minion Life remain separate obligations.
+Native checks execute the six stored bodies, preserve allocation provenance and
+verify removal, scratch reuse and parallel replay. This is injected data using
+existing operations, with no new evaluator or implicit Life reducer.
+
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference
 commands behind `--features pob`. The old native backend selector, `prepare-build`,
@@ -453,13 +471,14 @@ The subsequent optional late-slot witness proves that its source copies happen
 after ordinary gem preparation and leave prepared inputs unchanged. Native
 preparation must not derive inputs by replaying PoB's final modifier store.
 Recipient applicability is a separate unfinished obligation: the admitted
-Amulet/Necromantic Talisman combination diverts the original record, while the
-current direct Minion-level rule still delivers to Player unconditionally.
+Amulet/Necromantic Talisman combination diverts the original record. The current
+direct Minion-level rule now requires the separate per-item applicability fact.
 The dedicated Talisman witness now proves this diversion separately from early
 Player copying, including connected removal controls, exact minion-store
 transport and unchanged unhooked outputs. It does not establish a minion
 gem-level consumer or the intended game law for copied properties. Native
-recipient applicability remains open and separate from copy eligibility.
+applicability for this reviewed diversion is published separately from copy
+eligibility; other routing exclusions remain unproved.
 That owner remains Partial. The [current checkpoint](implementation.md#subsequent-checkpoint-ordinary-amulet-recipient-diversion)
 records the exact evidence, diagnostic control limits and next routing work.
 

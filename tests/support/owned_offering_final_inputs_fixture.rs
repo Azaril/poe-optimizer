@@ -53,6 +53,15 @@ impl World {
         Self::load_release(&path)
     }
     pub fn load_release(path: &std::path::Path) -> Self {
+        Self::load_release_with_item_owner(path, None)
+    }
+    /// Successor components may supply an independently authenticated replacement
+    /// owner. Historical callers retain the exact original numeric/copy check.
+    /// This selects stored bodies; it never rewrites a published rule for a test.
+    pub fn load_release_with_item_owner(
+        path: &std::path::Path,
+        expected_item_owner: Option<&DefinitionRules>,
+    ) -> Self {
         let before = release::inventory(path);
         let endpoint = release::load(path);
         crate::family::assert_endpoint(&endpoint);
@@ -94,7 +103,7 @@ impl World {
         );
         source.base.inner.owner_mut(subject(stat));
         let (item_programs, actual_modifier) =
-            install_items(&mut source, &endpoint, path, &bindings);
+            install_items(&mut source, &endpoint, path, &bindings, expected_item_owner);
         let table = endpoint
             .input()
             .recipe
@@ -578,6 +587,7 @@ fn install_items(
     endpoint: &StagedOwnedRelease,
     path: &std::path::Path,
     b: &Value,
+    expected_item_owner: Option<&DefinitionRules>,
 ) -> (Vec<(SchemaSubject, OwnedDefinitionKey)>, DefinitionRules) {
     let mut items = item_fixture::Fixture::new();
     items.original_pair();
@@ -600,7 +610,15 @@ fn install_items(
         .iter()
         .find(|o| o.owner == actual.owner)
         .unwrap();
-    let mut component_programs = component.programs.members.clone();
+    let mut component_programs = if let Some(expected) = expected_item_owner {
+        assert_eq!(
+            &actual, expected,
+            "exact authenticated successor item owner"
+        );
+        expected.programs.members.clone()
+    } else {
+        component.programs.members.clone()
+    };
     component_programs.sort_by(|a, b| a.id.cmp(&b.id));
     let mut actual_programs = actual.programs.members.clone();
     actual_programs.sort_by(|a, b| a.id.cmp(&b.id));

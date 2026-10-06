@@ -168,8 +168,12 @@ these are not new WASM numerical replays. Hosted CI remains a separate gate.
 After test-helper cleanup, Amulet's nine native tests pass in
 `runs/owned-offering-amulet-regressions-01.log` and the Offering seven-test replay
 passes in 9.22 seconds in `runs/owned-offering-native-04.log`.
-The real `32e4` producer and
-complete incoming inventories remain unresolved independently of these results.
+This paragraph records the initial Offering checkpoint. The subsequent
+[Amulet snapshot packet](../data/owned/poe2/3887ae68/amulet-bonus-snapshot/README.md)
+now supplies the real `32e4` producer, and the
+[ordinary routing packet](../data/owned/poe2/3887ae68/ordinary-item-routing/README.md)
+checks it alongside independent recipient applicability. Complete incoming
+inventories remain unresolved independently of those later component results.
 
 Keep the following checks as the validation contract:
 
@@ -187,8 +191,9 @@ Keep the following checks as the validation contract:
   native/WASM proofs; do not count them as new V4 assertions unless rerun or
   extended for this slice. The new Offering component should add its exact
   item-derived input replay/isolation checks and report which checks actually ran.
-- Historical stage/version fixtures and receipts remain unchanged. Actual
-  `32e4` absence and actual Partial coverage continue to block the real release.
+- Historical stage/version fixtures and receipts remain unchanged. The historical
+  missing-`32e4` control must still refuse preparation; the subsequent published
+  producer does not close actual Partial coverage in the real release.
 
 The decision is limited to early local derivation authority. It does not decide
 participation ownership, source lifecycle policy, legal fractional game inputs,

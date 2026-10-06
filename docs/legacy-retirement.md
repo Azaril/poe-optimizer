@@ -96,6 +96,14 @@ Command endpoint `e77ecaa55284d1dd888f3ad65145e735269fe589fc387076cbd711a8eb1142
 and its original issue counts. New five-original publication likewise passes;
 neither replay changes original query identities or relaxes incomplete mechanics.
 
+The subsequent two-node Life packet contains only declaration and program
+refinements. The shared test publication helper now applies these through the
+existing checked catalog transition, without an empty migration or a fabricated
+intermediate receipt. It requires unchanged contracts and no extension payload.
+Historical migration callers retain their checked migration path; the Command
+publication regression passes. This is shared validation plumbing, not a second
+production release API.
+
 ### Support catalogue entries versus executable supply (2026-10-05)
 
 The Bidding component exposed a source-shaped conversion error. Gem definitions
@@ -499,12 +507,16 @@ Retain the original consumer and phase evidence before deciding whether these
 are intentional mechanics or incidental reference behavior; do not implement
 Lua list merging or replay a final store as the native specification. Separately,
 Necromantic Talisman's explicit Amulet recipient routing is an admitted
-combination the current direct Player rule does not yet represent. The bounded
+combination the earlier direct Player rule did not represent. The bounded
 Talisman witness now proves ordinary diversion, independent early Player copies
 and actual minion-store delivery. Minion property consumption and copied-property
-game intent remain separate questions. Model recipient applicability independently
-of numerical scaling; the existing copy-eligibility fact is not a general
-recipient classification. The
+game intent remain separate questions. The
+[ordinary routing packet](../data/owned/poe2/3887ae68/ordinary-item-routing/README.md)
+now guards the actual direct program through independently produced applicability,
+preserving all copy bodies and Partial closures. It replaces the unconditional
+live body instead of retaining a selectable old behavior. Historical packages and
+useful tests remain replayable. The existing copy-eligibility fact is not a general
+recipient classification; other routing exclusions still need proof. The
 [implementation plan](implementation.md#next-executable-work) tracks both the
 bounded source proof and the native routing obligation.
 

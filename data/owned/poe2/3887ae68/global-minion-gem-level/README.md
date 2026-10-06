@@ -5,10 +5,11 @@ describe this packet's original release, not the current integration baseline.
 Later packets supply canonical category inputs, ordered magnitude arithmetic,
 Amulet-copy arithmetic and the pre-copy reducer; see the
 [current plan](../../../../../docs/implementation.md). Modifier `30ca` remains
-Partial. Its unconditional direct Player delivery still needs recipient-routing
-proof and applicability, including the admitted Amulet/Necromantic Talisman
-combination. Completing arithmetic does not complete the owner or its incoming
-contributor inventory.
+Partial. The [ordinary routing successor](../ordinary-item-routing/README.md)
+now guards direct Player delivery for the admitted Amulet/Necromantic Talisman
+combination while retaining independent copies. Focus preprocessing, other routing
+exclusions and actual incoming coverage remain separate. Completing arithmetic
+or this recipient guard does not complete the owner or its contributor inventory.
 
 This authored family recognizes `+<unsigned integer> to Level of all Minion
 Skills` under the existing complete source-prefix checks. It appends one Modifier

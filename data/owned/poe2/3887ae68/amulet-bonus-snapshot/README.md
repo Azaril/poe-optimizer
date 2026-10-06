@@ -103,9 +103,9 @@ with 18 files / 60,842,780 bytes / 103 provenance rows and no evaluation bundle.
 
 The subsequent late-slot Source02 witness proves that its diagnostic copies
 do not change already-prepared gem inputs. Focus's separate merge branch still
-needs its own dynamic proof. The next substantive `30ca` gap is ordinary
-recipient applicability: Necromantic Talisman diverts original Amulet records,
-while the current direct native rule delivers to Player unconditionally.
+needs its own dynamic proof. The [ordinary recipient successor](../ordinary-item-routing/README.md)
+now guards direct `30ca` delivery when Necromantic Talisman diverts original
+Amulet records, independently of this snapshot and the earlier copy.
 See the [current plan](../../../../../docs/implementation.md) for those separate
 obligations and the unchanged contributor/owner gates. Complete native original
 builds remain **0/5**.

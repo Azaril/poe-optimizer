@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "kind": "ordinary-item-routing-v1",
+  "before": "4ce040d82ff5ed51801d46108fdb55b43f48820664a76b6f2575d8acaa116704",
+  "release": "pob-3887ae68-ordinary-item-routing-v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-command-damage-v1",
+    "schema_version": 6,
+    "content_sha256": "5470c110b0ffb6c1f24eb7fee19ba80f4bc65be841d3ad295338fd5fbb3a05cf",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "fca3de6689794092f11657b09a8176caf26a72567b4e536103eeabfc5f9904eb",
+  "rules": "275dd0d1f3e9d5be1948cbc0ce8c0f9082cf0c22f210697f72c3d6cf87f20119",
+  "mapping": "3ffc22bad9de76a21fbab8202f662ecddb2f46986d501cc5eb7dc992d8f90b7a",
+  "roles": "ff0fc29ea99cf360328b02ae6b98bbd0ae256a74c4bf29e853789eed24b0c1c2",
+  "normalization": "9241afb05476e382b6cd29cc2ce1a94f00253a42ed0d6caad0519a20fc051c12",
+  "allocated_definitions": 2,
+  "new_programs": 8,
+  "replaced_programs": 1,
+  "new_receivers": 1,
+  "closed_existing_owners": 0,
+  "registry_last_issued_before": 13060,
+  "registry_last_issued_after": 13062,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Data/Bases/amulet.lua",
+      "bytes": 9634,
+      "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+    },
+    {
+      "path": "src/Data/Bases/focus.lua",
+      "bytes": 14925,
+      "sha256": "b5a315245cc0f9f11657f7fdab751e5ed5306166df54c2c19ef83295b876820e"
+    },
+    {
+      "path": "src/Data/Bases/helmet.lua",
+      "bytes": 87249,
+      "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+    },
+    {
+      "path": "src/Data/Bases/sceptre.lua",
+      "bytes": 6236,
+      "sha256": "3a232d7eff8ed199a7c738623de52fd1bd6540051283fda174472fd4295d9ae0"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "bytes": 2620112,
+      "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+    }
+  ],
+  "scope": {
+    "ordinary_player_delivery_only": true,
+    "reviewed_allocated_passive_domain": true,
+    "early_copy_program_unchanged": true,
+    "incoming_contributor_inventory_closed": false,
+    "existing_owner_closures_changed": false,
+    "other_item_routing_complete": false,
+    "minion_property_consumer_claimed": false,
+    "late_granted_passive_authority": false,
+    "complete_build_parity": false,
+    "evaluation_bundle": false
+  },
+  "artifact_sha256": {
+    "bindings": "186d9d6f767d6b7c69e285f8bfe5880d6d2d04bba2a9257882b968be7d859228",
+    "dependencies": "1c3002cd3da4ebcb4de5aa10a41ad11a19eef996325e7081a2fbdb137e8bb6ee",
+    "migration": "baa28747b0d0b7e8274fea427f2d52adb654dc78cd7ac2c0c74c19b5b38a8e13",
+    "readiness": "a465a149d2f7ff126b6c18534a89fea4b7cd3336a455539dc6142224ae6a6494",
+    "routing-authoring": "29b2cd8be25f424a34f5b3c954682454d26f16058890f6ddaf77d5fbab98d354",
+    "source-vectors": "33cae05bb57e834291bbd08ee564f4cb9ee597cb3dd2927c5ddd8a554e3150ca"
+  }
+}

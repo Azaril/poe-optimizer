@@ -23,11 +23,35 @@ use std::{fs, path::Path};
 fn key(text: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(text).unwrap()
 }
+#[allow(dead_code)] // Pure-refinement targets share this migration entry point.
 pub fn stage(
     prior: &StagedOwnedRelease,
     directory: &Path,
     provenance: &str,
     domain: &'static str,
+) -> StagedOwnedRelease {
+    stage_inner(prior, directory, provenance, domain, false)
+}
+
+/// Refine already-declared passive owners without inventing a migration change.
+/// The authored envelope must preserve every endpoint contract and contain no
+/// extension payload. The public migration compiler keeps rejecting empty work.
+#[allow(dead_code)] // Historical migration-only targets share this helper.
+pub fn stage_refinement(
+    prior: &StagedOwnedRelease,
+    directory: &Path,
+    provenance: &str,
+    domain: &'static str,
+) -> StagedOwnedRelease {
+    stage_inner(prior, directory, provenance, domain, true)
+}
+
+fn stage_inner(
+    prior: &StagedOwnedRelease,
+    directory: &Path,
+    provenance: &str,
+    domain: &'static str,
+    refinement_only: bool,
 ) -> StagedOwnedRelease {
     let read = |name: &str| -> Value {
         serde_json::from_slice(&fs::read(directory.join(name)).unwrap()).unwrap()
@@ -111,14 +135,59 @@ pub fn stage(
     }
     let migration: OwnedReleaseMigrationInput =
         serde_json::from_value(read("migration.json")).unwrap();
-    let migrated =
-        compile_owned_release_migration(prior, migration.clone(), Default::default()).unwrap();
-    let mut recipe = migrated.input().recipe.clone();
+    let migrated = if refinement_only {
+        assert_eq!(migration.schema_version, 5);
+        assert_eq!(migration.before, prior.receipt().input);
+        assert!(
+            migration.schema.is_empty()
+                && migration.owners.is_empty()
+                && migration.tables.is_empty()
+                && migration.receivers.is_empty()
+                && migration.query_targets.is_empty()
+                && migration.evaluation.is_none(),
+            "pure refinement cannot bypass any extension or evaluation migration"
+        );
+        let old = &prior.input().recipe;
+        assert_eq!(old.schema.schema_version, 6);
+        assert_eq!(
+            old.rules.operations_version.as_str(),
+            "owned-domain-operations-v20"
+        );
+        assert_eq!(migration.contract.schema_version, old.schema.schema_version);
+        assert_eq!(
+            migration.contract.schema_semantics_version,
+            old.schema.semantics_version
+        );
+        assert_eq!(
+            migration.contract.operations_version,
+            old.rules.operations_version
+        );
+        assert_eq!(
+            migration.contract.rule_semantics_version,
+            old.rules.semantics_version
+        );
+        assert_ne!(migration.release, old.schema.release);
+        None
+    } else {
+        Some(compile_owned_release_migration(prior, migration.clone(), Default::default()).unwrap())
+    };
+    let base = migrated.as_ref().unwrap_or(prior);
+    let mut recipe = base.input().recipe.clone();
+    if refinement_only {
+        recipe.schema.release = migration.release.clone();
+    }
     let next_definitions: Vec<DefinitionDescriptor> =
         serde_json::from_value(c["definitions"].clone()).unwrap();
     let next_owners: Vec<DefinitionRules> = serde_json::from_value(c["owners"].clone()).unwrap();
     assert_eq!(old_definitions.len(), next_definitions.len());
     assert_eq!(old_owners.len(), next_owners.len());
+    if refinement_only {
+        assert!(!old_definitions.is_empty() && !old_owners.is_empty());
+        assert!(
+            old_definitions != next_definitions || old_owners != next_owners,
+            "pure refinement must change its explicitly reviewed rows"
+        );
+    }
     let mut nodes = vec![];
     for (old, new) in old_definitions.iter().zip(&next_definitions) {
         let row = recipe
@@ -151,34 +220,34 @@ pub fn stage(
     let refined = transition_owned_catalog_with_tree_refinement_compact(
         SuccessorBundleInput {
             schema_version: 1,
-            prior: migrated.input().recipe.clone(),
+            prior: base.input().recipe.clone(),
             successor: recipe,
-            mapping: migrated.input().mapping.clone(),
-            roles: migrated.input().roles.clone(),
-            normalization: migrated.input().normalization.clone(),
-            rewards: migrated.input().rewards.clone(),
-            query_sets: migrated.input().query_sets.clone(),
-            items: migrated.input().items.clone(),
-            item_source: migrated.input().item_source.clone(),
+            mapping: base.input().mapping.clone(),
+            roles: base.input().roles.clone(),
+            normalization: base.input().normalization.clone(),
+            rewards: base.input().rewards.clone(),
+            query_sets: base.input().query_sets.clone(),
+            items: base.input().items.clone(),
+            item_source: base.input().item_source.clone(),
         },
         CatalogAppend {
             mappings: vec![],
-            source: migrated.input().mapping.source.clone(),
+            source: base.input().mapping.source.clone(),
             item_policies: CatalogItemPolicyMode::RebindPrior,
         },
         TreePolicyTransitionInput::RebindPrior {
-            prior: Box::new(migrated.input().tree.clone().unwrap()),
+            prior: Box::new(base.input().tree.clone().unwrap()),
         },
         PassiveDeclarationRefinement {
             schema_version: 1,
-            before: migrated.receipt().definitions.clone(),
+            before: base.receipt().definitions.clone(),
             after: schema.identity().clone(),
             nodes,
         },
         Default::default(),
     )
     .unwrap();
-    let mut input = migrated.input().clone();
+    let mut input = base.input().clone();
     input.recipe = refined.recipe().clone();
     input.mapping = refined.mapping().input().clone();
     input.roles = refined.roles().input().clone();
@@ -188,17 +257,21 @@ pub fn stage(
     input.item_source = refined.item_source().input().clone();
     input.tree = refined.tree().map(|tree| tree.input().clone());
     input.query_sets = refined.query_sets().to_vec();
-    // The checked migration is an intermediate construction step. Publish one
-    // packet receipt from the actual predecessor; authoring commits the exact
-    // migration bytes as well as the subsequent passive refinement.
-    assert_eq!(
-        migrated.input().provenance.len(),
-        prior.input().provenance.len() + 1
-    );
-    assert_eq!(
-        migrated.input().provenance[..prior.input().provenance.len()],
-        prior.input().provenance
-    );
+    // Extension callers retain their exact checked intermediate migration.
+    // A pure refinement transitions directly from the real predecessor and
+    // never creates or claims a synthetic intermediate migration receipt.
+    if let Some(migrated) = &migrated {
+        assert_eq!(
+            migrated.input().provenance.len(),
+            prior.input().provenance.len() + 1
+        );
+        assert_eq!(
+            migrated.input().provenance[..prior.input().provenance.len()],
+            prior.input().provenance
+        );
+    } else {
+        assert_eq!(input.provenance, prior.input().provenance);
+    }
     input.provenance = prior.input().provenance.clone();
     input.provenance.push(OwnedReleaseProvenance {
         kind: key(provenance),

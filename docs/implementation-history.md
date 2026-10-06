@@ -1,10 +1,96 @@
-> Historical snapshots through Amulet aggregation and property-routing evidence on 2026-10-06.
+> Historical snapshots through Command damage and population readiness on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: Command damage and population readiness
+
+The [Command damage packet](../data/owned/poe2/3887ae68/command-damage/README.md)
+publishes three selected default passive bodies: 25927/32847/41511 contribute
+20/20/15 percentage points. Existing native operations aggregate these at Player,
+transport the result to each exact Sniper Actor and use the existing Command
+eligibility fact at the Action. Basic contributes zero; each of Gas Arrow's three
+stat sets contributes 55. These are contributions, not final damage scalars.
+All gameplay recipes are injected data; no production Rust branch, new evaluator,
+Lua runtime dependency or operation/schema version change is introduced.
+
+Three new Stats (`3302`–`3304`), seven programs and two receivers are published.
+The three default passive program inventories and twenty-one empty declaration
+inventories become Complete. Actual occurrence transforms, incoming contributors
+and both existing Action owners remain unresolved independently. The new Stat
+reducers have complete program inventories, not blanket contributor authority.
+No query, item rule, existing Action body or evaluation bundle is replaced.
+
+Source04 passes in **124.85 seconds** with fourteen cases per JIT mode, fresh
+original/positive replays and exact equality. All four raw/compared reports are
+**1,494,378 bytes**, SHA256
+feb56809bc0df1a4cb7aa2fe6c6fa489dd6bb9057a2737a83261cd9097afe2c2.
+The 542,588-byte compact projection retains source records, occurrence joins,
+actual original damage-consumer inputs and separately labelled diagnostic queries.
+One shared Rust validator checks both source testing and publication. The native
+package excludes these offline observations and source excerpts.
+
+Source03 correctly rejected controls that disconnected additional allocations.
+Source04 explicitly removes the connected branches: 25927 also removes 32847;
+41511 also removes 35560. Full allocation removals and the reviewed-source subset
+remain separate, and exact actual-node census still gates every control. No
+whole-output delta is attributed solely to the reviewed three records. Source01
+failed on our Lua observer's multi-return argument; Source02 failed on a relative
+child-process output path. All failed evidence is retained without changing PoB.
+
+Publication01 passes in **29.62 seconds**, reproduces eighteen artifacts and
+preserves all five original sources, local IDs, issue correspondence and 110
+queries. The shared publication helper checks exactly three existing
+Partial-to-Complete owner transitions separately from new Stat owners. Its
+historical Amulet publication regression also passes (34.19 seconds).
+
+Native integration exposed a real mixed-phase authoring blocker: Sniper's
+`ordinary-population-inputs` combined actor projection and grant creation with
+an execution-only character-level requirement. The separate
+[population readiness packet](../data/owned/poe2/3887ae68/sniper-population-readiness/README.md)
+splits the actual published program into factual and requirement programs using
+exact reachable dependency subsequences. Every original row and effect reconstructs
+exactly; only the level read/node is shared. No requirement is discarded or copied
+into preparation, and no fixture-only rule rewrite remains. This implements the
+accepted preparation/execution boundary without a new runtime contract.
+
+Population publication01 passes in **24.96 seconds**. It changes only
+rules, manifest and release receipt, preserves definitions and import policies
+byte-for-byte, compares every imported field after the existing fresh-lineage
+canonicalization, and authenticates an inverse of the entire predecessor input and
+receipt. The Skill owner remains Partial. The package has no live readiness bundle:
+phase recommendations still require complete owners and actual producer authority
+when integrated. This split does not certify those missing inventories.
+
+All **eight native tests pass in 20.44 seconds** against both published
+packages: Basic/Gas selection, exact allocation provenance, independent populations,
+individual finite-node removals, loadout A/B/A and four-worker Rayon replay,
+missing eligibility/transport/final inputs/grants, disabled roots and Partial
+inventory refusals, and the original character-level requirement on two independent
+roots. Character level 89 leaves factual outputs unchanged while the final-level-22
+root's requirement is false and the final-level-1 root's is true. The fixture uses
+checked stages and explicit finite application
+and readiness inventories under operations V20. Its isolated adjacency and parent
+input boundaries are not legal-tree or complete-build evidence. Earlier native
+attempts exposed missing fixture application/readiness setup and the genuine
+mixed-phase program; production gates were preserved. Ordinary authoring,
+partition-tampering and input-control tests plus targeted strict Clippy
+pass. No production Rust changed, so prior WASM evidence remains applicable.
+
+Receipts: runs/owned-command-damage-source-04.log,
+runs/owned-command-damage-controls-02.log,
+runs/owned-command-damage-authoring-02.log,
+runs/owned-command-damage-publication-01.log,
+runs/owned-command-damage-native-03.log, runs/owned-command-damage-clippy-01.log,
+runs/owned-command-damage-clippy-02.log (explicit publication scope after review), and
+runs/owned-command-damage-prior-publication-01.log.
+Population receipts: runs/owned-sniper-population-authoring-01.log and
+runs/owned-sniper-population-publication-01.log.
+Exact pushed-head hosted CI remains a separate gate. **Complete native original
+builds remain 0/5**, with selected issues still 106/117/109/122/5.
 
 ## Archived 2026-10-06 checkpoint: Amulet aggregation and property routing
 

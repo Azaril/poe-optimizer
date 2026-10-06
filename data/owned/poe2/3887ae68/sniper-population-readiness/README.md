@@ -37,8 +37,8 @@ bundle; phase recommendations in `authoring.json` are authoring guidance, not
 proof of a complete build or a published stage contract.
 
 Three ordinary Rust authoring/tampering tests pass. Publication01 passes in
-24.96 seconds at `runs/owned-sniper-population-readiness-01`, the current checked
-integration baseline. All eight Command native tests pass in 20.44 seconds
+24.96 seconds at `runs/owned-sniper-population-readiness-01`, this checkpoint's
+checked endpoint. All eight Command native tests pass in 20.44 seconds
 against the two actual published packages, including the preserved character-level
 requirement on independent roots and four-worker Rayon replay. Targeted strict
 Clippy passes. These are component checks; complete native originals remain 0/5.

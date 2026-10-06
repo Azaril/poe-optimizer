@@ -65,8 +65,9 @@ fresh output, checked `runs/owned-command-damage-01`. The ignored native
 tests require `POE_OPTIMIZER_TEST_COMMAND_DAMAGE_RELEASE` pointing to that newly
 published package and `POE_OPTIMIZER_TEST_COMMAND_DAMAGE_READINESS_RELEASE`
 pointing to `runs/owned-sniper-population-readiness-01/package`. Publish both
-packets separately before native validation. The successor package is the current
-integration baseline and contains the combined data.
+packets separately before native validation. The successor package contains the
+combined data for this historical checkpoint. Use the implementation plan's
+current integration baseline for subsequent work.
 
 Source04 passed in 124.85 seconds, publication01 in 29.62 seconds, and eight native
 checks in 20.44 seconds, including four-worker Rayon replay. Authoring, source

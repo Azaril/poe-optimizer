@@ -1,0 +1,572 @@
+{
+  "schema_version": 1,
+  "reference_only": true,
+  "minimum_stages_version": 4,
+  "stages": [
+    {
+      "id": "ordinary-routing-contributors",
+      "predecessors": []
+    },
+    {
+      "id": "ordinary-routing-factor",
+      "predecessors": [
+        "ordinary-routing-contributors"
+      ]
+    },
+    {
+      "id": "ordinary-routing-applicability",
+      "predecessors": [
+        "ordinary-routing-factor"
+      ]
+    },
+    {
+      "id": "ordinary-item-contribution",
+      "predecessors": [
+        "ordinary-routing-applicability"
+      ]
+    }
+  ],
+  "programs": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001338"
+          }
+        }
+      },
+      "program": "talisman-ordinary-amulet-retention",
+      "stage": "ordinary-routing-contributors"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003305"
+          }
+        }
+      },
+      "program": "ordinary-amulet-retention-factor",
+      "stage": "ordinary-routing-factor"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "item_template",
+          "value": {
+            "kind": "item_template",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001f1c"
+          }
+        }
+      },
+      "program": "ordinary-item-direct-applicability",
+      "stage": "ordinary-routing-applicability"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "item_template",
+          "value": {
+            "kind": "item_template",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001f37"
+          }
+        }
+      },
+      "program": "ordinary-item-direct-applicability",
+      "stage": "ordinary-routing-applicability"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "item_template",
+          "value": {
+            "kind": "item_template",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001f45"
+          }
+        }
+      },
+      "program": "ordinary-item-direct-applicability",
+      "stage": "ordinary-routing-applicability"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "item_template",
+          "value": {
+            "kind": "item_template",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001fe3"
+          }
+        }
+      },
+      "program": "ordinary-item-direct-applicability",
+      "stage": "ordinary-routing-applicability"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "item_template",
+          "value": {
+            "kind": "item_template",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000022f5"
+          }
+        }
+      },
+      "program": "ordinary-item-direct-applicability",
+      "stage": "ordinary-routing-applicability"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "item_template",
+          "value": {
+            "kind": "item_template",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000002343"
+          }
+        }
+      },
+      "program": "ordinary-item-direct-applicability",
+      "stage": "ordinary-routing-applicability"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "modifier",
+          "value": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000030ca"
+          }
+        }
+      },
+      "program": "contribute-player-minion-gem-level",
+      "stage": "ordinary-item-contribution"
+    }
+  ],
+  "readiness": {
+    "programs": {
+      "members": [
+        {
+          "owner": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001338"
+              }
+            }
+          },
+          "program": "talisman-ordinary-amulet-retention",
+          "phase": "structural",
+          "role": "preparation_facts",
+          "outputs": [
+            {
+              "kind": "contributions",
+              "scope": "actor",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003305"
+              },
+              "contribution": "multiply"
+            }
+          ]
+        },
+        {
+          "owner": {
+            "kind": "definition",
+            "value": {
+              "kind": "stat",
+              "value": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003305"
+              }
+            }
+          },
+          "program": "ordinary-amulet-retention-factor",
+          "phase": "structural",
+          "role": "preparation_facts",
+          "outputs": [
+            {
+              "kind": "stat",
+              "scope": "actor",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003305"
+              }
+            }
+          ]
+        },
+        {
+          "owner": {
+            "kind": "definition",
+            "value": {
+              "kind": "item_template",
+              "value": {
+                "kind": "item_template",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001f1c"
+              }
+            }
+          },
+          "program": "ordinary-item-direct-applicability",
+          "phase": "structural",
+          "role": "preparation_facts",
+          "outputs": [
+            {
+              "kind": "stat",
+              "scope": "equipment_use",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003306"
+              }
+            }
+          ]
+        },
+        {
+          "owner": {
+            "kind": "definition",
+            "value": {
+              "kind": "item_template",
+              "value": {
+                "kind": "item_template",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001f37"
+              }
+            }
+          },
+          "program": "ordinary-item-direct-applicability",
+          "phase": "structural",
+          "role": "preparation_facts",
+          "outputs": [
+            {
+              "kind": "stat",
+              "scope": "equipment_use",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003306"
+              }
+            }
+          ]
+        },
+        {
+          "owner": {
+            "kind": "definition",
+            "value": {
+              "kind": "item_template",
+              "value": {
+                "kind": "item_template",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001f45"
+              }
+            }
+          },
+          "program": "ordinary-item-direct-applicability",
+          "phase": "structural",
+          "role": "preparation_facts",
+          "outputs": [
+            {
+              "kind": "stat",
+              "scope": "equipment_use",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003306"
+              }
+            }
+          ]
+        },
+        {
+          "owner": {
+            "kind": "definition",
+            "value": {
+              "kind": "item_template",
+              "value": {
+                "kind": "item_template",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001fe3"
+              }
+            }
+          },
+          "program": "ordinary-item-direct-applicability",
+          "phase": "structural",
+          "role": "preparation_facts",
+          "outputs": [
+            {
+              "kind": "stat",
+              "scope": "equipment_use",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003306"
+              }
+            }
+          ]
+        },
+        {
+          "owner": {
+            "kind": "definition",
+            "value": {
+              "kind": "item_template",
+              "value": {
+                "kind": "item_template",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000022f5"
+              }
+            }
+          },
+          "program": "ordinary-item-direct-applicability",
+          "phase": "structural",
+          "role": "preparation_facts",
+          "outputs": [
+            {
+              "kind": "stat",
+              "scope": "equipment_use",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003306"
+              }
+            }
+          ]
+        },
+        {
+          "owner": {
+            "kind": "definition",
+            "value": {
+              "kind": "item_template",
+              "value": {
+                "kind": "item_template",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002343"
+              }
+            }
+          },
+          "program": "ordinary-item-direct-applicability",
+          "phase": "structural",
+          "role": "preparation_facts",
+          "outputs": [
+            {
+              "kind": "stat",
+              "scope": "equipment_use",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003306"
+              }
+            }
+          ]
+        },
+        {
+          "owner": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000030ca"
+              }
+            }
+          },
+          "program": "contribute-player-minion-gem-level",
+          "phase": "structural",
+          "role": "preparation_facts",
+          "outputs": [
+            {
+              "kind": "contributions",
+              "scope": "actor",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000030ab"
+              },
+              "contribution": "add"
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "partial",
+        "value": {
+          "gaps": [
+            {
+              "subject": {
+                "kind": "definition",
+                "value": {
+                  "kind": "stat",
+                  "value": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003305"
+                  }
+                }
+              },
+              "facet": "game_rules",
+              "code": "schedule-fragment-only"
+            }
+          ]
+        }
+      }
+    },
+    "skills": []
+  },
+  "frozen_channels": [
+    {
+      "channel": {
+        "kind": "contributions",
+        "scope": "actor",
+        "stat": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003305"
+        },
+        "contribution": "multiply"
+      },
+      "stage": "ordinary-routing-contributors"
+    },
+    {
+      "channel": {
+        "kind": "stat",
+        "scope": "actor",
+        "stat": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003305"
+        }
+      },
+      "stage": "ordinary-routing-factor"
+    },
+    {
+      "channel": {
+        "kind": "stat",
+        "scope": "equipment_use",
+        "stat": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003306"
+        }
+      },
+      "stage": "ordinary-routing-applicability"
+    }
+  ]
+}

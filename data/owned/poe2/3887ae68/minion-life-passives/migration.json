@@ -1,0 +1,17 @@
+{
+  "schema_version": 5,
+  "before": "7722280b6ee96e99f8c86f21924b6f28a991c908d12f73268b49640f04aedc61",
+  "release": "pob-3887ae68-minion-life-passives-v1",
+  "reason": "two-plain-minion-life-default-owners",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v20",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "schema": [],
+  "owners": [],
+  "receivers": [],
+  "tables": [],
+  "query_targets": []
+}

@@ -39,155 +39,146 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: Command damage and population readiness
+## Latest implementation checkpoint: ordinary item routing and Minion Life defaults
 
-The [Command damage packet](../data/owned/poe2/3887ae68/command-damage/README.md)
-publishes three selected default passive bodies: 25927/32847/41511 contribute
-20/20/15 percentage points. Existing native operations aggregate these at Player,
-transport the result to each exact Sniper Actor and use the existing Command
-eligibility fact at the Action. Basic contributes zero; each of Gas Arrow's three
-stat sets contributes 55. These are contributions, not final damage scalars.
-All gameplay recipes are injected data; no production Rust branch, new evaluator,
-Lua runtime dependency or operation/schema version change is introduced.
+The [ordinary routing packet](../data/owned/poe2/3887ae68/ordinary-item-routing/README.md)
+corrects the actual direct Minion-level item program. Necromantic Talisman's
+reviewed allocated Passive contributes a zero retention factor; a Player reducer
+and per-template Boolean facts guard ordinary delivery independently of Amulet
+copy eligibility and the pre-copy snapshot. Both new channels (`3305/3306`) use
+existing native operations and stages V4. The six-template applicability facts
+address this exclusion only; other routing, placement and contributor inventories
+remain open. All eight existing affected owners retain their exact Partial
+closures. The copy program and all other modifier bodies are unchanged.
 
-Three new Stats (`3302`–`3304`), seven programs and two receivers are published.
-The three default passive program inventories and twenty-one empty declaration
-inventories become Complete. Actual occurrence transforms, incoming contributors
-and both existing Action owners remain unresolved independently. The new Stat
-reducers have complete program inventories, not blanket contributor authority.
-No query, item rule, existing Action body or evaluation bundle is replaced.
+The packet reuses the passed Talisman source witness with a 959,498-byte offline
+certificate. The 934,962-byte compact report projection preserves actual source
+records, object/occurrence joins and preparation consumers; publication authenticates
+all four 3,373,272-byte raw/compared reports, reconstructs the projection exactly,
+and checks all original replays and unhooked numerical controls. It does not infer
+a minion Gem-level consumer or classify every copy behavior as intended game law.
+Early item-granted-node collection is Socket-only; generic Keystone grants are
+merged later than the observed route. The packet does not grant those later
+sources unproved early authority.
 
-Source04 passes in **124.85 seconds** with fourteen cases per JIT mode, fresh
-original/positive replays and exact equality. All four raw/compared reports are
-**1,494,378 bytes**, SHA256
-feb56809bc0df1a4cb7aa2fe6c6fa489dd6bb9057a2737a83261cd9097afe2c2.
-The 542,588-byte compact projection retains source records, occurrence joins,
-actual original damage-consumer inputs and separately labelled diagnostic queries.
-One shared Rust validator checks both source testing and publication. The native
-package excludes these offline observations and source excerpts.
+Routing publication01 passes in **26.83 seconds**. All **six native tests pass in
+10.98 seconds**, consuming the actual successor programs, real snapshot reducer
+and Mystic Attunement producer with canonical Crown/Amulet modifier inputs and
+two independent Offering sources. Original ordinary inputs yield level 22;
+Talisman removes only the Amulet's direct contribution and yields 21. A five-level
+Amulet and actual 25% copy producer retain the independent copied level even under
+diversion. Missing applicability/retention, actual Partial owners and incomplete
+receivers refuse; non-Amulet facts need no Amulet retention scalar. Frozen stages,
+removal, independent raw quality, A/B/A and four-worker Rayon replay pass.
+The finite adjacency and unrelated contributor boundaries remain explicit.
 
-Source03 correctly rejected controls that disconnected additional allocations.
-Source04 explicitly removes the connected branches: 25927 also removes 32847;
-41511 also removes 35560. Full allocation removals and the reviewed-source subset
-remain separate, and exact actual-node census still gates every control. No
-whole-output delta is attributed solely to the reviewed three records. Source01
-failed on our Lua observer's multi-return argument; Source02 failed on a relative
-child-process output path. All failed evidence is retained without changing PoB.
+The [two Minion Life defaults](../data/owned/poe2/3887ae68/minion-life-passives/README.md)
+complete selected passive definitions 1218/40894 (owned `0aef/1372`) and their
+fourteen empty declaration inventories. Each contributes 10 percentage points to
+existing Player-carried Minion Life Increase `32e5`. The four prior 6% Life/Damage
+bodies remain identical. Source evidence reuses exact original/repeat/warm records
+from the passed physical-damage source02 reports, with independent full tree and
+default-dispatch evidence; it adds no source harness. Runtime observations and
+default declaration authority remain distinct from occurrence transformations.
 
-Publication01 passes in **29.62 seconds**, reproduces eighteen artifacts and
-preserves all five original sources, local IDs, issue correspondence and 110
-queries. The shared publication helper checks exactly three existing
-Partial-to-Complete owner transitions separately from new Stat owners. Its
-historical Amulet publication regression also passes (34.19 seconds).
+Life publication02 passes in **29.94 seconds**, and **three native tests pass in
+2.17 seconds**. The six actual producer bodies sum to 44 in the finite component;
+removing either new node yields 34 while the Damage subtotal stays 24. Exact allocation
+origins, actual Partial refusal, A/B/A and four-worker Rayon replay pass. No
+received Life pool, scalar reducer, new definition or evaluator is invented.
+The current unchanged Original05 selection has **41/55 complete default passive
+program inventories**, up from 39/55; fourteen remain Partial. This is not a
+complete occurrence, contributor or whole-build inventory.
 
-Native integration exposed a real mixed-phase authoring blocker: Sniper's
-`ordinary-population-inputs` combined actor projection and grant creation with
-an execution-only character-level requirement. The separate
-[population readiness packet](../data/owned/poe2/3887ae68/sniper-population-readiness/README.md)
-splits the actual published program into factual and requirement programs using
-exact reachable dependency subsequences. Every original row and effect reconstructs
-exactly; only the level read/node is shared. No requirement is discarded or copied
-into preparation, and no fixture-only rule rewrite remains. This implements the
-accepted preparation/execution boundary without a new runtime contract.
+Validation exposed two authoring issues, both corrected without weakening
+production contracts. Compile01 found three move-order errors in the new fixture.
+Life publication01 rejected an empty migration before writing output. Pure
+declaration refinement now uses the existing checked catalog transition directly,
+with an explicit unchanged-V6/V20 contract and no extension payload or fabricated
+intermediate receipt. The public migration still rejects empty changes. The
+historical Command publication regression passes in 34.59 seconds. Seven Offering
+and five snapshot regressions pass in 9.07/11.42 seconds, preserving the historical
+fixture path and actual prior program bodies. Ordinary authoring/tampering checks
+and strict Clippy for all five affected targets pass. Formatting checks pass for
+all eight packages; local links and anchors pass across fifteen active documents.
+An independent read-only review found no blocking issue. No production Rust changed.
 
-Population publication01 passes in **24.96 seconds**. It changes only
-rules, manifest and release receipt, preserves definitions and import policies
-byte-for-byte, compares every imported field after the existing fresh-lineage
-canonicalization, and authenticates an inverse of the entire predecessor input and
-receipt. The Skill owner remains Partial. The package has no live readiness bundle:
-phase recommendations still require complete owners and actual producer authority
-when integrated. This split does not certify those missing inventories.
+Both publications preserve all five unchanged imports, local correspondence,
+110 queries and selected issue counts 106/117/109/122/5; all eighteen artifacts
+rebuild byte-for-byte. Source/readiness authoring payloads remain outside the
+native package. **Complete native original builds remain 0/5**.
 
-All **eight native tests pass in 20.44 seconds** against both published
-packages: Basic/Gas selection, exact allocation provenance, independent populations,
-individual finite-node removals, loadout A/B/A and four-worker Rayon replay,
-missing eligibility/transport/final inputs/grants, disabled roots and Partial
-inventory refusals, and the original character-level requirement on two independent
-roots. Character level 89 leaves factual outputs unchanged while the final-level-22
-root's requirement is false and the final-level-1 root's is true. The fixture uses
-checked stages and explicit finite application
-and readiness inventories under operations V20. Its isolated adjacency and parent
-input boundaries are not legal-tree or complete-build evidence. Earlier native
-attempts exposed missing fixture application/readiness setup and the genuine
-mixed-phase program; production gates were preserved. Ordinary authoring,
-partition-tampering and input-control tests plus targeted strict Clippy
-pass. No production Rust changed, so prior WASM evidence remains applicable.
-
-Receipts: runs/owned-command-damage-source-04.log,
-runs/owned-command-damage-controls-02.log,
-runs/owned-command-damage-authoring-02.log,
-runs/owned-command-damage-publication-01.log,
-runs/owned-command-damage-native-03.log, runs/owned-command-damage-clippy-01.log,
-runs/owned-command-damage-clippy-02.log (explicit publication scope after review), and
-runs/owned-command-damage-prior-publication-01.log.
-Population receipts: runs/owned-sniper-population-authoring-01.log and
-runs/owned-sniper-population-publication-01.log.
-Exact pushed-head hosted CI remains a separate gate. **Complete native original
-builds remain 0/5**, with selected issues still 106/117/109/122/5.
+Receipts: runs/owned-ordinary-routing-authoring-01.log,
+runs/owned-ordinary-routing-publication-01.log,
+runs/owned-ordinary-routing-native-01.log,
+runs/owned-minion-life-authoring-02.log,
+runs/owned-minion-life-publication-02.log,
+runs/owned-minion-life-native-01.log,
+runs/owned-command-damage-refinement-regression-01.log,
+runs/owned-ordinary-routing-offering-regression-01.log,
+runs/owned-ordinary-routing-snapshot-regression-01.log,
+runs/owned-routing-life-clippy-01.log and
+runs/owned-routing-life-selected-owner-census-01.json.
+The earlier [hosted run for f11a57c](https://github.com/Azaril/poe-optimizer/actions/runs/37379670680)
+finished successfully across all fourteen Windows/Linux jobs. That is not evidence
+for this new checkpoint; exact pushed-head CI remains a separate gate.
 
 ### Subsequent checkpoint: item-property lifetime and routing audit
 
-The late-copy witness passes: its diagnostic slot copies occur after ordinary
-gem preparation and do not reassemble prepared inputs. Focus's discarded scaled
-LIST still needs its own bounded dynamic proof. Detailed source02 receipts and
-scope are preserved in [checkpoint history](implementation-history.md#subsequent-checkpoint-item-property-lifetime-and-routing-audit).
+The late-copy witness passes; its observed copies occur after preparation.
+Focus's discarded scaled LIST needs its own dynamic proof and a source-branch
+applicability census before broad owner completion. Historical receipts remain in
+[checkpoint history](implementation-history.md#subsequent-checkpoint-item-property-lifetime-and-routing-audit).
 
 ### Subsequent checkpoint: ordinary Amulet recipient diversion
 
-The dedicated Talisman witness passes in **433.30 seconds** over twenty-one cases,
-three lifecycle stages and both JIT modes. It proves ordinary Amulet diversion
-separately from early Player copying, including exact minion-store transport and
-unhooked controls. It does not prove a minion gem-level consumer or the intended
-game law for copied properties. Native ordinary-recipient applicability remains
-open, distinct from copy eligibility `32e3` and snapshot scalar `32e4`. The
-Modifier owner remains Partial. [Checkpoint history](implementation-history.md#subsequent-checkpoint-ordinary-amulet-recipient-diversion)
-retains all hashes, controls and receipts.
+Both the original Talisman witness and native ordinary-delivery guard now pass.
+The latter is independent of copy eligibility `32e3` and snapshot `32e4`; it
+does not produce minion skill levels or close all routing. Full source receipts
+remain in [checkpoint history](implementation-history.md#subsequent-checkpoint-ordinary-amulet-recipient-diversion).
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-sniper-population-readiness-01/package` as the integration baseline. Current
-imports are its `original-01` through `original-05` siblings. The checked
-publication retains exact Direct-target normalization and provider/raw-input
-authority. Sidecars are V20 for Originals01/05 and V19 for the others; native
-schema V6 and operations V20 are separate version contracts.
+Use `runs/owned-minion-life-passives-02/package` as the integration baseline. Its `original-01` through
+`original-05` siblings are the current checked imports. Exact Direct normalization,
+provider/raw-input authority and all source issue correspondences are retained.
+Sidecars are V20 for Originals 01/05 and V19 for the others; native schema V6 and
+operations V20 remain independent contracts.
 
-Its immediate predecessor is runs/owned-command-damage-01/package,
-input 05628c005d8a1035179520b27e6a36ee8e81edac198943259bdfbcce979a57fb.
-Run `publish_population_readiness_preserving_all_five_originals` in
-tests/owned_sniper_population_readiness.rs with explicit
-`POE_OPTIMIZER_TEST_SNIPER_POPULATION_PRIOR` and a fresh
-`POE_OPTIMIZER_TEST_SNIPER_POPULATION_OUTPUT`. The [packet instructions](../data/owned/poe2/3887ae68/sniper-population-readiness/README.md)
-record the exact rule-only partition. Native Command checks set
-`POE_OPTIMIZER_TEST_COMMAND_DAMAGE_RELEASE` to its Command predecessor and
-`POE_OPTIMIZER_TEST_COMMAND_DAMAGE_READINESS_RELEASE` to this current package,
-then use `native::` with `--ignored`. These two test inputs authenticate both
-publications; the current standalone package carries the complete combined data.
+Its immediate predecessor is `runs/owned-ordinary-item-routing-01/package`, input
+`7722280b6ee96e99f8c86f21924b6f28a991c908d12f73268b49640f04aedc61`. The [Life packet](../data/owned/poe2/3887ae68/minion-life-passives/README.md)
+records the exact pure refinement; the [routing packet](../data/owned/poe2/3887ae68/ordinary-item-routing/README.md)
+records its own predecessor and guard replacement. Set
+`POE_OPTIMIZER_TEST_MINION_LIFE_PASSIVES_RELEASE` to the current package for its
+native checks. Routing's historical endpoint-specific checks use
+`POE_OPTIMIZER_TEST_ORDINARY_ITEM_ROUTING_RELEASE` with its own publication.
+Each successor carries the combined data; these separate test inputs authenticate
+the respective publication receipts, not separate production evaluators.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `4ce040d82ff5ed51801d46108fdb55b43f48820664a76b6f2575d8acaa116704` |
-| Registry | `fca3de6689794092f11657b09a8176caf26a72567b4e536103eeabfc5f9904eb` |
-| Definitions content | `5470c110b0ffb6c1f24eb7fee19ba80f4bc65be841d3ad295338fd5fbb3a05cf` |
-| Rules | `275dd0d1f3e9d5be1948cbc0ce8c0f9082cf0c22f210697f72c3d6cf87f20119` |
-| Compiled rules | `8d59374fca6a78c54932ac5a792a88ffd8c70e5aba81aa98e3daf5fe11fee4f9` |
-| Routing | `4931b5cff90cbb73041cbdbdb77d783e7445a23b7db9c92aba741b589b172f80` |
-| Mapping | `3ffc22bad9de76a21fbab8202f662ecddb2f46986d501cc5eb7dc992d8f90b7a` |
-| Skill roles | `ff0fc29ea99cf360328b02ae6b98bbd0ae256a74c4bf29e853789eed24b0c1c2` |
-| Normalization | `9241afb05476e382b6cd29cc2ce1a94f00253a42ed0d6caad0519a20fc051c12` |
-| Rewards | `75850b14b0dd4dea0395428b73e12d3b5b1aa943a3b641953c375a0e96de1494` |
-| Items | `f006e392daf7d05705e5de780a20777b8d6006d134f5d585c2e7e13fcc69d99f` |
-| Item source | `b4ef66cf401a435c8c9353e5e28205fa73c3167ee299539a058bebc6a77366b6` |
-| Tree policy | `43d59d48361e01200ee9270b072ed59c561bd5b51c3b50a2da40fc3429692e5a` |
-| Authoring commitment | `bb1158d1f4cad915cf0078ed20162f5f7363bbb9d80c6b0922374138b0f7227f` |
+| Release input | `ee4cc6c44202f2174129e12e782a02cd65c5a993c6ccffc87e779460fb7be09f` |
+| Registry | `bf2cfe8c8a889c51f2c71133fa04743a8abd02fc845000779adcd66bb2660d1e` |
+| Definitions content | `49026a388e578bf4dec85d04b3390e377ce879c51d2be5240f173927c5dcd195` |
+| Rules | `46a716830598582f0d0369c7bb47bf95a1552c497a76b64db55ff8a986f8a1de` |
+| Compiled rules | `2b72690b6056abfbddb8ceac0193f63467c7051d43cb51f3430f51bae20e85cd` |
+| Routing | `0b9980554092cd7260682da1dd2a0c68c9c1939f629337a8e00935671c1ef7a9` |
+| Mapping | `3d1f6cdc90c3633faac3eda0f8637e90f7f4adfcbb3c966b8bb522461ffaedd6` |
+| Skill roles | `f09d0f5f9073726303d11932ba5e90c0c688495032091998f229f28600550e1f` |
+| Normalization | `a2f89609b3537783519ca76bb216f5259194ea14578134df06e48d1aa1914eca` |
+| Rewards | `1bba1ac96c91bb963eaad7040ea86c516c840c53620efcb15e73c4367f04a845` |
+| Items | `ac201a9122b3365a4c8e439dd29946ec6ac7b327c5a40cc6ecd8cc7b2b19aa33` |
+| Item source | `0a6bc5fec5e220bd2f9f47dc5118dcf9c45c1b719d87ec717e517b123a985d53` |
+| Tree policy | `69d65d88ecad3287210f60ce8069a6e6d9a831177e1f8cdff8ec54f6114c521d` |
+| Authoring commitment | `c0d2d74a58d48e2144cf47a530d53089b5fb02c845d2a76ee951307df65c7864` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,845,791 bytes** with 105 provenance rows.
-Definitions remain `pob-3887ae68-command-damage-v1`; the rules release is
-`pob-3887ae68-sniper-population-readiness-v1`. The registry still ends at `3304`.
-Mechanics and integration remain Partial with no evaluation bundle.
-Source/readiness/preparation fragments remain authoring data, not independently
-complete evaluators.
+The eighteen package files total **60,850,211 bytes**, with 107 provenance rows.
+Definitions use `pob-3887ae68-minion-life-passives-v1`; the independent rules release
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3306`.
+Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
+source-property and readiness fragments are not independently complete evaluators.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
@@ -307,8 +298,8 @@ replacing finite test closure with actual release authority. The global
 selected-owner gate still refuses scalar/reduction reads if another selected
 owner is Partial; a measured empty source bucket cannot override that gate.
 
-Prioritize selected Modifier 30ca's remaining recipient applicability and Focus
-preprocessing at CalcSetup1473–1484. The late non-Amulet copy witness now proves
+Selected Modifier `30ca` now has the ordinary Talisman recipient guard. Prioritize
+its remaining Focus preprocessing at `CalcSetup.lua:1473–1484` and routing-branch census. The late non-Amulet copy witness now proves
 bounded delivery after preparation; Talisman's dedicated witness proves ordinary
 Amulet diversion separately from early copying. Use these consumer observations;
 final ModDB presence alone does not establish an earlier level bonus. Completing
@@ -467,7 +458,7 @@ numerical outputs when game intent remains unresolved.
    controls alone cannot certify an empty scenario-usage inventory.
 
 2. **Connect selected receiving and property contributors.** The two single-line
-   Minion Damage nodes, four Life/Damage nodes and twelve flat/permanent reward
+   Minion Damage nodes, four Life/Damage nodes, two plain Life nodes and twelve flat/permanent reward
    owners now have complete default producer behavior. The Command slice also
    closes six selected passive owners and exercises Player-to-Actor-to-Action
    semantics using existing contracts. The Fire/Lightning
@@ -567,23 +558,37 @@ numerical outputs when game intent remains unresolved.
    six-template admission domain. They do not prove the Focus branch or
    establish intended game behavior for every possible slot-copy mechanic.
 
-   **Next substantive routing blocker:** Necromantic Talisman (source node
-   39935) diverts the original Amulet modifiers to a minion store at
-   `CalcSetup.lua:1397–1403`; the independent pre-preparation Amulet-copy loop
-   still runs at 1661–1667. Current native direct `30ca` delivery is unconditional
-   to Player. Solar and Lapis Amulets are admitted templates, so this reachable
-   combination prevents broad owner completion even though Original05 has no
-   such allocation. The dedicated original-call witness now passes. Next express
-   ordinary recipient applicability in owned rules and guard direct delivery.
-   Unknown routing must remain unavailable. Prove ordinary Crown/Amulet,
-   diversion, removal and independent copy behavior; do not conflate an item
-   property reaching a minion store with changing that minion's prepared level.
-   The independent-copy behavior is observed reference evidence whose intended
-   game semantics remain unclassified. Keep copy eligibility and ordinary
-   recipient applicability as separate facts rather than overloading `32e3`.
-   Reuse existing typed reads, receivers and preparation stages if sufficient;
-   discuss any genuinely new item-to-recipient contract before implementing it.
-   Replace stale owner gaps only after these obligations are proved.
+   **Published routing correction:** the original Amulet/Talisman exclusion now
+   guards direct delivery through `3305/3306`, independently of `32e3/32e4`.
+   Crown/Amulet, allocation removal, independent copies, missing facts and actual
+   Partial-owner controls pass in one native graph. Generic later granted
+   Keystones have no unproved early authority. Keep the minion consumer, intended
+   copy semantics and remaining routing/placement inventories separate.
+
+   **Next bounded source work:** extend the existing property-consumer witness
+   for Original01's actual Sacred Focus Item 1, physically in Weapon 2 but carrying
+   `sourceSlot` Focus and a desecrated Minion-level LIST value 2. Real supplier
+   Instruments of Power (20701) emits Focus-effect INC −50; its connected ascendancy
+   path is 8305 → 35880 → 20701. A matched point-budget control can replace terminals
+   30265/23265 with 35880/20701, preserving 36891's Time-Lost-radius behavior.
+   Prove the complete effective allocation changes, not just XML edits. Join the
+   original item return, `MergeMod` at line 1477, scaled candidate −1, rejection at
+   `MergeMod` at line 1482 with `skipNonAdditive`, `AddList` at line 1484 and the actual physical Sniper
+   preparation consumer. Add supplier removal/restoration, exact Focus-line
+   removal, fresh/unhooked and JIT controls. No new generic harness or native
+   multiplier is justified by the static source branch.
+
+   That proof alone cannot close `30ca`. Explicitly discharge EnergyBlade,
+   animated-weapon/IronMass and name-based Kalandra branch reachability against
+   the admitted physical/granted-item domain; a failed text search is not absence
+   authority. Sceptre/Focus placement, occurrence transforms and actual incoming
+   contributors remain independent. Continue closing measured selected defaults
+   alongside this work; Original05 now has 41/55 complete passive default owners.
+   Jewel Socket 7960 (owned `1b48`) has real Socket `320e` placement semantics and must not
+   be declared empty merely because no selected jewel occupies it. A final minion
+   Life receiver/pool needs complete base-life and incoming evidence, not the
+   finite 44 subtotal from the producer test. Any new public contract remains a
+   reviewed decision; do not duplicate existing parsers/producers.
 
    Keep ordinary `GemProperty` before support admission and actor-provided
    `SupportedGemProperty` after census. Named unkeyed supported records retain
@@ -619,7 +624,7 @@ numerical outputs when game intent remains unresolved.
    or More channels. Final damage reduction must join actual unconditional and
    conditional contributions with complete receiving/owner coverage. The finite
    Basic 0/Gas 55 component does not provide that closure. Prioritize the ordinary
-   item-recipient gap above and the next measured selected-owner/input blocker;
+   remaining routing proof above and the next measured selected-owner/input blocker;
    further source harness work must enable a concrete native consumer.
 
    The Djinn preparation sidecar already proves ten supports and 1,296 admission
