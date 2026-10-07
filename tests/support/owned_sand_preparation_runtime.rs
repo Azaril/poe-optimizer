@@ -18,6 +18,13 @@ fn key(name: &str) -> OwnedDefinitionKey {
 pub fn compile(
     world: &super::World,
 ) -> std::result::Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>, String> {
+    compile_configured(world, |_| {})
+}
+
+pub fn compile_configured(
+    world: &super::World,
+    configure: impl FnOnce(&mut EvaluationStagesInput),
+) -> std::result::Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>, String> {
     let recipe = &world.recipe;
     let build = &world.build;
     let scenario = &world.scenario;
@@ -148,121 +155,119 @@ pub fn compile(
         .iter()
         .flat_map(|o| o.programs.members.iter().map(move |p| (o, p)))
         .collect();
-    let stages = Arc::new(
-        OwnedEvaluationStages::new(
-            EvaluationStagesInput {
-                schema_version: OWNED_EVALUATION_STAGES_V3,
-                namespace: namespace.clone(),
-                release: key("finite-sand-stages"),
-                definitions: schema.identity().clone(),
-                rules: *stored.identity(),
-                routing: *routing.identity(),
-                stages: [
-                    "prepare",
-                    "source-census",
-                    "source-properties",
-                    "source-assembly",
-                    "descendants",
-                    "execute",
-                ]
-                .into_iter()
-                .enumerate()
-                .map(|(i, name)| EvaluationStage {
-                    id: key(name),
-                    predecessors: i
-                        .checked_sub(1)
-                        .map(|j| {
-                            vec![key([
-                                "prepare",
-                                "source-census",
-                                "source-properties",
-                                "source-assembly",
-                                "descendants",
-                                "execute",
-                            ][j])]
-                        })
-                        .unwrap_or_default(),
+    let mut stage_input = EvaluationStagesInput {
+        schema_version: OWNED_EVALUATION_STAGES_V3,
+        namespace: namespace.clone(),
+        release: key("finite-sand-stages"),
+        definitions: schema.identity().clone(),
+        rules: *stored.identity(),
+        routing: *routing.identity(),
+        stages: [
+            "prepare",
+            "source-census",
+            "source-properties",
+            "source-assembly",
+            "descendants",
+            "execute",
+        ]
+        .into_iter()
+        .enumerate()
+        .map(|(i, name)| EvaluationStage {
+            id: key(name),
+            predecessors: i
+                .checked_sub(1)
+                .map(|j| {
+                    vec![key([
+                        "prepare",
+                        "source-census",
+                        "source-properties",
+                        "source-assembly",
+                        "descendants",
+                        "execute",
+                    ][j])]
+                })
+                .unwrap_or_default(),
+        })
+        .collect(),
+        programs: DeclaredSet::complete(
+            programs
+                .iter()
+                .map(|(o, p)| StagedRuleProgram {
+                    owner: o.owner.clone(),
+                    program: p.id.clone(),
+                    stage: key(super::classification(p).1),
                 })
                 .collect(),
-                programs: DeclaredSet::complete(
-                    programs
-                        .iter()
-                        .map(|(o, p)| StagedRuleProgram {
-                            owner: o.owner.clone(),
-                            program: p.id.clone(),
-                            stage: key(super::classification(p).1),
-                        })
-                        .collect(),
-                ),
-                effect_applications: Some(DeclaredSet::complete(vec![])),
-                routing_stage: key("execute"),
-                frozen_channels: unused
-                    .iter()
-                    .map(|(id, scope, _)| FrozenStageChannel {
-                        channel: StageChannel::Stat {
-                            scope: *scope,
-                            stat: id.clone(),
+        ),
+        effect_applications: Some(DeclaredSet::complete(vec![])),
+        routing_stage: key("execute"),
+        frozen_channels: unused
+            .iter()
+            .map(|(id, scope, _)| FrozenStageChannel {
+                channel: StageChannel::Stat {
+                    scope: *scope,
+                    stat: id.clone(),
+                },
+                stage: key("prepare"),
+            })
+            .collect(),
+        readiness: Some(ReadinessInput {
+            skills: vec![
+                SkillReadiness {
+                    participation: None,
+                    skill: super::def(0x322),
+                    parameters: DeclaredSet::complete(vec![
+                        ParameterReadiness {
+                            parameter: super::slot(0x3261, 0x322),
+                            phase: ReadinessPhase::Structural,
                         },
-                        stage: key("prepare"),
+                        ParameterReadiness {
+                            parameter: super::slot(0x3262, 0x322),
+                            phase: ReadinessPhase::Structural,
+                        },
+                    ]),
+                },
+                SkillReadiness {
+                    participation: None,
+                    skill: super::def(0xd8),
+                    parameters: DeclaredSet::complete(vec![
+                        ParameterReadiness {
+                            parameter: super::slot(0x3350, 0xd8),
+                            phase: ReadinessPhase::Execution,
+                        },
+                        ParameterReadiness {
+                            parameter: super::slot(0x3351, 0xd8),
+                            phase: ReadinessPhase::Execution,
+                        },
+                    ]),
+                },
+            ],
+            programs: DeclaredSet::complete(
+                programs
+                    .iter()
+                    .map(|(o, p)| ReadinessProgram {
+                        owner: o.owner.clone(),
+                        program: p.id.clone(),
+                        phase: if super::classification(p).0 == ReadinessProgramRole::Execution {
+                            ReadinessPhase::Execution
+                        } else {
+                            ReadinessPhase::Preparation
+                        },
+                        role: super::classification(p).0,
+                        outputs: if super::classification(p).0 == ReadinessProgramRole::Execution {
+                            vec![]
+                        } else {
+                            super::outputs(p)
+                        },
                     })
                     .collect(),
-                readiness: Some(ReadinessInput {
-                    skills: vec![
-                        SkillReadiness {
-                            participation: None,
-                            skill: super::def(0x322),
-                            parameters: DeclaredSet::complete(vec![
-                                ParameterReadiness {
-                                    parameter: super::slot(0x3261, 0x322),
-                                    phase: ReadinessPhase::Structural,
-                                },
-                                ParameterReadiness {
-                                    parameter: super::slot(0x3262, 0x322),
-                                    phase: ReadinessPhase::Structural,
-                                },
-                            ]),
-                        },
-                        SkillReadiness {
-                            participation: None,
-                            skill: super::def(0xd8),
-                            parameters: DeclaredSet::complete(vec![
-                                ParameterReadiness {
-                                    parameter: super::slot(0x3350, 0xd8),
-                                    phase: ReadinessPhase::Execution,
-                                },
-                                ParameterReadiness {
-                                    parameter: super::slot(0x3351, 0xd8),
-                                    phase: ReadinessPhase::Execution,
-                                },
-                            ]),
-                        },
-                    ],
-                    programs: DeclaredSet::complete(
-                        programs
-                            .iter()
-                            .map(|(o, p)| ReadinessProgram {
-                                owner: o.owner.clone(),
-                                program: p.id.clone(),
-                                phase: if super::classification(p).0
-                                    == ReadinessProgramRole::Execution
-                                {
-                                    ReadinessPhase::Execution
-                                } else {
-                                    ReadinessPhase::Preparation
-                                },
-                                role: super::classification(p).0,
-                                outputs: if super::classification(p).0
-                                    == ReadinessProgramRole::Execution
-                                {
-                                    vec![]
-                                } else {
-                                    super::outputs(p)
-                                },
-                            })
-                            .collect(),
-                    ),
-                }),
-            },
+            ),
+        }),
+    };
+    configure(&mut stage_input);
+    let stages = Arc::new(
+        OwnedEvaluationStages::new(
+            stage_input,
             schema.as_ref(),
             &stored,
             &routing,

@@ -366,6 +366,58 @@ pub fn assert_endpoint(endpoint: &StagedOwnedRelease) {
         .extend(m.owners.last().unwrap().programs.members.clone());
     assert_eq!(owners[owner_key(&actor.owner)], &actor);
 }
+/// Exact retained template additions, without requiring this historical
+/// checkpoint to be the successor's last publication or freezing its Actor.
+#[allow(dead_code)]
+pub fn retained_template_additions(endpoint: &StagedOwnedRelease) -> Vec<DefinitionRules> {
+    check_authored();
+    let a: Value = read("authoring.json");
+    let m: OwnedReleaseMigrationInput = read("migration.json");
+    let proofs: Vec<_> = endpoint
+        .receipt()
+        .provenance
+        .iter()
+        .filter(|p| p.kind.as_str() == KIND)
+        .collect();
+    assert_eq!(proofs.len(), 1);
+    assert_eq!(json!(proofs[0].prior_input), a["before"]);
+    assert_eq!(proofs[0].authoring_input, digest());
+    let additions: Vec<_> = m
+        .owners
+        .into_iter()
+        .filter(|o| {
+            matches!(
+                o.owner,
+                SchemaSubject::Definition(DefinitionAddress::ItemTemplate(_))
+            )
+        })
+        .collect();
+    assert_eq!(additions.len(), 1756);
+    for addition in &additions {
+        let actual: Vec<_> = endpoint
+            .input()
+            .recipe
+            .rules
+            .owners
+            .iter()
+            .filter(|o| o.owner == addition.owner)
+            .collect();
+        assert_eq!(actual.len(), 1);
+        assert_eq!(actual[0].programs.closure, addition.programs.closure);
+        for program in &addition.programs.members {
+            assert_eq!(
+                actual[0]
+                    .programs
+                    .members
+                    .iter()
+                    .filter(|p| *p == program)
+                    .count(),
+                1
+            );
+        }
+    }
+    additions
+}
 pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     check_authored();
     dependencies(prior);

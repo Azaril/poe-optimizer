@@ -1086,9 +1086,13 @@ impl World {
             RulePackageInput {
                 existing_actor_rules: None,
                 // This finite fixture includes every owner below and has no
-                // ordered reads. V21 requires an explicit empty registry even
-                // when no such consumer exists; this is not build coverage.
-                contribution_queries: if self.operations.as_str() == OWNED_RULE_OPERATIONS_V21 {
+                // contribution-query reads. V21 and V22 require an explicit
+                // numeric/Boolean query inventory even with no such consumer;
+                // the asserted finite empty inventory is not build coverage.
+                contribution_queries: if RuleOperationsVersion::parse(self.operations.as_str())
+                    .expect("known finite fixture operations")
+                    .supports_contribution_queries()
+                {
                     assert!(
                         self.owners
                             .iter()

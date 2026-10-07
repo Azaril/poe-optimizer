@@ -39,7 +39,15 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest native checkpoint publishes shared Sand preparation: manual and
+The latest data checkpoint closes five empty intrinsic declaration inventories
+on the Iron Crown: choices, grants, actors, skill grants and outputs. Its known
+three-socket host remains Partial, as do modifier/quality and numerical owner
+coverage. The distinction between intrinsic and modifier-supplied grants remains
+explicit. Retained source evidence, exact migration inverse and all-five imports
+pass without new native operations. See the
+[Crown packet](../data/owned/poe2/3887ae68/crown-declarations/README.md).
+
+The preceding native checkpoint publishes shared Sand preparation: manual and
 tree-granted occurrences use the same raw-input validation, ordinary-property
 and once-per-source assembly rules. The exact Command receives prepared inputs;
 the declared Actor slot receives an injected level-table lookup. These are
@@ -47,8 +55,16 @@ data-authored programs on existing owners, without skill-name dispatch in Rust.
 Their Partial source/support inventories and remaining combat/population modes
 still prevent full owner closure. All-five reimports preserve selections and
 110 queries; Original05's five obligations and the 0/5 completion count remain.
-The current package is `runs/owned-sand-preparation-publication-03/package`.
+The current package is `runs/owned-crown-declarations-publication-01/package`.
 See the [packet and coverage limits](../data/owned/poe2/3887ae68/sand-preparation/README.md).
+
+A joined finite test now supplies Sand's ordinary level from the real Crown/Solar
+canonical modifier, direct applicability, Amulet snapshot and copy programs.
+Selected canonical rolls come from a fresh import; unrelated item mechanics and
+real support inventory remain outside that fixture. Exact donor identities,
+changed equipment/rolls, Partial and missing-producer refusals, scratch reuse and
+Rayon checks pass on the current package. This adds integration evidence without
+promoting production contributor coverage or substituting a whole-build request.
 
 The preceding native checkpoint implements typed Boolean `Flag` contributions and
 unordered `Any` on the existing graph. Source membership and numeric ranks are

@@ -511,6 +511,12 @@ impl World {
     ) -> std::result::Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>, String> {
         runtime::compile(self)
     }
+    pub fn compile_configured(
+        &self,
+        configure: impl FnOnce(&mut EvaluationStagesInput),
+    ) -> std::result::Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>, String> {
+        runtime::compile_configured(self, configure)
+    }
 }
 
 pub fn classification(program: &RuleProgram) -> (ReadinessProgramRole, &'static str) {
@@ -530,31 +536,32 @@ pub fn classification(program: &RuleProgram) -> (ReadinessProgramRole, &'static 
     }
 }
 pub fn outputs(program: &RuleProgram) -> Vec<StageChannel> {
+    let scope = |entity| match entity {
+        RuleEntity::Current => program.context,
+        RuleEntity::Player | RuleEntity::Actor => RuleEntityKind::Actor,
+        RuleEntity::Modifier => RuleEntityKind::Modifier,
+        RuleEntity::PropertyOwner => RuleEntityKind::Skill,
+        _ => panic!("unreviewed finite preparation destination"),
+    };
     program
         .effects
         .iter()
         .map(|effect| match &effect.effect {
-            RuleEffectKind::Derive { stat, .. } | RuleEffectKind::ProjectActorStat { stat, .. } => {
-                StageChannel::Stat {
-                    scope: if matches!(effect.effect, RuleEffectKind::ProjectActorStat { .. }) {
-                        RuleEntityKind::Actor
-                    } else {
-                        program.context
-                    },
-                    stat: stat.clone(),
-                }
-            }
+            RuleEffectKind::Derive { entity, stat, .. } => StageChannel::Stat {
+                scope: scope(*entity),
+                stat: stat.clone(),
+            },
+            RuleEffectKind::ProjectActorStat { stat, .. } => StageChannel::Stat {
+                scope: RuleEntityKind::Actor,
+                stat: stat.clone(),
+            },
             RuleEffectKind::Contribute {
                 stat,
                 contribution,
                 entity,
                 ..
             } => StageChannel::Contributions {
-                scope: if *entity == RuleEntity::PropertyOwner {
-                    RuleEntityKind::Skill
-                } else {
-                    RuleEntityKind::Actor
-                },
+                scope: scope(*entity),
                 stat: stat.clone(),
                 contribution: *contribution,
             },

@@ -1,0 +1,4446 @@
+{
+  "schema_version": 1,
+  "status": "retained-source-witnesses-passed",
+  "scope": {
+    "whole_build_parity": false,
+    "template_rules_closed": false,
+    "socket_inventory_closed": false,
+    "modifier_inventory_closed": false,
+    "quality_inventory_closed": false,
+    "incoming_contributor_inventory_closed": false,
+    "modifier_supplied_grants_closed": false,
+    "item_requirements_implemented": false,
+    "new_numeric_behavior": false,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "query_changes": 0,
+    "routing_changes": 0
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/PartyTab.lua",
+      "bytes": 45505,
+      "sha256": "6ad023b873077d3c48eef65214a4076762f9dc304967459ef96d8422e0a32189"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "bytes": 95117,
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "bytes": 31232,
+      "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Data/Bases/boots.lua",
+      "bytes": 63558,
+      "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+    },
+    {
+      "path": "src/Data/Bases/flask.lua",
+      "bytes": 9406,
+      "sha256": "ed025daab24f4964874296c5e5eb0855f1b90a4063b4a69cc8a65fef7c293cc7"
+    },
+    {
+      "path": "src/Data/Bases/helmet.lua",
+      "bytes": 87249,
+      "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "bytes": 18651,
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/ModCache.lua",
+      "bytes": 1602699,
+      "sha256": "8ac20aeca963e8b3745525da0444828e294632da0b57535144268489faa22b8b"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "bytes": 111112,
+      "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+    },
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "bytes": 2494,
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "bytes": 239878,
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/Main.lua",
+      "bytes": 78051,
+      "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/ModTools.lua",
+      "bytes": 9130,
+      "sha256": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+    }
+  ],
+  "local_pins": [
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/owned_armour_item_inputs.rs",
+      "sha256": "d2ed6a6430d06f1e7acdd4a4b277962660a2960606f44349b872483860631397"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/armour_item_input_source.rs",
+      "sha256": "9f22275b03d12c169873306e9dc1c183d8578b7808b590a464c7ca7510ef28be"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/generated_extra_stat_consumption.rs",
+      "sha256": "d4606409dccedaf5706a12d83ad627ac10b7ecc24b6cadd221b7942c204f8aa4"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/generated_extra_stat_consumption.lua",
+      "sha256": "3fd06d0919665f86889d61d1c38673173bc3a960d3957dc2c9fc499efba9cd38"
+    }
+  ],
+  "original_path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+  "original_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+  "source_binding": {
+    "original": 5,
+    "item_id": 21,
+    "source_ordinal": 576,
+    "equipment_slot": "Helmet"
+  },
+  "base": {
+    "armour": {
+      "Armour": 26,
+      "EnergyShield": 13
+    },
+    "implicitModTypes": {},
+    "quality": 20,
+    "req": {
+      "int": 7,
+      "level": 5,
+      "str": 7
+    },
+    "socketLimit": 3,
+    "subType": "Armour/Energy Shield",
+    "tags": {
+      "armour": true,
+      "default": true,
+      "ezomyte_basetype": true,
+      "helmet": true,
+      "str_int_armour": true
+    },
+    "type": "Helmet"
+  },
+  "witnesses": [
+    {
+      "kind": "catalogue",
+      "reports": [
+        {
+          "path": "runs/owned-armour-local-defence-source-03/source-jit-off.json",
+          "bytes": 9528071,
+          "sha256": "a4e1c0ca6baad3905a279592ad6800c3d51b7c9fdf7f38f55933e4b464eac62d"
+        },
+        {
+          "path": "runs/owned-armour-local-defence-source-03/source-jit-on.json",
+          "bytes": 9528071,
+          "sha256": "a4e1c0ca6baad3905a279592ad6800c3d51b7c9fdf7f38f55933e4b464eac62d"
+        }
+      ],
+      "report_metadata": {
+        "files": [
+          {
+            "path": "src/Classes/Item.lua",
+            "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+          },
+          {
+            "path": "src/Classes/ItemsTab.lua",
+            "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+          },
+          {
+            "path": "src/Modules/Build.lua",
+            "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+          },
+          {
+            "path": "src/Modules/Common.lua",
+            "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+          },
+          {
+            "path": "src/Modules/ItemTools.lua",
+            "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+          },
+          {
+            "path": "src/Modules/ModParser.lua",
+            "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+          },
+          {
+            "path": "src/Classes/ModStore.lua",
+            "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+          },
+          {
+            "path": "src/Modules/CalcDefence.lua",
+            "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+          },
+          {
+            "path": "src/HeadlessWrapper.lua",
+            "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+          },
+          {
+            "path": "src/Data/Bases/helmet.lua",
+            "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+          },
+          {
+            "path": "src/Data/Bases/boots.lua",
+            "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+          }
+        ],
+        "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+        "native_owner_closure": false,
+        "observer_sha256": "e1f985c21e47d263b61c047f2466f939ef4a727b988be7bbea4a245b6f91ebe2",
+        "preoverride_and_slot_consumption_are_separate": true,
+        "schema_version": 1,
+        "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+      },
+      "observations": [
+        {
+          "case_index": 0,
+          "name": "original",
+          "stage": "fresh",
+          "pointer": "/cases/0/observed/states/fresh",
+          "value": {
+            "selected": {
+              "config": 1,
+              "items": 2,
+              "skills": 4,
+              "spec": 3
+            },
+            "original_functions_preserved": true,
+            "method_wrappers": false,
+            "item": {
+              "id": 21,
+              "base_name": "Iron Crown",
+              "source": "Item:21:New Item, Iron Crown",
+              "exact_catalogue_base": true,
+              "exact_registered": true,
+              "base": {
+                "armour": {
+                  "Armour": 26,
+                  "EnergyShield": 13
+                },
+                "implicitModTypes": {},
+                "quality": 20,
+                "req": {
+                  "int": 7,
+                  "level": 5,
+                  "str": 7
+                },
+                "socketLimit": 3,
+                "subType": "Armour/Energy Shield",
+                "tags": {
+                  "armour": true,
+                  "default": true,
+                  "ezomyte_basetype": true,
+                  "helmet": true,
+                  "str_int_armour": true
+                },
+                "type": "Helmet"
+              }
+            }
+          }
+        },
+        {
+          "case_index": 0,
+          "name": "original",
+          "stage": "rebuild-one",
+          "pointer": "/cases/0/observed/states/rebuild-one",
+          "value": {
+            "selected": {
+              "config": 1,
+              "items": 2,
+              "skills": 4,
+              "spec": 3
+            },
+            "original_functions_preserved": true,
+            "method_wrappers": false,
+            "item": {
+              "id": 21,
+              "base_name": "Iron Crown",
+              "source": "Item:21:New Item, Iron Crown",
+              "exact_catalogue_base": true,
+              "exact_registered": true,
+              "base": {
+                "armour": {
+                  "Armour": 26,
+                  "EnergyShield": 13
+                },
+                "implicitModTypes": {},
+                "quality": 20,
+                "req": {
+                  "int": 7,
+                  "level": 5,
+                  "str": 7
+                },
+                "socketLimit": 3,
+                "subType": "Armour/Energy Shield",
+                "tags": {
+                  "armour": true,
+                  "default": true,
+                  "ezomyte_basetype": true,
+                  "helmet": true,
+                  "str_int_armour": true
+                },
+                "type": "Helmet"
+              }
+            }
+          }
+        },
+        {
+          "case_index": 0,
+          "name": "original",
+          "stage": "rebuild-two",
+          "pointer": "/cases/0/observed/states/rebuild-two",
+          "value": {
+            "selected": {
+              "config": 1,
+              "items": 2,
+              "skills": 4,
+              "spec": 3
+            },
+            "original_functions_preserved": true,
+            "method_wrappers": false,
+            "item": {
+              "id": 21,
+              "base_name": "Iron Crown",
+              "source": "Item:21:New Item, Iron Crown",
+              "exact_catalogue_base": true,
+              "exact_registered": true,
+              "base": {
+                "armour": {
+                  "Armour": 26,
+                  "EnergyShield": 13
+                },
+                "implicitModTypes": {},
+                "quality": 20,
+                "req": {
+                  "int": 7,
+                  "level": 5,
+                  "str": 7
+                },
+                "socketLimit": 3,
+                "subType": "Armour/Energy Shield",
+                "tags": {
+                  "armour": true,
+                  "default": true,
+                  "ezomyte_basetype": true,
+                  "helmet": true,
+                  "str_int_armour": true
+                },
+                "type": "Helmet"
+              }
+            }
+          }
+        },
+        {
+          "case_index": 1,
+          "name": "independent-repeat",
+          "stage": "fresh",
+          "pointer": "/cases/1/observed/states/fresh",
+          "value": {
+            "selected": {
+              "config": 1,
+              "items": 2,
+              "skills": 4,
+              "spec": 3
+            },
+            "original_functions_preserved": true,
+            "method_wrappers": false,
+            "item": {
+              "id": 21,
+              "base_name": "Iron Crown",
+              "source": "Item:21:New Item, Iron Crown",
+              "exact_catalogue_base": true,
+              "exact_registered": true,
+              "base": {
+                "armour": {
+                  "Armour": 26,
+                  "EnergyShield": 13
+                },
+                "implicitModTypes": {},
+                "quality": 20,
+                "req": {
+                  "int": 7,
+                  "level": 5,
+                  "str": 7
+                },
+                "socketLimit": 3,
+                "subType": "Armour/Energy Shield",
+                "tags": {
+                  "armour": true,
+                  "default": true,
+                  "ezomyte_basetype": true,
+                  "helmet": true,
+                  "str_int_armour": true
+                },
+                "type": "Helmet"
+              }
+            }
+          }
+        },
+        {
+          "case_index": 1,
+          "name": "independent-repeat",
+          "stage": "rebuild-one",
+          "pointer": "/cases/1/observed/states/rebuild-one",
+          "value": {
+            "selected": {
+              "config": 1,
+              "items": 2,
+              "skills": 4,
+              "spec": 3
+            },
+            "original_functions_preserved": true,
+            "method_wrappers": false,
+            "item": {
+              "id": 21,
+              "base_name": "Iron Crown",
+              "source": "Item:21:New Item, Iron Crown",
+              "exact_catalogue_base": true,
+              "exact_registered": true,
+              "base": {
+                "armour": {
+                  "Armour": 26,
+                  "EnergyShield": 13
+                },
+                "implicitModTypes": {},
+                "quality": 20,
+                "req": {
+                  "int": 7,
+                  "level": 5,
+                  "str": 7
+                },
+                "socketLimit": 3,
+                "subType": "Armour/Energy Shield",
+                "tags": {
+                  "armour": true,
+                  "default": true,
+                  "ezomyte_basetype": true,
+                  "helmet": true,
+                  "str_int_armour": true
+                },
+                "type": "Helmet"
+              }
+            }
+          }
+        },
+        {
+          "case_index": 1,
+          "name": "independent-repeat",
+          "stage": "rebuild-two",
+          "pointer": "/cases/1/observed/states/rebuild-two",
+          "value": {
+            "selected": {
+              "config": 1,
+              "items": 2,
+              "skills": 4,
+              "spec": 3
+            },
+            "original_functions_preserved": true,
+            "method_wrappers": false,
+            "item": {
+              "id": 21,
+              "base_name": "Iron Crown",
+              "source": "Item:21:New Item, Iron Crown",
+              "exact_catalogue_base": true,
+              "exact_registered": true,
+              "base": {
+                "armour": {
+                  "Armour": 26,
+                  "EnergyShield": 13
+                },
+                "implicitModTypes": {},
+                "quality": 20,
+                "req": {
+                  "int": 7,
+                  "level": 5,
+                  "str": 7
+                },
+                "socketLimit": 3,
+                "subType": "Armour/Energy Shield",
+                "tags": {
+                  "armour": true,
+                  "default": true,
+                  "ezomyte_basetype": true,
+                  "helmet": true,
+                  "str_int_armour": true
+                },
+                "type": "Helmet"
+              }
+            }
+          }
+        },
+        {
+          "case_index": 2,
+          "name": "warm-quality-thirty-then-original",
+          "stage": "fresh",
+          "pointer": "/cases/2/observed/states/fresh",
+          "value": {
+            "selected": {
+              "config": 1,
+              "items": 2,
+              "skills": 4,
+              "spec": 3
+            },
+            "original_functions_preserved": true,
+            "method_wrappers": false,
+            "item": {
+              "id": 21,
+              "base_name": "Iron Crown",
+              "source": "Item:21:New Item, Iron Crown",
+              "exact_catalogue_base": true,
+              "exact_registered": true,
+              "base": {
+                "armour": {
+                  "Armour": 26,
+                  "EnergyShield": 13
+                },
+                "implicitModTypes": {},
+                "quality": 20,
+                "req": {
+                  "int": 7,
+                  "level": 5,
+                  "str": 7
+                },
+                "socketLimit": 3,
+                "subType": "Armour/Energy Shield",
+                "tags": {
+                  "armour": true,
+                  "default": true,
+                  "ezomyte_basetype": true,
+                  "helmet": true,
+                  "str_int_armour": true
+                },
+                "type": "Helmet"
+              }
+            }
+          }
+        },
+        {
+          "case_index": 2,
+          "name": "warm-quality-thirty-then-original",
+          "stage": "rebuild-one",
+          "pointer": "/cases/2/observed/states/rebuild-one",
+          "value": {
+            "selected": {
+              "config": 1,
+              "items": 2,
+              "skills": 4,
+              "spec": 3
+            },
+            "original_functions_preserved": true,
+            "method_wrappers": false,
+            "item": {
+              "id": 21,
+              "base_name": "Iron Crown",
+              "source": "Item:21:New Item, Iron Crown",
+              "exact_catalogue_base": true,
+              "exact_registered": true,
+              "base": {
+                "armour": {
+                  "Armour": 26,
+                  "EnergyShield": 13
+                },
+                "implicitModTypes": {},
+                "quality": 20,
+                "req": {
+                  "int": 7,
+                  "level": 5,
+                  "str": 7
+                },
+                "socketLimit": 3,
+                "subType": "Armour/Energy Shield",
+                "tags": {
+                  "armour": true,
+                  "default": true,
+                  "ezomyte_basetype": true,
+                  "helmet": true,
+                  "str_int_armour": true
+                },
+                "type": "Helmet"
+              }
+            }
+          }
+        },
+        {
+          "case_index": 2,
+          "name": "warm-quality-thirty-then-original",
+          "stage": "rebuild-two",
+          "pointer": "/cases/2/observed/states/rebuild-two",
+          "value": {
+            "selected": {
+              "config": 1,
+              "items": 2,
+              "skills": 4,
+              "spec": 3
+            },
+            "original_functions_preserved": true,
+            "method_wrappers": false,
+            "item": {
+              "id": 21,
+              "base_name": "Iron Crown",
+              "source": "Item:21:New Item, Iron Crown",
+              "exact_catalogue_base": true,
+              "exact_registered": true,
+              "base": {
+                "armour": {
+                  "Armour": 26,
+                  "EnergyShield": 13
+                },
+                "implicitModTypes": {},
+                "quality": 20,
+                "req": {
+                  "int": 7,
+                  "level": 5,
+                  "str": 7
+                },
+                "socketLimit": 3,
+                "subType": "Armour/Energy Shield",
+                "tags": {
+                  "armour": true,
+                  "default": true,
+                  "ezomyte_basetype": true,
+                  "helmet": true,
+                  "str_int_armour": true
+                },
+                "type": "Helmet"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "construction",
+      "reports": [
+        {
+          "path": "runs/owned-armour-item-inputs-source-01/source-jit-off.json",
+          "bytes": 728258,
+          "sha256": "c46b5de13a5b584c5bc8d78cb32d86c2b9e1e384cde4bc4e1f7bbb140729759b"
+        },
+        {
+          "path": "runs/owned-armour-item-inputs-source-01/source-jit-on.json",
+          "bytes": 728258,
+          "sha256": "c46b5de13a5b584c5bc8d78cb32d86c2b9e1e384cde4bc4e1f7bbb140729759b"
+        }
+      ],
+      "report_metadata": {
+        "evidence": {
+          "files": [
+            {
+              "path": "src/Classes/Item.lua",
+              "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+            },
+            {
+              "path": "src/Classes/ItemsTab.lua",
+              "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+            },
+            {
+              "path": "src/Modules/Build.lua",
+              "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+            },
+            {
+              "path": "src/Modules/ItemTools.lua",
+              "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+            },
+            {
+              "path": "src/Modules/ModParser.lua",
+              "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+            },
+            {
+              "path": "src/Data/Bases/helmet.lua",
+              "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+            },
+            {
+              "path": "src/Data/Bases/boots.lua",
+              "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+            },
+            {
+              "path": "src/Data/Bases/flask.lua",
+              "sha256": "ed025daab24f4964874296c5e5eb0855f1b90a4063b4a69cc8a65fef7c293cc7"
+            }
+          ],
+          "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+          "native_input_closure": false,
+          "native_owner_coverage": false
+        },
+        "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+      },
+      "observations": [
+        {
+          "case_index": 0,
+          "name": "original",
+          "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+          "pointer": "/cases/0/state",
+          "value": {
+            "original_functions_preserved": true,
+            "main_output_preserved": true,
+            "saved_items_preserved": true,
+            "saved_selections_preserved": true,
+            "selected_config": 1,
+            "selected_items": 2,
+            "selected_skills": 4,
+            "selected_spec": 3,
+            "item": {
+              "id": 21,
+              "raw": "Rarity: RARE\nNew Item\nIron Crown\nArmour: 31\nEnergy Shield: 16\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nQuality: 20\nSockets: S S S\nRune: None\nRune: None\nRune: None\nLevelReq: 5\nImplicits: 0\n+1 to Level of all Minion Skills",
+              "xml": {
+                "attributes": {
+                  "id": "21"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "id": "1",
+                      "range": "0.5"
+                    },
+                    "name": "ModRange"
+                  }
+                ],
+                "text_nodes": 1
+              },
+              "base_facts": {
+                "armour": {
+                  "Armour": 26,
+                  "EnergyShield": 13
+                },
+                "implicit_mod_types": {},
+                "name": "Iron Crown",
+                "quality": 20,
+                "requirements": {
+                  "int": 7,
+                  "level": 5,
+                  "str": 7
+                },
+                "socket_limit": 3,
+                "subtype": "Armour/Energy Shield",
+                "type": "Helmet"
+              },
+              "selected_slots": [
+                "Helmet"
+              ],
+              "loaded": {
+                "base": "Iron Crown",
+                "baseName": "Iron Crown",
+                "type": "Helmet",
+                "sockets": [
+                  {
+                    "group": 1
+                  },
+                  {
+                    "group": 2
+                  },
+                  {
+                    "group": 3
+                  }
+                ],
+                "base_mods": [
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "GemProperty",
+                    "source": "Item:21:New Item, Iron Crown",
+                    "tags": {},
+                    "type": "LIST",
+                    "value": {
+                      "key": "level",
+                      "keyOfScaledMod": "value",
+                      "keyword": "minion",
+                      "value": 1
+                    }
+                  }
+                ],
+                "active": [
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "GemProperty",
+                    "source": "Item:21:New Item, Iron Crown",
+                    "source_slot": "Helmet",
+                    "tags": {},
+                    "type": "LIST",
+                    "value": {
+                      "key": "level",
+                      "keyOfScaledMod": "value",
+                      "keyword": "minion",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "Multiplier:QualityOnHelmet",
+                    "source": "Quality",
+                    "tags": {},
+                    "type": "BASE",
+                    "value": 20
+                  }
+                ],
+                "lists": {
+                  "buff": {},
+                  "classRequirement": {},
+                  "enchant": {},
+                  "explicit": [
+                    {
+                      "catalyst_factor": 1,
+                      "field_types": {
+                        "extra": "nil"
+                      },
+                      "line": "+1 to Level of all Minion Skills",
+                      "modTags": {},
+                      "range": 0.5,
+                      "records": [
+                        {
+                          "flags": 0,
+                          "keyword_flags": 0,
+                          "name": "GemProperty",
+                          "source": "Item:21:New Item, Iron Crown",
+                          "tags": {},
+                          "type": "LIST",
+                          "value": {
+                            "key": "level",
+                            "keyOfScaledMod": "value",
+                            "keyword": "minion",
+                            "value": 1
+                          }
+                        }
+                      ],
+                      "valueScalar": 1
+                    }
+                  ],
+                  "implicit": {},
+                  "rune": {}
+                }
+              },
+              "fresh_before_build": {
+                "base": "Iron Crown",
+                "baseName": "Iron Crown",
+                "type": "Helmet",
+                "sockets": [
+                  {
+                    "group": 1
+                  },
+                  {
+                    "group": 2
+                  },
+                  {
+                    "group": 3
+                  }
+                ],
+                "base_mods": [
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "GemProperty",
+                    "source": "Item:21:New Item, Iron Crown",
+                    "tags": {},
+                    "type": "LIST",
+                    "value": {
+                      "key": "level",
+                      "keyOfScaledMod": "value",
+                      "keyword": "minion",
+                      "value": 1
+                    }
+                  }
+                ],
+                "active": {},
+                "lists": {
+                  "buff": {},
+                  "classRequirement": {},
+                  "enchant": {},
+                  "explicit": [
+                    {
+                      "catalyst_factor": 1,
+                      "field_types": {
+                        "extra": "nil"
+                      },
+                      "line": "+1 to Level of all Minion Skills",
+                      "modTags": {},
+                      "range": 0.5,
+                      "records": [
+                        {
+                          "flags": 0,
+                          "keyword_flags": 0,
+                          "name": "GemProperty",
+                          "source": "Item:21:New Item, Iron Crown",
+                          "tags": {},
+                          "type": "LIST",
+                          "value": {
+                            "key": "level",
+                            "keyOfScaledMod": "value",
+                            "keyword": "minion",
+                            "value": 1
+                          }
+                        }
+                      ],
+                      "valueScalar": 1
+                    }
+                  ],
+                  "implicit": {},
+                  "rune": {}
+                }
+              },
+              "fresh": {
+                "base": "Iron Crown",
+                "baseName": "Iron Crown",
+                "type": "Helmet",
+                "sockets": [
+                  {
+                    "group": 1
+                  },
+                  {
+                    "group": 2
+                  },
+                  {
+                    "group": 3
+                  }
+                ],
+                "base_mods": [
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "GemProperty",
+                    "source": "Item:21:New Item, Iron Crown",
+                    "tags": {},
+                    "type": "LIST",
+                    "value": {
+                      "key": "level",
+                      "keyOfScaledMod": "value",
+                      "keyword": "minion",
+                      "value": 1
+                    }
+                  }
+                ],
+                "active": [
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "GemProperty",
+                    "source": "Item:21:New Item, Iron Crown",
+                    "source_slot": "Helmet",
+                    "tags": {},
+                    "type": "LIST",
+                    "value": {
+                      "key": "level",
+                      "keyOfScaledMod": "value",
+                      "keyword": "minion",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "Multiplier:QualityOnHelmet",
+                    "source": "Quality",
+                    "tags": {},
+                    "type": "BASE",
+                    "value": 20
+                  }
+                ],
+                "lists": {
+                  "buff": {},
+                  "classRequirement": {},
+                  "enchant": {},
+                  "explicit": [
+                    {
+                      "catalyst_factor": 1,
+                      "field_types": {
+                        "extra": "nil"
+                      },
+                      "line": "+1 to Level of all Minion Skills",
+                      "modTags": {},
+                      "range": 0.5,
+                      "records": [
+                        {
+                          "flags": 0,
+                          "keyword_flags": 0,
+                          "name": "GemProperty",
+                          "source": "Item:21:New Item, Iron Crown",
+                          "tags": {},
+                          "type": "LIST",
+                          "value": {
+                            "key": "level",
+                            "keyOfScaledMod": "value",
+                            "keyword": "minion",
+                            "value": 1
+                          }
+                        }
+                      ],
+                      "valueScalar": 1
+                    }
+                  ],
+                  "implicit": {},
+                  "rune": {}
+                }
+              },
+              "reparsed": {
+                "base": "Iron Crown",
+                "baseName": "Iron Crown",
+                "type": "Helmet",
+                "sockets": [
+                  {
+                    "group": 1
+                  },
+                  {
+                    "group": 2
+                  },
+                  {
+                    "group": 3
+                  }
+                ],
+                "base_mods": [
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "GemProperty",
+                    "source": "Item:21:New Item, Iron Crown",
+                    "tags": {},
+                    "type": "LIST",
+                    "value": {
+                      "key": "level",
+                      "keyOfScaledMod": "value",
+                      "keyword": "minion",
+                      "value": 1
+                    }
+                  }
+                ],
+                "active": [
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "GemProperty",
+                    "source": "Item:21:New Item, Iron Crown",
+                    "source_slot": "Helmet",
+                    "tags": {},
+                    "type": "LIST",
+                    "value": {
+                      "key": "level",
+                      "keyOfScaledMod": "value",
+                      "keyword": "minion",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "Multiplier:QualityOnHelmet",
+                    "source": "Quality",
+                    "tags": {},
+                    "type": "BASE",
+                    "value": 20
+                  }
+                ],
+                "lists": {
+                  "buff": {},
+                  "classRequirement": {},
+                  "enchant": {},
+                  "explicit": [
+                    {
+                      "catalyst_factor": 1,
+                      "field_types": {
+                        "extra": "nil"
+                      },
+                      "line": "+1 to Level of all Minion Skills",
+                      "modTags": {},
+                      "range": 0.5,
+                      "records": [
+                        {
+                          "flags": 0,
+                          "keyword_flags": 0,
+                          "name": "GemProperty",
+                          "source": "Item:21:New Item, Iron Crown",
+                          "tags": {},
+                          "type": "LIST",
+                          "value": {
+                            "key": "level",
+                            "keyOfScaledMod": "value",
+                            "keyword": "minion",
+                            "value": 1
+                          }
+                        }
+                      ],
+                      "valueScalar": 1
+                    }
+                  ],
+                  "implicit": {},
+                  "rune": {}
+                }
+              },
+              "fresh_after_reparse": {
+                "base": "Iron Crown",
+                "baseName": "Iron Crown",
+                "type": "Helmet",
+                "sockets": [
+                  {
+                    "group": 1
+                  },
+                  {
+                    "group": 2
+                  },
+                  {
+                    "group": 3
+                  }
+                ],
+                "base_mods": [
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "GemProperty",
+                    "source": "Item:21:New Item, Iron Crown",
+                    "tags": {},
+                    "type": "LIST",
+                    "value": {
+                      "key": "level",
+                      "keyOfScaledMod": "value",
+                      "keyword": "minion",
+                      "value": 1
+                    }
+                  }
+                ],
+                "active": [
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "GemProperty",
+                    "source": "Item:21:New Item, Iron Crown",
+                    "source_slot": "Helmet",
+                    "tags": {},
+                    "type": "LIST",
+                    "value": {
+                      "key": "level",
+                      "keyOfScaledMod": "value",
+                      "keyword": "minion",
+                      "value": 1
+                    }
+                  },
+                  {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "Multiplier:QualityOnHelmet",
+                    "source": "Quality",
+                    "tags": {},
+                    "type": "BASE",
+                    "value": 20
+                  }
+                ],
+                "lists": {
+                  "buff": {},
+                  "classRequirement": {},
+                  "enchant": {},
+                  "explicit": [
+                    {
+                      "catalyst_factor": 1,
+                      "field_types": {
+                        "extra": "nil"
+                      },
+                      "line": "+1 to Level of all Minion Skills",
+                      "modTags": {},
+                      "range": 0.5,
+                      "records": [
+                        {
+                          "flags": 0,
+                          "keyword_flags": 0,
+                          "name": "GemProperty",
+                          "source": "Item:21:New Item, Iron Crown",
+                          "tags": {},
+                          "type": "LIST",
+                          "value": {
+                            "key": "level",
+                            "keyOfScaledMod": "value",
+                            "keyword": "minion",
+                            "value": 1
+                          }
+                        }
+                      ],
+                      "valueScalar": 1
+                    }
+                  ],
+                  "implicit": {},
+                  "rune": {}
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "runtime_grants",
+      "reports": [
+        {
+          "path": "runs/owned-extra-stat-consumption-source-05/source-jit-off.json",
+          "bytes": 104791002,
+          "sha256": "d0d93a4a98e7b1b97aa78aa5147e2c7a276913b2d7f91ba9b89db1e7130e4ada"
+        },
+        {
+          "path": "runs/owned-extra-stat-consumption-source-05/source-jit-on.json",
+          "bytes": 104791002,
+          "sha256": "d0d93a4a98e7b1b97aa78aa5147e2c7a276913b2d7f91ba9b89db1e7130e4ada"
+        }
+      ],
+      "report_metadata": {
+        "all_suppliers_or_transforms_proved": false,
+        "amulet_supplier_scope": "exact unchanged Item23 original ScaleAddMod/AddMod calls and returns, both source records at factor zero; no general transformation law",
+        "business_wrappers": false,
+        "deterministic_comparison": {
+          "all_other_records_and_numerical_outputs": "exact",
+          "recipient_transfer": "CalcPerform.lua:1161-1166; ModDB.lua:31-37 separate named channels",
+          "same_channel_order": "preserved",
+          "scope": "exact unchanged manual Djinn Bidding II pair at local sequence positions 1 and 2",
+          "source_iteration": "CalcActiveSkill.lua:87 pairs(stats)",
+          "view": "bidding_distinct_channel_projection_v1"
+        },
+        "dormant_presets_covered": false,
+        "effect_ids": [
+          "SummonSandDjinnPlayer",
+          "CommandSandDjinnKnifeThrowPlayer",
+          "SummonWaterDjinnPlayer",
+          "CommandWaterDjinnBubblePlayer",
+          "FireboltPlayer"
+        ],
+        "evidence_view": "bidding_distinct_channel_projection_v1",
+        "field_non_applicability_certificate": false,
+        "files": [
+          {
+            "path": "src/Modules/CalcActiveSkill.lua",
+            "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+          },
+          {
+            "path": "src/Modules/CalcSetup.lua",
+            "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+          },
+          {
+            "path": "src/Modules/CalcPerform.lua",
+            "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+          },
+          {
+            "path": "src/Modules/Common.lua",
+            "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+          },
+          {
+            "path": "src/Classes/ModStore.lua",
+            "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+          },
+          {
+            "path": "src/Classes/ModList.lua",
+            "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+          },
+          {
+            "path": "src/Classes/ModDB.lua",
+            "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+          },
+          {
+            "path": "src/Classes/Item.lua",
+            "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+          },
+          {
+            "path": "src/Classes/PartyTab.lua",
+            "sha256": "6ad023b873077d3c48eef65214a4076762f9dc304967459ef96d8422e0a32189"
+          },
+          {
+            "path": "src/Classes/ConfigTab.lua",
+            "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+          },
+          {
+            "path": "src/Classes/SkillsTab.lua",
+            "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+          },
+          {
+            "path": "src/Classes/PassiveSpec.lua",
+            "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+          },
+          {
+            "path": "src/Classes/PassiveTree.lua",
+            "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+          },
+          {
+            "path": "src/Modules/Data.lua",
+            "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+          },
+          {
+            "path": "src/Data/SkillStatMap.lua",
+            "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+          },
+          {
+            "path": "src/Modules/ModTools.lua",
+            "sha256": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+          },
+          {
+            "path": "src/Modules/ModParser.lua",
+            "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+          },
+          {
+            "path": "src/Data/ModCache.lua",
+            "sha256": "8ac20aeca963e8b3745525da0444828e294632da0b57535144268489faa22b8b"
+          },
+          {
+            "path": "src/Data/Global.lua",
+            "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+          },
+          {
+            "path": "src/Modules/Main.lua",
+            "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+          },
+          {
+            "path": "src/HeadlessWrapper.lua",
+            "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+          },
+          {
+            "path": "src/Modules/Build.lua",
+            "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+          }
+        ],
+        "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+        "native_build_parity": false,
+        "native_inventory_authority": false,
+        "node_supplier_scope": "local and authenticated effective fields plus actual per-node original returns; cross-node invocation order not captured",
+        "numeric_tolerance": 0,
+        "observer_requeries_extra_stats": false,
+        "observer_sha256": "3fd06d0919665f86889d61d1c38673173bc3a960d3957dc2c9fc499efba9cd38",
+        "original_path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+        "original_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+        "schema_version": 4,
+        "source_frame": {
+          "axes": {
+            "config": "1",
+            "items": "2",
+            "passives": "3",
+            "skills": "4"
+          },
+          "config_xml": "<ConfigSet id=\"1\">\n\t\t\t<Input string=\"+5% to Lightning Resistance\" name=\"questAct 4Halls Of The DeadTawhoa&apos;s Test\"/>\n\t\t\t<Input string=\"+5% to Cold Resistance\" name=\"questAct 4Halls Of The DeadTasalio&apos;s Test\"/>\n\t\t\t<Input string=\"+5% to Fire Resistance\" name=\"questAct 4Halls Of The DeadNgamahu&apos;s Test\"/>\n\t\t\t<Input string=\"30% increased Life Recovery from Flasks\" name=\"questAct 4Abandoned PrisonGoddess of Justice\"/>\n\t\t\t<Input string=\"15% increased Global Armour, Evasion and Energy Shield\" name=\"questInterlude 2QimahSeven Pillars\"/>\n\t\t\t<Input string=\"30% increased Charm Charges Gained\n\t+1 Charm Slot\" name=\"questAct 2Valley of the TitansMedallion\"/>\n\t\t\t<Input string=\"30% increased Elemental Ailment Threshold\" name=\"questAct 3Venom CryptsVenom Draught\"/>\n\t\t\t<Input string=\"30% increased Global Armour, Evasion and Energy Shield\" name=\"questAct 4Eye of HinekoraTribal Medicine\"/>\n\t\t\t<Placeholder number=\"3\" name=\"enemyColdPen\"/>\n\t\t\t<Placeholder number=\"50\" name=\"enemyFireResist\"/>\n\t\t\t<Placeholder number=\"8063\" name=\"enemyArmour\"/>\n\t\t\t<Placeholder number=\"50\" name=\"enemyColdResist\"/>\n\t\t\t<Placeholder number=\"50\" name=\"enemyLightningResist\"/>\n\t\t\t<Placeholder number=\"10\" name=\"conditionCorruptingCryStages\"/>\n\t\t\t<Placeholder number=\"82\" name=\"enemyLevel\"/>\n\t\t\t<Placeholder number=\"1\" name=\"multiplierWarcryUsedRecently\"/>\n\t\t\t<Placeholder number=\"1\" name=\"multiplierStunnedRecently\"/>\n\t\t\t<Placeholder number=\"100\" name=\"multiplierCurrentEnergyShield\"/>\n\t\t\t<Placeholder number=\"1\" name=\"sigilOfPowerStages\"/>\n\t\t\t<Placeholder number=\"1\" name=\"ShockStacks\"/>\n\t\t\t<Placeholder number=\"20\" name=\"enemyDistance\"/>\n\t\t\t<Placeholder number=\"1\" name=\"multiplierDifferentAmmoFired\"/>\n\t\t\t<Placeholder number=\"1175\" name=\"enemyEvasion\"/>\n\t\t\t<Placeholder number=\"3\" name=\"enemyFirePen\"/>\n\t\t\t<Placeholder number=\"20\" name=\"enemyCriticalWeaknessStacks\"/>\n\t\t\t<Placeholder number=\"1\" name=\"multiplierDifferentGrenadeFired\"/>\n\t\t\t<Placeholder number=\"56\" name=\"configBossFaceBroken\"/>\n\t\t\t<Placeholder number=\"15\" name=\"multiplierWitheredStackCountSelf\"/>\n\t\t\t<Placeholder number=\"700\" name=\"enemySpeed\"/>\n\t\t\t<Placeholder number=\"5\" name=\"enemyCritChance\"/>\n\t\t\t<Placeholder number=\"30\" name=\"enemyCritDamage\"/>\n\t\t\t<Placeholder number=\"70\" name=\"enemyDamageRollRange\"/>\n\t\t\t<Placeholder number=\"10\" name=\"demonFormStacks\"/>\n\t\t\t<Placeholder number=\"1\" name=\"ScorchStacks\"/>\n\t\t\t<Placeholder number=\"965\" name=\"enemyPhysicalDamage\"/>\n\t\t\t<Placeholder number=\"965\" name=\"enemyLightningDamage\"/>\n\t\t\t<Placeholder number=\"965\" name=\"enemyColdDamage\"/>\n\t\t\t<Placeholder number=\"965\" name=\"enemyFireDamage\"/>\n\t\t\t<Placeholder number=\"386\" name=\"enemyChaosDamage\"/>\n\t\t\t<Placeholder number=\"1\" name=\"ChillStacks\"/>\n\t\t\t<Placeholder number=\"0\" name=\"enemyChaosResist\"/>\n\t\t\t<Placeholder number=\"3\" name=\"enemyLightningPen\"/>\n\t\t</ConfigSet>",
+          "equipment_uses": [
+            {
+              "itemId": "23",
+              "itemPbURL": "",
+              "name": "Amulet"
+            },
+            {
+              "itemId": "20",
+              "itemPbURL": "",
+              "name": "Gloves"
+            },
+            {
+              "itemId": "22",
+              "itemPbURL": "",
+              "name": "Boots"
+            },
+            {
+              "itemId": "26",
+              "itemPbURL": "",
+              "name": "Ring 1"
+            },
+            {
+              "itemId": "27",
+              "itemPbURL": "",
+              "name": "Belt"
+            },
+            {
+              "itemId": "26",
+              "itemPbURL": "",
+              "name": "Ring 2"
+            },
+            {
+              "itemId": "19",
+              "itemPbURL": "",
+              "name": "Body Armour"
+            },
+            {
+              "itemId": "21",
+              "itemPbURL": "",
+              "name": "Helmet"
+            },
+            {
+              "itemId": "28",
+              "itemPbURL": "",
+              "name": "Weapon 1"
+            }
+          ],
+          "item_set_xml": "<ItemSet title=\"Act 1 &amp; 2 (Pre-Ascend)\" useSecondWeaponSet=\"nil\" id=\"2\">\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Weapon 2\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Ring 3\"/>\n\t\t\t<Slot itemId=\"23\" itemPbURL=\"\" name=\"Amulet\"/>\n\t\t\t<Slot itemId=\"20\" itemPbURL=\"\" name=\"Gloves\"/>\n\t\t\t<Slot itemId=\"22\" itemPbURL=\"\" name=\"Boots\"/>\n\t\t\t<Slot itemId=\"26\" itemPbURL=\"\" name=\"Ring 1\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Weapon 1 Swap\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Weapon 2 Swap\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Leg 2\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Charm 1\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Leg 1\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Charm 3\"/>\n\t\t\t<SocketIdURL itemPbURL=\"\" nodeId=\"7960\" name=\"Jewel 7960\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Arm 2\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Flask 1\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Flask 2\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Arm 1\"/>\n\t\t\t<Slot itemId=\"0\" itemPbURL=\"\" name=\"Charm 2\"/>\n\t\t\t<Slot itemId=\"27\" itemPbURL=\"\" name=\"Belt\"/>\n\t\t\t<Slot itemId=\"26\" itemPbURL=\"\" name=\"Ring 2\"/>\n\t\t\t<Slot itemId=\"19\" itemPbURL=\"\" name=\"Body Armour\"/>\n\t\t\t<Slot itemId=\"21\" itemPbURL=\"\" name=\"Helmet\"/>\n\t\t\t<Slot itemId=\"28\" itemPbURL=\"\" name=\"Weapon 1\"/>\n\t\t</ItemSet>",
+          "party_xml": "<Party destination=\"All\" ShowAdvanceTools=\"false\" append=\"false\"/>",
+          "skill_set_xml": "<SkillSet title=\"Act 3\" id=\"4\">\n\t\t\t<Skill mainActiveSkillCalcs=\"1\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"nil\" enabled=\"true\">\n\t\t\t\t<Gem skillMinionSkillCalcs=\"1\" corruptLevel=\"0\" corrupted=\"false\" skillMinionSkill=\"1\" level=\"20\" skillMinionCalcs=\"RaisedSkeletonArsonist\" count=\"1\" gemId=\"Metadata/Items/Gems/SkillGemSkeletalArsonist\" enabled=\"true\" skillMinion=\"RaisedSkeletonArsonist\" variantId=\"SkeletalArsonist\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SummonSkeletalArsonistsPlayer\" nameSpec=\"Skeletal Arsonist\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gem/SupportGemLastGasp\" enabled=\"true\" variantId=\"LastGaspSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportLastGaspPlayer\" nameSpec=\"Last Gasp\"/>\n\t\t\t</Skill>\n\t\t\t<Skill source=\"Tree:13289\" mainActiveSkillCalcs=\"nil\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"1\" enabled=\"true\">\n\t\t\t\t<Gem skillMinionSkillCalcs=\"1\" corruptLevel=\"nil\" corrupted=\"nil\" skillMinionSkill=\"2\" level=\"1\" count=\"nil\" gemId=\"Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn\" enabled=\"true\" skillMinion=\"SandDjinn\" variantId=\"AscendancySummonSandDjinn\" quality=\"0\" enableGlobal2=\"nil\" enableGlobal1=\"true\" skillId=\"SummonSandDjinnPlayer\" nameSpec=\"Kelari, the Tainted Sands\"/>\n\t\t\t</Skill>\n\t\t\t<Skill mainActiveSkillCalcs=\"nil\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"1\" enabled=\"true\">\n\t\t\t\t<Gem skillMinionSkillCalcs=\"1\" corruptLevel=\"0\" corrupted=\"false\" skillMinionSkill=\"1\" level=\"20\" count=\"1\" gemId=\"Metadata/Items/Gems/SkillGemSkeletalSniper\" enabled=\"true\" skillMinion=\"RaisedSkeletonSniper\" variantId=\"SkeletalSniper\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SummonSkeletalSnipersPlayer\" nameSpec=\"Skeletal Sniper\"/>\n\t\t\t</Skill>\n\t\t\t<Skill mainActiveSkillCalcs=\"nil\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"nil\" enabled=\"true\">\n\t\t\t\t<Gem skillMinionSkillCalcs=\"1\" corruptLevel=\"0\" corrupted=\"false\" skillMinionSkill=\"1\" level=\"20\" count=\"1\" gemId=\"Metadata/Items/Gems/SkillGemSkeletalFrostMage\" enabled=\"true\" skillMinion=\"RaisedSkeletonFrostMage\" variantId=\"SkeletalFrostMage\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SummonSkeletalFrostMagesPlayer\" nameSpec=\"Skeletal Frost Mage\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gem/SupportGemLastGasp\" enabled=\"true\" variantId=\"LastGaspSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportLastGaspPlayer\" nameSpec=\"Last Gasp\"/>\n\t\t\t</Skill>\n\t\t\t<Skill mainActiveSkillCalcs=\"nil\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"nil\" enabled=\"true\">\n\t\t\t\t<Gem skillMinionSkillCalcs=\"1\" corruptLevel=\"0\" corrupted=\"false\" skillMinionSkill=\"1\" level=\"20\" count=\"1\" gemId=\"Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn\" enabled=\"true\" skillMinion=\"SandDjinn\" variantId=\"AscendancySummonSandDjinn\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SummonSandDjinnPlayer\" nameSpec=\"Kelari, the Tainted Sands\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gem/SupportGemBiddingTwo\" enabled=\"true\" variantId=\"BiddingSupportTwo\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportBiddingPlayerTwo\" nameSpec=\"Bidding II\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gems/SupportGemMagnifiedEffect\" enabled=\"true\" variantId=\"MagnifiedAreaSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportMagnifiedAreaPlayer\" nameSpec=\"Magnified Area I\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gem/SupportGemMuster\" enabled=\"true\" variantId=\"MusterSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportMusterPlayer\" nameSpec=\"Muster\"/>\n\t\t\t</Skill>\n\t\t\t<Skill mainActiveSkillCalcs=\"nil\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"nil\" enabled=\"true\">\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"20\" count=\"1\" gemId=\"Metadata/Items/Gems/SkillGemPainOffering\" enabled=\"true\" variantId=\"PainOffering\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"PainOfferingPlayer\" nameSpec=\"Pain Offering\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gems/SupportGemPersistence\" enabled=\"true\" variantId=\"ProlongedDurationSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"ProlongedDurationSupportPlayer\" nameSpec=\"Prolonged Duration I\"/>\n\t\t\t</Skill>\n\t\t\t<Skill mainActiveSkillCalcs=\"nil\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"nil\" enabled=\"true\">\n\t\t\t\t<Gem skillMinionSkillCalcs=\"1\" corruptLevel=\"0\" corrupted=\"false\" skillMinionSkill=\"1\" level=\"20\" count=\"1\" gemId=\"Metadata/Items/Gems/SkillGemSkeletalReaver\" enabled=\"true\" skillMinion=\"RaisedSkeletonReaver\" variantId=\"SkeletalReaver\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SummonSkeletalReaversPlayer\" nameSpec=\"Skeletal Reaver\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gem/SupportGemLastGasp\" enabled=\"true\" variantId=\"LastGaspSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportLastGaspPlayer\" nameSpec=\"Last Gasp\"/>\n\t\t\t</Skill>\n\t\t\t<Skill source=\"Tree:32705\" mainActiveSkillCalcs=\"nil\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"nil\" enabled=\"true\">\n\t\t\t\t<Gem skillMinionSkillCalcs=\"1\" corruptLevel=\"nil\" corrupted=\"nil\" skillMinionSkill=\"1\" level=\"1\" count=\"nil\" gemId=\"Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn\" enabled=\"true\" skillMinion=\"WaterDjinn\" variantId=\"AscendancySummonWaterDjinn\" quality=\"0\" enableGlobal2=\"nil\" enableGlobal1=\"true\" skillId=\"SummonWaterDjinnPlayer\" nameSpec=\"Navira, the Last Mirage\"/>\n\t\t\t</Skill>\n\t\t\t<Skill mainActiveSkillCalcs=\"nil\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"nil\" enabled=\"true\">\n\t\t\t\t<Gem skillMinionSkillCalcs=\"1\" corruptLevel=\"0\" corrupted=\"false\" skillMinionSkill=\"1\" level=\"20\" count=\"1\" gemId=\"Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn\" enabled=\"true\" skillMinion=\"WaterDjinn\" variantId=\"AscendancySummonWaterDjinn\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SummonWaterDjinnPlayer\" nameSpec=\"Navira, the Last Mirage\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gem/SupportGemBiddingTwo\" enabled=\"true\" variantId=\"BiddingSupportTwo\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportBiddingPlayerTwo\" nameSpec=\"Bidding II\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gem/SupportGemMuster\" enabled=\"true\" variantId=\"MusterSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportMusterPlayer\" nameSpec=\"Muster\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gems/SupportGemFrostNexus\" enabled=\"true\" variantId=\"ChillingIceSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportChillingIcePlayer\" nameSpec=\"Frost Nexus\"/>\n\t\t\t</Skill>\n\t\t\t<Skill mainActiveSkillCalcs=\"nil\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"nil\" enabled=\"true\">\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"20\" count=\"1\" gemId=\"Metadata/Items/Gems/SkillGemFrostBomb\" enabled=\"true\" variantId=\"FrostBomb\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"FrostBombPlayer\" nameSpec=\"Frost Bomb\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gems/SupportGemSpellEcho\" enabled=\"true\" variantId=\"SpellEchoSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportSpellEchoPlayer\" nameSpec=\"Spell Echo\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gems/SupportGemOverabundance\" enabled=\"true\" variantId=\"IncreaseLimitSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportIncreaseLimitPlayer\" nameSpec=\"Overabundance I\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gem/SupportGemExpedite\" enabled=\"true\" variantId=\"ShortFuseSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportShortFusePlayer\" nameSpec=\"Short Fuse I\"/>\n\t\t\t</Skill>\n\t\t\t<Skill mainActiveSkillCalcs=\"nil\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"nil\" enabled=\"true\">\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"17\" count=\"1\" gemId=\"Metadata/Items/Gems/SkillGemIceNova\" enabled=\"true\" variantId=\"IceNova\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"IceNovaPlayer\" nameSpec=\"Ice Nova\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gem/SupportGemSuffuse\" enabled=\"true\" variantId=\"EncroachingGroundSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportEncroachingGroundPlayer\" nameSpec=\"Encroaching Ground\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gems/SupportGemMagnifiedEffectTwo\" enabled=\"true\" variantId=\"MagnifiedAreaSupportTwo\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportMagnifiedAreaPlayerTwo\" nameSpec=\"Magnified Area II\"/>\n\t\t\t\t<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gems/SupportGemArcaneTempo\" enabled=\"true\" variantId=\"RapidCastingSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportRapidCastingPlayer\" nameSpec=\"Rapid Casting I\"/>\n\t\t\t</Skill>\n\t\t\t<Skill source=\"Item:28:New Item, Ashen Staff\" mainActiveSkillCalcs=\"nil\" includeInFullDPS=\"nil\" label=\"\" mainActiveSkill=\"nil\" enabled=\"true\" slot=\"Weapon 1\">\n\t\t\t\t<Gem corruptLevel=\"nil\" corrupted=\"nil\" level=\"11\" count=\"nil\" gemId=\"Metadata/Items/Gems/SkillGemFirebolt\" enabled=\"true\" variantId=\"Firebolt\" quality=\"0\" enableGlobal2=\"nil\" enableGlobal1=\"true\" skillId=\"FireboltPlayer\" nameSpec=\"Firebolt\"/>\n\t\t\t</Skill>\n\t\t</SkillSet>",
+          "spec_xml": "<Spec ascendClassId=\"3\" classId=\"7\" secondaryAscendClassId=\"nil\" ascendancyInternalId=\"Sorceress3\" masteryEffects=\"\" treeVersion=\"0_5\" nodes=\"6077,19006,47168,54447,32705,35645,53324,30979,47555,39461,14686,29148,14598,25927,23265,54453,4739,95,15782,46628,8737,14945,13289,54521,53795,35560,19318,41511,45333,7960,31238,1218,46358,229,19240,46365,11679,48552,10561,45885,4345,1433,18407,53697,50837,50104,22419,40894,34840,43979,32847,62210,26926,8305,44733,3041,61042\" title=\"Act 3\" classInternalId=\"7\">\n\t\t\t<URL>\n\t\t\t\thttps://www.pathofexile.com/passive-skill-tree/AAAABgcDNxe9Sj64QH_Biz3QTHkDucOaJTlecdw5BmVHWuHUtRKDAF89prYkIiE6YTPp1PnSI4roS3aiJ7EVHxh6BgTCtRYA5UsotR0tn72oKUGzPRD5BZlH59HBxpXDuFeTn76IGKvLgE_zAmkurr0L4e5yAAA=\n\t\t\t</URL>\n\t\t\t<Sockets/>\n\t\t\t<Overrides>\n\t\t\t\t<AttributeOverride strNodes=\"15782,46628,11679,61042\" intNodes=\"50104,47168,19240,3041,30979,47555,45885,48552,1433,18407,53697,44733,29148,34840,31238,46358,54521,22419\" dexNodes=\"\"/>\n\t\t\t</Overrides>\n\t\t</Spec>"
+        },
+        "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+      },
+      "observations": [
+        {
+          "case_index": 0,
+          "name": "original-05",
+          "stage": "fresh",
+          "pointer": "/cases/0/states/fresh/consumer",
+          "value": {
+            "original_functions_preserved": true,
+            "hook_removed": true,
+            "native_field_disposition": false,
+            "whole_supplier_domain_complete": false,
+            "environments": [
+              {
+                "environment_index": 0,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 1,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 2,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 3,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 4,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 5,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 6,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 7,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 8,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 9,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 10,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 11,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 12,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 13,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 14,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 15,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 16,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 17,
+                "mode": "CALCS",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 18,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 19,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 20,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "case_index": 0,
+          "name": "original-05",
+          "stage": "rebuilt_once",
+          "pointer": "/cases/0/states/rebuilt_once/consumer",
+          "value": {
+            "original_functions_preserved": true,
+            "hook_removed": true,
+            "native_field_disposition": false,
+            "whole_supplier_domain_complete": false,
+            "environments": [
+              {
+                "environment_index": 0,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 1,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 2,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 3,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 4,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 5,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 6,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 7,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 8,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 9,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 10,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 11,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 12,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 13,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 14,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 15,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 16,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 17,
+                "mode": "CALCS",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 18,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 19,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 20,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "case_index": 0,
+          "name": "original-05",
+          "stage": "rebuilt_twice",
+          "pointer": "/cases/0/states/rebuilt_twice/consumer",
+          "value": {
+            "original_functions_preserved": true,
+            "hook_removed": true,
+            "native_field_disposition": false,
+            "whole_supplier_domain_complete": false,
+            "environments": [
+              {
+                "environment_index": 0,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 1,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 2,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 3,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 4,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 5,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 6,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 7,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 8,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 9,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 10,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 11,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 12,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 13,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 14,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 15,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 16,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 17,
+                "mode": "CALCS",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 18,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 19,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 20,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "case_index": 1,
+          "name": "repeat-original-05",
+          "stage": "fresh",
+          "pointer": "/cases/1/states/fresh/consumer",
+          "value": {
+            "original_functions_preserved": true,
+            "hook_removed": true,
+            "native_field_disposition": false,
+            "whole_supplier_domain_complete": false,
+            "environments": [
+              {
+                "environment_index": 0,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 1,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 2,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 3,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 4,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 5,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 6,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 7,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 8,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 9,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 10,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 11,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 12,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 13,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 14,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 15,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 16,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 17,
+                "mode": "CALCS",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 18,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 19,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 20,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "case_index": 1,
+          "name": "repeat-original-05",
+          "stage": "rebuilt_once",
+          "pointer": "/cases/1/states/rebuilt_once/consumer",
+          "value": {
+            "original_functions_preserved": true,
+            "hook_removed": true,
+            "native_field_disposition": false,
+            "whole_supplier_domain_complete": false,
+            "environments": [
+              {
+                "environment_index": 0,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 1,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 2,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 3,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 4,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 5,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 6,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 7,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 8,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 9,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 10,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 11,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 12,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 13,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 14,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 15,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 16,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 17,
+                "mode": "CALCS",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 18,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 19,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 20,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "case_index": 1,
+          "name": "repeat-original-05",
+          "stage": "rebuilt_twice",
+          "pointer": "/cases/1/states/rebuilt_twice/consumer",
+          "value": {
+            "original_functions_preserved": true,
+            "hook_removed": true,
+            "native_field_disposition": false,
+            "whole_supplier_domain_complete": false,
+            "environments": [
+              {
+                "environment_index": 0,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 1,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 2,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 3,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 4,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 5,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 6,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 7,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 8,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 9,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 10,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 11,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 12,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 13,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 14,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 15,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 16,
+                "mode": "MAIN",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 17,
+                "mode": "CALCS",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 18,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 19,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              },
+              {
+                "environment_index": 20,
+                "mode": "CALCULATOR",
+                "axes": {
+                  "config": 1,
+                  "items": 2,
+                  "passives": 3,
+                  "skills": 4
+                },
+                "item": {
+                  "id": 21,
+                  "slot": "Helmet",
+                  "source": "Item:21:New Item, Iron Crown",
+                  "type": "Helmet",
+                  "saved_object_exact": true,
+                  "selected_item_id": 21,
+                  "grants": {
+                    "fields": {},
+                    "has_metatable": false,
+                    "kind": "raw_table"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "authority": {
+    "source_reports_close_native_inventories": false,
+    "selected_modifier_absence_proves_template_domain": false,
+    "socket_inventory_complete": false,
+    "numerical_owner_complete": false
+  }
+}

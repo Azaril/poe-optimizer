@@ -1,0 +1,58 @@
+{
+  "before": "9bbb63fab97fca1b60a67ccb048103e51677a9b0668a0e9d130355b0f930cd24",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-sand-preparation-v1",
+    "schema_version": 6,
+    "content_sha256": "7665e6314a2390fbb8e2f62d5cf8df76fc09b34c9d413069565a5ecda6c26947",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea",
+  "rules": "90cad421eecc8f5e7c6125170df4765c5f1694b3814cf1c5cb636a9dd43d9ea9",
+  "mapping": "9eb1f7362c20fe4fb20f05d316cdc83fc45ae514c49d346c390346a3d17e3034",
+  "roles": "2b506025035351ea2a733787454a2e16affb2fe64ad3954c11d9b529552338c7",
+  "normalization": "953f5acf6f16ff5a04c8bb0bdb5d980e74a7e1ba09c1bc494e2181c1548b36a8",
+  "schema_version": 1,
+  "release": "pob-3887ae68-crown-declarations-v1",
+  "template": {
+    "kind": "item_template",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000001f1c"
+  },
+  "base_name": "Iron Crown",
+  "closed_empty_intrinsic_declarations": [
+    "choices",
+    "grants",
+    "actors",
+    "skill_grants",
+    "outputs"
+  ],
+  "unchanged_declarations": [
+    "parameters",
+    "sockets"
+  ],
+  "source_binding": {
+    "original": 5,
+    "item_id": 21,
+    "source_ordinal": 576,
+    "equipment_slot": "Helmet"
+  },
+  "scope": {
+    "whole_build_parity": false,
+    "template_rules_closed": false,
+    "socket_inventory_closed": false,
+    "modifier_inventory_closed": false,
+    "quality_inventory_closed": false,
+    "incoming_contributor_inventory_closed": false,
+    "modifier_supplied_grants_closed": false,
+    "item_requirements_implemented": false,
+    "new_numeric_behavior": false,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "query_changes": 0,
+    "routing_changes": 0
+  }
+}

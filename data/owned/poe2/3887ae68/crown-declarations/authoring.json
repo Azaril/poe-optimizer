@@ -1,0 +1,45 @@
+{
+  "before": "9bbb63fab97fca1b60a67ccb048103e51677a9b0668a0e9d130355b0f930cd24",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-sand-preparation-v1",
+    "schema_version": 6,
+    "content_sha256": "7665e6314a2390fbb8e2f62d5cf8df76fc09b34c9d413069565a5ecda6c26947",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea",
+  "rules": "90cad421eecc8f5e7c6125170df4765c5f1694b3814cf1c5cb636a9dd43d9ea9",
+  "mapping": "9eb1f7362c20fe4fb20f05d316cdc83fc45ae514c49d346c390346a3d17e3034",
+  "roles": "2b506025035351ea2a733787454a2e16affb2fe64ad3954c11d9b529552338c7",
+  "normalization": "953f5acf6f16ff5a04c8bb0bdb5d980e74a7e1ba09c1bc494e2181c1548b36a8",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "allocated_definitions": 0,
+  "replaced_definitions": 1,
+  "closed_declaration_inventories": 5,
+  "closed_existing_rule_owners": 0,
+  "registry_last_issued_before": 13138,
+  "registry_last_issued_after": 13138,
+  "scope": {
+    "whole_build_parity": false,
+    "template_rules_closed": false,
+    "socket_inventory_closed": false,
+    "modifier_inventory_closed": false,
+    "quality_inventory_closed": false,
+    "incoming_contributor_inventory_closed": false,
+    "modifier_supplied_grants_closed": false,
+    "item_requirements_implemented": false,
+    "new_numeric_behavior": false,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "query_changes": 0,
+    "routing_changes": 0
+  },
+  "artifact_sha256": {
+    "bindings": "93f5b8dab622b6bcac0301985ccac01fac4dc120043222283da28ecbfdfd2bcc",
+    "dependencies": "7fccbd41eca1261bcf09e84eb07a6c9c133a56f23a5d02e62d8f35eecec53061",
+    "migration": "4e14bb5200d266d7ff4ae34bc9cb2ef312b4f6558b76ea33c10cfa716dd333df",
+    "source-vectors": "c841c43714f635e1a47149c35fdfad9bace32c75a037ec28bb49d5404175cd90"
+  }
+}

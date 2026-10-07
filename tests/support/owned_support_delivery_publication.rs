@@ -89,6 +89,36 @@ pub fn run_with_payloads(
     );
 }
 
+/// Successor packets can commit an updated diagnostic census without changing
+/// the exact historical expectations of earlier publication fixtures.
+#[allow(dead_code, clippy::too_many_arguments)]
+pub fn run_with_expected_selected_counts(
+    prior_path: PathBuf,
+    out: PathBuf,
+    authoring: &Path,
+    effects: &[&str],
+    payload_files: &[&str],
+    stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
+    extra: Value,
+    selected_counts: [usize; 5],
+) {
+    run_with_item_parameter_completions_and_counts(
+        prior_path,
+        out,
+        authoring,
+        effects,
+        payload_files,
+        stage,
+        PublicationScope {
+            closed_existing_rule_owners: 0,
+            passive_refinement: false,
+            extra,
+        },
+        &[],
+        selected_counts,
+    );
+}
+
 /// Describes reviewed owner-inventory refinements, independently of new
 /// Complete producer owners and the still-open whole-build contributor census.
 pub struct PublicationScope {
@@ -129,6 +159,31 @@ pub fn run_with_item_parameter_completions(
     stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
     scope: PublicationScope,
     completions: &[preservation::ItemParameterCompletion],
+) {
+    run_with_item_parameter_completions_and_counts(
+        prior_path,
+        out,
+        authoring,
+        effects,
+        payload_files,
+        stage,
+        scope,
+        completions,
+        [106, 117, 109, 122, 5],
+    );
+}
+
+#[allow(clippy::too_many_arguments)] // One shared gate, with explicit diagnostic expectations.
+fn run_with_item_parameter_completions_and_counts(
+    prior_path: PathBuf,
+    out: PathBuf,
+    authoring: &Path,
+    effects: &[&str],
+    payload_files: &[&str],
+    stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
+    scope: PublicationScope,
+    completions: &[preservation::ItemParameterCompletion],
+    selected_counts: [usize; 5],
 ) {
     assert!(!out.exists(), "evidence is immutable");
     let prior_files = release::inventory(&prior_path);
@@ -222,8 +277,8 @@ pub fn run_with_item_parameter_completions(
         package: &package,
         out: &out,
         families: &[],
-        selected_before: [106, 117, 109, 122, 5],
-        selected_after: [106, 117, 109, 122, 5],
+        selected_before: selected_counts,
+        selected_after: selected_counts,
         // Rule-only coverage corrections preserve the schema identity. Each
         // packet's stage checks its exact transition; normalize only identities
         // that actually changed, rather than demanding artificial schema churn.

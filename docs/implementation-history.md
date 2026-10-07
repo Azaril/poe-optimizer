@@ -1,10 +1,127 @@
-> Historical snapshots through typed Boolean contribution publication on 2026-10-07.
+> Historical snapshots through shared Sand preparation and real item integration on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: Sand preparation and real item integration
+
+The [Sand packet](../data/owned/poe2/3887ae68/sand-preparation/README.md) now
+authors four native programs on the existing Skill owner. Manual and exact
+tree-generated occurrences use the same typed raw-input, ordinary-property and
+once-per-source assembly path. Prepared level/quality are common Skill stats;
+the exact Command receives projected inputs, and the actual Actor slot receives
+an injected table lookup with the witnessed final population-level bound.
+Five definitions/slots were allocated (`334e`–`3352`). Two descendant grants now
+permit their proven Allocation root as well as SkillUse, using the existing
+release migration path. No source-language evaluator or new public model was added.
+
+The real integration exposed and fixed an Engine bug: source-property cycle
+validation expected an authored program stage on generated preset inputs, which
+are Structural request producers. Validation now follows only those explicit
+input nodes to their actual ordinary ancestors. Original gates, cycle edges,
+readiness checks, stage ordering and work limits remain enforced. Missing stages
+on ordinary programs still fail; no default stage or raw-as-final fallback was
+introduced. Previously successful plan identities are unchanged.
+
+Nine native component tests pass, including raw validation before bonuses,
+late final-level clamping, finite signed/fractional quality, independent missing
+dimensions, exact descendant ownership, injected actor-level table changes,
+once-per-source synthetic external properties and fresh/reused/Rayon agreement.
+Those determinism checks first require successful known results; matching
+Unavailable outcomes cannot pass. Two source tests authenticate 140 compact
+observations from 18 retained controls and compare real preparation arithmetic,
+including exact Command input projections in both MAIN and CALCS.
+The actor attacks and real support inventory are excluded from this finite
+fixture; its explicit empty-support facts are not production coverage.
+
+The full source report and actual SupportCount rows are authenticated before
+publication. All-five CLI publication passed in **32.12s**, including an identical
+byte rebuild and independent fresh imports. Drafts, local IDs, saved selections,
+dispositions, selected issues and all **110 queries** remain intact. The packet
+adds no evaluation bundle, promotes no Partial inventory and retires no input
+issue. Complete native builds remain **0/5**; Original05 still has five selected
+input obligations. Component arithmetic is not proof of full Command/actor
+mechanics, population overrides or real supported-property producer coverage.
+
+Validation also passed 185 Engine library tests, 11 generated-source-property
+tests, 10 generated-input tests and 15 source-property tests (**221 Engine tests**).
+The new preset regression combines eight exact input bindings with real source
+assembly. Evidence: `runs/owned-sand-preparation-build-07.jsonl`,
+`runs/owned_sand_preparation-tests-08.log`,
+`runs/owned_sand_preparation_source-tests-09.log`,
+`runs/owned-sand-engine-*-01.log`, and
+`runs/owned-sand-preparation-publication-03/validation.json`.
+Strict workspace/all-feature/all-target Clippy passed in
+`runs/owned-sand-preparation-clippy-01.log`; final source-test lint and formatting
+passed in `runs/owned-sand-preparation-clippy-02.log` and
+`runs/owned-sand-preparation-format-02.log`.
+
+The ignored Rust publication test is
+`owned_sand_preparation_publication::publish_sand_preparation_preserving_all_five_originals`.
+Set `POE_OPTIMIZER_TEST_SAND_PREPARATION_PRIOR` to the absolute path of
+`runs/owned-boolean-publication-01/package` and
+`POE_OPTIMIZER_TEST_SAND_PREPARATION_OUTPUT` to a fresh directory. It also requires
+the retained source witnesses. Ordinary CI runs the native, compact-source and
+authored-data checks without a PoB VM or local publication directory.
+
+The preceding [Boolean checkpoint](implementation-history.md#archived-2026-10-07-checkpoint-typed-boolean-contributions)
+remains active in this package: typed Flag contributions use unordered Any,
+preserve duplicate origins and never turn unknown coverage into false. Its two
+real passive producers and five reducers remain Partial. Rule schema3,
+operations22, definition schema6 and sidecar23 are unchanged; there is one current
+format reader, not a compatibility evaluator.
+
+**Resume:** Original05 remains first. Incoming critical-hit arithmetic has source
+proof but awaits the Actor-to-Enemy read decision below; support-origin discovery
+awaits its separate composition decision. Do not bypass either authority guard.
+Final Strength also remains blocked by signed/scaled BASE ordering, socket origins
+and post-passive item copies in the [BASE audit](owned-base-contribution-audit.md).
+Continue a concrete selected consumer or input responsibility using existing
+contracts; do not spend the next phase widening Sand combat solely because its
+preparation now works. D4 starts as soon as one unchanged build passes the full
+native/reference gate.
+
+**Subsequent item integration: validated.** The Sand component now consumes the
+existing Crown/Solar chain: canonical `30ca` arithmetic, direct applicability,
+the Amulet snapshot and its copy. It reuses the Offering/ordinary-item-routing
+fixture and removes the synthetic ordinary-level producer. Retained canonical
+rolls come from a fresh Original05 import; only the selected numerical item
+projections are included, not Solar's unrelated `314d` or full item mechanics.
+Exact equipment/modifier origins produce +1 Crown, +1 Solar and +0 copy, then
+manual level22 and tree level3. Amulet removal yields21/2, removing both yields20/1,
+and changing its roll yields26/7. Fresh/reused A-B-A and four-worker Rayon results
+agree after successful known-value assertions. Missing applicability and the
+actual Partial modifier owner remain refused.
+
+Four joined tests pass in **16.65s** and all six prior item-routing numerical
+regressions pass on the current package in **14.97s**. The prior Sand nine native
+and two source tests, plus four touched authoring checks, also pass. Evidence:
+`runs/owned-sand-items-tests-03.log`,
+`runs/owned-ordinary-routing-item-regression-03.log` and
+`runs/owned_sand_preparation{,_source}-item-regression-03.log`.
+These ignored integration tests require a checked local release via
+`POE_OPTIMIZER_TEST_SAND_ITEM_RELEASE` or
+`POE_OPTIMIZER_TEST_ORDINARY_ITEM_ROUTING_RELEASE`; ordinary CI does not run them.
+
+Two fixture assumptions were repaired without changing production behavior:
+readiness output metadata follows explicit Modifier/Player destinations, and a
+proven zero-query finite fixture uses the operations capability check for its
+required empty query inventory. A future query read still fails the complete
+reader census. Current item authentication verifies the exact published offhand
+addition and one-gap scalability retirement through their receipts. Historical
+publication assertions remain strict; numerical tests now consume current data
+without reviving the retired importer format.
+
+The next bounded data work refines Crown's five empty non-socket intrinsic
+declaration inventories using retained source evidence. Its three-socket host,
+modifier/quality memberships and all numerical owner gaps remain separate.
+Neither this integration nor that refinement closes the incoming contributor
+inventory or a complete original build. Modifier `30ca` has a continuous
+nonnegative raw/scalar domain; do not apply the signed attribute BASE audit to it.
+
 
 ## Archived 2026-10-07 checkpoint: typed Boolean contributions
 

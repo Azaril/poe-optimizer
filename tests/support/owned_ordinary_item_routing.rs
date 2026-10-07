@@ -1,6 +1,13 @@
 //! Offline, source-bound ordinary Player routing. Copy routing remains separate.
 #[path = "owned_ordinary_item_routing_evidence.rs"]
 mod evidence;
+#[allow(dead_code)]
+#[path = "owned_player_offhand_facts.rs"]
+mod offhand;
+#[allow(dead_code)]
+#[path = "owned_minion_level_scalability.rs"]
+mod scalability;
+use crate::migration_preservation;
 use poe_optimizer_core::{
     owned_content::{OwnedContentDigest, digest_owned},
     owned_definitions::{OwnedDefinitionKey, StatDefinition},
@@ -616,13 +623,24 @@ fn assert_dependencies(prior: &StagedOwnedRelease, d: &Value) {
 }
 
 pub fn assert_endpoint(next: &StagedOwnedRelease) {
-    check_authored();
+    assert_components(next, false);
     let m: OwnedReleaseMigrationInput = read("migration.json");
     let proof = next.input().provenance.last().unwrap();
     assert_eq!(proof.kind.as_str(), KIND);
     assert_eq!(proof.prior_input, m.before);
     assert_eq!(proof.authoring_input, authoring_digest());
     assert_eq!(next.input().recipe.schema.release, m.release);
+}
+
+/// Authenticate retained routing on a checked successor independently of its
+/// last publication. Historical endpoint assertions remain exact above.
+pub fn assert_component(next: &StagedOwnedRelease) {
+    assert_components(next, true);
+}
+
+fn assert_components(next: &StagedOwnedRelease, current: bool) {
+    check_authored();
+    let m: OwnedReleaseMigrationInput = read("migration.json");
     for entry in &m.schema {
         let SchemaExtensionEntry::Definition(row) = entry else {
             panic!("Stat definitions only")
@@ -639,14 +657,34 @@ pub fn assert_endpoint(next: &StagedOwnedRelease) {
         );
     }
     let modifier_owner = expected_modifier_owner();
+    let retained = current.then(|| scalability::retained_modifier_owner(next));
+    let additions = if current {
+        offhand::retained_template_additions(next)
+    } else {
+        vec![]
+    };
     for owner in m.owners.iter().chain(std::iter::once(&modifier_owner)) {
+        let mut expected = owner.clone();
+        if let Some(ref refined) = retained
+            && refined.owner == expected.owner
+        {
+            assert_eq!(refined.programs.members, expected.programs.members);
+            expected = refined.clone();
+        }
+        if let Some(addition) = additions.iter().find(|o| o.owner == expected.owner) {
+            assert_eq!(expected.programs.closure, addition.programs.closure);
+            expected
+                .programs
+                .members
+                .extend(addition.programs.members.clone());
+        }
         assert_eq!(
             next.input()
                 .recipe
                 .rules
                 .owners
                 .iter()
-                .filter(|r| *r == owner)
+                .filter(|r| **r == expected)
                 .count(),
             1
         );

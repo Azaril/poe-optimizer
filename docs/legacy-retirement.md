@@ -700,8 +700,24 @@ authority. The current contract was replaced in place: old occurrence strings,
 bare assembly keys and the ambiguous `DirectOwner` endpoint are rejected.
 Current authoring fragments use explicit occurrence/assembly bindings and the
 `OwnerSkill` endpoint. No physical Gems, duplicate raw-input store or parallel
-evaluator were introduced. Real Sand/Firebolt preparation remains to be authored;
-the contract tests do not close their Partial inventories.
+evaluator were introduced. Sand preparation is now authored on this same graph:
+ordinary and source assembly, exact Command inputs and table-driven actor level.
+Its integration fixed Structural request-input ancestry in the existing cycle
+proof instead of inventing stages or bypassing readiness. Firebolt preparation
+and both families' complete contributor/owner inventories remain open; the
+[Sand packet](../data/owned/poe2/3887ae68/sand-preparation/README.md) states the
+finite component boundary.
+
+The following item-to-Sand integration removes its synthetic ordinary-level
+producer and reuses the existing canonical Crown/Solar calculation chain.
+Current numerical regressions authenticate later offhand/scalability changes
+through their exact receipts; they no longer require a retired saved-import
+format. The shared fixture's explicit empty query inventory is now selected by
+operations capability, with the existing complete no-query-reader assertion
+retained. These are test repairs, not compatibility readers or relaxed runtime
+coverage. The Crown packet also resolves five empty intrinsic declaration gaps
+from retained source evidence while preserving its nonempty socket host gap and
+all numerical/modifier/quality obligations.
 
 The Command component's V20 integration exposed a mixed-phase owned program in
 the published Sniper data. `ordinary-population-inputs` previously bundled actor

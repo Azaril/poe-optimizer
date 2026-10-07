@@ -65,92 +65,92 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest published native checkpoint: shared Sand preparation
+## Latest published native checkpoint: Crown declarations and real item preparation
 
-The [Sand packet](../data/owned/poe2/3887ae68/sand-preparation/README.md) now
-authors four native programs on the existing Skill owner. Manual and exact
-tree-generated occurrences use the same typed raw-input, ordinary-property and
-once-per-source assembly path. Prepared level/quality are common Skill stats;
-the exact Command receives projected inputs, and the actual Actor slot receives
-an injected table lookup with the witnessed final population-level bound.
-Five definitions/slots were allocated (`334e`–`3352`). Two descendant grants now
-permit their proven Allocation root as well as SkillUse, using the existing
-release migration path. No source-language evaluator or new public model was added.
+The [Crown packet](../data/owned/poe2/3887ae68/crown-declarations/README.md)
+closes exactly five empty intrinsic declaration inventories on ItemTemplate
+`1f1c`: choices, grants, actors, skill grants and outputs. Its existing six
+parameters are unchanged. The base's **three-socket capacity remains unresolved**
+in the native declaration model; three empty saved socket groups do not justify
+an empty socket inventory. Quality/modifier memberships, all seven numerical
+programs and the rule-owner closure remain Partial. Modifier-supplied grants
+remain owned by modifiers, not certified absent for every possible item roll.
 
-The real integration exposed and fixed an Engine bug: source-property cycle
-validation expected an authored program stage on generated preset inputs, which
-are Structural request producers. Validation now follows only those explicit
-input nodes to their actual ordinary ancestors. Original gates, cycle edges,
-readiness checks, stage ordering and work limits remain enforced. Missing stages
-on ordinary programs still fail; no default stage or raw-as-final fallback was
-introduced. Previously successful plan identities are unchanged.
+The existing V5 offline migration replaces one descriptor and allocates no IDs.
+It authenticates three retained JIT report pairs, exact base/construction data,
+selected Helmet identity and observed grants. No new PoB execution or native
+format/API was needed. Two ordinary Rust checks cover the exact five-field inverse
+and reject wrong identity, erased sockets and nonempty grants. Full source
+authentication and all-five CLI publication pass in **27.64s**, including an
+identical-byte package rebuild. Inputs, local IDs, selections, dispositions,
+selected issues and all **110 queries** remain intact. No input issue or numerical
+owner is closed, no evaluation bundle is added, and complete builds remain **0/5**.
 
-Nine native component tests pass, including raw validation before bonuses,
-late final-level clamping, finite signed/fractional quality, independent missing
-dimensions, exact descendant ownership, injected actor-level table changes,
-once-per-source synthetic external properties and fresh/reused/Rayon agreement.
-Those determinism checks first require successful known results; matching
-Unavailable outcomes cannot pass. Two source tests authenticate 140 compact
-observations from 18 retained controls and compare real preparation arithmetic,
-including exact Command input projections in both MAIN and CALCS.
-The actor attacks and real support inventory are excluded from this finite
-fixture; its explicit empty-support facts are not production coverage.
+The same checkpoint connects actual native Crown/Solar item rules to the shared
+Sand preparation published in `3ca9383`. It reuses the existing canonical
+modifier, applicability, Amulet snapshot and copy chain; it removes the synthetic
+ordinary-level producer from the joined fixture. Fresh Original05 import supplies
+the retained canonical rolls. This is a selected numerical projection: unrelated
+Solar `314d`, other item mechanics and real support-composition coverage are
+excluded explicitly. Exact equipment/modifier origins produce +1 Crown, +1 Solar
+and +0 copy, yielding manual level22 and tree level3. Item removal, roll changes,
+missing producers and the actual Partial modifier owner receive positive/negative
+controls. Successful A-B-A scratch reuse and four-worker Rayon results agree.
 
-The full source report and actual SupportCount rows are authenticated before
-publication. All-five CLI publication passed in **32.12s**, including an identical
-byte rebuild and independent fresh imports. Drafts, local IDs, saved selections,
-dispositions, selected issues and all **110 queries** remain intact. The packet
-adds no evaluation bundle, promotes no Partial inventory and retires no input
-issue. Complete native builds remain **0/5**; Original05 still has five selected
-input obligations. Component arithmetic is not proof of full Command/actor
-mechanics, population overrides or real supported-property producer coverage.
+All four joined tests pass on the new Crown package in **13.34s**; the six prior
+item-routing numerical regressions pass on its Sand predecessor in **14.97s**.
+The prior Sand nine native/two source checks and four affected authoring checks
+also pass. The ignored integration tests require the current package through
+`POE_OPTIMIZER_TEST_SAND_ITEM_RELEASE` or
+`POE_OPTIMIZER_TEST_ORDINARY_ITEM_ROUTING_RELEASE`; ordinary CI does not execute
+those local-package tests. The ordinary compact-evidence/data tests need no Lua.
+Strict workspace/all-feature/all-target Clippy and formatting pass. Evidence:
+`runs/owned-crown-tests-01.log`,
+`runs/owned-crown-declarations-publication-01/validation.json`,
+`runs/owned-sand-items-crown-tests-01.log`,
+`runs/owned-ordinary-routing-item-regression-03.log`,
+`runs/owned-sand-items-crown-clippy-02.log` and
+`runs/owned-sand-items-crown-format-02.log`.
 
-Validation also passed 185 Engine library tests, 11 generated-source-property
-tests, 10 generated-input tests and 15 source-property tests (**221 Engine tests**).
-The new preset regression combines eight exact input bindings with real source
-assembly. Evidence: `runs/owned-sand-preparation-build-07.jsonl`,
-`runs/owned_sand_preparation-tests-08.log`,
-`runs/owned_sand_preparation_source-tests-09.log`,
-`runs/owned-sand-engine-*-01.log`, and
-`runs/owned-sand-preparation-publication-03/validation.json`.
-Strict workspace/all-feature/all-target Clippy passed in
-`runs/owned-sand-preparation-clippy-01.log`; final source-test lint and formatting
-passed in `runs/owned-sand-preparation-clippy-02.log` and
-`runs/owned-sand-preparation-format-02.log`.
+Fixture repairs preserve production guards: output metadata follows the actual
+Modifier/Player destination, and the operations capability check supplies an
+explicit empty query inventory only after proving every retained reader is
+query-free. Future query readers still fail that proof. Current routing checks
+authenticate the exact later offhand addition and scalability retirement rather
+than weakening whole-owner comparisons. Numerical regressions now use current
+data; no retired importer-format reader was restored. The shared publication
+helper accepts explicit expected issue counts, preserving older tests' exact
+expectations instead of deriving counts from whatever a run happens to produce.
 
-The ignored Rust publication test is
-`owned_sand_preparation_publication::publish_sand_preparation_preserving_all_five_originals`.
-Set `POE_OPTIMIZER_TEST_SAND_PREPARATION_PRIOR` to the absolute path of
-`runs/owned-boolean-publication-01/package` and
-`POE_OPTIMIZER_TEST_SAND_PREPARATION_OUTPUT` to a fresh directory. It also requires
-the retained source witnesses. Ordinary CI runs the native, compact-source and
-authored-data checks without a PoB VM or local publication directory.
+The preceding [Sand implementation](implementation-history.md#archived-2026-10-07-checkpoint-sand-preparation-and-real-item-integration)
+and [Boolean contributions](implementation-history.md#archived-2026-10-07-checkpoint-typed-boolean-contributions)
+remain in this package. Sand uses one occurrence/source graph and injected tables;
+its real generated-input integration repaired Structural ancestry in the existing
+cycle proof. Boolean Flag/Any preserves duplicate sources and unresolved coverage.
+Definition schema6, rule schema3, operations22 and sidecar23 are unchanged.
 
-The preceding [Boolean checkpoint](implementation-history.md#archived-2026-10-07-checkpoint-typed-boolean-contributions)
-remains active in this package: typed Flag contributions use unordered Any,
-preserve duplicate origins and never turn unknown coverage into false. Its two
-real passive producers and five reducers remain Partial. Rule schema3,
-operations22, definition schema6 and sidecar23 are unchanged; there is one current
-format reader, not a compatibility evaluator.
+**Resume:** Original05 stays first. The two immediate public-model decisions are
+still pending: Actor-to-Enemy computed reads for the source-proven critical-hit
+consumer, and authored support assignments versus cold effective-origin composition.
+Do not bypass either boundary or treat the accepted Boolean representation as
+approval for those separate authorities. Crown sockets, `30ca`'s six remaining
+domain/routing/contributor obligations, and complete selected numerical owners
+remain open. Its raw/scalar domain is continuous nonnegative; the signed attribute
+BASE audit is a separate Strength blocker. Do not close these inventories from
+one measured item sum. D4 starts as soon as the first unchanged build passes the
+full native/reference gate.
 
-**Resume:** Original05 remains first. Incoming critical-hit arithmetic has source
-proof but awaits the Actor-to-Enemy read decision below; support-origin discovery
-awaits its separate composition decision. Do not bypass either authority guard.
-Final Strength also remains blocked by signed/scaled BASE ordering, socket origins
-and post-passive item copies in the [BASE audit](owned-base-contribution-audit.md).
-Continue a concrete selected consumer or input responsibility using existing
-contracts; do not spend the next phase widening Sand combat solely because its
-preparation now works. D4 starts as soon as one unchanged build passes the full
-native/reference gate.
-
-The next permitted numerical integration replaces the Sand fixture's synthetic
-ordinary-level amount with the existing Crown/Solar item chain: canonical `30ca`
-arithmetic, direct applicability, the Amulet snapshot and its copy. Reuse the
-Offering/ordinary-item-routing fixture instead of duplicating those programs.
-The retained source census gives +1 Crown, +1 Solar and +0 copy, producing manual
-level22 and tree level3 in Original05. That integration must retain all Partial
-owner/contributor refusals; it is not permission to close the incoming inventory
-from one measured context. Then audit the exact selected item-owner gaps.
+The next decision-independent numerical task is to audit `30ca`'s
+`amulet-bonus-copy-unconverted` obligation against its already-authored copy
+program. Reuse retained Amulet-copy/snapshot evidence and the exact source law;
+test identity and unscalable branches, non-unit rounding, zero-copy retention,
+independent occurrences and snapshot-before-copy staging. Include admitted
+canonical boundary cases, especially fractional values at the identity branch;
+establish factor domains and unavailable/nonfinite outcomes before asserting a
+full-domain law. Retire only that local arithmetic obligation if proved, using
+the existing owner-closure inverse. Keep actual magnitude producers, canonical
+admission, source encoding, ordinary routing and external membership separate.
+No new public model is indicated; insufficient evidence means the gap stays open.
 
 ## In progress: incoming critical source proof and Actor read decision
 
@@ -199,7 +199,9 @@ authority and its storage/raw-compiler guards, prove wrong scope/type, missing
 producers, Partial membership, stages/cycles and unchanged write boundaries;
 then execute the seven actual authored native tests, authenticate the compact
 vectors against the full reports, and run the prepared all-five publication
-inverse. The draft's input policy should add two absence/value channels and
+inverse. First rebase the draft's predecessor expectations from the Boolean
+package to the current Crown package; its reserved `3353`–`3364` IDs remain free.
+The draft's input policy should add two absence/value channels and
 account for exactly two overwritten placeholders per original; **these changes
 have not been published or counted as progress in input closure**. Current
 package identities, issue counts and 0/5 completion remain unchanged.
@@ -253,46 +255,47 @@ records a narrow injected permission for future review. Even after that proof,
 only one source leaf would be accounted for; all five selected obligations remain.
 Do not prioritize this bookkeeping over a ready numerical consumer.
 
-The approved Sand preparation checkpoint above now follows this source-only
-investigation. It retains Partial contributor/readiness coverage and removes no
+The approved Sand preparation remains in the current package after this
+source-only investigation. It retains Partial contributor/readiness coverage and removes no
 selected input obligations. The unapproved incoming-critical packet provisionally
 uses `3353`–`3364`, after Sand's five allocations; its source evidence is unchanged.
 
-CI snapshot after the source checkpoint: `7c6ac95` run
-[37696941035](https://github.com/Azaril/poe-optimizer/actions/runs/37696941035)
-was pending. Local checks are not hosted success.
+CI snapshot at 23:26 UTC: Sand checkpoint `3ca9383` run
+[37702132448](https://github.com/Azaril/poe-optimizer/actions/runs/37702132448)
+is queued behind `f93d551`; the earlier pending `7c6ac95` run was superseded.
+Local checks are not hosted success for this revision.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-sand-preparation-publication-03/package` and its neighboring
+Use `runs/owned-crown-declarations-publication-01/package` and its neighboring
 `original-01` through `original-05` imports. Current sidecars remain V23;
 definition schema V6, rule schema3 and operationsV22 are independent contracts.
-The immediate predecessor is `runs/owned-boolean-publication-01/package`, input
-`cebc32eb98f05d6716051dde7417d26a2c7667d8361ad82afa1ea87cfc218838`.
+The immediate predecessor is `runs/owned-sand-preparation-publication-03/package`,
+input `9bbb63fab97fca1b60a67ccb048103e51677a9b0668a0e9d130355b0f930cd24`.
 Historical endpoint paths authenticate stored evidence; retired formats require
 explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `9bbb63fab97fca1b60a67ccb048103e51677a9b0668a0e9d130355b0f930cd24` |
+| Release input | `5d8757d9046ef837509223103f06931fb16aac7a3b60aa8231b6f48b5f4225aa` |
 | Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
-| Definitions content | `7665e6314a2390fbb8e2f62d5cf8df76fc09b34c9d413069565a5ecda6c26947` |
-| Rules | `90cad421eecc8f5e7c6125170df4765c5f1694b3814cf1c5cb636a9dd43d9ea9` |
-| Compiled rules | `9854a1eb75751e11c423ecbe07aa646bff41d15307b4cfb88b8a56a6a55cca31` |
-| Routing | `1b6e98429075411b59acb62ea8b136de1e62f8528bf11df9ce7afb98d8f4b468` |
-| Mapping | `9eb1f7362c20fe4fb20f05d316cdc83fc45ae514c49d346c390346a3d17e3034` |
-| Skill roles | `2b506025035351ea2a733787454a2e16affb2fe64ad3954c11d9b529552338c7` |
-| Normalization | `953f5acf6f16ff5a04c8bb0bdb5d980e74a7e1ba09c1bc494e2181c1548b36a8` |
-| Rewards | `1e17fc5a9e27f071f981cbd2c398849683b68364f2017ff2cea9d03cf62f551d` |
-| Items | `3787f66950e1a6d46c0a92f7caa75456ffa4df0b6e8e13cdd7de16d512ae0688` |
-| Item source | `b3852296d9df5efd704a2137d3646813f7d7b576a40fd234589a81e87f3bc2f3` |
-| Tree policy | `d51390f29aa3d95c4ab44a379c2fe4a831b03a33feafbebf95e7b51eca4f55e1` |
-| Authoring commitment | `67e7326a03b13fc56f0499ee081daa31e4ddaff78f96a6432e8b51eb52efdd4c` |
+| Definitions content | `6c339c996870dbc85c1f2dffe62b64a95134d501bc6ad7e4876a986bd8542a99` |
+| Rules | `6206a47e979b9b8a33a8c68350346f95ea9ce922af29b204fb21720a6a75c489` |
+| Compiled rules | `3f4e655b54c5e0982aff525ca115eb66874dbfd77408c068227dd2d398c10802` |
+| Routing | `9c4eb5d88257fa37c5d65d637907483c32f02c5fd7ff056369786eddd2762809` |
+| Mapping | `a8aeb0e92863d49b5ae99fc580467c70a016b6e53db2d4fc9a51a5c6d074f790` |
+| Skill roles | `701ece0c17de2a42bb07e175a896ba77fa882ba582ddf288358a494fbe41002c` |
+| Normalization | `9f3ebfa318ce77bbccc88c7975621a07148cc7795da4f0bdc555ffbc64e41191` |
+| Rewards | `6b46aaf53e60b8a09f2f1c2a230e3fa2c929fe33958b03468112d83153952fa8` |
+| Items | `1ca7459a798378a6441bfde3549899912a1da8ba70557909007c27c7552bfd6d` |
+| Item source | `d977add5dbc0b01605cc87637642c777afa1b728373069bbaef5cf67782f8b50` |
+| Tree policy | `d2b3a0fe5c87e8994710783c4b585a92c435eccc6061924a10c36873bc09664a` |
+| Authoring commitment | `5c7bc00e0b2e29072ec58e85637a0f4c27d08a158dea0aefc5c20163cbca3d06` |
 | Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
 
-The eighteen package files total **63,192,465 bytes**, with 137 provenance rows.
-Definitions and rules use `pob-3887ae68-sand-preparation-v1`. The registry ends
+The eighteen package files total **63,191,420 bytes**, with 138 provenance rows.
+Definitions and rules use `pob-3887ae68-crown-declarations-v1`. The registry ends
 at `3352`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
@@ -1283,7 +1286,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
 | Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation; six current INC memberships are now Complete; BASE membership and the global query inventory remain Partial. The BASE audit now proves a signed-scaling counterexample, real post-passive bonus copies and missing socket-origin ordering; resolve these concrete domain gaps. Typed Boolean flag aggregation is implemented separately and does not close final attributes. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | At 21:24 UTC on 2026-10-07, [37646478601](https://github.com/Azaril/poe-optimizer/actions/runs/37646478601) at `47f3560` had passed all fourteen jobs, including Windows native CLI. [37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252) at `f93d551` was running with no failed steps; [37687481540](https://github.com/Azaril/poe-optimizer/actions/runs/37687481540) at `303adb2` was pending. No hosted success for the Boolean checkpoint is claimed. Pending revisions may coalesce; duration alone does not establish a hung test. Read current workflow status before treating a revision as green. |
+| CI regression, timeout and infrastructure | At 23:26 UTC on 2026-10-07, [37646478601](https://github.com/Azaril/poe-optimizer/actions/runs/37646478601) at `47f3560` had passed all fourteen jobs. [37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252) at `f93d551` had seven successful/five active matrix jobs and no failed steps; Sand checkpoint [37702132448](https://github.com/Azaril/poe-optimizer/actions/runs/37702132448) was pending. The preceding successful Windows native CLI step took 314 minutes: separately profile/shard that critical path while retaining coverage. Job logs require authenticated access, so current compilation versus test progress is unverified. Pending revisions may coalesce; duration alone does not establish a hung test. No hosted success for the latest checkpoint is claimed. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 | Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |

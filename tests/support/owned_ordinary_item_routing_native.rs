@@ -12,7 +12,12 @@ use poe_optimizer_core::{
 use poe_optimizer_engine::owned_plan::*;
 use poe_optimizer_import::owned_release::StagedOwnedRelease;
 use rayon::prelude::*;
-use std::{path::PathBuf, sync::OnceLock};
+use serde_json::Value;
+use std::{
+    collections::BTreeSet,
+    path::{Path, PathBuf},
+    sync::OnceLock,
+};
 
 const RETENTION: &str = "ordinary-amulet-retention-factor";
 const APPLICABILITY: &str = "ordinary-item-direct-applicability";
@@ -49,11 +54,23 @@ impl World {
             std::env::var_os("POE_OPTIMIZER_TEST_ORDINARY_ITEM_ROUTING_RELEASE")
                 .expect("published ordinary item routing package"),
         );
-        let before = crate::release::inventory(&path);
-        let endpoint = crate::release::load(&path);
-        crate::family::assert_endpoint(&endpoint);
-        let expected = crate::family::expected_modifier_owner();
-        let mut base = offering::World::load_release_with_item_owner(&path, Some(&expected));
+        Self::load_release(&path)
+    }
+    fn load_release(path: &Path) -> Self {
+        let before = crate::release::inventory(path);
+        let endpoint = crate::release::load(path);
+        crate::family::assert_component(&endpoint);
+        let address = crate::family::expected_modifier_owner().owner;
+        let expected = endpoint
+            .input()
+            .recipe
+            .rules
+            .owners
+            .iter()
+            .find(|o| o.owner == address)
+            .unwrap()
+            .clone();
+        let mut base = offering::World::load_release_with_item_owner(path, Some(&expected));
         let mut early = vec![];
         for stat in [retention(), applicability()] {
             let definition = endpoint
@@ -160,7 +177,7 @@ impl World {
             install_passive(&mut base, &endpoint, node, program, occurrence, &mut early)
         })
         .collect();
-        assert_eq!(before, crate::release::inventory(&path));
+        assert_eq!(before, crate::release::inventory(path));
         Self {
             base,
             receivers: DeclaredSet::complete(receivers),
@@ -182,45 +199,28 @@ impl World {
         late_retention: bool,
         early_direct: bool,
     ) -> std::result::Result<shared::Plan, String> {
-        self.base.checked_plan_configured(OWNED_EVALUATION_STAGES_V4, false, self.receivers.clone(), |stages| {
-            let names = ["prepare", "routing-contributors", "routing-resolve", "routing-applicability", "item-delivery",
-                "source-prepare", "source-census", "source-assembly", "facts", "apply", "deliver"];
-            stages.stages = names.iter().enumerate().map(|(i, name)| EvaluationStage {
-                id: key(name), predecessors: i.checked_sub(1).map(|n| vec![key(names[n])]).unwrap_or_default(),
-            }).collect();
-            for row in &mut stages.programs.members {
-                row.stage = match row.program.as_str() {
-                    TALISMAN | MYSTIC => key(if late_retention && row.program == key(TALISMAN) { "item-delivery" } else { "routing-contributors" }),
-                    RETENTION | SNAPSHOT => key("routing-resolve"),
-                    APPLICABILITY => key("routing-applicability"),
-                    DIRECT => key(if early_direct { "prepare" } else { "item-delivery" }),
-                    COPY => key("item-delivery"),
-                    _ => row.stage.clone(),
-                };
-            }
-            for row in &mut stages.readiness.as_mut().unwrap().programs.members {
-                if self.early.contains(&(row.owner.clone(), row.program.clone())) {
-                    let program = self.base.source.base.inner.owners.iter().find(|o| o.owner == row.owner).unwrap()
-                        .programs.members.iter().find(|p| p.id == row.program).unwrap();
-                    row.phase = ReadinessPhase::Structural;
-                    row.role = ReadinessProgramRole::PreparationFacts;
-                    row.outputs = program.effects.iter().map(|e| offering::channel(program.context, &e.effect)).collect();
-                }
-            }
-            for row in &mut stages.frozen_channels {
-                if matches!(&row.channel, StageChannel::Contributions { stat, .. } if *stat == def::<StatDefinition>("def.00000000000030ab")) {
-                    row.stage = key("item-delivery");
-                }
-            }
-            for (stat, kind) in [(retention(), ContributionKind::Multiply), (snapshot(), ContributionKind::Add)] {
-                stages.frozen_channels.extend([
-                    FrozenStageChannel { channel: StageChannel::Contributions { scope: RuleEntityKind::Actor, stat: stat.clone(), contribution: kind }, stage: key("routing-contributors") },
-                    FrozenStageChannel { channel: StageChannel::Stat { scope: RuleEntityKind::Actor, stat }, stage: key("routing-resolve") },
-                ]);
-            }
-            stages.frozen_channels.push(FrozenStageChannel { channel: StageChannel::Stat {
-                scope: RuleEntityKind::EquipmentUse, stat: applicability() }, stage: key("routing-applicability") });
-        })
+        self.base.checked_plan_configured(
+            OWNED_EVALUATION_STAGES_V4,
+            false,
+            self.receivers.clone(),
+            |stages| {
+                configure_item_stages(
+                    stages,
+                    &self.base.source.base.inner.owners,
+                    &self.early,
+                    &[
+                        "source-prepare",
+                        "source-census",
+                        "source-assembly",
+                        "facts",
+                        "apply",
+                        "deliver",
+                    ],
+                    late_retention,
+                    early_direct,
+                )
+            },
+        )
     }
     fn plan(&self) -> shared::Plan {
         self.checked_plan(false, false).unwrap()
@@ -319,6 +319,260 @@ impl World {
                 .all(|e| e.key.invocation.program != key(offering::SNAPSHOT))
         );
     }
+}
+
+/// The existing finite item's checked component, without Offering, supports,
+/// passive controls or synthetic snapshot/applicability producers. This is test
+/// metadata, never a production coverage declaration.
+#[derive(Clone)]
+#[allow(dead_code)]
+pub struct ItemDonors {
+    pub definitions: Vec<DefinitionDescriptor>,
+    pub slots: Vec<SlotDescriptor>,
+    pub owners: Vec<DefinitionRules>,
+    pub receivers: DeclaredSet<StatReceiver>,
+    pub items: Vec<ItemRecord>,
+    pub equipment: Vec<EquipmentUse>,
+    pub actual_modifier: DefinitionRules,
+    early: Vec<(SchemaSubject, OwnedDefinitionKey)>,
+}
+
+#[allow(dead_code)]
+pub fn item_donors(path: &Path) -> ItemDonors {
+    let w = World::load_release(path);
+    let inner = &w.base.source.base.inner;
+    assert!(inner.build.allocations.is_empty());
+    let mut selected = vec![];
+    for owner in inner.build.items.iter().flat_map(|item| {
+        std::iter::once(subject(item.template.clone()))
+            .chain(item.modifiers.iter().map(|m| subject(m.definition.clone())))
+    }) {
+        if !selected.contains(&owner) {
+            selected.push(owner);
+        }
+    }
+    selected.extend([subject(retention()), subject(snapshot())]);
+    let owners: Vec<_> = inner
+        .owners
+        .iter()
+        .filter(|o| selected.contains(&o.owner))
+        .cloned()
+        .collect();
+    assert_eq!(owners.len(), selected.len());
+    assert!(owners.iter().all(|o| o.programs.is_complete()));
+    assert!(
+        owners
+            .iter()
+            .flat_map(|o| &o.programs.members)
+            .all(|p| p.id != key(offering::SNAPSHOT) && p.id != key(offering::DIRECT_BOUNDARY))
+    );
+
+    // Traverse references in already typed fixture records, then copy exact
+    // descriptors. No interpreted game logic or inferred default is involved.
+    // The namespace/kind/key triple prevents a bare key from aliasing a domain.
+    fn references(value: &Value, found: &mut BTreeSet<String>) {
+        match value {
+            Value::Object(fields) => {
+                if fields.contains_key("namespace")
+                    && fields.contains_key("kind")
+                    && fields.contains_key("key")
+                {
+                    assert_eq!(fields.len(), 3);
+                    found.insert(serde_json::to_string(value).unwrap());
+                }
+                for value in fields.values() {
+                    references(value, found);
+                }
+            }
+            Value::Array(values) => {
+                for value in values {
+                    references(value, found);
+                }
+            }
+            _ => {}
+        }
+    }
+    let mut needed = BTreeSet::new();
+    references(
+        &serde_json::json!((
+            &owners,
+            &w.receivers,
+            &inner.build.items,
+            &inner.build.equipment
+        )),
+        &mut needed,
+    );
+    let mut definitions = vec![];
+    let mut slots = vec![];
+    loop {
+        let before = needed.len();
+        for d in &inner.schema.definitions {
+            let id = serde_json::to_value(d.address()).unwrap()["value"].clone();
+            if needed.contains(&serde_json::to_string(&id).unwrap())
+                && !definitions
+                    .iter()
+                    .any(|old: &DefinitionDescriptor| old.address() == d.address())
+            {
+                references(&serde_json::to_value(d).unwrap(), &mut needed);
+                definitions.push(d.clone());
+            }
+        }
+        for s in &inner.schema.slots {
+            let id = serde_json::to_value(s.address()).unwrap()["value"]["slot"].clone();
+            if needed.contains(&serde_json::to_string(&id).unwrap())
+                && !slots
+                    .iter()
+                    .any(|old: &SlotDescriptor| old.address() == s.address())
+            {
+                references(&serde_json::to_value(s).unwrap(), &mut needed);
+                slots.push(s.clone());
+            }
+        }
+        if needed.len() == before {
+            break;
+        }
+    }
+    assert!(definitions.iter().all(|d| matches!(
+        d,
+        DefinitionDescriptor::Unit(_)
+            | DefinitionDescriptor::Option(_)
+            | DefinitionDescriptor::Stat(_)
+            | DefinitionDescriptor::Modifier(_)
+            | DefinitionDescriptor::ItemTemplate(_)
+            | DefinitionDescriptor::EquipmentSlot(_)
+    )));
+    assert!(
+        slots
+            .iter()
+            .all(|s| matches!(s, SlotDescriptor::Parameter(_)))
+    );
+    let early = w
+        .early
+        .into_iter()
+        .filter(|(owner, _)| selected.contains(owner))
+        .collect();
+    ItemDonors {
+        definitions,
+        slots,
+        owners,
+        receivers: w.receivers,
+        items: inner.build.items.clone(),
+        equipment: inner.build.equipment.clone(),
+        actual_modifier: w.base.actual_modifier,
+        early,
+    }
+}
+
+#[allow(dead_code)]
+impl ItemDonors {
+    pub fn configure_stages(&self, stages: &mut EvaluationStagesInput, tail: &[&str]) {
+        stages.schema_version = OWNED_EVALUATION_STAGES_V4;
+        configure_item_stages(stages, &self.owners, &self.early, tail, false, false);
+    }
+}
+
+fn configure_item_stages(
+    stages: &mut EvaluationStagesInput,
+    owners: &[DefinitionRules],
+    early: &[(SchemaSubject, OwnedDefinitionKey)],
+    tail: &[&str],
+    late_retention: bool,
+    early_direct: bool,
+) {
+    let names: Vec<_> = [
+        "prepare",
+        "routing-contributors",
+        "routing-resolve",
+        "routing-applicability",
+        "item-delivery",
+    ]
+    .into_iter()
+    .chain(tail.iter().copied())
+    .collect();
+    stages.stages = names
+        .iter()
+        .enumerate()
+        .map(|(i, name)| EvaluationStage {
+            id: key(name),
+            predecessors: i
+                .checked_sub(1)
+                .map(|n| vec![key(names[n])])
+                .unwrap_or_default(),
+        })
+        .collect();
+    for row in &mut stages.programs.members {
+        row.stage = match row.program.as_str() {
+            TALISMAN | MYSTIC => key(if late_retention && row.program == key(TALISMAN) {
+                "item-delivery"
+            } else {
+                "routing-contributors"
+            }),
+            RETENTION | SNAPSHOT => key("routing-resolve"),
+            APPLICABILITY => key("routing-applicability"),
+            DIRECT => key(if early_direct {
+                "prepare"
+            } else {
+                "item-delivery"
+            }),
+            COPY => key("item-delivery"),
+            _ => row.stage.clone(),
+        };
+    }
+    for row in &mut stages.readiness.as_mut().unwrap().programs.members {
+        if early.contains(&(row.owner.clone(), row.program.clone())) {
+            let program = owners
+                .iter()
+                .find(|o| o.owner == row.owner)
+                .unwrap()
+                .programs
+                .members
+                .iter()
+                .find(|p| p.id == row.program)
+                .unwrap();
+            row.phase = ReadinessPhase::Structural;
+            row.role = ReadinessProgramRole::PreparationFacts;
+            row.outputs = program
+                .effects
+                .iter()
+                .map(|e| offering::channel(program.context, &e.effect))
+                .collect();
+        }
+    }
+    for row in &mut stages.frozen_channels {
+        if matches!(&row.channel, StageChannel::Contributions { stat, .. } if *stat == def::<StatDefinition>("def.00000000000030ab"))
+        {
+            row.stage = key("item-delivery");
+        }
+    }
+    for (stat, kind) in [
+        (retention(), ContributionKind::Multiply),
+        (snapshot(), ContributionKind::Add),
+    ] {
+        stages.frozen_channels.extend([
+            FrozenStageChannel {
+                channel: StageChannel::Contributions {
+                    scope: RuleEntityKind::Actor,
+                    stat: stat.clone(),
+                    contribution: kind,
+                },
+                stage: key("routing-contributors"),
+            },
+            FrozenStageChannel {
+                channel: StageChannel::Stat {
+                    scope: RuleEntityKind::Actor,
+                    stat,
+                },
+                stage: key("routing-resolve"),
+            },
+        ]);
+    }
+    stages.frozen_channels.push(FrozenStageChannel {
+        channel: StageChannel::Stat {
+            scope: RuleEntityKind::EquipmentUse,
+            stat: applicability(),
+        },
+        stage: key("routing-applicability"),
+    });
 }
 
 fn install_passive(

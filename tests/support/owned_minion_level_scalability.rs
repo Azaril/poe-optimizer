@@ -207,6 +207,24 @@ pub fn assert_endpoint(endpoint: &StagedOwnedRelease) {
     assert_eq!(json!(endpoint.receipt().registry), a["registry"]);
     dependencies(endpoint, true);
 }
+/// Reuse the exact proved closure refinement on a checked successor. This is
+/// independent of which later checkpoint owns the release's final receipt.
+#[allow(dead_code)]
+pub fn retained_modifier_owner(endpoint: &StagedOwnedRelease) -> DefinitionRules {
+    check_authored();
+    let a: Value = read("authoring.json");
+    let proofs: Vec<_> = endpoint
+        .receipt()
+        .provenance
+        .iter()
+        .filter(|p| p.kind.as_str() == KIND)
+        .collect();
+    assert_eq!(proofs.len(), 1);
+    assert_eq!(json!(proofs[0].prior_input), a["before"]);
+    assert_eq!(proofs[0].authoring_input, digest());
+    dependencies(endpoint, true);
+    expected_owner(true)
+}
 pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     check_authored();
     let a: Value = read("authoring.json");
