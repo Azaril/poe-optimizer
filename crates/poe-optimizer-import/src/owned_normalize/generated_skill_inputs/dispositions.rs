@@ -1,9 +1,10 @@
 //! Complete source-field accounting after independent raw/count materialization.
-//! Private receipts prove output correspondence; an attached Pending usage owner
-//! retains unresolved participation/reporting. No draft values or IDs are changed.
+//! Materialized receipts prove output correspondence. Archived syntax retains
+//! separate Pending raw-input, usage and support-origin owners and proves no
+//! generated target or output. No draft values or IDs are changed.
 use super::*;
 use crate::owned_normalize::skill_input_disposition::{
-    account_reference, link_once, pending_intent_usage,
+    account_reference, link_once, pending_generated_responsibilities, pending_intent_usage,
 };
 use source_shape::{container_text, plain_row, value};
 
@@ -126,7 +127,7 @@ pub(in crate::owned_normalize) fn account(
     draft: &DraftSessionInput,
     compiled: Option<&CompiledGeneratedInputs<'_>>,
     direct: Option<&direct_skill_inputs::CompiledDirectInputs<'_>>,
-    inputs: &[MaterializedInput],
+    inputs: &InputAccounting,
     usages: &[usage_inputs::MaterializedUsage],
 ) -> Result<()> {
     let Some(compiled) = compiled else {
@@ -146,7 +147,7 @@ pub(in crate::owned_normalize) fn account(
             _ => None,
         })
         .collect();
-    for receipt in inputs {
+    for receipt in &inputs.materialized {
         b.charge(1)?;
         let preset = &draft.skill_presets.members[receipt.preset];
         let Some(intent) = &preset.intent else {
@@ -209,6 +210,101 @@ pub(in crate::owned_normalize) fn account(
         for source in [receipt.source, receipt.group].into_iter().chain(children) {
             link_once(b, source, OwnedOriginTarget::SkillPreset(preset.id))?;
             link_once(b, source, OwnedOriginTarget::Issue(issue))?;
+            b.charge(b.origins[source.ordinal() as usize].links.len())?;
+            b.origins[source.ordinal() as usize].links.retain(
+                |link| !matches!(link, OwnedOriginTarget::Issue(id) if configuration.contains(id)),
+            );
+        }
+    }
+    account_archived(b, draft, compiled, direct, &inputs.archived, &configuration)?;
+    Ok(())
+}
+
+fn account_archived(
+    b: &mut Builder<'_, '_>,
+    draft: &DraftSessionInput,
+    compiled: &CompiledGeneratedInputs<'_>,
+    direct: Option<&direct_skill_inputs::CompiledDirectInputs<'_>>,
+    inputs: &[ArchivedInput],
+    configuration: &BTreeSet<DraftIssueId>,
+) -> Result<()> {
+    let Some(direct) = direct else { return Ok(()) };
+    for receipt in inputs {
+        b.charge(1)?;
+        let preset = &draft.skill_presets.members[receipt.preset];
+        if b.evidence.rows()[receipt.group.ordinal() as usize]
+            .occurrence()
+            .parent()
+            != Some(receipt.set)
+            || !frame(b, receipt.source, receipt.group)?
+        {
+            continue;
+        }
+        let Some(issues) = pending_generated_responsibilities(b, receipt.set, preset)? else {
+            continue;
+        };
+        let bound = &compiled.rows[receipt.row];
+        let evidence = b.evidence;
+        let row = &evidence.rows()[receipt.source.ordinal() as usize];
+        let group = &evidence.rows()[receipt.group.ordinal() as usize];
+        if !generated_skill_sources::scalar(b, row, &bound.quality)?
+            .is_some_and(|value| gem_inputs::value_valid(&value, &bound.schema.value))
+        {
+            continue;
+        }
+        let Some(usage) = direct.generated_deferred_usage(bound.row) else {
+            continue;
+        };
+        if !usage.prove_generated(b, row, group)? {
+            continue;
+        }
+        let Some(adapter) = direct.generated_selector_adapter(bound.row) else {
+            continue;
+        };
+        let Some(children) = account_reference(
+            b,
+            row,
+            |context| Ok(adapter.inspect_generated_selectors(evidence, receipt.source, context)?),
+            adapter.construction_work(),
+        )?
+        else {
+            continue;
+        };
+        // The receipt recognizes external syntax only. No live physical or
+        // generated output may be relabelled as an unresolved archived row.
+        b.charge(children.len().saturating_add(2))?;
+        let sources: Vec<_> = [receipt.source, receipt.group]
+            .into_iter()
+            .chain(children)
+            .collect();
+        let mut unbound = true;
+        for source in &sources {
+            let links = &b.origins[source.ordinal() as usize].links;
+            b.charge(links.len())?;
+            if b.origins[source.ordinal() as usize]
+                .links
+                .iter()
+                .any(|link| {
+                    matches!(
+                        link,
+                        OwnedOriginTarget::Gem(_)
+                            | OwnedOriginTarget::Skill(_)
+                            | OwnedOriginTarget::Support(_)
+                            | OwnedOriginTarget::GeneratedSkillInput { .. }
+                    )
+                })
+            {
+                unbound = false;
+            }
+        }
+        if !unbound {
+            continue;
+        }
+        for source in sources {
+            link_once(b, source, OwnedOriginTarget::SkillPreset(preset.id))?;
+            for issue in issues {
+                link_once(b, source, OwnedOriginTarget::Issue(issue))?;
+            }
             b.charge(b.origins[source.ordinal() as usize].links.len())?;
             b.origins[source.ordinal() as usize].links.retain(
                 |link| !matches!(link, OwnedOriginTarget::Issue(id) if configuration.contains(id)),

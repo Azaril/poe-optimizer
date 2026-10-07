@@ -107,8 +107,8 @@ pub fn originals(
         let mut sz = read(new.join("sidecar.json"));
         preservation::authenticate(&sa, &old, prior_path, case, prior);
         preservation::authenticate(&sz, &new, package, case, next);
-        assert_eq!(sa["schema_version"], 21);
-        assert_eq!(sz["schema_version"], 21);
+        assert_eq!(sa["schema_version"], 22);
+        assert_eq!(sz["schema_version"], 22);
         assert_eq!(
             report["sidecar_sha256"],
             family::hash(&fs::read(new.join("sidecar.json")).unwrap())

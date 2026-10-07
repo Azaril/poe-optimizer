@@ -1,10 +1,63 @@
-> Historical snapshots through participation inputs and cached-output accounting on 2026-10-07.
+> Historical snapshots through typed configuration defaults and Player resistance penalty on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: typed configuration defaults and Player resistance penalty
+
+The [resistance-penalty packet](../data/owned/poe2/3887ae68/configuration-resistance-penalty/README.md)
+adds a real Original05 dependency through existing native contracts. The current
+Import configuration policy now projects typed Integer, Quantity, Boolean and
+Option constructor defaults to declared Player, Enemy or Environment targets.
+It uses authenticated fresh-configuration absence; explicit zero/false survives,
+and malformed or wrong-lane input cannot silently become a default. Existing
+option defaults use the same internal collector rather than a second runtime path.
+
+The published Player input `334d` supplies -60 by default or the saved numeric
+`resistancePenalty`. One data-authored program on shared Player Actor `332a`
+adds it once to each elemental resistance channel. It does not double-count the
+all-elemental channel or affect Chaos. Source dropdown choices constrain display,
+not the saved numerical value; signed, fractional and out-of-list values remain
+valid within the declared finite adapter domain. A per-input opt-in ignores only
+validated numeric Placeholders, whose source lane never supplies this direct
+input. Wrong-lane or malformed Placeholders still refuse projection. No native
+schema, operation, Lua execution path or complete-owner declaration was added.
+
+The fresh PoB witness passes in **55.49s**: seven controls, two independent fresh
+loads in each JIT mode, cold state and exactly two normal rebuilds, with exact
+MAIN/CALCS agreement on all three channels and the separate zero Chaos record.
+JIT reports are byte-identical. Native tests execute the real penalty and six
+permanent-resistance reward programs together; missing input, wrong target,
+actual Partial refusal and fresh/reused/Rayon determinism remain explicit.
+Final Player resistance and caps are not yet compared as complete outputs.
+
+Validation passes: **307 Import normalization tests**, six ordinary native tests,
+one ordinary publication test, the all-five publication in **37.74s**, and the
+retained/fresh source and published-component authentication in **2.33s**. The
+publication checks full import inverses, an identical 18-file rebuild, all 110
+queries and eleven malformed/precedence/value controls. Strict workspace/
+all-feature/all-target Clippy passes. No new full-workspace test run or hosted
+success for this revision is claimed.
+
+Original05 now has **17 external assumptions**, retaining 23 usage preferences,
+all twelve active-root participation inputs and 72 configuration-linked origins.
+Selected unresolved issues remain **107/117/109/123/5** and complete native
+builds remain **0/5**. A real consumer and its inputs are now present, but complete
+configuration, assumptions, usage, selected mechanics and final metrics remain
+separate gates. The Actor and Encounter inventories stay Partial.
+
+**Next:** finish Original05's remaining input accounting through reviewed actual
+consumers and source-field dispositions. Support-origin composition awaits the
+owner's decision. The seven child buff/curse/aura defaults have source consumers
+but no current owned child consumer programs; do not add unused flags merely to
+increase transport coverage. Complete the selected build's dependency path,
+then begin D4 immediately after full native/reference validation. The
+[configuration consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07)
+retains useful source assertions while scheduling removal of obsolete authoring
+variants; it does not take priority over this build's next blocker.
 
 ## Archived 2026-10-07 checkpoint: remaining participation inputs and cached output accounting
 

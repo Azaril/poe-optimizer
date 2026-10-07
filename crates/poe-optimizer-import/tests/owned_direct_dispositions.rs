@@ -17,6 +17,8 @@ mod minions;
 #[path = "support/owned_direct_support_targets.rs"]
 mod support_targets;
 use fixture::Fixture;
+#[path = "support/owned_generated_deferred_accounting.rs"]
+mod generated_deferred_accounting;
 use poe_optimizer_core::{
     build_identity::BuildLineage, owned_build::ParameterValue, owned_draft::*,
 };

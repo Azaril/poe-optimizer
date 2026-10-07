@@ -39,7 +39,15 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest [configuration packet](../data/owned/poe2/3887ae68/configuration-resistance-penalty/README.md)
+The latest Import checkpoint accounts for fourteen archived generated source
+rows through their actual preset's existing Pending raw-input, usage and support-
+discovery obligations. It reuses the same source/selector proofs and creates no
+provider, value or issue. Unknown fields and unproved responsibility retain
+fallback. All-five reimport passes with unchanged canonical drafts and queries;
+Original05's configuration-linked origins decrease from 72 to 58. Fresh sidecars
+use schema22; the native package is unchanged. See the [accounting boundary](owned-generated-skill-dispositions-proposal.md#archived-source-responsibility-2026-10-07).
+
+The preceding [configuration packet](../data/owned/poe2/3887ae68/configuration-resistance-penalty/README.md)
 adds a typed Player resistance-penalty input and its real native Actor rule. Import
 now projects injected typed constructor defaults to Player, Enemy and Environment
 external inputs, preserving explicit zero/false and refusing malformed fields.
@@ -52,8 +60,9 @@ The preceding participation publication supplied all twelve active roots' enable
 preferences in Original05's selected preset, which retains 23 usage preferences.
 Import also accounts for the strictly framed Build/Buffs leaf as cached output,
 not a configured buff. Original05 retains five selected input obligations and
-72 configuration-linked source origins. The new penalty consumer does not close
-usage, readiness, resistance contributors/caps or complete native evaluation.
+58 configuration-linked source origins after archived accounting. The penalty
+consumer does not close usage, readiness, resistance contributors/caps or complete
+native evaluation.
 
 The [scaling-data investigation](owned-scaling-data-investigation.md) now compares
 exact tables, genuine formulas and lossless range segments. Current native tables
@@ -66,14 +75,16 @@ they preserve the supplying provider's level authority. The accepted
 [generated-source accounting contract](owned-generated-skill-dispositions-proposal.md)
 updates the single current Import policy in place. Its private proof checks saved
 fields against actual imported outputs and an existing same-preset Pending usage
-obligation. Regenerated evidence uses sidecar21 and a CLI commitment to its exact
-bytes; no old/new behavior branch is retained. All-five validation passed in
+obligation. That selected-source checkpoint emitted sidecar21 and a CLI commitment
+to its exact bytes; current archived accounting emits sidecar22. No old/new
+behavior branch is retained. The earlier all-five validation passed in
 `runs/owned-generated-field-accounting-01/validation.json` (5.89s): Original01
 changes four origin links, Original05 changes six, and the other three change
 none. Draft values, IDs, allocator state, selections and all 110 query rows remain
 exact. That publication reduced Original05's configuration issue `01f2` to 73 linked
-origins from 79; the later cached-output proof reduced it to the current 72; all five selected input issues remain. Complete native
-builds remain **0/5**. The [participation contract](owned-skill-participation-proposal.md)
+origins from 79; cached-output accounting reduced it to 72 and archived
+responsibility accounting to the current 58; all five selected input issues remain.
+Complete native builds remain **0/5**. The [participation contract](owned-skill-participation-proposal.md)
 now has a native consumer on the existing graph and a published Sniper policy
 combining independent required group/occurrence values. Other skills still need
 actual input-inventory closure before readiness publication. The [Class audit](owned-class-coverage-audit.md)

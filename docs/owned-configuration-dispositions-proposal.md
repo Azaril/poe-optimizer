@@ -69,7 +69,8 @@ The owned Original05 scenario currently has known encounter/level, fourteen fals
 raw-override presence flags, a false block-chance presence flag and the injected
 `enemyDamageType=Average` default. Its seventeen rewards have complete membership.
 Configuration build choices and scenario usage are empty/Pending; assumptions
-have sixteen known members but remain Pending.
+had sixteen known members at that audit and now have seventeen after the
+resistance-penalty publication; the inventory remains Pending.
 
 A follow-up audit of `runs/owned-occurrence-counts-04/original-05/sidecar.json`
 corrects the earlier description of "237 configuration origins." There are
@@ -210,8 +211,9 @@ lines. At that range-origins checkpoint, live `01f2` retained **79 origins:
 35 Config, 44 outside, with 38 outside sole-link origins**. At that checkpoint,
 all eleven selected obligations remained, as did every original draft, saved
 selection and query. This proved source correspondence, not numerical consumption,
-item completeness or full-build parity. The later generated field-accounting
-result below reduces the current origin count to 73.
+item completeness or full-build parity. The later selected generated-field proof
+reduced this to 73; subsequent cached-output and archived-responsibility
+checkpoints are tracked in the current implementation plan.
 
 The five-original checkpoint compares against hard-hashed historical sidecars
 and drafts from `runs/owned-source-presentation-03/`, rather than regenerating
@@ -827,10 +829,27 @@ six links now reduce `01f2` from the historical **79** origins to **73**:
 35 Config and 38 outside, with all 38 outside retaining `01f2` as their only Issue
 link. Usage issue `0503` and shared issue `01f2` both remain live. All 24 dormant generated
 origins remain unchanged; set 2's Complete empty usage receives no invented
-Pending obligation. **Current status is 73 configuration-linked origins, five
+Pending obligation. **That checkpoint had 73 configuration-linked origins, five
 selected Original05 issues and 0/5 complete native evaluations.** This does not
 complete support-origin discovery: local assignment order is not proof of all
 contributing sources.
+
+### Archived generated-source responsibility (2026-10-07)
+
+The subsequent audit found that seven archived Djinn pairs already have exact
+same-preset Pending owners for generated inputs, usage and support discovery.
+Their provider correspondence remains unresolved, but their reviewed source
+fields do not represent global configuration choices. The existing generated
+accounting path now recognizes that distinction without creating a target or
+known input. The [accepted accounting design](owned-generated-skill-dispositions-proposal.md#archived-source-responsibility-2026-10-07)
+records the strict source-frame, type, selector, duplicate and retained-owner
+gates; the implementation plan records executed all-five results.
+
+This does not generalize to every archived source. Unknown Warrior correspondence
+and Firebolt's absent Pending usage witness retain fallback. No Config field,
+container, external assumption or scenario usage inventory is completed by this
+change. Global `01f2` remains live until every remaining contributor has its real
+owner or a proven source-only disposition.
 
 ## Proposed Import contract
 

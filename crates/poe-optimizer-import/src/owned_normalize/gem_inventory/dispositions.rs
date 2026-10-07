@@ -569,6 +569,97 @@ mod tests {
     }
 
     #[test]
+    fn archived_generated_accounting_requires_three_existing_same_preset_obligations() {
+        use skill_input_disposition::pending_generated_responsibilities;
+        for owner in 0..3 {
+            for case in 0..9 {
+                with_destination(|b, pending, _, mut preset, other_source| {
+                    let set = b.ancestor(pending.source, "SkillSet").unwrap().unwrap();
+                    preset.intent = Some(SkillPresetIntentDraftV1 {
+                        schema_version: 1,
+                        usage: b
+                            .closure(pending.source, "usage-preferences-not-converted", vec![])
+                            .unwrap(),
+                        generated_inputs: b
+                            .closure(set, "generated-skill-inputs-not-converted", vec![])
+                            .unwrap(),
+                    });
+                    preset.support_origins = Some(
+                        b.closure(set, "support-origin-discovery-not-converted", vec![])
+                            .unwrap(),
+                    );
+                    let expected = pending_generated_responsibilities(b, set, &preset)
+                        .unwrap()
+                        .unwrap();
+                    let code = [
+                        "generated-skill-inputs-not-converted",
+                        "usage-preferences-not-converted",
+                        "support-origin-discovery-not-converted",
+                    ][owner];
+                    let completion = match owner {
+                        0 => &mut preset.intent.as_mut().unwrap().generated_inputs.completion,
+                        1 => &mut preset.intent.as_mut().unwrap().usage.completion,
+                        2 => &mut preset.support_origins.as_mut().unwrap().completion,
+                        _ => unreachable!(),
+                    };
+                    match case {
+                        0 => {}
+                        1 => *completion = DraftListCompletion::Complete,
+                        2 => {
+                            *completion = DraftListCompletion::Pending {
+                                id: b.id().unwrap(),
+                                code: key(code),
+                            }
+                        }
+                        3 => b
+                            .link(other_source, OwnedOriginTarget::Issue(expected[owner]))
+                            .unwrap(),
+                        4 => {
+                            *completion = DraftListCompletion::Pending {
+                                id: expected[owner],
+                                code: key("wrong-obligation"),
+                            }
+                        }
+                        5 => {
+                            if owner == 2 {
+                                preset.support_origins = None
+                            } else {
+                                preset.intent = None
+                            }
+                        }
+                        6 => preset.id = b.id().unwrap(),
+                        7 => {
+                            let foreign = b.id().unwrap();
+                            b.link(set, OwnedOriginTarget::SkillPreset(foreign))
+                                .unwrap();
+                        }
+                        8 => {
+                            *completion = DraftListCompletion::Pending {
+                                id: expected[(owner + 1) % 3],
+                                code: key(code),
+                            }
+                        }
+                        _ => unreachable!(),
+                    }
+                    let before = preset.clone();
+                    let state = (b.allocator.state(), b.issues, b.links, b.origins.clone());
+                    assert_eq!(
+                        pending_generated_responsibilities(b, set, &preset).unwrap(),
+                        (case == 0).then_some(expected),
+                        "owner {owner}, case {case}"
+                    );
+                    assert_eq!(preset, before);
+                    assert_eq!(
+                        (b.allocator.state(), b.issues, b.links, b.origins.clone()),
+                        state,
+                        "checking retained owners never creates or alters them"
+                    );
+                });
+            }
+        }
+    }
+
+    #[test]
     fn immutable_skill_container_census_reuses_only_the_source_frame_and_charges_copies() {
         use skill_source_census::{container_sets, sets};
         let source = SOURCE.replace("<Gem/>", "<Gem><Reference/></Gem>");

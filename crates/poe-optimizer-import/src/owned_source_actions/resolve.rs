@@ -313,9 +313,10 @@ fn inspect<L: Locator>(
     inspect_row(adapter, evidence, row, request.context, true, budget)
 }
 
-// The normalizer has already established the exact generated provider. This
-// inspects only the shared selector topology; it never constructs a Direct
-// request or grants manual-source authority.
+// Inspect only shared selector topology. The normalizer separately either
+// proves an exact generated provider or retains its scoped Pending obligations.
+// This never resolves a provider, constructs a Direct request or grants manual
+// source authority.
 pub(super) fn inspect_generated_selectors(
     adapter: &SourceActionCorrespondence,
     evidence: &SourceProjectEvidence<'_>,

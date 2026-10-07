@@ -398,7 +398,6 @@ fn tree_provider(
     draft: &DraftSessionInput,
     context: &Context<'_>,
     selected: &Selected,
-    group: &SourceEvidenceRow<'_>,
     bound: &BoundSource<'_>,
 ) -> Result<Option<(ProviderRoot, BoundedInteger, Vec<SourceOccurrenceId>)>> {
     let GeneratedSkillInputProvider::TreeAllocation {
@@ -409,11 +408,7 @@ fn tree_provider(
     else {
         unreachable!()
     };
-    if value(group, "slot").is_some()
-        || value(group, "source") != Some(format!("Tree:{source_node_id}").as_str())
-    {
-        return Ok(None);
-    }
+    // The shared syntax candidate already checked the exact source and slot.
     let Some(spec) = selected.spec else {
         return Ok(None);
     };
@@ -501,16 +496,7 @@ fn item_provider(
     let Some(&preset) = context.equipment.get(&set) else {
         return Ok(None);
     };
-    let Some((item_key, name)) = value(group, "source")
-        .and_then(|v| v.strip_prefix("Item:"))
-        .and_then(|v| v.split_once(':'))
-    else {
-        return Ok(None);
-    };
-    if !positive(item_key) || name != source_name {
-        return Ok(None);
-    }
-    let Some(slot_name) = value(group, "slot") else {
+    let Some((item_key, slot_name)) = item_source(group, source_name) else {
         return Ok(None);
     };
     let evidence = b.evidence;
@@ -710,6 +696,36 @@ fn item_provider(
     )))
 }
 
+fn item_source<'a>(
+    group: &'a SourceEvidenceRow<'_>,
+    source_name: &str,
+) -> Option<(&'a str, &'a str)> {
+    let (item_key, name) = value(group, "source")?
+        .strip_prefix("Item:")?
+        .split_once(':')?;
+    (positive(item_key) && name == source_name).then_some((item_key, value(group, "slot")?))
+}
+
+/// Source identity only. This proves no selected allocation, equipment use or
+/// provider level, and never constructs a generated target.
+fn source_identity(
+    group: &SourceEvidenceRow<'_>,
+    gem: &SourceEvidenceRow<'_>,
+    bound: &BoundSource<'_>,
+) -> bool {
+    value(gem, "skillId") == Some(bound.row.skill_id.as_str())
+        && value(gem, "nameSpec") == Some(bound.row.name_spec.as_str())
+        && match bound.row.provider {
+            GeneratedSkillInputProvider::TreeAllocation { source_node_id, .. } => {
+                value(group, "slot").is_none()
+                    && value(group, "source") == Some(format!("Tree:{source_node_id}").as_str())
+            }
+            GeneratedSkillInputProvider::ItemModifier { source_name, .. } => {
+                item_source(group, source_name).is_some()
+            }
+        }
+}
+
 fn candidate(
     b: &mut Builder<'_, '_>,
     draft: &DraftSessionInput,
@@ -719,14 +735,12 @@ fn candidate(
     gem: &SourceEvidenceRow<'_>,
     bound: &BoundSource<'_>,
 ) -> Result<Option<ProvenSource>> {
-    if value(gem, "skillId") != Some(bound.row.skill_id.as_str())
-        || value(gem, "nameSpec") != Some(bound.row.name_spec.as_str())
-    {
+    if !source_identity(group, gem, bound) {
         return Ok(None);
     }
     let provider = match bound.row.provider {
         GeneratedSkillInputProvider::TreeAllocation { .. } => {
-            tree_provider(b, draft, context, selected, group, bound)?
+            tree_provider(b, draft, context, selected, bound)?
         }
         GeneratedSkillInputProvider::ItemModifier { .. } => {
             item_provider(b, draft, context, selected, group, bound)?
@@ -758,6 +772,15 @@ pub(super) struct ResolvedPreset {
     pub preset_index: usize,
     pub complete: bool,
     pub sources: Vec<ProvenSource>,
+    pub archived: Vec<ArchivedSource>,
+}
+
+/// Recognized saved syntax on an explicitly nonselected preset. No provider or
+/// raw-input correspondence has been resolved; all responsibility stays Pending.
+pub(super) struct ArchivedSource {
+    pub source: SourceOccurrenceId,
+    pub group: SourceOccurrenceId,
+    pub index: usize,
 }
 
 pub(super) fn resolve(
@@ -765,6 +788,25 @@ pub(super) fn resolve(
     draft: &DraftSessionInput,
     compiled: &CompiledSources<'_>,
     context: Context<'_>,
+) -> Result<Vec<ResolvedPreset>> {
+    resolve_inner(b, draft, compiled, context, false)
+}
+
+pub(super) fn resolve_with_archived(
+    b: &mut Builder<'_, '_>,
+    draft: &DraftSessionInput,
+    compiled: &CompiledSources<'_>,
+    context: Context<'_>,
+) -> Result<Vec<ResolvedPreset>> {
+    resolve_inner(b, draft, compiled, context, true)
+}
+
+fn resolve_inner(
+    b: &mut Builder<'_, '_>,
+    draft: &DraftSessionInput,
+    compiled: &CompiledSources<'_>,
+    context: Context<'_>,
+    account_archived: bool,
 ) -> Result<Vec<ResolvedPreset>> {
     let evidence = b.evidence;
     let frames = skill_source_census::container_sets(b)?;
@@ -776,6 +818,7 @@ pub(super) fn resolve(
         b.charge(1)?;
         let mut proven = frame_index.as_ref().is_some_and(|rows| rows.contains(set));
         let mut candidates: BTreeMap<GeneratedSkillKey, Vec<ProvenSource>> = BTreeMap::new();
+        let mut archived = Vec::new();
         if proven {
             // Reconstruction chooses a saved group before our narrower scalar
             // admission. An unsupported competing row must not make a later row
@@ -834,8 +877,10 @@ pub(super) fn resolve(
                 if !has_source {
                     continue;
                 }
+                let is_selected = selected.skills == Some(*set);
+                let is_archived = account_archived && selected.skills.is_some() && !is_selected;
                 if !unambiguous_identity
-                    || selected.skills != Some(*set)
+                    || (!is_selected && !is_archived)
                     || group.children().len() != 1
                     || source.and_then(|source| joins.get(&(source, slot))) != Some(&1)
                 {
@@ -845,7 +890,7 @@ pub(super) fn resolve(
                 let gem = &evidence.rows()[group.children()[0].ordinal() as usize];
                 charge_frame(b, gem, &["gemId", "variantId", "skillId", "nameSpec"])?;
                 if gem.occurrence().name() != "Gem"
-                    || !plain_row(gem, skill_source_census::GEM_ATTRIBUTES, true)
+                    || !plain_row(gem, skill_source_census::GEM_ATTRIBUTES, !is_archived)
                     || !matches!(
                         gem.authored_instance(),
                         Some(AuthoredInstanceId::SkillEntry(_))
@@ -880,6 +925,31 @@ pub(super) fn resolve(
                     proven = false;
                     continue;
                 }
+                if is_archived {
+                    // Keep the same pre-admission source+slot census, including
+                    // unsupported competing rows. Recognition supplies no root.
+                    proven = false;
+                    let mut matched = Vec::new();
+                    for row in rows {
+                        if source_identity(group, gem, row)
+                            && matches!(
+                                scalar(b, gem, &row.level)?,
+                                Some(ParameterValue::Integer(_))
+                            )
+                        {
+                            matched.push(row.index);
+                        }
+                    }
+                    if let [index] = matched.as_slice() {
+                        b.charge(1)?;
+                        archived.push(ArchivedSource {
+                            source: gem.occurrence().id(),
+                            group: group.occurrence().id(),
+                            index: *index,
+                        });
+                    }
+                    continue;
+                }
                 let mut matched = Vec::new();
                 for row in rows {
                     if let Some(value) = candidate(b, draft, &context, &selected, group, gem, row)?
@@ -909,6 +979,7 @@ pub(super) fn resolve(
             preset_index: *index,
             complete: proven,
             sources: rows,
+            archived,
         });
     }
     Ok(plans)

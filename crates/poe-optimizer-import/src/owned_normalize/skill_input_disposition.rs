@@ -112,6 +112,26 @@ impl CompiledDeferredUsage {
         row: &SourceEvidenceRow<'_>,
         group: &SourceEvidenceRow<'_>,
     ) -> Result<bool> {
+        self.prove_fields(b, row, group, false)
+    }
+    /// The source saves absent generated usage inputs as missing or `nil`.
+    /// This only accounts for their syntax under a retained Pending usage
+    /// obligation; it does not assign a native count, Boolean or default.
+    pub(super) fn prove_generated(
+        &self,
+        b: &mut Builder<'_, '_>,
+        row: &SourceEvidenceRow<'_>,
+        group: &SourceEvidenceRow<'_>,
+    ) -> Result<bool> {
+        self.prove_fields(b, row, group, true)
+    }
+    fn prove_fields(
+        &self,
+        b: &mut Builder<'_, '_>,
+        row: &SourceEvidenceRow<'_>,
+        group: &SourceEvidenceRow<'_>,
+        generated: bool,
+    ) -> Result<bool> {
         // The base inventory proves the intrinsic fields and finite row/group
         // grammar. Group main-action preferences have not gained a converter.
         for name in ["mainActiveSkill", "mainActiveSkillCalcs"] {
@@ -126,6 +146,14 @@ impl CompiledDeferredUsage {
             b.charge(selected.attributes().len().saturating_add(1))?;
             if let Some(value) = selected.attribute(attribute) {
                 b.charge(value.raw().len())?;
+            }
+            if generated
+                && !from_group
+                && selected
+                    .attribute(attribute)
+                    .is_none_or(|value| value.decoded().ok() == Some("nil"))
+            {
+                continue;
             }
             match b.scalar_value(selected, recipe)? {
                 ScalarValue::Selected(ParameterValue::Quantity(_)) if field.count() => {}
@@ -344,20 +372,38 @@ pub(super) fn pending_intent_usage(
     set: SourceOccurrenceId,
     preset: &SkillPresetDraft,
 ) -> Result<Option<DraftIssueId>> {
-    if unique_link(b, set, |link| match link {
-        OwnedOriginTarget::SkillPreset(id) => Some(*id),
-        _ => None,
-    })? != Some(preset.id)
-    {
-        return Ok(None);
-    }
     let Some(intent) = &preset.intent else {
         return Ok(None);
     };
-    let DraftListCompletion::Pending { id, code } = &intent.usage.completion else {
+    pending_preset_issue(
+        b,
+        set,
+        preset.id,
+        &intent.usage.completion,
+        "usage-preferences-not-converted",
+    )
+}
+
+/// Reuse an existing attached responsibility; never create a new issue or turn
+/// Complete into Pending merely to justify a source disposition.
+fn pending_preset_issue(
+    b: &mut Builder<'_, '_>,
+    set: SourceOccurrenceId,
+    preset: SkillPresetId,
+    completion: &DraftListCompletion,
+    expected_code: &str,
+) -> Result<Option<DraftIssueId>> {
+    if unique_link(b, set, |link| match link {
+        OwnedOriginTarget::SkillPreset(id) => Some(*id),
+        _ => None,
+    })? != Some(preset)
+    {
+        return Ok(None);
+    }
+    let DraftListCompletion::Pending { id, code } = completion else {
         return Ok(None);
     };
-    if code.as_str() != "usage-preferences-not-converted" {
+    if code.as_str() != expected_code {
         return Ok(None);
     }
     let issue = *id;
@@ -381,4 +427,37 @@ pub(super) fn pending_intent_usage(
         }
     }
     Ok(Some(issue))
+}
+
+/// Archived generated syntax belongs to three independent, still-open
+/// inventories. A singleton saved group does not prove runtime support sources.
+pub(super) fn pending_generated_responsibilities(
+    b: &mut Builder<'_, '_>,
+    set: SourceOccurrenceId,
+    preset: &SkillPresetDraft,
+) -> Result<Option<[DraftIssueId; 3]>> {
+    let (Some(intent), Some(supports)) = (&preset.intent, &preset.support_origins) else {
+        return Ok(None);
+    };
+    let mut issues = Vec::new();
+    for (completion, code) in [
+        (
+            &intent.generated_inputs.completion,
+            "generated-skill-inputs-not-converted",
+        ),
+        (&intent.usage.completion, "usage-preferences-not-converted"),
+        (
+            &supports.completion,
+            "support-origin-discovery-not-converted",
+        ),
+    ] {
+        let Some(issue) = pending_preset_issue(b, set, preset.id, completion, code)? else {
+            return Ok(None);
+        };
+        if issues.contains(&issue) {
+            return Ok(None);
+        }
+        issues.push(issue);
+    }
+    Ok(Some([issues[0], issues[1], issues[2]]))
 }

@@ -87,7 +87,7 @@ fn generated_accounting_retires_only_selected_pairs_and_preserves_real_pending_o
     let f = fixture();
     let text = source();
     let result = run(&text, &f);
-    assert_eq!(result.sidecar().schema_version, 21);
+    assert_eq!(result.sidecar().schema_version, 22);
     let preset = &result.draft().input().skill_presets.members[1];
     let DraftListCompletion::Pending { id, .. } = preset.intent.as_ref().unwrap().usage.completion
     else {

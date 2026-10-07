@@ -1,6 +1,8 @@
 # Proposal: generated skill source-field accounting
 
-**Status:** Implemented and validated 2026-10-06; requested participation remains separate.
+**Status:** Selected-source accounting implemented and validated 2026-10-06;
+archived responsibility accounting added 2026-10-07. Current validation and
+baseline are recorded in [implementation](implementation.md).
 **Date:** 2026-10-05.
 
 ## Problem and bounded outcome
@@ -15,8 +17,9 @@ Before this checkpoint, Original05 had 79 origins linked to configuration issue 
 five selected input issues. Its selected generated pairs 208/209, 226/227 and
 243/244 have exact Tree/Item providers, raw-quality bindings and count projections.
 The checked accounting pass discharges those six links while preserving
-usage issue `0503` and shared issue `01f2`. Its configuration-linked inventory
-now has 73 origins. Complete native original builds remain **0/5**.
+usage issue `0503` and shared issue `01f2`. That checkpoint left 73 configuration-
+linked origins; subsequent cached-output and archived-responsibility checkpoints
+are recorded in the current plan. Complete native original builds remain **0/5**.
 
 The intended change identifies a real retained owner for unresolved semantics.
 It does not prove that a global switch is inert, resolve usage, complete support
@@ -43,9 +46,11 @@ Fresh normalization is the only producer of this proof: there is no sidecar
 restore/cache reader whose old result can acquire new authority.
 
 Whenever the generated-input policy runs under current accounting semantics,
-emit sidecar schema/domain 21, including attempts that conservatively retire no
-links. The CLI reports that schema and the SHA-256 of the actual written sidecar
-bytes. An unchanged draft digest does not identify unchanged accounting proof.
+emit sidecar schema/domain 22, including attempts that conservatively retire no
+links. Schema21 identifies the earlier selected-output-only accounting proof;
+there is no historical importer mode or restored-proof reader. The CLI reports
+that schema and the SHA-256 of the actual written sidecar bytes. An unchanged
+draft digest does not identify unchanged accounting proof.
 Reimport all five originals and compare against stored pre-cutover evidence;
 do not retain the old importer merely to regenerate that evidence. Failure must
 preserve successful raw/count imports and unresolved obligations. A format
@@ -137,13 +142,51 @@ watermarks, query selections or other source origins.
    hard-coding the implementation to Original05 or assuming only six links can
    qualify across the whole corpus.
 
-Original05's 24 dormant generated origins remain outside the selected-source
-proof. In particular, set 2's Complete empty usage cannot be replaced by an
-invented Pending obligation. Record actual admitted rows and sidecar versions
-with each checkpoint. The verified result is **73 configuration origins,
-five selected Original05 issues and 0/5 complete native evaluations**.
+## Archived source responsibility (2026-10-07)
 
-## Verified current implementation
+The selected-output proof above remains unchanged. Archived generated rows can
+also have correctly scoped unresolved owners even though their exact provider
+cannot yet be resolved. Requiring a successful selected-provider binding before
+acknowledging those owners accidentally leaves their known saved fields on the
+global configuration obligation, coupling independent presets.
+
+The existing generated-source resolver now separately recognizes source syntax
+on an explicitly nonselected preset. It shares the exact configured definition/
+source identity and the pre-admission source/slot duplicate census. This private
+receipt has no `GeneratedSkillKey`, provider, native input or usage value. Missing
+or invalid active selection is not evidence that a row is archived.
+
+A deferred accounting proof requires all three existing same-preset Pending
+inventories, with their expected codes and actual source attachment:
+
+- Generated inputs retain unresolved provider, saved level and quality ownership.
+- Usage retains counts, global effects, participation and reporting intent.
+- Support origins retain runtime source discovery and ordering responsibility;
+  one saved Gem child does not prove a complete effective support inventory.
+
+It never creates an issue or turns a Complete inventory back into Pending. Each
+row still needs the full generated field grammar, typed saved level and quality,
+the existing deferred usage codecs, and exact MAIN/CALCS selector correspondence.
+Generated missing/`nil` count/global fields are recognized only as unresolved
+source syntax; they produce no native default or Boolean. Ordinary values still
+use the same typed codecs. Unknown attributes, malformed values, unsupported
+selectors, ambiguous identities and live physical/generated-output links refuse
+this proof. The selector inspector proves topology, never provider authority.
+
+Only the admitted source rows gain the exact preset and its three retained issue
+links, replacing their configuration fallback. They remain `Contributes`; raw
+source, draft values, IDs, allocator state, active axes, queries and every issue
+completion remain unchanged. A source-kind or skill name alone cannot authorize
+this change, and no production branch recognizes an example build.
+
+The audited Original05 candidates are seven archived Djinn pairs (14 origins),
+on skill sets 3, 5, 6 and 1. The remaining four Warrior pairs lack the required
+configured correspondence, and set 2's Firebolt lacks a Pending usage obligation;
+those ten origins must retain fallback. These observations are test expectations,
+not runtime allowlists. All-five publication compares against pinned earlier
+sidecars; see the current plan for executed results and remaining blockers.
+
+## Verified selected-source checkpoint (2026-10-06)
 
 All 287 normalization tests, 184 Import library tests, 16 Direct-disposition
 and eight Direct-source-action tests pass. The five-build CLI reimport test

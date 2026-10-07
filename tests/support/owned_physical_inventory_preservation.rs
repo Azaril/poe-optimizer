@@ -376,11 +376,11 @@ pub fn compare_original_with_item_parameter_completions(
         "this preservation replay does not introduce generated-input authority"
     );
     // Both endpoints run the single current importer. Generated-field accounting
-    // uses proof schema21 even when no source pair qualifies for retirement.
+    // uses proof schema22 even when no source pair qualifies for retirement.
     // Earlier declarations without that policy use their current applicable
     // proof shape; this is not a branch retaining an old importer algorithm.
     let expected_version = if generated_inputs {
-        21
+        22
     } else if direct_targets && matches!(case, 1 | 5) {
         20
     } else {

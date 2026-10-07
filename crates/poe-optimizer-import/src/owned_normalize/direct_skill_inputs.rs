@@ -491,6 +491,21 @@ impl CompiledDirectInputs<'_> {
         &self,
         row: &generated_skill_inputs::GeneratedSkillInputRule,
     ) -> Option<&crate::owned_source_actions::SourceActionCorrespondence> {
+        self.generated_disposition(row)
+            .map(|d| d.selector_adapter())
+    }
+    /// Share the existing typed deferred-field proof without assigning the
+    /// archived generated row any Direct skill or raw-input ownership.
+    pub(super) fn generated_deferred_usage(
+        &self,
+        row: &generated_skill_inputs::GeneratedSkillInputRule,
+    ) -> Option<&skill_input_disposition::CompiledDeferredUsage> {
+        self.generated_disposition(row).map(|d| d.deferred_usage())
+    }
+    fn generated_disposition(
+        &self,
+        row: &generated_skill_inputs::GeneratedSkillInputRule,
+    ) -> Option<&dispositions::CompiledDirectDisposition<'_>> {
         let selector = ExternalSelector::Definition(ExternalOwnerSelector::Gem {
             game_id: SourceComponent::Text(row.game_id.clone()),
             variant_id: SourceComponent::Text(row.variant_id.clone()),
@@ -503,7 +518,7 @@ impl CompiledDirectInputs<'_> {
             && input.skill_id == row.skill_id
             && input.name_spec == row.name_spec
             && input.skill == row.skill)
-            .then(|| bound.disposition.as_ref().map(|d| d.selector_adapter()))
+            .then_some(bound.disposition.as_ref())
             .flatten()
     }
     pub(super) fn sets(&self, b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {

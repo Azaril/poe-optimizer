@@ -127,6 +127,14 @@ optimizer integration and verified mutations while completing the remaining
 originals. Retain contrasting player/minion contract tests and all-five regression;
 those safeguards do not require two complete builds before search work starts.
 
+Unresolved imported fields belong to their actual preset or scenario obligation.
+A known source field on an archived skill preset must not remain coupled to a
+selected build's global configuration blocker when its complete field grammar
+and existing scoped responsibilities are proven. This is Import accounting,
+not permission to invent providers, drop unknown fields or complete a native
+inventory. Exact provider binding and executable support/usage coverage remain
+independent requirements.
+
 Whether authors edit a small textual DSL or structured documents is a tooling choice.
 Both compile to the same project-owned typed rule representation. Optional Lua authoring
 bindings may emit this representation in offline tools; Lua callbacks cannot escape into

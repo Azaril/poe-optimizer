@@ -2288,7 +2288,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let item_range_origins_attached = b.item_range_origins_attached;
     let sidecar = FreshNormalizationSidecar {
         schema_version: if policy.generated_skill_inputs.is_some() {
-            21
+            22
         } else if direct_support_targets_attached {
             20
         } else if item_range_origins_attached {
@@ -2297,8 +2297,6 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             18
         } else if occurrence_usage {
             17
-        } else if policy.generated_skill_inputs.is_some() {
-            16
         } else if census_profile {
             15
         } else if paired_profile {
@@ -2332,7 +2330,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
         if policy.generated_skill_inputs.is_some() {
-            "owned-normalization-sidecar-v21"
+            "owned-normalization-sidecar-v22"
         } else if direct_support_targets_attached {
             "owned-normalization-sidecar-v20"
         } else if item_range_origins_attached {
@@ -2341,8 +2339,6 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             "owned-normalization-sidecar-v18"
         } else if occurrence_usage {
             "owned-normalization-sidecar-v17"
-        } else if policy.generated_skill_inputs.is_some() {
-            "owned-normalization-sidecar-v16"
         } else if census_profile {
             "owned-normalization-sidecar-v15"
         } else if paired_profile {

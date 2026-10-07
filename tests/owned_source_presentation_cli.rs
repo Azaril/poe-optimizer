@@ -221,8 +221,8 @@ fn compare(case: usize, xml: &[u8], prior: &Path, out: &Path) -> Value {
     );
     let before_side: Value = read(before_dir.join("sidecar.json"));
     let after_side: Value = read(after_dir.join("sidecar.json"));
-    assert_eq!(before_side["schema_version"], 21);
-    assert_eq!(after_side["schema_version"], 21);
+    assert_eq!(before_side["schema_version"], 22);
+    assert_eq!(after_side["schema_version"], 22);
     let mut old_origins = before_side["origins"].clone();
     let mut new_origins = after_side["origins"].clone();
     selected::canonical(&mut old_origins);

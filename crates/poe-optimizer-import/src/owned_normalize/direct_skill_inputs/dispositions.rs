@@ -205,6 +205,9 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
 }
 
 impl CompiledDirectDisposition<'_> {
+    pub(super) fn deferred_usage(&self) -> &CompiledDeferredUsage {
+        &self.deferred
+    }
     pub(super) fn selector_adapter(&self) -> &SourceActionCorrespondence {
         &self.reference
     }

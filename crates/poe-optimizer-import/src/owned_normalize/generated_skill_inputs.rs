@@ -302,23 +302,37 @@ pub(super) struct MaterializedInput {
     row: usize,
     binding: GeneratedSkillInputBindingDraft,
 }
+#[derive(Default)]
+pub(super) struct InputAccounting {
+    materialized: Vec<MaterializedInput>,
+    archived: Vec<ArchivedInput>,
+}
+struct ArchivedInput {
+    source: SourceOccurrenceId,
+    group: SourceOccurrenceId,
+    set: SourceOccurrenceId,
+    preset: usize,
+    row: usize,
+}
 pub(super) use generated_skill_sources::Context;
 pub(super) fn materialize(
     b: &mut Builder<'_, '_>,
     draft: &mut DraftSessionInput,
     compiled: Option<&CompiledGeneratedInputs<'_>>,
     context: Context<'_>,
-) -> Result<Vec<MaterializedInput>> {
+) -> Result<InputAccounting> {
     let Some(compiled) = compiled else {
-        return Ok(vec![]);
+        return Ok(InputAccounting::default());
     };
-    let mut receipts = Vec::new();
-    let plans = generated_skill_sources::resolve(b, draft, &compiled.sources, context)?;
+    let mut receipts = InputAccounting::default();
+    let plans =
+        generated_skill_sources::resolve_with_archived(b, draft, &compiled.sources, context)?;
     for generated_skill_sources::ResolvedPreset {
         source: set,
         preset_index: index,
         complete: proven,
         sources: rows,
+        archived,
     } in plans
     {
         let preset = &mut draft.skill_presets.members[index];
@@ -371,7 +385,7 @@ pub(super) fn materialize(
                 .iter()
                 .all(|p| matches!(p.value, DraftField::Known { .. }))
             {
-                receipts.push(MaterializedInput {
+                receipts.materialized.push(MaterializedInput {
                     source: row.source,
                     group: row.group,
                     set,
@@ -405,6 +419,16 @@ pub(super) fn materialize(
             usage,
             generated_inputs,
         });
+        b.charge(archived.len())?;
+        receipts
+            .archived
+            .extend(archived.into_iter().map(|row| ArchivedInput {
+                source: row.source,
+                group: row.group,
+                set,
+                preset: index,
+                row: row.index,
+            }));
     }
     Ok(receipts)
 }
