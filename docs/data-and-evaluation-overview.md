@@ -63,6 +63,15 @@ no Lua-shaped override model for a dormant source lookup. The implementation
 plan records the exact failed admission check and pending work; current package
 identities and all five build results are unchanged.
 
+An independent source witness also proves that the saved damage-roll setting is
+inactive in the exact no-boss encounter: 26 complete loads pass with identical
+JIT-on/off evidence, while a boss-preset contrast exercises the real consumer.
+It compares each saved MAIN/CALCS selection independently; Original05 selects
+Sniper in MAIN and Arsonist in CALCS. This adds no native setting, Import exception
+or coverage. Any later non-applicability permission must express the field and
+branch relationship in injected acquisition policy, not game-specific Rust.
+See the [proof and next work](implementation.md#independent-progress-default-encounter-damage-roll-evidence).
+
 The preceding Import checkpoint accounts for fourteen overwritten numeric
 configuration placeholders in every original. The proof binds the exact source
 scope and encounter to actual emitted raw-presence/optional-value inputs; it

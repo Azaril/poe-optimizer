@@ -41,6 +41,16 @@ real modifier. The optional source observer is retained to authenticate actual
 formula branches, source inputs and this absence boundary; it adds no runtime
 Lua dependency. See the [critical source checkpoint](implementation.md#in-progress-incoming-critical-source-proof-and-actor-read-decision).
 
+**Damage-roll branch review, 2026-10-07:** the saved numeric Placeholder has no
+independent consumer in the exact default no-boss encounter. The optional source
+witness retains a real boss contrast and full scalar-output controls, without
+copying widget visibility or callback behavior into native evaluation. Existing
+presentation accounting is not authority to discard a mechanical field; a later
+injected branch-disposition permission needs its own review. Retain authored
+Input intent and unresolved configuration inventories. No runtime exception,
+unused native input or parallel configuration parser was added. See the
+[source checkpoint](implementation.md#independent-progress-default-encounter-damage-roll-evidence).
+
 Retain a legacy path only for a named, currently useful consumer: original-PoB
 reference evaluation, maintained data acquisition/import, or an independent
 numerical regression that has not yet moved to the owned engine. An exported API,

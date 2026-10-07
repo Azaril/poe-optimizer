@@ -225,6 +225,57 @@ was attempted for this unapproved draft. At 21:54:56 UTC, `bfa28bb` CI was pendi
 pending runs coalesced, and `f93d551` had four successful/eight running jobs with
 no failed steps. No new hosted success is claimed.
 
+## Independent progress: default-encounter damage-roll evidence
+
+While the Actor-read and support-origin decisions remain pending, the next
+configuration source investigation passed. The optional Rust target
+`owned_damage_roll_source` performs twelve cases per JIT mode, including one
+extra warm-up load per mode: **26 complete loads in 133.31s**. Ten no-boss cases
+cover the original, raw Input zero/100/fractional values, changed/missing numeric
+Placeholders, explicit `None`, a separate fresh replay and changed-to-original
+reuse. All top-level scalar Player and selected-minion outputs and top-level
+availability/type maps match their unchanged baseline within each mode. Nested
+output tables are not covered by that equality claim.
+
+The observer traces the original preset callback without replacing methods or
+injecting modifier records. The no-boss branch never reads the roll. A pinned
+`Shaper Ball` contrast reads 0/100 and changes Cold incoming damage from 4127 to
+6190 in both modes. This is a PoB callback contrast, not native admission of a
+boss preset or a claim about current PoE2 boss content. MAIN preserves saved
+Sniper selection and CALCS preserves saved Arsonist selection; the first local
+run failed because our new assertion incorrectly assumed both selected Sniper.
+The corrected test changes no source selection and establishes no new PoB bug.
+
+Both 339,448-byte reports have SHA-256
+`c20f9c8992fa062f59b42bcc1da77abc17581bf9e1a7133c6fef20251e27d2b6`.
+Evidence: `runs/owned-damage-roll-source-02/source-jit-{off,on}.json` and
+`runs/owned-damage-roll-test-02.log`. Two evidence-helper regressions, strict
+targeted Clippy and formatting passed. To reproduce, build the
+`poe-optimizer-pob` test target, set `POE_DAMAGE_ROLL_SOURCE_OUT` to a fresh
+directory and run its ignored exact test
+`damage_roll_range_is_inactive_without_selected_boss_skill`.
+
+**No Import disposition or native data changed.** The current encounter policy
+cannot express the field-to-branch relationship. A hardcoded field exception,
+presentation classification or unused synthetic input would violate the intended
+data boundary. The [existing configuration proposal](owned-configuration-dispositions-proposal.md#default-encounter-branch-dispositions-2026-10-07-investigation)
+records a narrow injected permission for future review. Even after that proof,
+only one source leaf would be accounted for; all five selected obligations remain.
+Do not prioritize this bookkeeping over a ready numerical consumer.
+
+The independent next implementation is the already approved shared Sand Djinn
+preparation described below: ordinary and once-per-source supported properties,
+common prepared Skill values, and real Command/actor-level consumers. Retain
+Partial contributor/readiness coverage until proven; neither raw-as-final values
+nor source endpoint differences authorize a shortcut. This work needs no new
+public model if the accepted source-property/staging contract suffices.
+
+CI snapshot at 22:29 UTC: `23fb1c5` run
+[37695361479](https://github.com/Azaril/poe-optimizer/actions/runs/37695361479)
+was pending and `f93d551` run
+[37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252)
+was in progress, with no run failure reported. This is not hosted success.
+
 ## Checked baseline and original-build results
 
 Use `runs/owned-boolean-publication-01/package` and its neighboring

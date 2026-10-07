@@ -929,8 +929,10 @@ connecting the result to incoming damage/mitigation. Preserve source branch
 order, clamps and unlucky squaring; baseline zeros are not absence proofs.
 Multiple-source flags also depend on the accepted
 [typed Boolean contribution contract](owned-boolean-contributions-proposal.md),
-approved by the owner on 2026-10-07 and still unimplemented. Do not replace it with
-numeric flag counters or assumed false values.
+approved and implemented on 2026-10-07. The published passive flag inventories
+remain Partial; critical-specific producers and shared Actor reads of computed
+Enemy results are separate gates. Do not replace them with numeric flag counters
+or assumed false values.
 
 Distance needs special care: its count callback falls back from Input zero,
 whereas direct reads in `CalcActiveSkill.lua:674,688` retain zero. One effective
@@ -939,6 +941,45 @@ reused. The shared configuration frame proves structure, not semantic closure:
 it admits well-framed unknown names and custom blocks. Config/ConfigSet and
 complete assumptions/usage remain unresolved until every responsibility is owned.
 Support-origin composition and FullDPS reporting remain separate design decisions.
+
+### Default-encounter branch dispositions (2026-10-07 investigation)
+
+The `enemyDamageRollRange` consumer is inside the pinned boss-skill callback's
+non-`None` branch (`ConfigOptions.lua:2190,2203`). Its widget has no apply callback.
+All five saved originals contain a numeric Placeholder for this field and no
+boss-skill selector. Widget visibility alone is not the proof: actual callback
+branch execution and downstream output controls must establish non-applicability.
+
+The current encounter policy proves an exact identity from injected absent
+selectors. It does **not** encode which other fields are inactive in that branch.
+Its catalog variant is opaque; a matching encounter ID or absent-selector name
+is not new disposition authority. The existing numeric-placeholder accounting
+requires actual emitted raw-input correspondence, and presentation-only
+accounting cannot cover a mechanical field. Do not hardcode this field's name,
+its value 70, a boss-selector relationship, or an encounter ID in Rust; do not
+fabricate an unused native input to obtain an accounting proof.
+
+If this becomes the next useful input-closure step, review a small injected
+numeric-placeholder disposition permission on the existing encounter policy.
+Each row would carry a recipe for one `PlaceholderNumber` source selector and
+its finite numeric grammar, plus required absent-selector guards. Every required
+guard must belong to that policy's authenticated encounter preconditions. Source
+evidence must establish the row's branch relationship; the recipe is not a
+general ignore list. This is a proposed public Import permission, not an
+implemented private optimization or a new Core/runtime rule model.
+
+Reuse the complete fresh ConfigSet census, exact scoped Encounter proof and
+unique Scenario/Choice/live-issue accounting. Retire only a proven leaf's sole
+configuration-issue link, retaining its Scenario link. Preserve authored Inputs,
+string aliases, unsupported or malformed rows, all draft values and every
+inventory obligation. Test changed finite values independently of saved 70,
+missing/wrong guards, selector writes in every lane (including explicit `None`),
+multiple ConfigSets, ambiguity, source updates and bounded-work failures.
+
+For current Original05, such a proof would account for one source leaf only;
+the five selected input obligations would remain. The critical consumer and
+already approved Sand preparation remain more useful immediate implementation
+work. This investigation does not authorize full configuration closure.
 
 ## Proposed Import contract
 
