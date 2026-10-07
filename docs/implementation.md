@@ -230,6 +230,19 @@ this source-property path and start at level 1 / quality 0; they must not each
 add another source-property contribution. Their separate support admission and
 delivery still require coverage.
 
+Concrete authoring map: existing support count `32e0` and supported-level channel
+`32e1` complement pre-support `30ac/30ad`; Sand must not read Spell channel
+`32e2`. Bind tree supply `32d2`, Command supply `32a5`, Actor population slot
+`32a3` and actor-level stat `001c` through their actual declarations. The existing
+`sniper.actor-level` table has the applicable 1–40 → 2–80 values; reuse checked
+table data, not Sniper's unrelated quality/damage formula. Preserve source
+population override/clamp evidence before claiming the full actor-level domain.
+Sand catalog tags include Minion/Persistent/Command/Physical, but not Spell;
+the acquisition witness must record tags and requirements alongside the actual
+applied ordinary property rows. After that proof, use Skill-owned ordinary
+preparation, source census, shared final stats and declared Command/Actor
+projections in that order. No further public model change is currently indicated.
+
 Saved participation transport now uses existing `332b` independently. Manual
 Sand needs its own binding before any Skill-definition-wide gate is admitted.
 Generated bindings retain `WhenExactSourceSelected`; Original04's unresolved
