@@ -14,6 +14,7 @@ fn enabled_policy(a: &Artifacts) -> NormalizationPolicy {
         calcs_sections: true,
         tree_view: true,
         empty_notes: true,
+        cached_build_buffs: true,
     });
     p
 }
@@ -24,11 +25,13 @@ fn url_policy(a: &Artifacts) -> NormalizationPolicy {
         calcs_sections,
         tree_view,
         empty_notes,
+        cached_build_buffs,
         ..
     } = p.source_presentation.as_mut().unwrap();
     *calcs_sections = false;
     *tree_view = false;
     *empty_notes = false;
+    *cached_build_buffs = false;
     p
 }
 

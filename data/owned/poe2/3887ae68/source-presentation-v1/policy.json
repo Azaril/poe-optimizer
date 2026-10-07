@@ -4,5 +4,6 @@
   "empty_socket_urls": true,
   "calcs_sections": true,
   "tree_view": true,
-  "empty_notes": true
+  "empty_notes": true,
+  "cached_build_buffs": true
 }

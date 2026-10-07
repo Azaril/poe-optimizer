@@ -142,6 +142,26 @@ and left `01f2` with 180 links (35 Config, 145 elsewhere, 139 of the latter
 sole-link). The earlier 237-row census and this 180-row result are historical;
 the intrinsic range correction below further reduces outstanding source links.
 
+### Cached Build/Buffs accounting (2026-10-07)
+
+The existing source-presentation policy now has an independent opt-in for the
+saved Build/Buffs child. The pinned Load function (1138-1178) never consumes it;
+Save (1245-1253) writes calculated buff/combat/curse lists. Only a unique, flat,
+non-namespaced leaf under the ordinary unique Build frame is admitted, with the
+three known output attributes. Actual configured effects, Party data, the Build
+container and other children retain their existing semantic responsibilities.
+Unknown fields/content, duplicates and wrong parents keep fallback; an existing
+semantic link is never replaced by this proof.
+
+The current-release publication at `runs/owned-cached-build-buffs-01` passes in
+20.79s. It changes exactly one source disposition in each unchanged original;
+all draft values, allocator state, selections, 110 queries and selected issues
+remain exact. Original05's configuration-linked origins decrease from 73 to 72
+(35 Config-local and 37 outside Config). The whole configuration authority
+proposed below remains unimplemented; this bounded cached-output proof closes
+no inventory. The [packet](../data/owned/poe2/3887ae68/source-presentation-v1/README.md)
+records source pins, malformed-frame checks and reproduction.
+
 ### Item-range ownership correction (2026-10-05)
 
 The next intrinsic Import step reuses `ItemRangeAttribution`, the canonical Item

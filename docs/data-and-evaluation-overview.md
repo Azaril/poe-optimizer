@@ -39,6 +39,16 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
+The latest input publication adds the remaining eight requested-participation
+preferences in Original05's selected preset, reusing one existing Boolean policy
+and exact occurrence bindings. All twelve active roots now retain their enabled
+preferences; the preset has 23 usage preferences total. Complete usage and native
+readiness remain separate. Import also now recognizes the strictly framed saved
+Build/Buffs leaf as cached output: pinned Load ignores it and Save produces it.
+This changes one provenance disposition per original and no canonical build
+value. All-five publication checks pass; Original05 still has five selected input
+obligations, with 72 source origins linked to its configuration obligation.
+
 The [scaling-data investigation](owned-scaling-data-investigation.md) now compares
 exact tables, genuine formulas and lossless range segments. Current native tables
 remain dense bounded integer lookups. A compact storage form could expand once

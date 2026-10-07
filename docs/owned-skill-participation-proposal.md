@@ -3,6 +3,15 @@
 **Status:** Accepted 2026-10-06; native consumer implemented and tested;
 first Sniper input/rule packet and typed composition integration validated.
 Remaining skill families and complete-original coverage remain open.
+
+**Input publication, 2026-10-07:** the
+[remaining-occurrence packet](../data/owned/poe2/3887ae68/occurrence-participation-inputs/README.md)
+reuses policy 332b for Original05's other eight selected roots. Together with
+Sniper, Sand and Firebolt, all twelve now preserve requested group/occurrence
+enabled values. All-five import inverses and 52 source controls pass. This adds
+no readiness declarations or native formulas; complete selected parameter/rule
+inventories and usage accounting still require their own proofs.
+
 **Date:** 2026-10-05.
 **Decider:** Project owner.
 

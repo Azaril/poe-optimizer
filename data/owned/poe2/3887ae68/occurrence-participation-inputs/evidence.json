@@ -1,0 +1,1280 @@
+{
+  "schema_version": 1,
+  "prior_input": "03504a9f21dee158483d990ddad77d56c60559b35ac6ecef1fe89664ee75c8ae",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_files": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "bytes": 239878,
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    }
+  ],
+  "authored_files": [
+    {
+      "path": "data/owned/poe2/3887ae68/occurrence-participation-inputs/changes.json",
+      "bytes": 172669,
+      "sha256": "1c4ffbb140d1a304b54b7377bf9733e1800b4dea598b45c5960f40e1eeb359b2"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/skill-participation/usage.json",
+      "bytes": 3351,
+      "sha256": "2b003b5d6f13e50def0a5c24801639bfb76a49e6c66f0a8e03c580cceb084f31"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/skill-participation/extension.json",
+      "bytes": 10400,
+      "sha256": "97f2f4263a29fd000995a328b2b1b8e44e1289172bd7298ee84ed803951574d5"
+    }
+  ],
+  "retained_reports": [
+    {
+      "path": "runs/owned-minion-occurrence-inputs-01/source-jit-off.json",
+      "bytes": 25157026,
+      "sha256": "1b07bd0cc1b4aa6166189064ecece004f1a4068f5a985a64d3bd61e07a5bbc86"
+    },
+    {
+      "path": "runs/owned-minion-occurrence-inputs-01/source-jit-on.json",
+      "bytes": 25157026,
+      "sha256": "1b07bd0cc1b4aa6166189064ecece004f1a4068f5a985a64d3bd61e07a5bbc86"
+    },
+    {
+      "path": "runs/owned-spell-stat-set-source-01/source-jit-off.json",
+      "bytes": 2236787,
+      "sha256": "3da1b32a4ed08336ea603b5c85190252ab63aa95e3d40ebf5d5c8869eecd2326"
+    },
+    {
+      "path": "runs/owned-spell-stat-set-source-01/source-jit-on.json",
+      "bytes": 2236787,
+      "sha256": "3da1b32a4ed08336ea603b5c85190252ab63aa95e3d40ebf5d5c8869eecd2326"
+    },
+    {
+      "path": "runs/owned-active-gem-occurrence-source-01/source-jit-off.json",
+      "bytes": 2648994,
+      "sha256": "48a1fa3874d3c8a752752a3de8a4c6a904bf9a9ed8e72f98e704a1bbf19701cf"
+    },
+    {
+      "path": "runs/owned-active-gem-occurrence-source-01/source-jit-on.json",
+      "bytes": 2648994,
+      "sha256": "48a1fa3874d3c8a752752a3de8a4c6a904bf9a9ed8e72f98e704a1bbf19701cf"
+    },
+    {
+      "path": "runs/owned-djinn-provider-source-01/source-jit-off.json",
+      "bytes": 6052229,
+      "sha256": "6c53dc1e853331f4a7d2cdfee60d9b0b04b92ec814a673185456300a11cbc916"
+    },
+    {
+      "path": "runs/owned-djinn-provider-source-01/source-jit-on.json",
+      "bytes": 6052229,
+      "sha256": "6c53dc1e853331f4a7d2cdfee60d9b0b04b92ec814a673185456300a11cbc916"
+    },
+    {
+      "path": "runs/owned-generated-skill-usage-source-01/source-jit-off.json",
+      "bytes": 64295778,
+      "sha256": "75ca2ba05fdecc465d4727f43b2a31358ffcd2fb134a80281534bc4d24a867d5"
+    },
+    {
+      "path": "runs/owned-generated-skill-usage-source-01/source-jit-on.json",
+      "bytes": 64295778,
+      "sha256": "75ca2ba05fdecc465d4727f43b2a31358ffcd2fb134a80281534bc4d24a867d5"
+    }
+  ],
+  "original_inventory": [
+    {
+      "original": 1,
+      "fixture": {
+        "path": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+        "bytes": 49642,
+        "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+      },
+      "occurrences": [
+        {
+          "gem_ordinal": 145,
+          "group_ordinal": 144,
+          "skill_set_ordinal": 136,
+          "skill_set": "1",
+          "selected": true,
+          "gem_attributes": {
+            "statSetIndex": "nil",
+            "enableGlobal2": "true",
+            "skillMinionSkillCalcs": "1",
+            "quality": "0",
+            "level": "17",
+            "enableGlobal1": "true",
+            "variantId": "SkeletalArsonist",
+            "skillId": "SummonSkeletalArsonistsPlayer",
+            "skillMinionSkill": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+            "nameSpec": "Skeletal Arsonist",
+            "enabled": "true",
+            "count": "1",
+            "statSetIndexCalcs": "nil",
+            "skillMinion": "RaisedSkeletonArsonist"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "1",
+            "includeInFullDPS": "nil",
+            "enabled": "true",
+            "mainActiveSkill": "1"
+          }
+        },
+        {
+          "gem_ordinal": 182,
+          "group_ordinal": 181,
+          "skill_set_ordinal": 136,
+          "skill_set": "1",
+          "selected": true,
+          "gem_attributes": {
+            "statSetIndex": "nil",
+            "enableGlobal2": "true",
+            "skillMinionSkillCalcs": "1",
+            "quality": "0",
+            "level": "19",
+            "enableGlobal1": "true",
+            "variantId": "SkeletalReaver",
+            "skillId": "SummonSkeletalReaversPlayer",
+            "skillMinionSkill": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+            "nameSpec": "Skeletal Reaver",
+            "enabled": "true",
+            "count": "1",
+            "statSetIndexCalcs": "nil",
+            "skillMinion": "RaisedSkeletonReaver"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "1",
+            "includeInFullDPS": "nil",
+            "enabled": "true",
+            "mainActiveSkill": "1"
+          }
+        },
+        {
+          "gem_ordinal": 188,
+          "group_ordinal": 187,
+          "skill_set_ordinal": 136,
+          "skill_set": "1",
+          "selected": true,
+          "gem_attributes": {
+            "statSetIndex": "nil",
+            "enableGlobal2": "true",
+            "skillMinionSkillCalcs": "1",
+            "quality": "0",
+            "level": "20",
+            "enableGlobal1": "true",
+            "variantId": "AscendancySummonWaterDjinn",
+            "skillId": "SummonWaterDjinnPlayer",
+            "skillMinionSkill": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "nameSpec": "Navira, the Last Mirage",
+            "enabled": "true",
+            "count": "1",
+            "statSetIndexCalcs": "nil",
+            "skillMinion": "WaterDjinn"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "1",
+            "includeInFullDPS": "nil",
+            "enabled": "true",
+            "mainActiveSkill": "1"
+          }
+        },
+        {
+          "gem_ordinal": 209,
+          "group_ordinal": 208,
+          "skill_set_ordinal": 136,
+          "skill_set": "1",
+          "selected": true,
+          "gem_attributes": {
+            "statSetIndex": "nil",
+            "enableGlobal2": "true",
+            "skillMinionSkillCalcs": "1",
+            "quality": "0",
+            "level": "12",
+            "enableGlobal1": "true",
+            "variantId": "SkeletalFrostMage",
+            "skillId": "SummonSkeletalFrostMagesPlayer",
+            "skillMinionSkill": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+            "nameSpec": "Skeletal Frost Mage",
+            "enabled": "true",
+            "count": "1",
+            "statSetIndexCalcs": "nil",
+            "skillMinion": "RaisedSkeletonFrostMage"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "1",
+            "includeInFullDPS": "nil",
+            "enabled": "true",
+            "mainActiveSkill": "1"
+          }
+        },
+        {
+          "gem_ordinal": 215,
+          "group_ordinal": 214,
+          "skill_set_ordinal": 136,
+          "skill_set": "1",
+          "selected": true,
+          "gem_attributes": {
+            "enableGlobal2": "nil",
+            "skillMinionSkillCalcs": "1",
+            "quality": "0",
+            "level": "1",
+            "enableGlobal1": "true",
+            "variantId": "AscendancySummonWaterDjinn",
+            "skillId": "SummonWaterDjinnPlayer",
+            "skillMinionSkill": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "nameSpec": "Navira, the Last Mirage",
+            "enabled": "true",
+            "count": "nil",
+            "skillMinion": "WaterDjinn"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "source": "Tree:32705",
+            "enabled": "true",
+            "mainActiveSkill": "nil"
+          }
+        }
+      ]
+    },
+    {
+      "original": 2,
+      "fixture": {
+        "path": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+        "bytes": 116512,
+        "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+      },
+      "occurrences": []
+    },
+    {
+      "original": 3,
+      "fixture": {
+        "path": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+        "bytes": 46532,
+        "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+      },
+      "occurrences": []
+    },
+    {
+      "original": 4,
+      "fixture": {
+        "path": "tests/fixtures/builds/breadth-20260908/build-04.xml",
+        "bytes": 46397,
+        "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+      },
+      "occurrences": [
+        {
+          "gem_ordinal": 119,
+          "group_ordinal": 118,
+          "skill_set_ordinal": 92,
+          "skill_set": "1",
+          "selected": true,
+          "gem_attributes": {
+            "enabled": "true",
+            "corruptLevel": "0",
+            "count": "1",
+            "nameSpec": "Frost Bomb",
+            "variantId": "FrostBomb",
+            "gemId": "Metadata/Items/Gems/SkillGemFrostBomb",
+            "quality": "0",
+            "corrupted": "nil",
+            "enableGlobal2": "true",
+            "level": "18",
+            "enableGlobal1": "true",
+            "skillId": "FrostBombPlayer"
+          },
+          "group_attributes": {
+            "enabled": "true",
+            "mainActiveSkillCalcs": "nil",
+            "mainActiveSkill": "nil",
+            "label": "",
+            "includeInFullDPS": "nil"
+          }
+        }
+      ]
+    },
+    {
+      "original": 5,
+      "fixture": {
+        "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+        "bytes": 106378,
+        "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "occurrences": [
+        {
+          "gem_ordinal": 188,
+          "group_ordinal": 187,
+          "skill_set_ordinal": 184,
+          "skill_set": "3",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonArsonist",
+            "variantId": "SkeletalArsonist",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalArsonistsPlayer",
+            "nameSpec": "Skeletal Arsonist"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 195,
+          "group_ordinal": 194,
+          "skill_set_ordinal": 184,
+          "skill_set": "3",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonFrostMage",
+            "variantId": "SkeletalFrostMage",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalFrostMagesPlayer",
+            "nameSpec": "Skeletal Frost Mage"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 202,
+          "group_ordinal": 201,
+          "skill_set_ordinal": 184,
+          "skill_set": "3",
+          "selected": false,
+          "gem_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+            "enabled": "true",
+            "variantId": "PainOffering",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "PainOfferingPlayer",
+            "nameSpec": "Pain Offering"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 206,
+          "group_ordinal": 205,
+          "skill_set_ordinal": 204,
+          "skill_set": "4",
+          "selected": true,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "skillMinionCalcs": "RaisedSkeletonArsonist",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonArsonist",
+            "variantId": "SkeletalArsonist",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalArsonistsPlayer",
+            "nameSpec": "Skeletal Arsonist"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "1",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 213,
+          "group_ordinal": 212,
+          "skill_set_ordinal": 204,
+          "skill_set": "4",
+          "selected": true,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonFrostMage",
+            "variantId": "SkeletalFrostMage",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalFrostMagesPlayer",
+            "nameSpec": "Skeletal Frost Mage"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 221,
+          "group_ordinal": 220,
+          "skill_set_ordinal": 204,
+          "skill_set": "4",
+          "selected": true,
+          "gem_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+            "enabled": "true",
+            "variantId": "PainOffering",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "PainOfferingPlayer",
+            "nameSpec": "Pain Offering"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 224,
+          "group_ordinal": 223,
+          "skill_set_ordinal": 204,
+          "skill_set": "4",
+          "selected": true,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonReaver",
+            "variantId": "SkeletalReaver",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalReaversPlayer",
+            "nameSpec": "Skeletal Reaver"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 227,
+          "group_ordinal": 226,
+          "skill_set_ordinal": 204,
+          "skill_set": "4",
+          "selected": true,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          },
+          "group_attributes": {
+            "source": "Tree:32705",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 229,
+          "group_ordinal": 228,
+          "skill_set_ordinal": 204,
+          "skill_set": "4",
+          "selected": true,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 234,
+          "group_ordinal": 233,
+          "skill_set_ordinal": 204,
+          "skill_set": "4",
+          "selected": true,
+          "gem_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemFrostBomb",
+            "enabled": "true",
+            "variantId": "FrostBomb",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "FrostBombPlayer",
+            "nameSpec": "Frost Bomb"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 239,
+          "group_ordinal": 238,
+          "skill_set_ordinal": 204,
+          "skill_set": "4",
+          "selected": true,
+          "gem_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "level": "17",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+            "enabled": "true",
+            "variantId": "IceNova",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "IceNovaPlayer",
+            "nameSpec": "Ice Nova"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 249,
+          "group_ordinal": 248,
+          "skill_set_ordinal": 245,
+          "skill_set": "5",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonArsonist",
+            "variantId": "SkeletalArsonist",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalArsonistsPlayer",
+            "nameSpec": "Skeletal Arsonist"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 256,
+          "group_ordinal": 255,
+          "skill_set_ordinal": 245,
+          "skill_set": "5",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonFrostMage",
+            "variantId": "SkeletalFrostMage",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalFrostMagesPlayer",
+            "nameSpec": "Skeletal Frost Mage"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 264,
+          "group_ordinal": 263,
+          "skill_set_ordinal": 245,
+          "skill_set": "5",
+          "selected": false,
+          "gem_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+            "enabled": "true",
+            "variantId": "PainOffering",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "PainOfferingPlayer",
+            "nameSpec": "Pain Offering"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 267,
+          "group_ordinal": 266,
+          "skill_set_ordinal": 245,
+          "skill_set": "5",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonReaver",
+            "variantId": "SkeletalReaver",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalReaversPlayer",
+            "nameSpec": "Skeletal Reaver"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 270,
+          "group_ordinal": 269,
+          "skill_set_ordinal": 245,
+          "skill_set": "5",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          },
+          "group_attributes": {
+            "source": "Tree:32705",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 272,
+          "group_ordinal": 271,
+          "skill_set_ordinal": 245,
+          "skill_set": "5",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 283,
+          "group_ordinal": 282,
+          "skill_set_ordinal": 245,
+          "skill_set": "5",
+          "selected": false,
+          "gem_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "level": "20",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemFrostBomb",
+            "enabled": "true",
+            "variantId": "FrostBomb",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "FrostBombPlayer",
+            "nameSpec": "Frost Bomb"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 288,
+          "group_ordinal": 287,
+          "skill_set_ordinal": 245,
+          "skill_set": "5",
+          "selected": false,
+          "gem_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "level": "17",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+            "enabled": "true",
+            "variantId": "IceNova",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "IceNovaPlayer",
+            "nameSpec": "Ice Nova"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 294,
+          "group_ordinal": 293,
+          "skill_set_ordinal": 292,
+          "skill_set": "6",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "skillMinionCalcs": "WaterDjinn",
+            "count": "1",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "1",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "1",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 328,
+          "group_ordinal": 327,
+          "skill_set_ordinal": 292,
+          "skill_set": "6",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "17",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonReaver",
+            "variantId": "SkeletalReaver",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalReaversPlayer",
+            "nameSpec": "Skeletal Reaver"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 331,
+          "group_ordinal": 330,
+          "skill_set_ordinal": 292,
+          "skill_set": "6",
+          "selected": false,
+          "gem_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "nil",
+            "level": "17",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemFrostBomb",
+            "enabled": "true",
+            "variantId": "FrostBomb",
+            "quality": "20",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "FrostBombPlayer",
+            "nameSpec": "Frost Bomb"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 337,
+          "group_ordinal": 336,
+          "skill_set_ordinal": 292,
+          "skill_set": "6",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "17",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonArsonist",
+            "variantId": "SkeletalArsonist",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalArsonistsPlayer",
+            "nameSpec": "Skeletal Arsonist"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 345,
+          "group_ordinal": 344,
+          "skill_set_ordinal": 292,
+          "skill_set": "6",
+          "selected": false,
+          "gem_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "nil",
+            "level": "17",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+            "enabled": "true",
+            "variantId": "IceNova",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "IceNovaPlayer",
+            "nameSpec": "Ice Nova"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 354,
+          "group_ordinal": 353,
+          "skill_set_ordinal": 292,
+          "skill_set": "6",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          },
+          "group_attributes": {
+            "source": "Tree:32705",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 357,
+          "group_ordinal": 356,
+          "skill_set_ordinal": 355,
+          "skill_set": "1",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "20",
+            "skillMinionCalcs": "WaterDjinn",
+            "count": "1",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "1",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "1",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 393,
+          "group_ordinal": 392,
+          "skill_set_ordinal": 355,
+          "skill_set": "1",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "17",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonReaver",
+            "variantId": "SkeletalReaver",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalReaversPlayer",
+            "nameSpec": "Skeletal Reaver"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 396,
+          "group_ordinal": 395,
+          "skill_set_ordinal": 355,
+          "skill_set": "1",
+          "selected": false,
+          "gem_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "nil",
+            "level": "17",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemFrostBomb",
+            "enabled": "true",
+            "variantId": "FrostBomb",
+            "quality": "20",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "FrostBombPlayer",
+            "nameSpec": "Frost Bomb"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 403,
+          "group_ordinal": 402,
+          "skill_set_ordinal": 355,
+          "skill_set": "1",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "0",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "17",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+            "enabled": "true",
+            "skillMinion": "RaisedSkeletonArsonist",
+            "variantId": "SkeletalArsonist",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "SummonSkeletalArsonistsPlayer",
+            "nameSpec": "Skeletal Arsonist"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 411,
+          "group_ordinal": 410,
+          "skill_set_ordinal": 355,
+          "skill_set": "1",
+          "selected": false,
+          "gem_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "nil",
+            "level": "17",
+            "count": "1",
+            "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+            "enabled": "true",
+            "variantId": "IceNova",
+            "quality": "0",
+            "enableGlobal2": "true",
+            "enableGlobal1": "true",
+            "skillId": "IceNovaPlayer",
+            "nameSpec": "Ice Nova"
+          },
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        },
+        {
+          "gem_ordinal": 421,
+          "group_ordinal": 420,
+          "skill_set_ordinal": 355,
+          "skill_set": "1",
+          "selected": false,
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          },
+          "group_attributes": {
+            "source": "Tree:32705",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "authority": "requested source participation transport only; no source preview enablement, global-switch disposition, readiness or complete inventory authority"
+}

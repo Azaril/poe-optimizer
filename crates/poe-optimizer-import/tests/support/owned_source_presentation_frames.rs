@@ -130,13 +130,16 @@ fn tree_view_requires_complete_finite_known_leaf_and_empty_notes_stays_narrow() 
 #[test]
 fn presentation_family_switches_are_independent() {
     let a = artifacts(false);
-    let xml = wrap(&format!("<Calcs>{SECTION}</Calcs>{TREE_VIEW}<Notes/>"));
-    for enabled in 0..3 {
+    let xml = wrap(&format!(
+        "<Calcs>{SECTION}</Calcs>{TREE_VIEW}<Notes/><Build><Buffs/></Build>"
+    ));
+    for enabled in 0..4 {
         let mut policy = enabled_policy(&a);
         let Some(SourcePresentationPolicy::PobFreshPresentationV1 {
             calcs_sections,
             tree_view,
             empty_notes,
+            cached_build_buffs,
             ..
         }) = &mut policy.source_presentation
         else {
@@ -145,11 +148,13 @@ fn presentation_family_switches_are_independent() {
         *calcs_sections = enabled == 0;
         *tree_view = enabled == 1;
         *empty_notes = enabled == 2;
+        *cached_build_buffs = enabled == 3;
         let result = normalize(&xml, &a, &policy, Default::default()).unwrap();
         for (index, code) in [
             "source-calculation-section-layout",
             "source-tree-view-layout",
             "source-empty-notes",
+            "source-cached-build-buffs",
         ]
         .iter()
         .enumerate()
@@ -160,4 +165,121 @@ fn presentation_family_switches_are_independent() {
             );
         }
     }
+}
+
+const CACHED_BUFFS: &str = "source-cached-build-buffs";
+
+#[test]
+fn cached_buffs_are_only_a_strict_build_child_and_never_a_semantic_container() {
+    for leaf in [
+        "<Buffs/>",
+        r#"<Buffs buffList="" combatList="" curseList="Frost Bomb"/>"#,
+        r#"<Buffs buffList="Clarity I, Rage" curseList="a &amp; b"/>"#,
+    ] {
+        assert_eq!(
+            count(&format!("<Build level='73'>{leaf}</Build>"), CACHED_BUFFS),
+            1
+        );
+    }
+    for body in [
+        "<Buffs/>",
+        "<Party><Buffs/></Party>",
+        "<Party><Build><Buffs/></Build></Party>",
+        "<Build/><Build><Buffs/></Build>",
+        "<Build><Buffs/><Buffs/></Build>",
+        "<Build><Buffs future='x'/></Build>",
+        "<Build future='x'><Buffs/></Build>",
+        "<Build><Buffs><Input name='buff' boolean='true'/></Buffs></Build>",
+        "<Build><Buffs>authored meaning</Buffs></Build>",
+        "<Build><Buffs><!-- ambiguous content --></Buffs></Build>",
+        "<Build xmlns='urn:future'><Buffs/></Build>",
+        "<Build><Buffs xmlns='urn:future'/></Build>",
+    ] {
+        assert_eq!(count(body, CACHED_BUFFS), 0, "{body}");
+    }
+}
+
+fn assert_cached_buffs_delta(xml: &str) {
+    let a = artifacts(false);
+    let policy = enabled_policy(&a);
+    let mut before_policy = policy.clone();
+    let Some(SourcePresentationPolicy::PobFreshPresentationV1 {
+        cached_build_buffs, ..
+    }) = &mut before_policy.source_presentation
+    else {
+        unreachable!()
+    };
+    *cached_build_buffs = false;
+    let before = normalize(xml, &a, &before_policy, Default::default()).unwrap();
+    let after = normalize(xml, &a, &policy, Default::default()).unwrap();
+    assert_eq!(before.draft().input(), after.draft().input());
+    assert_eq!(before.allocator_after(), after.allocator_after());
+    assert_eq!(presentation_count(&before, CACHED_BUFFS), 0);
+    assert_eq!(presentation_count(&after, CACHED_BUFFS), 1);
+    let changed: Vec<_> = before
+        .sidecar()
+        .origins
+        .iter()
+        .zip(&after.sidecar().origins)
+        .filter(|(old, new)| old != new)
+        .collect();
+    assert_eq!(changed.len(), 1);
+    let (old, new) = changed[0];
+    assert_eq!(old.source, new.source);
+    assert!(matches!(old.disposition, SourceDisposition::Contributes));
+    assert!(!old.links.is_empty());
+    assert!(
+        old.links
+            .iter()
+            .all(|link| matches!(link, OwnedOriginTarget::Issue(_)))
+    );
+    assert!(new.links.is_empty());
+    assert!(
+        matches!(&new.disposition, SourceDisposition::SourceOnly(code) if code.as_str() == CACHED_BUFFS)
+    );
+}
+
+#[test]
+fn cached_buffs_change_only_one_origin_in_each_unchanged_original() {
+    for xml in [
+        include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-01.xml"),
+        include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-02.xml"),
+        include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-03.xml"),
+        include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-04.xml"),
+        include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-05.xml"),
+    ] {
+        assert_cached_buffs_delta(xml);
+    }
+}
+
+#[test]
+fn omitted_cached_buffs_switch_authorizes_nothing_and_preserves_policy_wire() {
+    let a = artifacts(false);
+    let mut policy = enabled_policy(&a);
+    let Some(SourcePresentationPolicy::PobFreshPresentationV1 {
+        cached_build_buffs, ..
+    }) = &mut policy.source_presentation
+    else {
+        unreachable!()
+    };
+    *cached_build_buffs = false;
+    let wire = serde_json::to_value(policy.source_presentation.as_ref().unwrap()).unwrap();
+    assert!(wire.get("cached_build_buffs").is_none());
+    let decoded: SourcePresentationPolicy = serde_json::from_value(wire.clone()).unwrap();
+    assert_eq!(serde_json::to_value(&decoded).unwrap(), wire);
+    assert!(matches!(
+        decoded,
+        SourcePresentationPolicy::PobFreshPresentationV1 {
+            cached_build_buffs: false,
+            ..
+        }
+    ));
+    let result = normalize(
+        &wrap("<Build><Buffs/></Build>"),
+        &a,
+        &policy,
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(presentation_count(&result, CACHED_BUFFS), 0);
 }

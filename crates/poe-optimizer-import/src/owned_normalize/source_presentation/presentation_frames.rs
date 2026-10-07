@@ -90,13 +90,63 @@ fn sections(
     Ok(result)
 }
 
+fn cached_build_buffs(
+    b: &mut Builder<'_, '_>,
+    source: SourceOccurrenceId,
+) -> Result<Vec<(SourceOccurrenceId, OwnedDefinitionKey)>> {
+    let evidence = b.evidence;
+    let build = &evidence.rows()[source.ordinal() as usize];
+    // Validate the parent frame without disposing any of its semantic fields.
+    // Build.Load:1138-1178 consumes these fields and selected child families;
+    // it has no Buffs branch. Save:1245-1253 writes only calculated outputs.
+    if !plain_row(
+        build,
+        &[
+            "targetVersion",
+            "viewMode",
+            "level",
+            "characterLevelAutoMode",
+            "mainSkillIndex",
+            "mainSocketGroup",
+            "className",
+            "ascendClassName",
+        ],
+        false,
+    ) || !container_text(build)
+    {
+        return Ok(vec![]);
+    }
+    let mut candidate = None;
+    for child in build.children() {
+        b.charge(1)?;
+        let row = &evidence.rows()[child.ordinal() as usize];
+        if row.occurrence().name() != "Buffs" {
+            continue;
+        }
+        // Admit one ordinary saved leaf only. The strings are cached display
+        // outputs; absent attributes are possible when a saved output is nil.
+        charge_row(b, row)?;
+        if candidate.is_some()
+            || row.occurrence().parent() != Some(source)
+            || !plain_row(row, &["buffList", "combatList", "curseList"], true)
+        {
+            return Ok(vec![]);
+        }
+        candidate = Some(*child);
+    }
+    Ok(candidate
+        .map(|source| vec![(source, key("source-cached-build-buffs"))])
+        .unwrap_or_default())
+}
+
 pub(super) fn collect(
     b: &mut Builder<'_, '_>,
     calcs_sections: bool,
     tree_view_enabled: bool,
     empty_notes: bool,
+    cached_build_buffs_enabled: bool,
 ) -> Result<Vec<(SourceOccurrenceId, OwnedDefinitionKey)>> {
-    if !calcs_sections && !tree_view_enabled && !empty_notes {
+    if !calcs_sections && !tree_view_enabled && !empty_notes && !cached_build_buffs_enabled {
         return Ok(vec![]);
     }
     let evidence = b.evidence;
@@ -116,6 +166,7 @@ pub(super) fn collect(
         if (name == "Calcs" && calcs_sections)
             || (name == "TreeView" && tree_view_enabled)
             || (name == "Notes" && empty_notes)
+            || (name == "Build" && cached_build_buffs_enabled)
         {
             let frame = frames.entry(name).or_insert((*source, 0));
             frame.1 = frame.1.saturating_add(1);
@@ -134,6 +185,7 @@ pub(super) fn collect(
             continue;
         }
         match name {
+            "Build" => result.extend(cached_build_buffs(b, source)?),
             "Calcs" => result.extend(sections(b, source)?),
             "TreeView" if tree_view(row) => {
                 result.push((source, key("source-tree-view-layout")));

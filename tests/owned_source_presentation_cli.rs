@@ -56,6 +56,7 @@ fn presentation_authoring_is_pinned_and_has_no_native_rules() {
             calcs_sections: true,
             tree_view: true,
             empty_notes: true,
+            cached_build_buffs: true,
             ..
         }
     ));
@@ -124,8 +125,19 @@ fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     }
     let before = prior.input();
     let mut policy = before.normalization.clone();
-    assert!(policy.source_presentation.is_none());
-    policy.source_presentation = Some(read(data().join("policy.json")));
+    let proposed: SourcePresentationPolicy = read(data().join("policy.json"));
+    let mut inherited = proposed.clone();
+    let SourcePresentationPolicy::PobFreshPresentationV1 {
+        cached_build_buffs, ..
+    } = &mut inherited;
+    assert!(*cached_build_buffs);
+    *cached_build_buffs = false;
+    assert_eq!(
+        policy.source_presentation,
+        Some(inherited),
+        "the current policy differs only by the new opt-in"
+    );
+    policy.source_presentation = Some(proposed);
     let transition = transition_owned_normalization_with_tree_compact(
         SuccessorBundleInput {
             schema_version: 1,
@@ -152,7 +164,7 @@ fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     tree_inverse.normalization = before.tree.as_ref().unwrap().normalization;
     assert_eq!(&tree_inverse, before.tree.as_ref().unwrap());
     full.provenance.push(OwnedReleaseProvenance {
-        kind: key("reviewed-source-presentation"),
+        kind: key("reviewed-cached-build-buffs"),
         prior_input: prior.receipt().input,
         authoring_input: digest_owned(
             "owned-source-presentation-v1",
@@ -205,14 +217,12 @@ fn compare(case: usize, xml: &[u8], prior: &Path, out: &Path) -> Value {
     selected::canonical(&mut historical);
     assert_eq!(
         before, historical,
-        "the new integrity gate preserves the checked baseline"
+        "cached output accounting preserves the checked current baseline"
     );
     let before_side: Value = read(before_dir.join("sidecar.json"));
     let after_side: Value = read(after_dir.join("sidecar.json"));
-    // Range ownership is an intrinsic Import correction, applied equally to
-    // both policy endpoints. Its V19 receipt supersedes presentation's V18.
-    assert_eq!(before_side["schema_version"], 19);
-    assert_eq!(after_side["schema_version"], 19);
+    assert_eq!(before_side["schema_version"], 21);
+    assert_eq!(after_side["schema_version"], 21);
     let mut old_origins = before_side["origins"].clone();
     let mut new_origins = after_side["origins"].clone();
     selected::canonical(&mut old_origins);
@@ -233,12 +243,17 @@ fn compare(case: usize, xml: &[u8], prior: &Path, out: &Path) -> Value {
             .map(|id| &evidence.rows()[id.ordinal() as usize]);
         let parent_name = parent.map(|row| row.occurrence().name());
         let reason = match (row.occurrence().name(), parent_name) {
-            ("Section", Some("Calcs")) => Some("source-calculation-section-layout"),
-            ("TreeView", Some("PathOfBuilding2")) => Some("source-tree-view-layout"),
-            ("Notes", Some("PathOfBuilding2")) => Some("source-empty-notes"),
-            ("SocketIdURL", Some("ItemSet")) => {
-                assert_eq!(row.attribute("itemPbURL").unwrap().decoded().unwrap(), "");
-                Some("empty-socket-trade-url")
+            ("Buffs", Some("Build")) => {
+                assert!(row.children().is_empty());
+                assert!(!row.occurrence().has_namespace_context());
+                assert!(row.attributes().iter().all(|a| {
+                    ["buffList", "combatList", "curseList"].contains(&a.origin().name.as_str())
+                        && a.decoded().is_ok()
+                }));
+                let root = parent.unwrap().occurrence().parent().unwrap();
+                assert_eq!(root.ordinal(), 0);
+                assert_eq!(evidence.rows()[0].occurrence().name(), "PathOfBuilding2");
+                Some("source-cached-build-buffs")
             }
             _ => None,
         };
@@ -246,7 +261,7 @@ fn compare(case: usize, xml: &[u8], prior: &Path, out: &Path) -> Value {
             expected.insert(u64::from(row.occurrence().id().ordinal()), reason);
         }
     }
-    assert_eq!(expected.len(), [54, 69, 54, 58, 57][case - 1]);
+    assert_eq!(expected.len(), 1);
     assert_eq!(
         old_origins.as_array().unwrap().len(),
         new_origins.as_array().unwrap().len()
@@ -281,7 +296,7 @@ fn compare(case: usize, xml: &[u8], prior: &Path, out: &Path) -> Value {
     }
     assert!(
         expected.is_empty(),
-        "all independently censused presentation rows accounted for"
+        "the one independently censused cached Buffs leaf is accounted for"
     );
     if case == 5 {
         let count = |side: &Value| {
@@ -309,8 +324,8 @@ fn compare(case: usize, xml: &[u8], prior: &Path, out: &Path) -> Value {
             })
             .count();
         assert_eq!(owned_ranges, 101);
-        assert_eq!(count(&before_side), 237 - owned_ranges);
-        assert_eq!(count(&after_side), 180 - owned_ranges);
+        assert_eq!(count(&before_side), 73);
+        assert_eq!(count(&after_side), 72);
     }
     let mut old_side = before_side;
     for field in [
@@ -376,7 +391,7 @@ fn compare(case: usize, xml: &[u8], prior: &Path, out: &Path) -> Value {
 }
 
 #[test]
-#[ignore = "requires the exact occurrence-count publication and pinned source checkout"]
+#[ignore = "requires the checked current release and pinned source checkout"]
 fn presentation_publication_preserves_all_five_original_requests() {
     let prior_path = PathBuf::from(
         std::env::var_os("POE_OPTIMIZER_TEST_PRESENTATION_PRIOR").expect("explicit prior package"),

@@ -15,7 +15,15 @@ pub enum SourcePresentationPolicy {
         calcs_sections: bool,
         tree_view: bool,
         empty_notes: bool,
+        /// Omission authorizes no cached-output disposition. Serializing false
+        /// preserves inherited policies and their existing content identities.
+        #[serde(default, skip_serializing_if = "is_false")]
+        cached_build_buffs: bool,
     },
+}
+
+fn is_false(value: &bool) -> bool {
+    !value
 }
 
 pub(super) struct CompiledSourcePresentation {
@@ -23,6 +31,7 @@ pub(super) struct CompiledSourcePresentation {
     calcs_sections: bool,
     tree_view: bool,
     empty_notes: bool,
+    cached_build_buffs: bool,
 }
 
 pub(super) fn compile(
@@ -36,6 +45,7 @@ pub(super) fn compile(
         calcs_sections,
         tree_view,
         empty_notes,
+        cached_build_buffs,
     }) = &policy.source_presentation
     else {
         return Ok(None);
@@ -54,6 +64,7 @@ pub(super) fn compile(
         calcs_sections: *calcs_sections,
         tree_view: *tree_view,
         empty_notes: *empty_notes,
+        cached_build_buffs: *cached_build_buffs,
     }))
 }
 
@@ -147,6 +158,7 @@ pub(super) fn apply(
         policy.calcs_sections,
         policy.tree_view,
         policy.empty_notes,
+        policy.cached_build_buffs,
     )?);
     if candidates.len() > b.limits.draft.input.max_collection_entries {
         return Err(NormalizationError::Limit("source presentation rows"));

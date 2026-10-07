@@ -1,10 +1,82 @@
-> Historical snapshots through generated participation inputs on 2026-10-07.
+> Historical snapshots through generated source-property ownership and first-build priority on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: generated source properties and first-build priority
+
+The accepted [ownership contract](owned-generated-source-properties-proposal.md)
+is implemented in the existing Core/Data/Engine path. Receiving V3 now declares
+an authored occurrence or an exact generated supply, an `OwnerSkill` endpoint,
+and assembly bound to `InputOwner` or `ExactSupplyingProvider`. Generated Skills
+own their collected properties; the exact declaring provider retains parameter
+write authority and its natural Actor, Skill or EquipmentUse context. Current
+wire and authoring fragments changed in place; no compatibility path was added.
+
+Ten Engine tests cover repeated item/tree sources, mixed manual/generated uses,
+exact natural contexts, absent providers, duplicate and foreign writers,
+missing final producers, dependency cycles, disabled participation, and serial/
+Rayon scratch reuse. Core wire tests and Data validation suites pass, as do the
+existing Engine source-property, participation and preparation-readiness suites.
+An independent review found no new correctness defect. The added discovery is
+bounded cold-plan work; the hot evaluator and worker scratch model are unchanged.
+
+The five-build publication was replayed with the updated libraries in **35.61s**
+at `runs/owned-generated-participation-02/package`. It reproduces the same release
+identity, all drafts/sidecars and the 18 participation controls. Complete native
+builds remain **0/5**, with selected unresolved issues **107/117/109/123/5**.
+This contract supplies no missing game formulas or complete rule-owner inventory.
+
+The older numerical components now use the current checked release, retaining
+exact authored program/table equality and explicit finite-test boundaries.
+Ice Nova's eight tests pass in **3.96s**, Offering's eight in **9.50s**, and
+Sniper's six in **11.52s**. Historical publication steps were not replayed through
+retired importer formats. Their provenance assertions remain distinct from the
+current numerical component checks. No compatibility loader was restored.
+Strict workspace/all-feature/all-target Clippy passes, as do owned-only library
+Clippy, both WASM library checks, compiled-source boundary checks, default CLI
+dependency checks and formatting for every changed package. No fresh full
+workspace test run or fresh source VM run is claimed. CI `c3ec029` was queued
+behind the still-running `47f3560` validation; its Engine/Import/Workspace shards
+passed on both platforms. The last observed complete green run remains
+[37552883848](https://github.com/Azaril/poe-optimizer/actions/runs/37552883848).
+
+Local evidence: `runs/owned-generated-source-*` records the focused builds/tests,
+the corrected current-release component runs (`*-04.log`), strict lint (`clippy-03`),
+WASM and dependency/source-boundary checks. Initial failures were test migration
+issues: removed importer formats, old stage metadata, fixture provider roles,
+and changed Partial diagnostic inventories. No native authority check was relaxed
+to make a fixture pass.
+
+**Next blocker: Original05 request admission.** Its five selected obligations
+still stop the public finalizer before an evaluation request exists. Prioritize
+support-origin composition and selected usage/configuration/default accounting.
+Sand's preparation remains a downstream selected dependency; Firebolt-specific
+breadth work is deferred unless an Original05 dependency proves it necessary.
+The separated Sand source witness now passes; its authoring map below is retained
+for the mechanics phase, not the immediate task order. The separate
+[Boolean contribution proposal](owned-boolean-contributions-proposal.md) remains
+pending; the Player slot read is already accepted and implemented.
+
+**Subsequent evidence checkpoint: Sand source properties.** The optional Rust
+witness `owned_djinn_properties_source::sand_properties_preserve_exact_source_contributors`
+passed in **275.67s**, with eighteen cases in each independent JIT mode, fixed
+fresh/one-rebuild/two-rebuild observations, repeated fresh runs and unhooked
+controls. Both reports at `runs/owned-djinn-properties-source-01` are byte-identical:
+20,990,381 bytes, SHA-256
+`159ddd222dca8dbe7b7784eae1695b85ddab356b90bf5d2e4ef7fbe6b74f7c79`.
+Original05's actual ordinary contributors are Helmet Item21 +1, Amulet Item23 +1
+and its exact zero-percent copy +0. Manual and tree Sand receive the same +2;
+the observed supported-property results are empty. Manual counts three supports
+once per source; the tree counts none. Endpoints are manual 20→22 / actor44 and
+tree 1→3 / actor6. Provider/support/quality controls preserve exact provenance.
+The witness authenticates the population table but does not exhaustively execute
+its rows, exercise a nonzero supported-property contribution, prove native
+contributor completeness or make any original build complete. Focused strict
+Clippy passes. No runtime data or original input changed.
 
 ## Archived 2026-10-07 checkpoint: exact generated participation inputs
 

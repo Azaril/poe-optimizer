@@ -390,6 +390,78 @@
         "\tself.zoomLevel = 20",
         "\tself.zoom = 1.2 ^ self.zoomLevel"
       ]
+    },
+    {
+      "purpose": "Build loader consumes semantic inputs and selected child families but never the saved Buffs child",
+      "file": {
+        "path": "src/Modules/Build.lua",
+        "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+      },
+      "first_line": 1138,
+      "last_line": 1178,
+      "lines": [
+        "function buildMode:Load(xml, fileName)",
+        "\tself.targetVersion = xml.attrib.targetVersion or legacyTargetVersion",
+        "\tif xml.attrib.viewMode then",
+        "\t\tself.viewMode = xml.attrib.viewMode",
+        "\tend",
+        "\tself.characterLevel = m_max(1 ,m_min(100, tonumber(xml.attrib.level) or 1))",
+        "\tself.characterLevelAutoMode = xml.attrib.characterLevelAutoMode == \"true\"",
+        "\tself.mainSocketGroup = tonumber(xml.attrib.mainSkillIndex) or tonumber(xml.attrib.mainSocketGroup) or 1",
+        "\twipeTable(self.spectreList)",
+        "\twipeTable(self.beastList)",
+        "\tfor _, child in ipairs(xml) do",
+        "\t\tif child.elem == \"Spectre\" then",
+        "\t\t\tif child.attrib.id and data.minions[child.attrib.id] then",
+        "\t\t\t\tt_insert(self.spectreList, child.attrib.id)",
+        "\t\t\tend",
+        "\t\telseif child.elem == \"BeastCompanion\" then",
+        "\t\t\tif child.attrib.id and data.minions[child.attrib.id] then",
+        "\t\t\t\tt_insert(self.beastList, child.attrib.id)",
+        "\t\t\tend",
+        "\t\telseif child.elem == \"TimelessData\" then",
+        "\t\t\tself.timelessData.jewelType = {",
+        "\t\t\t\tid = tonumber(child.attrib.jewelTypeId)",
+        "\t\t\t}",
+        "\t\t\tself.timelessData.conquerorType = {",
+        "\t\t\t\tid = tonumber(child.attrib.conquerorTypeId)",
+        "\t\t\t}",
+        "\t\t\tself.timelessData.devotionVariant1 = tonumber(child.attrib.devotionVariant1) or 1",
+        "\t\t\tself.timelessData.devotionVariant2 = tonumber(child.attrib.devotionVariant2) or 1",
+        "\t\t\tself.timelessData.jewelSocket = {",
+        "\t\t\t\tid = tonumber(child.attrib.jewelSocketId)",
+        "\t\t\t}",
+        "\t\t\tself.timelessData.fallbackWeightMode = {",
+        "\t\t\t\tidx = tonumber(child.attrib.fallbackWeightModeIdx)",
+        "\t\t\t}",
+        "\t\t\tself.timelessData.socketFilter = child.attrib.socketFilter == \"true\"",
+        "\t\t\tself.timelessData.socketFilterDistance = tonumber(child.attrib.socketFilterDistance) or 0",
+        "\t\t\tself.timelessData.searchList = child.attrib.searchList",
+        "\t\t\tself.timelessData.searchListFallback = child.attrib.searchListFallback",
+        "\t\tend",
+        "\tend",
+        "end"
+      ]
+    },
+    {
+      "purpose": "Buffs leaf contains saved calculation outputs, including nonempty lists, rather than authored activation inputs",
+      "file": {
+        "path": "src/Modules/Build.lua",
+        "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+      },
+      "first_line": 1245,
+      "last_line": 1253,
+      "lines": [
+        "\tlocal buffs = {",
+        "\t\telem = \"Buffs\",",
+        "\t\tattrib = {",
+        "\t\t\tbuffList = self.calcsTab.calcsOutput.BuffList,",
+        "\t\t\tcombatList = self.calcsTab.calcsOutput.CombatList,",
+        "\t\t\tcurseList = self.calcsTab.calcsOutput.CurseList,",
+        "\t\t}",
+        "\t}",
+        "\tt_insert(xml, buffs)"
+      ]
     }
   ]
 }
