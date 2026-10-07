@@ -111,3 +111,113 @@ assert(build.calcsTab.mainEnv==env and build.calcsTab.mainOutput==output);for k,
 assert(class.ParseRaw==parse and class.BuildModList==mods and class.GetActiveModListForSlotNum==active and build.itemsTab.Load==load and upvalue(parse,"getCatalystScalar")==catalyst and itemLib.formatValue==format and itemLib.applyRange==range and modLib.parseMod==parser and common.classes.ModStore.ScaleAddMod==scaleAdd);result.original_functions_preserved=true
 return result
 "##;
+
+/// Fixed untagged source lines. This observes the original constructor and the
+/// unchanged selected and dormant items; it does not grant complete item coverage.
+pub const FIXED_OBSERVE: &str = r##"
+local function original(f,path,first,last)
+ local i=debug.getinfo(f,"S");local s=i.source:gsub("\\","/")
+ assert(i.what=="Lua" and s:sub(-#path)==path and i.linedefined==first)
+ if last then assert(i.lastlinedefined==last) end;return f
+end
+local function upvalue(f,wanted)
+ for i=1,100 do local n,v=debug.getupvalue(f,i);if not n then break end;if n==wanted then return v end end
+ error("missing original upvalue "..wanted)
+end
+local class=common.classes.Item
+local parse=original(class.ParseRaw,"Classes/Item.lua",468,1803)
+local mods=original(class.BuildModList,"Classes/Item.lua",2694,2863)
+local active=original(class.GetActiveModListForSlotNum,"Classes/Item.lua",2198,2220)
+local catalyst=original(upvalue(parse,"getCatalystScalar"),"Classes/Item.lua",32,63)
+local format=original(itemLib.formatValue,"Modules/ItemTools.lua",45,58)
+local range=original(itemLib.applyRange,"Modules/ItemTools.lua",130)
+local parser=original(modLib.parseMod,"Modules/ModParser.lua",7404)
+local function plain(v,d)
+ if type(v)~="table" then assert(type(v)~="function" and type(v)~="userdata");return v end
+ d=(d or 0)+1;assert(d<10);local out={};local count=0
+ for k,x in pairs(v) do count=count+1;assert(count<512);out[k]=plain(x,d) end;return out
+end
+local function equal(a,b)
+ if type(a)~=type(b) then return false end;if type(a)~="table" then return a==b end
+ for k,v in pairs(a) do if not equal(v,b[k]) then return false end end
+ for k in pairs(b) do if a[k]==nil then return false end end;return true
+end
+local function relevant(m)
+ return m.type=="BASE" and (m.name=="Spirit" or m.name=="Str" or m.name=="Dex" or m.name=="Int" or m.name=="All")
+end
+local function records(list,include_all)
+ local out={};for _,m in ipairs(list or {}) do if include_all or relevant(m) then
+  local tags={};for _,t in ipairs(m) do tags[#tags+1]=plain(t) end
+  out[#out+1]={name=m.name,type=m.type,value=plain(m.value),flags=m.flags,keyword_flags=m.keywordFlags,source=m.source,source_slot=m.sourceSlot,tags=tags}
+ end end;return out
+end
+local function snapshot(item,list)
+ local out={name=item.name,base=item.baseName,kind=item.type,rarity=item.rarity,catalyst=item.catalyst,catalyst_quality=item.catalystQuality,
+  lists={},active=records(list),base_mods=records(item.baseModList)}
+ for _,category in ipairs({"buff","enchant","rune","classRequirement","implicit","explicit"}) do
+  local lines={};for _,line in ipairs(item[category.."ModLines"] or {}) do
+   local row={line=line.line,records=records(line.modList,line.line==fixedSpiritNextLine),field_types={extra=type(line.extra)},catalyst_factor=catalyst(item.catalyst,line,item.catalystQuality)}
+   for _,k in ipairs({"extra","modTags","range","corruptedRange","valueScalar","unscalable","disabled","bonded","enchant","rune"}) do row[k]=plain(line[k]) end
+   lines[#lines+1]=row
+  end;out.lists[category]=lines
+ end;return out
+end
+local function construct(raw,id)
+ local item=new("Item"):Item("");item.id=id;parse(item,raw);local before=snapshot(item,nil);mods(item)
+ return item,before,snapshot(item,active(item,1,false))
+end
+local function replace(text,old,new)
+ local at=assert(text:find(old,1,true));assert(not text:find(old,at+#old,true))
+ return text:sub(1,at-1)..new..text:sub(at+#old)
+end
+local doc,err=common.xml.ParseXML(fixedSpiritXml);assert(doc and not err)
+local raw,xmlRows
+for _,n in ipairs(doc[1]) do if type(n)=="table" and n.elem=="Items" then
+ for _,entry in ipairs(n) do if type(entry)=="table" and entry.elem=="Item" and entry.attrib.id==tostring(fixedSpiritItemId) then
+  assert(not raw);local text={};xmlRows={}
+  for _,child in ipairs(entry) do if type(child)=="string" then text[#text+1]=child else xmlRows[#xmlRows+1]={name=child.elem,attributes=plain(child.attrib)} end end
+  raw=table.concat(text,"\n")
+ end end
+end end
+assert(raw and raw:find(fixedSpiritLine,1,true) and raw:find(fixedSpiritNextLine,1,true))
+local item=assert(build.itemsTab.items[fixedSpiritItemId]);assert(item.baseName==fixedSpiritBase)
+local env=build.calcsTab.mainEnv;local output=build.calcsTab.mainOutput
+local saved={items=build.itemsTab.activeItemSetId,spec=build.treeTab.activeSpec,skills=build.skillsTab.activeSkillSetId,config=build.configTab.activeConfigSetId,group=build.mainSocketGroup}
+local outputValues={};for k,v in pairs(output) do if type(v)=="number" or type(v)=="boolean" or type(v)=="string" then outputValues[k]=v end end
+local loaded=snapshot(item,item.modList or item.slotModList and item.slotModList[1]);local selected={}
+for slot,value in pairs(env.player.itemList) do if value==item then selected[#selected+1]=slot end end;table.sort(selected)
+local result={selected=saved,raw=raw,xml_children=xmlRows,loaded=loaded,selected_slots=selected,
+ player_spirit=records(env.modDB.mods.Spirit),main_output=outputValues,scalability=plain(data.modScalability["# to Spirit"]),
+ base_facts={implicit=item.base.implicit,has_buff=not not(item.base.flask and item.base.flask.buff or item.base.charm and item.base.charm.buff)},probes={}}
+local fresh,before,after=construct(raw,fixedSpiritItemId)
+result.fresh_before=before;result.fresh=after
+local prefix="Rarity: RARE\nOwned fixed Spirit witness\n"..fixedSpiritBase.."\nImplicits: 0\n"
+local function probe(name,line,header,tail)
+ local text=prefix..line.."\n"..fixedSpiritNextLine
+ if header then text=replace(text,"Implicits: 0",header.."\nImplicits: 0") end
+ if tail then text=text.."\n"..tail end
+ local current,initial,final=construct(text,9001)
+ assert(equal(final,snapshot(current,active(current,1,false))))
+ result.probes[#result.probes+1]={name=name,raw=text,before=initial,after=final}
+end
+for _,value in ipairs({1,34,48,1000000}) do probe("integer-"..value,"+"..value.." to Spirit") end
+probe("untagged-neural",fixedSpiritLine,"Catalyst: Neural\nCatalystQuality: 20")
+probe("untagged-neural-negative-quality",fixedSpiritLine,"Catalyst: Neural\nCatalystQuality: -200")
+probe("tagged-neural","{tags:mana}"..fixedSpiritLine,"Catalyst: Neural\nCatalystQuality: 20")
+probe("zero","+0 to Spirit")
+probe("decimal","+34.5 to Spirit")
+probe("negative","-34 to Spirit")
+probe("unknown-predecessor","Owned witness unknown line\n"..fixedSpiritLine)
+probe("explicit-magnitude",fixedSpiritLine,nil,"50% increased explicit modifier magnitudes")
+probe("corrupted-range","{corruptedRange:1.5}"..fixedSpiritLine)
+probe("disabled","{disabled}"..fixedSpiritLine)
+assert(build.itemsTab.items[fixedSpiritItemId]==item and equal(loaded,snapshot(item,item.modList or item.slotModList and item.slotModList[1])))
+result.observed_item_fields_preserved=true
+assert(build.itemsTab.activeItemSetId==saved.items and build.treeTab.activeSpec==saved.spec and build.skillsTab.activeSkillSetId==saved.skills and build.configTab.activeConfigSetId==saved.config and build.mainSocketGroup==saved.group)
+result.saved_selections_preserved=true
+assert(build.calcsTab.mainEnv==env and build.calcsTab.mainOutput==output);for k,v in pairs(outputValues) do assert(output[k]==v) end
+result.main_scalar_output_preserved=true
+assert(class.ParseRaw==parse and class.BuildModList==mods and class.GetActiveModListForSlotNum==active and upvalue(parse,"getCatalystScalar")==catalyst and itemLib.formatValue==format and itemLib.applyRange==range and modLib.parseMod==parser)
+result.original_functions_preserved=true
+return result
+"##;

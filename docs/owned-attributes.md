@@ -318,11 +318,19 @@ though both final results fit the Integer domain. Configurable resource limits
 are not numerical-domain proofs. Do not publish arbitrary BASE ranks, restrict
 the proof to class/passive contributors, or silently omit current item donors.
 
+The [executable BASE audit](owned-base-contribution-audit.md) confirms this
+counterexample through the actual current item and attribute programs: admitted
+signed scaling yields final Strength 8 or 7 depending on association. These are
+declared-input-domain controls, not a claim that such rolls are obtainable.
+The current passive literals have bounded nonnegative totals, but their
+conditional final-suffix argument does not describe every supplied build.
+
 Source setup inserts class and prepared item modifiers before its passive loop;
-the latter uses source table traversal without an owned semantic order.
-Preserving the item prefix and proving the remaining nonnegative passive suffix
-order-independent is a possible investigation, not an accepted law. It still
-needs signed/cancellation bounds, final quantization and INC-scaling evidence.
+the latter uses source table traversal without an owned semantic order. Real
+equipment bonus copies also occur **after** passives: Original03 adds 8 Strength
+and 7 Intelligence. Other slot bonuses group matching numeric records before
+scaling. Retain explicit zero copies and provenance too. A fixed item prefix
+followed only by passives is therefore not an all-five ordering proof.
 `Item:BuildModList` processes enchant, rune, class-requirement, implicit and
 explicit lines in separate groups; source item preparation can also transform
 those lists. Saved text-line order alone cannot establish contribution order.
@@ -332,7 +340,12 @@ proof before assigning `modifier_order`. Reuse that boundary. Next authenticate
 the actual prepared item-to-Player contributions and their ordering, identify
 what the admitted native domain can prove, and discuss any remaining numerical
 semantics change. Source UI/cache behavior is not automatically a native game
-rule. This investigation is separate from complete increased-attribute membership.
+rule. Native provider discovery also admits passive-socket and item-socket
+equipment, while the current ordered ItemModifier origin accepts only character
+slots. A complete ordering policy must cover that admitted domain or reject it
+explicitly, not silently discard those contributors. No new ordering or grouped
+projection contract is approved by this audit. This investigation is separate
+from complete increased-attribute membership.
 
 ## Breadth and integration gates
 

@@ -425,6 +425,14 @@ canonical occurrences; a public diagnostic status or recognized header alone can
 grant completeness. The evaluator consumes the resulting owned facts and explicit
 order without needing source syntax or source runtime state.
 
+Ordered aggregation must account for every admitted provider destination,
+including character slots, passive sockets and item sockets. Physical source
+records, prepared contributions and grouped/scaled bonus copies are different
+stages of the same occurrence graph; closing the first does not close the
+others. The [BASE audit](owned-base-contribution-audit.md) exposes current gaps
+in socket-origin ranking and post-passive bonus projection. Their public model
+remains to be reviewed; source UI traversal is not an owned ordering law.
+
 Source ownership and numerical consumption are separate proofs. A saved item
 range belongs to its exact item and, when conversion proves the target, to the
 actual emitted modifier occurrences. A range attached to a fixed literal does

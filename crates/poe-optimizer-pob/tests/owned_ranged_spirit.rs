@@ -333,3 +333,261 @@ fn check(result: &Json) {
         assert_eq!(p["records"][0]["value"], value);
     }
 }
+
+const FIXED_TEST: &str = "fixed_spirit_preserves_actual_items_and_independent_attribute_successors";
+const FIXED_CHILD: &str = "POE_FIXED_SPIRIT_CHILD";
+
+#[test]
+#[ignore = "requires full pinned original01/original04/original05 loading and a fresh evidence directory"]
+fn fixed_spirit_preserves_actual_items_and_independent_attribute_successors() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .canonicalize()
+        .unwrap();
+    let out = PathBuf::from(
+        std::env::var_os("POE_OPTIMIZER_FIXED_SPIRIT_OUTPUT")
+            .expect("set POE_OPTIMIZER_FIXED_SPIRIT_OUTPUT to a fresh evidence directory"),
+    );
+    if let Some(mode) = std::env::var_os(FIXED_CHILD) {
+        assert!(mode == "off" || mode == "on");
+        let enabled = mode == "on";
+        let fixtures = root.join("tests/fixtures/builds/breadth-20260908");
+        let manifest = read(&fixtures.join("index.json"));
+        let mut cases = Vec::new();
+        let mut source_hash = None;
+        for (index, item_id, base, line, next_line, slot) in [
+            (
+                1,
+                3,
+                "Runeforged Adherent's Raiment",
+                "+34 to Spirit",
+                "+29 to Intelligence",
+                Some("Body Armour"),
+            ),
+            (
+                4,
+                19,
+                "Gold Amulet",
+                "+48 to Spirit",
+                "+11 to all Attributes",
+                Some("Amulet"),
+            ),
+            (
+                5,
+                2,
+                "Stellar Amulet",
+                "+49 to Spirit",
+                "+2 to Level of all Minion Skills",
+                None,
+            ),
+        ] {
+            let name = format!("build-{index:02}.xml");
+            let xml = fs::read_to_string(fixtures.join(&name)).unwrap();
+            let entry = rows(&manifest["builds"])
+                .iter()
+                .find(|row| row["xml"] == name)
+                .unwrap();
+            assert_eq!(entry["xml_sha256"], digest(xml.as_bytes()));
+            let before = |lua: &Lua| {
+                lua.globals().set("fixedSpiritXml", xml.as_str())?;
+                lua.globals().set("fixedSpiritItemId", item_id)?;
+                lua.globals().set("fixedSpiritBase", base)?;
+                lua.globals().set("fixedSpiritLine", line)?;
+                lua.globals().set("fixedSpiritNextLine", next_line)?;
+                lua.globals().set("fixedSpiritJit", enabled)?;
+                lua.load("if fixedSpiritJit then jit.on() else jit.off();jit.flush() end")
+                    .exec()?;
+                Ok(())
+            };
+            let observe = |lua: &Lua| -> Result<Json, RuntimeError> {
+                let value: Value = lua
+                    .load(observer::FIXED_OBSERVE)
+                    .set_name("@fixed-spirit-observer")
+                    .eval()?;
+                Ok(lua.from_value(value)?)
+            };
+            let temp = tempfile::tempdir().unwrap();
+            let observed = source::observe_with_build_hook_unwrapped(
+                &root.join("vendor/path-of-building-poe2"),
+                temp.path(),
+                &xml,
+                None,
+                false,
+                Some(&before),
+                None,
+                Some(&observe),
+            )
+            .unwrap();
+            assert_eq!(observed["configuration_method_wrappers"], false);
+            assert_eq!(observed["original_build_output_available"], true);
+            if let Some(hash) = &source_hash {
+                assert_eq!(hash, &observed["source_hash"]);
+            } else {
+                source_hash = Some(observed["source_hash"].clone());
+            }
+            cases.push(
+                json!({"name":format!("original-{index:02}"),"xml_sha256":digest(xml.as_bytes()),
+                "item_id":item_id,"base":base,"line":line,"next_line":next_line,"slot":slot,"player_participating":slot.is_some(),
+                "state":observed["additional_observation"]}),
+            );
+            assert_eq!(fs::read_to_string(fixtures.join(name)).unwrap(), xml);
+        }
+        let result = json!({"source_hash":source_hash,"evidence":{
+            "manifest_sha256":pinned::manifest_sha256(),"observer_sha256":digest(observer::FIXED_OBSERVE.as_bytes()),
+            "native_parity":false,"whole_contributor_coverage":false,"complete_item_inventory":false,
+            "files":(["src/Classes/Item.lua","src/Classes/ItemsTab.lua","src/Classes/ModStore.lua","src/Modules/ItemTools.lua","src/Modules/ModParser.lua","src/Modules/CalcSetup.lua","src/Data/ModScalability.lua","src/Data/Bases/amulet.lua","src/Data/Bases/body.lua"]
+                .map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})))
+        },"cases":cases});
+        fs::write(
+            out.join(format!(
+                "source-jit-{}.json",
+                if enabled { "on" } else { "off" }
+            )),
+            serde_json::to_vec_pretty(&result).unwrap(),
+        )
+        .unwrap();
+        check_fixed(&result);
+        return;
+    }
+    fs::create_dir(&out).expect("fixed Spirit evidence directory must be fresh");
+    for mode in ["off", "on"] {
+        let path = out.join(format!("source-jit-{mode}.log"));
+        let log = fs::File::create(&path).unwrap();
+        let mut child = Command::new(std::env::current_exe().unwrap())
+            .args(["--exact", FIXED_TEST, "--ignored", "--nocapture"])
+            .env(FIXED_CHILD, mode)
+            .current_dir(root.join("vendor/path-of-building-poe2/src"))
+            .stdout(Stdio::from(log.try_clone().unwrap()))
+            .stderr(Stdio::from(log))
+            .spawn()
+            .unwrap();
+        let start = Instant::now();
+        loop {
+            if let Some(status) = child.try_wait().unwrap() {
+                assert!(
+                    status.success(),
+                    "fixed Spirit source child failed: {}",
+                    path.display()
+                );
+                break;
+            }
+            if start.elapsed() > Duration::from_secs(240) {
+                child.kill().unwrap();
+                child.wait().unwrap();
+                panic!("fixed Spirit source deadline: {}", path.display());
+            }
+            std::thread::sleep(Duration::from_millis(100));
+        }
+    }
+    assert_eq!(
+        read(&out.join("source-jit-off.json")),
+        read(&out.join("source-jit-on.json"))
+    );
+}
+
+fn fixed_line<'a>(snapshot: &'a Json, text: &str) -> &'a Json {
+    let matches: Vec<_> = snapshot["lists"]
+        .as_object()
+        .unwrap()
+        .values()
+        .flat_map(rows)
+        .filter(|row| row["line"] == text)
+        .collect();
+    assert_eq!(matches.len(), 1, "one distinct physical line: {text}");
+    matches[0]
+}
+fn fixed_spirit_record(line: &Json, value: f64) {
+    assert_eq!(line["field_types"]["extra"], "nil");
+    let records = rows(&line["records"]);
+    assert_eq!(records.len(), 1);
+    assert_eq!(records[0]["name"], "Spirit");
+    assert_eq!(records[0]["type"], "BASE");
+    assert_eq!(records[0]["value"].as_f64(), Some(value));
+    assert_eq!(records[0]["flags"], 0);
+    assert_eq!(records[0]["keyword_flags"], 0);
+    assert!(rows(&records[0]["tags"]).is_empty());
+}
+fn check_fixed(result: &Json) {
+    assert_eq!(rows(&result["cases"]).len(), 3);
+    for (case, value) in rows(&result["cases"]).iter().zip([34., 48., 49.]) {
+        let state = &case["state"];
+        for field in [
+            "observed_item_fields_preserved",
+            "saved_selections_preserved",
+            "main_scalar_output_preserved",
+            "original_functions_preserved",
+        ] {
+            assert_eq!(state[field], true);
+        }
+        let participating = case["player_participating"].as_bool().unwrap();
+        if participating {
+            assert_eq!(state["selected_slots"], json!([case["slot"]]));
+        } else {
+            assert!(case["slot"].is_null());
+            assert!(rows(&state["selected_slots"]).is_empty());
+        }
+        assert_eq!(state["base_facts"]["has_buff"], false);
+        for field in ["loaded", "fresh_before", "fresh"] {
+            let line = fixed_line(&state[field], case["line"].as_str().unwrap());
+            fixed_spirit_record(line, value);
+            assert_eq!(line["catalyst_factor"].as_f64(), Some(1.));
+            assert!(line.get("modTags").is_none_or(|tags| rows(tags).is_empty()));
+            let next = fixed_line(&state[field], case["next_line"].as_str().unwrap());
+            assert_eq!(next["field_types"]["extra"], "nil");
+            assert!(!rows(&next["records"]).is_empty());
+        }
+        let source = rows(&state["fresh"]["active"])
+            .iter()
+            .find(|r| r["name"] == "Spirit" && r["value"].as_f64() == Some(value))
+            .unwrap();
+        if participating {
+            assert!(rows(&state["loaded"]["active"]).iter().any(|r| r == source));
+            assert!(rows(&state["player_spirit"]).iter().any(|r| r == source));
+        } else {
+            assert!(
+                !rows(&state["player_spirit"])
+                    .iter()
+                    .any(|r| r["source"] == source["source"])
+            );
+        }
+        assert_eq!(rows(&state["probes"]).len(), 14);
+        let probe = |name: &str| {
+            rows(&state["probes"])
+                .iter()
+                .find(|p| p["name"] == name)
+                .unwrap()
+        };
+        for amount in [1, 34, 48, 1_000_000] {
+            let p = probe(&format!("integer-{amount}"));
+            let text = format!("+{amount} to Spirit");
+            for field in ["before", "after"] {
+                fixed_spirit_record(fixed_line(&p[field], &text), f64::from(amount));
+            }
+        }
+        for name in ["untagged-neural", "untagged-neural-negative-quality"] {
+            let p = probe(name);
+            for field in ["before", "after"] {
+                let line = fixed_line(&p[field], case["line"].as_str().unwrap());
+                fixed_spirit_record(line, value);
+                assert_eq!(line["catalyst_factor"].as_f64(), Some(1.));
+            }
+        }
+        let tagged = fixed_line(
+            &probe("tagged-neural")["after"],
+            case["line"].as_str().unwrap(),
+        );
+        assert_eq!(tagged["modTags"], json!(["mana"]));
+        assert_eq!(tagged["catalyst_factor"].as_f64(), Some(1.2));
+        let unknown = probe("unknown-predecessor");
+        // A failed predecessor does not gain physical membership authority from
+        // the following recognized line. Preserve both observations separately.
+        assert!(
+            unknown["after"]["lists"]
+                .as_object()
+                .unwrap()
+                .values()
+                .flat_map(rows)
+                .any(|line| line["field_types"]["extra"] == "string")
+        );
+    }
+}

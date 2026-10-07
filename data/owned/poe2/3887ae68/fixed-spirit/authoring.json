@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "before": "29e4e9ef2b321bb6c802d9970666e8bf85afb805830ca9c2bbfc03bceaafb1ef",
+  "prior": {
+    "definitions": {
+      "game": "poe2",
+      "release": "pob-3887ae68-player-offhand-facts-v1",
+      "schema_version": 6,
+      "content_sha256": "1d65ca708007732943046d2d000aad831673ab71a95a2f45309a9ccd5ed395ba",
+      "semantics_version": "owned-mechanics-skill-inputs-v1"
+    },
+    "registry": "274df864ba96949566f0ab5890debb9f487e6ebfa205ac23885362f1fe646310",
+    "rules": "5fd42ba0744bd4ebddc7d671b68345bdcbb424d1e6115c93b3f1ba06b4b76cba",
+    "routing": "af0035ca19a1d020b72ead006f12eba1e03d53f146c2512a72c6ac9710a868cf",
+    "mapping": "24cfc49f303943403dfe15ed5544f91cd475fbdd8658e25f34e83149a5fe24d3",
+    "roles": "a57d4b2fcfdbe171de9feb083f4d5111694013314deec46f0ee81b5f3559e3ae",
+    "normalization": "8b5ba80475a40a89a7a7d952adf57aea76eb2927b13a12769fa5b928bff9c86e",
+    "rewards": "89a218f7941532efcbd02f5fdb50450271608a02d97efe6da46f3d3a01b00217",
+    "items": "296cac134d72ddb3305653527e50c847433a8f394775adfab442a27c2d638e31",
+    "item_source": "7579e163f706e30962fa42f1eadf607b7c32c7fb32a30ec8ee51b7fc17c2c188",
+    "tree": "1745ca6dec339b625940cdf49859bc8a539be426b7a623260b09098bd7f2a098"
+  },
+  "scope": {
+    "new_definitions": 0,
+    "new_programs": 0,
+    "new_receivers": 0,
+    "admitted_templates": 1756,
+    "added_memberships": 1755,
+    "complete_builds": 0
+  },
+  "artifacts": {
+    "bindings.json": {
+      "bytes": 306424,
+      "sha256": "f2d5be9c9945ef066d9acba4c7c4ed361944b955af02f7257104f8c5947e0b9a"
+    },
+    "dependencies.json": {
+      "bytes": 141603,
+      "sha256": "349252547dc25bd989c7734c5fc7eebe178cacee2a1b360c61a3d5fb16ab2e54"
+    },
+    "extension.json": {
+      "bytes": 166,
+      "sha256": "8a700143c86327af6f4a8ad4e393b80343b177c0c541101f6372e1b5ca8eb856"
+    },
+    "item-rule.json": {
+      "bytes": 22210,
+      "sha256": "bfc562f9567bd5eb8f1533493524a6a6b977a13287aaab3ed7ba938c3fe288eb"
+    },
+    "source-condition.json": {
+      "bytes": 293,
+      "sha256": "86c9b2a0abe6a744f162cbb6587156091bedb09056d75e52e842ac15d893f06e"
+    },
+    "source-vectors.json": {
+      "bytes": 520096,
+      "sha256": "0a36915a60091082bcb55a689d2dedab3a885051045e7fc7920b92782ddc087d"
+    }
+  }
+}

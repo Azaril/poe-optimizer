@@ -1,7 +1,8 @@
 # Equipment slot reads for shared Player state
 
-**Status:** Accepted and implemented on 2026-10-06. Game-state producers remain
-unpublished; no IDs allocated and no Class coverage changed.
+**Status:** Accepted and implemented on 2026-10-06. Selected off-hand producers
+are published through this relation; effective equipment state remains separate.
+The boundary itself allocated no IDs and changed no Class coverage.
 **Date:** 2026-10-06.
 **Decision owner:** Project owner.
 

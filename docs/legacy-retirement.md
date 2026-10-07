@@ -425,6 +425,16 @@ native modes, silently change goldens or apply the separate Frost exception to i
 The retained witness tests source behavior; its retirement or migration depends
 on a justified replacement law and contrasting numerical evidence.
 
+The [BASE audit](owned-base-contribution-audit.md) adds a separate numerical and
+ordering obligation: current declared signed/scaled inputs produce different
+final attributes under different binary64 fold orders. Real originals also
+contain post-passive equipment bonus copies, including grouped-before-scaling
+operations. Neither individually integral donors nor a passive-only suffix proof
+justifies arbitrary ordering. Cover character slots and admitted socket origins,
+distinguish obtainable game ranges from broad declared input domains, and review
+the intended numerical law before promoting contributor coverage. No source
+`pairs` traversal, UI slot order or cache-dependent mode is adopted by this audit.
+
 The [Bloodbarrier supplier audit](owned-configuration-dispositions-proposal.md#cache-authority-and-remaining-supplier-proof-2026-10-05)
 adds another distinction. Its parser emits a stack-marker stat with no local or
 global modifier mapping in the pinned source. `Data.lua:913–924` returns no map,

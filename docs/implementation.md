@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-06 (EDT).
+Updated: 2026-10-07 (EDT).
 
 This is the active delivery plan. The [design](domain-architecture.md) defines
 the end state; the [execution overview](data-and-evaluation-overview.md) explains
@@ -47,105 +47,92 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest checkpoint: complete increased-attribute memberships
+## Latest checkpoint: fixed Spirit recognition and BASE ordering evidence
 
-The [increased-attribute packet](../data/owned/poe2/3887ae68/attribute-increase-membership/README.md)
-completes six INC query groups with **34 effect memberships** from nine existing
-Complete passive owners. Their programs are unchanged. The full family supplies
-17 effects per pass, with Strength/Dexterity/Intelligence sums of 29/24/22
-percentage points. These fixed integral values sum exactly in every permutation;
-the binder rejects duplicate active semantic positions. Authored ranks are
-deterministic enumeration, not an adoption of PoB table traversal order.
+The [fixed-Spirit packet](../data/owned/poe2/3887ae68/fixed-spirit/README.md) adds
+one bounded, untagged source grammar using existing modifier `314d`, all 24 input
+slots and its five unchanged programs. Structural admission now covers all 1,756
+item templates; it proves neither affix legality nor complete item inventories.
+Two whole-input inverses check the exact membership/policy additions and required
+identity rebinding. No calculation program, public contract, operation or owner
+coverage marker changes.
 
-Publication scans every owner program and separately rejects matching application
-programs. Unknown, inactive or zero contributions cannot escape that census.
-The explicit six BASE groups and global query inventory remain Partial, as do
-all pre-existing Class/Actor/item coverage markers. There are no new definitions,
-programs, receivers, opcodes, runtime algorithms or schema revisions. This closes
-a current contributor family, not final attributes or any original build.
+Recognition unlocks **+29 Intelligence in Original01** and **+11 to all Attributes
+in Original04**. Their concrete values are retained, with one new remaining-input
+obligation each. Selected issue counts are now **107/117/109/123/5**; all prior
+issues survive. The three actual fixed Spirit lines still lack proven source
+categories, so no new fixed Spirit modifier is emitted from these originals.
+Original05's existing ranged Solar Spirit is preserved. Provisional implicit
+source positions are not canonical authority: the source witness places the
+fixed lines in explicit lists while the importer correctly keeps their layouts
+Pending. The tagged Crossbow rune remains outside this grammar's source domain.
 
-Source evidence reuses the authenticated original-call pipeline in
-`runs/owned-attribute-pipeline-source-05`: both passes and MAIN/CALCS for all five
-unchanged originals, plus unhooked/replay controls and identical JIT-on/off
-reports. Independent whole-list passive constructor tests were rerun and pass
-(**3.22s / 2.86s**). They cover all nine donors, including donors absent from the
-five selected examples. Exact typed values reconcile JSON integer/decimal
-spellings without numerical tolerance; stored source projections retain their
-original representation.
+Fresh source validation passes in **10.94s** with identical JIT-on/off reports
+(`runs/owned-fixed-spirit-source-02`). It covers both equipped items, Original05's
+dormant +49 Spirit item and 14 constructor controls per case. Authored validation
+passes; publication and **15 positive/negative import controls** pass in **38.54s**
+(`runs/owned-fixed-spirit-04/validation.json`). Complete drafts, source sidecars,
+selections, prior issues and all **110 queries** are checked, with explicit exact
+inverses for the two new records. Rebuilding the package is byte-identical.
+Failed draft checks are retained in earlier runs; they are not integration bases.
 
-Publication passes in **21.22s** at
-`runs/owned-attribute-increase-01/validation.json`. The exact whole-input inverse
-restores only these memberships and the appended provenance. All five imports,
-local identities, dispositions, selected issues and **110 queries** survive.
-A second publication is byte-identical, and authoring/source payloads stay out
-of the runtime package. Complete native builds remain **0/5**.
+The [BASE audit](owned-base-contribution-audit.md) also passes: three default tests
+(0.02s) and two retained-source/native-program checks (3.13s) after the final
+test-only lifetime cleanup. Its 60 stages retain 876 full
+records and 44 zero bonus copies. Current signed/scaled item programs expose
+order-sensitive final results; real Original03 has post-passive bonus copies,
+and socketed equipment lacks complete ordered-origin coverage. Keep BASE/global
+membership Partial instead of adopting arbitrary order or a class/passive-only
+shortcut. The five-build completion result remains **0/5**.
 
-Five native tests pass in **5.27s**, using all nine actual passive bodies, all six
-actual scalar consumers and all six actual guarded empty-MORE producers. They
-verify selected original occurrences, the full donor family, missing/unknown
-contributors, restored Partial coverage, duplicate positions, inactive loadouts,
-order and ID permutations, A/B/A scratch reuse and four Rayon workers. Only BASE
-subtotals and excluded mechanics are finite fixture authority; these are component
-results, not complete original-build evaluations.
+Strict workspace/all-targets/all-features Clippy and changed-package formatting
+pass. Production Rust libraries are unchanged; previous WASM and compiled-boundary
+checks are retained without claiming a fresh run. The earlier CI asset-path fix
+passes locally, but hosted success for the current revision is not yet confirmed.
 
-Two authored tests, strict workspace/all-targets/all-features Clippy and changed
-package formatting pass. Logs use `runs/owned-attribute-increase-*`; failed draft
-runs are retained alongside the passing authored `03` and Clippy `02` logs.
-The changed negative-test assertion was rebuilt and rerun after the final Clippy
-correction (`native-tests-02`, 2.64s).
-No production Rust library changed; prior WASM and compiled-boundary evidence is
-retained without claiming a new run.
-
-Remote CI for `7b7fb1b` identified `owned_skill_usage_inputs` as failing on both
-OSes. Its asset test still used pre-migration JSON paths. The test now checks the
-current unified policy, exact gem/skill/policy/parameter identities and typed
-occurrence source. All six ordinary tests in that target pass locally; its
-optional source replay remains ignored. Public check annotations identified the
-target; authenticated full logs were unavailable. Remote success is not yet
-confirmed for this correction.
-
-The next numerical blocker is BASE membership/order, including current signed,
-scaled item contributors. The [boundedness audit](owned-attributes.md#base-membership-proof-remains-open)
-records why per-item integer quantization alone is insufficient and the concrete
-source-order investigation. Separately, the five inherent-bonus flags need
-multiple-source aggregation. The [Boolean contribution proposal](owned-boolean-contributions-proposal.md)
-is pending owner review; do not implement that contract or insert false defaults
-until the direction is accepted. Effective equipment conditions and final Life
-remain separate obligations.
+**Next input blocker:** ordinary global maximum Energy Shield increase, including
+Original04's 44% line before +68 Life. Reuse Player channel `29f0`, not the distinct
+local-ES semantics, and include the saved 20%/16% Sapphire jewels as breadth
+controls. This will not alone resolve Spirit category: anoints, all-skills quality,
+rune/Bonded and other item families remain in the [item blocker census](../data/owned/poe2/3887ae68/fixed-spirit/README.md#remaining-original-item-category-blockers).
+Anoints must retain granted-passive meaning. Separately, the
+[Boolean contribution proposal](owned-boolean-contributions-proposal.md) still
+awaits owner review. The shared Player slot relation is already accepted and
+implemented; selected and effective equipment remain distinct.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-attribute-increase-01/package` as the integration baseline. Its
+Use `runs/owned-fixed-spirit-04/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. All freshly regenerated sidecars use V21;
 native schema V6 and operations V21 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-player-offhand-01/package`, input
-`98d7a8cbd812535194ea4379a0bfc9ac910abb7b352888c4ebd9521144ac3520`.
+Its immediate predecessor is `runs/owned-attribute-increase-01/package`, input
+`29e4e9ef2b321bb6c802d9970666e8bf85afb805830ca9c2bbfc03bceaafb1ef`.
 Historical endpoint paths authenticate useful stored evidence; they are not
 separate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `29e4e9ef2b321bb6c802d9970666e8bf85afb805830ca9c2bbfc03bceaafb1ef` |
+| Release input | `3a09338958da3f0fd49dc0669bb4fbc9c9acb1c464025c55d5edab4effaeb86f` |
 | Registry | `274df864ba96949566f0ab5890debb9f487e6ebfa205ac23885362f1fe646310` |
-| Definitions content | `1d65ca708007732943046d2d000aad831673ab71a95a2f45309a9ccd5ed395ba` |
-| Rules | `5fd42ba0744bd4ebddc7d671b68345bdcbb424d1e6115c93b3f1ba06b4b76cba` |
-| Compiled rules | `e82af4f422aa63e3e018d19d041f941f821be53e70d67fe091a065d2d1aff6bf` |
-| Routing | `af0035ca19a1d020b72ead006f12eba1e03d53f146c2512a72c6ac9710a868cf` |
-| Mapping | `24cfc49f303943403dfe15ed5544f91cd475fbdd8658e25f34e83149a5fe24d3` |
-| Skill roles | `a57d4b2fcfdbe171de9feb083f4d5111694013314deec46f0ee81b5f3559e3ae` |
-| Normalization | `8b5ba80475a40a89a7a7d952adf57aea76eb2927b13a12769fa5b928bff9c86e` |
-| Rewards | `89a218f7941532efcbd02f5fdb50450271608a02d97efe6da46f3d3a01b00217` |
-| Items | `296cac134d72ddb3305653527e50c847433a8f394775adfab442a27c2d638e31` |
-| Item source | `7579e163f706e30962fa42f1eadf607b7c32c7fb32a30ec8ee51b7fc17c2c188` |
-| Tree policy | `1745ca6dec339b625940cdf49859bc8a539be426b7a623260b09098bd7f2a098` |
-| Authoring commitment | `4bd44e527f9f3307eeebd0726ae231cf49f72b1370ea33df3ec5147d144020a8` |
+| Definitions content | `54487fcaf4ba617bc1627666fe015a50bc6fc3ed64d44a2be0b523939ddee945` |
+| Rules | `8701496441041c3c5fa0a6eea7222cf2902e964a3b3ea38718e92621ce69d1e9` |
+| Compiled rules | `0402d94f4a6aab830c87b39ab674ef15271a3e85e4341a77460b3c05dcf211c8` |
+| Routing | `8c906aa089c0b5e3dcde2db331429e7e77b918dbc053df398c2b3f8e77ae2dcc` |
+| Mapping | `2b06fd1fec052648efd6566b3fe82783cb2a721571b7fad2929329c481ef2622` |
+| Skill roles | `10b8ad0849f194fdca0e2292b21a63346cd8315a6fc299211b3b93ffaca6ec6f` |
+| Normalization | `8e3abaebd506144e86df51f760b7c66a459c9c2c310d65cc8f98b901a2e91d57` |
+| Rewards | `07493114cab88324e0053f7dc9ed673636ebe4f3b8ba020b73acb4428093fde7` |
+| Items | `8037df9b5edca8d4f131e83716cda91e2de48dd77a698ff646e6392cdf9530bb` |
+| Item source | `a43bc1fbb26346f9d9ab3b61095bf27be2b61162eb54ecb38041a2414e513caf` |
+| Tree policy | `a301884a281d053e7d9bce575e0d3df57e308c004288fe5af6dff855232c22c9` |
+| Authoring commitment | `62fca4eab4963684c09b5a733be6f8ba51e5299144faf029b462d34dc02b589f` |
 | Schema / operations | V6 / `owned-domain-operations-v21` |
 
-The eighteen package files total **62,688,591 bytes**, with 129 provenance rows.
+The eighteen package files total **62,887,875 bytes**, with 130 provenance rows.
 Definitions use `pob-3887ae68-player-offhand-facts-v1`; the independent rules release
 remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3333`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
@@ -153,10 +140,10 @@ source-property and readiness fragments are not independently complete evaluator
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
-| 01 | Kelari / Sand Djinn, Kelari's Deception | 106 | Not run: Pending |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 107 | Not run: Pending |
 | 02 | Twister, skill set 6 | 117 | Not run: Pending |
 | 03 | Whirling Assault, average-damage mode | 109 | Not run: Pending |
-| 04 | Crossbow Shot | 122 | Not run: Pending |
+| 04 | Crossbow Shot | 123 | Not run: Pending |
 | 05 | Skeletal Sniper, Basic Attack, skill set 4 | 5 | Not run: Pending |
 
 Original05 retains support-origin discovery `01de`, preset usage `0503`,
@@ -192,7 +179,10 @@ Complete. BASE/global inventories, Class coverage and original builds remain ope
 Next establish real BASE contributor closure and semantic ordering, including
 all current item donors and inactive alternatives. Reuse the importer's explicit
 modifier-order proof; raw saved line order is not source modifier-list order.
-Signed scaling and large cancellation need their own bounds/order evidence. Nonempty
+The executable BASE audit now proves a declared-domain signed-cancellation
+counterexample and real post-passive bonus copies. Resolve destination-complete
+ordering and grouped bonus projections before promoting those memberships;
+the class/item-prefix plus passive-suffix shortcut is insufficient. Nonempty
 MORE grouping remains unresolved; there is no native cache-dependent mode.
 Comparison snapshots and stage-dependent donors remain on the accepted finite
 stage plan. Resolve inherent-bonus controls before connecting final Player Life.
@@ -974,9 +964,9 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
-| Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation; six current INC memberships are now Complete; BASE membership and the global query inventory remain Partial. Next prove current item-inclusive BASE bounds/order and review typed Boolean flag aggregation. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
+| Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation; six current INC memberships are now Complete; BASE membership and the global query inventory remain Partial. The BASE audit now proves a signed-scaling counterexample, real post-passive bonus copies and missing socket-origin ordering; resolve these concrete domain gaps and review typed Boolean flag aggregation. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | Earlier V18/V20 expectation regressions and the combined Windows compile bottleneck are fixed. Run [37409208353](https://github.com/Azaril/poe-optimizer/actions/runs/37409208353) at `230494e` completed all twelve Windows/Linux jobs successfully. Windows PoB's combined compilation/test step took 3h28m40s, within its prior successful duration range; no hang or failure was found. At this pre-push check, run37514924385 at `da49f3f` was pending behind active run37499216040 at `81227b8`. Local checks for this checkpoint pass, but CI success for the current `main` revision is not yet confirmed. Read the latest [main workflow runs](https://github.com/Azaril/poe-optimizer/actions/workflows/rust.yml) before treating a newer revision as green; pending runs can be superseded by the next checkpoint. Main retains running validation and coalesces pending revisions. Separate compile/test timings before choosing further sharding. Keep every package/target and required aggregate check; infrastructure delays do not justify dropping coverage. |
+| CI regression, timeout and infrastructure | Earlier V18/V20 expectation regressions and the combined Windows compile bottleneck are fixed. Run [37409208353](https://github.com/Azaril/poe-optimizer/actions/runs/37409208353) at `230494e` completed all twelve Windows/Linux jobs successfully. Windows PoB's combined compilation/test step took 3h28m40s, within its prior successful duration range; no hang or failure was found. At the BASE audit check, run37552883848 at `0ff9210` was pending behind active run37529126901 at `7b7fb1b`. The latter exposed stale unified-usage asset paths in both engine jobs; the current main test correction passes all six ordinary target tests locally. Hosted success for that correction and this checkpoint is not yet confirmed. Read the latest [main workflow runs](https://github.com/Azaril/poe-optimizer/actions/workflows/rust.yml) before treating a newer revision as green; pending runs can be superseded by the next checkpoint. Main retains running validation and coalesces pending revisions. Separate compile/test timings before choosing further sharding. Keep every package/target and required aggregate check; infrastructure delays do not justify dropping coverage. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 | Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |

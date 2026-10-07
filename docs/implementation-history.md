@@ -1,10 +1,120 @@
-> Historical snapshots through the off-hand facts checkpoint on 2026-10-06.
+> Historical snapshots through the BASE contribution audit on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: executable BASE contribution audit
+
+The [BASE audit](owned-base-contribution-audit.md) retains **60 stages, 876 full
+modifier records and 44 zero bonus copies** from the existing authenticated
+all-five MAIN/CALCS source reports. Default checks use checked-in evidence;
+optional retained-report verification authenticates both JIT modes and original
+observer controls. It does not execute a new source witness or approximate
+PoB's conditional getter. Raw record sums remain distinct from actual results.
+
+The actual current native item/attribute programs confirm that individually
+quantized integer donors can produce final Strength **8 or 7** when signed
+scaled contributions are reordered within the declared input bounds. This is a
+numeric-domain control, not an obtainable-item claim. Real Original03 adds
+8 Strength and 7 Intelligence through equipment bonus copies after passives,
+invalidating the proposed all-five class/item-prefix plus passive-suffix shortcut.
+Other slot bonuses group matching records before scaling. Socketed equipment is
+also admitted by provider discovery but not by the current character-slot-only
+ordered ItemModifier origin. Preserve these gaps rather than publishing an
+incomplete contributor census or adopting source UI traversal as a domain law.
+
+Three default tests pass (**0.02s**); both optional checks pass (**3.17s**),
+including current published native programs and exact retained source projection.
+Logs are `runs/owned-attribute-base-audit-*`. This checkpoint changes no runtime
+artifact, coverage marker, evaluator operation or public contract. The checked
+baseline below is unchanged; complete native builds remain **0/5**.
+
+The next useful input work is source-validated fixed `+# to Spirit` conversion,
+reusing the existing Spirit modifier and numerical programs. Unknown fixed
+Spirit predecessors currently block adjacent attribute lines in Original01 and
+Original04. Validate original source parsing and preconditions, extend only the
+owned import data and structural admission, then reimport all five and identify
+the exact delta. Whole-item membership/order and final Spirit remain separate
+obligations. No new public model is required for that input family.
+
+The [Boolean contribution proposal](owned-boolean-contributions-proposal.md)
+remains pending owner review. The accepted shared Player slot relation is already
+implemented and has selected off-hand producers; this audit does not reopen that
+decision or make selected equipment equivalent to effective equipment.
+
+The prior checkpoint also fixed CI's stale `owned_skill_usage_inputs` asset test
+on both OSes. All six ordinary tests pass locally. Hosted success for that
+correction is not yet confirmed; public annotations were available, authenticated
+full logs were not. Preserve this distinction from the passing local checks.
+
+## Archived 2026-10-06 checkpoint: complete increased-attribute memberships
+
+The [increased-attribute packet](../data/owned/poe2/3887ae68/attribute-increase-membership/README.md)
+completes six INC query groups with **34 effect memberships** from nine existing
+Complete passive owners. Their programs are unchanged. The full family supplies
+17 effects per pass, with Strength/Dexterity/Intelligence sums of 29/24/22
+percentage points. These fixed integral values sum exactly in every permutation;
+the binder rejects duplicate active semantic positions. Authored ranks are
+deterministic enumeration, not an adoption of PoB table traversal order.
+
+Publication scans every owner program and separately rejects matching application
+programs. Unknown, inactive or zero contributions cannot escape that census.
+The explicit six BASE groups and global query inventory remain Partial, as do
+all pre-existing Class/Actor/item coverage markers. There are no new definitions,
+programs, receivers, opcodes, runtime algorithms or schema revisions. This closes
+a current contributor family, not final attributes or any original build.
+
+Source evidence reuses the authenticated original-call pipeline in
+`runs/owned-attribute-pipeline-source-05`: both passes and MAIN/CALCS for all five
+unchanged originals, plus unhooked/replay controls and identical JIT-on/off
+reports. Independent whole-list passive constructor tests were rerun and pass
+(**3.22s / 2.86s**). They cover all nine donors, including donors absent from the
+five selected examples. Exact typed values reconcile JSON integer/decimal
+spellings without numerical tolerance; stored source projections retain their
+original representation.
+
+Publication passes in **21.22s** at
+`runs/owned-attribute-increase-01/validation.json`. The exact whole-input inverse
+restores only these memberships and the appended provenance. All five imports,
+local identities, dispositions, selected issues and **110 queries** survive.
+A second publication is byte-identical, and authoring/source payloads stay out
+of the runtime package. Complete native builds remain **0/5**.
+
+Five native tests pass in **5.27s**, using all nine actual passive bodies, all six
+actual scalar consumers and all six actual guarded empty-MORE producers. They
+verify selected original occurrences, the full donor family, missing/unknown
+contributors, restored Partial coverage, duplicate positions, inactive loadouts,
+order and ID permutations, A/B/A scratch reuse and four Rayon workers. Only BASE
+subtotals and excluded mechanics are finite fixture authority; these are component
+results, not complete original-build evaluations.
+
+Two authored tests, strict workspace/all-targets/all-features Clippy and changed
+package formatting pass. Logs use `runs/owned-attribute-increase-*`; failed draft
+runs are retained alongside the passing authored `03` and Clippy `02` logs.
+The changed negative-test assertion was rebuilt and rerun after the final Clippy
+correction (`native-tests-02`, 2.64s).
+No production Rust library changed; prior WASM and compiled-boundary evidence is
+retained without claiming a new run.
+
+Remote CI for `7b7fb1b` identified `owned_skill_usage_inputs` as failing on both
+OSes. Its asset test still used pre-migration JSON paths. The test now checks the
+current unified policy, exact gem/skill/policy/parameter identities and typed
+occurrence source. All six ordinary tests in that target pass locally; its
+optional source replay remains ignored. Public check annotations identified the
+target; authenticated full logs were unavailable. Remote success is not yet
+confirmed for this correction.
+
+The next numerical blocker is BASE membership/order, including current signed,
+scaled item contributors. The [boundedness audit](owned-attributes.md#base-membership-proof-remains-open)
+records why per-item integer quantization alone is insufficient and the concrete
+source-order investigation. Separately, the five inherent-bonus flags need
+multiple-source aggregation. The [Boolean contribution proposal](owned-boolean-contributions-proposal.md)
+is pending owner review; do not implement that contract or insert false defaults
+until the direction is accepted. Effective equipment conditions and final Life
+remain separate obligations.
 
 ## Archived 2026-10-06 checkpoint: selected Player off-hand facts
 

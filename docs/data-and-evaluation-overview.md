@@ -65,6 +65,23 @@ through shared Player Actor rules. It changes no native operation or public
 contract. Source/native checks and all-five input/query preservation pass;
 Actor, item and Class coverage remains Partial.
 
+The [BASE contribution audit](owned-base-contribution-audit.md) adds executable
+evidence without changing that runtime package. It retains all five builds'
+actual ordered attribute records, including post-passive equipment bonus copies,
+and exercises a signed-scaling order counterexample through current native
+programs. BASE membership remains Partial; socket-origin ordering and grouped
+bonus projection need explicit treatment before closure.
+
+Fixed Spirit recognition is now an owned import-data extension using the same
+24 inputs and five existing numerical programs. It unlocks two neighboring
+attribute records in the unchanged originals without inventing a source category
+for the Spirit lines themselves. Those categories remain Pending; clean positive
+controls demonstrate complete 24-slot conversion. Exact all-five preservation,
+15 import controls and the fresh three-item source witness pass. The
+[packet](../data/owned/poe2/3887ae68/fixed-spirit/README.md) records the admitted
+domain and remaining item-layout blockers. New attribute input obligations bring
+selected counts to 107/117/109/123/5; complete native builds remain 0/5.
+
 Selected equipment is distinct from effective equipment. The accepted slot
 reader answers what the authored active loadout selects; later disabling or
 replacement mechanics require their own explicit rules. PoB's prepared item
