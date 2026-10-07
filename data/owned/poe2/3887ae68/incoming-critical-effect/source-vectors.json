@@ -1,0 +1,1570 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "scope": "Measured incoming-critical operands and outputs; no native or whole-build coverage claim.",
+  "dormant_override": "No lowercase enemyCritChance producer in the pinned ordinary XML/custom-modifier source domain; each measured bucket is empty and result unavailable. Direct mod-DB injection and future source mechanics are outside this statement.",
+  "source_files": [
+    {
+      "path": "runtime/lua/xml.lua",
+      "bytes": 4741,
+      "sha256": "832b6bb31f1f0e79e3ed6346113691b36ace29ed964e332530eef8b3b63af0e2"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "bytes": 27763,
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/EditControl.lua",
+      "bytes": 24662,
+      "sha256": "6af3f270ec07ddf2e3594effd868332c76c9e3039e6a49309965a51419dcf2d4"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "bytes": 18651,
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "bytes": 24010,
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "path": "src/GameVersions.lua",
+      "bytes": 1039,
+      "sha256": "7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e"
+    },
+    {
+      "path": "src/Launch.lua",
+      "bytes": 12034,
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "bytes": 239878,
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "bytes": 364029,
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "bytes": 11517,
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/Main.lua",
+      "bytes": 78051,
+      "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/ModTools.lua",
+      "bytes": 9130,
+      "sha256": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+    }
+  ],
+  "local_pins": [
+    {
+      "path": "crates/poe-optimizer-pob/tests/owned_incoming_critical_source.rs",
+      "bytes": 23752,
+      "sha256": "f939be7dbbcae188aa7e4e401e1ff5dec57752bdf813ab1c624e113ce2fc9c3f"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/owned_incoming_critical_source.lua",
+      "bytes": 10562,
+      "sha256": "8d0b81ebe9a7b8371c667aa9f3430dd60ce559537766de01a939439da9e68290"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/configuration_preparation_source.rs",
+      "bytes": 14535,
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/json_evidence.rs",
+      "bytes": 4597,
+      "sha256": "55175219a711f968167eb2b12c19efbdef9442992f07954a508ec32bd40ba95a"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "bytes": 106378,
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "reports": [
+    {
+      "path": "runs/owned-incoming-critical-source-01/source-jit-off.json",
+      "bytes": 1575783,
+      "sha256": "f70cf672f6bf4ca39f16c275ddc2839813c2554bb9bd5d695375ace7bccd8d86"
+    },
+    {
+      "path": "runs/owned-incoming-critical-source-01/source-jit-on.json",
+      "bytes": 1575783,
+      "sha256": "f70cf672f6bf4ca39f16c275ddc2839813c2554bb9bd5d695375ace7bccd8d86"
+    }
+  ],
+  "vectors": [
+    {
+      "name": "original-05",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    },
+    {
+      "name": "original-05",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    },
+    {
+      "name": "enemyCritChance-0",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        0,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        0,
+        30,
+        1
+      ]
+    },
+    {
+      "name": "enemyCritChance-0",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        0,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        0,
+        30,
+        1
+      ]
+    },
+    {
+      "name": "enemyCritChance--3.5",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        -3.5,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        0,
+        30,
+        1
+      ]
+    },
+    {
+      "name": "enemyCritChance--3.5",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        -3.5,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        0,
+        30,
+        1
+      ]
+    },
+    {
+      "name": "enemyCritChance-12.5",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        12.5,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        12.5,
+        30,
+        1.0375
+      ]
+    },
+    {
+      "name": "enemyCritChance-12.5",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        12.5,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        12.5,
+        30,
+        1.0375
+      ]
+    },
+    {
+      "name": "enemyCritChance-150",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        150,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        100,
+        30,
+        1.3
+      ]
+    },
+    {
+      "name": "enemyCritChance-150",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        150,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        100,
+        30,
+        1.3
+      ]
+    },
+    {
+      "name": "enemyCritDamage-0",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        0
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "enemyCritDamage-0",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        0
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "enemyCritDamage--17.25",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        -17.25
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "enemyCritDamage--17.25",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        -17.25
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "enemyCritDamage-37.5",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        37.5
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        37.5,
+        1.01875
+      ]
+    },
+    {
+      "name": "enemyCritDamage-37.5",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        37.5
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        37.5,
+        1.01875
+      ]
+    },
+    {
+      "name": "changed-saved-placeholders",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    },
+    {
+      "name": "changed-saved-placeholders",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    },
+    {
+      "name": "zero-saved-placeholders",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    },
+    {
+      "name": "zero-saved-placeholders",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    },
+    {
+      "name": "missing-saved-placeholders",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    },
+    {
+      "name": "missing-saved-placeholders",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    },
+    {
+      "name": "authored-inputs-with-conflicting-placeholders",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        12.5,
+        37.5
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        12.5,
+        37.5,
+        1.046875
+      ]
+    },
+    {
+      "name": "authored-inputs-with-conflicting-placeholders",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        12.5,
+        37.5
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        12.5,
+        37.5,
+        1.046875
+      ]
+    },
+    {
+      "name": "never",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "dependencies": [
+        null,
+        null,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        0,
+        30,
+        1
+      ]
+    },
+    {
+      "name": "never",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "dependencies": [
+        null,
+        null,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        0,
+        30,
+        1
+      ]
+    },
+    {
+      "name": "always",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        true,
+        false
+      ],
+      "dependencies": [
+        null,
+        null,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        100,
+        30,
+        1.3
+      ]
+    },
+    {
+      "name": "always",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        true,
+        false
+      ],
+      "dependencies": [
+        null,
+        null,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        100,
+        30,
+        1.3
+      ]
+    },
+    {
+      "name": "never-and-always",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "dependencies": [
+        null,
+        null,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        0,
+        30,
+        1
+      ]
+    },
+    {
+      "name": "never-and-always",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "dependencies": [
+        null,
+        null,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        0,
+        30,
+        1
+      ]
+    },
+    {
+      "name": "unlucky",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        true
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        0.25,
+        30,
+        1.00075
+      ]
+    },
+    {
+      "name": "unlucky",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        true
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        0.25,
+        30,
+        1.00075
+      ]
+    },
+    {
+      "name": "always-and-unlucky",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        true,
+        true
+      ],
+      "dependencies": [
+        null,
+        null,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        100,
+        30,
+        1.3
+      ]
+    },
+    {
+      "name": "always-and-unlucky",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        true,
+        true
+      ],
+      "dependencies": [
+        null,
+        null,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        100,
+        30,
+        1.3
+      ]
+    },
+    {
+      "name": "actor-and-enemy-increase",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        20,
+        30,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        7.5,
+        30,
+        1.0225
+      ]
+    },
+    {
+      "name": "actor-and-enemy-increase",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        20,
+        30,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        7.5,
+        30,
+        1.0225
+      ]
+    },
+    {
+      "name": "enemy-bonus-base-and-increase",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        10,
+        25,
+        0
+      ],
+      "outputs": [
+        5,
+        50,
+        1.025
+      ]
+    },
+    {
+      "name": "enemy-bonus-base-and-increase",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        10,
+        25,
+        0
+      ],
+      "outputs": [
+        5,
+        50,
+        1.025
+      ]
+    },
+    {
+      "name": "reduction",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        25
+      ],
+      "outputs": [
+        5,
+        30,
+        1.01125
+      ]
+    },
+    {
+      "name": "reduction",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        25
+      ],
+      "outputs": [
+        5,
+        30,
+        1.01125
+      ]
+    },
+    {
+      "name": "reduction-upper-clamp",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        100
+      ],
+      "outputs": [
+        5,
+        30,
+        1
+      ]
+    },
+    {
+      "name": "reduction-upper-clamp",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        100
+      ],
+      "outputs": [
+        5,
+        30,
+        1
+      ]
+    },
+    {
+      "name": "negative-reduction",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        -25
+      ],
+      "outputs": [
+        5,
+        30,
+        1.01875
+      ]
+    },
+    {
+      "name": "negative-reduction",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        -25
+      ],
+      "outputs": [
+        5,
+        30,
+        1.01875
+      ]
+    },
+    {
+      "name": "configured-evade",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        14,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        4.3,
+        30,
+        1.0129
+      ]
+    },
+    {
+      "name": "configured-evade",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        14,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        4.3,
+        30,
+        1.0129
+      ]
+    },
+    {
+      "name": "damage-over-time",
+      "mode": "main",
+      "category": "DamageOverTime",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        null,
+        null,
+        null
+      ],
+      "dependencies": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        0
+      ],
+      "outputs": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "name": "damage-over-time",
+      "mode": "calcs",
+      "category": "DamageOverTime",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        null,
+        null,
+        null
+      ],
+      "dependencies": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        0
+      ],
+      "outputs": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "name": "repeat-original-05",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    },
+    {
+      "name": "repeat-original-05",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    },
+    {
+      "name": "warm-changed-to-original-05",
+      "mode": "main",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    },
+    {
+      "name": "warm-changed-to-original-05",
+      "mode": "calcs",
+      "category": "Average",
+      "raw": [
+        null,
+        null
+      ],
+      "flags": [
+        false,
+        false,
+        false
+      ],
+      "dependencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outputs": [
+        5,
+        30,
+        1.015
+      ]
+    }
+  ]
+}

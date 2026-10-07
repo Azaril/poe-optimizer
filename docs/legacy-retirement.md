@@ -31,6 +31,16 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Incoming-critical source review, 2026-10-07:** do not automatically translate
+the lowercase `enemyCritChance` Override lookup into a second native override
+model. The pinned ordinary XML/custom-modifier source path has no known producer;
+26 measured cases in each JIT mode have an empty bucket and no returned override.
+The native draft keeps the existing resolved configured-chance dependency.
+This is a bounded acquisition classification, not permission to discard a future
+real modifier. The optional source observer is retained to authenticate actual
+formula branches, source inputs and this absence boundary; it adds no runtime
+Lua dependency. See the [critical source checkpoint](implementation.md#in-progress-incoming-critical-source-proof-and-actor-read-decision).
+
 Retain a legacy path only for a named, currently useful consumer: original-PoB
 reference evaluation, maintained data acquisition/import, or an independent
 numerical regression that has not yet moved to the owned engine. An exported API,

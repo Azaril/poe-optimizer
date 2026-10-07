@@ -65,7 +65,7 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest checkpoint: typed Boolean contributions and real passive producers
+## Latest published native checkpoint: typed Boolean contributions and real passive producers
 
 The accepted [Boolean contract](owned-boolean-contributions-proposal.md) is now
 implemented in Core, Data and Engine. One `contribution_queries` inventory
@@ -162,6 +162,68 @@ Lesser Harm passive is a useful real unlucky-crit contrast, but is absent from
 Original05 and cannot establish complete flag coverage. See
 `runs/owned-incoming-damage-source-01` and the
 [configuration consumer plan](owned-configuration-dispositions-proposal.md).
+
+## In progress: incoming critical source proof and Actor read decision
+
+The independent complete-PoB witness now **passes 26 cases under both JIT modes**,
+including MAIN/CALCS agreement, a separate fresh replay and a changed-to-original
+warm load. These are 54 complete loads. The parent test passed in **332.56s**;
+both 1,575,783-byte reports have SHA-256
+`f70cf672f6bf4ca39f16c275ddc2839813c2554bb9bd5d695375ace7bccd8d86`.
+The [compact source packet](../data/owned/poe2/3887ae68/incoming-critical-effect/source-vectors.json)
+retains 52 measured MAIN/CALCS vectors and pins the harness, observer, original
+XML, source manifest and full reports. It proves actual flags, numeric operands,
+lazy branch behavior, defaults, authored zero/fractional/negative values, extra
+damage reduction's upper-only cap, evasion, and overwritten placeholders.
+No source method is replaced and no synthetic modifier database is injected.
+
+The source's lowercase `enemyCritChance` override bucket is empty and has no
+result in every observed ordinary XML/custom-modifier load. Static acquisition
+also found no producer in the pinned supported source paths. This is bounded
+evidence, not permission to ignore a future real override mechanic or arbitrary
+direct modifier injection. The native draft deliberately has no Lua-shaped
+override-presence/value model; it retains a resolved configured-chance dependency.
+
+**The native draft is not published or usable yet.** Its shared Player owner
+reads Enemy computed Stats and Boolean queries. Native tests expose an existing
+contract restriction: `existing actor read requires unsupported provider
+authority`. Shared Actor rules currently admit Enemy external inputs but not
+these computed reads. The [Actor-to-Enemy read proposal](owned-actor-enemy-reads-proposal.md)
+is awaiting the owner's decision; do not relocate the formula, copy Enemy facts
+onto Player Stats, remove the real Actor binding from tests, or change validation
+to get around that decision. The separate support-origin composition decision
+has also been re-prompted. Neither pending answer is approval.
+
+Uncommitted preparatory files are `incoming-critical-effect/{extension,policy,
+native-inputs,queries,README}` and the two new root critical test targets and
+their helpers. They reserve `334e`–`335f` for 18 definitions, preserve Partial
+Actor/Encounter ownership, add three Partial flag inventories, and leave six
+numeric dependencies unresolved. The normal native target currently has one
+passing authoring test and five tests stopped by the explicit authority guard;
+the measured replay has not run. Keep those unapproved native drafts out of a
+published green checkpoint. No production format, validation or runtime code
+was changed in this source-evidence checkpoint.
+
+Resume after the design decision: extend only the approved shared-Actor read
+authority and its storage/raw-compiler guards, prove wrong scope/type, missing
+producers, Partial membership, stages/cycles and unchanged write boundaries;
+then execute the seven actual authored native tests, authenticate the compact
+vectors against the full reports, and run the prepared all-five publication
+inverse. The draft's input policy should add two absence/value channels and
+account for exactly two overwritten placeholders per original; **these changes
+have not been published or counted as progress in input closure**. Current
+package identities, issue counts and 0/5 completion remain unchanged.
+
+Evidence: `runs/owned-critical-source-test-01.log`,
+`runs/owned-incoming-critical-source-01/source-jit-{off,on}.json`,
+`runs/owned-critical-native-tests-02.log`. Strict workspace/all-feature/all-target
+Clippy passed in `runs/owned-critical-clippy-01.log`; it does not establish native
+execution. The ordinary critical authoring/source-pin check and the exact compact
+vector/full-report authentication pass in `runs/owned-critical-cli-tests-02.log`
+and `runs/owned-critical-source-authentication-01.log`. No all-five publication
+was attempted for this unapproved draft. At 21:54:56 UTC, `bfa28bb` CI was pending, `303adb2` was cancelled as
+pending runs coalesced, and `f93d551` had four successful/eight running jobs with
+no failed steps. No new hosted success is claimed.
 
 ## Checked baseline and original-build results
 
@@ -1241,6 +1303,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. All five production flag memberships and unrelated passive mechanics remain Partial; no false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
+| Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |
 | Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 21 Config-local and 23 non-Config origins after selected/generated accounting, cached-Buffs, archived responsibility and overwritten-placeholder proofs. Fourteen archived rows retain their exact existing raw-input, usage and support-origin Pending owners; they gain no provider or known value. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Typed constructor defaults now reach Player/Enemy/Environment inputs; the real Player resistance-penalty consumer is published, but no global inventory closes. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |

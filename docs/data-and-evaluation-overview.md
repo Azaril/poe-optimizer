@@ -51,6 +51,18 @@ Neither passive is selected in Original05; final Strength, final Life and the
 five selected input obligations remain unresolved. See the
 [flag packet](../data/owned/poe2/3887ae68/inherent-attribute-flags/README.md).
 
+The next critical-hit slice has passed an independent PoB witness: 26 cases in
+each JIT mode, byte-identical reports, and 52 measured MAIN/CALCS vectors. The
+native data draft is **unpublished** because the shared Actor contract currently
+forbids computed Enemy reads. The
+[read-authority proposal](owned-actor-enemy-reads-proposal.md) asks to reuse the
+scenario Enemy for typed Stat and Boolean query reads while retaining Actor-only
+writes; no authority or runtime change has been made. This is separate from
+the already accepted Boolean contribution representation. The draft introduces
+no Lua-shaped override model for a dormant source lookup. The implementation
+plan records the exact failed admission check and pending work; current package
+identities and all five build results are unchanged.
+
 The preceding Import checkpoint accounts for fourteen overwritten numeric
 configuration placeholders in every original. The proof binds the exact source
 scope and encounter to actual emitted raw-presence/optional-value inputs; it
@@ -58,8 +70,8 @@ retains the ScenarioPreset link and never imports a saved calculated default.
 Malformed, ambiguous, fallback/default and unproved rows retain their obligations.
 All five drafts, IDs, selections and 110 queries remain unchanged. Original05 has
 44 configuration-linked origins (21 inside Config, 23 outside); complete native
-builds remain 0/5. Current configuration-policy sidecars use schema23, and the
-that checkpoint changed no native package. See the [proof and remaining consumers](owned-configuration-dispositions-proposal.md#overwritten-raw-override-placeholders-2026-10-07).
+builds remain 0/5. Current configuration-policy sidecars use schema23; that
+checkpoint changed no native package. See the [proof and remaining consumers](owned-configuration-dispositions-proposal.md#overwritten-raw-override-placeholders-2026-10-07).
 
 The preceding archived-source checkpoint accounted for fourteen generated rows
 through existing preset-scoped Pending raw-input, usage and support-discovery
