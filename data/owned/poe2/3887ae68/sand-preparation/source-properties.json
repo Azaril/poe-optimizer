@@ -1,0 +1,518 @@
+{
+  "relations": {
+    "members": [
+      {
+        "id": "sand-manual-source",
+        "owner": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        },
+        "occurrence": {
+          "kind": "authored_skill_use"
+        },
+        "aliases": "reject_shared_backing_gem_v1",
+        "context": "player_scenario_v1",
+        "census": "exact_selected_position_v1",
+        "census_stage": "source-census",
+        "effects": {
+          "members": [
+            {
+              "endpoint": {
+                "kind": "owner_skill"
+              },
+              "admission": {
+                "kind": "assigned_skill"
+              }
+            },
+            {
+              "endpoint": {
+                "kind": "generated",
+                "path": [],
+                "skill_supply": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000322"
+                    }
+                  },
+                  "slot": {
+                    "kind": "skill_grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032a5"
+                  }
+                }
+              },
+              "admission": {
+                "kind": "receiving_skill",
+                "summoner_path": null
+              }
+            }
+          ],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "skill",
+                      "value": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000322"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "sand-property-effect-inventory-unproven"
+                }
+              ]
+            }
+          }
+        },
+        "inputs": [
+          {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000030ac"
+          },
+          {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000030ad"
+          }
+        ],
+        "channels": {
+          "members": [
+            {
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032e1"
+              },
+              "contribution": "add"
+            },
+            {
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003352"
+              },
+              "contribution": "add"
+            }
+          ],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "skill",
+                      "value": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000322"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "sand-supported-property-channels-unproven"
+                }
+              ]
+            }
+          }
+        },
+        "external": {
+          "members": [],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "skill",
+                      "value": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000322"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "sand-actor-supported-properties-unconverted"
+                }
+              ]
+            }
+          }
+        },
+        "supports": {
+          "members": [],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "skill",
+                      "value": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000322"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "sand-supported-property-producers-unconverted"
+                }
+              ]
+            }
+          }
+        },
+        "assembly": {
+          "members": [
+            {
+              "program": "sand-final-preparation",
+              "binding": "input_owner"
+            }
+          ],
+          "closure": {
+            "kind": "complete"
+          }
+        },
+        "non_hidden_count": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032e0"
+        }
+      },
+      {
+        "id": "sand-tree-source",
+        "owner": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        },
+        "occurrence": {
+          "kind": "generated_skill",
+          "skill_supply": {
+            "declaration": {
+              "kind": "passive_node",
+              "definition": {
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000b34"
+              }
+            },
+            "slot": {
+              "kind": "skill_grant_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032d2"
+            }
+          }
+        },
+        "aliases": "reject_shared_backing_gem_v1",
+        "context": "player_scenario_v1",
+        "census": "exact_selected_position_v1",
+        "census_stage": "source-census",
+        "effects": {
+          "members": [
+            {
+              "endpoint": {
+                "kind": "owner_skill"
+              },
+              "admission": {
+                "kind": "assigned_skill"
+              }
+            },
+            {
+              "endpoint": {
+                "kind": "generated",
+                "path": [],
+                "skill_supply": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000322"
+                    }
+                  },
+                  "slot": {
+                    "kind": "skill_grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032a5"
+                  }
+                }
+              },
+              "admission": {
+                "kind": "receiving_skill",
+                "summoner_path": null
+              }
+            }
+          ],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "skill",
+                      "value": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000322"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "sand-property-effect-inventory-unproven"
+                }
+              ]
+            }
+          }
+        },
+        "inputs": [
+          {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000030ac"
+          },
+          {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000030ad"
+          }
+        ],
+        "channels": {
+          "members": [
+            {
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032e1"
+              },
+              "contribution": "add"
+            },
+            {
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003352"
+              },
+              "contribution": "add"
+            }
+          ],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "skill",
+                      "value": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000322"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "sand-supported-property-channels-unproven"
+                }
+              ]
+            }
+          }
+        },
+        "external": {
+          "members": [],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "skill",
+                      "value": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000322"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "sand-actor-supported-properties-unconverted"
+                }
+              ]
+            }
+          }
+        },
+        "supports": {
+          "members": [],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "skill",
+                      "value": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000322"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "sand-supported-property-producers-unconverted"
+                }
+              ]
+            }
+          }
+        },
+        "assembly": {
+          "members": [
+            {
+              "program": "sand-final-preparation",
+              "binding": "input_owner"
+            }
+          ],
+          "closure": {
+            "kind": "complete"
+          }
+        },
+        "non_hidden_count": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032e0"
+        }
+      }
+    ],
+    "closure": {
+      "kind": "partial",
+      "value": {
+        "gaps": [
+          {
+            "subject": {
+              "kind": "definition",
+              "value": {
+                "kind": "skill",
+                "value": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000322"
+                }
+              }
+            },
+            "facet": "game_rules",
+            "code": "sand-source-property-inventory-unconverted"
+          }
+        ]
+      }
+    }
+  }
+}

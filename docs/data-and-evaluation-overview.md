@@ -39,7 +39,18 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The current native checkpoint implements typed Boolean `Flag` contributions and
+The latest native checkpoint publishes shared Sand preparation: manual and
+tree-granted occurrences use the same raw-input validation, ordinary-property
+and once-per-source assembly rules. The exact Command receives prepared inputs;
+the declared Actor slot receives an injected level-table lookup. These are
+data-authored programs on existing owners, without skill-name dispatch in Rust.
+Their Partial source/support inventories and remaining combat/population modes
+still prevent full owner closure. All-five reimports preserve selections and
+110 queries; Original05's five obligations and the 0/5 completion count remain.
+The current package is `runs/owned-sand-preparation-publication-03/package`.
+See the [packet and coverage limits](../data/owned/poe2/3887ae68/sand-preparation/README.md).
+
+The preceding native checkpoint implements typed Boolean `Flag` contributions and
 unordered `Any` on the existing graph. Source membership and numeric ranks are
 separate; missing coverage remains unresolved even beside true. The current
 format is rules schema3 / operations22; no historical DTO loading path exists.
@@ -730,11 +741,20 @@ the input owner or its exact declaring provider, retaining natural Actor, Skill
 or EquipmentUse context while sealing property reads to the generated Skill.
 Sibling writes, ambiguous concrete ownership and undeclared input authority are
 rejected. The current wire format is updated in place; no compatibility evaluator
-is retained. Sand/Firebolt raw level/quality inventories remain Partial until
-real preparation rules and consumers are authored. Saved participation transport
+is retained. Sand now has real preparation, Command-input and actor-level
+programs, while incoming-property/support coverage remains Partial. Firebolt's
+preparation is still unauthored. Saved participation transport
 adds nine exact preferences across Originals01/05, with all-five inverses and
 18 import controls passing. This publishes no readiness and closes none of
 Original05's five selected obligations.
+
+Sand integration also exercises generated preset inputs together with source
+assembly. These inputs are Structural request producers, not authored programs
+with an invented stage. The potential source-cycle proof now follows their
+provider gates to ordinary ancestors for stage comparison, retaining all cycle
+edges, readiness requirements and work limits. Ordinary unstaged/backward
+dependencies still fail. This corrects the existing implementation without a
+new graph, authority, public format or compatibility path.
 
 The Offering integration exposed an earlier implementation limit: item programs
 derive typed facts on EquipmentUse and Modifier occurrences, which stages V3

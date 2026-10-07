@@ -502,3 +502,219 @@ fn generated_sources_preserve_serial_parallel_and_reused_scratch_results() {
         assert!(rows.iter().all(|actual| actual == &expected));
     }
 }
+
+#[test]
+fn preset_generated_quality_feeds_source_assembly_without_an_invented_stage() {
+    use poe_optimizer_core::{
+        build_identity::InstanceAllocator, owned_definitions::*, owned_readiness::*,
+        owned_source_properties::*, owned_stages::*,
+    };
+    let mut f = generated::fixture();
+    add_shared_final_stat(&mut f);
+    f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V6;
+    let raw = readiness::summon_parameter("preset-quality");
+    for definition in &mut f.schema.definitions {
+        if let DefinitionDescriptor::Skill(row) = definition
+            && row.id == def::<SkillDefinition>("summon")
+            && let SchemaState::Known(schema) = &mut row.schema
+        {
+            schema.declarations.parameters.members.push(raw.clone());
+        }
+    }
+    f.schema
+        .slots
+        .push(SlotDescriptor::Parameter(DefinitionEntry {
+            id: raw.clone(),
+            schema: SchemaState::Known(ParameterSlotSchema {
+                skill_input: Some(SkillInputAuthority::Projected),
+                value: ValueSchema::Quantity(QuantityRange {
+                    minimum: FiniteQuantity::new(0.0, def("count")).unwrap(),
+                    maximum: FiniteQuantity::new(100.0, def("count")).unwrap(),
+                }),
+                presence: SlotPresence::RequiredOnce,
+                sites: vec![],
+            }),
+        }));
+    for slot in &mut f.schema.slots {
+        if let SlotDescriptor::SkillGrant(row) = slot
+            && [
+                readiness::summon_supply(),
+                supply(modifier()),
+                supply(passive()),
+            ]
+            .contains(&row.id)
+            && let SchemaState::Known(schema) = &mut row.schema
+        {
+            schema.preset_inputs = Some(PresetSkillInputPermission {
+                schema_version: 1,
+                parameters: DeclaredSet::complete(vec![raw.clone()]),
+            });
+        }
+    }
+    f.schema
+        .definitions
+        .push(DefinitionDescriptor::Stat(DefinitionEntry {
+            id: def("prepared-quality"),
+            schema: SchemaState::Known(StatSchema {
+                value: ComputedValueType::Quantity { unit: def("count") },
+                targets: vec![RuleEntityKind::Skill],
+            }),
+        }));
+    let assembly =
+        readiness::program_mut(&mut f, readiness::summon_owner(), "source-direct-assembly");
+    assembly.reads.push(RuleRead {
+        id: key("quality"),
+        value_type: ComputedValueType::Quantity { unit: def("count") },
+        source: RuleReadSource::Parameter { slot: raw.clone() },
+    });
+    assembly.nodes.extend([
+        base::read_node("quality", "quality"),
+        base::node(
+            "quality-unit",
+            RuleExpression::Literal {
+                value: readiness::quantity(1.0),
+            },
+        ),
+        base::node(
+            "quality-properties",
+            RuleExpression::ScaleInteger {
+                value: key("quality-unit"),
+                count: key("properties"),
+            },
+        ),
+        base::node(
+            "prepared-quality",
+            RuleExpression::Add {
+                left: key("quality"),
+                right: key("quality-properties"),
+            },
+        ),
+    ]);
+    assembly.effects.push(base::derive(
+        "quality",
+        RuleEntity::Current,
+        "prepared-quality",
+        "prepared-quality",
+    ));
+    let mut allocator = InstanceAllocator::from_state(f.build.allocator);
+    let preset = allocator.allocate().unwrap();
+    f.build.allocator = allocator.state();
+    let targets = [
+        fixture::member(30),
+        fixture::member(31),
+        item_target(6, 4),
+        item_target(6, 5),
+        item_target(7, 4),
+        item_target(7, 5),
+        node_target(80),
+        node_target(81),
+    ];
+    f.build.generated_inputs = Some(GeneratedSkillInputsV1 {
+        schema_version: 1,
+        bindings: targets
+            .iter()
+            .enumerate()
+            .map(|(index, target)| {
+                let SkillTarget::Generated(target) = target else {
+                    unreachable!()
+                };
+                SelectedGeneratedSkillInput {
+                    target: *target.clone(),
+                    parameters: vec![ParameterAssignment {
+                        slot: raw.clone(),
+                        value: readiness::quantity(12.5 + index as f64),
+                    }],
+                    origin: GeneratedSkillInputOrigin {
+                        skill_preset: preset,
+                    },
+                }
+            })
+            .collect(),
+    });
+    let checked = inputs_with_operations(
+        &f,
+        OWNED_RULE_OPERATIONS_V19,
+        |_| {},
+        |stages| {
+            let ready = stages.readiness.as_mut().unwrap();
+            ready
+                .skills
+                .iter_mut()
+                .find(|row| row.skill == def::<SkillDefinition>("summon"))
+                .unwrap()
+                .parameters
+                .members
+                .push(ParameterReadiness {
+                    parameter: raw.clone(),
+                    phase: ReadinessPhase::Structural,
+                });
+            ready
+                .programs
+                .members
+                .iter_mut()
+                .find(|row| {
+                    row.owner == readiness::summon_owner()
+                        && row.program == key("source-direct-assembly")
+                })
+                .unwrap()
+                .outputs
+                .push(StageChannel::Stat {
+                    scope: RuleEntityKind::Skill,
+                    stat: def("prepared-quality"),
+                });
+        },
+        |receiving| {
+            for relation in &mut receiving
+                .source_properties
+                .as_mut()
+                .unwrap()
+                .relations
+                .members
+            {
+                relation.inputs.push(def("direct-final"));
+                relation
+                    .assembly
+                    .members
+                    .push(SourcePropertyAssemblyProgram {
+                        program: key("source-direct-assembly"),
+                        binding: SourcePropertyAssemblyBinding::InputOwner,
+                    });
+            }
+        },
+    )
+    .unwrap();
+    let plan = readiness::compile_inputs(checked)
+        .expect("preset inputs retain intrinsic Structural readiness");
+    let report = evaluate(&plan);
+    let values = fixture::evaluated(&report);
+    for (index, target) in targets.iter().enumerate() {
+        // The two supported sources add 2; the item/tree sources add the common 20.
+        let properties = if index < 2 { 22.0 } else { 20.0 };
+        assert_eq!(
+            fixture::value(
+                values,
+                &PlanValueKey::Stat {
+                    entity: ConcreteEntity::Skill(Box::new(target.clone())),
+                    stat: def("prepared-quality"),
+                }
+            ),
+            &EffectValue::Known {
+                value: readiness::quantity(12.5 + index as f64 + properties)
+            }
+        );
+    }
+    assert_eq!(
+        values
+            .effects
+            .iter()
+            .filter(|effect| matches!(
+                effect.key.invocation.origin,
+                RuleOrigin::GeneratedInput { .. }
+            ))
+            .count(),
+        8
+    );
+    let mut scratch = plan.new_scratch();
+    assert_eq!(plan.evaluate(&mut scratch).unwrap(), report);
+    assert_eq!(plan.evaluate(&mut scratch).unwrap(), report);
+}

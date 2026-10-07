@@ -1,0 +1,649 @@
+{
+  "schema_version": 1,
+  "reference_only": true,
+  "stages": [
+    {
+      "id": "prepare",
+      "predecessors": []
+    },
+    {
+      "id": "source-census",
+      "predecessors": [
+        "prepare"
+      ]
+    },
+    {
+      "id": "source-assembly",
+      "predecessors": [
+        "source-census"
+      ]
+    },
+    {
+      "id": "descendants",
+      "predecessors": [
+        "source-assembly"
+      ]
+    },
+    {
+      "id": "execute",
+      "predecessors": [
+        "descendants"
+      ]
+    }
+  ],
+  "programs": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        }
+      },
+      "program": "sand-ordinary-preparation",
+      "stage": "prepare"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        }
+      },
+      "program": "sand-final-preparation",
+      "stage": "source-assembly"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        }
+      },
+      "program": "sand-command-preparation",
+      "stage": "descendants"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        }
+      },
+      "program": "sand-population-level",
+      "stage": "descendants"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        }
+      },
+      "program": "sand-command-supply",
+      "stage": "prepare"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        }
+      },
+      "program": "sand-actor-supply",
+      "stage": "prepare"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000b34"
+          }
+        }
+      },
+      "program": "sand-tree-raw-supply",
+      "stage": "prepare"
+    }
+  ],
+  "readiness": {
+    "skills": [
+      {
+        "skill": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000322"
+        },
+        "parameters": {
+          "members": [
+            {
+              "parameter": {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000322"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003261"
+                }
+              },
+              "phase": "structural"
+            },
+            {
+              "parameter": {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000322"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003262"
+                }
+              },
+              "phase": "structural"
+            }
+          ],
+          "closure": {
+            "kind": "complete"
+          }
+        }
+      },
+      {
+        "skill": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000000d8"
+        },
+        "parameters": {
+          "members": [
+            {
+              "parameter": {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000000d8"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003350"
+                }
+              },
+              "phase": "execution"
+            },
+            {
+              "parameter": {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000000d8"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003351"
+                }
+              },
+              "phase": "execution"
+            }
+          ],
+          "closure": {
+            "kind": "complete"
+          }
+        }
+      }
+    ],
+    "programs": [
+      {
+        "owner": {
+          "kind": "definition",
+          "value": {
+            "kind": "skill",
+            "value": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000322"
+            }
+          }
+        },
+        "program": "sand-ordinary-preparation",
+        "phase": "preparation",
+        "role": "preparation_facts",
+        "outputs": [
+          {
+            "kind": "stat",
+            "scope": "skill",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000030ac"
+            }
+          },
+          {
+            "kind": "stat",
+            "scope": "skill",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000030ad"
+            }
+          }
+        ]
+      },
+      {
+        "owner": {
+          "kind": "definition",
+          "value": {
+            "kind": "skill",
+            "value": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000322"
+            }
+          }
+        },
+        "program": "sand-final-preparation",
+        "phase": "preparation",
+        "role": "source_final_input_assembly",
+        "outputs": [
+          {
+            "kind": "stat",
+            "scope": "skill",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000334e"
+            }
+          },
+          {
+            "kind": "stat",
+            "scope": "skill",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000334f"
+            }
+          }
+        ]
+      },
+      {
+        "owner": {
+          "kind": "definition",
+          "value": {
+            "kind": "skill",
+            "value": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000322"
+            }
+          }
+        },
+        "program": "sand-command-preparation",
+        "phase": "preparation",
+        "role": "final_input_assembly",
+        "outputs": [
+          {
+            "kind": "skill_parameter",
+            "parameter": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000000d8"
+                }
+              },
+              "slot": {
+                "kind": "parameter_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003350"
+              }
+            }
+          },
+          {
+            "kind": "skill_parameter",
+            "parameter": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000000d8"
+                }
+              },
+              "slot": {
+                "kind": "parameter_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003351"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "owner": {
+          "kind": "definition",
+          "value": {
+            "kind": "skill",
+            "value": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000322"
+            }
+          }
+        },
+        "program": "sand-population-level",
+        "phase": "preparation",
+        "role": "preparation_facts",
+        "outputs": [
+          {
+            "kind": "stat",
+            "scope": "actor",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000001c"
+            }
+          }
+        ]
+      },
+      {
+        "owner": {
+          "kind": "definition",
+          "value": {
+            "kind": "skill",
+            "value": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000322"
+            }
+          }
+        },
+        "program": "sand-command-supply",
+        "phase": "preparation",
+        "role": "preparation_facts",
+        "outputs": [
+          {
+            "kind": "grant",
+            "slot": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000322"
+                }
+              },
+              "slot": {
+                "kind": "grant_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032a6"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "owner": {
+          "kind": "definition",
+          "value": {
+            "kind": "skill",
+            "value": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000322"
+            }
+          }
+        },
+        "program": "sand-actor-supply",
+        "phase": "preparation",
+        "role": "preparation_facts",
+        "outputs": [
+          {
+            "kind": "grant",
+            "slot": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000322"
+                }
+              },
+              "slot": {
+                "kind": "grant_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032a4"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "owner": {
+          "kind": "definition",
+          "value": {
+            "kind": "passive_node",
+            "value": {
+              "kind": "passive_node",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000b34"
+            }
+          }
+        },
+        "program": "sand-tree-raw-supply",
+        "phase": "preparation",
+        "role": "final_input_assembly",
+        "outputs": [
+          {
+            "kind": "skill_parameter",
+            "parameter": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000322"
+                }
+              },
+              "slot": {
+                "kind": "parameter_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003261"
+              }
+            }
+          },
+          {
+            "kind": "grant",
+            "slot": {
+              "declaration": {
+                "kind": "passive_node",
+                "definition": {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000b34"
+                }
+              },
+              "slot": {
+                "kind": "grant_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032d3"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

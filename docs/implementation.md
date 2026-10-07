@@ -65,103 +65,92 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest published native checkpoint: typed Boolean contributions and real passive producers
+## Latest published native checkpoint: shared Sand preparation
 
-The accepted [Boolean contract](owned-boolean-contributions-proposal.md) is now
-implemented in Core, Data and Engine. One `contribution_queries` inventory
-replaces the ordered-only shape. Every member declares its source origin;
-numeric groups separately declare semantic ranks. Boolean `Flag` contributions
-use unordered `Any`, Boolean false identity and no ranks. Active unresolved
-members remain unresolved even alongside true; deterministic diagnostics do not
-short-circuit coverage. Direct Boolean channel reads cannot bypass membership.
-Unread queries, inactive sources and nonempty support suffixes receive the same
-census. Numeric ordering/ties, stage authority and competing final writers remain
-checked. Enemy authority expands only for the reviewed Boolean query domain.
+The [Sand packet](../data/owned/poe2/3887ae68/sand-preparation/README.md) now
+authors four native programs on the existing Skill owner. Manual and exact
+tree-generated occurrences use the same typed raw-input, ordinary-property and
+once-per-source assembly path. Prepared level/quality are common Skill stats;
+the exact Command receives projected inputs, and the actual Actor slot receives
+an injected table lookup with the witnessed final population-level bound.
+Five definitions/slots were allocated (`334e`–`3352`). Two descendant grants now
+permit their proven Allocation root as well as SkillUse, using the existing
+release migration path. No source-language evaluator or new public model was added.
 
-The current development format is rule-package schema **3**, operations **22**,
-rule storage/compiler hash domains **v3** and effect-plan domain **v19**.
-Definition schema remains V6. There is one current DTO reader; maintained static
-acquisition/test artifacts were rebuilt, including complete catalog and tree
-publication chains. Their numerical bodies and definition IDs did not change.
-Older operations still describe explicit capability subsets within the current
-format; they are not an old-format loading mode. The obsolete root
-`owned_generated_field_accounting` transition harness was removed after the new
-all-five check passed; Import ownership/negative tests and independent source
-witnesses remain. See the [retirement record](legacy-retirement.md#current-rule-format-cutover-2026-10-07).
+The real integration exposed and fixed an Engine bug: source-property cycle
+validation expected an authored program stage on generated preset inputs, which
+are Structural request producers. Validation now follows only those explicit
+input nodes to their actual ordinary ancestors. Original gates, cycle edges,
+readiness checks, stage ordering and work limits remain enforced. Missing stages
+on ordinary programs still fail; no default stage or raw-as-final fallback was
+introduced. Previously successful plan identities are unchanged.
 
-The [authored flag packet](../data/owned/poe2/3887ae68/inherent-attribute-flags/README.md)
-adds Giant's Blood halving and Enhanced Effectiveness doubling, five final flag
-reducers and their exact query inventories. Both passive owners retain their
-unrelated Partial mechanics. **All five flag inventories remain Partial**:
-missing item/transformed-passive sources are not false defaults. Actual native
-producer tests feed the unchanged Strength-Life receiver and obtain 54/27/108/54
-at fixture final Strength27 for no passive/halving/doubling/both. Production never
-receives those fixture inputs. These passives are not selected in Original05,
-and flags feed the inherent Life amount downstream of final Strength. This does
-not close final Strength, final Life, or a selected input obligation.
+Nine native component tests pass, including raw validation before bonuses,
+late final-level clamping, finite signed/fractional quality, independent missing
+dimensions, exact descendant ownership, injected actor-level table changes,
+once-per-source synthetic external properties and fresh/reused/Rayon agreement.
+Those determinism checks first require successful known results; matching
+Unavailable outcomes cannot pass. Two source tests authenticate 140 compact
+observations from 18 retained controls and compare real preparation arithmetic,
+including exact Command input projections in both MAIN and CALCS.
+The actor attacks and real support inventory are excluded from this finite
+fixture; its explicit empty-support facts are not production coverage.
 
-All-five public CLI publication/reimport passed in **28.15s**, then again in
-**28.51s** from a fresh output directory after final test changes. It authenticates the
-predecessor and current source sidecars, checks the exact rule inverse and
-provenance append, and preserves all other package artifacts byte-for-byte.
-Independent fresh imports preserve every canonical draft, selection, source
-disposition, selected issue and all **110 queries**. Original05 still has five
-selected input obligations and 44 configuration-linked origins; complete native
-builds remain **0/5**.
+The full source report and actual SupportCount rows are authenticated before
+publication. All-five CLI publication passed in **32.12s**, including an identical
+byte rebuild and independent fresh imports. Drafts, local IDs, saved selections,
+dispositions, selected issues and all **110 queries** remain intact. The packet
+adds no evaluation bundle, promotes no Partial inventory and retires no input
+issue. Complete native builds remain **0/5**; Original05 still has five selected
+input obligations. Component arithmetic is not proof of full Command/actor
+mechanics, population overrides or real supported-property producer coverage.
 
-Validation: 184 Engine library tests, 13 contribution-binding tests, 60 selected
-Data tests, three Core operation tests, two nonempty support/stage tests, two
-actual-passive receiver tests and the authored data checks passed. The final
-Import batch passed 68 tests, including 22 migration regressions; six character
-identity tests verify the rebuilt snapshot and rejection of the retired wire
-format. Strict workspace/all-feature/all-target Clippy and formatting checks
-passed. Existing exporter regression suites passed **56 tests**; no new Python
-tests were introduced. Cold binding now performs additional bounded membership
-checks; its performance has not yet been benchmarked. Evidence:
-`runs/owned-boolean-publication-01/validation.json`,
-`runs/owned-boolean-publication-02/validation.json`,
-`runs/owned-boolean-clippy-05.log`,
-`runs/owned-boolean-static-validation-01.json` and
-`runs/owned-boolean-static-export-tests-01.log`.
+Validation also passed 185 Engine library tests, 11 generated-source-property
+tests, 10 generated-input tests and 15 source-property tests (**221 Engine tests**).
+The new preset regression combines eight exact input bindings with real source
+assembly. Evidence: `runs/owned-sand-preparation-build-07.jsonl`,
+`runs/owned_sand_preparation-tests-08.log`,
+`runs/owned_sand_preparation_source-tests-09.log`,
+`runs/owned-sand-engine-*-01.log`, and
+`runs/owned-sand-preparation-publication-03/validation.json`.
+Strict workspace/all-feature/all-target Clippy passed in
+`runs/owned-sand-preparation-clippy-01.log`; final source-test lint and formatting
+passed in `runs/owned-sand-preparation-clippy-02.log` and
+`runs/owned-sand-preparation-format-02.log`.
 
-The local publication replay is the ignored Rust test
-`owned_boolean_publication::publish_flags_and_reimport_all_five_through_the_public_cli`.
-Set `POE_OPTIMIZER_TEST_BOOLEAN_INPUT` to `runs/owned-boolean-cutover-01/input.json`,
-`POE_OPTIMIZER_TEST_BOOLEAN_PRIOR` to `runs/owned-resistance-penalty-02/package`,
-`POE_OPTIMIZER_TEST_BOOLEAN_IMPORTS` to `runs/owned-config-placeholders-accounting-01`
-and `POE_OPTIMIZER_TEST_BOOLEAN_OUTPUT` to a fresh directory, using absolute paths.
-Ordinary CI runs the source-bound authored-data and real-passive tests; it does
-not execute this local-artifact replay automatically.
+The ignored Rust publication test is
+`owned_sand_preparation_publication::publish_sand_preparation_preserving_all_five_originals`.
+Set `POE_OPTIMIZER_TEST_SAND_PREPARATION_PRIOR` to the absolute path of
+`runs/owned-boolean-publication-01/package` and
+`POE_OPTIMIZER_TEST_SAND_PREPARATION_OUTPUT` to a fresh directory. It also requires
+the retained source witnesses. Ordinary CI runs the native, compact-source and
+authored-data checks without a PoB VM or local publication directory.
 
-**Next:** enemy critical chance/damage inputs **together with the actual critical
-consumer**, using typed Enemy NeverCrit/AlwaysCrit and Player EnemyUnluckyCrit
-coverage. Input-only transport is insufficient. Final attribute BASE membership
-is a separate upstream Strength blocker: the class-plus-choice subtotal already
-has source/native validation, while item/socket/copy origins and signed/scaled
-arithmetic still prevent safe production closure. Resolve that concrete
-[BASE audit](owned-base-contribution-audit.md) through a reviewed numerical/domain
-proposal before changing semantics. Do not repeat a finite subtotal or admit
-Irongrasp solely to inflate coverage. The next-blocker audit is retained at
-`runs/owned-boolean-next-blocker-01.md`. Support-origin composition and FullDPS
-remain pending owner decisions. Original05 stays the priority; D4 starts after
-the first complete native/reference build.
+The preceding [Boolean checkpoint](implementation-history.md#archived-2026-10-07-checkpoint-typed-boolean-contributions)
+remains active in this package: typed Flag contributions use unordered Any,
+preserve duplicate origins and never turn unknown coverage into false. Its two
+real passive producers and five reducers remain Partial. Rule schema3,
+operations22, definition schema6 and sidecar23 are unchanged; there is one current
+format reader, not a compatibility evaluator.
 
-The critical slice can use the existing typed expressions and shared Player
-Actor binding. Retained Original05 reference runs agree on chance5 and factor
-1.015 across fresh/repeat/warm MAIN and CALCS; these are validation targets, not
-defaults or absence proofs. Encounter `31d1` supplies data-defined chance5/damage30
-only for its reviewed no-boss-skill domain. Preserve raw presence/zero, NeverCrit
-precedence over AlwaysCrit, chance clamping before unlucky squaring, and the
-source multiplication association. Configured evade and critical extra-damage
-reduction remain actual upstream dependencies. Boolean memberships remain
-Partial until their sources are accounted for. Numeric Enemy membership needs
-a separately reviewed authority extension; do not bypass it with unchecked
-direct reductions. Investigate the source's lowercase `enemyCritChance` override
-read and absence of a literal writer before proposing any override model. The
-Lesser Harm passive is a useful real unlucky-crit contrast, but is absent from
-Original05 and cannot establish complete flag coverage. See
-`runs/owned-incoming-damage-source-01` and the
-[configuration consumer plan](owned-configuration-dispositions-proposal.md).
+**Resume:** Original05 remains first. Incoming critical-hit arithmetic has source
+proof but awaits the Actor-to-Enemy read decision below; support-origin discovery
+awaits its separate composition decision. Do not bypass either authority guard.
+Final Strength also remains blocked by signed/scaled BASE ordering, socket origins
+and post-passive item copies in the [BASE audit](owned-base-contribution-audit.md).
+Continue a concrete selected consumer or input responsibility using existing
+contracts; do not spend the next phase widening Sand combat solely because its
+preparation now works. D4 starts as soon as one unchanged build passes the full
+native/reference gate.
+
+The next permitted numerical integration replaces the Sand fixture's synthetic
+ordinary-level amount with the existing Crown/Solar item chain: canonical `30ca`
+arithmetic, direct applicability, the Amulet snapshot and its copy. Reuse the
+Offering/ordinary-item-routing fixture instead of duplicating those programs.
+The retained source census gives +1 Crown, +1 Solar and +0 copy, producing manual
+level22 and tree level3 in Original05. That integration must retain all Partial
+owner/contributor refusals; it is not permission to close the incoming inventory
+from one measured context. Then audit the exact selected item-owner gaps.
 
 ## In progress: incoming critical source proof and Actor read decision
 
@@ -196,7 +185,8 @@ has also been re-prompted. Neither pending answer is approval.
 
 Uncommitted preparatory files are `incoming-critical-effect/{extension,policy,
 native-inputs,queries,README}` and the two new root critical test targets and
-their helpers. They reserve `334e`–`335f` for 18 definitions, preserve Partial
+their helpers. They now provisionally reserve `3353`–`3364` for 18 definitions
+(moved after the independent Sand packet's five IDs), preserve Partial
 Actor/Encounter ownership, add three Partial flag inventories, and leave six
 numeric dependencies unresolved. The normal native target currently has one
 passing authoring test and five tests stopped by the explicit authority guard;
@@ -263,51 +253,47 @@ records a narrow injected permission for future review. Even after that proof,
 only one source leaf would be accounted for; all five selected obligations remain.
 Do not prioritize this bookkeeping over a ready numerical consumer.
 
-The independent next implementation is the already approved shared Sand Djinn
-preparation described below: ordinary and once-per-source supported properties,
-common prepared Skill values, and real Command/actor-level consumers. Retain
-Partial contributor/readiness coverage until proven; neither raw-as-final values
-nor source endpoint differences authorize a shortcut. This work needs no new
-public model if the accepted source-property/staging contract suffices.
+The approved Sand preparation checkpoint above now follows this source-only
+investigation. It retains Partial contributor/readiness coverage and removes no
+selected input obligations. The unapproved incoming-critical packet provisionally
+uses `3353`–`3364`, after Sand's five allocations; its source evidence is unchanged.
 
-CI snapshot at 22:29 UTC: `23fb1c5` run
-[37695361479](https://github.com/Azaril/poe-optimizer/actions/runs/37695361479)
-was pending and `f93d551` run
-[37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252)
-was in progress, with no run failure reported. This is not hosted success.
+CI snapshot after the source checkpoint: `7c6ac95` run
+[37696941035](https://github.com/Azaril/poe-optimizer/actions/runs/37696941035)
+was pending. Local checks are not hosted success.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-boolean-publication-01/package` and its neighboring
+Use `runs/owned-sand-preparation-publication-03/package` and its neighboring
 `original-01` through `original-05` imports. Current sidecars remain V23;
 definition schema V6, rule schema3 and operationsV22 are independent contracts.
-The immediate predecessor is `runs/owned-resistance-penalty-02/package`, input
-`b19134496c85e208a735568b5e5191f3b60f68154be336ab4afb6fd953b6fa01`.
+The immediate predecessor is `runs/owned-boolean-publication-01/package`, input
+`cebc32eb98f05d6716051dde7417d26a2c7667d8361ad82afa1ea87cfc218838`.
 Historical endpoint paths authenticate stored evidence; retired formats require
 explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `cebc32eb98f05d6716051dde7417d26a2c7667d8361ad82afa1ea87cfc218838` |
-| Registry | `c1da329a2ea8cdde00a666f0d158851458fbfb3bb211c9d932e02e39fe1b8d18` |
-| Definitions content | `72fccd185dcf70fbf13198b295b2cc8da3672c749506db98988c4e92a2bcbba7` |
-| Rules | `9b3dca1ec5cec12ec21b5a2c7b3f9be52aefe06da2806412184378b5b7c60265` |
-| Compiled rules | `d5b2ccd4aa7e7dd144487450ac402ca3e853cf462a03671305280bad944dd668` |
-| Routing | `3ee884f637dd8ab1dd823f64e7c1b842be08c7ffa1834edc9150a6a0d99a2205` |
-| Mapping | `d8953fa8a2e9e663c5676eb2a42b31e8e3f3459b0acfa15be5abb17315b391fa` |
-| Skill roles | `cd44e748a11730980743266ac5d4c4d228f86767cd077ba243792fceac21289d` |
-| Normalization | `efa81dbfda1559f3bcd3f7cfb5394e5287adce4440906a9b8015ab52207d9af0` |
-| Rewards | `8fb0c34e474c54745576d153c5afa10690f89a6e972a7382a98f5c5ee5a1e081` |
-| Items | `295e01c60e706a02c3477dcb0a9ac6b97e4c795ead8192639c33b1f8ad2a32aa` |
-| Item source | `d808849e298e6dd19e66901f35ccf092249da3985bdbc7f08c59547d5af20942` |
-| Tree policy | `e408348d3fc44dedaa27d71b16a05d36454fead3ed66152f051d79819a6d5e89` |
-| Authoring commitment | `840fa8c87317873e19291f5f8eb726e11d0cd87d9fec253f70ad8c8ffda1bbec` |
+| Release input | `9bbb63fab97fca1b60a67ccb048103e51677a9b0668a0e9d130355b0f930cd24` |
+| Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
+| Definitions content | `7665e6314a2390fbb8e2f62d5cf8df76fc09b34c9d413069565a5ecda6c26947` |
+| Rules | `90cad421eecc8f5e7c6125170df4765c5f1694b3814cf1c5cb636a9dd43d9ea9` |
+| Compiled rules | `9854a1eb75751e11c423ecbe07aa646bff41d15307b4cfb88b8a56a6a55cca31` |
+| Routing | `1b6e98429075411b59acb62ea8b136de1e62f8528bf11df9ce7afb98d8f4b468` |
+| Mapping | `9eb1f7362c20fe4fb20f05d316cdc83fc45ae514c49d346c390346a3d17e3034` |
+| Skill roles | `2b506025035351ea2a733787454a2e16affb2fe64ad3954c11d9b529552338c7` |
+| Normalization | `953f5acf6f16ff5a04c8bb0bdb5d980e74a7e1ba09c1bc494e2181c1548b36a8` |
+| Rewards | `1e17fc5a9e27f071f981cbd2c398849683b68364f2017ff2cea9d03cf62f551d` |
+| Items | `3787f66950e1a6d46c0a92f7caa75456ffa4df0b6e8e13cdd7de16d512ae0688` |
+| Item source | `b3852296d9df5efd704a2137d3646813f7d7b576a40fd234589a81e87f3bc2f3` |
+| Tree policy | `d51390f29aa3d95c4ab44a379c2fe4a831b03a33feafbebf95e7b51eca4f55e1` |
+| Authoring commitment | `67e7326a03b13fc56f0499ee081daa31e4ddaff78f96a6432e8b51eb52efdd4c` |
 | Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
 
-The eighteen package files total **63,177,153 bytes**, with 136 provenance rows.
-Definitions use `pob-3887ae68-player-offhand-facts-v1`; the independent rules release
-is `pob-3887ae68-inherent-attribute-flags-v1`. The registry ends at `334d`.
+The eighteen package files total **63,192,465 bytes**, with 137 provenance rows.
+Definitions and rules use `pob-3887ae68-sand-preparation-v1`. The registry ends
+at `3352`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -375,99 +361,28 @@ outputs. Do not remove the occurrences, invent completeness or silently adopt
 the still-proposed [scoped coverage contract](owned-coverage.md). Reassess the
 actual remaining plan gaps after the request is admitted.
 
-**Retained downstream authoring map: generated preparation.** The accepted ownership
-contract now supports exact generated sources. Tree-generated Sand and
-item-generated Firebolt still lack their authored preparation and assembly
-rules. Their Partial two-slot raw-input lists must not be closed as final
-inventories. Real source contrasts include
-Sand raw level 1 becoming 3 in Original05 and 12 in Original01, and Original04
-Firebolt raw 17/0 becoming prepared 26/21. These are evidence of missing assembly,
-not universally applicable formulas.
+**Remaining generated preparation.** Sand's actual ordinary/source assembly,
+Command input projection and override-free actor-level projection are now authored
+and component-tested in the latest packet. Its source/effect/channel/external/
+support inventories remain Partial, and no receiving/readiness bundle is published.
+Complete incoming Minion-level contributors, actual support composition, actor
+attacks, Command mechanics and four population override modes remain separate
+coverage work. The generated provider's noSupports fact does not suppress external
+supported properties or manual supports. Actor children are not extra source owners.
 
-The [generated-source contract](owned-generated-source-properties-proposal.md)
-was **accepted and implemented on 2026-10-07**. Cold discovery, exact assembly
-authority and dependency checks are covered by the native contract tests. Use
-these existing bindings for real producers and consumers before readiness; do
-not add fake authored roots, a second raw-input store, self-parameter writes or
-a raw-as-final shortcut. Validate actual source contrasts, provider-specific
-support eligibility, inactive loadouts and serial/Rayon consistency.
+Item-generated Firebolt `0134` still has no authored ordinary/final assembly. Its
+raw grant domain includes zero; retained Original04 controls show raw17/quality0
+becoming prepared26/21, with a fractional-quality contrast. Do not copy Sand's
+Minion channel or physical-Gem corruption/recovery rules. Firebolt is an
+Original04 breadth blocker, not a reason to switch away from Original05.
+The accepted [generated-source contract](owned-generated-source-properties-proposal.md)
+already provides exact source ownership and provider projection. Use existing
+typed inputs and actual consumers; no second input store or new public model is
+currently justified.
 
-**Real authoring after the contract.** The actual Sand owner `0322` currently
-contains only Command/Actor supply; Firebolt `0134` has no rule owner or output
-members. Neither has a final-parameter consumer to preserve. Prefer common
-prepared-level/quality Skill stats for manual and generated uses, using existing
-InputOwner authority; use exact-provider projection only where a real consumer
-requires final parameters. Reuse pre-support channels `30ac/30ad`, Player Minion
-level channel `30ab`, actual `30ca` direct/copy programs and snapshot reducer
-`32e4` where their proven applicability fits. Do not copy physical Gem readers,
-corruption assumptions or incomplete contributor closure into these forms.
-
-**Separated incoming property evidence: captured.** The retained
-[Sand witness](implementation-history.md#archived-2026-10-07-checkpoint-generated-source-properties-and-first-build-priority)
-enumerates ordinary `GemProperty` separately from once-per-source
-`SupportedGemProperty`, including applicability, original source objects and
-before/after values. It supplies the evidence for the next Sand authoring packet;
-complete native incoming coverage remains a separate proof. Earlier
-`djinn-support-preparation-source-02` reports show manual Sand 20→31 and tree
-Sand 1→12 in Original01, and manual 20→22 / tree 1→3 in Original05. Both source
-forms have PoB catalog Gem metadata even though they are not physical native
-Gem instances. Catalog metadata must stay acquisition data; do not manufacture
-native physical Gems to reproduce it. The reports establish final values and
-metadata flags. The new witness adds zero-support generated Sand, manual support
-removal and independent provider changes. Use those inventories before asserting
-complete channel `30ab` coverage or authoring a closed raw-plus-bonus formula.
-Endpoint differences alone are insufficient. Reuse retained controls rather than
-repeating unrelated acquisition.
-
-Retained `owned-djinn-raw-inputs-01` evidence already distinguishes raw-domain
-validation from final-domain validation: manual Sand raw 0/−1, 41 and fractional
-levels trigger source editor recovery before property addition. Initially admit
-the proved integral raw range 1–40 through data-defined guards, then independently
-check final level after ordinary/supported additions. An invalid raw value must
-not become supported merely because bonuses bring its final value into range.
-Keep unproved recovery and quality domains unresolved rather than copying Lua
-fallback behavior. These Sand constraints do not define Firebolt's grant domain.
-
-The pinned source clamps raw level plus corruption to at least one only when
-corruption is present, then adds ordinary properties. Firebolt's admitted raw
-grant domain includes zero: an unconditional physical-Gem clamp would turn
-raw zero plus one ordinary level into two. Preserve the ordering and explicit
-final-domain validation; no Lua recovery fallback is authorized. Source quality
-controls retain fractional `12.5`, so do not silently choose integer quality.
-Retained Sand observations show skill/Command levels 12 and 3 with actual minion
-levels 24 and 6. Its `levelRequirement`/stat-set `actorLevel` are different values;
-author the actual minion-level table/branch as injected data instead of treating
-those source metadata fields as minion level or inferring a two-times formula.
-All contributor inventories and full numerical owners remain separate gates.
-Sand's `noSupports` belongs to the generated provider, not its whole Skill
-definition: manual Sand has real support assignments. An empty generated support
-census also does not eliminate actor-provided supported properties. Use explicit
-source applicability and relation inventories; the existing ten Djinn type/
-admission definitions do not provide complete support origins, effective support
-inputs or numerical delivery. Firebolt requires its own Spell/Fire/quality
-coverage; the Minion channel must not be applied to it.
-
-The source census covers Sand's summon and declared Command, which share one
-source occurrence. The three actor-child skills have no source occurrence in
-this source-property path and start at level 1 / quality 0; they must not each
-add another source-property contribution. Their separate support admission and
-delivery still require coverage.
-
-Concrete authoring map: existing support count `32e0` and supported-level channel
-`32e1` complement pre-support `30ac/30ad`; Sand must not read Spell channel
-`32e2`. Bind tree supply `32d2`, Command supply `32a5`, Actor population slot
-`32a3` and actor-level stat `001c` through their actual declarations. The existing
-`sniper.actor-level` table has the applicable 1–40 → 2–80 values; reuse checked
-table data, not Sniper's unrelated quality/damage formula. Preserve source
-population override/clamp evidence before claiming the full actor-level domain.
-Sand catalog tags include Minion/Persistent/Command/Physical, but not Spell;
-the acquisition witness must record tags and requirements alongside the actual
-applied ordinary property rows. After that proof, use Skill-owned ordinary
-preparation, source census, shared final stats and declared Command/Actor
-projections in that order. No further public model change is currently indicated.
-
-Saved participation transport now uses existing `332b` independently. Manual
-Sand needs its own binding before any Skill-definition-wide gate is admitted.
+Saved participation transport already uses existing `332b` for all twelve
+selected roots in Original05, including manual Sand. Remaining work is actual
+readiness and mechanics coverage, not a second enabled-flag import packet.
 Generated bindings retain `WhenExactSourceSelected`; Original04's unresolved
 Firebolt provider and archived cross-axis joins stay unresolved. Reuse the
 [generated evidence packet](../data/owned/poe2/3887ae68/generated-participation/README.md)

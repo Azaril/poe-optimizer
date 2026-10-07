@@ -1,10 +1,109 @@
-> Historical snapshots through archived generated-source responsibility accounting on 2026-10-07.
+> Historical snapshots through typed Boolean contribution publication on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: typed Boolean contributions
+
+The accepted [Boolean contract](owned-boolean-contributions-proposal.md) is now
+implemented in Core, Data and Engine. One `contribution_queries` inventory
+replaces the ordered-only shape. Every member declares its source origin;
+numeric groups separately declare semantic ranks. Boolean `Flag` contributions
+use unordered `Any`, Boolean false identity and no ranks. Active unresolved
+members remain unresolved even alongside true; deterministic diagnostics do not
+short-circuit coverage. Direct Boolean channel reads cannot bypass membership.
+Unread queries, inactive sources and nonempty support suffixes receive the same
+census. Numeric ordering/ties, stage authority and competing final writers remain
+checked. Enemy authority expands only for the reviewed Boolean query domain.
+
+The current development format is rule-package schema **3**, operations **22**,
+rule storage/compiler hash domains **v3** and effect-plan domain **v19**.
+Definition schema remains V6. There is one current DTO reader; maintained static
+acquisition/test artifacts were rebuilt, including complete catalog and tree
+publication chains. Their numerical bodies and definition IDs did not change.
+Older operations still describe explicit capability subsets within the current
+format; they are not an old-format loading mode. The obsolete root
+`owned_generated_field_accounting` transition harness was removed after the new
+all-five check passed; Import ownership/negative tests and independent source
+witnesses remain. See the [retirement record](legacy-retirement.md#current-rule-format-cutover-2026-10-07).
+
+The [authored flag packet](../data/owned/poe2/3887ae68/inherent-attribute-flags/README.md)
+adds Giant's Blood halving and Enhanced Effectiveness doubling, five final flag
+reducers and their exact query inventories. Both passive owners retain their
+unrelated Partial mechanics. **All five flag inventories remain Partial**:
+missing item/transformed-passive sources are not false defaults. Actual native
+producer tests feed the unchanged Strength-Life receiver and obtain 54/27/108/54
+at fixture final Strength27 for no passive/halving/doubling/both. Production never
+receives those fixture inputs. These passives are not selected in Original05,
+and flags feed the inherent Life amount downstream of final Strength. This does
+not close final Strength, final Life, or a selected input obligation.
+
+All-five public CLI publication/reimport passed in **28.15s**, then again in
+**28.51s** from a fresh output directory after final test changes. It authenticates the
+predecessor and current source sidecars, checks the exact rule inverse and
+provenance append, and preserves all other package artifacts byte-for-byte.
+Independent fresh imports preserve every canonical draft, selection, source
+disposition, selected issue and all **110 queries**. Original05 still has five
+selected input obligations and 44 configuration-linked origins; complete native
+builds remain **0/5**.
+
+Validation: 184 Engine library tests, 13 contribution-binding tests, 60 selected
+Data tests, three Core operation tests, two nonempty support/stage tests, two
+actual-passive receiver tests and the authored data checks passed. The final
+Import batch passed 68 tests, including 22 migration regressions; six character
+identity tests verify the rebuilt snapshot and rejection of the retired wire
+format. Strict workspace/all-feature/all-target Clippy and formatting checks
+passed. Existing exporter regression suites passed **56 tests**; no new Python
+tests were introduced. Cold binding now performs additional bounded membership
+checks; its performance has not yet been benchmarked. Evidence:
+`runs/owned-boolean-publication-01/validation.json`,
+`runs/owned-boolean-publication-02/validation.json`,
+`runs/owned-boolean-clippy-05.log`,
+`runs/owned-boolean-static-validation-01.json` and
+`runs/owned-boolean-static-export-tests-01.log`.
+
+The local publication replay is the ignored Rust test
+`owned_boolean_publication::publish_flags_and_reimport_all_five_through_the_public_cli`.
+Set `POE_OPTIMIZER_TEST_BOOLEAN_INPUT` to `runs/owned-boolean-cutover-01/input.json`,
+`POE_OPTIMIZER_TEST_BOOLEAN_PRIOR` to `runs/owned-resistance-penalty-02/package`,
+`POE_OPTIMIZER_TEST_BOOLEAN_IMPORTS` to `runs/owned-config-placeholders-accounting-01`
+and `POE_OPTIMIZER_TEST_BOOLEAN_OUTPUT` to a fresh directory, using absolute paths.
+Ordinary CI runs the source-bound authored-data and real-passive tests; it does
+not execute this local-artifact replay automatically.
+
+**Next:** enemy critical chance/damage inputs **together with the actual critical
+consumer**, using typed Enemy NeverCrit/AlwaysCrit and Player EnemyUnluckyCrit
+coverage. Input-only transport is insufficient. Final attribute BASE membership
+is a separate upstream Strength blocker: the class-plus-choice subtotal already
+has source/native validation, while item/socket/copy origins and signed/scaled
+arithmetic still prevent safe production closure. Resolve that concrete
+[BASE audit](owned-base-contribution-audit.md) through a reviewed numerical/domain
+proposal before changing semantics. Do not repeat a finite subtotal or admit
+Irongrasp solely to inflate coverage. The next-blocker audit is retained at
+`runs/owned-boolean-next-blocker-01.md`. Support-origin composition and FullDPS
+remain pending owner decisions. Original05 stays the priority; D4 starts after
+the first complete native/reference build.
+
+The critical slice can use the existing typed expressions and shared Player
+Actor binding. Retained Original05 reference runs agree on chance5 and factor
+1.015 across fresh/repeat/warm MAIN and CALCS; these are validation targets, not
+defaults or absence proofs. Encounter `31d1` supplies data-defined chance5/damage30
+only for its reviewed no-boss-skill domain. Preserve raw presence/zero, NeverCrit
+precedence over AlwaysCrit, chance clamping before unlucky squaring, and the
+source multiplication association. Configured evade and critical extra-damage
+reduction remain actual upstream dependencies. Boolean memberships remain
+Partial until their sources are accounted for. Numeric Enemy membership needs
+a separately reviewed authority extension; do not bypass it with unchecked
+direct reductions. Investigate the source's lowercase `enemyCritChance` override
+read and absence of a literal writer before proposing any override model. The
+Lesser Harm passive is a useful real unlucky-crit contrast, but is absent from
+Original05 and cannot establish complete flag coverage. See
+`runs/owned-incoming-damage-source-01` and the
+[configuration consumer plan](owned-configuration-dispositions-proposal.md).
+
 
 ## Archived 2026-10-07 checkpoint: archived generated fields retain their actual preset owners
 

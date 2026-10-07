@@ -14,6 +14,7 @@ struct Node<'a> {
     direct: &'a [usize],
     source: bool,
     stage: Option<&'a OwnedDefinitionKey>,
+    structural_input: bool,
 }
 #[derive(Default)]
 struct Writers<'a> {
@@ -121,6 +122,7 @@ fn program<'a>(
                 direct: &[],
                 source,
                 stage,
+                structural_input: false,
             },
             limits,
             work,
@@ -157,6 +159,10 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 direct: &[],
                 source: false,
                 stage: effect_stage(effect, stages, &mut self.work)?,
+                structural_input: matches!(
+                    effect.operation,
+                    EffectOperation::GeneratedInput { .. }
+                ),
             };
             match &effect.operation {
                 EffectOperation::Program { invocation, effect }
@@ -209,6 +215,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                     direct: &[],
                     source: true,
                     stage: Some(&relation.census_stage),
+                    structural_input: false,
                 },
                 self.limits,
                 &mut self.work,
@@ -299,17 +306,28 @@ fn prove(
             charge(work, reads.len())?;
             remaining[index] = reads.len();
             for dependency in reads {
-                if let Some(stages) = stages {
-                    let before = nodes[*dependency].stage.ok_or_else(|| {
-                        PlanError::Invalid("potential source dependency has no stage".into())
-                    })?;
+                if let Some(stages) = stages
+                    && !nodes[index].structural_input
+                {
                     let after = nodes[index].stage.ok_or_else(|| {
                         PlanError::Invalid("potential source consumer has no stage".into())
                     })?;
-                    if before != after && !stages.precedes(before, after) {
-                        return Err(PlanError::Invalid(
-                            "potential source dependency crosses a stage backwards or without precedence".into(),
-                        ));
+                    // Request literals have intrinsic Structural readiness, not
+                    // an authored stage. Their provider gates remain real edges.
+                    // As in the support prefix/suffix checks, compare every
+                    // ordinary ancestor reached through those input nodes.
+                    // validate_readiness already proved that their parent gates
+                    // are Structural; this does not promote a late producer.
+                    for before in input_ancestors(nodes, &dependencies, dependency, work)?.as_ref()
+                    {
+                        let before = nodes[*before].stage.ok_or_else(|| {
+                            PlanError::Invalid("potential source dependency has no stage".into())
+                        })?;
+                        if before != after && !stages.precedes(before, after) {
+                            return Err(PlanError::Invalid(
+                                "potential source dependency crosses a stage backwards or without precedence".into(),
+                            ));
+                        }
                     }
                 }
                 outgoing[*dependency].push(index);
@@ -322,6 +340,33 @@ fn prove(
         ));
     }
     Ok(())
+}
+
+fn input_ancestors<'a>(
+    nodes: &[Node<'_>],
+    dependencies: &[BTreeSet<usize>],
+    index: &'a usize,
+    work: &mut usize,
+) -> Result<std::borrow::Cow<'a, [usize]>> {
+    if !nodes[*index].structural_input {
+        return Ok(std::borrow::Cow::Borrowed(std::slice::from_ref(index)));
+    }
+    let mut seen = BTreeSet::new();
+    let mut pending = vec![*index];
+    let mut ancestors = Vec::new();
+    while let Some(index) = pending.pop() {
+        charge(work, 1)?;
+        if !seen.insert(index) {
+            continue;
+        }
+        if nodes[index].structural_input {
+            charge(work, dependencies[index].len())?;
+            pending.extend(&dependencies[index]);
+        } else {
+            ancestors.push(index);
+        }
+    }
+    Ok(std::borrow::Cow::Owned(ancestors))
 }
 
 #[cfg(test)]
@@ -355,6 +400,7 @@ mod tests {
             direct: &[],
             source,
             stage: None,
+            structural_input: false,
         }
     }
 
@@ -448,6 +494,7 @@ mod tests {
                 direct: &[],
                 source: true,
                 stage: None,
+                structural_input: false,
             },
         ];
         prove(&nodes, 0, PlanLimits::default(), None, &mut 1000).unwrap();
@@ -542,5 +589,113 @@ mod tests {
                 );
             }
         }
+    }
+
+    #[test]
+    fn structural_request_inputs_preserve_ancestor_stages_and_cycles() {
+        use poe_optimizer_core::owned_stages::EvaluationStage;
+        use poe_optimizer_data::{
+            owned_rules::{OwnedRulePackage, RuleStorageLimits},
+            owned_stages::StageStorageLimits,
+        };
+        let f = fixture::generated_fixture();
+        let inputs = fixture::compile_inputs(&f, fixture::target(30, "first"));
+        let stored = OwnedRulePackage::new(
+            fixture::raw_rules(
+                &f,
+                &inputs.definitions,
+                poe_optimizer_core::owned_rules::OWNED_RULE_OPERATIONS_V12,
+            ),
+            inputs.definitions.as_ref(),
+            RuleStorageLimits::default(),
+        )
+        .unwrap();
+        let early = fixture::key("prepare");
+        let late = fixture::key("later");
+        let mut input = inputs.stages.input().clone();
+        input.stages.push(EvaluationStage {
+            id: late.clone(),
+            predecessors: vec![early.clone()],
+        });
+        let stages = OwnedEvaluationStages::new(
+            input,
+            inputs.definitions.as_ref(),
+            &stored,
+            &inputs.routing,
+            StageStorageLimits::default(),
+        )
+        .unwrap();
+        let keys: Vec<_> = ["provider", "input-parent", "input-child"]
+            .into_iter()
+            .map(|name| PlanValueKey::Stat {
+                entity: ConcreteEntity::Actor(ActorKey::Player),
+                stat: fixture::def(name),
+            })
+            .collect();
+        let reads: Vec<_> = keys.iter().cloned().map(PendingRead::Value).collect();
+        let output = channel("property");
+        let targets: Vec<_> = keys
+            .iter()
+            .cloned()
+            .map(|key| BoundEffectTarget::Value { key })
+            .chain([BoundEffectTarget::Contribution {
+                key: output.clone(),
+            }])
+            .collect();
+        for (provider_stage, consumer_stage, expected) in [
+            (Some(&early), &late, None),
+            (Some(&late), &early, Some("crosses a stage")),
+            (None, &early, Some("dependency has no stage")),
+        ] {
+            let mut nodes = [
+                node(&targets[0], vec![], false),
+                node(&targets[1], vec![&reads[0]], false),
+                node(&targets[2], vec![&reads[1]], false),
+                node(&targets[3], vec![&reads[2]], true),
+            ];
+            nodes[0].stage = provider_stage;
+            nodes[1].structural_input = true;
+            nodes[2].structural_input = true;
+            nodes[3].stage = Some(consumer_stage);
+            let result = prove(&nodes, 0, PlanLimits::default(), Some(&stages), &mut 1000);
+            match expected {
+                None => result.unwrap(),
+                Some(expected) => assert!(
+                    matches!(result, Err(PlanError::Invalid(message)) if message.contains(expected))
+                ),
+            }
+            // Only the explicit request operation is transparent. An arbitrary
+            // unclassified ordinary writer is still an invalid dependency.
+            nodes[2].structural_input = false;
+            assert!(
+                matches!(prove(&nodes, 0, PlanLimits::default(), Some(&stages), &mut 1000),
+                Err(PlanError::Invalid(message)) if message.contains("has no stage"))
+            );
+        }
+        let output_read = read(&output);
+        let mut nodes = [
+            node(&targets[0], vec![&output_read], false),
+            node(&targets[1], vec![&reads[0]], false),
+            node(&targets[2], vec![&reads[1]], false),
+            node(&targets[3], vec![&reads[2]], true),
+        ];
+        nodes[0].stage = Some(&early);
+        nodes[1].structural_input = true;
+        nodes[2].structural_input = true;
+        nodes[3].stage = Some(&early);
+        assert!(
+            matches!(prove(&nodes, 0, PlanLimits::default(), Some(&stages), &mut 1000),
+            Err(PlanError::Invalid(message)) if message.contains("dependency cycle"))
+        );
+        nodes[0].reads.clear();
+        assert!(matches!(
+            prove(&nodes, 0, PlanLimits::default(), Some(&stages), &mut 1),
+            Err(PlanError::Limit(_))
+        ));
+        prove(&nodes, 0, PlanLimits::default(), Some(&stages), &mut 1000).unwrap();
+        // A literal whose root provider has no executable gate needs no stage.
+        nodes[1].reads.clear();
+        nodes[0].stage = None;
+        prove(&nodes, 0, PlanLimits::default(), Some(&stages), &mut 1000).unwrap();
     }
 }
