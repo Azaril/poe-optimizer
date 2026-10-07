@@ -1,0 +1,19 @@
+{
+  "rule": "fixed-global-energy-shield-increase",
+  "all": [
+    {
+      "kind": "no_source_tags"
+    },
+    {
+      "kind": "no_generated_buff_members"
+    },
+    {
+      "kind": "unsigned_integer_capture",
+      "value": {
+        "capture": "amount",
+        "min": 0,
+        "max": 1000000
+      }
+    }
+  ]
+}

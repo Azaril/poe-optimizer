@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "before": "3a09338958da3f0fd49dc0669bb4fbc9c9acb1c464025c55d5edab4effaeb86f",
+  "prior": {
+    "definitions": {
+      "game": "poe2",
+      "release": "pob-3887ae68-player-offhand-facts-v1",
+      "schema_version": 6,
+      "content_sha256": "54487fcaf4ba617bc1627666fe015a50bc6fc3ed64d44a2be0b523939ddee945",
+      "semantics_version": "owned-mechanics-skill-inputs-v1"
+    },
+    "registry": "274df864ba96949566f0ab5890debb9f487e6ebfa205ac23885362f1fe646310",
+    "rules": "8701496441041c3c5fa0a6eea7222cf2902e964a3b3ea38718e92621ce69d1e9",
+    "routing": "8c906aa089c0b5e3dcde2db331429e7e77b918dbc053df398c2b3f8e77ae2dcc",
+    "mapping": "2b06fd1fec052648efd6566b3fe82783cb2a721571b7fad2929329c481ef2622",
+    "roles": "10b8ad0849f194fdca0e2292b21a63346cd8315a6fc299211b3b93ffaca6ec6f",
+    "normalization": "8e3abaebd506144e86df51f760b7c66a459c9c2c310d65cc8f98b901a2e91d57",
+    "rewards": "07493114cab88324e0053f7dc9ed673636ebe4f3b8ba020b73acb4428093fde7",
+    "items": "8037df9b5edca8d4f131e83716cda91e2de48dd77a698ff646e6392cdf9530bb",
+    "item_source": "a43bc1fbb26346f9d9ab3b61095bf27be2b61162eb54ecb38041a2414e513caf",
+    "tree": "a301884a281d053e7d9bce575e0d3df57e308c004288fe5af6dff855232c22c9"
+  },
+  "scope": {
+    "new_definitions": 1,
+    "new_slots": 24,
+    "new_programs": 5,
+    "new_receivers": 0,
+    "added_memberships": 1756,
+    "complete_builds": 0
+  },
+  "artifacts": {
+    "bindings.json": {
+      "bytes": 318208,
+      "sha256": "2f3dd6006754553cd2e530a25f11d6eba43fe37aec2280fcf614d7c0ef2fed89"
+    },
+    "dependencies.json": {
+      "bytes": 10543,
+      "sha256": "e3a5d41f365e59b6f1a76526cef957f6bab5965d8e225d6f059d9ebb1ffa3fea"
+    },
+    "extension.json": {
+      "bytes": 107234,
+      "sha256": "0ea1534c0dcebed0884438fecf75089c441fc8f076499f695c86f9fe3d9c6722"
+    },
+    "numeric-binding.json": {
+      "bytes": 1453,
+      "sha256": "4651c4f95a1323c28416b79cd9227a9c56a59ad32f21d9952d682dfee92eb4a0"
+    },
+    "item-rule.json": {
+      "bytes": 22199,
+      "sha256": "f794c9bf793189535cb939d18a4c3b2d10c0cce5554b57ee6594fad5a5f698c0"
+    },
+    "source-condition.json": {
+      "bytes": 316,
+      "sha256": "44b4de376a41a72c0838004093b7d660dddeeffdcf134b737430fbc673938b91"
+    },
+    "source-vectors.json": {
+      "bytes": 410419,
+      "sha256": "73814d986dc09ced530fe21568cc2d9d65743180d1fe184308b432d079066d03"
+    }
+  }
+}

@@ -47,94 +47,85 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest checkpoint: fixed Spirit recognition and BASE ordering evidence
+## Latest checkpoint: global Energy Shield inputs
 
-The [fixed-Spirit packet](../data/owned/poe2/3887ae68/fixed-spirit/README.md) adds
-one bounded, untagged source grammar using existing modifier `314d`, all 24 input
-slots and its five unchanged programs. Structural admission now covers all 1,756
-item templates; it proves neither affix legality nor complete item inventories.
-Two whole-input inverses check the exact membership/policy additions and required
-identity rebinding. No calculation program, public contract, operation or owner
-coverage marker changes.
+The [global Energy Shield packet](../data/owned/poe2/3887ae68/global-energy-shield-inputs/README.md)
+adds the bounded untagged integer form of increased maximum Energy Shield. One
+modifier and 24 slots (`3334`–`334c`) use five native programs, including the
+existing numeric compiler, to produce percentage Increase contributions to
+Player channel `29f0`. The item-local ES family stays separate. All 1,756 template
+memberships remain Partial; there is no new public model, operation, receiver,
+complete contributor set or final ES calculation.
 
-Recognition unlocks **+29 Intelligence in Original01** and **+11 to all Attributes
-in Original04**. Their concrete values are retained, with one new remaining-input
-obligation each. Selected issue counts are now **107/117/109/123/5**; all prior
-issues survive. The three actual fixed Spirit lines still lack proven source
-categories, so no new fixed Spirit modifier is emitted from these originals.
-Original05's existing ranged Solar Spirit is preserved. Provisional implicit
-source positions are not canonical authority: the source witness places the
-fixed lines in explicit lists while the importer correctly keeps their layouts
-Pending. The tagged Crossbow rune remains outside this grammar's source domain.
+Fresh PoB source checks pass in **7.23s**, with identical JIT-on/off reports
+(`runs/owned-global-energy-shield-source-01`). They retain the selected Original04
+44% line, both dormant Original05 Sapphire lines (20%/16%), 24 constructor
+controls, six formatting controls and local/global armour contrasts. Native
+component checks exercise all five real programs on **11 source-derived cases**,
+including zero and the supported upper boundary, exact serial/1-thread/4-thread
+Rayon agreement and scratch reuse after missing inputs. These direct facts do
+not certify provider binding or execution of modifier transforms.
 
-Fresh source validation passes in **10.94s** with identical JIT-on/off reports
-(`runs/owned-fixed-spirit-source-02`). It covers both equipped items, Original05's
-dormant +49 Spirit item and 14 constructor controls per case. Authored validation
-passes; publication and **15 positive/negative import controls** pass in **38.54s**
-(`runs/owned-fixed-spirit-04/validation.json`). Complete drafts, source sidecars,
-selections, prior issues and all **110 queries** are checked, with explicit exact
-inverses for the two new records. Rebuilding the package is byte-identical.
-Failed draft checks are retained in earlier runs; they are not integration bases.
+All-five publication, **20 import controls** and native component checks pass in
+**49.52s** (`runs/owned-global-energy-shield-03/validation.json`). Complete drafts,
+allocator state, saved selections and all 110 queries are preserved; exact leaf
+inverses account for source-side diagnostic changes. Rebuilding is byte-identical.
+Original04's +68 Life now has a recognized grammar but still lacks a proven
+source category. A dormant Original05 jewel's next Critical Hit Chance line is
+recognized lexically, with Partial coverage and no canonical modifier. **No new
+canonical modifier is emitted in any unchanged original.** Selected issue counts
+remain **107/117/109/123/5** and complete native evaluations remain **0/5**.
 
-The [BASE audit](owned-base-contribution-audit.md) also passes: three default tests
-(0.02s) and two retained-source/native-program checks (3.13s) after the final
-test-only lifetime cleanup. Its 60 stages retain 876 full
-records and 44 zero bonus copies. Current signed/scaled item programs expose
-order-sensitive final results; real Original03 has post-passive bonus copies,
-and socketed equipment lacks complete ordered-origin coverage. Keep BASE/global
-membership Partial instead of adopting arbitrary order or a class/passive-only
-shortcut. The five-build completion result remains **0/5**.
+The final authored check passes (0.01s), strict workspace/all-targets/all-features
+Clippy passes, and both changed packages pass formatting. Production Rust
+libraries are unchanged; this checkpoint does not claim a fresh full-suite or
+WASM run. GitHub [37552883848](https://github.com/Azaril/poe-optimizer/actions/runs/37552883848)
+at `0ff9210` is green; [37646478601](https://github.com/Azaril/poe-optimizer/actions/runs/37646478601)
+at `47f3560` was still running at the latest check. Failed draft checks are kept
+as diagnostics; only `owned-global-energy-shield-03` is the new integration base.
 
-Strict workspace/all-targets/all-features Clippy and changed-package formatting
-pass. Production Rust libraries are unchanged; previous WASM and compiled-boundary
-checks are retained without claiming a fresh run. The earlier CI asset-path fix
-passes locally, but hosted success for the current revision is not yet confirmed.
-
-**Next input blocker:** ordinary global maximum Energy Shield increase, including
-Original04's 44% line before +68 Life. Reuse Player channel `29f0`, not the distinct
-local-ES semantics, and include the saved 20%/16% Sapphire jewels as breadth
-controls. This will not alone resolve Spirit category: anoints, all-skills quality,
-rune/Bonded and other item families remain in the [item blocker census](../data/owned/poe2/3887ae68/fixed-spirit/README.md#remaining-original-item-category-blockers).
-Anoints must retain granted-passive meaning. Separately, the
+**Next priority:** advance Original05's generated Sand Djinn and item Firebolt
+requested-participation inputs using the already accepted model. More isolated
+item grammar will not resolve its five selected obligations. The separate
 [Boolean contribution proposal](owned-boolean-contributions-proposal.md) still
-awaits owner review. The shared Player slot relation is already accepted and
-implemented; selected and effective equipment remain distinct.
+awaits owner review; the shared Player slot relation is already accepted and
+implemented, with selected and effective equipment kept distinct.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-fixed-spirit-04/package` as the integration baseline. Its
+Use `runs/owned-global-energy-shield-03/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. All freshly regenerated sidecars use V21;
 native schema V6 and operations V21 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-attribute-increase-01/package`, input
-`29e4e9ef2b321bb6c802d9970666e8bf85afb805830ca9c2bbfc03bceaafb1ef`.
+Its immediate predecessor is `runs/owned-fixed-spirit-04/package`, input
+`3a09338958da3f0fd49dc0669bb4fbc9c9acb1c464025c55d5edab4effaeb86f`.
 Historical endpoint paths authenticate useful stored evidence; they are not
 separate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `3a09338958da3f0fd49dc0669bb4fbc9c9acb1c464025c55d5edab4effaeb86f` |
-| Registry | `274df864ba96949566f0ab5890debb9f487e6ebfa205ac23885362f1fe646310` |
-| Definitions content | `54487fcaf4ba617bc1627666fe015a50bc6fc3ed64d44a2be0b523939ddee945` |
-| Rules | `8701496441041c3c5fa0a6eea7222cf2902e964a3b3ea38718e92621ce69d1e9` |
-| Compiled rules | `0402d94f4a6aab830c87b39ab674ef15271a3e85e4341a77460b3c05dcf211c8` |
-| Routing | `8c906aa089c0b5e3dcde2db331429e7e77b918dbc053df398c2b3f8e77ae2dcc` |
-| Mapping | `2b06fd1fec052648efd6566b3fe82783cb2a721571b7fad2929329c481ef2622` |
-| Skill roles | `10b8ad0849f194fdca0e2292b21a63346cd8315a6fc299211b3b93ffaca6ec6f` |
-| Normalization | `8e3abaebd506144e86df51f760b7c66a459c9c2c310d65cc8f98b901a2e91d57` |
-| Rewards | `07493114cab88324e0053f7dc9ed673636ebe4f3b8ba020b73acb4428093fde7` |
-| Items | `8037df9b5edca8d4f131e83716cda91e2de48dd77a698ff646e6392cdf9530bb` |
-| Item source | `a43bc1fbb26346f9d9ab3b61095bf27be2b61162eb54ecb38041a2414e513caf` |
-| Tree policy | `a301884a281d053e7d9bce575e0d3df57e308c004288fe5af6dff855232c22c9` |
-| Authoring commitment | `62fca4eab4963684c09b5a733be6f8ba51e5299144faf029b462d34dc02b589f` |
+| Release input | `21b327c2364f5f5d9ae7c47c5c2293ac310d5e5c113e536d5bde25d93b410ff9` |
+| Registry | `77170e2cd8220b5fbc2bb6907c8fc506325c3abc490acd426b71a374310ffb3a` |
+| Definitions content | `9d6ee09d44c1eb022b706bc51a61b28239c7f572647c25e9c15ce2f19e48ff94` |
+| Rules | `9cc36e0d2e5bd48c303f7a91f9d2f2fe0f401fa38b9ed61c3c203aa6e3ab89a3` |
+| Compiled rules | `bf97c711b4554d5e81b1654aba5d3a129ae5df496d299bf84b91c4a211ec744f` |
+| Routing | `5b9286007c9d5b415cc6c83c22d4f4f373f2941651123f80253bb042af8d4e28` |
+| Mapping | `e923bc662644414a25789c39d5b9268dba8293e3849c3f8d7b9ef6cbb836fe70` |
+| Skill roles | `ef9f89fa061f0acaad37051e30d02bac80a6a562f480bb2d5d86861dde257eac` |
+| Normalization | `5c4434dcf0754944fef5a4838e7abb9c286f628899a131b84a6fe3cf79a6a252` |
+| Rewards | `9aaa507de9513904e76f0306f934a08c22d795f2ada2bbc4c8b28544e592c859` |
+| Items | `44cb569177decf3c749521cd508df4107b5cb8bb0cfef74203dc941642905ed7` |
+| Item source | `dd16e916712dcbcac94fa4da8bb7740a89d831ba14eafa6e11f4212efe6a1651` |
+| Tree policy | `6c75cfa841ba7dc9ebbc49c4fb2df5aceacbdc4d722ed13b08613c4d92fb7fb2` |
+| Authoring commitment | `29799f2bba43e6ec51803561c4ac32a5c7ab23d09264e8267a64bedec166ac3d` |
 | Schema / operations | V6 / `owned-domain-operations-v21` |
 
-The eighteen package files total **62,887,875 bytes**, with 130 provenance rows.
+The eighteen package files total **63,143,059 bytes**, with 131 provenance rows.
 Definitions use `pob-3887ae68-player-offhand-facts-v1`; the independent rules release
-remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3333`.
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `334c`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -155,6 +146,38 @@ and all 110 query identities remain unchanged. Local `runs/` files are
 reproducible evidence, not distributed game data.
 
 ## Next executable work
+
+**Immediate work order.** Reuse the [participation packet](../data/owned/poe2/3887ae68/skill-participation/README.md)
+(`332b`, required inputs `332c/332d`, output `332e`) for the real generated Sand
+Djinn and item Firebolt occurrences in Original05. Bind group and occurrence
+intent through the existing exact generated-source resolver and preset
+`WhenExactSourceSelected` applicability. First prove each target's complete
+required-input inventory, then publish its participation/readiness fragment.
+Reuse `owned_selected_participation_source.rs` and the retained
+`runs/owned-selected-participation-source-01` controls for disabled groups,
+disabled Firebolt Gem and removed providers. Preserve mechanical preparation,
+independent presets, dormant preferences and scenario overrides. Global switches,
+FullDPS/reporting intent and the other selected issues are separate obligations;
+do not close all of usage `0503` on the strength of one enabled Boolean.
+
+The next input evidence work should classify the retained
+`owned-extra-stat-consumption-source-05` suppliers and filters, which already
+include inherited-node and Amulet-copy transport. Do not repeat that acquisition
+or treat a new scalar grammar as progress on these selected obligations.
+
+**Deferred coherent item-layout work.** Original04's selected Gold Amulet needs
+Paragon's granted passive, remaining Rarity accounting and all-skills quality;
+its global ES, Life and Spirit category inputs stay Pending. Original05's
+selected Solar Amulet has no anoint and already has Proven layout. Dominion is
+on its dormant Stellar Amulet, so completing it will not solve the current five
+selected issues. Paragon (`20686`/owned `0d5e`) and Dominion (`26214`/`0ef4`) are
+anoint-only disconnected nodes, not ascendancy nodes. Current
+`GrantTarget::AllocationAccess { pools }` authorizes a pool without an exact
+node, and Engine rejects granted allocations/access providers as
+`UnsupportedRelation`. A future anoint checkpoint must review exact target
+permission, provider lifetime, deduplication and point accounting before
+implementation; it is not a data-only grammar extension. Paragon's +5% skill
+quality and the separate +5% item line are distinct contributions.
 
 **Accepted generality checkpoint (2026-10-04).** The [review and gates](build-generality-review.md)
 record concrete limits in generated-source ownership, application stacking,

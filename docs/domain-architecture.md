@@ -553,6 +553,16 @@ normalization and mutable construction history are source concerns, not implicit
 quality defaults in the evaluator. Missing quality preparation or contributor
 coverage leaves the dependent value unavailable.
 
+Represent global versus item-local modifiers through owned recipient and
+contribution semantics. For example, a global maximum Energy Shield increase
+contributes percentage points to the Player's resource channel; local Energy
+Shield modifies the item's defence calculation. Similar display text does not
+make them interchangeable. Source parser tags are acquisition evidence, not
+runtime tags or automatic catalyst properties. The
+[global Energy Shield packet](../data/owned/poe2/3887ae68/global-energy-shield-inputs/README.md)
+uses this existing boundary; complete contributor collection and final resource
+calculation remain separate obligations.
+
 Applicability facts must name the precise delivery law they establish. Passing
 one exclusion does not authorize every other routing or scaling branch. For
 example, an item unaffected by Amulet diversion may still require grouped Focus

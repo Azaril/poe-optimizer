@@ -1,10 +1,66 @@
-> Historical snapshots through the BASE contribution audit on 2026-10-06.
+> Historical snapshots through fixed Spirit recognition on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: fixed Spirit recognition and BASE ordering evidence
+
+The [fixed-Spirit packet](../data/owned/poe2/3887ae68/fixed-spirit/README.md) adds
+one bounded, untagged source grammar using existing modifier `314d`, all 24 input
+slots and its five unchanged programs. Structural admission now covers all 1,756
+item templates; it proves neither affix legality nor complete item inventories.
+Two whole-input inverses check the exact membership/policy additions and required
+identity rebinding. No calculation program, public contract, operation or owner
+coverage marker changes.
+
+Recognition unlocks **+29 Intelligence in Original01** and **+11 to all Attributes
+in Original04**. Their concrete values are retained, with one new remaining-input
+obligation each. Selected issue counts are now **107/117/109/123/5**; all prior
+issues survive. The three actual fixed Spirit lines still lack proven source
+categories, so no new fixed Spirit modifier is emitted from these originals.
+Original05's existing ranged Solar Spirit is preserved. Provisional implicit
+source positions are not canonical authority: the source witness places the
+fixed lines in explicit lists while the importer correctly keeps their layouts
+Pending. The tagged Crossbow rune remains outside this grammar's source domain.
+
+Fresh source validation passes in **10.94s** with identical JIT-on/off reports
+(`runs/owned-fixed-spirit-source-02`). It covers both equipped items, Original05's
+dormant +49 Spirit item and 14 constructor controls per case. Authored validation
+passes; publication and **15 positive/negative import controls** pass in **38.54s**
+(`runs/owned-fixed-spirit-04/validation.json`). Complete drafts, source sidecars,
+selections, prior issues and all **110 queries** are checked, with explicit exact
+inverses for the two new records. Rebuilding the package is byte-identical.
+Failed draft checks are retained in earlier runs; they are not integration bases.
+
+The [BASE audit](owned-base-contribution-audit.md) also passes: three default tests
+(0.02s) and two retained-source/native-program checks (3.13s) after the final
+test-only lifetime cleanup. Its 60 stages retain 876 full
+records and 44 zero bonus copies. Current signed/scaled item programs expose
+order-sensitive final results; real Original03 has post-passive bonus copies,
+and socketed equipment lacks complete ordered-origin coverage. Keep BASE/global
+membership Partial instead of adopting arbitrary order or a class/passive-only
+shortcut. The five-build completion result remains **0/5**.
+
+Strict workspace/all-targets/all-features Clippy and changed-package formatting
+pass. Production Rust libraries are unchanged; previous WASM and compiled-boundary
+checks are retained without claiming a fresh run. GitHub run
+[37552883848](https://github.com/Azaril/poe-optimizer/actions/runs/37552883848)
+at `0ff9210` passed, confirming the earlier CI asset-path fix. Run
+[37646478601](https://github.com/Azaril/poe-optimizer/actions/runs/37646478601)
+for this checkpoint (`47f3560`) is in progress; its result is not yet confirmed.
+
+**Next input blocker:** ordinary global maximum Energy Shield increase, including
+Original04's 44% line before +68 Life. Reuse Player channel `29f0`, not the distinct
+local-ES semantics, and include the saved 20%/16% Sapphire jewels as breadth
+controls. This will not alone resolve Spirit category: anoints, all-skills quality,
+rune/Bonded and other item families remain in the [item blocker census](../data/owned/poe2/3887ae68/fixed-spirit/README.md#remaining-original-item-category-blockers).
+Anoints must retain granted-passive meaning. Separately, the
+[Boolean contribution proposal](owned-boolean-contributions-proposal.md) still
+awaits owner review. The shared Player slot relation is already accepted and
+implemented; selected and effective equipment remain distinct.
 
 ## Archived 2026-10-06 checkpoint: executable BASE contribution audit
 

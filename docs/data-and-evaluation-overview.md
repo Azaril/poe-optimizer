@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-06, including published Arsonist/Frost Mage/Reaver topology
+Snapshot: 2026-10-07, including published Arsonist/Frost Mage/Reaver topology
 and physical inventories, stable deferred V3 attachment, Sniper count/reservation,
 reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables,
 native readiness, source-property ownership, Ice source-input fragments and
@@ -81,6 +81,18 @@ controls demonstrate complete 24-slot conversion. Exact all-five preservation,
 [packet](../data/owned/poe2/3887ae68/fixed-spirit/README.md) records the admitted
 domain and remaining item-layout blockers. New attribute input obligations bring
 selected counts to 107/117/109/123/5; complete native builds remain 0/5.
+
+The subsequent [global Energy Shield input packet](../data/owned/poe2/3887ae68/global-energy-shield-inputs/README.md)
+adds a distinct global modifier through existing native percentage Increase
+delivery. Source `Global` scope becomes a Player recipient, independently of
+the inline properties used for catalyst scaling. All five new programs pass
+11 source-derived component cases and serial/Rayon agreement; 20 import
+controls and complete all-five preservation pass. Item source categories still
+prevent new canonical modifiers in the unchanged originals, so the issue counts
+and 0/5 result are unchanged. Work now prioritizes generated Sand Djinn/Firebolt
+participation in Original05 through the already accepted usage/readiness model.
+Anoints are a separate future model obligation: the current pool-only grant
+contract cannot authorize a particular passive or execute granted allocations.
 
 Selected equipment is distinct from effective equipment. The accepted slot
 reader answers what the authored active loadout selects; later disabling or

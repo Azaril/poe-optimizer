@@ -435,6 +435,15 @@ distinguish obtainable game ranges from broad declared input domains, and review
 the intended numerical law before promoting contributor coverage. No source
 `pairs` traversal, UI slot order or cache-dependent mode is adopted by this audit.
 
+The global Energy Shield input conversion supplies a concrete tag-retirement
+example: PoB's parsed `Global` tag becomes an owned Player-targeted Increase
+contribution. It is distinct from inline source properties used for catalyst
+scaling. Native rules need neither a Lua tag list nor a `Global` Boolean. The
+source witness contrasts local/global behaviour on the same armour base and
+proves that untagged lines remain unscaled by a catalyst header. Keep these
+independent contrasts when retiring the optional reference path; they do not
+authorize complete item coverage or final Energy Shield.
+
 The [Bloodbarrier supplier audit](owned-configuration-dispositions-proposal.md#cache-authority-and-remaining-supplier-proof-2026-10-05)
 adds another distinction. Its parser emits a stack-marker stat with no local or
 global modifier mapping in the pinned source. `Data.lua:913–924` returns no map,
