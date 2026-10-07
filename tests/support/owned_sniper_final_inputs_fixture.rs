@@ -54,7 +54,7 @@ impl World {
     pub fn load_release(path: &std::path::Path) -> Self {
         let before = crate::release::inventory(path);
         let endpoint = crate::release::load(path);
-        crate::family::assert_endpoint(&endpoint);
+        crate::sniper_family::assert_component(&endpoint);
         let modifier = endpoint
             .input()
             .recipe

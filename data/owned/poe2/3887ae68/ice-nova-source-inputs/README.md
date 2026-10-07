@@ -85,8 +85,8 @@ Remove-Item Env:POE_ICE_PROPERTY_SOURCE_CHILD -ErrorAction SilentlyContinue
 cargo test -p poe-optimizer-pob --test owned_ice_nova_property_source -- --ignored --test-threads=1
 ```
 
-Publish into a new, nonexistent output directory after the authenticated reports
-and exact predecessor are available:
+Historical publication command (requires the matching development format from
+that checkpoint; old importer formats are not supported by the current runtime):
 
 ```powershell
 $env:POE_OPTIMIZER_TEST_ICE_SOURCE_INPUTS_PRIOR = 'runs/owned-ice-nova-intrinsics-01/package'
@@ -94,10 +94,11 @@ $env:POE_OPTIMIZER_TEST_ICE_SOURCE_INPUTS_OUTPUT = 'runs/owned-ice-nova-source-i
 cargo test --test owned_ice_nova_source_inputs_cli -- --include-ignored --test-threads=1
 ```
 
-Run the native component after publication with both endpoint parents available:
+Run the native component against the current checked release. It authenticates
+the retained intrinsic/preparation programs and tables within its explicit finite
+boundary; unrelated later mechanics do not become part of this component:
 
 ```powershell
-$env:POE_OPTIMIZER_TEST_ICE_INTRINSICS_OUTPUT = 'runs/owned-ice-nova-intrinsics-01'
-$env:POE_OPTIMIZER_TEST_ICE_SOURCE_INPUTS_OUTPUT = 'runs/owned-ice-nova-source-inputs-01'
+$env:POE_OPTIMIZER_TEST_ICE_NATIVE_RELEASE = 'runs/owned-generated-participation-02/package'
 cargo test --test owned_ice_nova_intrinsics_native -- --include-ignored
 ```

@@ -1,7 +1,7 @@
 //! Historical Offering component checks. Shared construction has no nested tests.
 #[allow(dead_code)]
 #[path = "owned_offering_final_inputs_fixture.rs"]
-mod fixture;
+pub(crate) mod fixture;
 use fixture::*;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_stages::*};
 use poe_optimizer_engine::owned_plan::*;

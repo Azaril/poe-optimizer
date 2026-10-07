@@ -25,6 +25,13 @@ pub(super) fn charge(
 ) -> Result<()> {
     used.entries(source.relations.members.len(), limits)?;
     for row in &source.relations.members {
+        used.entries(
+            usize::from(matches!(
+                row.occurrence,
+                SourcePropertyOccurrence::GeneratedSkill { .. }
+            )),
+            limits,
+        )?;
         for n in [
             row.effects.members.len(),
             row.inputs.len(),
@@ -60,7 +67,64 @@ fn numeric(value: &ComputedValueType) -> bool {
         ComputedValueType::Integer | ComputedValueType::Quantity { .. }
     )
 }
-impl<I: DefinitionSchemaIndex> Check<'_, I> {
+impl<'a, I: DefinitionSchemaIndex> Check<'a, I> {
+    // Source applicability admits exact mechanical providers; this intentionally
+    // does not widen the separate receiving-path traversal contract.
+    fn source_declarations(&mut self, owner: &SlotOwnerDefId) -> Result<&'a DeclaredSlots> {
+        self.used.work(1, self.l)?;
+        Ok(match owner {
+            SlotOwnerDefId::Class(id) => &known(self.index.definition(id))?.declarations,
+            SlotOwnerDefId::Ascendancy(id) => &known(self.index.definition(id))?.declarations,
+            SlotOwnerDefId::Reward(id) => &known(self.index.definition(id))?.declarations,
+            SlotOwnerDefId::ItemTemplate(id) => &known(self.index.definition(id))?.declarations,
+            SlotOwnerDefId::Modifier(id) => &known(self.index.definition(id))?.declarations,
+            SlotOwnerDefId::Gem(id) => &known(self.index.definition(id))?.declarations,
+            SlotOwnerDefId::Skill(id) => &known(self.index.definition(id))?.declarations,
+            SlotOwnerDefId::Actor(id) => &known(self.index.definition(id))?.declarations,
+            SlotOwnerDefId::PassiveNode(id) => &known(self.index.definition(id))?.declarations,
+            SlotOwnerDefId::UsagePolicy(_) => {
+                return Err(invalid("source supply requires a mechanical provider"));
+            }
+        })
+    }
+    fn source_occurrence(&mut self, relation: &SourcePropertyRelation) -> Result<()> {
+        match (&relation.occurrence, &relation.owner) {
+            (SourcePropertyOccurrence::AuthoredSkillUse {}, SupportTargetDefinition::Gem(gem)) => {
+                let schema = known(self.index.definition(gem))?;
+                self.used.work(schema.roles.len(), self.l)?;
+                if !schema.roles.contains(&AuthoredGemRole::SkillUse) {
+                    return Err(invalid("source owner Gem lacks SkillUse"));
+                }
+            }
+            (
+                SourcePropertyOccurrence::AuthoredSkillUse {},
+                SupportTargetDefinition::Skill(skill),
+            ) => {
+                if !known(self.index.definition(skill))?.directly_selectable {
+                    return Err(invalid("source owner Skill is not directly selectable"));
+                }
+            }
+            (
+                SourcePropertyOccurrence::GeneratedSkill { skill_supply },
+                SupportTargetDefinition::Skill(skill),
+            ) => {
+                let declarations = self.source_declarations(&skill_supply.declaration)?;
+                self.source_member(&declarations.skill_grants, skill_supply)?;
+                let supply = known(self.index.slot(skill_supply))?;
+                if &supply.skill != skill {
+                    return Err(invalid(
+                        "generated source owner differs from exact supplied Skill",
+                    ));
+                }
+                self.source_declared_skill(&skill_supply.declaration, skill)?;
+                known(self.index.definition(skill))?;
+            }
+            (SourcePropertyOccurrence::GeneratedSkill { .. }, SupportTargetDefinition::Gem(_)) => {
+                return Err(invalid("generated source owner must be a Skill"));
+            }
+        }
+        Ok(())
+    }
     fn source_stat(&mut self, stat: &StatDefId, number: bool) -> Result<&ComputedValueType> {
         self.used.work(1, self.l)?;
         let schema = known(self.index.definition(stat))?;
@@ -87,12 +151,12 @@ impl<I: DefinitionSchemaIndex> Check<'_, I> {
     ) -> Result<()> {
         self.used.expanded(1, self.l)?;
         match &row.endpoint {
-            SourcePropertyEffectEndpoint::DirectOwner {} => {
+            SourcePropertyEffectEndpoint::OwnerSkill {} => {
                 if !matches!(owner, SupportTargetDefinition::Skill(_))
                     || row.admission != SupportAdmissionContext::AssignedSkill
                 {
                     return Err(invalid(
-                        "Direct source effect requires Direct owner admission",
+                        "owner Skill source effect requires assigned owner admission",
                     ));
                 }
             }
@@ -262,6 +326,7 @@ impl<I: DefinitionSchemaIndex> Check<'_, I> {
         owner: &SchemaSubject,
         program: &RuleProgram,
         role: ReadinessProgramRole,
+        assembly_binding: Option<SourcePropertyAssemblyBinding>,
     ) -> Result<()> {
         self.readiness_role(owner, &program.id, role)?;
         let readiness = self
@@ -322,9 +387,26 @@ impl<I: DefinitionSchemaIndex> Check<'_, I> {
                 }
             }
             ReadinessProgramRole::SourceFinalInputAssembly => {
-                let context = match relation.owner {
-                    SupportTargetDefinition::Gem(_) => RuleEntityKind::Actor,
-                    SupportTargetDefinition::Skill(_) => RuleEntityKind::Skill,
+                let binding = assembly_binding.expect("source assembly binding is explicit");
+                let exact_supply = match binding {
+                    SourcePropertyAssemblyBinding::InputOwner => None,
+                    SourcePropertyAssemblyBinding::ExactSupplyingProvider => {
+                        let SourcePropertyOccurrence::GeneratedSkill { skill_supply } =
+                            &relation.occurrence
+                        else {
+                            return Err(invalid(
+                                "exact supplying-provider assembly requires a generated source",
+                            ));
+                        };
+                        Some(skill_supply)
+                    }
+                };
+                let context = match exact_supply {
+                    Some(supply) => source_provider_context(&supply.declaration)?,
+                    None => match relation.owner {
+                        SupportTargetDefinition::Gem(_) => RuleEntityKind::Actor,
+                        SupportTargetDefinition::Skill(_) => RuleEntityKind::Skill,
+                    },
                 };
                 if program.context != context {
                     return Err(invalid(
@@ -336,10 +418,16 @@ impl<I: DefinitionSchemaIndex> Check<'_, I> {
                         RuleEffectKind::ProjectSkillParameter {
                             skill, parameter, ..
                         } => {
-                            if skill.declaration != target_owner(&relation.owner) {
+                            if let Some(supply) = exact_supply {
+                                if skill != supply {
+                                    return Err(invalid(
+                                        "source assembly must project its exact supplied Skill",
+                                    ));
+                                }
+                            } else if skill.declaration != target_owner(&relation.owner) {
                                 return Err(invalid("source assembly projects a foreign child"));
                             }
-                            let declarations = self.declarations(&skill.declaration)?;
+                            let declarations = self.source_declarations(&skill.declaration)?;
                             self.source_member(&declarations.skill_grants, skill)?;
                             let supplied = known(self.index.slot(skill))?;
                             if parameter.declaration
@@ -351,12 +439,40 @@ impl<I: DefinitionSchemaIndex> Check<'_, I> {
                             }
                             let child = known(self.index.definition(&supplied.skill))?;
                             self.source_member(&child.declarations.parameters, parameter)?;
+                            if exact_supply.is_some() {
+                                let schema = known(self.index.slot(parameter))?;
+                                if schema.presence != SlotPresence::RequiredOnce
+                                    || !matches!(
+                                        schema.skill_input,
+                                        Some(
+                                            SkillInputAuthority::Projected
+                                                | SkillInputAuthority::AuthoredOrProjected
+                                        )
+                                    )
+                                    || self.stages.parameter_phase(&supplied.skill, parameter)
+                                        != Some(ReadinessPhase::Execution)
+                                {
+                                    return Err(invalid(
+                                        "exact supplying-provider assembly requires projected required execution inputs",
+                                    ));
+                                }
+                                if let Some(permission) = &supplied.preset_inputs {
+                                    self.used
+                                        .work(permission.parameters.members.len(), self.l)?;
+                                    if permission.parameters.members.contains(parameter) {
+                                        return Err(invalid(
+                                            "source final input overlaps preset raw input authority",
+                                        ));
+                                    }
+                                }
+                            }
                         }
                         RuleEffectKind::Derive {
                             entity: RuleEntity::Current,
                             stat,
                             ..
-                        } if context == RuleEntityKind::Skill
+                        } if exact_supply.is_none()
+                            && context == RuleEntityKind::Skill
                             && stat != &relation.non_hidden_count =>
                         {
                             self.source_stat(stat, true)?;
@@ -381,10 +497,10 @@ impl<I: DefinitionSchemaIndex> Check<'_, I> {
         let mut registered: Vec<(SchemaSubject, OwnedDefinitionKey)> = Vec::new();
         for (i, relation) in input.relations.members.iter().enumerate() {
             if (i > 0 && input.relations.members[i - 1].id == relation.id)
-                || !owners.insert(relation.owner.clone())
+                || !owners.insert((relation.owner.clone(), relation.occurrence.clone()))
             {
                 return Err(invalid(
-                    "duplicate source property relation identity or owner",
+                    "duplicate source property relation identity or applicability",
                 ));
             }
         }
@@ -406,20 +522,7 @@ impl<I: DefinitionSchemaIndex> Check<'_, I> {
                     "source property relation requires eligible effects",
                 ));
             }
-            match &relation.owner {
-                SupportTargetDefinition::Gem(gem) => {
-                    let schema = known(self.index.definition(gem))?;
-                    self.used.work(schema.roles.len(), self.l)?;
-                    if !schema.roles.contains(&AuthoredGemRole::SkillUse) {
-                        return Err(invalid("source owner Gem lacks SkillUse"));
-                    }
-                }
-                SupportTargetDefinition::Skill(skill) => {
-                    if !known(self.index.definition(skill))?.directly_selectable {
-                        return Err(invalid("source owner Skill is not directly selectable"));
-                    }
-                }
-            }
+            self.source_occurrence(relation)?;
             if !self
                 .stages
                 .precedes(self.preparation_stage, &relation.census_stage)
@@ -472,6 +575,7 @@ impl<I: DefinitionSchemaIndex> Check<'_, I> {
                     &external.owner,
                     p,
                     ReadinessProgramRole::SourceExternalProperty,
+                    None,
                 )?;
                 producers.push((external.owner.clone(), external.program.clone()));
             }
@@ -509,19 +613,34 @@ impl<I: DefinitionSchemaIndex> Check<'_, I> {
                         &owner,
                         p,
                         ReadinessProgramRole::SourceSupportedProperty,
+                        None,
                     )?;
                     producers.push((owner.clone(), id.clone()));
                 }
             }
             unique(&mut relation.assembly.members)?;
-            let owner = target_subject(&relation.owner);
-            for id in &relation.assembly.members {
+            for assembly in &relation.assembly.members {
+                let owner = match assembly.binding {
+                    SourcePropertyAssemblyBinding::InputOwner => target_subject(&relation.owner),
+                    SourcePropertyAssemblyBinding::ExactSupplyingProvider => {
+                        let SourcePropertyOccurrence::GeneratedSkill { skill_supply } =
+                            &relation.occurrence
+                        else {
+                            return Err(invalid(
+                                "exact supplying-provider assembly requires a generated source",
+                            ));
+                        };
+                        source_provider_subject(&skill_supply.declaration)?
+                    }
+                };
+                let id = &assembly.program;
                 let p = self.source_program(rules, &owner, id)?;
                 self.source_bound_program(
                     relation,
                     &owner,
                     p,
                     ReadinessProgramRole::SourceFinalInputAssembly,
+                    Some(assembly.binding),
                 )?;
                 let stage = self
                     .stages
@@ -586,4 +705,37 @@ fn source_owner_key(owner: &SchemaSubject) -> (Option<&DefinitionAddress>, Optio
         SchemaSubject::Definition(value) => (Some(value), None),
         SchemaSubject::Slot(value) => (None, Some(value)),
     }
+}
+fn source_provider_subject(owner: &SlotOwnerDefId) -> Result<SchemaSubject> {
+    Ok(SchemaSubject::Definition(match owner {
+        SlotOwnerDefId::Class(id) => id.address(),
+        SlotOwnerDefId::Ascendancy(id) => id.address(),
+        SlotOwnerDefId::Reward(id) => id.address(),
+        SlotOwnerDefId::ItemTemplate(id) => id.address(),
+        SlotOwnerDefId::Modifier(id) => id.address(),
+        SlotOwnerDefId::Gem(id) => id.address(),
+        SlotOwnerDefId::Skill(id) => id.address(),
+        SlotOwnerDefId::Actor(id) => id.address(),
+        SlotOwnerDefId::PassiveNode(id) => id.address(),
+        SlotOwnerDefId::UsagePolicy(_) => {
+            return Err(invalid("source supply requires a mechanical provider"));
+        }
+    }))
+}
+fn source_provider_context(owner: &SlotOwnerDefId) -> Result<RuleEntityKind> {
+    Ok(match owner {
+        SlotOwnerDefId::Class(_)
+        | SlotOwnerDefId::Ascendancy(_)
+        | SlotOwnerDefId::Reward(_)
+        | SlotOwnerDefId::Gem(_)
+        | SlotOwnerDefId::Actor(_)
+        | SlotOwnerDefId::PassiveNode(_) => RuleEntityKind::Actor,
+        SlotOwnerDefId::ItemTemplate(_) | SlotOwnerDefId::Modifier(_) => {
+            RuleEntityKind::EquipmentUse
+        }
+        SlotOwnerDefId::Skill(_) => RuleEntityKind::Skill,
+        SlotOwnerDefId::UsagePolicy(_) => {
+            return Err(invalid("source supply requires a mechanical provider"));
+        }
+    })
 }

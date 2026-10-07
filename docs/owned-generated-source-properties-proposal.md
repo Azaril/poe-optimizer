@@ -1,8 +1,8 @@
 # Generated source ownership and final-input assembly
 
-Status: accepted by the owner on 2026-10-07. Exact generated Skill ownership
-with exact supplying-provider projection is authorized; implementation is next.
-Baseline: `67eb514`, `runs/owned-global-energy-shield-03/package`.
+Status: accepted and implemented in the native contract on 2026-10-07. Real
+Sand/Firebolt preparation data and complete-build coverage remain separate gates.
+Current integration: `runs/owned-generated-participation-02/package`.
 
 ## The actual blocker
 
@@ -18,12 +18,11 @@ and prepares at level 3; Original01's starts at 1 and prepares at 12. Original04
 Firebolt changes from raw level 17 / quality 0 to prepared level 26 / quality 21.
 These examples identify the missing assembly stage, not universal formulas.
 
-The shared source-property layer currently discovers only authored SkillUses.
-`SourcePropertyOccurrence::AuthoredSkillUseV1` has no generated alternative;
-the compiler iterates `build.skills` and constructs authored targets. Generated
-effect endpoints are children of those owners. They do not let a tree- or
-item-generated Skill be a property owner itself. Sand's source `noSupports`
-setting does not eliminate external level/quality properties.
+Before this extension, the shared source-property layer discovered only authored
+SkillUses. Generated effect endpoints were children of those owners and could
+not themselves own collected properties. The extension removes that limitation;
+it does not supply missing game rules. Sand's source `noSupports` setting does
+not eliminate external level/quality properties.
 
 ## Recommended ownership
 
@@ -102,7 +101,47 @@ implementation review; old development formats need not remain compatible.
 Rebuild affected data and result identities instead of maintaining old/new
 execution branches.
 
+## Accepted contract shape
+
+Update the current receiving V3 contract in place. Occurrence applicability is
+explicitly `AuthoredSkillUse {}` or `GeneratedSkill { skill_supply }`. Rename
+the former `DirectOwner` endpoint to `OwnerSkill`; a physical Gem container
+still cannot use it. Assembly entries carry a program key and either
+`InputOwner` or `ExactSupplyingProvider`. Infer their definition owner from
+that binding, so an independent owner field cannot disagree with the supply.
+
+For generated input-owner programs, existing Skill facts and declared child
+projections retain their scope; this adds no self-parameter write operation.
+Exact supplying-provider assembly projects only to the relation's own generated
+Skill. Missing natural provider context is an error; nested equipment providers
+are not resolved by guessing an ancestor. The first supported equipment binding
+uses the existing exact EquipmentUse/ItemModifier root context.
+
+Manual/generated uses of the same Skill must share their effective calculation
+where their mechanics agree. Existing `InputOwner` assembly can derive common
+prepared Skill stats for both occurrence forms, with an exact-provider projection
+bridge only where generated consumers require final parameters. This does not
+authorize importing prepared literals as manual raw inputs. Source-specific
+level/quality domain validation and complete producer/consumer inventories still
+belong in authored rules. A shared stat design for Sand is within this contract;
+a universal replacement of all existing final parameters would be a separate
+design decision.
+
+The canonical receiving input includes these fields, and its identity feeds
+effect and metric plans and evaluation receipts. Rebuilding a source-property
+relation therefore changes affected cache/result identities. Old wire forms
+are rejected, not interpreted under new semantics. Empty source-relation
+inventories keep their existing behavior. Current Partial releases without an
+evaluation bundle do not embed this relation contract.
+
 ## Implementation and acceptance gates
+
+Gates 1–3 are implemented. Validation covers three Core wire tests, 63 Data
+receiving/stage tests and 48 Engine tests including ten new generated-owner
+cases. Current-release numerical components pass: Ice Nova eight, Offering
+eight and Sniper six. The all-five participation replay reproduces its prior
+identity and issue inventories. Gates 4 and 6 remain real data/numerical work;
+gate 5's participation transport is published, but readiness remains withheld.
 
 1. Generalize the existing relation's owner discovery and explicit applicability.
    Bind generated owners through the shared resolver and structural supply map.
@@ -127,5 +166,5 @@ execution branches.
    remains a separate gate, currently 0/5.
 
 Saved usage transport has been published independently through the existing
-policy. Do not close parameter inventories or publish generated
-readiness to conceal this model gap.
+policy. Do not close parameter inventories or publish generated readiness to
+conceal missing real preparation rules and contributor coverage.

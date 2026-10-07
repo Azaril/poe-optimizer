@@ -638,14 +638,15 @@ coefficients and numerical recovery do not establish domain laws. Lossless
 storage compression needs full-domain equality and explicit boundaries; runtime
 formulas additionally need valid-input and deterministic rounding evidence.
 
-The 2026-10-07 generated-source audit found a missing owner grammar, not a reason
-to add a parallel final-input evaluator. The current property relation only
-discovers authored SkillUses. The [proposal](owned-generated-source-properties-proposal.md)
-extends that relation to generated Skill occurrences while reusing exact provider
-projection authority. Review and replace the current contract in place, then
-rebuild affected data; retain no authored/generated compatibility execution
-branches. Do not manufacture physical Gems or copy raw inputs into a second
-source object. The owner accepted this extension on 2026-10-07; implementation remains pending.
+The 2026-10-07 generated-source audit found a missing owner grammar. The accepted
+[extension](owned-generated-source-properties-proposal.md) now admits generated
+Skill occurrences in the existing relation and reuses exact provider projection
+authority. The current contract was replaced in place: old occurrence strings,
+bare assembly keys and the ambiguous `DirectOwner` endpoint are rejected.
+Current authoring fragments use explicit occurrence/assembly bindings and the
+`OwnerSkill` endpoint. No physical Gems, duplicate raw-input store or parallel
+evaluator were introduced. Real Sand/Firebolt preparation remains to be authored;
+the contract tests do not close their Partial inventories.
 
 The Command component's V20 integration exposed a mixed-phase owned program in
 the published Sniper data. `ordinary-population-inputs` previously bundled actor

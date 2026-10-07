@@ -156,11 +156,11 @@ impl Fixture {
         FIXTURE.get_or_init(Self::from_publication).clone()
     }
     fn from_publication() -> Self {
-        let output = PathBuf::from(
-            std::env::var_os("POE_OPTIMIZER_TEST_ICE_INTRINSICS_OUTPUT")
-                .expect("verified Ice intrinsic publication parent"),
+        let package = PathBuf::from(
+            std::env::var_os("POE_OPTIMIZER_TEST_ICE_NATIVE_RELEASE")
+                .expect("current checked owned release package"),
         );
-        let endpoint = release::load(&output.join("package"));
+        let endpoint = release::load(&package);
         assert!(endpoint.input().evaluation.is_none());
         let packet = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("data/owned/poe2/3887ae68/ice-nova-intrinsics");
@@ -175,10 +175,10 @@ impl Fixture {
         let migration: OwnedReleaseMigrationInput = read(packet.join("migration.json"));
         let dependencies: Value = read(packet.join("dependencies.json"));
         let recipe = &endpoint.input().recipe;
-        assert_eq!(recipe.schema.schema_version, 5);
+        assert_eq!(recipe.schema.schema_version, 6);
         assert_eq!(
             recipe.rules.operations_version.as_str(),
-            OWNED_RULE_OPERATIONS_V17
+            OWNED_RULE_OPERATIONS_V21
         );
         let mut definitions: Vec<DefinitionDescriptor> =
             serde_json::from_value(dependencies["definitions"].clone()).unwrap();
@@ -198,17 +198,25 @@ impl Fixture {
                 }
             }
         }
-        for row in &definitions {
-            assert!(
-                recipe.schema.definitions.contains(row),
-                "actual declared definition retained"
-            );
+        for row in &mut definitions {
+            let actual = recipe
+                .schema
+                .definitions
+                .iter()
+                .find(|actual| actual.address() == row.address())
+                .unwrap();
+            assert_eq!(actual, &*row, "intrinsic dependency remains unchanged");
+            *row = actual.clone();
         }
-        for row in &slots {
-            assert!(
-                recipe.schema.slots.contains(row),
-                "actual declared slot retained"
-            );
+        for row in &mut slots {
+            let actual = recipe
+                .schema
+                .slots
+                .iter()
+                .find(|actual| actual.address() == row.address())
+                .unwrap();
+            assert_eq!(actual, &*row, "intrinsic slot remains unchanged");
+            *row = actual.clone();
         }
         for (index, stat) in b.channels.all().into_iter().enumerate() {
             let unit = definitions
@@ -322,7 +330,7 @@ impl Fixture {
             .members
             .sort_by(|a, b| a.id.cmp(&b.id));
         assert_eq!(actual_routes, authored_routes);
-        let gem_owner = recipe
+        let mut gem_owner = recipe
             .rules
             .owners
             .iter()
@@ -330,6 +338,18 @@ impl Fixture {
             .unwrap()
             .clone();
         assert!(!gem_owner.programs.is_complete());
+        // The intrinsic-only component retains its explicit final-input boundary.
+        // Current source preparation is exercised separately below; do not copy
+        // those programs into a component without their dependencies.
+        gem_owner.programs.members.retain(|program| {
+            !program.effects.is_empty()
+                && program.effects.iter().all(|effect| {
+                    matches!(
+                        &effect.effect,
+                        RuleEffectKind::ActivateGrant { slot, .. } if *slot == b.entering_grant
+                    )
+                })
+        });
         assert_eq!(gem_owner.programs.members.len(), 1);
         assert!(gem_owner.programs.members[0].effects.iter().all(|e|matches!(&e.effect,RuleEffectKind::ActivateGrant{slot,..} if *slot==b.entering_grant)),"production primary remains activation only");
         // Select exact required units from actual schema. No synthetic replacement
@@ -504,7 +524,7 @@ impl Fixture {
             )));
         }
         let schema = SchemaPackageInput {
-            schema_version: 5,
+            schema_version: recipe.schema.schema_version,
             namespace: namespace.clone(),
             release: key("unpublished-ice-intrinsic-component"),
             semantics_version: key("intrinsic-component-only"),
@@ -560,6 +580,10 @@ impl Fixture {
         rules.owners = owners;
         rules.receivers = DeclaredSet::complete(vec![]);
         rules.effect_applications = Some(DeclaredSet::complete(vec![]));
+        // This finite component has no item contribution queries or shared Player
+        // owner. Keep their current release inventories out of this test copy.
+        rules.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+        rules.existing_actor_rules = Some(DeclaredSet::complete(vec![]));
         let mut routes = actual_routes.clone();
         routes.routes.closure = SchemaClosure::Complete;
         routes.source_selectors.as_mut().unwrap().closure = SchemaClosure::Complete;
@@ -728,7 +752,7 @@ impl Fixture {
         let stages = Arc::new(OwnedEvaluationStages::new(
             source.map_or_else(
                 || EvaluationStagesInput {
-                    schema_version: 2,
+                    schema_version: OWNED_EVALUATION_STAGES_V3,
                     namespace: self.schema.namespace.clone(),
                     release: key("component-stages"),
                     definitions: definitions.identity().clone(),
@@ -922,7 +946,7 @@ impl Fixture {
                 ),
                 Err(PlanError::Invalid(_))
             ),
-            "V17 requires checked readiness"
+            "current operations require checked readiness"
         );
         Ok(Plan::compile(
             SupportEffectPlanInputs {

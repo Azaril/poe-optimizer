@@ -82,11 +82,11 @@ impl SourceFixture {
     }
     fn from_publication() -> Self {
         let mut f = Fixture::load();
-        let output = PathBuf::from(
-            std::env::var_os("POE_OPTIMIZER_TEST_ICE_SOURCE_INPUTS_OUTPUT")
-                .expect("checked source-input publication parent"),
+        let package = PathBuf::from(
+            std::env::var_os("POE_OPTIMIZER_TEST_ICE_NATIVE_RELEASE")
+                .expect("current checked owned release package"),
         );
-        let endpoint = release::load(&output.join("package"));
+        let endpoint = release::load(&package);
         assert!(
             endpoint.evaluation().is_none(),
             "actual Partial release has no fabricated evaluation bundle"
@@ -94,7 +94,7 @@ impl SourceFixture {
         let recipe = &endpoint.input().recipe;
         assert_eq!(
             recipe.rules.operations_version.as_str(),
-            OWNED_RULE_OPERATIONS_V18
+            OWNED_RULE_OPERATIONS_V21
         );
         let packet = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("data/owned/poe2/3887ae68/ice-nova-source-inputs");
@@ -213,10 +213,9 @@ impl SourceFixture {
                 assert!(!f.schema.slots.iter().any(|s| s.address() == slot.address()));
                 f.schema.slots.push(slot);
             }
-            // The finite component keeps raw support inputs and property rules,
-            // but excludes implicit catalog Skill topology and ordinary delivery.
-            // The actual descriptor remains authenticated above and in the
-            // publication dependency receipt; it is not changed in the package.
+            // Current descriptors supersede the historical packet's obsolete
+            // catalog Skill links. Take raw slots from this checked publication,
+            // then bound this component's topology without rewriting the package.
             gem.skills = DeclaredSet::complete(vec![]);
             gem.quality.allowed_kinds.closure = SchemaClosure::Complete;
             finite(&mut gem.declarations);
@@ -235,6 +234,17 @@ impl SourceFixture {
                     .members
                     .iter()
                     .any(|p| p.id == support.preparation_program)
+            );
+            // Later packets add ordinary support delivery. This component admits
+            // positions explicitly and tests only the unchanged actual preparation
+            // and source-property bodies authenticated against the packet above.
+            owner.programs.members.retain(|program| {
+                program.id == support.preparation_program
+                    || support.property_programs.contains(&program.id)
+            });
+            assert_eq!(
+                owner.programs.members.len(),
+                support.property_programs.len() + 1
             );
             owner.programs.closure = SchemaClosure::Complete;
             f.rules.owners.push(owner);
@@ -287,7 +297,7 @@ impl SourceFixture {
                     .collect(),
             });
         }
-        f.rules.operations_version = key(OWNED_RULE_OPERATIONS_V18);
+        assert_eq!(f.rules.operations_version, recipe.rules.operations_version);
         let mut result = Self {
             f,
             config: Configuration {
@@ -718,7 +728,10 @@ impl Configuration {
             .iter()
             .flat_map(|o| &o.programs.members)
             .any(|p| p.id == self.b.programs.assembly)
-            .then(|| self.b.programs.assembly.clone())
+            .then(|| SourcePropertyAssemblyProgram {
+                program: self.b.programs.assembly.clone(),
+                binding: SourcePropertyAssemblyBinding::InputOwner,
+            })
             .into_iter()
             .collect();
         SupportReceivingInput {
@@ -756,7 +769,7 @@ impl Configuration {
                 relations: DeclaredSet::complete(vec![SourcePropertyRelation {
                     id: key("ice-source-inputs"),
                     owner: SupportTargetDefinition::Gem(f.b.physical_gem.clone()),
-                    occurrence: SourcePropertyOccurrence::AuthoredSkillUseV1,
+                    occurrence: SourcePropertyOccurrence::AuthoredSkillUse {},
                     aliases: SourcePropertyAliasPolicy::RejectSharedBackingGemV1,
                     context: SourcePropertyContext::PlayerScenarioV1,
                     census: SourcePropertyCensus::ExactSelectedPositionV1,

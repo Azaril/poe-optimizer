@@ -452,7 +452,10 @@ fn validate_effect<I: DefinitionSchemaIndex>(
         }
         ReadinessProgramRole::SourceFinalInputAssembly => match effect {
             RuleEffectKind::ProjectSkillParameter { .. } => {
-                matches!(context, RuleEntityKind::Actor | RuleEntityKind::Skill)
+                matches!(
+                    context,
+                    RuleEntityKind::Actor | RuleEntityKind::Skill | RuleEntityKind::EquipmentUse
+                )
             }
             RuleEffectKind::Derive {
                 entity: RuleEntity::Current,

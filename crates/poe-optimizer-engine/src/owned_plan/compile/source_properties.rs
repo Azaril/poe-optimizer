@@ -59,6 +59,23 @@ fn subject(owner: &SupportTargetDefinition) -> SchemaSubject {
     })
 }
 
+fn assembly_owner(
+    relation: &SourcePropertyRelation,
+    assembly: &SourcePropertyAssemblyProgram,
+) -> Result<SchemaSubject> {
+    match assembly.binding {
+        SourcePropertyAssemblyBinding::InputOwner => Ok(subject(&relation.owner)),
+        SourcePropertyAssemblyBinding::ExactSupplyingProvider => match &relation.occurrence {
+            SourcePropertyOccurrence::GeneratedSkill { skill_supply } => {
+                Ok(owner_subject(&skill_supply.declaration))
+            }
+            SourcePropertyOccurrence::AuthoredSkillUse {} => {
+                Err(invalid("authored source has no exact supplying provider"))
+            }
+        },
+    }
+}
+
 pub(super) type SourceProgramKey = (
     Option<DefinitionAddress>,
     Option<SlotAddress>,
@@ -105,9 +122,8 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     self.defer_source_program(&owner, program)?;
                 }
             }
-            let owner = subject(&row.owner);
             for program in &row.assembly.members {
-                self.defer_source_program(&owner, program)?;
+                self.defer_source_program(&assembly_owner(row, program)?, &program.program)?;
             }
         }
         let build = self.request.build().input();
@@ -131,39 +147,33 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         let mut counts = support_templates::TemplateCounts::default();
         let mut bound_owners = BTreeSet::new();
         for row in &input.relations.members {
-            charge(&mut self.work, build.skills.len() + 1)?;
-            for skill in &build.skills {
-                let declaration = match &skill.source {
-                    AuthoredSkillSource::Direct(id) => SupportTargetDefinition::Skill(id.clone()),
-                    AuthoredSkillSource::Gem(id) => SupportTargetDefinition::Gem(
-                        gems.get(id)
-                            .ok_or_else(|| invalid("source owner has no exact Gem"))?
-                            .definition
-                            .clone(),
-                    ),
-                };
-                if declaration != row.owner {
-                    continue;
-                }
-                if let AuthoredSkillSource::Gem(gem) = &skill.source
-                    && (skill_uses.get(gem) != Some(&1) || support_uses.contains_key(gem))
-                {
-                    return Err(invalid(
-                        "source property owner has ambiguous backing-Gem aliases",
-                    ));
-                }
+            let candidates = self.source_owners(row, &skill_uses, &support_uses)?;
+            for (target, provider) in candidates {
                 if result.relations.len() >= self.limits.max_owner_bindings {
                     return Err(PlanError::Limit("source property relations"));
                 }
-                let target = SkillTarget::Authored(skill.id);
                 if !bound_owners.insert(target.clone()) {
                     return Err(invalid("competing source relations for one input owner"));
                 }
-                let provider = root(ProviderRoot::SkillUse(skill.id));
                 let resolved = self.resolver.skill(&target)?;
                 charge(&mut self.work, resolved.work_used() + 1)?;
                 if resolved.schema() == SchemaBindingStatus::Invalid {
                     return Err(invalid("source property owner has invalid bindings"));
+                }
+                if let Some(resolved) = resolved.value() {
+                    if resolved.provider().actor() != &ActorKey::Player {
+                        return Err(invalid(
+                            "source owner is outside the declared Player context",
+                        ));
+                    }
+                    if let SourcePropertyOccurrence::GeneratedSkill { .. } = &row.occurrence
+                        && !matches!(&row.owner, SupportTargetDefinition::Skill(skill)
+                            if resolved.definition() == Some(skill))
+                    {
+                        return Err(invalid(
+                            "generated source owner differs from supplied Skill",
+                        ));
+                    }
                 }
                 let inactive = resolved.status() == SelectorBindingStatus::Unavailable;
                 let complete = inactive
@@ -194,7 +204,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         continue;
                     }
                     let (effect_target, entered) = match &effect.endpoint {
-                        SourcePropertyEffectEndpoint::DirectOwner {} => {
+                        SourcePropertyEffectEndpoint::OwnerSkill {} => {
                             (target.clone(), provider.clone())
                         }
                         SourcePropertyEffectEndpoint::Generated { path, skill_supply } => {
@@ -375,35 +385,53 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     }
                     bound.supports.insert(assignment.id, support);
                 }
-                let owner = subject(&row.owner);
                 charge(&mut self.work, row.assembly.members.len())?;
-                for name in &row.assembly.members {
-                    let program = self.source_program_definition(&owner, name)?;
-                    let entity = match program.context {
-                        RuleEntityKind::Actor => ConcreteEntity::Actor(ActorKey::Player),
-                        RuleEntityKind::Skill => ConcreteEntity::Skill(Box::new(target.clone())),
-                        _ => return Err(invalid("unsupported source assembly context")),
-                    };
-                    let context = Context {
-                        property_owner: Some(target.clone()),
-                        origin: RuleOrigin::Provider {
-                            provider: provider.clone(),
-                        },
-                        provider: Some(provider.clone()),
-                        actor: ActorKey::Player,
-                        skill: None,
-                        receiving_skill: None,
-                        assigned_skill: None,
-                        entity,
-                    };
-                    bound.assembly.push(self.source_program(
+                for assembly in &row.assembly.members {
+                    let owner = assembly_owner(row, assembly)?;
+                    let program = self.source_program_definition(&owner, &assembly.program)?;
+                    let context = self.source_assembly_context(
+                        assembly.binding,
+                        &owner,
+                        program.context,
+                        &target,
+                        &provider,
+                        owners,
+                    )?;
+                    let assembled = self.source_program(
                         row,
                         &owner,
                         program,
                         &context,
                         owner_gates,
                         &mut counts,
-                    )?);
+                    )?;
+                    for effect in &assembled.program.effects {
+                        charge(&mut self.work, 1)?;
+                        if let BoundEffectTarget::Value {
+                            key: PlanValueKey::SkillParameter { skill, .. },
+                        } = &effect.target
+                        {
+                            let projected = SkillTarget::Generated(skill.clone());
+                            match assembly.binding {
+                                SourcePropertyAssemblyBinding::ExactSupplyingProvider
+                                    if projected != target =>
+                                {
+                                    return Err(invalid(
+                                        "source assembly projects outside its exact supplied Skill",
+                                    ));
+                                }
+                                SourcePropertyAssemblyBinding::InputOwner
+                                    if projected == target =>
+                                {
+                                    return Err(invalid(
+                                        "source input owner cannot project its own parameters",
+                                    ));
+                                }
+                                _ => {}
+                            }
+                        }
+                    }
+                    bound.assembly.push(assembled);
                 }
                 charge(&mut self.work, 1)?;
                 result
@@ -415,6 +443,152 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             }
         }
         Ok(result)
+    }
+
+    fn source_owners(
+        &mut self,
+        relation: &SourcePropertyRelation,
+        skill_uses: &BTreeMap<GemInstanceId, usize>,
+        support_uses: &BTreeMap<GemInstanceId, usize>,
+    ) -> Result<Vec<(SkillTarget, ProviderKey)>> {
+        let mut result = Vec::new();
+        match &relation.occurrence {
+            SourcePropertyOccurrence::AuthoredSkillUse {} => {
+                let build = self.request.build().input();
+                charge(&mut self.work, build.skills.len() + build.gems.len())?;
+                let gems: BTreeMap<_, _> = build.gems.iter().map(|gem| (gem.id, gem)).collect();
+                for skill in &build.skills {
+                    let declaration = match &skill.source {
+                        AuthoredSkillSource::Direct(id) => {
+                            SupportTargetDefinition::Skill(id.clone())
+                        }
+                        AuthoredSkillSource::Gem(id) => SupportTargetDefinition::Gem(
+                            gems.get(id)
+                                .ok_or_else(|| invalid("source owner has no exact Gem"))?
+                                .definition
+                                .clone(),
+                        ),
+                    };
+                    if declaration != relation.owner {
+                        continue;
+                    }
+                    if let AuthoredSkillSource::Gem(gem) = &skill.source
+                        && (skill_uses.get(gem) != Some(&1) || support_uses.contains_key(gem))
+                    {
+                        return Err(invalid(
+                            "source property owner has ambiguous backing-Gem aliases",
+                        ));
+                    }
+                    result.push((
+                        SkillTarget::Authored(skill.id),
+                        root(ProviderRoot::SkillUse(skill.id)),
+                    ));
+                }
+            }
+            SourcePropertyOccurrence::GeneratedSkill { skill_supply } => {
+                charge(&mut self.work, self.skill_supplies.len())?;
+                for (skill, entered) in &self.skill_supplies {
+                    if &skill.slot == skill_supply {
+                        charge(
+                            &mut self.work,
+                            skill.provider.grant_path.len() + entered.grant_path.len() + 1,
+                        )?;
+                        result.push((
+                            SkillTarget::Generated(Box::new(skill.clone())),
+                            entered.clone(),
+                        ));
+                    }
+                }
+            }
+        }
+        if result.len() > self.limits.max_owner_bindings {
+            return Err(PlanError::Limit("source property owners"));
+        }
+        Ok(result)
+    }
+
+    fn source_assembly_context(
+        &mut self,
+        binding: SourcePropertyAssemblyBinding,
+        owner: &SchemaSubject,
+        kind: RuleEntityKind,
+        target: &SkillTarget,
+        entered: &ProviderKey,
+        owners: &[DeferredOwner],
+    ) -> Result<Context> {
+        let (provider, actor, skill) = match binding {
+            SourcePropertyAssemblyBinding::InputOwner => (
+                entered.clone(),
+                ActorKey::Player,
+                match target {
+                    SkillTarget::Generated(skill) => Some(skill.as_ref().clone()),
+                    SkillTarget::Authored(_) => None,
+                },
+            ),
+            SourcePropertyAssemblyBinding::ExactSupplyingProvider => {
+                let SkillTarget::Generated(target) = target else {
+                    return Err(invalid(
+                        "source assembly has no exact generated input owner",
+                    ));
+                };
+                charge(&mut self.work, owners.len())?;
+                let mut matching = owners.iter().filter(|occurrence| {
+                    &occurrence.subject == owner && occurrence.provider == target.provider
+                });
+                let occurrence = matching
+                    .next()
+                    .ok_or_else(|| invalid("source assembly declaring provider is missing"))?;
+                if matching.next().is_some() {
+                    return Err(invalid("source assembly declaring provider is ambiguous"));
+                }
+                // This is the parent declaration's natural context. Injecting the
+                // source child here would rebind Current/Parameter and gates.
+                (
+                    occurrence.provider.clone(),
+                    occurrence.actor.clone(),
+                    occurrence.skill.clone(),
+                )
+            }
+        };
+        if actor != ActorKey::Player {
+            return Err(invalid("source assembly is outside the Player context"));
+        }
+        let entity = match kind {
+            RuleEntityKind::Actor => ConcreteEntity::Actor(actor.clone()),
+            RuleEntityKind::Skill => ConcreteEntity::Skill(Box::new(
+                exact_skill(Some(&provider), skill.as_ref())
+                    .ok_or_else(|| invalid("source assembly has no natural Skill context"))?,
+            )),
+            RuleEntityKind::EquipmentUse => {
+                match (&provider.root, provider.grant_path.is_empty()) {
+                    (
+                        ProviderRoot::EquipmentUse(id)
+                        | ProviderRoot::ItemModifier {
+                            equipment_use: id, ..
+                        },
+                        true,
+                    ) => ConcreteEntity::EquipmentUse(*id),
+                    _ => {
+                        return Err(invalid(
+                            "source assembly has no natural EquipmentUse context",
+                        ));
+                    }
+                }
+            }
+            _ => return Err(invalid("unsupported source assembly context")),
+        };
+        Ok(Context {
+            property_owner: Some(target.clone()),
+            origin: RuleOrigin::Provider {
+                provider: provider.clone(),
+            },
+            provider: Some(provider),
+            actor,
+            skill,
+            receiving_skill: None,
+            assigned_skill: None,
+            entity,
+        })
     }
 
     fn source_program_definition(

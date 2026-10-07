@@ -1,10 +1,46 @@
-> Historical snapshots through global Energy Shield inputs on 2026-10-07.
+> Historical snapshots through generated participation inputs on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: exact generated participation inputs
+
+The [generated participation packet](../data/owned/poe2/3887ae68/generated-participation/README.md)
+reuses existing policy `332b` and required group/occurrence inputs `332c/332d`
+in four reviewed occurrence recipes: manual Sand, tree-generated Sand and the
+two item Firebolt source frames. This produces **nine new exact preferences**:
+two in Original01 and seven in Original05. Generated preferences use
+`WhenExactSourceSelected`; manual preferences remain required. Original04's
+unresolved provider and archived generated source-axis joins remain unresolved.
+No definition, program, readiness inventory or complete usage claim changes.
+
+The retained witness authenticates both identical JIT reports, eight source
+cases, three lifecycle stages, both calculation modes and all fifteen original
+occurrences. No source VM was rerun. Source preview overrides remain diagnostic.
+All three Rust target tests pass in **34.98s**, including full publication,
+byte-identical rebuilding, a whole release-input inverse, exact all-five draft
+and sidecar inverses and **18 import controls**. False values survive; missing
+or malformed values retain an explicit Pending binding and the other Boolean.
+Independent manual/tree/item occurrences remain independent. The allocator,
+saved selections, all 110 queries and selected issues **107/117/109/123/5** are
+preserved. Complete native builds remain **0/5**, with no calculation run.
+
+Strict Clippy for the changed test target and its dependencies passes. This
+checkpoint changes no production Rust library and claims no fresh full-suite
+or WASM result. GitHub `67eb514` is pending; `47f3560` is still running. The last
+observed green run is [37552883848](https://github.com/Azaril/poe-optimizer/actions/runs/37552883848)
+at `0ff9210`. The checked integration base is now `runs/owned-generated-participation-01/package`.
+
+The audit found the next structural blocker: shared property preparation only
+admits authored SkillUses. The owner **accepted** the [generated-source extension](owned-generated-source-properties-proposal.md)
+on 2026-10-07: exact generated Skill ownership with final projection by its exact
+supplying provider. Implement that contract and real final-input producers next;
+do not promote raw inputs to final or add a second evaluator. The independent
+[Boolean contribution proposal](owned-boolean-contributions-proposal.md) remains
+pending; the Player slot relation is already accepted and implemented.
 
 ## Archived 2026-10-07 checkpoint: global Energy Shield inputs
 

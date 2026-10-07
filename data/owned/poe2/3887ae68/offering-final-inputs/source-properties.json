@@ -14,7 +14,9 @@
             "key": "def.000000000000086b"
           }
         },
-        "occurrence": "authored_skill_use_v1",
+        "occurrence": {
+          "kind": "authored_skill_use"
+        },
         "aliases": "reject_shared_backing_gem_v1",
         "context": "player_scenario_v1",
         "census": "exact_selected_position_v1",
@@ -130,7 +132,10 @@
         },
         "assembly": {
           "members": [
-            "pain-offering-final-inputs"
+            {
+              "program": "pain-offering-final-inputs",
+              "binding": "input_owner"
+            }
           ],
           "closure": {
             "kind": "complete"

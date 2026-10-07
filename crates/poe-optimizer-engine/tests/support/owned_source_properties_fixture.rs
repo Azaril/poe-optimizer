@@ -322,7 +322,7 @@ pub fn relation() -> SourcePropertyRelation {
     SourcePropertyRelation {
         id: key("source"),
         owner: SupportTargetDefinition::Gem(def("summoner")),
-        occurrence: SourcePropertyOccurrence::AuthoredSkillUseV1,
+        occurrence: SourcePropertyOccurrence::AuthoredSkillUse {},
         aliases: SourcePropertyAliasPolicy::RejectSharedBackingGemV1,
         context: SourcePropertyContext::PlayerScenarioV1,
         census: SourcePropertyCensus::ExactSelectedPositionV1,
@@ -350,7 +350,10 @@ pub fn relation() -> SourcePropertyRelation {
             counted: true,
             programs: DeclaredSet::complete(vec![key("source-supported")]),
         }]),
-        assembly: DeclaredSet::complete(vec![key("source-assembly")]),
+        assembly: DeclaredSet::complete(vec![SourcePropertyAssemblyProgram {
+            program: key("source-assembly"),
+            binding: SourcePropertyAssemblyBinding::InputOwner,
+        }]),
         non_hidden_count: def("source-count"),
     }
 }
@@ -363,10 +366,25 @@ pub fn inputs_with(
     edit_stages: impl FnOnce(&mut EvaluationStagesInput),
     edit_receiving: impl FnOnce(&mut SupportReceivingInput),
 ) -> Checked<Inputs> {
+    inputs_with_operations(
+        f,
+        OWNED_RULE_OPERATIONS_V18,
+        edit_rules,
+        edit_stages,
+        edit_receiving,
+    )
+}
+pub fn inputs_with_operations(
+    f: &Fixture,
+    operations: &str,
+    edit_rules: impl FnOnce(&mut RulePackageInput),
+    edit_stages: impl FnOnce(&mut EvaluationStagesInput),
+    edit_receiving: impl FnOnce(&mut SupportReceivingInput),
+) -> Checked<Inputs> {
     readiness::inputs_with_operations(
         f,
         false,
-        OWNED_RULE_OPERATIONS_V18,
+        operations,
         edit_rules,
         |stages| {
             stages.schema_version = 3;
@@ -614,10 +632,13 @@ pub fn direct_inputs(f: &Fixture) -> Checked<Inputs> {
             direct.id = key("direct-source");
             direct.owner = SupportTargetDefinition::Skill(def("skill"));
             direct.effects = DeclaredSet::complete(vec![SourcePropertyEffect {
-                endpoint: SourcePropertyEffectEndpoint::DirectOwner {},
+                endpoint: SourcePropertyEffectEndpoint::OwnerSkill {},
                 admission: SupportAdmissionContext::AssignedSkill,
             }]);
-            direct.assembly = DeclaredSet::complete(vec![key("source-direct-assembly")]);
+            direct.assembly = DeclaredSet::complete(vec![SourcePropertyAssemblyProgram {
+                program: key("source-direct-assembly"),
+                binding: SourcePropertyAssemblyBinding::InputOwner,
+            }]);
             receiving
                 .source_properties
                 .as_mut()

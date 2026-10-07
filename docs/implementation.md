@@ -47,45 +47,62 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest checkpoint: exact generated participation inputs
+## Latest checkpoint: exact generated source-property ownership
 
-The [generated participation packet](../data/owned/poe2/3887ae68/generated-participation/README.md)
-reuses existing policy `332b` and required group/occurrence inputs `332c/332d`
-in four reviewed occurrence recipes: manual Sand, tree-generated Sand and the
-two item Firebolt source frames. This produces **nine new exact preferences**:
-two in Original01 and seven in Original05. Generated preferences use
-`WhenExactSourceSelected`; manual preferences remain required. Original04's
-unresolved provider and archived generated source-axis joins remain unresolved.
-No definition, program, readiness inventory or complete usage claim changes.
+The accepted [ownership contract](owned-generated-source-properties-proposal.md)
+is implemented in the existing Core/Data/Engine path. Receiving V3 now declares
+an authored occurrence or an exact generated supply, an `OwnerSkill` endpoint,
+and assembly bound to `InputOwner` or `ExactSupplyingProvider`. Generated Skills
+own their collected properties; the exact declaring provider retains parameter
+write authority and its natural Actor, Skill or EquipmentUse context. Current
+wire and authoring fragments changed in place; no compatibility path was added.
 
-The retained witness authenticates both identical JIT reports, eight source
-cases, three lifecycle stages, both calculation modes and all fifteen original
-occurrences. No source VM was rerun. Source preview overrides remain diagnostic.
-All three Rust target tests pass in **34.98s**, including full publication,
-byte-identical rebuilding, a whole release-input inverse, exact all-five draft
-and sidecar inverses and **18 import controls**. False values survive; missing
-or malformed values retain an explicit Pending binding and the other Boolean.
-Independent manual/tree/item occurrences remain independent. The allocator,
-saved selections, all 110 queries and selected issues **107/117/109/123/5** are
-preserved. Complete native builds remain **0/5**, with no calculation run.
+Ten Engine tests cover repeated item/tree sources, mixed manual/generated uses,
+exact natural contexts, absent providers, duplicate and foreign writers,
+missing final producers, dependency cycles, disabled participation, and serial/
+Rayon scratch reuse. Core wire tests and Data validation suites pass, as do the
+existing Engine source-property, participation and preparation-readiness suites.
+An independent review found no new correctness defect. The added discovery is
+bounded cold-plan work; the hot evaluator and worker scratch model are unchanged.
 
-Strict Clippy for the changed test target and its dependencies passes. This
-checkpoint changes no production Rust library and claims no fresh full-suite
-or WASM result. GitHub `67eb514` is pending; `47f3560` is still running. The last
-observed green run is [37552883848](https://github.com/Azaril/poe-optimizer/actions/runs/37552883848)
-at `0ff9210`. The checked integration base is now `runs/owned-generated-participation-01/package`.
+The five-build publication was replayed with the updated libraries in **35.61s**
+at `runs/owned-generated-participation-02/package`. It reproduces the same release
+identity, all drafts/sidecars and the 18 participation controls. Complete native
+builds remain **0/5**, with selected unresolved issues **107/117/109/123/5**.
+This contract supplies no missing game formulas or complete rule-owner inventory.
 
-The audit found the next structural blocker: shared property preparation only
-admits authored SkillUses. The owner **accepted** the [generated-source extension](owned-generated-source-properties-proposal.md)
-on 2026-10-07: exact generated Skill ownership with final projection by its exact
-supplying provider. Implement that contract and real final-input producers next;
-do not promote raw inputs to final or add a second evaluator. The independent
+The older numerical components now use the current checked release, retaining
+exact authored program/table equality and explicit finite-test boundaries.
+Ice Nova's eight tests pass in **3.96s**, Offering's eight in **9.50s**, and
+Sniper's six in **11.52s**. Historical publication steps were not replayed through
+retired importer formats. Their provenance assertions remain distinct from the
+current numerical component checks. No compatibility loader was restored.
+Strict workspace/all-feature/all-target Clippy passes, as do owned-only library
+Clippy, both WASM library checks, compiled-source boundary checks, default CLI
+dependency checks and formatting for every changed package. No fresh full
+workspace test run or fresh source VM run is claimed. CI `c3ec029` was queued
+behind the still-running `47f3560` validation; its Engine/Import/Workspace shards
+passed on both platforms. The last observed complete green run remains
+[37552883848](https://github.com/Azaril/poe-optimizer/actions/runs/37552883848).
+
+Local evidence: `runs/owned-generated-source-*` records the focused builds/tests,
+the corrected current-release component runs (`*-04.log`), strict lint (`clippy-03`),
+WASM and dependency/source-boundary checks. Initial failures were test migration
+issues: removed importer formats, old stage metadata, fixture provider roles,
+and changed Partial diagnostic inventories. No native authority check was relaxed
+to make a fixture pass.
+
+**Next blocker: real generated preparation data.** Sand and Firebolt still have
+raw-only Partial inventories. Author Sand's ordinary preparation and shared
+prepared Skill stats for its manual/generated forms, with exact provider
+projection where a real consumer needs parameters. Keep provider-specific support
+eligibility, final-domain validation and incoming coverage explicit. The separate
 [Boolean contribution proposal](owned-boolean-contributions-proposal.md) remains
-pending; the Player slot relation is already accepted and implemented.
+pending; the Player slot read is already accepted and implemented.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-generated-participation-01/package` as the integration baseline. Its
+Use `runs/owned-generated-participation-02/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. All freshly regenerated sidecars use V21;
@@ -139,26 +156,79 @@ reproducible evidence, not distributed game data.
 
 ## Next executable work
 
-**Immediate blocker: generated final-input ownership.** The 2026-10-07 audit
-found that the source-property layer discovers only authored SkillUses.
-Tree-generated Sand and item-generated Firebolt have exact raw inputs but cannot
-yet own collected external/supported properties. Their Partial two-slot input
-lists must not be closed as final inventories. Real source contrasts include
+**Immediate blocker: real generated preparation data.** The accepted ownership
+contract now supports exact generated sources. Tree-generated Sand and
+item-generated Firebolt still lack their authored preparation and assembly
+rules. Their Partial two-slot raw-input lists must not be closed as final
+inventories. Real source contrasts include
 Sand raw level 1 becoming 3 in Original05 and 12 in Original01, and Original04
 Firebolt raw 17/0 becoming prepared 26/21. These are evidence of missing assembly,
 not universally applicable formulas.
 
-The [generated-source proposal](owned-generated-source-properties-proposal.md)
-was **accepted on 2026-10-07**. Extend the existing relation to exact
-generated Skill owners, with explicit authored/generated supply applicability;
-keep final projections on each exact declaring provider. Preserve Actor versus
-EquipmentUse context and seal property reads to the separately bound source.
-Do not add fake authored roots, a second raw-input store, self-parameter writes
-or a raw-as-final shortcut. Implement cold owner discovery,
-exact assembly authority and dependency checks, then author real final-input
-producers and their consumers before readiness. Include manual/generated uses
-of the same Skill, repeated providers, no-support sources, duplicate writers,
-cycles, inactive loadouts and serial/Rayon consistency.
+The [generated-source contract](owned-generated-source-properties-proposal.md)
+was **accepted and implemented on 2026-10-07**. Cold discovery, exact assembly
+authority and dependency checks are covered by the native contract tests. Use
+these existing bindings for real producers and consumers before readiness; do
+not add fake authored roots, a second raw-input store, self-parameter writes or
+a raw-as-final shortcut. Validate actual source contrasts, provider-specific
+support eligibility, inactive loadouts and serial/Rayon consistency.
+
+**Real authoring after the contract.** The actual Sand owner `0322` currently
+contains only Command/Actor supply; Firebolt `0134` has no rule owner or output
+members. Neither has a final-parameter consumer to preserve. Prefer common
+prepared-level/quality Skill stats for manual and generated uses, using existing
+InputOwner authority; use exact-provider projection only where a real consumer
+requires final parameters. Reuse pre-support channels `30ac/30ad`, Player Minion
+level channel `30ab`, actual `30ca` direct/copy programs and snapshot reducer
+`32e4` where their proven applicability fits. Do not copy physical Gem readers,
+corruption assumptions or incomplete contributor closure into these forms.
+
+**First authoring gate: capture separated incoming property evidence.** Existing
+`djinn-support-preparation-source-02` reports show manual Sand 20→31 and tree
+Sand 1→12 in Original01, and manual 20→22 / tree 1→3 in Original05. Both source
+forms have PoB catalog Gem metadata even though they are not physical native
+Gem instances. Catalog metadata must stay acquisition data; do not manufacture
+native physical Gems to reproduce it. The reports establish final values and
+metadata flags, but do not enumerate ordinary `GemProperty` separately from
+once-per-source `SupportedGemProperty`. Capture both inventories and before/after
+values, including zero-support generated Sand, manual support removal and
+independent provider changes, before asserting complete channel `30ab` coverage
+or authoring a closed raw-plus-bonus formula. Endpoint differences alone are
+insufficient. Reuse retained controls rather than repeating unrelated acquisition.
+
+Retained `owned-djinn-raw-inputs-01` evidence already distinguishes raw-domain
+validation from final-domain validation: manual Sand raw 0/−1, 41 and fractional
+levels trigger source editor recovery before property addition. Initially admit
+the proved integral raw range 1–40 through data-defined guards, then independently
+check final level after ordinary/supported additions. An invalid raw value must
+not become supported merely because bonuses bring its final value into range.
+Keep unproved recovery and quality domains unresolved rather than copying Lua
+fallback behavior. These Sand constraints do not define Firebolt's grant domain.
+
+The pinned source clamps raw level plus corruption to at least one only when
+corruption is present, then adds ordinary properties. Firebolt's admitted raw
+grant domain includes zero: an unconditional physical-Gem clamp would turn
+raw zero plus one ordinary level into two. Preserve the ordering and explicit
+final-domain validation; no Lua recovery fallback is authorized. Source quality
+controls retain fractional `12.5`, so do not silently choose integer quality.
+Retained Sand observations show skill/Command levels 12 and 3 with actual minion
+levels 24 and 6. Its `levelRequirement`/stat-set `actorLevel` are different values;
+author the actual minion-level table/branch as injected data instead of treating
+those source metadata fields as minion level or inferring a two-times formula.
+All contributor inventories and full numerical owners remain separate gates.
+Sand's `noSupports` belongs to the generated provider, not its whole Skill
+definition: manual Sand has real support assignments. An empty generated support
+census also does not eliminate actor-provided supported properties. Use explicit
+source applicability and relation inventories; the existing ten Djinn type/
+admission definitions do not provide complete support origins, effective support
+inputs or numerical delivery. Firebolt requires its own Spell/Fire/quality
+coverage; the Minion channel must not be applied to it.
+
+The source census covers Sand's summon and declared Command, which share one
+source occurrence. The three actor-child skills have no source occurrence in
+this source-property path and start at level 1 / quality 0; they must not each
+add another source-property contribution. Their separate support admission and
+delivery still require coverage.
 
 Saved participation transport now uses existing `332b` independently. Manual
 Sand needs its own binding before any Skill-definition-wide gate is admitted.

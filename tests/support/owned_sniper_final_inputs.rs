@@ -180,7 +180,7 @@ pub fn check_authored() {
     );
     assert_eq!(
         relation.occurrence,
-        SourcePropertyOccurrence::AuthoredSkillUseV1
+        SourcePropertyOccurrence::AuthoredSkillUse {}
     );
     assert_eq!(
         relation.aliases,
@@ -210,7 +210,13 @@ pub fn check_authored() {
         "skill_supply":b["target"]["primary_supply"]},"admission":{"kind":"receiving_skill","summoner_path":null}}])
     );
     assert!(relation.assembly.is_complete());
-    assert_eq!(relation.assembly.members, vec![p.id.clone()]);
+    assert_eq!(
+        relation.assembly.members,
+        vec![SourcePropertyAssemblyProgram {
+            program: p.id.clone(),
+            binding: SourcePropertyAssemblyBinding::InputOwner,
+        }]
+    );
     assert!(relation.supports.is_complete() && relation.supports.members.is_empty());
     assert!(relation.external.is_complete() && relation.external.members.is_empty());
     assert!(relation.channels.is_complete() && relation.channels.members.is_empty());
@@ -341,13 +347,21 @@ fn check_source(full: bool) {
 }
 
 pub fn assert_endpoint(endpoint: &StagedOwnedRelease) {
-    check_authored();
+    assert_component(endpoint);
     let m: OwnedReleaseMigrationInput = read("migration.json");
-    let d: Value = read("dependencies.json");
     let provenance = endpoint.receipt().provenance.last().unwrap();
     assert_eq!(provenance.kind.as_str(), KIND);
     assert_eq!(provenance.prior_input, m.before);
     assert_eq!(provenance.authoring_input, authoring_digest());
+    assert_eq!(endpoint.input().recipe.schema.release, m.release);
+    assert!(endpoint.evaluation().is_none());
+}
+
+/// Check preserved rule/table bodies independently of the last publication step.
+pub fn assert_component(endpoint: &StagedOwnedRelease) {
+    check_authored();
+    let m: OwnedReleaseMigrationInput = read("migration.json");
+    let d: Value = read("dependencies.json");
     let mut expected: DefinitionRules = decode(&d["owners"][0]);
     expected
         .programs
@@ -364,8 +378,25 @@ pub fn assert_endpoint(endpoint: &StagedOwnedRelease) {
             .count(),
         1
     );
-    assert_eq!(endpoint.input().recipe.schema.release, m.release);
-    assert!(endpoint.evaluation().is_none());
+    let authored: Value = serde_json::from_slice(
+        &fs::read(root().join("data/owned/poe2/3887ae68/import/recipe-seed.json")).unwrap(),
+    )
+    .unwrap();
+    let tables: Vec<IntegerRuleTable> = decode(&authored["rules"]["tables"]);
+    for name in ["sniper.actor-level", "sniper.required-character-level"] {
+        let expected = tables.iter().find(|t| t.id.as_str() == name).unwrap();
+        assert_eq!(
+            endpoint
+                .input()
+                .recipe
+                .rules
+                .tables
+                .iter()
+                .filter(|t| t.id == expected.id)
+                .collect::<Vec<_>>(),
+            vec![expected]
+        );
+    }
 }
 
 pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {

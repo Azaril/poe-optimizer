@@ -643,15 +643,18 @@ actual raw Gem inputs. Its already-admitted, item-free boundary is explicitly
 separate from full-build support. See the
 [source-property contract](owned-source-property-preparation-proposal.md).
 
-The generated-source audit found a specific implementation gap: the relation
-discovers authored SkillUses, so tree-generated Sand and item-generated Firebolt
-cannot themselves own its collected properties. Their raw level/quality slots
-remain Partial and are not final inputs. The [proposed extension](owned-generated-source-properties-proposal.md)
-keeps the exact Skill occurrence as property owner and invokes its exact
-declaring provider for final projection. The owner accepted it on 2026-10-07; implementation remains pending. Saved
-participation transport now adds nine exact preferences across Originals01/05,
-with all-five inverses and 18 import controls passing. This publishes no
-readiness and closes none of Original05's five selected obligations.
+The [generated-source extension](owned-generated-source-properties-proposal.md)
+was accepted and implemented on 2026-10-07. The same relation now admits exact
+generated Skill owners through explicit supply declarations. Assembly binds to
+the input owner or its exact declaring provider, retaining natural Actor, Skill
+or EquipmentUse context while sealing property reads to the generated Skill.
+Sibling writes, ambiguous concrete ownership and undeclared input authority are
+rejected. The current wire format is updated in place; no compatibility evaluator
+is retained. Sand/Firebolt raw level/quality inventories remain Partial until
+real preparation rules and consumers are authored. Saved participation transport
+adds nine exact preferences across Originals01/05, with all-five inverses and
+18 import controls passing. This publishes no readiness and closes none of
+Original05's five selected obligations.
 
 The Offering integration exposed an earlier implementation limit: item programs
 derive typed facts on EquipmentUse and Modifier occurrences, which stages V3

@@ -209,7 +209,10 @@ pub fn check_authored() {
             .assembly
             .members
             .iter()
-            .map(|s| s.as_str())
+            .map(|s| {
+                assert_eq!(s.binding, SourcePropertyAssemblyBinding::InputOwner);
+                s.program.as_str()
+            })
             .collect::<Vec<_>>(),
         [assembly]
     );
@@ -273,13 +276,21 @@ pub fn check_authored() {
 }
 
 pub fn assert_endpoint(endpoint: &StagedOwnedRelease) {
-    check_authored();
+    assert_component(endpoint);
     let m: OwnerReplacement = read("owner-replacement.json");
     let provenance = endpoint.input().provenance.last().unwrap();
     assert_eq!(provenance.kind.as_str(), KIND);
     assert_eq!(provenance.prior_input, m.before);
     assert_eq!(provenance.authoring_input, authoring_digest());
     assert_eq!(endpoint.input().recipe.schema.release, m.release);
+    assert!(endpoint.evaluation().is_none());
+}
+
+/// Authenticate the actual component on a current checked release. Publication
+/// history is a separate proof and does not determine its numerical authority.
+pub fn assert_component(endpoint: &StagedOwnedRelease) {
+    check_authored();
+    let m: OwnerReplacement = read("owner-replacement.json");
     for owner in m.owners {
         assert_eq!(
             endpoint
@@ -293,7 +304,24 @@ pub fn assert_endpoint(endpoint: &StagedOwnedRelease) {
             1
         );
     }
-    assert!(endpoint.evaluation().is_none());
+    let authored: Value = serde_json::from_slice(
+        &fs::read(root().join("data/owned/poe2/3887ae68/pain-offering/extension.json")).unwrap(),
+    )
+    .unwrap();
+    let expected: Vec<IntegerRuleTable> = decode(&authored["tables"]);
+    assert_eq!(expected.len(), 1);
+    assert_eq!(expected[0].id.as_str(), "pain-offering.damage-increase");
+    assert_eq!(
+        endpoint
+            .input()
+            .recipe
+            .rules
+            .tables
+            .iter()
+            .filter(|t| t.id == expected[0].id)
+            .collect::<Vec<_>>(),
+        vec![&expected[0]]
+    );
 }
 pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     check_authored();

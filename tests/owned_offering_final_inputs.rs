@@ -1,6 +1,5 @@
 //! Actual Offering input assembly using the accepted source-property contract.
-#[path = "support/owned_offering_final_inputs.rs"]
-mod family;
+use native::fixture::component as family;
 #[path = "support/owned_release_migration_preservation.rs"]
 mod migration_preservation;
 #[path = "support/owned_offering_final_inputs_native.rs"]

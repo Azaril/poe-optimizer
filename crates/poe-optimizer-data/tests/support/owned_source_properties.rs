@@ -2,6 +2,9 @@
 use super::*;
 use poe_optimizer_core::{owned_readiness::*, owned_source_properties::*};
 
+#[path = "owned_generated_source_properties.rs"]
+mod generated;
+
 fn source_owner() -> SchemaSubject {
     SchemaSubject::Definition(DefinitionAddress::Skill(id("parent")))
 }
@@ -72,6 +75,13 @@ fn fixture_with_rules(edit: impl FnOnce(&mut RulePackageInput)) -> Fixture {
 fn fixture_with(
     edit_schema: impl FnOnce(&mut SchemaPackageInput),
     edit: impl FnOnce(&mut RulePackageInput),
+) -> Fixture {
+    fixture_with_stages(edit_schema, edit, |_| {})
+}
+fn fixture_with_stages(
+    edit_schema: impl FnOnce(&mut SchemaPackageInput),
+    edit: impl FnOnce(&mut RulePackageInput),
+    edit_stages: impl FnOnce(&mut EvaluationStagesInput),
 ) -> Fixture {
     let mut f = Fixture::with(
         |schema| {
@@ -186,6 +196,7 @@ fn fixture_with(
                 skills: vec![],
                 programs: complete(programs),
             });
+            edit_stages(stages);
         },
     );
     let mut prep = f.preparation.input().clone();
@@ -228,13 +239,13 @@ fn fixture_with(
         relations: complete(vec![SourcePropertyRelation {
             id: key("source"),
             owner: SupportTargetDefinition::Skill(id("parent")),
-            occurrence: SourcePropertyOccurrence::AuthoredSkillUseV1,
+            occurrence: SourcePropertyOccurrence::AuthoredSkillUse {},
             aliases: SourcePropertyAliasPolicy::RejectSharedBackingGemV1,
             context: SourcePropertyContext::PlayerScenarioV1,
             census: SourcePropertyCensus::ExactSelectedPositionV1,
             census_stage: key("source-census"),
             effects: complete(vec![SourcePropertyEffect {
-                endpoint: SourcePropertyEffectEndpoint::DirectOwner {},
+                endpoint: SourcePropertyEffectEndpoint::OwnerSkill {},
                 admission: SupportAdmissionContext::AssignedSkill,
             }]),
             inputs: vec![id("source-input")],
@@ -251,7 +262,10 @@ fn fixture_with(
                 counted: true,
                 programs: complete(vec![key("source-supported")]),
             }]),
-            assembly: complete(vec![key("source-assembly")]),
+            assembly: complete(vec![SourcePropertyAssemblyProgram {
+                program: key("source-assembly"),
+                binding: SourcePropertyAssemblyBinding::InputOwner,
+            }]),
             non_hidden_count: id("source-count"),
         }]),
     });
@@ -472,9 +486,9 @@ fn source_wire_is_strict_and_versions_do_not_gain_authority() {
         assert!(serde_json::from_value::<SupportReceivingInput>(value).is_err());
     }
     assert_eq!(
-        serde_json::to_value(SourcePropertyEffectEndpoint::DirectOwner {}).unwrap(),
-        serde_json::json!({ "kind": "direct_owner" }),
-        "strict empty-struct decoding must preserve the Direct endpoint wire"
+        serde_json::to_value(SourcePropertyEffectEndpoint::OwnerSkill {}).unwrap(),
+        serde_json::json!({ "kind": "owner_skill" }),
+        "strict empty-struct decoding must preserve the owner Skill endpoint wire"
     );
     let mut generated = serde_json::to_value(SourcePropertyEffectEndpoint::Generated {
         path: vec![],
@@ -505,7 +519,7 @@ fn source_channels_inputs_programs_and_stage_order_are_exact() {
     relation(&mut raw).external.members.clear();
     f.bad(raw, "lacks a complete relation");
     let mut raw = f.input.clone();
-    relation(&mut raw).assembly.members = vec![key("unknown")];
+    relation(&mut raw).assembly.members[0].program = key("unknown");
     f.bad(raw, "unknown source property program");
     let mut raw = f.input.clone();
     relation(&mut raw).census_stage = key("source-properties");
@@ -532,7 +546,7 @@ fn source_endpoints_cannot_alias_duplicate_or_infer_owned_actor_membership() {
     relation(&mut raw).effects.members[0].admission = SupportAdmissionContext::ReceivingSkill {
         summoner_path: None,
     };
-    f.bad(raw, "Direct owner admission");
+    f.bad(raw, "assigned owner admission");
     let mut raw = f.input.clone();
     relation(&mut raw).effects.members[0] = SourcePropertyEffect {
         endpoint: SourcePropertyEffectEndpoint::Generated {

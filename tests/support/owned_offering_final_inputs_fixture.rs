@@ -4,6 +4,9 @@
 //! may replace it with checked rule/receiver data through the shared plan seam.
 //! No final-input literals, attached minion or complete-build claim exist.
 #[allow(dead_code)]
+#[path = "owned_offering_final_inputs.rs"]
+pub(crate) mod component;
+#[allow(dead_code)]
 #[path = "owned_amulet_level_copy_native.rs"]
 mod item_fixture;
 #[allow(dead_code)]
@@ -29,6 +32,7 @@ use std::{collections::BTreeSet, path::PathBuf, sync::OnceLock};
 
 pub const SNAPSHOT: &str = "fixture-pre-amulet-snapshot";
 pub const TABLE_OBSERVATION: &str = "observe-offering-table";
+pub const DIRECT_BOUNDARY: &str = "fixture-direct-item-applicability";
 
 #[derive(Clone)]
 pub struct World {
@@ -55,16 +59,16 @@ impl World {
     pub fn load_release(path: &std::path::Path) -> Self {
         Self::load_release_with_item_owner(path, None)
     }
-    /// Successor components may supply an independently authenticated replacement
-    /// owner. Historical callers retain the exact original numeric/copy check.
-    /// This selects stored bodies; it never rewrites a published rule for a test.
+    /// Joined components supply actual routing after this loader. Standalone
+    /// Offering declares a finite direct-applicability boundary alongside its
+    /// explicit snapshot input. Both execute the current stored modifier bodies.
     pub fn load_release_with_item_owner(
         path: &std::path::Path,
         expected_item_owner: Option<&DefinitionRules>,
     ) -> Self {
         let before = release::inventory(path);
         let endpoint = release::load(path);
-        crate::family::assert_endpoint(&endpoint);
+        component::assert_component(&endpoint);
         let data = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("data/owned/poe2/3887ae68/offering-final-inputs");
         let bindings: Value = shared::read(data.join("bindings.json"));
@@ -619,30 +623,27 @@ fn install_items(
         .find(|o| o.owner == subject(modifier.clone()))
         .unwrap()
         .clone();
-    let component = items
-        .native
-        .recipe
-        .rules
-        .owners
-        .iter()
-        .find(|o| o.owner == actual.owner)
-        .unwrap();
-    let mut component_programs = if let Some(expected) = expected_item_owner {
+    let routing = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("data/owned/poe2/3887ae68/ordinary-item-routing");
+    let authored: Value = shared::read(routing.join("authoring.json"));
+    let bytes = std::fs::read(routing.join("routing-authoring.json")).unwrap();
+    assert_eq!(
+        format!("{:x}", Sha256::digest(&bytes)),
+        authored["artifact_sha256"]["routing-authoring"]
+    );
+    let routing: Value = serde_json::from_slice(&bytes).unwrap();
+    let expected: DefinitionRules = decode(&routing["owner"]);
+    assert_eq!(actual.owner, expected.owner);
+    assert_eq!(
+        actual.programs.members, expected.programs.members,
+        "exact current authored item-routing programs"
+    );
+    if let Some(expected) = expected_item_owner {
         assert_eq!(
             &actual, expected,
-            "exact authenticated successor item owner"
+            "exact independently authenticated joined item owner"
         );
-        expected.programs.members.clone()
-    } else {
-        component.programs.members.clone()
-    };
-    component_programs.sort_by(|a, b| a.id.cmp(&b.id));
-    let mut actual_programs = actual.programs.members.clone();
-    actual_programs.sort_by(|a, b| a.id.cmp(&b.id));
-    assert_eq!(
-        component_programs, actual_programs,
-        "exact published numeric/copy bodies"
-    );
+    }
     assert!(!actual.programs.is_complete());
     let templates: BTreeSet<_> = items
         .native
@@ -861,6 +862,53 @@ fn install_items(
         .members
         .push(snapshot);
     programs.push((class, key(SNAPSHOT)));
+    let applicability: StatDefId = def("def.0000000000003306");
+    add_definition(
+        w,
+        endpoint
+            .input()
+            .recipe
+            .schema
+            .definitions
+            .iter()
+            .find(|d| d.address() == applicability.address())
+            .unwrap()
+            .clone(),
+    );
+    w.base.inner.owner_mut(subject(applicability.clone()));
+    if expected_item_owner.is_none() {
+        // This is a declared component boundary, not a game default. Joined
+        // routing fixtures install the actual applicability program instead.
+        for item in &items.native.build.items {
+            let owner = subject(item.template.clone());
+            w.base
+                .inner
+                .owner_mut(owner.clone())
+                .programs
+                .members
+                .push(RuleProgram {
+                    id: key(DIRECT_BOUNDARY),
+                    context: RuleEntityKind::EquipmentUse,
+                    reads: vec![],
+                    nodes: vec![RuleNode {
+                        id: key("value"),
+                        expression: RuleExpression::Literal {
+                            value: ParameterValue::Boolean(true),
+                        },
+                    }],
+                    effects: vec![RuleEffect {
+                        id: key("direct"),
+                        when: None,
+                        effect: RuleEffectKind::Derive {
+                            entity: RuleEntity::Current,
+                            stat: applicability.clone(),
+                            value: key("value"),
+                        },
+                    }],
+                });
+            programs.push((owner, key(DIRECT_BOUNDARY)));
+        }
+    }
     w.base.inner.build.items = items.native.build.items;
     w.base.inner.build.equipment = items.native.build.equipment;
     (programs, actual)
