@@ -47,91 +47,93 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest checkpoint: selected Player off-hand facts
+## Latest checkpoint: complete increased-attribute memberships
 
-The accepted slot-read boundary now has its first published game-data producers.
-Two EquipmentUse capabilities classify all **1,756** injected item-base templates
-(193 Shield, 51 Focus). Shared Player Actor `332a` reads off-hand slot `0065` and
-derives selected empty-hand, Shield and Focus facts. Occupancy guards ordinary
-lazy reads; missing classification stays unresolved. IDs `332f` through `3333`
-and 1,757 appended programs use existing V21 operations. Production Rust APIs
-and evaluator algorithms are unchanged. All prior owner closures survive.
+The [increased-attribute packet](../data/owned/poe2/3887ae68/attribute-increase-membership/README.md)
+completes six INC query groups with **34 effect memberships** from nine existing
+Complete passive owners. Their programs are unchanged. The full family supplies
+17 effects per pass, with Strength/Dexterity/Intelligence sums of 29/24/22
+percentage points. These fixed integral values sum exactly in every permutation;
+the binder rejects duplicate active semantic positions. Authored ranks are
+deterministic enumeration, not an adoption of PoB table traversal order.
 
-Selected equipment and effective equipment remain distinct. PoB can disable or
-replace a selected item before its condition branch. The original-call witness
-covers all five unchanged builds plus empty, Shield, swap and synthetic disabling
-controls. Its sixty fresh loads pass in **159.39s**, with independent repeats,
-unhooked scalar-output comparisons and byte-identical JIT-on/off reports.
-`runs/owned-player-offhand-source-02` retains full diagnostics; checked-in compact
-vectors are authenticated by exact report projections and source/item joins.
-The test compares scalar outputs and excluded field inventories, not the full
-output object graph. Source01 stopped before loads on an XML fixture assumption;
-the correction preserves nested roll metadata without relaxing comparisons.
+Publication scans every owner program and separately rejects matching application
+programs. Unknown, inactive or zero contributions cannot escape that census.
+The explicit six BASE groups and global query inventory remain Partial, as do
+all pre-existing Class/Actor/item coverage markers. There are no new definitions,
+programs, receivers, opcodes, runtime algorithms or schema revisions. This closes
+a current contributor family, not final attributes or any original build.
 
-The disabling control parses `Uses both hand slots` through PoB's real item
-parser. The selected off-hand remains a Focus while both prepared environments
-are empty. Native selection facts preserve the Focus. This explicitly bounds
-the component: it supplies neither effective modifier conditions nor equipment
-filtering, substitutions, legality, Unarmed or Unencumbered behavior. No source
-defect exception, retry-until-pass or named-build native branch was added.
+Source evidence reuses the authenticated original-call pipeline in
+`runs/owned-attribute-pipeline-source-05`: both passes and MAIN/CALCS for all five
+unchanged originals, plus unhooked/replay controls and identical JIT-on/off
+reports. Independent whole-list passive constructor tests were rerun and pass
+(**3.22s / 2.86s**). They cover all nine donors, including donors absent from the
+five selected examples. Exact typed values reconcile JSON integer/decimal
+spellings without numerical tolerance; stored source projections retain their
+original representation.
 
-Publication and all-five preservation checks pass in **27.24s**:
-`runs/owned-player-offhand-01/validation.json`. The exact recipe inverse removes
-only the five definitions and 1,757 programs. Every earlier body, closure,
-imported value, local identity, source disposition, selected issue and all
-**110 queries** survives; a second publication is byte-identical. No input issue
-or full-build owner is closed, and source authoring payloads stay outside the
-runtime release. Complete native builds remain **0/5**.
+Publication passes in **21.22s** at
+`runs/owned-attribute-increase-01/validation.json`. The exact whole-input inverse
+restores only these memberships and the appended provenance. All five imports,
+local identities, dispositions, selected issues and **110 queries** survive.
+A second publication is byte-identical, and authoring/source payloads stay out
+of the runtime package. Complete native builds remain **0/5**.
 
-Five native integration tests pass in **3.65s** using the actual published
-programs in an explicitly finite domain. They cover all ten source projections,
-empty/Shield/Focus/other types, exact opposite-hand and same-item uses, active
-loadouts, missing classifications, ambiguous/unknown occupants and restoration
-of real Partial coverage. Query order/subsets, A/B/A scratch reuse and four Rayon
-workers produce deterministic facts. The fixture excludes unrelated item/Class
-mechanics rather than claiming complete original requests. The existing checked
-test helper now accepts explicit queries; empty-query callers still delegate
-through the same compilation path. No second engine fixture was introduced.
+Five native tests pass in **5.27s**, using all nine actual passive bodies, all six
+actual scalar consumers and all six actual guarded empty-MORE producers. They
+verify selected original occurrences, the full donor family, missing/unknown
+contributors, restored Partial coverage, duplicate positions, inactive loadouts,
+order and ID permutations, A/B/A scratch reuse and four Rayon workers. Only BASE
+subtotals and excluded mechanics are finite fixture authority; these are component
+results, not complete original-build evaluations.
 
-Authored-data checks, strict workspace/all-features/all-targets Clippy and
-formatting for both changed packages pass. Logs are
-`runs/owned-player-offhand-{authored-tests-01,publication-tests-01,native-tests-01,clippy-01,fmt-01}.log`.
-No production Rust library changed, so prior WASM and compiled-boundary results
-are retained rather than claiming new runs. Remote CI for `4f7b535` was still
-pending at the checkpoint check; the older run's two known stale V21-test
-failures were already corrected in that commit. Remote success is unconfirmed.
+Two authored tests, strict workspace/all-targets/all-features Clippy and changed
+package formatting pass. Logs use `runs/owned-attribute-increase-*`; failed draft
+runs are retained alongside the passing authored `03` and Clippy `02` logs.
+The changed negative-test assertion was rebuilt and rerun after the final Clippy
+correction (`native-tests-02`, 2.64s).
+No production Rust library changed; prior WASM and compiled-boundary evidence is
+retained without claiming a new run.
 
-The next numerical blocker is the actual membership and semantic order of the
-six BASE and six INC attribute queries. Their inventories remain Partial with
-no declared members. Audit the complete potential contributor set, including
-existing item paths and inactive alternatives; one original's observed subtotal
-cannot close it. Five inherent-bonus control Stats `3315` through `3319` also
-lack producers and are separate flag queries, not consumers of these off-hand
-facts. Keep shared Actor/Class coverage Partial and resolve these inputs before
-publishing final Player Life. The [Class audit](owned-class-coverage-audit.md#next-bounded-producer-packet-off-hand-structural-facts)
-records the new evidence and remaining effective-equipment boundary.
+Remote CI for `7b7fb1b` identified `owned_skill_usage_inputs` as failing on both
+OSes. Its asset test still used pre-migration JSON paths. The test now checks the
+current unified policy, exact gem/skill/policy/parameter identities and typed
+occurrence source. All six ordinary tests in that target pass locally; its
+optional source replay remains ignored. Public check annotations identified the
+target; authenticated full logs were unavailable. Remote success is not yet
+confirmed for this correction.
+
+The next numerical blocker is BASE membership/order, including current signed,
+scaled item contributors. The [boundedness audit](owned-attributes.md#base-membership-proof-remains-open)
+records why per-item integer quantization alone is insufficient and the concrete
+source-order investigation. Separately, the five inherent-bonus flags need
+multiple-source aggregation. The [Boolean contribution proposal](owned-boolean-contributions-proposal.md)
+is pending owner review; do not implement that contract or insert false defaults
+until the direction is accepted. Effective equipment conditions and final Life
+remain separate obligations.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-player-offhand-01/package` as the integration baseline. Its
+Use `runs/owned-attribute-increase-01/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. All freshly regenerated sidecars use V21;
 native schema V6 and operations V21 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-skill-participation-02/package`, input
-`dee1994d2c6a20230b75f6ab30f44af163b8beb43cf2a1ce11e08f993a0ff70e`.
+Its immediate predecessor is `runs/owned-player-offhand-01/package`, input
+`98d7a8cbd812535194ea4379a0bfc9ac910abb7b352888c4ebd9521144ac3520`.
 Historical endpoint paths authenticate useful stored evidence; they are not
 separate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `98d7a8cbd812535194ea4379a0bfc9ac910abb7b352888c4ebd9521144ac3520` |
+| Release input | `29e4e9ef2b321bb6c802d9970666e8bf85afb805830ca9c2bbfc03bceaafb1ef` |
 | Registry | `274df864ba96949566f0ab5890debb9f487e6ebfa205ac23885362f1fe646310` |
 | Definitions content | `1d65ca708007732943046d2d000aad831673ab71a95a2f45309a9ccd5ed395ba` |
-| Rules | `a4f90b501700dd6e53c11cf5e48960b2b7a9cf38d1b0877aac52736b50591762` |
-| Compiled rules | `ad2346294f9f73cfc1e93e14c53c5397054065f35b7580be69e19624319812c4` |
+| Rules | `5fd42ba0744bd4ebddc7d671b68345bdcbb424d1e6115c93b3f1ba06b4b76cba` |
+| Compiled rules | `e82af4f422aa63e3e018d19d041f941f821be53e70d67fe091a065d2d1aff6bf` |
 | Routing | `af0035ca19a1d020b72ead006f12eba1e03d53f146c2512a72c6ac9710a868cf` |
 | Mapping | `24cfc49f303943403dfe15ed5544f91cd475fbdd8658e25f34e83149a5fe24d3` |
 | Skill roles | `a57d4b2fcfdbe171de9feb083f4d5111694013314deec46f0ee81b5f3559e3ae` |
@@ -140,10 +142,10 @@ separate production evaluator modes.
 | Items | `296cac134d72ddb3305653527e50c847433a8f394775adfab442a27c2d638e31` |
 | Item source | `7579e163f706e30962fa42f1eadf607b7c32c7fb32a30ec8ee51b7fc17c2c188` |
 | Tree policy | `1745ca6dec339b625940cdf49859bc8a539be426b7a623260b09098bd7f2a098` |
-| Authoring commitment | `21db71a180d12fc41c61b999712b3d01b279bf334fa4207b6cc293441101c3ec` |
+| Authoring commitment | `4bd44e527f9f3307eeebd0726ae231cf49f72b1370ea33df3ec5147d144020a8` |
 | Schema / operations | V6 / `owned-domain-operations-v21` |
 
-The eighteen package files total **62,678,721 bytes**, with 128 provenance rows.
+The eighteen package files total **62,688,591 bytes**, with 129 provenance rows.
 Definitions use `pob-3887ae68-player-offhand-facts-v1`; the independent rules release
 remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3333`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
@@ -184,12 +186,13 @@ changes the 0/5 complete-build result.
 attribute consumers and guarded empty-MORE producers are implemented and tested.
 Use the explicit query producers instead of fixture factor literals. V21 rejects
 an unmatched potential effect as `PlanError::Invalid`, even if inactive; retain
-this conservative admitted domain. It does not close BASE/INC membership, Class
-coverage or any original build.
+this conservative admitted domain. The six current INC memberships are now
+Complete. BASE/global inventories, Class coverage and original builds remain open.
 
-Next establish real BASE/INC contributor closure and semantic ordering from the
-all-five breadth census. Retain item-admission gaps and inactive-loadout controls.
-Large cancellation and fractional sums need their own order evidence. Nonempty
+Next establish real BASE contributor closure and semantic ordering, including
+all current item donors and inactive alternatives. Reuse the importer's explicit
+modifier-order proof; raw saved line order is not source modifier-list order.
+Signed scaling and large cancellation need their own bounds/order evidence. Nonempty
 MORE grouping remains unresolved; there is no native cache-dependent mode.
 Comparison snapshots and stage-dependent donors remain on the accepted finite
 stage plan. Resolve inherent-bonus controls before connecting final Player Life.
@@ -222,9 +225,12 @@ substitute Action query selection or template identity for hand state. Keep all
 eight Class markers and shared Actor `332a` Partial. The audit records exact
 source readers, current consumers and the smallest proof/control work.
 
-After that, the six Add and six Increase query inventories still require actual
-membership and ordering proof. Inherent-control Stats3315–3319 currently have no
-producers; do not add five false defaults. No final Player Life recipe exists.
+The six Add query inventories still require actual membership and ordering
+proof; the six Increase inventories are Complete for the current rule package.
+Inherent-control Stats3315–3319 currently have no producers; review the proposed
+[typed Boolean aggregation contract](owned-boolean-contributions-proposal.md)
+before implementing multiple-source flag producers. Do not add five false
+defaults. No final Player Life recipe exists.
 These are distinct production blockers, not further finite-fixture exercises.
 
 **Input resume:** keep Original05's five selected issues and 73 origins linked
@@ -968,7 +974,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
-| Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation; BASE/INC membership and the global query inventory remain Partial. Next finish actual contributor coverage. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
+| Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation; six current INC memberships are now Complete; BASE membership and the global query inventory remain Partial. Next prove current item-inclusive BASE bounds/order and review typed Boolean flag aggregation. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
 | CI regression, timeout and infrastructure | Earlier V18/V20 expectation regressions and the combined Windows compile bottleneck are fixed. Run [37409208353](https://github.com/Azaril/poe-optimizer/actions/runs/37409208353) at `230494e` completed all twelve Windows/Linux jobs successfully. Windows PoB's combined compilation/test step took 3h28m40s, within its prior successful duration range; no hang or failure was found. At this pre-push check, run37514924385 at `da49f3f` was pending behind active run37499216040 at `81227b8`. Local checks for this checkpoint pass, but CI success for the current `main` revision is not yet confirmed. Read the latest [main workflow runs](https://github.com/Azaril/poe-optimizer/actions/workflows/rust.yml) before treating a newer revision as green; pending runs can be superseded by the next checkpoint. Main retains running validation and coalesces pending revisions. Separate compile/test timings before choosing further sharding. Keep every package/target and required aggregate check; infrastructure delays do not justify dropping coverage. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |

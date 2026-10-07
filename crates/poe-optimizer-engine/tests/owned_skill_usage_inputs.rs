@@ -290,7 +290,7 @@ fn published_assets_only_add_the_declared_boolean_usage_owner() {
     assert_eq!(input.skill, def(0x2a2));
     assert_eq!(
         input.primary_supply,
-        pain::slot(SlotOwnerDefId::Gem(input.gem), 0x3221)
+        pain::slot(SlotOwnerDefId::Gem(input.gem.clone()), 0x3221)
     );
     let extension: Value = asset("extension.json");
     assert_eq!(extension["schema"].as_array().unwrap().len(), 2);
@@ -314,12 +314,22 @@ fn published_assets_only_add_the_declared_boolean_usage_owner() {
             .all(|owner| owner["programs"]["closure"]["kind"] == "partial")
     );
     let policy: Value = asset("policy.json");
+    assert_eq!(policy["kind"], "pob_occurrence_usage_v3");
+    let physical = policy["physical"].as_array().unwrap();
+    assert_eq!(physical.len(), 1);
+    assert_eq!(physical[0]["gem"], json!(input.gem));
+    assert_eq!(physical[0]["primary"], json!(input.skill));
+    let policies = physical[0]["policies"].as_array().unwrap();
+    assert_eq!(policies.len(), 1);
+    assert_eq!(policies[0]["policy"], json!(input.policy));
+    let parameters = policies[0]["parameters"].as_array().unwrap();
+    assert_eq!(parameters.len(), 1);
+    assert_eq!(parameters[0]["slot"], json!(input.parameter));
+    assert_eq!(parameters[0]["source"]["kind"], "occurrence");
+    let source = &parameters[0]["source"]["value"];
+    assert_eq!(source["missing"]["kind"], "pending");
     assert_eq!(
-        policy["gems"][0]["parameters"][0]["value"]["missing"]["kind"],
-        "pending"
-    );
-    assert_eq!(
-        policy["gems"][0]["parameters"][0]["value"]["codec"]["codec"]["value"]["tokens"],
+        source["codec"]["codec"]["value"]["tokens"],
         json!([{"token":"true","value":true},{"token":"false","value":false}])
     );
 }

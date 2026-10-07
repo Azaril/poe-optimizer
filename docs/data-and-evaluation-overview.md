@@ -101,8 +101,9 @@ for those title controls. They are not a corrupted unique or an observed obtaina
 item, and no unchanged original build is excluded. Native item names stay cosmetic.
 
 The [intrinsic Player Life packet](../data/owned/poe2/3887ae68/player-intrinsic-life/README.md)
-now adds `12 × CharacterLevel + 16` as injected Class-owned rule data to canonical
-Life `311a`. The existing native operations read the typed character level; no
+adds `12 × CharacterLevel + 16` to canonical Life `311a`. The accepted
+[existing-actor migration](owned-existing-actor-rule-ownership-proposal.md) now
+owns this shared rule on Player Actor `332a`, independently of class. The existing native operations read the typed character level; no
 Lua multiplier lookup, source-specific override, class switch or build fixture
 appears in runtime code. All eight class owners retain their Partial coverage.
 This contribution is separate from final attributes, inherent bonuses and final
@@ -130,10 +131,18 @@ It preserves each source occurrence and item quantization boundary, without
 adding final attribute producers or changing Partial coverage. Its successor
 [consumer packet](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md)
 adds six receiver bodies over those streams, with distinct first-pass outputs
-and final attribute IDs. BASE/INC memberships stay Partial and rank-free;
-effective-MORE Stats require explicit producers and have no default. The finite
-native fixture exercises actual class/choice occurrences; conditional snapshots,
-complete original-build attributes and final Life are still unresolved.
+and final attribute IDs. Six effective-MORE producers now use complete empty
+Multiply queries and reject every potential incoming multiplier. The
+[increased-attribute packet](../data/owned/poe2/3887ae68/attribute-increase-membership/README.md)
+completes six INC memberships from all nine existing donor owners. Their fixed
+small integer values sum exactly under any permutation; no source traversal
+order is imported. BASE and global contributor inventories remain Partial.
+Native component tests use all five selected INC occurrences and all nine donor
+bodies, with BASE projections explicitly confined to fixtures. Conditional
+snapshots, complete original-build attributes and final Life remain unresolved.
+Multiple-source inherent flags need the pending
+[Boolean aggregation contract](owned-boolean-contributions-proposal.md); the
+current implementation has no false-default shortcut.
 
 The [shared class-start root](../data/owned/poe2/3887ae68/class-start-root/README.md)
 has a source-proved empty intrinsic inventory. Its closure changes no class

@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "before": "98d7a8cbd812535194ea4379a0bfc9ac910abb7b352888c4ebd9521144ac3520",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-player-offhand-facts-v1",
+    "schema_version": 6,
+    "content_sha256": "1d65ca708007732943046d2d000aad831673ab71a95a2f45309a9ccd5ed395ba",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "274df864ba96949566f0ab5890debb9f487e6ebfa205ac23885362f1fe646310",
+  "rules": "a4f90b501700dd6e53c11cf5e48960b2b7a9cf38d1b0877aac52736b50591762",
+  "mapping": "24cfc49f303943403dfe15ed5544f91cd475fbdd8658e25f34e83149a5fe24d3",
+  "roles": "a57d4b2fcfdbe171de9feb083f4d5111694013314deec46f0ee81b5f3559e3ae",
+  "normalization": "8b5ba80475a40a89a7a7d952adf57aea76eb2927b13a12769fa5b928bff9c86e",
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "stages": [
+    {
+      "id": "strength-first",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331b"
+      },
+      "increase_query": "strength-first-increase",
+      "group": "ordinary",
+      "member_count": 7
+    },
+    {
+      "id": "dexterity-first",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331c"
+      },
+      "increase_query": "dexterity-first-increase",
+      "group": "ordinary",
+      "member_count": 5
+    },
+    {
+      "id": "intelligence-first",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331d"
+      },
+      "increase_query": "intelligence-first-increase",
+      "group": "ordinary",
+      "member_count": 5
+    },
+    {
+      "id": "strength-second",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331e"
+      },
+      "increase_query": "strength-second-increase",
+      "group": "ordinary",
+      "member_count": 7
+    },
+    {
+      "id": "dexterity-second",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331f"
+      },
+      "increase_query": "dexterity-second-increase",
+      "group": "ordinary",
+      "member_count": 5
+    },
+    {
+      "id": "intelligence-second",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003320"
+      },
+      "increase_query": "intelligence-second-increase",
+      "group": "ordinary",
+      "member_count": 5
+    }
+  ],
+  "contributors": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000abf"
+          }
+        }
+      },
+      "source_node_id": 116,
+      "source_rank": 1,
+      "program": "passive-view"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000b99"
+          }
+        }
+      },
+      "source_node_id": 1442,
+      "source_rank": 2,
+      "program": "passive-view"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000d18"
+          }
+        }
+      },
+      "source_node_id": 19424,
+      "source_rank": 4,
+      "program": "passive-view"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000d6f"
+          }
+        }
+      },
+      "source_node_id": 20895,
+      "source_rank": 5,
+      "program": "passive-view"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000f46"
+          }
+        }
+      },
+      "source_node_id": 27418,
+      "source_rank": 6,
+      "program": "passive-view"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000010a3"
+          }
+        }
+      },
+      "source_node_id": 3223,
+      "source_rank": 3,
+      "program": "passive-view"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000123b"
+          }
+        }
+      },
+      "source_node_id": 36822,
+      "source_rank": 7,
+      "program": "passive-view"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000016b7"
+          }
+        }
+      },
+      "source_node_id": 51707,
+      "source_rank": 8,
+      "program": "passive-view"
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000186e"
+          }
+        }
+      },
+      "source_node_id": 57047,
+      "source_rank": 9,
+      "program": "passive-view"
+    }
+  ],
+  "proof": {
+    "maximum_members_per_query": 7,
+    "minimum_literal": 3,
+    "maximum_literal": 8,
+    "full_member_sums": [
+      29,
+      24,
+      22,
+      29,
+      24,
+      22
+    ],
+    "meaning": "Explicit data ranks are deterministic enumeration only. Each direct Allocation member has a unique semantic position; binding rejects a second occurrence at that position. The fixed integral literals sum exactly in every order (at most 29 percentage points), independent of runtime resource limits. No PoB node traversal order is claimed."
+  },
+  "scope": {
+    "complete_increase_groups": 6,
+    "declared_effect_members": 34,
+    "unchanged_owners": 9,
+    "closed_existing_rule_owners": 0,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "new_receivers": 0,
+    "numeric_program_changes": 0,
+    "global_registry_closure_changed": false,
+    "base_membership_changed": false,
+    "source_admission_widened": false,
+    "whole_build_parity": false
+  }
+}

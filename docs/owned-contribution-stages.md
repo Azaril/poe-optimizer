@@ -29,8 +29,11 @@ permission to regroup values or treat attributes as resolved.
 The [consumer packet](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md)
 adds six receiver bodies, three distinct first-pass outputs and six explicit
 effective-MORE factor inputs. The second pass writes the existing final attribute
-IDs. Production BASE/INC query inventories remain Partial and rank-free; factor
-owners remain Partial with no producer. Complete final Player attributes and
+IDs. Six current INC query inventories are now Complete through the
+[reviewed membership packet](../data/owned/poe2/3887ae68/attribute-increase-membership/README.md).
+BASE and global inventories remain Partial. The guarded empty-MORE producers supply factors through complete
+empty Multiply queries; they reject every potential nonempty contribution.
+Nonempty grouping remains unresolved. Complete final Player attributes and
 Life therefore remain unavailable. No C0 or comparison snapshot is supplied.
 
 Ordinary rules already express explicit reads, lazy selection, comparisons, arithmetic,
@@ -116,7 +119,7 @@ C2=false. The calculation stops there; recomputing to convergence changes the me
 Stage BASE values must be Count quantities, because conditional scaling can produce a
 fraction before the final attribute round. The chosen cutover migrates ordinary
 providers at each occurrence to six pass-specific Count input channels, preserving
-old artifact compatibility and their integer conversion invariants. Separate pass
+occurrence identity and their integer conversion invariants. Separate pass
 channels prevent a future second-pass-dependent donor from contaminating the first
 pass or introducing a dependency cycle through a shared aggregate.
 

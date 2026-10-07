@@ -6,6 +6,70 @@
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
 
+## Archived 2026-10-06 checkpoint: selected Player off-hand facts
+
+The accepted slot-read boundary now has its first published game-data producers.
+Two EquipmentUse capabilities classify all **1,756** injected item-base templates
+(193 Shield, 51 Focus). Shared Player Actor `332a` reads off-hand slot `0065` and
+derives selected empty-hand, Shield and Focus facts. Occupancy guards ordinary
+lazy reads; missing classification stays unresolved. IDs `332f` through `3333`
+and 1,757 appended programs use existing V21 operations. Production Rust APIs
+and evaluator algorithms are unchanged. All prior owner closures survive.
+
+Selected equipment and effective equipment remain distinct. PoB can disable or
+replace a selected item before its condition branch. The original-call witness
+covers all five unchanged builds plus empty, Shield, swap and synthetic disabling
+controls. Its sixty fresh loads pass in **159.39s**, with independent repeats,
+unhooked scalar-output comparisons and byte-identical JIT-on/off reports.
+`runs/owned-player-offhand-source-02` retains full diagnostics; checked-in compact
+vectors are authenticated by exact report projections and source/item joins.
+The test compares scalar outputs and excluded field inventories, not the full
+output object graph. Source01 stopped before loads on an XML fixture assumption;
+the correction preserves nested roll metadata without relaxing comparisons.
+
+The disabling control parses `Uses both hand slots` through PoB's real item
+parser. The selected off-hand remains a Focus while both prepared environments
+are empty. Native selection facts preserve the Focus. This explicitly bounds
+the component: it supplies neither effective modifier conditions nor equipment
+filtering, substitutions, legality, Unarmed or Unencumbered behavior. No source
+defect exception, retry-until-pass or named-build native branch was added.
+
+Publication and all-five preservation checks pass in **27.24s**:
+`runs/owned-player-offhand-01/validation.json`. The exact recipe inverse removes
+only the five definitions and 1,757 programs. Every earlier body, closure,
+imported value, local identity, source disposition, selected issue and all
+**110 queries** survives; a second publication is byte-identical. No input issue
+or full-build owner is closed, and source authoring payloads stay outside the
+runtime release. Complete native builds remain **0/5**.
+
+Five native integration tests pass in **3.65s** using the actual published
+programs in an explicitly finite domain. They cover all ten source projections,
+empty/Shield/Focus/other types, exact opposite-hand and same-item uses, active
+loadouts, missing classifications, ambiguous/unknown occupants and restoration
+of real Partial coverage. Query order/subsets, A/B/A scratch reuse and four Rayon
+workers produce deterministic facts. The fixture excludes unrelated item/Class
+mechanics rather than claiming complete original requests. The existing checked
+test helper now accepts explicit queries; empty-query callers still delegate
+through the same compilation path. No second engine fixture was introduced.
+
+Authored-data checks, strict workspace/all-features/all-targets Clippy and
+formatting for both changed packages pass. Logs are
+`runs/owned-player-offhand-{authored-tests-01,publication-tests-01,native-tests-01,clippy-01,fmt-01}.log`.
+No production Rust library changed, so prior WASM and compiled-boundary results
+are retained rather than claiming new runs. Remote CI for `4f7b535` was still
+pending at the checkpoint check; the older run's two known stale V21-test
+failures were already corrected in that commit. Remote success is unconfirmed.
+
+The next numerical blocker is the actual membership and semantic order of the
+six BASE and six INC attribute queries. Their inventories remain Partial with
+no declared members. Audit the complete potential contributor set, including
+existing item paths and inactive alternatives; one original's observed subtotal
+cannot close it. Five inherent-bonus control Stats `3315` through `3319` also
+lack producers and are separate flag queries, not consumers of these off-hand
+facts. Keep shared Actor/Class coverage Partial and resolve these inputs before
+publishing final Player Life. The [Class audit](owned-class-coverage-audit.md#next-bounded-producer-packet-off-hand-structural-facts)
+records the new evidence and remaining effective-equipment boundary.
+
 ## Archived 2026-10-06 checkpoint: unified usage and first Sniper participation packet
 
 Physical, direct and generated occurrence usage now shares one typed policy

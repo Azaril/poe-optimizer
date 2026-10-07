@@ -26,8 +26,13 @@ add six ordinary typed receivers over those actual streams. First-pass Integer
 outputs use `3321`–`3323`; second-pass outputs retain the final attribute IDs.
 Each receiver reads named BASE/INC queries and a separate effective-MORE Factor
 Stat (`3324`–`3329`). The factor's composition remains a separate producer
-obligation. Production query memberships are Partial, without member ranks;
-factor owners have no producer or default. These bodies do not make final
+obligation. The guarded empty-MORE packet now supplies the six factors through
+complete empty Multiply queries, rejecting every potential incoming MORE effect.
+Nonempty factor grouping remains unresolved. The
+[increased-attribute packet](../data/owned/poe2/3887ae68/attribute-increase-membership/README.md)
+now completes six INC memberships (34 effects, nine existing owners), with
+small integral literals proving exact sums in any order. BASE membership and
+the global query inventory remain Partial. These bodies do not make final
 attributes available in an incomplete build.
 
 This separates the proven attribute formula from unresolved contribution
@@ -295,12 +300,39 @@ fixed groups to candidate occurrences with authored ranks and explicit item modi
 order. Its synthetic native tests preserve repeated occurrences, unknown inputs,
 whole-plan coverage and deterministic parallel results. The occurrence-preserving
 Count producers and six ordinary attribute consumers are now published under V21.
-Complete contributor membership/order, effective-MORE production and conditional
-snapshot bindings remain implementation work. The separate numerical
+The six current INC memberships and bounded empty-MORE producers are published.
+BASE membership/order, nonempty MORE grouping and conditional snapshot bindings
+remain implementation work. The separate numerical
 grouping policy is still unresolved: synthetic fresh/cached differences do not authorize
 source-cache entities, a second native mode or a gameplay rounding law. Establish the
 legal-input domain and discuss any remaining numerical-semantics change as required by
 the proposal's pending parity section. Final attributes and resources remain unresolved.
+
+### BASE membership proof remains open
+
+The current four item attribute producers retain signed raw quantities in
+`[-1e6, +1e6]`, substantial corruption scaling, and signed quality scaling.
+Per-occurrence integer quantization therefore does not prove an exact aggregate
+sum. With `N = 2^53 - 1`, binary64 `(N + 2) - N` and `(N - N) + 2` differ even
+though both final results fit the Integer domain. Configurable resource limits
+are not numerical-domain proofs. Do not publish arbitrary BASE ranks, restrict
+the proof to class/passive contributors, or silently omit current item donors.
+
+Source setup inserts class and prepared item modifiers before its passive loop;
+the latter uses source table traversal without an owned semantic order.
+Preserving the item prefix and proving the remaining nonnegative passive suffix
+order-independent is a possible investigation, not an accepted law. It still
+needs signed/cancellation bounds, final quantization and INC-scaling evidence.
+`Item:BuildModList` processes enchant, rune, class-requirement, implicit and
+explicit lines in separate groups; source item preparation can also transform
+those lists. Saved text-line order alone cannot establish contribution order.
+
+Owned item normalization already requires a reviewed complete membership/order
+proof before assigning `modifier_order`. Reuse that boundary. Next authenticate
+the actual prepared item-to-Player contributions and their ordering, identify
+what the admitted native domain can prove, and discuss any remaining numerical
+semantics change. Source UI/cache behavior is not automatically a native game
+rule. This investigation is separate from complete increased-attribute membership.
 
 ## Breadth and integration gates
 

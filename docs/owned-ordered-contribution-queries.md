@@ -49,8 +49,11 @@ Core/Data tests cover the closed V21 capability, historical omitted-field bytes 
 
 The attribute consumer checkpoint binds real Original05 class/choice occurrences
 to the same six receiver bodies in a finite fixture, using authenticated source
-record order. Production memberships remain Partial and contain no ranks;
-effective MORE remains an explicit unresolved Stat dependency. The next coverage
-checkpoint must establish the admitted candidate domain and every relevant member
-before making a final metric available. Structural tests and a finite fixture do
-not certify a complete original build.
+record order. The guarded empty-MORE packet now supplies six explicit factors
+for a proved empty Multiply domain. The increased-attribute packet completes
+six INC groups with 34 memberships across all nine current donor owners. Their
+integral literals have maximum sums 29/24/22, so every permutation is exact;
+explicit ranks do not claim source table iteration semantics. Publication scans
+owner programs and rejects matching application programs. BASE and global
+inventories remain Partial. Complete current INC membership alone does not
+certify a complete original build.
