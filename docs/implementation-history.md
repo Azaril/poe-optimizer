@@ -1,10 +1,55 @@
-> Historical snapshots through fixed Spirit recognition on 2026-10-07.
+> Historical snapshots through global Energy Shield inputs on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: global Energy Shield inputs
+
+The [global Energy Shield packet](../data/owned/poe2/3887ae68/global-energy-shield-inputs/README.md)
+adds the bounded untagged integer form of increased maximum Energy Shield. One
+modifier and 24 slots (`3334`–`334c`) use five native programs, including the
+existing numeric compiler, to produce percentage Increase contributions to
+Player channel `29f0`. The item-local ES family stays separate. All 1,756 template
+memberships remain Partial; there is no new public model, operation, receiver,
+complete contributor set or final ES calculation.
+
+Fresh PoB source checks pass in **7.23s**, with identical JIT-on/off reports
+(`runs/owned-global-energy-shield-source-01`). They retain the selected Original04
+44% line, both dormant Original05 Sapphire lines (20%/16%), 24 constructor
+controls, six formatting controls and local/global armour contrasts. Native
+component checks exercise all five real programs on **11 source-derived cases**,
+including zero and the supported upper boundary, exact serial/1-thread/4-thread
+Rayon agreement and scratch reuse after missing inputs. These direct facts do
+not certify provider binding or execution of modifier transforms.
+
+All-five publication, **20 import controls** and native component checks pass in
+**49.52s** (`runs/owned-global-energy-shield-03/validation.json`). Complete drafts,
+allocator state, saved selections and all 110 queries are preserved; exact leaf
+inverses account for source-side diagnostic changes. Rebuilding is byte-identical.
+Original04's +68 Life now has a recognized grammar but still lacks a proven
+source category. A dormant Original05 jewel's next Critical Hit Chance line is
+recognized lexically, with Partial coverage and no canonical modifier. **No new
+canonical modifier is emitted in any unchanged original.** Selected issue counts
+remain **107/117/109/123/5** and complete native evaluations remain **0/5**.
+
+The final authored check passes (0.01s), strict workspace/all-targets/all-features
+Clippy passes, and both changed packages pass formatting. Production Rust
+libraries are unchanged; this checkpoint does not claim a fresh full-suite or
+WASM run. GitHub [37552883848](https://github.com/Azaril/poe-optimizer/actions/runs/37552883848)
+at `0ff9210` is green; [37646478601](https://github.com/Azaril/poe-optimizer/actions/runs/37646478601)
+at `47f3560` was still running at the latest check. Failed draft checks are kept
+as diagnostics; only `owned-global-energy-shield-03` is the new integration base.
+
+**Next priority:** advance Original05's generated Sand Djinn and item Firebolt
+requested-participation inputs using the already accepted model. More isolated
+item grammar will not resolve its five selected obligations. The separate
+[Boolean contribution proposal](owned-boolean-contributions-proposal.md) still
+awaits owner review; the shared Player slot relation is already accepted and
+implemented, with selected and effective equipment kept distinct.
+
 
 ## Archived 2026-10-07 checkpoint: fixed Spirit recognition and BASE ordering evidence
 

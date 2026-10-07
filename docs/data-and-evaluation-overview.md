@@ -90,7 +90,9 @@ the inline properties used for catalyst scaling. All five new programs pass
 controls and complete all-five preservation pass. Item source categories still
 prevent new canonical modifiers in the unchanged originals, so the issue counts
 and 0/5 result are unchanged. Work now prioritizes generated Sand Djinn/Firebolt
-participation in Original05 through the already accepted usage/readiness model.
+participation in Original05 through the existing saved-usage model. The next
+audit found that generated final-input preparation needs an ownership extension;
+the accepted participation contract alone cannot make those targets ready.
 Anoints are a separate future model obligation: the current pool-only grant
 contract cannot authorize a particular passive or execute granted allocations.
 
@@ -640,6 +642,16 @@ native test path removes the placeholder final-level provider and consumes
 actual raw Gem inputs. Its already-admitted, item-free boundary is explicitly
 separate from full-build support. See the
 [source-property contract](owned-source-property-preparation-proposal.md).
+
+The generated-source audit found a specific implementation gap: the relation
+discovers authored SkillUses, so tree-generated Sand and item-generated Firebolt
+cannot themselves own its collected properties. Their raw level/quality slots
+remain Partial and are not final inputs. The [proposed extension](owned-generated-source-properties-proposal.md)
+keeps the exact Skill occurrence as property owner and invokes its exact
+declaring provider for final projection. The owner accepted it on 2026-10-07; implementation remains pending. Saved
+participation transport now adds nine exact preferences across Originals01/05,
+with all-five inverses and 18 import controls passing. This publishes no
+readiness and closes none of Original05's five selected obligations.
 
 The Offering integration exposed an earlier implementation limit: item programs
 derive typed facts on EquipmentUse and Modifier occurrences, which stages V3

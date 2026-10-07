@@ -47,67 +47,59 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest checkpoint: global Energy Shield inputs
+## Latest checkpoint: exact generated participation inputs
 
-The [global Energy Shield packet](../data/owned/poe2/3887ae68/global-energy-shield-inputs/README.md)
-adds the bounded untagged integer form of increased maximum Energy Shield. One
-modifier and 24 slots (`3334`–`334c`) use five native programs, including the
-existing numeric compiler, to produce percentage Increase contributions to
-Player channel `29f0`. The item-local ES family stays separate. All 1,756 template
-memberships remain Partial; there is no new public model, operation, receiver,
-complete contributor set or final ES calculation.
+The [generated participation packet](../data/owned/poe2/3887ae68/generated-participation/README.md)
+reuses existing policy `332b` and required group/occurrence inputs `332c/332d`
+in four reviewed occurrence recipes: manual Sand, tree-generated Sand and the
+two item Firebolt source frames. This produces **nine new exact preferences**:
+two in Original01 and seven in Original05. Generated preferences use
+`WhenExactSourceSelected`; manual preferences remain required. Original04's
+unresolved provider and archived generated source-axis joins remain unresolved.
+No definition, program, readiness inventory or complete usage claim changes.
 
-Fresh PoB source checks pass in **7.23s**, with identical JIT-on/off reports
-(`runs/owned-global-energy-shield-source-01`). They retain the selected Original04
-44% line, both dormant Original05 Sapphire lines (20%/16%), 24 constructor
-controls, six formatting controls and local/global armour contrasts. Native
-component checks exercise all five real programs on **11 source-derived cases**,
-including zero and the supported upper boundary, exact serial/1-thread/4-thread
-Rayon agreement and scratch reuse after missing inputs. These direct facts do
-not certify provider binding or execution of modifier transforms.
+The retained witness authenticates both identical JIT reports, eight source
+cases, three lifecycle stages, both calculation modes and all fifteen original
+occurrences. No source VM was rerun. Source preview overrides remain diagnostic.
+All three Rust target tests pass in **34.98s**, including full publication,
+byte-identical rebuilding, a whole release-input inverse, exact all-five draft
+and sidecar inverses and **18 import controls**. False values survive; missing
+or malformed values retain an explicit Pending binding and the other Boolean.
+Independent manual/tree/item occurrences remain independent. The allocator,
+saved selections, all 110 queries and selected issues **107/117/109/123/5** are
+preserved. Complete native builds remain **0/5**, with no calculation run.
 
-All-five publication, **20 import controls** and native component checks pass in
-**49.52s** (`runs/owned-global-energy-shield-03/validation.json`). Complete drafts,
-allocator state, saved selections and all 110 queries are preserved; exact leaf
-inverses account for source-side diagnostic changes. Rebuilding is byte-identical.
-Original04's +68 Life now has a recognized grammar but still lacks a proven
-source category. A dormant Original05 jewel's next Critical Hit Chance line is
-recognized lexically, with Partial coverage and no canonical modifier. **No new
-canonical modifier is emitted in any unchanged original.** Selected issue counts
-remain **107/117/109/123/5** and complete native evaluations remain **0/5**.
+Strict Clippy for the changed test target and its dependencies passes. This
+checkpoint changes no production Rust library and claims no fresh full-suite
+or WASM result. GitHub `67eb514` is pending; `47f3560` is still running. The last
+observed green run is [37552883848](https://github.com/Azaril/poe-optimizer/actions/runs/37552883848)
+at `0ff9210`. The checked integration base is now `runs/owned-generated-participation-01/package`.
 
-The final authored check passes (0.01s), strict workspace/all-targets/all-features
-Clippy passes, and both changed packages pass formatting. Production Rust
-libraries are unchanged; this checkpoint does not claim a fresh full-suite or
-WASM run. GitHub [37552883848](https://github.com/Azaril/poe-optimizer/actions/runs/37552883848)
-at `0ff9210` is green; [37646478601](https://github.com/Azaril/poe-optimizer/actions/runs/37646478601)
-at `47f3560` was still running at the latest check. Failed draft checks are kept
-as diagnostics; only `owned-global-energy-shield-03` is the new integration base.
-
-**Next priority:** advance Original05's generated Sand Djinn and item Firebolt
-requested-participation inputs using the already accepted model. More isolated
-item grammar will not resolve its five selected obligations. The separate
-[Boolean contribution proposal](owned-boolean-contributions-proposal.md) still
-awaits owner review; the shared Player slot relation is already accepted and
-implemented, with selected and effective equipment kept distinct.
+The audit found the next structural blocker: shared property preparation only
+admits authored SkillUses. The owner **accepted** the [generated-source extension](owned-generated-source-properties-proposal.md)
+on 2026-10-07: exact generated Skill ownership with final projection by its exact
+supplying provider. Implement that contract and real final-input producers next;
+do not promote raw inputs to final or add a second evaluator. The independent
+[Boolean contribution proposal](owned-boolean-contributions-proposal.md) remains
+pending; the Player slot relation is already accepted and implemented.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-global-energy-shield-03/package` as the integration baseline. Its
+Use `runs/owned-generated-participation-01/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. All freshly regenerated sidecars use V21;
 native schema V6 and operations V21 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-fixed-spirit-04/package`, input
-`3a09338958da3f0fd49dc0669bb4fbc9c9acb1c464025c55d5edab4effaeb86f`.
+Its immediate predecessor is `runs/owned-global-energy-shield-03/package`, input
+`21b327c2364f5f5d9ae7c47c5c2293ac310d5e5c113e536d5bde25d93b410ff9`.
 Historical endpoint paths authenticate useful stored evidence; they are not
 separate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `21b327c2364f5f5d9ae7c47c5c2293ac310d5e5c113e536d5bde25d93b410ff9` |
+| Release input | `03504a9f21dee158483d990ddad77d56c60559b35ac6ecef1fe89664ee75c8ae` |
 | Registry | `77170e2cd8220b5fbc2bb6907c8fc506325c3abc490acd426b71a374310ffb3a` |
 | Definitions content | `9d6ee09d44c1eb022b706bc51a61b28239c7f572647c25e9c15ce2f19e48ff94` |
 | Rules | `9cc36e0d2e5bd48c303f7a91f9d2f2fe0f401fa38b9ed61c3c203aa6e3ab89a3` |
@@ -115,15 +107,15 @@ separate production evaluator modes.
 | Routing | `5b9286007c9d5b415cc6c83c22d4f4f373f2941651123f80253bb042af8d4e28` |
 | Mapping | `e923bc662644414a25789c39d5b9268dba8293e3849c3f8d7b9ef6cbb836fe70` |
 | Skill roles | `ef9f89fa061f0acaad37051e30d02bac80a6a562f480bb2d5d86861dde257eac` |
-| Normalization | `5c4434dcf0754944fef5a4838e7abb9c286f628899a131b84a6fe3cf79a6a252` |
+| Normalization | `e097b3719b7d34a314736626ef496170819e11f476f476551196f0fd3050de92` |
 | Rewards | `9aaa507de9513904e76f0306f934a08c22d795f2ada2bbc4c8b28544e592c859` |
 | Items | `44cb569177decf3c749521cd508df4107b5cb8bb0cfef74203dc941642905ed7` |
 | Item source | `dd16e916712dcbcac94fa4da8bb7740a89d831ba14eafa6e11f4212efe6a1651` |
-| Tree policy | `6c75cfa841ba7dc9ebbc49c4fb2df5aceacbdc4d722ed13b08613c4d92fb7fb2` |
-| Authoring commitment | `29799f2bba43e6ec51803561c4ac32a5c7ab23d09264e8267a64bedec166ac3d` |
+| Tree policy | `93e1602eb70c094a1ddce9ea3a5162c2c05593213e64f46a0eb40cf24d2fc9e7` |
+| Authoring commitment | `18626f50ce65e7a93ce58548fb7cdbce7f76a0c34fd6d39550b6afbcf605bfa5` |
 | Schema / operations | V6 / `owned-domain-operations-v21` |
 
-The eighteen package files total **63,143,059 bytes**, with 131 provenance rows.
+The eighteen package files total **63,149,319 bytes**, with 132 provenance rows.
 Definitions use `pob-3887ae68-player-offhand-facts-v1`; the independent rules release
 remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `334c`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
@@ -147,18 +139,36 @@ reproducible evidence, not distributed game data.
 
 ## Next executable work
 
-**Immediate work order.** Reuse the [participation packet](../data/owned/poe2/3887ae68/skill-participation/README.md)
-(`332b`, required inputs `332c/332d`, output `332e`) for the real generated Sand
-Djinn and item Firebolt occurrences in Original05. Bind group and occurrence
-intent through the existing exact generated-source resolver and preset
-`WhenExactSourceSelected` applicability. First prove each target's complete
-required-input inventory, then publish its participation/readiness fragment.
-Reuse `owned_selected_participation_source.rs` and the retained
-`runs/owned-selected-participation-source-01` controls for disabled groups,
-disabled Firebolt Gem and removed providers. Preserve mechanical preparation,
-independent presets, dormant preferences and scenario overrides. Global switches,
-FullDPS/reporting intent and the other selected issues are separate obligations;
-do not close all of usage `0503` on the strength of one enabled Boolean.
+**Immediate blocker: generated final-input ownership.** The 2026-10-07 audit
+found that the source-property layer discovers only authored SkillUses.
+Tree-generated Sand and item-generated Firebolt have exact raw inputs but cannot
+yet own collected external/supported properties. Their Partial two-slot input
+lists must not be closed as final inventories. Real source contrasts include
+Sand raw level 1 becoming 3 in Original05 and 12 in Original01, and Original04
+Firebolt raw 17/0 becoming prepared 26/21. These are evidence of missing assembly,
+not universally applicable formulas.
+
+The [generated-source proposal](owned-generated-source-properties-proposal.md)
+was **accepted on 2026-10-07**. Extend the existing relation to exact
+generated Skill owners, with explicit authored/generated supply applicability;
+keep final projections on each exact declaring provider. Preserve Actor versus
+EquipmentUse context and seal property reads to the separately bound source.
+Do not add fake authored roots, a second raw-input store, self-parameter writes
+or a raw-as-final shortcut. Implement cold owner discovery,
+exact assembly authority and dependency checks, then author real final-input
+producers and their consumers before readiness. Include manual/generated uses
+of the same Skill, repeated providers, no-support sources, duplicate writers,
+cycles, inactive loadouts and serial/Rayon consistency.
+
+Saved participation transport now uses existing `332b` independently. Manual
+Sand needs its own binding before any Skill-definition-wide gate is admitted.
+Generated bindings retain `WhenExactSourceSelected`; Original04's unresolved
+Firebolt provider and archived cross-axis joins stay unresolved. Reuse the
+[generated evidence packet](../data/owned/poe2/3887ae68/generated-participation/README.md)
+and retained source controls. A selected PoB group can still preview a disabled
+generated effect; this supplies no native force-enable authority. Global switches,
+FullDPS/reporting intent and the other selected issues remain separate; do not
+close all usage `0503` on the strength of one enabled Boolean.
 
 The next input evidence work should classify the retained
 `owned-extra-stat-consumption-source-05` suppliers and filters, which already

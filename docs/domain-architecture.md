@@ -771,6 +771,16 @@ The initial ownership grammar admits authored Gem/Direct inputs with exact
 self/generated endpoints and a stable Player/scenario frame. Shared backing-Gem
 aliases and other source/context grammars require explicit future semantics.
 
+The [generated-source ownership proposal](owned-generated-source-properties-proposal.md)
+was accepted on 2026-10-07. It extends this same relation to exact
+item/tree-generated Skill owners and separates their property ownership from
+final-parameter write authority. The recommendation keeps projections on the
+exact declaring provider, retaining Actor or EquipmentUse context. Generated
+and authored occurrences of one definition need explicit applicability; a
+definition-wide shortcut must not bind both. Implementation of this accepted extension remains pending; it uses the same
+evaluator. Raw slots cannot stand in for
+unimplemented final inputs while this gap remains.
+
 A data release may store Partial rule fragments under the explicit operations
 version that understands them. That is distinct from publishing executable
 receiving/stages metadata: those contracts still require complete owner programs
