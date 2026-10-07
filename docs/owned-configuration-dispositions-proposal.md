@@ -851,6 +851,95 @@ container, external assumption or scenario usage inventory is completed by this
 change. Global `01f2` remains live until every remaining contributor has its real
 owner or a proven source-only disposition.
 
+### Overwritten raw-override placeholders (2026-10-07)
+
+The raw-only numeric rows of the existing configuration-input policy now carry
+a private receipt for a strictly framed saved Placeholder. Successful projection
+alone does not retire its configuration fallback. The accounting pass checks the
+same ConfigSet, exact resolved encounter, unique Scenario/Choice owners, attached
+Pending configuration issue and actual emitted Enemy presence/optional-value
+rows. Those rows must match in type, value, target, multiplicity and order.
+
+Only a source row linked solely to that configuration issue can become
+`SourceOnly(overwritten-config-placeholder)`, retaining its exact ScenarioPreset
+relationship. No draft value, ID, allocator state, issue or completion changes.
+Unknown names, other links, malformed or duplicate fields, string lanes, failed
+projection and unmatched encounters retain their obligations. Fallback/default
+recipes are separate; enrolling a field in a raw-only recipe is a reviewed claim
+about source semantics, never a workaround for an unimplemented consumer.
+
+The pinned Pinnacle callback overwrites four resistance, two rating, five incoming
+damage and three penetration placeholders (`ConfigOptions.lua:2071-2096`).
+`ConfigTab.lua:883-920` loads Input and numeric Placeholder into separate lanes;
+string Placeholder instead writes Input and is outside this proof.
+`countAllowZero` keeps explicit zero for resistance/rating callbacks. Later
+`CalcOffence.lua:686-698` also reads raw resistance Input for caps, so equal BASE
+values cannot justify erasing presence. Incoming damage/penetration readers use
+Input first, then the effective overwritten Placeholder (`CalcDefence.lua:2279-2288`).
+Their calculated defaults remain injected native rules, not imported saved values.
+
+Current configuration-policy imports identify this changed proof with sidecar
+schema/domain 23. Historical schema21/22 receipts remain evidence; there is one
+current importer. See the implementation checkpoint for executed validation.
+
+The expanded complete-source witness passes 29 cases in both JIT modes in
+121.88s. Its six added controls pair changed/absent placeholders with absent,
+zero and signed/fractional explicit Inputs for all four resistances. Both fresh
+reports in `runs/owned-raw-override-source-01/` are 37,752,151 bytes, SHA-256
+`b16d8d172a2f9b60f78d3efe082c40bfbee1913d1b5eb2f797574fb3631b47f7`.
+The ordinary test remains active; it retains a fresh output directory rather
+than overwriting old evidence. Set `POE_CONFIGURATION_INPUTS_SOURCE_OUT` to a
+fresh directory to reproduce the `owned_configuration_inputs_source` target.
+
+The other ten fields reuse authenticated, unchanged source controls: both rating
+reports are 15,196,149 bytes with SHA-256
+`3fc1dd33273abc188dcd81b231f6bf43f275a89885d96dd158816eacc58c7112`;
+both incoming-damage reports are 6,885,033 bytes with SHA-256
+`2bcde65841703d5072e0ccb67f4c334aac76fe31e9cfcab103b9b59d93cbbef7`.
+All 23 explicit source pins in each retained report were checked against the
+manifest and normalized checkout. These are source/component facts; this proof
+does not establish final resistance, EHP or complete build parity.
+
+### Remaining consumer priorities (2026-10-07)
+
+The nineteen other saved placeholders need their actual consumers:
+
+- Twelve `count` callbacks treat Input zero as fallback to Placeholder and skip a
+  resulting zero. Existing numeric fallback recipes deliberately preserve zero;
+  reusing them unchanged would be incorrect. `ValueRecipe` chooses a present tier
+  before decoding and cannot express this through numeric aliases. Add reviewed,
+  injected source-decoding semantics in Import when implementing these controls;
+  do not put PoB widget truthiness in Core or Engine.
+- Three `countAllowZero` controls (`sigilOfPowerStages`,
+  `multiplierWitheredStackCountSelf`, `ScorchStacks`) retain zero, but still need
+  target, constructor-placeholder and numerical-consumer coverage.
+- `enemySpeed`, `enemyCritChance` and `enemyCritDamage` are overwritten by boss
+  dispatch, then read directly. The next selected numerical slice is critical
+  chance/damage transport followed by the actual `EnemyCritEffect` consumer.
+  Speed feeds survival time, which is outside the current selected queries.
+- `enemyDamageRollRange` is read within the boss-skill branch; investigate a
+  narrow non-applicability proof for the exact no-boss-skill encounter.
+
+For critical effect, `CalcDefence.lua:2268-2274` consumes Never/AlwaysCrit,
+configured and overridden chance, Player/Enemy chance modifiers, configured
+evade chance, unlucky critical chance, Enemy critical multiplier and Player
+extra-critical-damage reduction. Importing two inputs is not completion of that
+formula. Add real typed contribution channels and prove their producers before
+connecting the result to incoming damage/mitigation. Preserve source branch
+order, clamps and unlucky squaring; baseline zeros are not absence proofs.
+Multiple-source flags also depend on the accepted
+[typed Boolean contribution contract](owned-boolean-contributions-proposal.md),
+approved by the owner on 2026-10-07 and still unimplemented. Do not replace it with
+numeric flag counters or assumed false values.
+
+Distance needs special care: its count callback falls back from Input zero,
+whereas direct reads in `CalcActiveSkill.lua:674,688` retain zero. One effective
+scalar must not erase both meanings. Existing distance source controls can be
+reused. The shared configuration frame proves structure, not semantic closure:
+it admits well-framed unknown names and custom blocks. Config/ConfigSet and
+complete assumptions/usage remain unresolved until every responsibility is owned.
+Support-origin composition and FullDPS reporting remain separate design decisions.
+
 ## Proposed Import contract
 
 Add an optional, versioned `ConfigurationDispositionPolicy` to the existing

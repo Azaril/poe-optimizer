@@ -105,6 +105,23 @@ fn fallback_selects_input_including_zero_and_exact_winning_source_in_either_orde
             .iter()
             .filter(|row| matches!(row.name(), "Input" | "Placeholder"))
         {
+            // The raw-only predecessor accounts its overwritten placeholder.
+            // The fallback policy consumes that lane, retaining its obligation.
+            if occurrence.name() == "Placeholder" {
+                let expected = expected_origins
+                    .iter_mut()
+                    .find(|row| row.source == occurrence.id())
+                    .unwrap();
+                let DraftListCompletion::Pending { id, .. } =
+                    after.draft().input().choice_presets.members[0]
+                        .choices
+                        .completion
+                else {
+                    panic!()
+                };
+                expected.disposition = SourceDisposition::Contributes;
+                expected.links = vec![OwnedOriginTarget::Issue(id)];
+            }
             let original = before
                 .sidecar()
                 .origins
@@ -127,7 +144,7 @@ fn fallback_selects_input_including_zero_and_exact_winning_source_in_either_orde
                     expected.links.push(link.clone());
                 }
                 assert!(actual.links.contains(&link), "winning row {body}");
-            } else {
+            } else if occurrence.name() != "Placeholder" {
                 assert_eq!(actual.links, original.links, "losing row {body}");
             }
         }

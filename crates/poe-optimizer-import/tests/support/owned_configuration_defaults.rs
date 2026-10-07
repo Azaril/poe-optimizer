@@ -290,7 +290,8 @@ fn defaults_and_explicit_zero_false_values_preserve_types_targets_and_all_old_ob
         );
         let mut sidecar = serde_json::to_value(after.sidecar()).unwrap();
         let old = serde_json::to_value(before.sidecar()).unwrap();
-        for field in ["policy", "draft", "origins"] {
+        assert_eq!(after.sidecar().schema_version, 23);
+        for field in ["schema_version", "policy", "draft", "origins"] {
             sidecar[field] = old[field].clone();
         }
         assert_eq!(sidecar, old);

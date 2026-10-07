@@ -2233,6 +2233,13 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 "configuration input scenario scope",
             ))?;
         configuration_inputs::materialize(&mut b, scope, scenario, config_inputs.get(&scope))?;
+        configuration_inputs::account(
+            &mut b,
+            scope,
+            scenario,
+            &draft.choice_presets.members,
+            config_inputs.get(&scope),
+        )?;
     }
     // Allocate new intent obligations only after all historical records/issues.
     // Existing usage values and completion IDs move without reallocation.
@@ -2287,7 +2294,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     );
     let item_range_origins_attached = b.item_range_origins_attached;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: if policy.generated_skill_inputs.is_some() {
+        schema_version: if policy.configuration_inputs.is_some() {
+            23
+        } else if policy.generated_skill_inputs.is_some() {
             22
         } else if direct_support_targets_attached {
             20
@@ -2329,7 +2338,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        if policy.generated_skill_inputs.is_some() {
+        if policy.configuration_inputs.is_some() {
+            "owned-normalization-sidecar-v23"
+        } else if policy.generated_skill_inputs.is_some() {
             "owned-normalization-sidecar-v22"
         } else if direct_support_targets_attached {
             "owned-normalization-sidecar-v20"

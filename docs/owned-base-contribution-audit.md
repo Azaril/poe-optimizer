@@ -137,5 +137,6 @@ socketed jewels and grouped slot-copy effects. Candidate-wide arithmetic bounds,
 destination-complete ordering and explicit grouping are different obligations.
 This audit selects no new public contract, numerical law or cache-dependent mode.
 Retain the current Partial gates until a reviewed design covers the actual donor
-domain. The separate [Boolean contribution proposal](owned-boolean-contributions-proposal.md)
-remains independently subject to owner review.
+domain. The separate [Boolean contribution contract](owned-boolean-contributions-proposal.md)
+was accepted on 2026-10-07. Its implementation remains outstanding and does not
+resolve this numeric BASE ordering/grouping question.

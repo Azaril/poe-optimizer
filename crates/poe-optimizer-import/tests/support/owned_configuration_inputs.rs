@@ -1,6 +1,8 @@
 //! Injected raw overrides: absence is a Boolean fact, never a numeric default.
 #[path = "owned_configuration_defaults.rs"]
 mod default_tests;
+#[path = "owned_configuration_dispositions.rs"]
+mod disposition_tests;
 #[path = "owned_configuration_fallbacks.rs"]
 mod fallback_tests;
 #[path = "owned_configuration_options.rs"]
@@ -284,6 +286,12 @@ fn absent_placeholders_and_explicit_raw_numbers_remain_distinct_and_preserve_eve
         let mut origins = after.sidecar().origins.clone();
         let scenario = after.draft().input().scenario_presets.members[0].id;
         for (row, old) in origins.iter_mut().zip(&before.sidecar().origins) {
+            if matches!(&row.disposition, SourceDisposition::SourceOnly(code) if code.as_str() == "overwritten-config-placeholder")
+            {
+                assert_eq!(row.links, vec![OwnedOriginTarget::ScenarioPreset(scenario)]);
+                *row = old.clone();
+                continue;
+            }
             row.links.retain(|link| {
                 old.links.contains(link) || *link != OwnedOriginTarget::ScenarioPreset(scenario)
             });
@@ -308,7 +316,7 @@ fn absent_placeholders_and_explicit_raw_numbers_remain_distinct_and_preserve_eve
                 next.links
                     .contains(&OwnedOriginTarget::ScenarioPreset(scenario))
             );
-        } else {
+        } else if body.is_empty() {
             assert_eq!(
                 serde_json::to_value(&after.sidecar().origins).unwrap(),
                 serde_json::to_value(&before.sidecar().origins).unwrap()
@@ -316,7 +324,8 @@ fn absent_placeholders_and_explicit_raw_numbers_remain_distinct_and_preserve_eve
         }
         let mut sidecar = serde_json::to_value(after.sidecar()).unwrap();
         let old = serde_json::to_value(before.sidecar()).unwrap();
-        for field in ["policy", "draft", "origins"] {
+        assert_eq!(after.sidecar().schema_version, 23);
+        for field in ["schema_version", "policy", "draft", "origins"] {
             sidecar[field] = old[field].clone();
         }
         assert_eq!(sidecar, old);

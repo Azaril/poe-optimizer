@@ -39,13 +39,20 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest Import checkpoint accounts for fourteen archived generated source
-rows through their actual preset's existing Pending raw-input, usage and support-
-discovery obligations. It reuses the same source/selector proofs and creates no
-provider, value or issue. Unknown fields and unproved responsibility retain
-fallback. All-five reimport passes with unchanged canonical drafts and queries;
-Original05's configuration-linked origins decrease from 72 to 58. Fresh sidecars
-use schema22; the native package is unchanged. See the [accounting boundary](owned-generated-skill-dispositions-proposal.md#archived-source-responsibility-2026-10-07).
+The latest Import checkpoint accounts for fourteen overwritten numeric
+configuration placeholders in every original. The proof binds the exact source
+scope and encounter to actual emitted raw-presence/optional-value inputs; it
+retains the ScenarioPreset link and never imports a saved calculated default.
+Malformed, ambiguous, fallback/default and unproved rows retain their obligations.
+All five drafts, IDs, selections and 110 queries remain unchanged. Original05 has
+44 configuration-linked origins (21 inside Config, 23 outside); complete native
+builds remain 0/5. Current configuration-policy sidecars use schema23, and the
+native package is unchanged. See the [proof and remaining consumers](owned-configuration-dispositions-proposal.md#overwritten-raw-override-placeholders-2026-10-07).
+
+The preceding archived-source checkpoint accounted for fourteen generated rows
+through existing preset-scoped Pending raw-input, usage and support-discovery
+obligations. It created no provider, value or issue and emitted sidecar22. Those
+proofs remain intact; unknown fields and unproved responsibilities keep fallback.
 
 The preceding [configuration packet](../data/owned/poe2/3887ae68/configuration-resistance-penalty/README.md)
 adds a typed Player resistance-penalty input and its real native Actor rule. Import
@@ -60,7 +67,7 @@ The preceding participation publication supplied all twelve active roots' enable
 preferences in Original05's selected preset, which retains 23 usage preferences.
 Import also accounts for the strictly framed Build/Buffs leaf as cached output,
 not a configured buff. Original05 retains five selected input obligations and
-58 configuration-linked source origins after archived accounting. The penalty
+44 configuration-linked source origins after archived and placeholder accounting. The penalty
 consumer does not close usage, readiness, resistance contributors/caps or complete
 native evaluation.
 
@@ -76,14 +83,16 @@ they preserve the supplying provider's level authority. The accepted
 updates the single current Import policy in place. Its private proof checks saved
 fields against actual imported outputs and an existing same-preset Pending usage
 obligation. That selected-source checkpoint emitted sidecar21 and a CLI commitment
-to its exact bytes; current archived accounting emits sidecar22. No old/new
+to its exact bytes; archived accounting subsequently emitted sidecar22 and
+current configuration accounting emits sidecar23. No old/new
 behavior branch is retained. The earlier all-five validation passed in
 `runs/owned-generated-field-accounting-01/validation.json` (5.89s): Original01
 changes four origin links, Original05 changes six, and the other three change
 none. Draft values, IDs, allocator state, selections and all 110 query rows remain
 exact. That publication reduced Original05's configuration issue `01f2` to 73 linked
 origins from 79; cached-output accounting reduced it to 72 and archived
-responsibility accounting to the current 58; all five selected input issues remain.
+responsibility accounting to 58; raw-placeholder accounting now leaves 44.
+All five selected input issues remain.
 Complete native builds remain **0/5**. The [participation contract](owned-skill-participation-proposal.md)
 now has a native consumer on the existing graph and a published Sniper policy
 combining independent required group/occurrence values. Other skills still need
@@ -206,9 +215,11 @@ order is imported. BASE and global contributor inventories remain Partial.
 Native component tests use all five selected INC occurrences and all nine donor
 bodies, with BASE projections explicitly confined to fixtures. Conditional
 snapshots, complete original-build attributes and final Life remain unresolved.
-Multiple-source inherent flags need the pending
-[Boolean aggregation contract](owned-boolean-contributions-proposal.md); the
-current implementation has no false-default shortcut.
+Multiple-source inherent flags need the accepted
+[Boolean aggregation contract](owned-boolean-contributions-proposal.md). The owner
+approved typed Boolean contributions with unordered `Any` on 2026-10-07; runtime
+implementation and producer migration remain outstanding. The current
+implementation has no false-default shortcut.
 
 The [shared class-start root](../data/owned/poe2/3887ae68/class-start-root/README.md)
 has a source-proved empty intrinsic inventory. Its closure changes no class

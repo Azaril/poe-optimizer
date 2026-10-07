@@ -1,10 +1,81 @@
-> Historical snapshots through typed configuration defaults and Player resistance penalty on 2026-10-07.
+> Historical snapshots through archived generated-source responsibility accounting on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: archived generated fields retain their actual preset owners
+
+The [generated-source accounting path](owned-generated-skill-dispositions-proposal.md#archived-source-responsibility-2026-10-07)
+now distinguishes successful selected-provider binding from recognized archived
+source syntax. Seven Original05 archived Djinn pairs already had real scoped
+Pending owners for generated inputs, usage and support discovery. Their known
+saved fields can therefore retain those responsibilities without blocking an
+unrelated preset through global configuration fallback.
+
+The private proof reuses source identity/slot ambiguity checks, typed raw and
+usage recipes, exact MAIN/CALCS selector topology and full-field framing. All
+three obligations must already exist, remain Pending and have source attachments
+only in the actual owning preset. Unknown fields, malformed values, unsupported
+selectors, live physical/generated-output links or a missing obligation refuse
+the proof. Generated absent/`nil` usage fields retain unresolved responsibility;
+they do not become native defaults. No provider, target, value or issue is created.
+Selected-provider binding and its successful-output proof remain unchanged.
+
+The all-five CLI reimport passes in **16.28s**, comparing against pinned earlier
+sidecars and authenticating every dependency and actual draft digest. Only
+Original05 changes semantic provenance: **14 archived source rows**, reducing
+configuration-linked origins **72 to 58** (35 inside Config, 23 elsewhere).
+All canonical drafts, local IDs, allocator watermarks, selections, 110 queries
+and selected unresolved issue lists remain identical. Independent fresh reimports
+reproduce the proof. The remaining ten archived generated origins retain fallback:
+eight Warrior rows lack configured correspondence, and Firebolt's set lacks the
+required Pending usage witness.
+
+Validation passes: **185 Import library tests**, **307 normalization tests** and
+**19 Direct-source tests**, including the new archived cases, additional raw-value
+refusals and 27 private obligation-corruption controls. Independent review found
+no production defect. Initial failures were a missing test import and a harness
+assumption that obligations must attach to the preset container; the actual
+contract permits source attachment anywhere within that exact preset. No
+production guard was relaxed. The source VM and native numerical components
+were not rerun because this changes Import accounting only.
+
+Strict workspace Clippy with all features and targets, Import/CLI formatting
+checks and `git diff --check` also pass. Local evidence is retained in
+`runs/owned-generated-deferred-publication-02.log`,
+`runs/owned-generated-deferred-clippy-01.log`,
+`runs/owned-generated-deferred-poe_optimizer_import-02.log`,
+`runs/owned-generated-deferred-owned_normalize-02.log` and
+`runs/owned-generated-deferred-direct-03.log`. These are local results, not a
+claim that hosted CI or the full workspace test suite passed this checkpoint.
+To reproduce the all-five integration test, run ignored test
+`current_accounting_reimports_all_five_without_changing_build_inputs` in target
+`owned_generated_field_accounting`, setting
+`POE_OPTIMIZER_TEST_GENERATED_ACCOUNTING_BASELINE` to the absolute
+`runs/owned-resistance-penalty-02` path and
+`POE_OPTIMIZER_TEST_GENERATED_ACCOUNTING_OUTPUT` to a fresh output directory.
+
+Fresh generated-policy imports now emit **sidecar schema/domain 22**, replacing
+the previous proof semantics in place. CLI byte hashes identify the actual
+artifact; no old importer or restore mode was added. Two unreachable earlier
+sidecar branches were removed, and the existing all-five accounting test was
+updated instead of retaining a duplicate historical importer comparison.
+The runtime package and every native input remain unchanged: 17 assumptions,
+23 selected usage preferences, twelve requested-participation inputs, five
+selected Sniper obligations and **0/5 complete native builds**.
+
+**Next:** continue Original05's source-field and consumer accounting, then its
+actual complete native request/evaluation path. Support-origin composition still
+awaits the owner's decision. Fourteen already-modeled raw-override Placeholders
+form the next coherent configuration proof candidate: establish their exact
+reader/encounter overwrite and emitted-input correspondence, not a blanket
+Placeholder exemption. The other nineteen Placeholder names, mixed containers,
+search intent and reference selectors remain separate responsibilities. Retain
+the first-complete-build priority; D4 begins immediately after that build's full
+native/reference gate passes.
 
 ## Archived 2026-10-07 checkpoint: typed configuration defaults and Player resistance penalty
 

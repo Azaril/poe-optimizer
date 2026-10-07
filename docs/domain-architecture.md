@@ -87,6 +87,16 @@ IDs and source-cache layout are not numerical authority. Compile those bindings
 to immutable reduction inputs before worker execution. Explicit stages and typed
 intermediate values express attribute dependencies; a flat subtotal does not
 stand in for a resolved attribute or authorize a dependent resource result.
+
+Boolean flags use the same contribution graph with typed Boolean effects and a
+checked unordered `Any` query. Complete membership and recipient authority remain
+mandatory; numeric ranks and tie rules have no meaning for this reduction.
+Repeated true sources are idempotent, inactive/false sources cannot cancel them,
+and an unresolved active source remains unresolved even beside true. Empty=false
+is valid only for a proved complete empty domain. Direct channel reads cannot
+bypass that membership proof. See the accepted
+[Boolean contract](owned-boolean-contributions-proposal.md).
+
 Attribute inputs use distinct pass-specific Count channels, while final
 attributes remain bounded Integers. Preserve each contributor occurrence through
 that boundary, including numeric conversion failures. Retire superseded live
@@ -134,6 +144,15 @@ and existing scoped responsibilities are proven. This is Import accounting,
 not permission to invent providers, drop unknown fields or complete a native
 inventory. Exact provider binding and executable support/usage coverage remain
 independent requirements.
+
+Saved external placeholders need per-reader interpretation. A value replaced by
+the source's encounter calculation is not an authored native input. Import may
+account for it as source-only after proving the exact scenario and the actual
+typed input projection; the native evaluator derives defaults from injected game
+data. Other placeholders can be consumed fallbacks. Keep their precedence and
+source-format zero handling in Import, preserving distinct raw/effective meanings
+when different consumers need them. Structural XML validity alone never proves
+semantic coverage or a complete scenario.
 
 Whether authors edit a small textual DSL or structured documents is a tooling choice.
 Both compile to the same project-owned typed rule representation. Optional Lua authoring

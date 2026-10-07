@@ -375,11 +375,13 @@ pub fn compare_original_with_item_parameter_completions(
         c.next.normalization().generated_skill_inputs.is_some(),
         "this preservation replay does not introduce generated-input authority"
     );
-    // Both endpoints run the single current importer. Generated-field accounting
-    // uses proof schema22 even when no source pair qualifies for retirement.
+    // Both endpoints run the single current importer. Configuration accounting
+    // uses proof schema23; generated-field accounting without it uses schema22.
     // Earlier declarations without that policy use their current applicable
     // proof shape; this is not a branch retaining an old importer algorithm.
-    let expected_version = if generated_inputs {
+    let expected_version = if c.next.normalization().configuration_inputs.is_some() {
+        23
+    } else if generated_inputs {
         22
     } else if direct_targets && matches!(case, 1 | 5) {
         20

@@ -1,8 +1,10 @@
 # Boolean contributions and complete flag queries
 
-Status: proposed for owner review, 2026-10-06. This changes a public data
-contract; no runtime implementation is approved by this document. The proposal was drafted against
-baseline `runs/owned-player-offhand-01/package` at commit `7b7fb1b`.
+Status: accepted by the owner on 2026-10-07: typed Boolean contributions with an
+unordered `Any` reduction on the existing occurrence/effect graph. Implementation
+and data migration remain outstanding. This changes a public data contract; use
+the current implementation plan for execution state. The proposal was drafted
+against baseline `runs/owned-player-offhand-01/package` at commit `7b7fb1b`.
 
 ## Problem and evidence
 
@@ -102,3 +104,43 @@ Source anchors: `ModStore.lua:281`–`295`, `ModDB.lua:297`–`317`,
 `Data/Uniques/body.lua:493`–`502`, and tree nodes 32349/58591 in the pinned
 `vendor/path-of-building-poe2` revision. These are bounded source findings,
 not claims of complete native producer coverage.
+
+## Implementation seam audit (2026-10-07)
+
+The existing ordered-query registry should become the single contribution-query
+registry, separating source membership from an explicit ordered/unordered policy.
+Core/Data can own the contract and validation; Engine typed compilation/folding
+and Engine cold membership binding can proceed in parallel after those names
+are fixed. Root integration owns Import budget/migration visitors, current-data
+republication and real producer/consumer validation. Do not edit the protected
+allocation implementation as part of this work.
+
+The recommended cutover is rule-package schema 2 to 3, operations 21 to 22 and
+new rule-input/program/storage/effect-plan hash domains. Definition schema V6
+already supports Boolean Stats and need not change solely for this feature.
+Rebuild affected artifacts and invalidate caches; do not retain parallel old/new
+DTO parsers. Check ordinary, preparation, staged and support-suffix identities.
+
+One existing bypass needs an explicit regression: public direct
+`RuleReadSource::Contributions` binds discovered indices without the query's
+declared member proof. Boolean reads must use the checked query path or resolve
+to that same proof. Internal query-to-read type validation is separate from
+public direct-read admission. Preserve unmatched-effect refusal, coverage of
+unread groups, inactive-member census and every provider's coverage. Stable
+diagnostic order is not semantic numeric ordering; never hide an unresolved
+member through Boolean short-circuiting.
+
+Keep resolved Stats3315–3319 and the existing `inherent-strength-life` receiver
+and amount331a. First publish real passive contributions from Giant's Blood
+(owned10ac) and Enhanced Effectiveness (owned18d9), preserving their unrelated
+Partial mechanics. Irongrasp's Iron Grip/Iron Will provide a repeated-source
+contrast but require actual item/modifier admission. A finite flag fixture does
+not complete those production inventories or the final Strength/Life metrics.
+
+Critical-hit continuation must distinguish Enemy NeverCrit/AlwaysCrit from
+Player EnemyUnluckyCrit. Extend recipient authority explicitly; the existing
+Encounter Enemy-context reducer path can be reused. Do not silently broaden
+origin families or reinterpret numeric Maximum effect-application stacking as
+Boolean Any. Those delivery domains require actual source/recipient evidence.
+The detailed local audit is `runs/owned-boolean-implementation-audit-01.md`;
+these gates remain authoritative even when that diagnostic file is unavailable.

@@ -151,6 +151,112 @@ fn prove_origin_change(
     json!({"source":new["source"],"preset":preset["id"],"retained":expected,"removed":removed})
 }
 
+fn prove_placeholder_change(
+    old: &Value,
+    new: &Value,
+    draft: &Value,
+    old_sidecar: &Value,
+    source: &SourceProjectEvidence<'_>,
+    policy: &Value,
+) -> Value {
+    assert_eq!(old["source"], new["source"]);
+    assert_eq!(old["disposition"]["kind"], "contributes");
+    assert_eq!(
+        new["disposition"],
+        json!({"kind":"source_only","value":"overwritten-config-placeholder"})
+    );
+    let ordinal = new["source"]["ordinal"].as_u64().unwrap() as usize;
+    let row = &source.rows()[ordinal];
+    assert_eq!(row.occurrence().name(), "Placeholder");
+    let name = attr(row, "name").unwrap();
+    assert!(
+        attr(row, "number")
+            .unwrap()
+            .parse::<f64>()
+            .unwrap()
+            .is_finite()
+    );
+    assert_eq!(row.attributes().len(), 2);
+    assert!(row.children().is_empty());
+    let input_rows: Vec<_> = policy["inputs"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|input| input["source_name"] == name)
+        .collect();
+    assert_eq!(input_rows.len(), 1, "exact raw override policy row");
+    let input = input_rows[0];
+    let set = &source.rows()[row.occurrence().parent().unwrap().ordinal() as usize];
+    assert_eq!(set.occurrence().name(), "ConfigSet");
+    assert!(
+        !set.children().iter().any(|id| {
+            let child = &source.rows()[id.ordinal() as usize];
+            child.occurrence().name() == "Input" && attr(child, "name") == Some(name)
+        }),
+        "these unchanged originals have no authored raw override"
+    );
+    let links = old_sidecar["origins"][set.occurrence().id().ordinal() as usize]["links"]
+        .as_array()
+        .unwrap();
+    let scenario_links: Vec<_> = links
+        .iter()
+        .filter(|l| l["kind"] == "scenario_preset")
+        .collect();
+    let choice_links: Vec<_> = links
+        .iter()
+        .filter(|l| l["kind"] == "choice_preset")
+        .collect();
+    assert_eq!(scenario_links.len(), 1);
+    assert_eq!(choice_links.len(), 1);
+    let scenario = draft["draft"]["scenario_presets"]["members"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|p| p["id"] == scenario_links[0]["value"])
+        .unwrap();
+    let choice = draft["draft"]["choice_presets"]["members"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|p| p["id"] == choice_links[0]["value"])
+        .unwrap();
+    assert_eq!(
+        scenario["scenario"]["enemy"]["encounter"],
+        json!({"kind":"known","value":policy["encounter"]})
+    );
+    let assumptions = &scenario["scenario"]["assumptions"];
+    assert_eq!(assumptions["completion"]["kind"], "pending");
+    assert_eq!(
+        scenario["scenario"]["usage"]["completion"]["kind"],
+        "pending"
+    );
+    let members = assumptions["members"].as_array().unwrap();
+    let presence: Vec<_> = members
+        .iter()
+        .filter(|a| {
+            a["input"]["value"] == input["presence_input"] && a["target"]["kind"] == "enemy"
+        })
+        .collect();
+    assert_eq!(presence.len(), 1);
+    assert_eq!(
+        presence[0]["value"],
+        json!({"kind":"known","value":{"kind":"boolean","value":false}})
+    );
+    assert!(
+        !members
+            .iter()
+            .any(|a| a["input"]["value"] == input["value_input"])
+    );
+    let completion = &choice["choices"]["completion"];
+    assert_eq!(completion["kind"], "pending");
+    assert_eq!(completion["code"], "configuration-roles-not-converted");
+    let issue = json!({"kind":"issue","value":completion["id"]});
+    assert!(links.contains(&issue));
+    assert_eq!(old["links"], json!([issue]));
+    assert_eq!(new["links"], json!([scenario_links[0]]));
+    json!({"source":new["source"],"name":name,"scenario":scenario["id"],"disposition":new["disposition"]})
+}
+
 const PINNED_IMPORTS: [(&str, &str); 5] = [
     (
         "809d64aca292d9b5cad936dc92894028b25122bde3f10b08cd52615441642c75",
@@ -189,6 +295,8 @@ fn current_accounting_reimports_all_five_without_changing_build_inputs() {
     let package = baseline.join("package");
     let inventory = release::inventory(&package);
     let staged = release::load(&package);
+    let configuration = read(package.join("normalization.json"))["configuration_inputs"].clone();
+    assert_eq!(configuration["inputs"].as_array().unwrap().len(), 14);
     assert_eq!(
         json!(staged.receipt().input),
         "b19134496c85e208a735568b5e5191f3b60f68154be336ab4afb6fd953b6fa01"
@@ -220,7 +328,7 @@ fn current_accounting_reimports_all_five_without_changing_build_inputs() {
         );
         let report = release::normalize(&package, &xml, case, &after);
         let sidecar_bytes = fs::read(after.join("sidecar.json")).unwrap();
-        assert_eq!(report["sidecar_schema_version"], 22);
+        assert_eq!(report["sidecar_schema_version"], 23);
         assert_eq!(report["sidecar_bytes"], sidecar_bytes.len());
         assert_eq!(report["sidecar_sha256"], hash(&sidecar_bytes));
         let mut old_draft = read(before.join("draft.json"));
@@ -230,7 +338,7 @@ fn current_accounting_reimports_all_five_without_changing_build_inputs() {
         preservation::authenticate(&old, &before, &package, case, &staged);
         preservation::authenticate(&new, &after, &package, case, &staged);
         assert_eq!(old["schema_version"], 21);
-        assert_eq!(new["schema_version"], 22);
+        assert_eq!(new["schema_version"], 23);
         assert_eq!(new["source_sha256"], hash(&bytes));
         assert_eq!(new["source_bytes"], bytes.len());
         for v in [&mut old_draft, &mut new_draft, &mut old, &mut new] {
@@ -247,11 +355,41 @@ fn current_accounting_reimports_all_five_without_changing_build_inputs() {
             .iter()
             .zip(new_origins)
             .filter(|(a, b)| a != b)
-            .map(|(a, b)| prove_origin_change(a, b, &new_draft, &old, &source))
+            .map(|(a, b)| {
+                if b["disposition"]["kind"] == "source_only" {
+                    prove_placeholder_change(a, b, &new_draft, &old, &source, &configuration)
+                } else {
+                    prove_origin_change(a, b, &new_draft, &old, &source)
+                }
+            })
+            .collect();
+        let placeholder_changes: Vec<_> = changes
+            .iter()
+            .filter(|c| c.get("disposition").is_some())
+            .collect();
+        assert_eq!(
+            placeholder_changes.len(),
+            14,
+            "all and only reviewed raw override fields"
+        );
+        let actual_names: BTreeSet<_> = placeholder_changes
+            .iter()
+            .map(|c| c["name"].as_str().unwrap())
+            .collect();
+        let expected_names: BTreeSet<_> = configuration["inputs"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|c| c["source_name"].as_str().unwrap())
+            .collect();
+        assert_eq!(actual_names, expected_names);
+        let generated_changes: Vec<_> = changes
+            .iter()
+            .filter(|c| c.get("disposition").is_none())
             .collect();
         if case == 5 {
             assert_eq!(
-                changes
+                generated_changes
                     .iter()
                     .map(|c| c["source"]["ordinal"].as_u64().unwrap())
                     .collect::<Vec<_>>(),
@@ -261,7 +399,10 @@ fn current_accounting_reimports_all_five_without_changing_build_inputs() {
             );
         }
         if case != 5 {
-            assert!(changes.is_empty(), "no unreviewed change in original{case}");
+            assert!(
+                generated_changes.is_empty(),
+                "no unreviewed generated change in original{case}"
+            );
         }
         for v in [&mut old, &mut new] {
             let o = v.as_object_mut().unwrap();
@@ -330,7 +471,7 @@ fn current_accounting_reimports_all_five_without_changing_build_inputs() {
         assert_eq!(replay_draft, new_draft);
         assert_eq!(old_files, release::inventory(&before));
         assert_eq!(fs::read(&xml).unwrap(), bytes);
-        results.push(json!({"original":case,"changes":changes,"sidecar_schema_version":22,"sidecar_sha256":report["sidecar_sha256"],"draft_unchanged":true,"selection_unchanged":true,"selected_issues":b["finalization"]["issues"].as_array().unwrap().len()}));
+        results.push(json!({"original":case,"changes":changes,"sidecar_schema_version":23,"sidecar_sha256":report["sidecar_sha256"],"draft_unchanged":true,"selection_unchanged":true,"selected_issues":b["finalization"]["issues"].as_array().unwrap().len()}));
     }
     assert_eq!(inventory, release::inventory(&package));
     fs::write(out.join("validation.json"),serde_json::to_vec_pretty(&json!({"package":staged.receipt().input,"cases":results,"query_rows":110,"runtime_data_changed":false,"complete_original_builds":0})).unwrap()).unwrap();

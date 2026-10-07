@@ -3,7 +3,9 @@ use super::source_shape::{fresh_config_sets, value};
 use super::*;
 use crate::owned_value::{OwnedValueCodec, WhitespacePolicy};
 mod defaults;
+mod dispositions;
 pub use defaults::{ConfigurationDefaultInput, ConfigurationInputTarget};
+pub(super) use dispositions::account;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
@@ -320,6 +322,7 @@ struct ProvenInput {
     presence_input: ExternalInputDefId,
     value_input: ExternalInputDefId,
     raw: Option<(SourceOccurrenceId, ParameterValue)>,
+    overwritten_placeholder: Option<SourceOccurrenceId>,
 }
 pub(super) struct ProvenConfigurationInputs {
     scope: SourceOccurrenceId,
@@ -352,6 +355,7 @@ pub(super) fn collect(
         for input in &policy.inputs {
             let mut authored = None;
             let mut saved_placeholder = None;
+            let mut overwritten_placeholder = None;
             let mut blocked = false;
             for id in row.children() {
                 let child = &evidence.rows()[id.ordinal() as usize];
@@ -370,10 +374,12 @@ pub(super) fn collect(
                 if child.occurrence().name() == "Placeholder" && !input.placeholder_fallback {
                     // It cannot establish a raw override. Validate its numeric
                     // source spelling, without promoting a callback default.
+                    b.charge(text.len())?;
                     if input.placeholder_codec.decode(text).is_err() {
                         blocked = true;
                         break;
                     }
+                    overwritten_placeholder = Some(*id);
                 } else if child.occurrence().name() == "Input"
                     || (input.placeholder_fallback && child.occurrence().name() == "Placeholder")
                 {
@@ -427,6 +433,7 @@ pub(super) fn collect(
                     presence_input: input.presence_input.clone(),
                     value_input: input.value_input.clone(),
                     raw: authored.or(saved_placeholder),
+                    overwritten_placeholder,
                 });
             }
         }
@@ -448,8 +455,8 @@ pub(super) fn collect(
 }
 
 /// Called after existing scoped adapters and the final fallback-link pass: new
-/// authority never removes an old unresolved-role link or changes the assumptions
-/// inventory obligation.
+/// projection does not change any inventory obligation. Individually overwritten
+/// placeholders are accounted separately against these actual outputs.
 pub(super) fn materialize(
     b: &mut Builder<'_, '_>,
     scope: SourceOccurrenceId,

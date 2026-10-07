@@ -45,9 +45,9 @@ the declaration format and release receipts can therefore remain unchanged.
 Fresh normalization is the only producer of this proof: there is no sidecar
 restore/cache reader whose old result can acquire new authority.
 
-Whenever the generated-input policy runs under current accounting semantics,
-emit sidecar schema/domain 22, including attempts that conservatively retire no
-links. Schema21 identifies the earlier selected-output-only accounting proof;
+Current configuration-input policies emit sidecar schema/domain 23. A generated-
+input policy without configuration accounting emits schema/domain 22, including
+attempts that conservatively retire no links. Schema21 identifies the earlier selected-output-only accounting proof;
 there is no historical importer mode or restored-proof reader. The CLI reports
 that schema and the SHA-256 of the actual written sidecar bytes. An unchanged
 draft digest does not identify unchanged accounting proof.

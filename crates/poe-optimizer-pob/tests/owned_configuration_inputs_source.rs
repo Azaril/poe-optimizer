@@ -21,6 +21,15 @@ use std::{
 const TEST: &str = "complete_configuration_inputs_preserve_source_lifecycle_and_delivery";
 const CHILD: &str = "POE_CONFIGURATION_INPUTS_SOURCE_CHILD";
 const OBSERVE: &str = include_str!("support/configuration_inputs_source.lua");
+const RESISTANCE_FIELDS: [&str; 4] = [
+    "enemyFireResist",
+    "enemyColdResist",
+    "enemyLightningResist",
+    "enemyChaosResist",
+];
+const RESISTANCE_PLACEHOLDERS: [f64; 4] = [12345.5, -123.25, 99.5, 777.0];
+const RESISTANCE_INPUTS: [f64; 4] = [91.5, -12.25, 37.5, 123.75];
+type ResistanceControl = (&'static str, Option<[f64; 4]>, Option<[f64; 4]>);
 
 #[test]
 fn complete_configuration_inputs_preserve_source_lifecycle_and_delivery() {
@@ -28,19 +37,40 @@ fn complete_configuration_inputs_preserve_source_lifecycle_and_delivery() {
         .join("../..")
         .canonicalize()
         .unwrap();
-    let out = root.join("runs/owned-configuration-inputs-source-01");
-    fs::create_dir_all(&out).unwrap();
+    let output = std::env::var_os("POE_CONFIGURATION_INPUTS_SOURCE_OUT");
     if let Some(mode) = std::env::var_os(CHILD) {
         assert!(mode == "off" || mode == "on");
+        let out = root.join(output.expect("parent must select the evidence directory"));
+        assert!(out.is_dir(), "parent must create the evidence directory");
         run_child(&root, &out, mode == "on");
         return;
     }
+    let out = if let Some(path) = output {
+        let out = root.join(path);
+        assert!(
+            !out.exists(),
+            "refusing to overwrite source evidence at {}; set POE_CONFIGURATION_INPUTS_SOURCE_OUT to a fresh directory",
+            out.display()
+        );
+        fs::create_dir_all(&out).unwrap();
+        out
+    } else {
+        let runs = root.join("runs");
+        fs::create_dir_all(&runs).unwrap();
+        tempfile::Builder::new()
+            .prefix("owned-configuration-inputs-source-")
+            .tempdir_in(runs)
+            .unwrap()
+            .keep()
+    };
+    eprintln!("configuration source evidence: {}", out.display());
     for mode in ["off", "on"] {
         let log_path = out.join(format!("source-jit-{mode}.log"));
         let log = fs::File::create(&log_path).unwrap();
         let mut child = Command::new(std::env::current_exe().unwrap())
             .args(["--exact", TEST, "--nocapture"])
             .env(CHILD, mode)
+            .env("POE_CONFIGURATION_INPUTS_SOURCE_OUT", &out)
             .current_dir(root.join("vendor/path-of-building-poe2/src"))
             .stdout(Stdio::from(log.try_clone().unwrap()))
             .stderr(Stdio::from(log))
@@ -99,7 +129,7 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
     }
     let mut inputs = originals.clone();
     inputs.extend(controls(&originals, &facts));
-    assert_eq!(inputs.len(), 23);
+    assert_eq!(inputs.len(), 29);
     let mut cases = Vec::new();
     for (name, text) in inputs {
         eprintln!("complete configuration source case {name}");
@@ -179,8 +209,9 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
         );
     }
     let result = json!({"source_revision":"3887ae68a6a6b8bb7b41d1b61998f1aa184201e4", "source_hash":pinned::manifest_sha256(), "evidence":{
-        "complete_load_attempts_per_jit":23,"originals":originals.iter().map(|(name,text)|json!({"name":name,"sha256":digest(text.as_bytes()),"source_census":xml_census(text)})).collect::<Vec<_>>(),
-        "full_controls":18,"native_effect_coverage":false,"business_method_wrappers":false,"callback_invocation_trace":false,
+        "complete_load_attempts_per_jit":29,"originals":originals.iter().map(|(name,text)|json!({"name":name,"sha256":digest(text.as_bytes()),"source_census":xml_census(text)})).collect::<Vec<_>>(),
+        "full_controls":24,"native_effect_coverage":false,"business_method_wrappers":false,"callback_invocation_trace":false,
+        "observer_sha256":digest(OBSERVE.as_bytes()),
         "reward_metadata_sha256":digest(&fs::read(root.join("data/owned/poe2/3887ae68/import/reward-source-facts.json")).unwrap()),
         "files":(["src/Launch.lua","src/GameVersions.lua","src/Modules/Common.lua","src/Modules/Main.lua","src/Modules/Build.lua","src/Classes/ConfigTab.lua","src/Classes/CalcsTab.lua","src/Classes/PopupDialog.lua","src/Modules/CalcSetup.lua","src/Modules/CalcDefence.lua","src/Modules/CalcOffence.lua","src/Modules/Data.lua","src/Classes/ModList.lua","src/Classes/ModDB.lua","src/Classes/ModStore.lua","src/Classes/EditControl.lua","src/Modules/ModParser.lua","src/Data/BossSkills.lua","src/Data/Bosses.lua","src/Data/Misc.lua","src/Modules/ConfigOptions.lua","src/Data/QuestRewards.lua"].map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})))},"cases":cases});
     fs::write(
@@ -314,8 +345,57 @@ fn controls(originals: &[(String, String)], _facts: &Json) -> Vec<(String, Strin
         "direct-damage-explicit".into(),
         add(xml, "<Input name=\"enemyPhysicalDamage\" number=\"125\"/>"),
     ));
-    assert_eq!(cases.len(), 18);
+    let resistance_clean = remove_keys(xml, &RESISTANCE_FIELDS);
+    for (name, placeholders, inputs) in resistance_controls() {
+        let mut body = String::new();
+        for (index, key) in RESISTANCE_FIELDS.iter().enumerate() {
+            if let Some(values) = placeholders {
+                body.push_str(&format!(
+                    "<Placeholder name=\"{key}\" number=\"{}\"/>",
+                    values[index]
+                ));
+            }
+            if let Some(values) = inputs {
+                body.push_str(&format!(
+                    "<Input name=\"{key}\" number=\"{}\"/>",
+                    values[index]
+                ));
+            }
+        }
+        cases.push((name.into(), add(&resistance_clean, &body)));
+    }
+    assert_eq!(cases.len(), 24);
     cases
+}
+fn resistance_controls() -> [ResistanceControl; 6] {
+    [
+        (
+            "resistance-changed-placeholders",
+            Some(RESISTANCE_PLACEHOLDERS),
+            None,
+        ),
+        ("resistance-missing-placeholders", None, None),
+        (
+            "resistance-zero-inputs-with-placeholders",
+            Some(RESISTANCE_PLACEHOLDERS),
+            Some([0.; 4]),
+        ),
+        (
+            "resistance-signed-inputs-with-placeholders",
+            Some(RESISTANCE_PLACEHOLDERS),
+            Some(RESISTANCE_INPUTS),
+        ),
+        (
+            "resistance-zero-inputs-without-placeholders",
+            None,
+            Some([0.; 4]),
+        ),
+        (
+            "resistance-signed-inputs-without-placeholders",
+            None,
+            Some(RESISTANCE_INPUTS),
+        ),
+    ]
 }
 fn remove_keys(xml: &str, keys: &[&str]) -> String {
     let doc = roxmltree::Document::parse(xml).unwrap();
@@ -499,8 +579,176 @@ fn metadata(actual: &Json, typed: &Json) {
         kind => panic!("unreviewed typed metadata {kind}"),
     }
 }
+fn check_resistance_controls(result: &Json) {
+    let baseline = state(result, "original-05");
+    let base = &baseline["saved"];
+    let defaults = [50., 50., 50., 0.];
+    for ((key, first), default) in RESISTANCE_FIELDS
+        .iter()
+        .zip([2171, 2168, 2165, 2174])
+        .zip(defaults)
+    {
+        let definitions: Vec<_> = rows(&baseline["catalogue"])
+            .iter()
+            .filter(|row| row["definition"]["var"] == *key)
+            .collect();
+        assert_eq!(definitions.len(), 1, "unique resistance definition {key}");
+        let definition = &definitions[0]["definition"];
+        assert_eq!(definition["type"], "countAllowZero");
+        assert!(definition["defaultState"].is_null());
+        assert!(definition["defaultPlaceholderState"].is_null());
+        assert_eq!(definition["apply"]["function_source"]["first"], first);
+        assert!(base["input"].as_object().unwrap().get(*key).is_none());
+        assert_eq!(base["placeholder"][key].as_f64(), Some(default));
+    }
+    for (name, placeholders, inputs) in resistance_controls() {
+        let observed = state(result, name);
+        let saved = &observed["saved"];
+        let configs = rows(&observed["raw"]);
+        assert_eq!(configs.len(), 1, "{name} Config census");
+        let sets = rows(&configs[0]["sets"]);
+        assert_eq!(sets.len(), 1, "{name} ConfigSet census");
+        assert_eq!(sets[0]["attributes"]["id"], "1");
+        assert_eq!(saved["input"]["enemyIsBoss"], "Pinnacle");
+        let mut expected_input = base["input"].clone();
+        for (index, key) in RESISTANCE_FIELDS.iter().enumerate() {
+            // Authenticate both saved lanes independently. Missing numeric Input
+            // stays absent; an overwritten Placeholder never supplies that lane.
+            for (element, values) in [("Placeholder", placeholders), ("Input", inputs)] {
+                let entries: Vec<_> = rows(&sets[0]["entries"])
+                    .iter()
+                    .filter(|entry| {
+                        entry["xml"]["elem"] == element && entry["xml"]["attrib"]["name"] == *key
+                    })
+                    .collect();
+                assert_eq!(
+                    entries.len(),
+                    usize::from(values.is_some()),
+                    "{name} {key} {element}"
+                );
+                if let Some(values) = values {
+                    let attributes = &entries[0]["xml"]["attrib"];
+                    assert_eq!(attributes.as_object().unwrap().len(), 2);
+                    assert_eq!(
+                        attributes["number"]
+                            .as_str()
+                            .unwrap()
+                            .parse::<f64>()
+                            .unwrap(),
+                        values[index],
+                        "{name} {key} actual saved {element}"
+                    );
+                }
+            }
+            let expected_raw = inputs.map(|values| values[index]);
+            if let Some(raw) = expected_raw {
+                assert_eq!(
+                    saved["input"][key].as_f64(),
+                    Some(raw),
+                    "{name} {key} raw Input"
+                );
+                expected_input[*key] = saved["input"][key].clone();
+            } else {
+                assert!(
+                    saved["input"].as_object().unwrap().get(*key).is_none(),
+                    "{name} {key} must remain absent"
+                );
+            }
+            assert_eq!(
+                saved["placeholder"][key].as_f64(),
+                Some(defaults[index]),
+                "{name} {key} callback overwrites the saved Placeholder"
+            );
+            let stat = key.strip_prefix("enemy").unwrap();
+            let expected = expected_raw.unwrap_or(defaults[index]);
+            let actual = records(saved, "enemy_mods", stat, "EnemyConfig");
+            let original = records(base, "enemy_mods", stat, "EnemyConfig");
+            assert_eq!(actual.len(), 1, "{name} {stat} contribution count");
+            assert_eq!(original.len(), 1, "baseline {stat} contribution count");
+            assert_eq!(actual[0]["type"], "BASE");
+            assert_eq!(
+                actual[0]["value"].as_f64(),
+                Some(expected),
+                "{name} {stat} contribution value"
+            );
+            let mut expected_record = original[0].clone();
+            expected_record["value"] = actual[0]["value"].clone();
+            expected_record["all_fields"]["value"] = actual[0]["value"].clone();
+            same(
+                actual[0],
+                &expected_record,
+                &format!("{name} {stat} exact contribution"),
+            );
+            for mode in ["MAIN", "CALCS"] {
+                assert_eq!(saved["modes"][mode]["input_alias"], true);
+                assert_eq!(saved["modes"][mode]["placeholder_alias"], true);
+                assert_eq!(
+                    saved["modes"][mode]["enemy_base"][stat]["enemy_config"].as_f64(),
+                    Some(expected),
+                    "{name} {mode} {stat} source-owned BASE"
+                );
+            }
+        }
+        same(
+            &saved["input"],
+            &expected_input,
+            &format!("{name} exact effective Input map"),
+        );
+        for field in [
+            "placeholder",
+            "selected",
+            "control_defaults",
+            "enemy_level",
+            "player_mods",
+        ] {
+            same(
+                &saved[field],
+                &base[field],
+                &format!("{name} stable Config {field}"),
+            );
+        }
+        for field in ["input", "placeholder"] {
+            same(
+                &case(result, name)["load"][field],
+                &saved[field],
+                &format!("{name} load/observation {field}"),
+            );
+        }
+    }
+    // Paired runs vary only saved Placeholder presence. Compare the configuration
+    // contract, not unrelated whole-build output or final resistance semantics.
+    for (with, without) in [
+        (
+            "resistance-changed-placeholders",
+            "resistance-missing-placeholders",
+        ),
+        (
+            "resistance-zero-inputs-with-placeholders",
+            "resistance-zero-inputs-without-placeholders",
+        ),
+        (
+            "resistance-signed-inputs-with-placeholders",
+            "resistance-signed-inputs-without-placeholders",
+        ),
+    ] {
+        for field in [
+            "input",
+            "placeholder",
+            "selected",
+            "sets",
+            "player_mods",
+            "enemy_mods",
+        ] {
+            same(
+                &state(result, with)["saved"][field],
+                &state(result, without)["saved"][field],
+                &format!("{with}/{without} {field}"),
+            );
+        }
+    }
+}
 fn check(result: &Json, facts: &Json) {
-    assert_eq!(rows(&result["cases"]).len(), 23);
+    assert_eq!(rows(&result["cases"]).len(), 29);
     let catalogue = &state(result, "original-05")["catalogue"];
     assert!(
         rows(catalogue).len() > 300,
@@ -665,6 +913,7 @@ fn check(result: &Json, facts: &Json) {
     // Equal BASE is not a statement of general raw-lane equivalence: the full
     // outputs and original consumer breakdowns retain the separate Input state.
     assert!(base["input"]["enemyColdResist"].is_null());
+    check_resistance_controls(result);
     for (name, expected) in [
         ("numeric-placeholders", [7., 13., 1.25, -13.]),
         ("numeric-input-priority", [3., 11., 2.5, -11.]),

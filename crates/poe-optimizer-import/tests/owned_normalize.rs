@@ -445,7 +445,12 @@ fn origin_integrity_with_retired(
         assert!(source_ids.insert(origin.source));
         match &origin.disposition {
             SourceDisposition::Contributes => assert!(!origin.links.is_empty()),
-            SourceDisposition::SourceOnly(_) => assert!(origin.links.is_empty()),
+            SourceDisposition::SourceOnly(_) => assert!(
+                origin
+                    .links
+                    .iter()
+                    .all(|target| !matches!(target, OwnedOriginTarget::Issue(_)))
+            ),
         }
         for target in &origin.links {
             let id = ids(target);
