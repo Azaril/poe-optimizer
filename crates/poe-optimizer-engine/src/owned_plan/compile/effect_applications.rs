@@ -285,11 +285,11 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 entity: RuleEntity::Current,
                 input: input.clone(),
             }),
-            RuleReadSource::OrderedContributions {
+            RuleReadSource::ContributionQuery {
                 entity: RuleEntity::EffectSource,
                 query,
                 group,
-            } => Some(RuleReadSource::OrderedContributions {
+            } => Some(RuleReadSource::ContributionQuery {
                 entity: RuleEntity::Current,
                 query: query.clone(),
                 group: group.clone(),

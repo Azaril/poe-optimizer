@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "scope": "resistance-contribution-only",
-  "base_recipe_sha256": "3a4b7e6079ece1e95f5b54aa50be69a2b4c0aebf87283123ce2edbc9ac36fe4f",
-  "recipe_sha256": "730e48051a347d418c74c9bbe615068add20d270c9763e3413f3490e94d1e5c3",
+  "base_recipe_sha256": "16cf33a993e1d6d379400139cec613b30061fa460b9529c6316ee76b21fe7a82",
+  "recipe_sha256": "b01c13e105b135ba75b59257f9341c09842239c7aee1503a8d18221a0e4b33ab",
   "source": {
     "system": "path_of_building2",
     "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",

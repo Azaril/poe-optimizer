@@ -37,7 +37,7 @@ class ImportExportTests(unittest.TestCase):
 
     def test_rule_registry_survives_with_no_implicit_old_wire_migration(self):
         for value in [EXPORT.decode(self.inputs[1]), EXPORT.decode(self.outputs["recipe-seed.json"])]:
-            self.assertEqual(value["rules"]["schema_version"], 2)
+            self.assertEqual(value["rules"]["schema_version"], 3)
             self.assertEqual(value["rules"]["receivers"], {"members": [], "closure": {"kind": "complete"}})
         original = EXPORT.decode(self.inputs[1])["rules"]
         for changed in ["missing", "old_version", "old_operations"]:
@@ -47,7 +47,7 @@ class ImportExportTests(unittest.TestCase):
             elif changed == "old_operations":
                 rules["operations_version"] = "owned-domain-operations-v5"
             else:
-                rules["schema_version"] = 1
+                rules["schema_version"] = 2
             with self.assertRaisesRegex(ValueError, "owned rule"):
                 EXPORT.validate_rule_wire(rules)
 

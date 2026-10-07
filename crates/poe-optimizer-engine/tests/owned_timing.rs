@@ -329,7 +329,7 @@ fn preparation_checks_exact_units_integer_repeats_and_bounded_precision() {
 fn package(f: &Fixture, schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
     RulePackageInput {
         existing_actor_rules: None,
-        ordered_contributions: None,
+        contribution_queries: None,
         effect_applications: None,
         receivers: DeclaredSet::complete(vec![]),
         tables: vec![],

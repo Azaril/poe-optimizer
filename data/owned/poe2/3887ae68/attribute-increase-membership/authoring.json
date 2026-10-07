@@ -48,12 +48,12 @@
       "sha256": "a4f53823e754e813b93556aa00799af44bcc57b917a66eed9c0ea121eb4d5ff6"
     },
     "dependencies.json": {
-      "bytes": 81367,
-      "sha256": "87af827b48f694da37c2c7e80d4d7b92cc261c37527ff8cba17dd9e7fff75b58"
+      "bytes": 81997,
+      "sha256": "fb884093b19013f75b6e055c8db26a6b139346a30fc5da67db68241dda779893"
     },
     "queries.json": {
-      "bytes": 44900,
-      "sha256": "da2d68d7d59ef75e96e365be440dc6d5c3a3a200203406e0eb9bd9f0a595b309"
+      "bytes": 46316,
+      "sha256": "8e09ddb382252431e54c500491c1d575e0fb3e21e049a0ae12e1b88d9f277fb8"
     },
     "source-vectors.json": {
       "bytes": 234949,

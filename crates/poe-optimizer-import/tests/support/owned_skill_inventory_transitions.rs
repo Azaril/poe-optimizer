@@ -80,7 +80,7 @@ fn prior(with_direct: bool) -> StagedOwnedRelease {
                 schema: schema.input().clone(),
                 rules: RulePackageInput {
                     existing_actor_rules: None,
-                    ordered_contributions: None,
+                    contribution_queries: None,
                     schema_version: OWNED_RULE_PACKAGE_VERSION,
                     namespace: schema.namespace().clone(),
                     release: key("finite-import-only-rules"),

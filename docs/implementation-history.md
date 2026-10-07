@@ -22455,3 +22455,90 @@ Offering tests pass again in 9.22 seconds (`runs/owned-offering-native-04.log`).
 Exact pushed-head hosted CI remains a separate gate.
 **Complete native original builds remain 0/5**, with Original05's
 five selected issues and 79 configuration-linked origins unchanged.
+
+
+## 2026-10-07: overwritten configuration placeholders have exact ownership
+
+The [configuration accounting proof](owned-configuration-dispositions-proposal.md#overwritten-raw-override-placeholders-2026-10-07)
+now accounts for saved numeric placeholders that the reviewed encounter replaces.
+It reuses existing injected raw-input policies and the strict ConfigSet census;
+there is no new public model, source-name allowlist or blanket Placeholder rule.
+Exact source scope, encounter, Scenario/Choice ownership, attached Pending issue
+and emitted presence/optional-value rows must all agree. A successful leaf becomes
+source-only with its exact ScenarioPreset link. Explicit Input provenance stays
+intact, including zero. Unknown, malformed, ambiguous, fallback/default or
+otherwise unproved rows retain their obligations. No inventory is completed.
+
+The all-five public CLI reimport passes in **13.52s**, with independent fresh
+repeats and authenticated prior sidecars/draft digests. All five retire exactly
+fourteen reviewed Placeholder links. Original05's configuration inventory drops
+**58 to 44 origins**: 21 inside Config and 23 elsewhere. The earlier fourteen
+archived-source ownership changes remain intact. Every canonical draft, local ID,
+allocator watermark, saved selection, all 110 queries and selected unresolved
+issue lists are unchanged. The runtime package and all native inputs are unchanged.
+
+Validation passes: **187 Import library tests** and **311 normalization tests**,
+including ownership, malformed-source, partial projection, exact output and
+failure-recovery controls. The expanded optional PoB witness passes **29 cases in
+both JIT modes** in **121.88s**. Six new controls cover all four resistances with
+changed/absent placeholders and absent/zero/signed/fractional Inputs. Both reports
+are byte-identical (37,752,151 bytes; SHA-256
+`b16d8d172a2f9b60f78d3efe082c40bfbee1913d1b5eb2f797574fb3631b47f7`).
+The existing rating and incoming-damage reports cover the other ten fields;
+their hashes and all 23 explicit source pins per report were reauthenticated
+against the manifest and checkout. Independent review found no production defect.
+This validates Import/source semantics, not new final numerical metrics.
+
+Strict workspace/all-feature/all-target Clippy passes in 22.32s after two
+test-style lint fixes; per-package Import/PoB/CLI formatting and `git diff --check`
+pass. The combined formatter command exceeded Windows' command-length limit,
+so the same checks ran separately per package. Log:
+`runs/owned-config-placeholders-clippy-02.log`. No full workspace test-suite run
+or hosted CI success is claimed for this checkpoint.
+
+Current imports with a configuration-input policy emit **sidecar schema/domain
+23**; generated-input policies without configuration accounting use schema22.
+There is one current importer and no historical restore mode. The existing
+all-five accounting harness was extended instead of adding a duplicate importer
+comparison. The ordinary complete-source test remains active and now retains a
+fresh evidence directory, preserving historical reports.
+
+Evidence: `runs/owned-config-placeholders-accounting-01/validation.json`,
+`runs/owned-config-placeholders-publication-01.log`,
+`runs/owned-config-placeholders-poe_optimizer_import-01.log`,
+`runs/owned-config-placeholders-owned_normalize-01.log`,
+`runs/owned-config-placeholders-source-01.log` and
+`runs/owned-raw-override-source-01/`. Reproduce the CLI check using target
+`owned_generated_field_accounting`, ignored test
+`current_accounting_reimports_all_five_without_changing_build_inputs`, with
+`POE_OPTIMIZER_TEST_GENERATED_ACCOUNTING_BASELINE` pointing to the absolute
+`runs/owned-resistance-penalty-02` directory and
+`POE_OPTIMIZER_TEST_GENERATED_ACCOUNTING_OUTPUT` to a fresh directory.
+For the source witness, run target `owned_configuration_inputs_source` with
+`POE_CONFIGURATION_INPUTS_SOURCE_OUT` pointing to a fresh directory.
+
+**Next:** implement the now-accepted [typed Boolean contribution/Any contract](owned-boolean-contributions-proposal.md)
+on the existing graph, then migrate actual selected flag producers and consumers.
+This is a shared prerequisite for inherent attribute and critical-hit calculations;
+an isolated finite fixture or assumed-false flags cannot complete it. The next
+configuration numerical slice is enemy critical chance/damage transport followed
+by its real critical-effect consumer and dependencies. The remaining nineteen
+Placeholders have different consumers and zero precedence; their
+[consumer audit](owned-configuration-dispositions-proposal.md#remaining-consumer-priorities-2026-10-07)
+records the path. Support-origin composition and FullDPS reporting remain separate
+owner decisions. Original05 remains the closest evidenced completion target:
+five selected input obligations, **0/5 complete native builds**, and D4 beginning
+immediately after the first full native/reference result.
+
+
+
+
+### 2026-10-07 historical harness retirement
+
+The schema21-to23 `owned_generated_field_accounting` CLI migration harness
+referenced above was removed after the current Boolean publication/reimport
+passed. Its raw evidence remains; the retired schema2 package is not accepted
+by the current loader. The current all-five test is `owned_boolean_publication`.
+Import ownership/disposition regressions and shared authentication helpers remain
+maintained. Earlier reproduction commands in this history describe their saved
+checkpoint, not a request to retain a historical loading mode.

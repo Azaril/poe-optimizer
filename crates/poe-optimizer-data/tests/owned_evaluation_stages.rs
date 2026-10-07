@@ -167,7 +167,7 @@ impl Fixture {
         let rules = OwnedRulePackage::new(
             RulePackageInput {
                 existing_actor_rules: None,
-                ordered_contributions: None,
+                contribution_queries: None,
                 effect_applications: None,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: ns(),
@@ -634,23 +634,23 @@ fn ordered_group_reads_obey_the_same_frozen_contribution_channel() {
         rules.effect_applications = Some(empty());
         // This storage-only fixture checks scheduling. An actual candidate with
         // an unlisted contributor still fails Engine's whole-query binding.
-        rules.ordered_contributions = Some(DeclaredSet::complete(vec![OrderedContributionQuery {
+        rules.contribution_queries = Some(DeclaredSet::complete(vec![ContributionQuery {
             id: key("ordered"),
             stat: id("a"),
             contribution: ContributionKind::Add,
-            groups: vec![OrderedContributionGroup {
+            groups: vec![ContributionGroup {
                 id: key("group"),
                 reduction: ContributionReduction::Sum,
+                ordering: ContributionOrdering::Ordered,
                 empty: ParameterValue::Integer(BoundedInteger::new(0).unwrap()),
                 members: empty(),
             }],
         }]));
-        rules.owners[1].programs.members[0].reads[0].source =
-            RuleReadSource::OrderedContributions {
-                entity: RuleEntity::Current,
-                query: key("ordered"),
-                group: key("group"),
-            };
+        rules.owners[1].programs.members[0].reads[0].source = RuleReadSource::ContributionQuery {
+            entity: RuleEntity::Current,
+            query: key("ordered"),
+            group: key("group"),
+        };
     });
     // V21 retains V18+'s readiness/stage envelope, with an explicitly empty
     // effect-application partition for this finite fixture.
@@ -691,6 +691,114 @@ fn ordered_group_reads_obey_the_same_frozen_contribution_channel() {
         f.package(),
         Err(StageStorageError::Invalid(
             "frozen channel read occurs before or outside frozen stage"
+        ))
+    ));
+}
+
+#[test]
+fn boolean_query_reads_obey_frozen_flag_channels_and_refuse_numeric_channel_types() {
+    use poe_optimizer_core::owned_readiness::*;
+    let mut f = Fixture::new();
+    let mut definitions = f.schema.input().clone();
+    definitions
+        .definitions
+        .push(DefinitionDescriptor::Stat(entry(
+            id("flag"),
+            StatSchema {
+                value: ComputedValueType::Boolean,
+                targets: vec![RuleEntityKind::Actor],
+            },
+        )));
+    f.schema =
+        OwnedDefinitionSchemaPackage::new(definitions, OwnedSchemaLimits::default()).unwrap();
+    let identity = f.schema.identity().clone();
+    f.input.definitions = identity.clone();
+    f.change_routing(|routing| routing.definitions = identity.clone());
+    f.change_rules(|rules| {
+        rules.definitions = identity;
+        rules.operations_version = key(OWNED_RULE_OPERATIONS_V22);
+        rules.effect_applications = Some(empty());
+        rules.contribution_queries = Some(DeclaredSet::complete(vec![ContributionQuery {
+            id: key("flags"),
+            stat: id("flag"),
+            contribution: ContributionKind::Flag,
+            groups: vec![ContributionGroup {
+                id: key("any"),
+                reduction: ContributionReduction::Any,
+                ordering: ContributionOrdering::Unordered,
+                empty: ParameterValue::Boolean(false),
+                members: empty(),
+            }],
+        }]));
+        rules.owners[1].programs.members[0].reads[0] = RuleRead {
+            id: key("flag-read"),
+            value_type: ComputedValueType::Boolean,
+            source: RuleReadSource::ContributionQuery {
+                entity: RuleEntity::Current,
+                query: key("flags"),
+                group: key("any"),
+            },
+        };
+    });
+    f.input.effect_applications = Some(empty());
+    f.input.schema_version = OWNED_EVALUATION_STAGES_V3;
+    f.input.readiness = Some(ReadinessInput {
+        skills: vec![SkillReadiness {
+            participation: None,
+            skill: id("skill"),
+            parameters: empty(),
+        }],
+        programs: DeclaredSet::complete(
+            ["a", "b"]
+                .into_iter()
+                .map(|name| ReadinessProgram {
+                    owner: owner(name),
+                    program: key("same-local-id"),
+                    phase: ReadinessPhase::Execution,
+                    role: ReadinessProgramRole::Execution,
+                    outputs: vec![],
+                })
+                .collect(),
+        ),
+    });
+    let channel = StageChannel::Contributions {
+        scope: RuleEntityKind::Actor,
+        stat: id("flag"),
+        contribution: ContributionKind::Flag,
+    };
+    f.input.frozen_channels.push(FrozenStageChannel {
+        channel: channel.clone(),
+        stage: key("prepare"),
+    });
+    f.package().unwrap();
+    f.input.frozen_channels.last_mut().unwrap().stage = key("finish");
+    assert!(matches!(
+        f.package(),
+        Err(StageStorageError::Invalid(
+            "frozen channel read occurs before or outside frozen stage"
+        ))
+    ));
+    f.input.frozen_channels.last_mut().unwrap().stage = key("prepare");
+    f.input.frozen_channels.last_mut().unwrap().channel = StageChannel::Contributions {
+        scope: RuleEntityKind::Actor,
+        stat: id("a"),
+        contribution: ContributionKind::Flag,
+    };
+    assert!(matches!(
+        f.package(),
+        Err(StageStorageError::Invalid(
+            "flag contribution channel requires Boolean stat and operations V22"
+        ))
+    ));
+    f.input.frozen_channels.last_mut().unwrap().channel = StageChannel::Contributions {
+        scope: RuleEntityKind::Actor,
+        stat: id("flag"),
+        contribution: ContributionKind::Add,
+    };
+    assert!(matches!(
+        f.package(),
+        Err(StageStorageError::Invalid(
+            "contribution channel must be numeric"
         ))
     ));
 }

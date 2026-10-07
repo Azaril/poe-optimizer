@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-10-06 for the owner's aggressive retirement direction. This is a living companion to
+Updated 2026-10-07 for the owner's aggressive retirement direction. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -10,6 +10,24 @@ review and Lua behavior/type pass. Track delivery order in the
 do not create a parallel cleanup plan or treat the archived checkpoints below as
 new work. Recent discussion findings must be classified here with a live consumer,
 retirement condition and validation boundary.
+
+## Current rule-format cutover (2026-10-07)
+
+The contribution query contract now has one schema3 representation: explicit
+source origins, optional numeric order and typed Boolean Any. No schema2 query
+reader or compatibility alias remains. Maintained acquisition seeds and static
+fixtures were rebuilt; their V6 operation subset is an explicit capability
+selection, not an alternative artifact loader. Independent source evidence stays
+pinned to its original bytes.
+
+Removed the root `owned_generated_field_accounting` test after the new current
+all-five publication check passed. It exclusively replayed the completed
+schema21-to23 transition against a retired package and had no direct CI/script
+consumer. Keep Import's similarly named module, malformed/ownership/recovery
+regressions and shared preservation helpers. Future historical release replay
+harnesses should be rebased only when they provide independent current-path
+coverage; otherwise retire their orchestration and retain useful source witnesses.
+Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 

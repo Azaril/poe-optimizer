@@ -153,7 +153,7 @@ fn fixture(offset: i64) -> Fixture {
     let request = OwnedEvaluationRequest::new(build, scenario, queries, limits).unwrap();
     let rules = RulePackageInput {
         existing_actor_rules: None,
-        ordered_contributions: None,
+        contribution_queries: None,
         effect_applications: None,
         receivers: DeclaredSet::complete(vec![]),
         tables: vec![],

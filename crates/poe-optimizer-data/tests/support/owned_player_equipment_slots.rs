@@ -34,7 +34,7 @@ fn fixture() -> (OwnedDefinitionSchemaPackage, RulePackageInput) {
     let mut rules = input(&schema);
     rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
     rules.effect_applications = Some(DeclaredSet::complete(vec![]));
-    rules.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+    rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
     rules.owners[0].programs.members[0].reads = vec![
         read(
             PlayerEquipmentSlotRead::Occupied,

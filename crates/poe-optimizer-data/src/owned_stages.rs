@@ -144,6 +144,7 @@ fn scope(
 }
 fn check_channel<I: DefinitionSchemaIndex>(
     channel: &StageChannel,
+    boolean_contributions: bool,
     index: &I,
     used: &mut StageStorageUse,
     l: StageStorageLimits,
@@ -159,15 +160,21 @@ fn check_channel<I: DefinitionSchemaIndex>(
             if let ComputedValueType::Quantity { unit } = &schema.value {
                 known(index.definition(unit))?;
             }
-            if matches!(channel, StageChannel::Contributions { .. })
-                && !matches!(
+            if let StageChannel::Contributions { contribution, .. } = channel {
+                if *contribution == ContributionKind::Flag {
+                    if !boolean_contributions || schema.value != ComputedValueType::Boolean {
+                        return Err(StageStorageError::Invalid(
+                            "flag contribution channel requires Boolean stat and operations V22",
+                        ));
+                    }
+                } else if !matches!(
                     schema.value,
                     ComputedValueType::Integer | ComputedValueType::Quantity { .. }
-                )
-            {
-                return Err(StageStorageError::Invalid(
-                    "contribution channel must be numeric",
-                ));
+                ) {
+                    return Err(StageStorageError::Invalid(
+                        "contribution channel must be numeric",
+                    ));
+                }
             }
         }
         StageChannel::Capability { scope, capability } => {
@@ -393,7 +400,14 @@ impl OwnedEvaluationStages {
         let readiness = readiness::validate(&mut input, index, rules, &mut used, limits)?;
         let mut frozen = BTreeMap::new();
         for row in &input.frozen_channels {
-            check_channel(&row.channel, index, &mut used, limits)?;
+            check_channel(
+                &row.channel,
+                RuleOperationsVersion::parse(rules.input().operations_version.as_str())
+                    .is_some_and(RuleOperationsVersion::supports_boolean_contributions),
+                index,
+                &mut used,
+                limits,
+            )?;
             let Some(&stage) = stages.get(&row.stage) else {
                 return Err(StageStorageError::Invalid("unknown frozen stage"));
             };
@@ -402,7 +416,7 @@ impl OwnedEvaluationStages {
             }
         }
         let mut ordered = BTreeMap::new();
-        if let Some(registry) = &rules.input().ordered_contributions {
+        if let Some(registry) = &rules.input().contribution_queries {
             used.entries(registry.members.len(), limits)?;
             used.work(registry.members.len(), limits)?;
             for query in &registry.members {
@@ -684,7 +698,7 @@ impl Access<'_> {
                     stage,
                     false,
                 )?,
-                RuleReadSource::OrderedContributions { entity, query, .. } => {
+                RuleReadSource::ContributionQuery { entity, query, .. } => {
                     let Some((stat, contribution)) = self.ordered.get(query) else {
                         return Err(StageStorageError::Invalid(
                             "unknown ordered contribution query",

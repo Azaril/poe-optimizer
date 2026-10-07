@@ -416,7 +416,7 @@ pub(crate) fn preflight(input: &OwnedReleaseInput, limits: OwnedReleaseLimits) -
             charge(&mut left, application.targets.len(), "validation entries")?;
         }
     }
-    if let Some(queries) = &recipe.rules.ordered_contributions {
+    if let Some(queries) = &recipe.rules.contribution_queries {
         charge(&mut left, queries.members.len(), "validation entries")?;
         if let SchemaClosure::Partial { gaps } = &queries.closure {
             charge(&mut left, gaps.len(), "validation entries")?;
@@ -429,8 +429,16 @@ pub(crate) fn preflight(input: &OwnedReleaseInput, limits: OwnedReleaseLimits) -
                     charge(&mut left, gaps.len(), "validation entries")?;
                 }
                 for member in &group.members.members {
-                    if let poe_optimizer_core::owned_rules::OrderedContributionOrigin::EquipmentUse { slots }
-                    | poe_optimizer_core::owned_rules::OrderedContributionOrigin::ItemModifier { slots } = &member.order.origin {
+                    if let Some(order) = &member.order {
+                        charge(&mut left, order.slot_ranks.len(), "validation entries")?;
+                    }
+                    if let poe_optimizer_core::owned_rules::ContributionOrigin::EquipmentUse {
+                        slots,
+                    }
+                    | poe_optimizer_core::owned_rules::ContributionOrigin::ItemModifier {
+                        slots,
+                    } = &member.origin
+                    {
                         charge(&mut left, slots.len(), "validation entries")?;
                     }
                 }

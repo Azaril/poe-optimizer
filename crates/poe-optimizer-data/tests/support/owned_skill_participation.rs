@@ -60,7 +60,7 @@ fn fixture() -> Fixture {
         rules.definitions = identity.clone();
         rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
         rules.effect_applications = Some(empty());
-        rules.ordered_contributions = Some(empty());
+        rules.contribution_queries = Some(empty());
         rules.owners.push(DefinitionRules {
             owner: usage_owner(),
             programs: DeclaredSet::complete(vec![RuleProgram {
@@ -202,7 +202,7 @@ fn requirement_needs_the_explicit_current_stage_and_operation_admission() {
         let mut f = fixture();
         f.change_rules(|r| {
             r.operations_version = key(operations);
-            r.ordered_contributions = None;
+            r.contribution_queries = None;
         });
         assert!(matches!(
             f.package(),

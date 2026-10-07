@@ -53,7 +53,7 @@ fn rules(f: &Fixture, version: &str) -> (OwnedDefinitionSchemaPackage, RulePacka
     let schema = OwnedDefinitionSchemaPackage::new(f.schema.clone(), Default::default()).unwrap();
     let input = RulePackageInput {
         existing_actor_rules: None,
-        ordered_contributions: None,
+        contribution_queries: None,
         effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
@@ -354,7 +354,7 @@ fn receiver_does_not_acquire_template_level_quality_or_modifier_read_authority()
 }
 
 #[test]
-fn old_actor_wire_and_v6_v7_v8_canonical_compiled_identities_are_unchanged() {
+fn actor_wire_and_v6_v7_v8_subsets_roundtrip_current_contract_identities() {
     let target = ActorReceiverTarget::Player;
     assert_eq!(
         serde_json::to_string(&target).unwrap(),
@@ -373,7 +373,7 @@ fn old_actor_wire_and_v6_v7_v8_canonical_compiled_identities_are_unchanged() {
         assert_eq!(
             compiled.identity(),
             digest_owned(
-                "owned-rule-programs-v2",
+                "owned-rule-programs-v3",
                 &canonical,
                 RuleLimits::default().max_wire_bytes
             )

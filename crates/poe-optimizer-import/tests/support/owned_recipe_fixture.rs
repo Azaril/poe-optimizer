@@ -54,7 +54,7 @@ pub fn recipe(coefficient: i64) -> OwnedRecipeInput {
         schema: schema.input().clone(),
         rules: RulePackageInput {
             existing_actor_rules: None,
-            ordered_contributions: None,
+            contribution_queries: None,
             effect_applications: None,
             receivers: DeclaredSet::complete(vec![]),
             schema_version: OWNED_RULE_PACKAGE_VERSION,

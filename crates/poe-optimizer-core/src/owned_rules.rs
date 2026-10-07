@@ -10,9 +10,12 @@ use crate::{
 };
 use serde::{Deserialize, Serialize};
 
-pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
-/// Version of the closed operations below, independent of game coefficients.
+pub const OWNED_RULE_PACKAGE_VERSION: u32 = 3;
+/// Baseline operation subset used when authors do not opt into newer capabilities.
+/// Package schema and content identity domains always use the current format.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+/// Typed Boolean contribution channels with unordered, complete Any reductions.
+pub const OWNED_RULE_OPERATIONS_V22: &str = "owned-domain-operations-v22";
 /// Candidate-bound ordered contribution groups. Earlier reductions stay unchanged.
 pub const OWNED_RULE_OPERATIONS_V21: &str = "owned-domain-operations-v21";
 /// Read-only predicates on an exact bound Action selection.
@@ -27,7 +30,8 @@ pub const OWNED_RULE_OPERATIONS_V17: &str = "owned-domain-operations-v17";
 pub const OWNED_RULE_OPERATIONS_V16: &str = "owned-domain-operations-v16";
 /// Explicit opt-in to source/recipient effect applications. The default remains V14.
 pub const OWNED_RULE_OPERATIONS_V15: &str = "owned-domain-operations-v15";
-/// Supported prior operation sets. Their input and identities remain unchanged.
+/// Supported operation subsets with frozen semantic capabilities. All use the
+/// current package schema; this does not promise old artifact compatibility.
 /// Scenario enemy level requires v14, actor support applicability requires v13,
 /// assignment/skill preparation scopes
 /// require v12, actor-owned ability supply
@@ -65,6 +69,7 @@ pub enum RuleOperationsVersion {
     V19,
     V20,
     V21,
+    V22,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -85,6 +90,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V19 => Self::V19,
             OWNED_RULE_OPERATIONS_V20 => Self::V20,
             OWNED_RULE_OPERATIONS_V21 => Self::V21,
+            OWNED_RULE_OPERATIONS_V22 => Self::V22,
             _ => return None,
         })
     }
@@ -106,6 +112,7 @@ impl RuleOperationsVersion {
             Self::V19 => 19,
             Self::V20 => 20,
             Self::V21 => 21,
+            Self::V22 => 22,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -150,8 +157,11 @@ impl RuleOperationsVersion {
     pub const fn supports_action_selection(self) -> bool {
         self.revision() >= 20
     }
-    pub const fn supports_ordered_contributions(self) -> bool {
+    pub const fn supports_contribution_queries(self) -> bool {
         self.revision() >= 21
+    }
+    pub const fn supports_boolean_contributions(self) -> bool {
+        self.revision() >= 22
     }
     /// Current explicit Skill participation in V4 readiness metadata.
     pub const fn supports_skill_participation(self) -> bool {
@@ -177,6 +187,7 @@ impl RuleOperationsVersion {
             Self::V19 => "owned-effect-plan-v16",
             Self::V20 => "owned-effect-plan-v17",
             Self::V21 => "owned-effect-plan-v18",
+            Self::V22 => "owned-effect-plan-v19",
         }
     }
 }
@@ -196,14 +207,14 @@ pub struct RulePackageInput {
     /// Explicit applicability; this registry never creates actor/equipment occurrences.
     /// Partial membership remains a coverage gap even if all known rows run.
     pub receivers: DeclaredSet<StatReceiver>,
-    /// Explicit v15 inventory; omission preserves the older package's bytes and
-    /// semantics. A Partial inventory never proves an absent incoming effect.
+    /// Explicit inventory required from operations V15. Omission is permitted
+    /// only by older operation subsets; Partial never proves an absent effect.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub effect_applications: Option<DeclaredSet<EffectApplicationRule>>,
-    /// Explicit V21 inventory. Omission preserves every older package's bytes.
+    /// Explicit contribution membership inventory, mandatory from operations V21.
     /// This does not close the numerical coverage of any contributing owner.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub ordered_contributions: Option<DeclaredSet<OrderedContributionQuery>>,
+    pub contribution_queries: Option<DeclaredSet<ContributionQuery>>,
     /// Rules applied once to actors already present in the request. Omission is
     /// a known empty applicability inventory, never an inferred actor default.
     #[serde(
@@ -234,29 +245,38 @@ pub enum ExistingActorRuleTarget {
 /// groups that a particular consumer does not read.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct OrderedContributionQuery {
+pub struct ContributionQuery {
     pub id: OwnedDefinitionKey,
     pub stat: StatDefId,
     pub contribution: ContributionKind,
-    pub groups: Vec<OrderedContributionGroup>,
+    pub groups: Vec<ContributionGroup>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct OrderedContributionGroup {
+pub struct ContributionGroup {
     pub id: OwnedDefinitionKey,
     pub reduction: ContributionReduction,
+    /// Numeric folds require explicit semantic order; Boolean Any forbids ranks.
+    pub ordering: ContributionOrdering,
     pub empty: ParameterValue,
-    pub members: DeclaredSet<OrderedContributionMember>,
+    pub members: DeclaredSet<ContributionMember>,
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ContributionOrdering {
+    Ordered,
+    Unordered,
 }
 /// Definition-qualified selection, expanded against actual candidate occurrences.
 /// Equal values or definitions never merge distinct provider occurrences.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct OrderedContributionMember {
+pub struct ContributionMember {
     pub owner: SchemaSubject,
     pub program: OwnedDefinitionKey,
     pub effect: OwnedDefinitionKey,
-    pub order: OrderedContributionOrder,
+    pub origin: ContributionOrigin,
+    pub order: Option<ContributionOrder>,
 }
 /// Compare (source_rank, slot_rank, modifier_position, program_rank, effect_rank).
 /// Inapplicable slot/position components are zero. No instance ID or discovery
@@ -264,26 +284,26 @@ pub struct OrderedContributionMember {
 /// modifier_position comes only from the rolled item's semantic modifier_order.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct OrderedContributionOrder {
+pub struct ContributionOrder {
     pub source_rank: u32,
     pub program_rank: u32,
     pub effect_rank: u32,
-    pub origin: OrderedContributionOrigin,
+    pub slot_ranks: Vec<ContributionSlotRank>,
 }
 /// Initially only direct provider roots with an empty grant path are admitted.
 /// Granted, socketed, support and application occurrences need a separately
 /// reviewed policy; they must not fall back to their opaque identity ordering.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
-pub enum OrderedContributionOrigin {
+pub enum ContributionOrigin {
     Character,
     Allocation,
-    EquipmentUse { slots: Vec<OrderedEquipmentSlot> },
-    ItemModifier { slots: Vec<OrderedEquipmentSlot> },
+    EquipmentUse { slots: Vec<EquipmentSlotDefId> },
+    ItemModifier { slots: Vec<EquipmentSlotDefId> },
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct OrderedEquipmentSlot {
+pub struct ContributionSlotRank {
     pub slot: EquipmentSlotDefId,
     pub rank: u32,
 }
@@ -432,7 +452,7 @@ impl RuleProgram {
                 } | RuleReadSource::Contributions {
                     entity: RuleEntity::PropertyOwner,
                     ..
-                } | RuleReadSource::OrderedContributions {
+                } | RuleReadSource::ContributionQuery {
                     entity: RuleEntity::PropertyOwner,
                     ..
                 }
@@ -462,7 +482,7 @@ impl RuleProgram {
             | RuleReadSource::Capability { entity, .. }
             | RuleReadSource::External { entity, .. }
             | RuleReadSource::Contributions { entity, .. }
-            | RuleReadSource::OrderedContributions { entity, .. } => {
+            | RuleReadSource::ContributionQuery { entity, .. } => {
                 *entity == RuleEntity::EffectSource
             }
             _ => false,
@@ -490,7 +510,7 @@ impl RuleProgram {
             | RuleReadSource::Capability { entity, .. }
             | RuleReadSource::External { entity, .. }
             | RuleReadSource::Contributions { entity, .. }
-            | RuleReadSource::OrderedContributions { entity, .. } => preparation_entity(entity),
+            | RuleReadSource::ContributionQuery { entity, .. } => preparation_entity(entity),
             _ => false,
         }) || self.effects.iter().any(|effect| match &effect.effect {
             RuleEffectKind::Contribute { entity, .. }
@@ -532,6 +552,8 @@ pub enum RuleEntity {
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ContributionKind {
+    /// Idempotent Boolean fact; never a numeric stand-in.
+    Flag,
     Add,
     Increase,
     Multiply,
@@ -554,6 +576,8 @@ pub struct ModifierTransformTarget {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ContributionReduction {
+    /// Complete unordered Boolean domain. Every unresolved active member blocks.
+    Any,
     Sum,
     Product,
 }
@@ -662,8 +686,8 @@ pub enum RuleReadSource {
         entity: RuleEntity,
         input: ExternalInputDefId,
     },
-    /// The resolver proves complete incoming membership before applying a
-    /// reduction. The explicit empty identity is never a missing-stat default.
+    /// Numeric direct reduction. Boolean channels require ContributionQuery for
+    /// explicit complete membership. Empty identity is never a missing-stat default.
     Contributions {
         entity: RuleEntity,
         stat: StatDefId,
@@ -673,7 +697,7 @@ pub enum RuleReadSource {
     },
     /// Read one named group of an explicitly declared candidate-bound query.
     /// Group arithmetic after the fold remains ordinary typed rule expressions.
-    OrderedContributions {
+    ContributionQuery {
         entity: RuleEntity,
         query: OwnedDefinitionKey,
         group: OwnedDefinitionKey,

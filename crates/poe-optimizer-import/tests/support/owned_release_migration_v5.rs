@@ -12,6 +12,50 @@ fn header(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
 }
 
 #[test]
+fn current_boolean_operation_contract_migrates_once_and_cannot_downgrade() {
+    let mut input = prior().input().clone();
+    input.recipe.rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
+    let prior = v3_fixture::contract(
+        input,
+        6,
+        OWNED_RULE_OPERATIONS_V21,
+        "before-boolean-contract",
+    );
+    let mut migration = header(&prior);
+    migration.release = key("boolean-contract");
+    migration.contract.operations_version = key(OWNED_RULE_OPERATIONS_V22);
+    let next = compile_owned_release_migration(&prior, migration, Default::default()).unwrap();
+    assert_eq!(
+        next.input().recipe.rules.schema_version,
+        OWNED_RULE_PACKAGE_VERSION
+    );
+    assert_eq!(
+        next.input().recipe.rules.operations_version.as_str(),
+        OWNED_RULE_OPERATIONS_V22
+    );
+    assert_eq!(
+        next.input().recipe.rules.owners,
+        prior.input().recipe.rules.owners
+    );
+    assert_source_inputs_preserved(&prior, &next);
+    assert_ne!(
+        next.receipt().compiled_rules,
+        prior.receipt().compiled_rules
+    );
+    for operations in [OWNED_RULE_OPERATIONS_V20, OWNED_RULE_OPERATIONS_V21] {
+        let mut backward = header(&next);
+        backward.release = key("unsupported-downgrade");
+        backward.contract.operations_version = key(operations);
+        assert!(matches!(
+            compile_owned_release_migration(&next, backward, Default::default()),
+            Err(OwnedReleaseError::Invalid(
+                "migration cannot downgrade current operations"
+            ))
+        ));
+    }
+}
+
+#[test]
 fn exact_v19_and_v20_predecessors_preserve_source_queries_and_rebuilds() {
     for operations in [OWNED_RULE_OPERATIONS_V19, OWNED_RULE_OPERATIONS_V20] {
         let prior = v3_fixture::contract(prior().input().clone(), 6, operations, "selection-prior");
@@ -83,7 +127,7 @@ fn v5_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
         assert!(matches!(
             compile_owned_release_migration(&prior, bad, Default::default()),
             Err(OwnedReleaseError::Invalid(
-                "current migration requires schema v6 and operations v20 or v21"
+                "current migration requires schema v6 and operations v20, v21 or v22"
             ))
         ));
     }
@@ -201,12 +245,13 @@ fn current_v21_schema_append_preserves_ordered_queries_and_actor_applicability()
         })
         .unwrap();
     input.recipe.rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
-    input.recipe.rules.ordered_contributions =
-        Some(DeclaredSet::complete(vec![OrderedContributionQuery {
+    input.recipe.rules.contribution_queries =
+        Some(DeclaredSet::complete(vec![ContributionQuery {
             id: key("retained-ordered-query"),
             stat,
             contribution: ContributionKind::Add,
-            groups: vec![OrderedContributionGroup {
+            groups: vec![ContributionGroup {
+                ordering: ContributionOrdering::Ordered,
                 id: key("empty-test-domain"),
                 reduction: ContributionReduction::Sum,
                 empty,
@@ -226,7 +271,7 @@ fn current_v21_schema_append_preserves_ordered_queries_and_actor_applicability()
     empty_registries
         .recipe
         .rules
-        .ordered_contributions
+        .contribution_queries
         .as_mut()
         .unwrap()
         .members
@@ -254,8 +299,8 @@ fn current_v21_schema_append_preserves_ordered_queries_and_actor_applicability()
             added.recipe.rules.existing_actor_rules =
                 prior.input().recipe.rules.existing_actor_rules.clone();
         } else {
-            added.recipe.rules.ordered_contributions =
-                prior.input().recipe.rules.ordered_contributions.clone();
+            added.recipe.rules.contribution_queries =
+                prior.input().recipe.rules.contribution_queries.clone();
         }
         assert!(matches!(
             assemble_owned_release(
@@ -285,8 +330,8 @@ fn current_v21_schema_append_preserves_ordered_queries_and_actor_applicability()
     let next =
         compile_owned_release_migration(&prior, migration.clone(), Default::default()).unwrap();
     assert_eq!(
-        next.input().recipe.rules.ordered_contributions,
-        prior.input().recipe.rules.ordered_contributions
+        next.input().recipe.rules.contribution_queries,
+        prior.input().recipe.rules.contribution_queries
     );
     assert_eq!(
         next.input().recipe.rules.existing_actor_rules,
@@ -317,7 +362,7 @@ fn current_v21_schema_append_preserves_ordered_queries_and_actor_applicability()
     assert!(matches!(
         compile_owned_release_migration(&prior, migration, Default::default()),
         Err(OwnedReleaseError::Invalid(
-            "migration cannot downgrade operations v21"
+            "migration cannot downgrade current operations"
         ))
     ));
 }

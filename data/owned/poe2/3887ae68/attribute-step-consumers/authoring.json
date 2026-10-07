@@ -12,12 +12,12 @@
       "sha256": "912b40180847879835be4f670a78050f42bfb7becdcfa785448b087cdec89eae"
     },
     "consumers.json": {
-      "bytes": 69256,
-      "sha256": "8fc4fb18a308d36d54f837edb9569bf5ab1993b469f4dc1540717d4a74718e97"
+      "bytes": 69220,
+      "sha256": "db06a07727361d1fde867b872c39678b8cdb7423cd92dd8e5b67d0d3509f36db"
     },
     "queries.json": {
-      "bytes": 20635,
-      "sha256": "ee5c4684d3cf91db00f45e63a2f9e24345d01e5aa77dec951a702e5a1ad4dac2"
+      "bytes": 21031,
+      "sha256": "c2d77fd819cfc1df888a99ab662d2a8535f31486d0bf89aa9e626578831f4dcd"
     },
     "source-vectors.json": {
       "bytes": 169674,

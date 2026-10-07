@@ -136,7 +136,7 @@ fn inherited_source_readiness_requires_v3_stages_through_v21() {
         f.change_rules(|r| {
             r.operations_version = key(operations);
             if operations == OWNED_RULE_OPERATIONS_V21 {
-                r.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+                r.contribution_queries = Some(DeclaredSet::complete(vec![]));
             }
         });
         assert!(

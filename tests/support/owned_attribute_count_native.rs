@@ -285,7 +285,7 @@ fn source() -> &'static Source {
         recipe.rules.tables.clear();
         recipe.rules.receivers = DeclaredSet::complete(vec![]);
         recipe.rules.effect_applications = Some(DeclaredSet::complete(vec![]));
-        assert!(recipe.rules.ordered_contributions.is_none());
+        assert!(recipe.rules.contribution_queries.is_none());
         recipe.routing.outputs.clear();
         recipe.rules.owners = recipe
             .schema

@@ -2,7 +2,10 @@
 #[path = "support/owned_plan_fixture.rs"]
 mod fixture;
 use fixture::*;
-use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
+use poe_optimizer_core::{
+    owned_build::*, owned_content::digest_owned, owned_definitions::*, owned_rules::*,
+    owned_schema::*,
+};
 use poe_optimizer_data::owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits};
 use poe_optimizer_engine::{
     owned_plan::*,
@@ -179,7 +182,7 @@ fn schema(f: &Fixture) -> OwnedDefinitionSchemaPackage {
 fn rules(f: &Fixture, schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
     RulePackageInput {
         existing_actor_rules: None,
-        ordered_contributions: None,
+        contribution_queries: None,
         effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
@@ -455,7 +458,7 @@ fn v7_is_explicit_and_v6_cannot_admit_either_new_predicate() {
 }
 
 #[test]
-fn persisted_v6_compiled_identity_and_input_are_unchanged() {
+fn current_snapshot_preserves_v6_semantics_and_refuses_retired_wire_version() {
     let path =
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../data/owned/poe2/3887ae68/current");
     let schema = OwnedDefinitionSchemaPackage::new(
@@ -469,17 +472,38 @@ fn persisted_v6_compiled_identity_and_input_are_unchanged() {
     let before = serde_json::to_value(&input).unwrap();
     let manifest: serde_json::Value =
         serde_json::from_slice(&fs::read(path.join("manifest.json")).unwrap()).unwrap();
+    assert_eq!(input.schema_version, OWNED_RULE_PACKAGE_VERSION);
+    let mut retired = input.clone();
+    retired.schema_version = 2;
+    assert!(CompiledRulePackage::compile(&retired, &schema, RuleLimits::default()).is_err());
     let compiled = CompiledRulePackage::compile(&input, &schema, RuleLimits::default()).unwrap();
     assert_eq!(
         serde_json::to_value(compiled.identity()).unwrap(),
         manifest["compiled_rules"]
     );
-    // Compilation has always canonicalized declaration order. The persisted
-    // compiled digest above proves that canonical form remains byte-identical.
+    assert_eq!(
+        compiled.identity(),
+        digest_owned(
+            "owned-rule-programs-v3",
+            compiled.input(),
+            RuleLimits::default().max_wire_bytes
+        )
+        .unwrap()
+    );
+    let canonical = serde_json::to_vec(compiled.input()).unwrap();
+    let repeated = CompiledRulePackage::compile(
+        &serde_json::from_slice(&canonical).unwrap(),
+        &schema,
+        RuleLimits::default(),
+    )
+    .unwrap();
+    assert_eq!(repeated.identity(), compiled.identity());
+    assert_eq!(serde_json::to_vec(repeated.input()).unwrap(), canonical);
     assert_eq!(
         compiled.input().operations_version,
         input.operations_version
     );
+
     assert!(
         serde_json::to_value(&input).unwrap() == before,
         "caller input changed"

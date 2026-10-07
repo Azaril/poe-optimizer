@@ -60,7 +60,7 @@ impl<'a> Writers<'a> {
         charge(work, 1)?;
         match read {
             PendingRead::Value(key) => Self::extend(self.values.get(key), out, work)?,
-            PendingRead::Contributions(key, ..) | PendingRead::OrderedContributions(key, ..) => {
+            PendingRead::Contributions(key, ..) | PendingRead::ContributionQuery(key, ..) => {
                 Self::extend(self.contributions.get(key), out, work)?;
             }
             PendingRead::ModifierTransforms { key, initial } => {

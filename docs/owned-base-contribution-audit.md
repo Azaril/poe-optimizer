@@ -73,7 +73,7 @@ is not an authored game order.
 Current modifier owners `295c`, `2974`, `298c`, `29a4` are admitted structurally by
 all 1,756 item templates. Their equipment-use programs are not restricted to
 character slots. Provider discovery includes passive sockets and item sockets,
-but `OrderedContributionOrigin::ItemModifier` currently accepts only character-slot
+but `ContributionOrigin::ItemModifier` currently accepts only character-slot
 destinations. A character-slot-only membership cannot claim the whole current
 donor domain. Parent-item jewels and passive jewels need reviewed treatment;
 source UI traversal places parent jewels after their parent and passive sockets
@@ -138,5 +138,6 @@ destination-complete ordering and explicit grouping are different obligations.
 This audit selects no new public contract, numerical law or cache-dependent mode.
 Retain the current Partial gates until a reviewed design covers the actual donor
 domain. The separate [Boolean contribution contract](owned-boolean-contributions-proposal.md)
-was accepted on 2026-10-07. Its implementation remains outstanding and does not
+was accepted and implemented on 2026-10-07. Its source inventories remain Partial;
+the Boolean implementation does not
 resolve this numeric BASE ordering/grouping question.

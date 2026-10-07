@@ -53,27 +53,32 @@ fn member(
     owner: SchemaSubject,
     program: &str,
     source_rank: u32,
-    origin: OrderedContributionOrigin,
-) -> OrderedContributionMember {
-    OrderedContributionMember {
+    origin: ContributionOrigin,
+) -> ContributionMember {
+    ContributionMember {
         owner,
         program: key(program),
         effect: key("add"),
-        order: OrderedContributionOrder {
+        order: Some(ContributionOrder {
             source_rank,
             program_rank: 0,
             effect_rank: 0,
-            origin,
-        },
+            slot_ranks: match &origin {
+                ContributionOrigin::EquipmentUse { .. }
+                | ContributionOrigin::ItemModifier { .. } => slots(),
+                _ => vec![],
+            },
+        }),
+        origin,
     }
 }
-fn slots() -> Vec<OrderedEquipmentSlot> {
+fn slots() -> Vec<ContributionSlotRank> {
     vec![
-        OrderedEquipmentSlot {
+        ContributionSlotRank {
             slot: def("weapon"),
             rank: 0,
         },
-        OrderedEquipmentSlot {
+        ContributionSlotRank {
             slot: def("other"),
             rank: 1,
         },
@@ -98,7 +103,7 @@ fn producer(id: &str, context: RuleEntityKind, n: f64) -> RuleProgram {
 }
 struct World {
     f: Fixture,
-    registry: DeclaredSet<OrderedContributionQuery>,
+    registry: DeclaredSet<ContributionQuery>,
 }
 impl World {
     fn new() -> Self {
@@ -207,45 +212,41 @@ impl World {
         }];
         p.nodes = vec![read_node("value", "roll")];
         f.owner_mut(&modifier_owner()).programs.members.push(p);
-        let registry = DeclaredSet::complete(vec![OrderedContributionQuery {
+        let registry = DeclaredSet::complete(vec![ContributionQuery {
             id: key("ordered-query"),
             stat: def("ordered"),
             contribution: ContributionKind::Add,
             groups: vec![
-                OrderedContributionGroup {
+                ContributionGroup {
                     id: key("main"),
                     reduction: ContributionReduction::Sum,
+                    ordering: ContributionOrdering::Ordered,
                     empty: q(0.),
                     members: DeclaredSet::complete(vec![
-                        member(
-                            class_owner(),
-                            "class",
-                            10,
-                            OrderedContributionOrigin::Character,
-                        ),
-                        member(
-                            passive(),
-                            "passive",
-                            20,
-                            OrderedContributionOrigin::Allocation,
-                        ),
+                        member(class_owner(), "class", 10, ContributionOrigin::Character),
+                        member(passive(), "passive", 20, ContributionOrigin::Allocation),
                         member(
                             item_owner(),
                             "equipment",
                             30,
-                            OrderedContributionOrigin::EquipmentUse { slots: slots() },
+                            ContributionOrigin::EquipmentUse {
+                                slots: slots().into_iter().map(|row| row.slot).collect(),
+                            },
                         ),
                         member(
                             modifier_owner(),
                             "modifier",
                             40,
-                            OrderedContributionOrigin::ItemModifier { slots: slots() },
+                            ContributionOrigin::ItemModifier {
+                                slots: slots().into_iter().map(|row| row.slot).collect(),
+                            },
                         ),
                     ]),
                 },
-                OrderedContributionGroup {
+                ContributionGroup {
                     id: key("empty"),
                     reduction: ContributionReduction::Sum,
+                    ordering: ContributionOrdering::Ordered,
                     empty: q(0.),
                     members: DeclaredSet::complete(vec![]),
                 },
@@ -271,7 +272,7 @@ impl World {
                 reads: vec![RuleRead {
                     id: key("incoming"),
                     value_type: qt(),
-                    source: RuleReadSource::OrderedContributions {
+                    source: RuleReadSource::ContributionQuery {
                         entity: RuleEntity::Current,
                         query: key("ordered-query"),
                         group: key(group),
@@ -289,13 +290,13 @@ impl World {
             namespace: ns(),
             release: key("ordered-rules"),
             semantics_version: key("test-v1"),
-            operations_version: key("owned-domain-operations-v21"),
+            operations_version: key("owned-domain-operations-v22"),
             definitions: schema.identity().clone(),
             tables: vec![],
             owners: self.f.owners.clone(),
             receivers: self.f.receivers.clone(),
             effect_applications: Some(DeclaredSet::complete(vec![])),
-            ordered_contributions: Some(self.registry.clone()),
+            contribution_queries: Some(self.registry.clone()),
         }
     }
     fn plan(&self) -> Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>> {
@@ -321,7 +322,7 @@ impl World {
     fn evaluate(&self) -> OwnedEffectsReport {
         evaluated(&self.report()).clone()
     }
-    fn members(&mut self) -> &mut Vec<OrderedContributionMember> {
+    fn members(&mut self) -> &mut Vec<ContributionMember> {
         &mut self.registry.members[0].groups[0].members.members
     }
 }
@@ -369,30 +370,9 @@ fn partial(subject: SchemaSubject) -> SchemaClosure {
         }],
     }
 }
-#[test]
-fn actual_class_passive_equipment_and_repeated_modifiers_follow_authored_order() {
-    let w = World::new();
-    let r = w.evaluate();
-    assert!(r.gaps.is_empty());
-    number(&r, "result", 2.);
-    number(&r, "other-result", 0.);
-    let actual:Vec<_>=r.effects.iter().filter(|e|matches!(&e.target,BoundEffectTarget::Contribution{key} if key.stat==def("ordered"))).collect();
-    assert_eq!(actual.len(), 8);
-    let mut edited = World::new();
-    edited.members()[0].order.source_rank = 50;
-    number(&edited.evaluate(), "result", 0.);
-}
-#[test]
-fn storage_ids_and_rebased_lineages_cannot_replace_semantic_modifier_order() {
-    let mut w = World::new();
-    let expected = w.evaluate();
-    w.f.build.equipment.reverse();
-    w.f.build.items[0].modifiers.reverse();
-    w.f.owners.reverse();
-    w.members().reverse();
-    number(&w.evaluate(), "result", 2.);
+fn rebase_occurrences(build: &mut BuildInput) {
     // Rebase every occurrence ID while retaining all owned relationships/order.
-    let mut v = serde_json::to_value(&w.f.build).unwrap();
+    let mut v = serde_json::to_value(&*build).unwrap();
     fn rebase(v: &mut serde_json::Value) {
         match v {
             serde_json::Value::Object(o) => {
@@ -425,9 +405,32 @@ fn storage_ids_and_rebased_lineages_cannot_replace_semantic_modifier_order() {
     v["allocator"]["last_issued"] = serde_json::json!("00000000000000c8");
     // Allocator's concrete format is preserved except its lineage; a larger ceiling
     // also keeps the newly permuted IDs valid.
-    w.f.build = serde_json::from_value(v).unwrap();
-    w.f.build.allocator =
-        InstanceAllocatorState::from_parts(BuildLineage::from_bytes([0xab; 16]), 201);
+    *build = serde_json::from_value(v).unwrap();
+    build.allocator = InstanceAllocatorState::from_parts(BuildLineage::from_bytes([0xab; 16]), 201);
+}
+#[test]
+fn actual_class_passive_equipment_and_repeated_modifiers_follow_authored_order() {
+    let w = World::new();
+    let r = w.evaluate();
+    assert!(r.gaps.is_empty());
+    number(&r, "result", 2.);
+    number(&r, "other-result", 0.);
+    let actual:Vec<_>=r.effects.iter().filter(|e|matches!(&e.target,BoundEffectTarget::Contribution{key} if key.stat==def("ordered"))).collect();
+    assert_eq!(actual.len(), 8);
+    let mut edited = World::new();
+    edited.members()[0].order.as_mut().unwrap().source_rank = 50;
+    number(&edited.evaluate(), "result", 0.);
+}
+#[test]
+fn storage_ids_and_rebased_lineages_cannot_replace_semantic_modifier_order() {
+    let mut w = World::new();
+    let expected = w.evaluate();
+    w.f.build.equipment.reverse();
+    w.f.build.items[0].modifiers.reverse();
+    w.f.owners.reverse();
+    w.members().reverse();
+    number(&w.evaluate(), "result", 2.);
+    rebase_occurrences(&mut w.f.build);
     number(&w.evaluate(), "result", 2.);
     assert_eq!(value(&expected, "result"), value(&w.evaluate(), "result"));
     let mut w = World::new();
@@ -462,19 +465,19 @@ fn exact_membership_rejects_unmapped_duplicate_tied_and_missing_group_policies()
         .push(duplicate);
     assert!(w.plan().is_err());
     let mut w = World::new();
-    w.members()[1].order.source_rank = 10;
+    w.members()[1].order.as_mut().unwrap().source_rank = 10;
     assert!(w.plan().is_err());
     let mut w = World::new();
     w.registry.members[0].groups.pop();
     assert!(w.plan().is_err());
     let mut w = World::new();
-    let OrderedContributionOrigin::ItemModifier { slots } = &mut w.members()[3].order.origin else {
+    let ContributionOrigin::ItemModifier { slots } = &mut w.members()[3].origin else {
         panic!()
     };
     slots.pop();
     assert!(w.plan().is_err());
     let mut w = World::new();
-    w.members()[3].order.origin = OrderedContributionOrigin::Allocation;
+    w.members()[3].origin = ContributionOrigin::Allocation;
     assert!(w.plan().is_err());
 }
 #[test]
@@ -649,19 +652,20 @@ fn finite_stage_conditional_contribution_rebinds_without_mutable_snapshots() {
         .programs
         .members
         .push(producer);
-    w.registry.members.push(OrderedContributionQuery {
+    w.registry.members.push(ContributionQuery {
         id: key("stage-two-query"),
         stat: def("stage-two-input"),
         contribution: ContributionKind::Add,
-        groups: vec![OrderedContributionGroup {
+        groups: vec![ContributionGroup {
             id: key("main"),
             reduction: ContributionReduction::Sum,
+            ordering: ContributionOrdering::Ordered,
             empty: q(0.),
             members: DeclaredSet::complete(vec![member(
                 class_owner(),
                 "stage-two-producer",
                 0,
-                OrderedContributionOrigin::Character,
+                ContributionOrigin::Character,
             )]),
         }],
     });
@@ -671,12 +675,12 @@ fn finite_stage_conditional_contribution_rebinds_without_mutable_snapshots() {
         .owner_mut(&subject(def::<StatDefinition>("stage-two")))
         .programs
         .members[0];
-    let RuleReadSource::OrderedContributions { query, .. } = &mut p.reads[0].source else {
+    let RuleReadSource::ContributionQuery { query, .. } = &mut p.reads[0].source else {
         panic!()
     };
     *query = key("stage-two-query");
     number(&w.evaluate(), "stage-two", 3.);
-    w.members()[0].order.source_rank = 50;
+    w.members()[0].order.as_mut().unwrap().source_rank = 50;
     number(&w.evaluate(), "stage-two", 0.);
 }
 
@@ -695,6 +699,262 @@ fn partial_registry_and_unread_groups_cannot_become_complete_empty_identities() 
         // whole-plan gap, exactly like the other global authored inventories.
         w.f.receivers.members.clear();
         assert_incomplete(&w.report(), PlanGapReason::IncompleteContributors);
+    }
+}
+
+// Boolean flags use the same provider inventory, checked support preparation,
+// staged execution and final receiver as the numeric tests. Only the authored
+// value/reduction/ordering contract changes; there is no separate flag plan.
+fn boolean_world() -> World {
+    let mut w = World::new();
+    for descriptor in &mut w.f.schema.definitions {
+        if let DefinitionDescriptor::Stat(row) = descriptor
+            && [def("ordered"), def("result"), def("other-result")].contains(&row.id)
+        {
+            let SchemaState::Known(schema) = &mut row.schema else {
+                panic!()
+            };
+            schema.value = ComputedValueType::Boolean;
+        }
+    }
+    for (owner, active) in [
+        (class_owner(), false),
+        (passive(), true),
+        (item_owner(), false),
+        (modifier_owner(), true),
+    ] {
+        let p = &mut w.f.owner_mut(&owner).programs.members[0];
+        p.reads.clear();
+        p.nodes = vec![node(
+            "value",
+            RuleExpression::Literal {
+                value: ParameterValue::Boolean(active),
+            },
+        )];
+        let RuleEffectKind::Contribute { contribution, .. } = &mut p.effects[0].effect else {
+            panic!()
+        };
+        *contribution = ContributionKind::Flag;
+    }
+    w.registry.members[0].contribution = ContributionKind::Flag;
+    for group in &mut w.registry.members[0].groups {
+        group.reduction = ContributionReduction::Any;
+        group.ordering = ContributionOrdering::Unordered;
+        group.empty = ParameterValue::Boolean(false);
+        for member in &mut group.members.members {
+            member.order = None;
+        }
+    }
+    for name in ["result", "other-result"] {
+        w.f.owner_mut(&subject(def::<StatDefinition>(name)))
+            .programs
+            .members[0]
+            .reads[0]
+            .value_type = ComputedValueType::Boolean;
+    }
+    w
+}
+fn boolean(r: &OwnedEffectsReport, name: &str, expected: bool) {
+    assert_eq!(
+        value(r, name),
+        &EffectValue::Known {
+            value: ParameterValue::Boolean(expected)
+        }
+    );
+}
+fn flag_value(w: &mut World, owner: &SchemaSubject, active: bool) {
+    w.f.owner_mut(owner).programs.members[0].nodes = vec![node(
+        "value",
+        RuleExpression::Literal {
+            value: ParameterValue::Boolean(active),
+        },
+    )];
+}
+fn flag_read(w: &mut World, owner: &SchemaSubject, name: &str) {
+    let p = &mut w.f.owner_mut(owner).programs.members[0];
+    p.reads.push(RuleRead {
+        id: key(name),
+        value_type: ComputedValueType::Boolean,
+        source: RuleReadSource::Stat {
+            entity: RuleEntity::Player,
+            stat: def(name),
+        },
+    });
+    p.nodes = vec![read_node("value", name)];
+}
+fn missing_boolean(w: &mut World, name: &str) {
+    w.f.schema
+        .definitions
+        .push(DefinitionDescriptor::Stat(known(
+            def(name),
+            StatSchema {
+                value: ComputedValueType::Boolean,
+                targets: vec![RuleEntityKind::Actor],
+            },
+        )));
+}
+#[test]
+fn boolean_any_is_idempotent_for_repeated_providers_and_false_is_only_a_complete_identity() {
+    let mut w = boolean_world();
+    let r = w.evaluate();
+    boolean(&r, "result", true);
+    boolean(&r, "other-result", false);
+    assert_eq!(r.effects.iter().filter(|e| matches!(&e.target, BoundEffectTarget::Contribution { key } if key.kind == ContributionKind::Flag)).count(), 8);
+    flag_value(&mut w, &passive(), false);
+    boolean(&w.evaluate(), "result", true); // Four distinct modifier occurrences remain true.
+    flag_value(&mut w, &modifier_owner(), false);
+    boolean(&w.evaluate(), "result", false);
+    for owner in [class_owner(), passive(), item_owner(), modifier_owner()] {
+        w.f.owner_mut(&owner).programs.members.clear();
+    }
+    w.members().clear();
+    boolean(&w.evaluate(), "result", false);
+    w.registry.members[0].groups[0].members.closure =
+        partial(subject(def::<StatDefinition>("ordered")));
+    assert_incomplete(&w.report(), PlanGapReason::IncompleteContributors);
+}
+#[test]
+fn boolean_inactive_and_false_never_cancel_true_and_unresolved_is_not_short_circuited() {
+    let mut w = boolean_world();
+    missing_boolean(&mut w, "missing-item-flag");
+    flag_read(&mut w, &item_owner(), "missing-item-flag");
+    let p = &mut w.f.owner_mut(&item_owner()).programs.members[0];
+    p.nodes.push(node(
+        "disabled",
+        RuleExpression::Literal {
+            value: ParameterValue::Boolean(false),
+        },
+    ));
+    p.effects[0].when = Some(key("disabled"));
+    boolean(&w.evaluate(), "result", true);
+    w.f.owner_mut(&item_owner()).programs.members[0].effects[0].when = None;
+    assert!(matches!(
+        value(&w.evaluate(), "result"),
+        EffectValue::Unresolved { .. }
+    ));
+    // A second unresolved source must not make the propagated diagnostic depend
+    // on registry, definition or equipment storage order.
+    missing_boolean(&mut w, "missing-class-flag");
+    flag_read(&mut w, &class_owner(), "missing-class-flag");
+    let expected = value(&w.evaluate(), "result").clone();
+    w.f.owners.reverse();
+    w.members().reverse();
+    w.f.build.equipment.reverse();
+    assert_eq!(value(&w.evaluate(), "result"), &expected);
+}
+#[test]
+fn boolean_membership_checks_inactive_and_unread_sources_and_preserves_provider_gaps() {
+    let mut w = boolean_world();
+    let p = &mut w.f.owner_mut(&modifier_owner()).programs.members[0];
+    p.nodes.push(node(
+        "disabled",
+        RuleExpression::Literal {
+            value: ParameterValue::Boolean(false),
+        },
+    ));
+    p.effects[0].when = Some(key("disabled"));
+    w.members().pop();
+    assert!(w.plan().is_err());
+    w.f.receivers.members.clear();
+    assert!(w.plan().is_err()); // No selected read does not erase the registry census.
+    let mut w = boolean_world();
+    let duplicate = w.members()[0].clone();
+    w.registry.members[0].groups[1]
+        .members
+        .members
+        .push(duplicate);
+    assert!(w.plan().is_err());
+    let mut w = boolean_world();
+    w.registry.members[0].groups[1].members.closure =
+        partial(subject(def::<StatDefinition>("ordered")));
+    assert_incomplete(&w.report(), PlanGapReason::IncompleteContributors);
+    let mut w = boolean_world();
+    w.f.owner_mut(&modifier_owner()).programs.closure = partial(modifier_owner());
+    assert_incomplete(&w.report(), PlanGapReason::PartialPrograms);
+    let mut w = boolean_world();
+    let ContributionOrigin::ItemModifier { slots } = &mut w.members()[3].origin else {
+        panic!()
+    };
+    slots.pop();
+    assert!(w.plan().is_err());
+}
+#[test]
+fn boolean_direct_reads_cycles_and_multiple_final_writers_are_rejected() {
+    let mut w = boolean_world();
+    w.f.owner_mut(&subject(def::<StatDefinition>("result")))
+        .programs
+        .members[0]
+        .reads[0]
+        .source = RuleReadSource::Contributions {
+        entity: RuleEntity::Current,
+        stat: def("ordered"),
+        contribution: ContributionKind::Flag,
+        reduction: ContributionReduction::Any,
+        empty: ParameterValue::Boolean(false),
+    };
+    assert!(w.plan().is_err());
+    let mut w = boolean_world();
+    flag_read(&mut w, &passive(), "result");
+    assert!(w.plan().is_err());
+    let mut w = boolean_world();
+    let p = &mut w.f.owner_mut(&class_owner()).programs.members[0];
+    p.effects.push(derive(
+        "competing-final",
+        RuleEntity::Player,
+        "result",
+        "value",
+    ));
+    assert!(w.plan().is_err());
+}
+#[test]
+fn boolean_scratch_reuse_permutation_and_four_worker_evaluation_agree_after_failure() {
+    let a = boolean_world();
+    let mut b = boolean_world();
+    flag_value(&mut b, &passive(), false);
+    flag_value(&mut b, &modifier_owner(), false);
+    let pa = a.plan().unwrap();
+    let pb = b.plan().unwrap();
+    let ra = a.report();
+    let rb = b.report();
+    boolean(evaluated(&ra), "result", true);
+    boolean(evaluated(&rb), "result", false);
+    let mut scratch = pa.new_scratch();
+    assert_eq!(pa.evaluate(&mut scratch).unwrap(), ra);
+    let mut failed = boolean_world();
+    missing_boolean(&mut failed, "missing-flag");
+    flag_read(&mut failed, &class_owner(), "missing-flag");
+    let failed = failed.plan().unwrap();
+    let failure = failed.evaluate(&mut scratch).unwrap();
+    assert!(matches!(
+        value(evaluated(&failure), "result"),
+        EffectValue::Unresolved { .. }
+    ));
+    assert_eq!(pb.evaluate(&mut scratch).unwrap(), rb);
+    assert_eq!(pa.evaluate(&mut scratch).unwrap(), ra);
+    let mut permuted = boolean_world();
+    permuted.f.owners.reverse();
+    permuted.members().reverse();
+    permuted.f.build.equipment.reverse();
+    permuted.f.build.items[0].modifiers.reverse();
+    permuted.f.build.items[0].modifier_order.reverse();
+    boolean(&permuted.evaluate(), "result", true);
+    rebase_occurrences(&mut permuted.f.build);
+    boolean(&permuted.evaluate(), "result", true);
+    let pool = rayon::ThreadPoolBuilder::new()
+        .num_threads(4)
+        .build()
+        .unwrap();
+    let actual: Vec<_> = pool.install(|| {
+        (0..16)
+            .into_par_iter()
+            .map(|i| {
+                let p = if i % 2 == 0 { &pa } else { &pb };
+                p.evaluate(&mut p.new_scratch()).unwrap()
+            })
+            .collect()
+    });
+    for (i, report) in actual.iter().enumerate() {
+        assert_eq!(report, if i % 2 == 0 { &ra } else { &rb });
     }
 }
 
@@ -718,7 +978,7 @@ fn checked_plan(
     };
     assert_eq!(
         rules_input.operations_version.as_str(),
-        OWNED_RULE_OPERATIONS_V21
+        OWNED_RULE_OPERATIONS_V22
     );
     assert!(build.gems.is_empty());
     assert!(build.skills.is_empty());

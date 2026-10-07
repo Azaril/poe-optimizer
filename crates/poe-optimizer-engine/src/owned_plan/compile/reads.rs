@@ -572,7 +572,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     }),
                 }
             }
-            RuleReadSource::OrderedContributions {
+            RuleReadSource::ContributionQuery {
                 entity: relative,
                 query,
                 group,
@@ -580,20 +580,18 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 let registry = self
                     .rules
                     .input()
-                    .ordered_contributions
+                    .contribution_queries
                     .as_ref()
                     .ok_or_else(|| {
-                        PlanError::Invalid("ordered contribution registry is absent".into())
+                        PlanError::Invalid("contribution query registry is absent".into())
                     })?;
                 charge(&mut self.work, registry.members.len())?;
                 let row = registry
                     .members
                     .iter()
                     .find(|row| &row.id == query)
-                    .ok_or_else(|| {
-                        PlanError::Invalid("ordered contribution query is absent".into())
-                    })?;
-                PendingRead::OrderedContributions(
+                    .ok_or_else(|| PlanError::Invalid("contribution query is absent".into()))?;
+                PendingRead::ContributionQuery(
                     ContributionKey {
                         entity: entity(*relative, c)?,
                         stat: row.stat.clone(),
@@ -609,15 +607,24 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 contribution,
                 reduction,
                 empty,
-            } => PendingRead::Contributions(
-                ContributionKey {
-                    entity: entity(*relative, c)?,
-                    stat: stat.clone(),
-                    kind: *contribution,
-                },
-                *reduction,
-                empty.clone(),
-            ),
+            } => {
+                if *contribution == ContributionKind::Flag
+                    || *reduction == ContributionReduction::Any
+                {
+                    return Err(PlanError::Invalid(
+                        "Boolean contributions require a checked contribution query".into(),
+                    ));
+                }
+                PendingRead::Contributions(
+                    ContributionKey {
+                        entity: entity(*relative, c)?,
+                        stat: stat.clone(),
+                        kind: *contribution,
+                    },
+                    *reduction,
+                    empty.clone(),
+                )
+            }
         })
     }
 }

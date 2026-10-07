@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "owned-import-input-seed",
-  "base_recipe_sha256": "7fa8ad4c837b326357d044560c5f582100accd5d11ab3fef0437895625415ede",
+  "base_recipe_sha256": "622ae366f51b67dc032415a94d6e8ab546b1c259c8804ba09c2af1a38e8a9223",
   "catalog_snapshot_lf_sha256": "a90217d9bab6c0469917a2ba75ed9517205d2ac2b3d59f8d68580604f26df07f",
   "mechanics_manifest_sha256": "996e1a96abc3de69bea13e927dd4c5a8d0e8a91eb2022d9a9261b3e23ee11a42",
   "reward_facts_sha256": "3afadc1baa928c91368b711cde665a3dc6737c68cb15f51be1f7e86ed86e66fe",
@@ -253,7 +253,7 @@
     {
       "path": "recipe-seed.json",
       "bytes": 342862,
-      "sha256": "6706e3f67328c11fd2953717e6790529944978f21be1701c9920e10a5af3bc13"
+      "sha256": "94b2702b9bd63ca30f3db1c82c5ca8fc0948ac4f348109c3ebe63588cf6b7163"
     },
     {
       "path": "reward-policy-seed.json",

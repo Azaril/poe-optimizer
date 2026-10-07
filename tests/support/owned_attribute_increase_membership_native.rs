@@ -253,7 +253,7 @@ impl World {
         recipe.rules.existing_actor_rules = Some(DeclaredSet::complete(vec![]));
         recipe.rules.tables.clear();
         recipe.routing.outputs.clear();
-        let registry = recipe.rules.ordered_contributions.as_mut().unwrap();
+        let registry = recipe.rules.contribution_queries.as_mut().unwrap();
         assert!(!registry.is_complete());
         assert_eq!(registry.members.len(), 18);
         registry.closure = SchemaClosure::Complete;
@@ -264,16 +264,17 @@ impl World {
             }
             assert!(!q.groups[0].members.is_complete());
             let index = (0..6).find(|i| q.stat == def(0x331b + i)).unwrap();
-            q.groups[0].members = DeclaredSet::complete(vec![OrderedContributionMember {
+            q.groups[0].members = DeclaredSet::complete(vec![ContributionMember {
                 owner: class_owner.clone(),
                 program: key("fixture-projected-base"),
                 effect: key(&format!("base-{index}")),
-                order: OrderedContributionOrder {
+                origin: ContributionOrigin::Character,
+                order: Some(ContributionOrder {
                     source_rank: 0,
                     program_rank: 0,
                     effect_rank: index as u32,
-                    origin: OrderedContributionOrigin::Character,
-                },
+                    slot_ranks: vec![],
+                }),
             }]);
             base_count += 1;
         }
@@ -282,7 +283,7 @@ impl World {
         referenced_keys(&json!(owners), &mut keys);
         referenced_keys(&json!(build), &mut keys);
         referenced_keys(&json!(recipe.rules.receivers), &mut keys);
-        referenced_keys(&json!(recipe.rules.ordered_contributions), &mut keys);
+        referenced_keys(&json!(recipe.rules.contribution_queries), &mut keys);
         for n in [1, 2, 0x295a, 0x31d1] {
             keys.insert(format!("def.{n:016x}"));
         }
@@ -649,13 +650,14 @@ fn entire_published_family_is_exact_under_order_permutations_and_opaque_id_rebas
     world.build.allocations.reverse();
     world.recipe.rules.owners.reverse();
     world.recipe.rules.receivers.members.reverse();
-    let registry = world.recipe.rules.ordered_contributions.as_mut().unwrap();
+    let registry = world.recipe.rules.contribution_queries.as_mut().unwrap();
     registry.members.reverse();
     for q in &mut registry.members {
         q.groups[0].members.members.reverse();
         if q.contribution == ContributionKind::Increase {
             for m in &mut q.groups[0].members.members {
-                m.order.source_rank = 10 - m.order.source_rank;
+                let order = m.order.as_mut().unwrap();
+                order.source_rank = 10 - order.source_rank;
             }
         }
     }
@@ -755,7 +757,7 @@ fn missing_members_and_actual_partial_domains_are_never_promoted_to_zero() {
     let registry = missing_member
         .recipe
         .rules
-        .ordered_contributions
+        .contribution_queries
         .as_mut()
         .unwrap();
     registry
@@ -780,12 +782,12 @@ fn missing_members_and_actual_partial_domains_are_never_promoted_to_zero() {
             world.owner_mut(&owner).programs.closure = actual.programs.closure.clone();
         } else {
             let prior: family::Dependencies = family::read("dependencies.json");
-            let registry = world.recipe.rules.ordered_contributions.as_mut().unwrap();
+            let registry = world.recipe.rules.contribution_queries.as_mut().unwrap();
             if domain == "global" {
                 registry.closure = source()
                     .recipe
                     .rules
-                    .ordered_contributions
+                    .contribution_queries
                     .as_ref()
                     .unwrap()
                     .closure

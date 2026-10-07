@@ -259,7 +259,14 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             ));
         }
         for output in &row.outputs {
-            check_channel(output, index, used, limits)?;
+            check_channel(
+                output,
+                RuleOperationsVersion::parse(rules.input().operations_version.as_str())
+                    .is_some_and(RuleOperationsVersion::supports_boolean_contributions),
+                index,
+                used,
+                limits,
+            )?;
         }
         if row.role != ReadinessProgramRole::Execution
             && actual != row.outputs.iter().cloned().collect()

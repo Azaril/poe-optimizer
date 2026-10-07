@@ -253,7 +253,7 @@ fn raw_compiler_cannot_bypass_slot_type_namespace_or_existing_player_authority()
         }
         if case == "old" {
             rules.operations_version = key(OWNED_RULE_OPERATIONS_V20);
-            rules.ordered_contributions = None;
+            rules.contribution_queries = None;
         }
         let p = &mut rules
             .owners

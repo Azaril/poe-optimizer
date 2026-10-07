@@ -295,7 +295,7 @@ impl World {
             CompiledRulePackage::compile(
                 &RulePackageInput {
                     existing_actor_rules: None,
-                    ordered_contributions: None,
+                    contribution_queries: None,
                     schema_version: OWNED_RULE_PACKAGE_VERSION,
                     namespace: schema.input().namespace.clone(),
                     release: key("finite-sniper-reservation"),

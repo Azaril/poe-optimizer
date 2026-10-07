@@ -52,7 +52,7 @@ pub fn compile_with_queries(
     };
     assert!(matches!(
         recipe.rules.operations_version.as_str(),
-        OWNED_RULE_OPERATIONS_V20 | OWNED_RULE_OPERATIONS_V21
+        OWNED_RULE_OPERATIONS_V20 | OWNED_RULE_OPERATIONS_V21 | OWNED_RULE_OPERATIONS_V22
     ));
     assert!(build.gems.is_empty());
     assert!(build.skills.is_empty());

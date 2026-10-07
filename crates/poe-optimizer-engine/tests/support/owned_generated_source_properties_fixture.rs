@@ -619,7 +619,7 @@ pub fn participation_inputs(f: &mut Fixture) -> Checked<Inputs> {
     inputs_with_operations(
         f,
         OWNED_RULE_OPERATIONS_V21,
-        |rules| rules.ordered_contributions = Some(DeclaredSet::complete(vec![])),
+        |rules| rules.contribution_queries = Some(DeclaredSet::complete(vec![])),
         |stages| {
             stages.schema_version = 4;
             let readiness = stages.readiness.as_mut().unwrap();

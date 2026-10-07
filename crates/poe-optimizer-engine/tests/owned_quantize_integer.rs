@@ -438,7 +438,7 @@ fn v8_is_explicit_and_prior_versions_retain_old_program_bytes_and_identities() {
         program(&mut unchanged).nodes[1] = literal("result", integer(7));
         let bytes = serde_json::to_vec(&unchanged.rules).unwrap();
         let expected = digest_owned(
-            "owned-rule-programs-v2",
+            "owned-rule-programs-v3",
             &unchanged.rules,
             RuleLimits::default().max_wire_bytes,
         )

@@ -582,7 +582,7 @@ impl Fixture {
         rules.effect_applications = Some(DeclaredSet::complete(vec![]));
         // This finite component has no item contribution queries or shared Player
         // owner. Keep their current release inventories out of this test copy.
-        rules.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+        rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
         rules.existing_actor_rules = Some(DeclaredSet::complete(vec![]));
         let mut routes = actual_routes.clone();
         routes.routes.closure = SchemaClosure::Complete;

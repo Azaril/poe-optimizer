@@ -113,7 +113,7 @@ impl World {
         );
         let rules = RulePackageInput {
             existing_actor_rules: self.applications.clone(),
-            ordered_contributions: None,
+            contribution_queries: None,
             effect_applications: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: ns(),

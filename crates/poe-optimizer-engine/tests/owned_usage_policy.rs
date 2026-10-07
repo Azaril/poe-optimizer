@@ -741,7 +741,7 @@ fn compile_request(
         CompiledRulePackage::compile(
             &RulePackageInput {
                 existing_actor_rules: None,
-                ordered_contributions: None,
+                contribution_queries: None,
                 effect_applications: None,
                 receivers: f.receivers.clone(),
                 tables: f.tables.clone(),

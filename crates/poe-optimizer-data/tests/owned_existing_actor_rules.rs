@@ -66,7 +66,7 @@ fn input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
         tables: vec![],
         receivers: DeclaredSet::complete(vec![]),
         effect_applications: None,
-        ordered_contributions: None,
+        contribution_queries: None,
         existing_actor_rules: Some(DeclaredSet::complete(vec![ExistingActorRuleApplication {
             id: key("player"),
             owner: id("player-rules"),
@@ -249,24 +249,26 @@ fn actor_applications_cannot_impersonate_character_origins_in_ordered_queries() 
     let mut rules = input(&schema);
     rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
     rules.effect_applications = Some(DeclaredSet::complete(vec![]));
-    rules.ordered_contributions = Some(DeclaredSet::complete(vec![OrderedContributionQuery {
+    rules.contribution_queries = Some(DeclaredSet::complete(vec![ContributionQuery {
         id: key("life"),
         stat: id("life"),
         contribution: ContributionKind::Add,
-        groups: vec![OrderedContributionGroup {
+        groups: vec![ContributionGroup {
             id: key("base"),
             reduction: ContributionReduction::Sum,
+            ordering: ContributionOrdering::Ordered,
             empty: ParameterValue::Integer(BoundedInteger::new(0).unwrap()),
-            members: DeclaredSet::complete(vec![OrderedContributionMember {
+            members: DeclaredSet::complete(vec![ContributionMember {
                 owner: subject(),
                 program: key("life"),
                 effect: key("base"),
-                order: OrderedContributionOrder {
+                origin: ContributionOrigin::Character,
+                order: Some(ContributionOrder {
                     source_rank: 1,
                     program_rank: 0,
                     effect_rank: 0,
-                    origin: OrderedContributionOrigin::Character,
-                },
+                    slot_ranks: vec![],
+                }),
             }]),
         }],
     }]));

@@ -31,9 +31,9 @@ pub fn validate_existing_actor_rules<I: DefinitionSchemaIndex>(
     Ok(usage)
 }
 
-/// Validate the V21 contract independently when compiling raw rule inputs.
+/// Validate contribution-query contracts independently when compiling raw inputs.
 /// Package construction calls the same validator with its aggregate budget.
-pub fn validate_ordered_contributions<I: DefinitionSchemaIndex>(
+pub fn validate_contribution_queries<I: DefinitionSchemaIndex>(
     input: &RulePackageInput,
     index: &I,
     limits: RuleStorageLimits,
@@ -343,7 +343,7 @@ impl OwnedRulePackage {
             return Err(RuleStorageError::Binding);
         }
         // Size bound before secondary indexes or serialization buffers.
-        digest_owned("owned-rule-package-v2", &input, limits.max_wire_bytes)?;
+        digest_owned("owned-rule-package-v3", &input, limits.max_wire_bytes)?;
         let resources = validate_structure(&input, index, limits)?;
         input.receivers.members.sort_by(|a, b| a.id.cmp(&b.id));
         for receiver in &mut input.receivers.members {
@@ -356,7 +356,7 @@ impl OwnedRulePackage {
                 application.stacking.sort_by(|a, b| a.effect.cmp(&b.effect));
             }
         }
-        let identity = digest_owned("owned-rule-package-v2", &input, limits.max_wire_bytes)?;
+        let identity = digest_owned("owned-rule-package-v3", &input, limits.max_wire_bytes)?;
         let canonical = serde_json::to_vec(&input)?;
         Ok(Self {
             input,

@@ -280,7 +280,7 @@ fn expected_program(stage: &Value, b: &Value) -> RuleProgram {
             RuleRead {
                 id: key("base"),
                 value_type: qtype(count),
-                source: RuleReadSource::OrderedContributions {
+                source: RuleReadSource::ContributionQuery {
                     entity: RuleEntity::Current,
                     query: decode(&stage["base_query"]),
                     group: decode(&stage["group"]),
@@ -289,7 +289,7 @@ fn expected_program(stage: &Value, b: &Value) -> RuleProgram {
             RuleRead {
                 id: key("increase"),
                 value_type: qtype(percent),
-                source: RuleReadSource::OrderedContributions {
+                source: RuleReadSource::ContributionQuery {
                     entity: RuleEntity::Current,
                     query: decode(&stage["increase_query"]),
                     group: decode(&stage["group"]),
@@ -321,7 +321,7 @@ pub fn check_authored() {
     let b: Value = read("bindings.json");
     let c: Consumers = read("consumers.json");
     let m: OwnedReleaseMigrationInput = read("schema-migration.json");
-    let q: DeclaredSet<OrderedContributionQuery> = read("queries.json");
+    let q: DeclaredSet<ContributionQuery> = read("queries.json");
     assert_eq!(a["schema_version"], 1);
     assert_eq!(c.schema_version, 1);
     assert_eq!(a["before"], b["before"]);
@@ -438,12 +438,12 @@ pub fn check_authored() {
 }
 pub fn assert_endpoint(next: &StagedOwnedRelease) {
     let c: Consumers = read("consumers.json");
-    let q: DeclaredSet<OrderedContributionQuery> = read("queries.json");
+    let q: DeclaredSet<ContributionQuery> = read("queries.json");
     assert_eq!(
         next.input().recipe.rules.operations_version.as_str(),
         OWNED_RULE_OPERATIONS_V21
     );
-    assert_eq!(next.input().recipe.rules.ordered_contributions, Some(q));
+    assert_eq!(next.input().recipe.rules.contribution_queries, Some(q));
     for o in c.owners {
         assert_eq!(
             next.input()
@@ -489,7 +489,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         assert_eq!(actual, b[field]);
     }
     assert!(prior.evaluation().is_none());
-    assert!(prior.input().recipe.rules.ordered_contributions.is_none());
+    assert!(prior.input().recipe.rules.contribution_queries.is_none());
     let schema_step =
         compile_owned_release_migration(prior, m.clone(), Default::default()).unwrap();
     let mut input = schema_step.input().clone();
@@ -516,7 +516,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         .members
         .extend(c.receivers.clone());
     input.recipe.rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
-    input.recipe.rules.ordered_contributions = Some(read("queries.json"));
+    input.recipe.rules.contribution_queries = Some(read("queries.json"));
     *input.provenance.last_mut().unwrap() = OwnedReleaseProvenance {
         kind: key(KIND),
         prior_input: prior.receipt().input,
@@ -548,7 +548,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     }
     inverse.recipe.rules.operations_version =
         schema_step.input().recipe.rules.operations_version.clone();
-    inverse.recipe.rules.ordered_contributions = None;
+    inverse.recipe.rules.contribution_queries = None;
     inverse.provenance = schema_step.input().provenance.clone();
     assert!(
         inverse == *schema_step.input(),
@@ -683,7 +683,7 @@ mod native {
                 recipe.schema.definitions.push(descriptor.clone());
             }
             recipe.rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
-            recipe.rules.ordered_contributions = source.recipe.rules.ordered_contributions.clone();
+            recipe.rules.contribution_queries = source.recipe.rules.contribution_queries.clone();
             for owner in consumers.owners {
                 if let Some(old) = recipe
                     .rules
@@ -725,7 +725,7 @@ mod native {
             }
         }
         fn finite_members(&mut self) {
-            let mut registry = self.recipe.rules.ordered_contributions.take().unwrap();
+            let mut registry = self.recipe.rules.contribution_queries.take().unwrap();
             assert!(!registry.is_complete());
             registry.closure = SchemaClosure::Complete;
             for (index, query) in registry.members.iter_mut().enumerate() {
@@ -777,20 +777,21 @@ mod native {
                                 inactive_rank
                             };
                             let origin = if name == "Base" {
-                                OrderedContributionOrigin::Character
+                                ContributionOrigin::Character
                             } else {
-                                OrderedContributionOrigin::Allocation
+                                ContributionOrigin::Allocation
                             };
-                            members.push(OrderedContributionMember {
+                            members.push(ContributionMember {
                                 owner: owner.owner.clone(),
                                 program: program.id.clone(),
                                 effect: effect.id.clone(),
-                                order: OrderedContributionOrder {
+                                origin,
+                                order: Some(ContributionOrder {
                                     source_rank: rank,
                                     program_rank: 0,
                                     effect_rank: effect_rank as u32,
-                                    origin,
-                                },
+                                    slot_ranks: vec![],
+                                }),
                             });
                         }
                     }
@@ -804,7 +805,7 @@ mod native {
                 }
                 group.members = DeclaredSet::complete(members);
             }
-            self.recipe.rules.ordered_contributions = Some(registry);
+            self.recipe.rules.contribution_queries = Some(registry);
         }
         fn finite_factors(&mut self) {
             // The finite fixture admits exactly one class and 22 choice sources.
@@ -926,7 +927,7 @@ mod native {
         }
     }
     fn assert_source_occurrences(world: &World, report: &OwnedEffectsReport, case: usize) {
-        let registry = world.recipe.rules.ordered_contributions.as_ref().unwrap();
+        let registry = world.recipe.rules.contribution_queries.as_ref().unwrap();
         for stage in 0..6 {
             let query = &registry.members[stage * 2];
             let mut actual = Vec::new();
@@ -978,7 +979,7 @@ mod native {
                     })
                     .unwrap();
                 actual.push((
-                    member.order.source_rank,
+                    member.order.as_ref().unwrap().source_rank,
                     world.source_name(&invocation.owner),
                     amount.value(),
                 ));
@@ -1028,13 +1029,14 @@ mod native {
         for query in &mut permuted
             .recipe
             .rules
-            .ordered_contributions
+            .contribution_queries
             .as_mut()
             .unwrap()
             .members
         {
             for member in &mut query.groups[0].members.members {
-                member.order.source_rank = 100_000 - member.order.source_rank;
+                let order = member.order.as_mut().unwrap();
+                order.source_rank = 100_000 - order.source_rank;
             }
         }
         assert_attributes(&permuted.evaluate(), [22, 12, 105]);
@@ -1068,7 +1070,7 @@ mod native {
         unassigned
             .recipe
             .rules
-            .ordered_contributions
+            .contribution_queries
             .as_mut()
             .unwrap()
             .members[0]
@@ -1085,11 +1087,11 @@ mod native {
             matches!(error,PlanError::Invalid(message) if message.contains("no ordered membership"))
         );
         let mut partial = World::new();
-        let production: DeclaredSet<OrderedContributionQuery> = read("queries.json");
+        let production: DeclaredSet<ContributionQuery> = read("queries.json");
         partial
             .recipe
             .rules
-            .ordered_contributions
+            .contribution_queries
             .as_mut()
             .unwrap()
             .members[0]

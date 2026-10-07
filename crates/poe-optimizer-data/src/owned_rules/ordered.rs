@@ -16,7 +16,7 @@ struct EquipmentLane {
 
 #[derive(Default)]
 struct QueryIndex<'a> {
-    queries: BTreeMap<&'a OwnedDefinitionKey, &'a OrderedContributionQuery>,
+    queries: BTreeMap<&'a OwnedDefinitionKey, &'a ContributionQuery>,
     group_types: BTreeMap<(&'a OwnedDefinitionKey, &'a OwnedDefinitionKey), ComputedValueType>,
 }
 
@@ -74,12 +74,29 @@ fn value_type(value: &ParameterValue) -> Option<ComputedValueType> {
     }
 }
 fn group_type<I: DefinitionSchemaIndex>(
-    query: &OrderedContributionQuery,
-    group: &OrderedContributionGroup,
+    query: &ContributionQuery,
+    group: &ContributionGroup,
     stat: &ComputedValueType,
     index: &I,
 ) -> Result<ComputedValueType, RuleStorageError> {
     let invalid = RuleStorageError::Structure;
+    if query.contribution == ContributionKind::Flag {
+        if *stat != ComputedValueType::Boolean
+            || group.empty != ParameterValue::Boolean(false)
+            || group.reduction != ContributionReduction::Any
+            || group.ordering != ContributionOrdering::Unordered
+        {
+            return Err(invalid(
+                "flag group requires Boolean stat, false identity and unordered Any",
+            ));
+        }
+        return Ok(ComputedValueType::Boolean);
+    }
+    if group.ordering != ContributionOrdering::Ordered {
+        return Err(invalid(
+            "numeric contribution group requires semantic ordering",
+        ));
+    }
     let ty = value_type(&group.empty).ok_or(invalid("ordered group needs a numeric identity"))?;
     let product = query.contribution == ContributionKind::Multiply;
     let expected = if product { 1.0 } else { 0.0 };
@@ -109,6 +126,7 @@ fn group_type<I: DefinitionSchemaIndex>(
         None
     };
     let valid = match query.contribution {
+        ContributionKind::Flag => unreachable!("flag handled above"),
         ContributionKind::Add => ty == *stat,
         ContributionKind::Increase => dimension == Some(UnitDimension::PercentagePoints),
         ContributionKind::Multiply => dimension == Some(UnitDimension::DimensionlessFactor),
@@ -121,13 +139,19 @@ fn group_type<I: DefinitionSchemaIndex>(
     Ok(ty)
 }
 fn order<I: DefinitionSchemaIndex>(
-    member: &OrderedContributionMember,
+    member: &ContributionMember,
+    ordering: ContributionOrdering,
     program: &RuleProgram,
     index: &I,
     usage: &mut RuleStorageUse,
     limits: RuleStorageLimits,
 ) -> Result<Option<EquipmentLane>, RuleStorageError> {
     let invalid = RuleStorageError::Structure;
+    if (ordering == ContributionOrdering::Ordered) != member.order.is_some() {
+        return Err(invalid(
+            "contribution member ordering differs from its group",
+        ));
+    }
     let definition = match &member.owner {
         SchemaSubject::Definition(id) => id,
         SchemaSubject::Slot(_) => {
@@ -151,8 +175,8 @@ fn order<I: DefinitionSchemaIndex>(
             "ordered producer definition must have a known schema",
         ));
     }
-    let (valid, context, equipment) = match &member.order.origin {
-        OrderedContributionOrigin::Character => (
+    let (valid, context, equipment) = match &member.origin {
+        ContributionOrigin::Character => (
             matches!(
                 definition,
                 DefinitionAddress::Class(_) | DefinitionAddress::Ascendancy(_)
@@ -160,17 +184,17 @@ fn order<I: DefinitionSchemaIndex>(
             RuleEntityKind::Actor,
             None,
         ),
-        OrderedContributionOrigin::Allocation => (
+        ContributionOrigin::Allocation => (
             matches!(definition, DefinitionAddress::PassiveNode(_)),
             RuleEntityKind::Actor,
             None,
         ),
-        OrderedContributionOrigin::EquipmentUse { slots } => (
+        ContributionOrigin::EquipmentUse { slots } => (
             matches!(definition, DefinitionAddress::ItemTemplate(_)),
             RuleEntityKind::EquipmentUse,
             Some((false, slots)),
         ),
-        OrderedContributionOrigin::ItemModifier { slots } => (
+        ContributionOrigin::ItemModifier { slots } => (
             matches!(definition, DefinitionAddress::Modifier(_)),
             RuleEntityKind::EquipmentUse,
             Some((true, slots)),
@@ -182,19 +206,40 @@ fn order<I: DefinitionSchemaIndex>(
         ));
     }
     let Some((modifier, slots)) = equipment else {
+        if member
+            .order
+            .as_ref()
+            .is_some_and(|o| !o.slot_ranks.is_empty())
+        {
+            return Err(invalid(
+                "non-equipment contribution order forbids slot ranks",
+            ));
+        }
         return Ok(None);
     };
     add(&mut usage.ordered_slots, slots.len())?;
     work(usage, limits, slots.len())?;
     if slots.is_empty() {
         return Err(invalid(
-            "ordered equipment policy needs explicit slot ranks",
+            "contribution equipment origin needs explicit slot membership",
         ));
     }
+    let mut membership = BTreeSet::new();
+    for slot in slots {
+        if !matches!(index.definition(slot), SchemaLookup::Known(_))
+            || !membership.insert(slot.clone())
+        {
+            return Err(invalid("duplicate or unknown contribution equipment slot"));
+        }
+    }
+    let Some(order) = &member.order else {
+        return Ok(None);
+    };
+    work(usage, limits, order.slot_ranks.len())?;
     let mut mapping = BTreeMap::new();
     let mut ranks = BTreeSet::new();
-    for slot in slots {
-        if !matches!(index.definition(&slot.slot), SchemaLookup::Known(_))
+    for slot in &order.slot_ranks {
+        if !membership.contains(&slot.slot)
             || mapping.insert(slot.slot.clone(), slot.rank).is_some()
             || !ranks.insert(slot.rank)
         {
@@ -203,9 +248,14 @@ fn order<I: DefinitionSchemaIndex>(
             ));
         }
     }
+    if mapping.len() != membership.len() {
+        return Err(invalid(
+            "ordered slot ranks must exactly cover origin membership",
+        ));
+    }
     Ok(Some(EquipmentLane {
         modifier,
-        source_rank: member.order.source_rank,
+        source_rank: order.source_rank,
         slots: mapping,
     }))
 }
@@ -218,7 +268,7 @@ fn read<I: DefinitionSchemaIndex>(
     usage: &mut RuleStorageUse,
     limits: RuleStorageLimits,
 ) -> Result<(), RuleStorageError> {
-    let RuleReadSource::OrderedContributions {
+    let RuleReadSource::ContributionQuery {
         entity,
         query,
         group,
@@ -229,7 +279,7 @@ fn read<I: DefinitionSchemaIndex>(
     work(usage, limits, 1)?;
     let invalid = RuleStorageError::Structure;
     if !RuleOperationsVersion::parse(input.operations_version.as_str())
-        .is_some_and(RuleOperationsVersion::supports_ordered_contributions)
+        .is_some_and(RuleOperationsVersion::supports_contribution_queries)
     {
         return Err(invalid(
             "ordered contributions require owned-domain-operations-v21",
@@ -244,13 +294,19 @@ fn read<I: DefinitionSchemaIndex>(
     }
     // These queries initially consume direct actor/equipment contributions. In
     // particular they cannot bypass the separate source-property/Skill contracts.
+    let enemy_allowed = catalog.queries[query].contribution == ContributionKind::Flag
+        && RuleOperationsVersion::parse(input.operations_version.as_str())
+            .is_some_and(RuleOperationsVersion::supports_boolean_contributions);
     let valid = match entity {
         RuleEntity::Player => true,
+        RuleEntity::Enemy => enemy_allowed,
         RuleEntity::Actor => matches!(p.context, RuleEntityKind::Actor | RuleEntityKind::Action),
-        RuleEntity::Current => matches!(
-            p.context,
-            RuleEntityKind::Actor | RuleEntityKind::EquipmentUse
-        ),
+        RuleEntity::Current => {
+            matches!(
+                p.context,
+                RuleEntityKind::Actor | RuleEntityKind::EquipmentUse
+            ) || (p.context == RuleEntityKind::Enemy && enemy_allowed)
+        }
         _ => false,
     };
     if !valid {
@@ -260,6 +316,8 @@ fn read<I: DefinitionSchemaIndex>(
     }
     let target = if *entity == RuleEntity::Current {
         p.context
+    } else if *entity == RuleEntity::Enemy {
+        RuleEntityKind::Enemy
     } else {
         RuleEntityKind::Actor
     };
@@ -279,21 +337,72 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
     limits: RuleStorageLimits,
     usage: &mut RuleStorageUse,
 ) -> Result<(), RuleStorageError> {
+    let boolean_enabled = RuleOperationsVersion::parse(input.operations_version.as_str())
+        .is_some_and(RuleOperationsVersion::supports_boolean_contributions);
+    // Bound the public raw-input entry point before any program traversal. This
+    // is traversal work, independent of the package's ordinary object counts.
+    work(usage, limits, input.owners.len())?;
+    for owner in &input.owners {
+        work(usage, limits, owner.programs.members.len())?;
+    }
+    if let Some(applications) = &input.effect_applications {
+        work(usage, limits, applications.members.len())?;
+    }
+    // Raw compilation calls this validator too. Public direct reductions cannot
+    // bypass exact membership; the compiler's private typing adapter is separate.
+    for p in input.owners.iter().flat_map(|o| &o.programs.members).chain(
+        input
+            .effect_applications
+            .iter()
+            .flat_map(|a| a.members.iter().map(|a| &a.program)),
+    ) {
+        work(usage, limits, p.reads.len().saturating_add(p.effects.len()))?;
+        for read in &p.reads {
+            if let RuleReadSource::Contributions {
+                contribution,
+                reduction,
+                ..
+            } = &read.source
+                && (*contribution == ContributionKind::Flag
+                    || *reduction == ContributionReduction::Any
+                    || read.value_type == ComputedValueType::Boolean)
+            {
+                return Err(RuleStorageError::Structure(
+                    "Boolean contributions require checked query membership",
+                ));
+            }
+        }
+        if !boolean_enabled
+            && p.effects.iter().any(|e| {
+                matches!(
+                    e.effect,
+                    RuleEffectKind::Contribute {
+                        contribution: ContributionKind::Flag,
+                        ..
+                    }
+                )
+            })
+        {
+            return Err(RuleStorageError::Structure(
+                "Boolean contributions require owned-domain-operations-v22",
+            ));
+        }
+    }
     let enabled = RuleOperationsVersion::parse(input.operations_version.as_str())
-        .is_some_and(RuleOperationsVersion::supports_ordered_contributions);
-    let Some(registry) = &input.ordered_contributions else {
+        .is_some_and(RuleOperationsVersion::supports_contribution_queries);
+    let Some(registry) = &input.contribution_queries else {
         if enabled {
             return Err(RuleStorageError::Structure(
                 "ordered contributions require an explicit V21 inventory",
             ));
         }
-        // No new counters or canonical fields enter historical receipts. Existing
-        // package/program limits bound these scans; new reads still cannot hide in
-        // unused programs or effect applications under an older version.
+        // Older operation capabilities still reject query reads. The current
+        // schema and work receipt apply to every operation subset, including
+        // unused programs and effect applications.
         let forbidden = |p: &RuleProgram| {
             p.reads
                 .iter()
-                .any(|r| matches!(r.source, RuleReadSource::OrderedContributions { .. }))
+                .any(|r| matches!(r.source, RuleReadSource::ContributionQuery { .. }))
         };
         if input
             .owners
@@ -350,10 +459,17 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                 "ordered query stat must be known",
             ));
         };
+        if query.contribution == ContributionKind::Flag && !boolean_enabled {
+            return Err(RuleStorageError::Structure(
+                "Boolean contributions require owned-domain-operations-v22",
+            ));
+        }
         if !matches!(
             stat.value,
             ComputedValueType::Integer | ComputedValueType::Quantity { .. }
-        ) {
+        ) && !(query.contribution == ContributionKind::Flag
+            && stat.value == ComputedValueType::Boolean)
+        {
             return Err(RuleStorageError::Structure(
                 "ordered query stat must be numeric",
             ));
@@ -435,6 +551,11 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                 }
                 let target = match entity {
                     RuleEntity::Player | RuleEntity::Actor => RuleEntityKind::Actor,
+                    RuleEntity::Enemy
+                        if boolean_enabled && query.contribution == ContributionKind::Flag =>
+                    {
+                        RuleEntityKind::Enemy
+                    }
                     RuleEntity::Current => program.context,
                     _ => {
                         return Err(RuleStorageError::Structure(
@@ -447,7 +568,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                         "ordered producer recipient is not admitted by its stat",
                     ));
                 }
-                if let Some(lane) = order(member, program, index, usage, limits)?
+                if let Some(lane) = order(member, group.ordering, program, index, usage, limits)?
                     && let Some(prior) = lanes.insert(lane.modifier, lane.clone())
                     && prior != lane
                 {
@@ -455,10 +576,13 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                         "ordered equipment origin lane must share source and slot ranks",
                     ));
                 }
-                let order = (member.order.source_rank, member.order.program_rank);
+                let Some(member_order) = &member.order else {
+                    continue;
+                };
+                let order = (member_order.source_rank, member_order.program_rank);
                 if let Some(prior) =
-                    owner_ranks.insert(owner_key(&member.owner), member.order.source_rank)
-                    && prior != member.order.source_rank
+                    owner_ranks.insert(owner_key(&member.owner), member_order.source_rank)
+                    && prior != member_order.source_rank
                 {
                     return Err(RuleStorageError::Structure(
                         "ordered programs of one owner must share source rank",

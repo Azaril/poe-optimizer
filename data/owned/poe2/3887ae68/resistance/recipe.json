@@ -152846,7 +152846,7 @@
     ]
   },
   "rules": {
-    "schema_version": 2,
+    "schema_version": 3,
     "namespace": {
       "game": "poe2",
       "version": "owned-mechanics-v1"

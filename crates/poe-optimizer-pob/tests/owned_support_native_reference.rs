@@ -530,7 +530,7 @@ fn package(
     let rules = OwnedRulePackage::new(
         RulePackageInput {
             existing_actor_rules: None,
-            ordered_contributions: None,
+            contribution_queries: None,
             effect_applications: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: namespace(),

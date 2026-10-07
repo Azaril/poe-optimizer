@@ -363,7 +363,7 @@ impl World {
         rules["owners"] = json!([]);
         rules["receivers"] = json!({"members":[],"closure":{"kind":"complete"}});
         rules["effect_applications"] = rules["receivers"].clone();
-        rules["ordered_contributions"] = rules["receivers"].clone();
+        rules["contribution_queries"] = rules["receivers"].clone();
         rules["existing_actor_rules"] = d["existing_actor_rules"].clone();
         let mut routing = d["headers"]["routing"].clone();
         routing["outputs"] = json!([]);

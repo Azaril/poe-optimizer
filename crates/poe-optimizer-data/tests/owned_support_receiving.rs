@@ -336,7 +336,7 @@ impl Fixture {
         let schema = OwnedDefinitionSchemaPackage::new(schema, Default::default()).unwrap();
         let mut rule_input = RulePackageInput {
             existing_actor_rules: None,
-            ordered_contributions: None,
+            contribution_queries: None,
             effect_applications: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: ns(),

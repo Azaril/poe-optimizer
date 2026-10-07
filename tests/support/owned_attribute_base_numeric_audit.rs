@@ -171,7 +171,7 @@ fn current_item_programs_and_attribute_receiver_reproduce_numeric_order_limits()
     }
     assert_range(&schema, 0x09fa, -1_000_000.0, 1_000_000.0);
     let rules = &staged.input().recipe.rules;
-    let queries = rules.ordered_contributions.as_ref().unwrap();
+    let queries = rules.contribution_queries.as_ref().unwrap();
     assert!(!queries.is_complete());
     for query in &queries.members {
         if query.id.as_str().ends_with("-base") {

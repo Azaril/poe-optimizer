@@ -200,8 +200,11 @@ are unchanged. All five regenerated sidecars use schema21 and match their CLI
 byte counts and SHA-256 reports. The package retains 110 queries.
 
 Evidence is `runs/owned-generated-field-accounting-01/validation.json` and
-`runs/owned-generated-field-accounting-tests-01.log`. The maintained test is
-`tests/owned_generated_field_accounting.rs`. It compares stored earlier output;
+`runs/owned-generated-field-accounting-tests-01.log`. That checkpoint used
+the now-retired `tests/owned_generated_field_accounting.rs` migration harness.
+Its stored output remains historical evidence; current all-five preservation is
+covered by `tests/owned_boolean_publication.rs`, while maintained Import tests
+retain the positive/negative ownership proofs. The old harness compared stored earlier output;
 there is no retained old importer mode. Two failed synthetic controls were
 corrected at their actual boundaries: absent/empty source can already have
 physical provenance, and duplicate XML attributes fail decoding before

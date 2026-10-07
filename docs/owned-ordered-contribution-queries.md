@@ -2,7 +2,7 @@
 
 Status: bounded implementation of the accepted [contribution-stage direction](owned-contribution-stages.md). This framework does not choose a PoE numerical grouping or rounding law, close a game owner, or make another original build executable. Game-specific adoption still requires actual consumer evidence and complete contributor coverage.
 
-The shared contract is an optional `ordered_contributions` registry on `RulePackageInput`, enabled only by `owned-domain-operations-v21`. Each query names one Stat and contribution kind. Its fixed named groups declare a reduction, typed empty identity, and a `DeclaredSet` of exact definition-owner/program/effect members. Programs read a named group through `RuleReadSource::OrderedContributions { entity, query, group }`. The query is authored data; concrete membership is bound from the current candidate's discovered effect occurrences.
+The shared contract is an optional `contribution_queries` registry on `RulePackageInput`, introduced by operationsV21 and generalized by operationsV22. Each query names one Stat and contribution kind. Its fixed named groups declare a reduction, typed empty identity, and a `DeclaredSet` of exact definition-owner/program/effect members. Programs read a named group through `RuleReadSource::ContributionQuery { entity, query, group }`. The query is authored data; concrete membership is bound from the current candidate's discovered effect occurrences.
 
 An authored member is not one runtime value. A repeated modifier produces one contribution per actual modifier occurrence. The same rolled item in two equipment uses produces separate occurrences. Removing a passive, changing an item, changing semantic modifier order, or selecting another loadout changes candidate membership. Renaming or rebasing opaque instance IDs must not change numerical order. Existing discovery determines whether alternate-loadout roots are available; the query does not introduce a second participation policy.
 
@@ -10,7 +10,7 @@ Every actual effect on the query's recipient/channel must match exactly one memb
 
 ## Bounded ordering contract
 
-Members name exact definition owners, program IDs and effect IDs. Their authored order is compared lexicographically as:
+Members name exact definition owners, program IDs, effect IDs and source origins. Numeric groups require `ordering: ordered`; each member carries a separate `ContributionOrder`, whose slot ranks exactly cover its origin membership. The authored order is compared lexicographically as:
 
 `(source_rank, slot_rank, modifier_position, program_rank, effect_rank)`
 
@@ -39,13 +39,23 @@ The existing staged DAG remains authoritative. A query read accesses its underly
 
 Data validates the registry's exact references, origin/owner/context agreement, slot maps, group identities, units, contribution kinds, read scopes, closures, and bounded sizes. The same reusable validator runs when Engine compiles raw rule inputs. Engine performs concrete occurrence binding and contributor coverage during candidate-plan compilation, then stores immutable ordered effect-index vectors for evaluation. Parallel workers evaluate ordinary native typed operations over their own candidate state; PoB is not involved.
 
-## Compatibility and validation
+## Current format and validation
 
-V6–V20 packages omit the registry and retain their exact wire form, rule identity domain, receipt fields, and existing `Contributions` behavior. They reject an explicit registry or an ordered-group read. V21 requires an explicit registry, even for a deliberately empty finite fixture, and retains all earlier required effect-application/readiness metadata. Its plan identity uses `owned-effect-plan-v18`. The later [attribute consumer packet](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md) opts into V21 through full release assembly; the historical release-migration V5 contract remains unchanged.
+Rule packages use schema3. There is no old/new query DTO parser. OperationsV21
+introduces numeric queries; V22 adds typed Boolean contributions and unordered
+Any, using effect-plan domainv19. Explicit older operation subsets still reject
+unsupported operations, but do not preserve historical package/hash formats.
+Maintained acquisition/test artifacts were rebuilt with rule storage/compiler
+hash domainsv3. The [Boolean contract](owned-boolean-contributions-proposal.md)
+uses the same registry and separates exact origins from optional numeric ranks.
 
-Storage budgets separately bound queries, groups, member references, declared slots and validation work. New counters are omitted when zero, preserving historical receipts. Engine additionally bounds candidate expansion and comparisons using its plan resources. Authored ordering data is included in package/plan identity; changing a rank is a semantic change.
-
-Core/Data tests cover the closed V21 capability, historical omitted-field bytes and digests, explicit inventory admission, exact reference and unit checks, unread-group validation, duplicate membership, origin/slot policies, Partial evidence, bounds, and frozen-stage access. Engine tests cover candidate expansion, rank-based arithmetic, repeated occurrences, edits/rebases, inactive loadouts, missing membership, unsupported origins and incomplete coverage. These tests demonstrate the framework's contract, not obtainability of synthetic fixture items or a game-specific aggregation law.
+Storage budgets bound queries, groups, members, slots and validation work. Engine
+bounds candidate expansion and comparisons. Declared ranks are part of package
+and plan identities; changing a numeric rank is a semantic change. Tests cover
+numeric order/ties, typed Boolean identities, explicit membership including
+unread and inactive effects, Partial coverage, nonempty support suffixes, frozen
+stages, scratch recovery, rebasing and Rayon determinism. These establish the
+framework contract, not a game-specific aggregation law or item obtainability.
 
 The attribute consumer checkpoint binds real Original05 class/choice occurrences
 to the same six receiver bodies in a finite fixture, using authenticated source

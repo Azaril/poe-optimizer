@@ -214,6 +214,11 @@ impl Budget {
                 return Err(ViewRecipeError::Invalid("contribution type or target"));
             }
             match contribution.contribution {
+                ContributionKind::Flag => {
+                    return Err(ViewRecipeError::Invalid(
+                        "passive view recipe requires numeric contributions",
+                    ));
+                }
                 ContributionKind::Add if stat.value != ty => {
                     return Err(ViewRecipeError::Invalid("Add contribution type differs"));
                 }

@@ -77,15 +77,15 @@ impl World {
             assert!(actual.rules.receivers.members.contains(&receiver));
             recipe.rules.receivers.members.push(receiver);
         }
-        let registry = recipe.rules.ordered_contributions.as_mut().unwrap();
+        let registry = recipe.rules.contribution_queries.as_mut().unwrap();
         assert!(registry.is_complete());
         assert_eq!(registry.members.len(), 12);
-        let queries: Vec<OrderedContributionQuery> = family::read("queries.json");
+        let queries: Vec<ContributionQuery> = family::read("queries.json");
         for query in queries {
             assert!(
                 actual
                     .rules
-                    .ordered_contributions
+                    .contribution_queries
                     .as_ref()
                     .unwrap()
                     .members
@@ -363,12 +363,12 @@ fn native_missing_factor_and_actual_partial_coverage_never_receive_identity_defa
     registry
         .recipe
         .rules
-        .ordered_contributions
+        .contribution_queries
         .as_mut()
         .unwrap()
         .closure = source()
         .rules
-        .ordered_contributions
+        .contribution_queries
         .as_ref()
         .unwrap()
         .closure

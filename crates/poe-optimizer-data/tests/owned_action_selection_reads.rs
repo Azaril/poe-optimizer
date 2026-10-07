@@ -79,7 +79,7 @@ fn fixture() -> (OwnedDefinitionSchemaPackage, RulePackageInput) {
     });
     let input = RulePackageInput {
         existing_actor_rules: None,
-        ordered_contributions: None,
+        contribution_queries: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("rules"),
@@ -140,7 +140,7 @@ fn v21_selection_reads_roundtrip_with_explicit_ordered_inventory() {
             "ordered contributions require an explicit V21 inventory"
         ))
     ));
-    input.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+    input.contribution_queries = Some(DeclaredSet::complete(vec![]));
     let package = OwnedRulePackage::new(input.clone(), &schema, limits).unwrap();
     let bytes = encode_rule_package(&package, limits).unwrap();
     let decoded = decode_rule_package(&bytes, &schema, limits).unwrap();

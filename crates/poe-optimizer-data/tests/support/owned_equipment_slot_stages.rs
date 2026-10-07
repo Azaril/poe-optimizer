@@ -38,7 +38,7 @@ fn fixture(read: PlayerEquipmentSlotRead, value_type: ComputedValueType) -> Fixt
         rules.definitions = identity.clone();
         rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
         rules.effect_applications = Some(empty());
-        rules.ordered_contributions = Some(empty());
+        rules.contribution_queries = Some(empty());
         rules.existing_actor_rules =
             Some(DeclaredSet::complete(vec![ExistingActorRuleApplication {
                 id: key("player"),

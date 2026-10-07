@@ -1,10 +1,9 @@
+use super::test_fixture as fixture;
 use super::*;
 use poe_optimizer_core::{
     owned_build::DeclaredSlot, owned_definitions::*, owned_rules::*, owned_schema::*,
 };
 use poe_optimizer_data::owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits};
-#[path = "../../tests/support/owned_rule_fixture.rs"]
-mod fixture;
 
 fn key(value: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(value).unwrap()

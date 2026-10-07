@@ -305,8 +305,9 @@ fn enemy_level_storage_requires_explicit_v14_even_when_the_read_is_unused() {
     }
     let mut explicit = raw.clone();
     explicit.effect_applications = Some(DeclaredSet::complete(vec![]));
-    explicit.ordered_contributions = Some(DeclaredSet::complete(vec![]));
-    check_roundtrip(explicit, &schema, OWNED_RULE_OPERATIONS_V21);
+    explicit.contribution_queries = Some(DeclaredSet::complete(vec![]));
+    check_roundtrip(explicit.clone(), &schema, OWNED_RULE_OPERATIONS_V21);
+    check_roundtrip(explicit, &schema, OWNED_RULE_OPERATIONS_V22);
     for previous in [
         OWNED_RULE_OPERATIONS_V6,
         OWNED_RULE_OPERATIONS_V7,
@@ -350,7 +351,7 @@ fn historical_packages_keep_exact_canonical_bytes_and_rule_identity_domain() {
         // These prior contracts remain canonical as authored, independent of the
         // moving latest alias. V14 does not add a field to historical packages.
         let bytes = serde_json::to_vec(&raw).unwrap();
-        let identity = digest_owned("owned-rule-package-v2", &raw, limits.max_wire_bytes).unwrap();
+        let identity = digest_owned("owned-rule-package-v3", &raw, limits.max_wire_bytes).unwrap();
         let stored = decode_rule_package(&bytes, &schema, limits).unwrap();
         assert_eq!(stored.input(), &raw);
         assert_eq!(*stored.identity(), identity);

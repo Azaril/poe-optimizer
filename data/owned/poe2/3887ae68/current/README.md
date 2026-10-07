@@ -1,5 +1,7 @@
 # Current owned package
 
+The 2026-10-07 contribution-contract cutover reauthored these maintained inputs with rule-package schema **3**. Their explicit operations **V6**, rule bodies, owned IDs, source pins and Partial coverage are unchanged; manifests and transition commitments were regenerated through the production publishers. Old rule-package formats are rejected, with no runtime compatibility path.
+
 This is the single published predecessor for new owned catalog work: registry watermark **7469**, with the complete earlier 2589-entry prefix retained. Use its `recipe.json` and `mapping.json` when adding definitions. Older import/resistance packages are reproducible historical stages, not alternative allocation bases. Changes to existing descriptors require an explicit refinement policy.
 
 The offline tree extension adds 4582 definitions and 298 choice slots. It represents eight classes, 23 ascendancy choices, 28 physical roots, ordinary/ascendancy pool eligibility, physical adjacency and exact parent choices. Roots belong to the character; attached options are choices, not paid allocations. Fourteen links to missing source nodes remain unresolved adjacency. Known structure does not close untranslated effects, class-dependent views, unlock conditions, radius access or legality budgets.

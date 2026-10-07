@@ -638,7 +638,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         ));
                     }
                 }
-                RuleReadSource::OrderedContributions {
+                RuleReadSource::ContributionQuery {
                     entity: RuleEntity::PropertyOwner,
                     query,
                     ..
@@ -646,7 +646,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     let registry = self
                         .rules
                         .input()
-                        .ordered_contributions
+                        .contribution_queries
                         .as_ref()
                         .ok_or_else(|| invalid("ordered contribution registry is absent"))?;
                     charge(

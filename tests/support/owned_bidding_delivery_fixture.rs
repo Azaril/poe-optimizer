@@ -1088,16 +1088,13 @@ impl World {
                 // This finite fixture includes every owner below and has no
                 // ordered reads. V21 requires an explicit empty registry even
                 // when no such consumer exists; this is not build coverage.
-                ordered_contributions: if self.operations.as_str() == OWNED_RULE_OPERATIONS_V21 {
+                contribution_queries: if self.operations.as_str() == OWNED_RULE_OPERATIONS_V21 {
                     assert!(
                         self.owners
                             .iter()
                             .flat_map(|o| &o.programs.members)
                             .flat_map(|p| &p.reads)
-                            .all(|r| !matches!(
-                                r.source,
-                                RuleReadSource::OrderedContributions { .. }
-                            ))
+                            .all(|r| !matches!(r.source, RuleReadSource::ContributionQuery { .. }))
                     );
                     Some(DeclaredSet::complete(vec![]))
                 } else {

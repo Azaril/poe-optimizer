@@ -1,15 +1,18 @@
 # Boolean contributions and complete flag queries
 
 Status: accepted by the owner on 2026-10-07: typed Boolean contributions with an
-unordered `Any` reduction on the existing occurrence/effect graph. Implementation
-and data migration remain outstanding. This changes a public data contract; use
+unordered `Any` reduction on the existing occurrence/effect graph. Core/Data/Engine
+implementation and current-format migration are complete; the first two passive
+producers and five reducers are published, with all production flag inventories
+still Partial. This changes a public data contract; use
 the current implementation plan for execution state. The proposal was drafted
 against baseline `runs/owned-player-offhand-01/package` at commit `7b7fb1b`.
 
-## Problem and evidence
+## Problem and evidence at the proposal baseline
 
-The five inherent Strength-to-Life controls (`3315` through `3319`) are resolved
-Boolean Stats with no producers. Their consumer already exists. They represent
+At the proposal baseline, the five inherent Strength-to-Life controls (`3315`
+through `3319`) were resolved Boolean Stats with no producers. Their consumer
+already existed. They represent
 disabling all inherent bonuses, disabling Strength bonuses, disabling Strength
 Life, doubling inherent bonuses, and halving Strength Life.
 
@@ -23,11 +26,11 @@ supply further suppression cases; their canonical native acquisition remains
 unfinished. Five originals having false flags is not candidate-wide absence
 evidence.
 
-Current native Stat and Capability effects are singular final producers.
+Native Stat and Capability effects are singular final producers.
 Engine correctly rejects competing writes. Numeric contributions accept Add,
 Increase and Multiply with Sum/Product reductions. An expression `Any` combines
 a fixed list of program values, not the candidate's dynamically discovered
-effect occurrences. None of these contracts currently represents the required
+effect occurrences. Before this change, none of these contracts represented the required
 multiple-source Boolean fact.
 
 ## Recommended contract
@@ -144,3 +147,21 @@ origin families or reinterpret numeric Maximum effect-application stacking as
 Boolean Any. Those delivery domains require actual source/recipient evidence.
 The detailed local audit is `runs/owned-boolean-implementation-audit-01.md`;
 these gates remain authoritative even when that diagnostic file is unavailable.
+
+## Implemented checkpoint
+
+The current contract uses `ContributionKind::Flag`, `ContributionReduction::Any`
+and one `contribution_queries` registry. `ContributionMember.origin` owns source
+membership; its optional `order` holds only numeric ranks. Groups explicitly
+select Ordered or Unordered. Direct Flag/Any reads are refused in storage,
+compilation and cold binding; they must use checked query membership. The census
+also covers unread channels and nonempty support suffixes. Numeric Enemy queries
+were not broadened alongside Boolean recipient authority.
+
+Rule schema3, operations22, rule storage/compiler domainsv3 and effect-planv19
+invalidate prior caches. Maintained fixtures were regenerated in place with
+unchanged mechanics; no old/new DTO parser was retained. The new real passive
+packet is [inherent attribute flags](../data/owned/poe2/3887ae68/inherent-attribute-flags/README.md).
+Irongrasp, transformed passives and complete source inventories remain work;
+complete original builds remain0/5. The living implementation plan holds test
+results, current artifact identities and the next selected-build blocker.

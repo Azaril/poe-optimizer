@@ -676,7 +676,7 @@ fn operations_recipe(version: &str) -> StagedOwnedRecipe {
             schema: schema.input().clone(),
             rules: RulePackageInput {
                 existing_actor_rules: None,
-                ordered_contributions: None,
+                contribution_queries: None,
                 // The synthetic package has only a unit, stat and literal
                 // derivation; its authored effect-application inventory is empty.
                 // Historical versions keep their original absent field.
@@ -846,7 +846,7 @@ fn ordered_query_upgrade_requires_an_authored_inventory_and_preserves_it() {
     // declares that inventory explicitly; a version change cannot infer it.
     let mut authored = recipe(&base);
     authored.rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
-    authored.rules.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+    authored.rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
     let migrated = assemble_owned_recipe(authored.clone(), Default::default()).unwrap();
     assert_eq!(recipe(&migrated), authored);
     let preserved = extend_owned_recipe(&migrated, &empty(), Default::default()).unwrap();

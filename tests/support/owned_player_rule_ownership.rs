@@ -447,7 +447,7 @@ mod native {
             recipe.rules.operations_version = s.recipe.rules.operations_version.clone();
             // This finite component contains no ordered reduction consumer.
             // Production's Partial attribute memberships remain unchanged.
-            recipe.rules.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+            recipe.rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
             recipe.rules.existing_actor_rules = s.recipe.rules.existing_actor_rules.clone();
             Self {
                 recipe,

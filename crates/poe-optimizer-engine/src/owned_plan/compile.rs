@@ -86,7 +86,7 @@ pub(super) enum PendingRead {
     Required(Box<PendingRead>),
     Value(PlanValueKey),
     Contributions(ContributionKey, ContributionReduction, ParameterValue),
-    OrderedContributions(ContributionKey, OwnedDefinitionKey, OwnedDefinitionKey),
+    ContributionQuery(ContributionKey, OwnedDefinitionKey, OwnedDefinitionKey),
     ModifierTransforms {
         key: PlanValueKey,
         initial: Box<PlanValueKey>,
@@ -557,7 +557,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     let pending_preparation = symbolic
         .as_ref()
         .map_or(&preparation_gates, |s| &s.preparation_gates);
-    let ordered_effects: Vec<_> = if rules.input().ordered_contributions.is_some() {
+    let ordered_effects: Vec<_> = if rules.input().contribution_queries.is_some() {
         charge(&mut b.work, b.effects.len())?;
         b.effects.iter().map(|node| node.key.clone()).collect()
     } else {
@@ -569,6 +569,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
         effects: &ordered_effects,
         appended: &[],
     };
+    ordered_sources.validate_inventory(contributions, complete, &mut b.work)?;
     for (inv, reads) in b.invocations.iter_mut().zip(pending_invocations) {
         inv.reads = reads
             .iter()
@@ -715,7 +716,7 @@ fn resolve_ref(
         PendingRead::Select { .. } => 3,
         PendingRead::Required(_) => 1,
         PendingRead::Value(_) => 1,
-        PendingRead::Contributions(key, ..) | PendingRead::OrderedContributions(key, ..) => {
+        PendingRead::Contributions(key, ..) | PendingRead::ContributionQuery(key, ..) => {
             contributions.get(key).map_or(0, Vec::len)
         }
         PendingRead::ModifierTransforms { key, .. } => transforms
@@ -764,7 +765,7 @@ fn resolve_ref(
                 .unwrap_or_default(),
             complete,
         },
-        PendingRead::OrderedContributions(key, query, group) => ordered.bind(
+        PendingRead::ContributionQuery(key, query, group) => ordered.bind(
             key,
             query,
             group,

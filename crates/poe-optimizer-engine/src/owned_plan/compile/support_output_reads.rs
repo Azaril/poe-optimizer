@@ -55,7 +55,7 @@ impl OutputReads<'_> {
             // have no semantic key to fabricate a preparation target from.
             PendingRead::Ready(_)
             | PendingRead::Contributions(..)
-            | PendingRead::OrderedContributions(..) => Ok(()),
+            | PendingRead::ContributionQuery(..) => Ok(()),
         }
     }
     fn reads(&mut self, reads: &[PendingRead]) -> Result<()> {

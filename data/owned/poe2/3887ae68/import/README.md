@@ -1,5 +1,7 @@
 # Owned import inputs for source 3887ae68
 
+The 2026-10-07 contribution-contract cutover reauthored these maintained inputs with rule-package schema **3**. Their explicit operations **V6**, rule bodies, owned IDs, source pins and Partial coverage are unchanged; manifests and transition commitments were regenerated through the production publishers. Old rule-package formats are rejected, with no runtime compatibility path.
+
 These are production inputs for the offline catalog extension and `normalize-owned`. The original component recipe, tables, and 38 IDs in the parent directory remain unchanged. The new seed adds 31 fixed reward outcomes, 30 option values, and 20 equipment slots, giving 119 allocations. The production extension reuses the six reviewed Gem/Skill mappings and appends 2,396 missing catalog identities, giving a final registry watermark of 2,515.
 
 The appended catalog descriptors are explicitly Unmapped input schemas. They do not inherit the executable Twister/Sniper schemas or claim numerical coverage. The original nine Partial rule owners and four Partial routing entries remain Partial. The reward declarations describe fixed authored input outcomes only; their stat text is evidence, not compiled effects.

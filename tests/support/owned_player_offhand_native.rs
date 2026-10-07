@@ -255,7 +255,7 @@ impl World {
         recipe.rules.tables.clear();
         recipe.rules.receivers = DeclaredSet::complete(vec![]);
         recipe.rules.effect_applications = Some(DeclaredSet::complete(vec![]));
-        recipe.rules.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+        recipe.rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
         let registry = recipe.rules.existing_actor_rules.as_ref().unwrap();
         assert!(registry.is_complete());
         assert_eq!(registry.members.len(), 1);

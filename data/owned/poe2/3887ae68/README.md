@@ -1,5 +1,7 @@
 # Owned mechanics components: PoE 2, source 3887ae68
 
+The 2026-10-07 contribution-contract cutover reauthored these maintained inputs with rule-package schema **3**. Their explicit operations **V6**, rule bodies, owned IDs, source pins and Partial coverage are unchanged; manifests and transition commitments were regenerated through the production publishers. Old rule-package formats are rejected, with no runtime compatibility path.
+
 This is persisted production input for the owned recipe assembler. It supplies complete finite level tables and reviewed component rules for Twister and Skeletal Sniper. It is not a complete game catalog or a claim that either original build is fully evaluated.
 
 The package contains 38 registered owned allocations, seven scalar tables with 40 rows each, and explicit Gem → generated Skill / Skill → actor grants. Nine rule owners and four action-routing entries remain Partial. Those gaps are deliberate: other modifiers, conditional skill behavior, minion damage scaling, supports, actor ability instances, and full metric coverage are not supplied by these components. Protected-original complete native evaluation remains 0/5.
@@ -13,8 +15,8 @@ The [ordinary defensive modifier inputs](item-defence-inputs/README.md) add 19 f
 base-factor presence preserve legacy formatting without source text in native evaluation.
 Structural membership does not establish local/global application or complete item coverage.
 The [full-release correction](releases/README.md) supersedes the early Complete-empty direct
-Gem parameter/choice declarations for new consumers. It keeps the historical component
-recipe immutable and makes the corrected Partial declarations explicit in persisted data.
+Gem parameter/choice declarations for new consumers. It keeps the component
+semantics unchanged and makes the corrected Partial declarations explicit in persisted data.
 
 The [active-Gem policies](active-gem-inputs/README.md) use the same native compiler for
 36 reviewed active definitions. [Selected-action query templates](selected-actions/README.md)
@@ -25,7 +27,7 @@ all query rows. Actor ability supply remains a separate, proposed Core extension
 
 | File | Purpose |
 |---|---|
-| recipe.json | Source-independent RegistryInput, SchemaPackageInput, RulePackageInput with operations v5, and ActionRoutingInput. Accepted directly by the production assembler. |
+| recipe.json | Source-independent RegistryInput, SchemaPackageInput, RulePackageInput with schema 3 and operations V6, and ActionRoutingInput. Accepted directly by the production assembler. |
 | ids.json | Human-readable inventory of the exact persisted typed IDs. Labels are authoring conveniences, not runtime source-name dispatch. |
 | source-manifest.json | Import-only source file/span pins, exact literal row shapes, selected identities, table/literal bindings, reviewed algorithm spans, and unresolved source references. |
 | mechanics-facts.json | Reproducible source evidence, exact numeric tokens, full row census, winning identity declarations, and association with the exact recipe bytes. |

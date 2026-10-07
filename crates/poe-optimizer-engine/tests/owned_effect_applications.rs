@@ -125,7 +125,7 @@ fn input(
 ) -> RulePackageInput {
     RulePackageInput {
         existing_actor_rules: None,
-        ordered_contributions: None,
+        contribution_queries: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("effect-application-tests"),

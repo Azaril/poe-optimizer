@@ -269,7 +269,7 @@ fn source_assembly_keeps_mechanical_members_with_mixed_requested_participation()
         &f,
         |r| {
             r.operations_version = key(OWNED_RULE_OPERATIONS_V21);
-            r.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+            r.contribution_queries = Some(DeclaredSet::complete(vec![]));
         },
         configure_stages,
         |_| {},

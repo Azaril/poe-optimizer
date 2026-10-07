@@ -159,7 +159,7 @@ pub fn inputs_with(
         false,
         OWNED_RULE_OPERATIONS_V21,
         |rules| {
-            rules.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+            rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
             edit_rules(rules);
         },
         |s| {

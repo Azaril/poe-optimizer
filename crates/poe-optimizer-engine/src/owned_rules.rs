@@ -18,6 +18,9 @@ mod compile;
 mod execute;
 #[cfg(test)]
 mod prepared_tests;
+#[cfg(test)]
+#[path = "../tests/support/owned_rule_fixture.rs"]
+mod test_fixture;
 
 #[derive(Clone, Copy, Debug)]
 pub struct RuleLimits {

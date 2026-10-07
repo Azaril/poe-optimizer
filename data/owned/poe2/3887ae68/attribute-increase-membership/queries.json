@@ -56,7 +56,8 @@
                 ]
               }
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     },
@@ -112,9 +113,10 @@
                   "source_rank": 2,
                   "program_rank": 0,
                   "effect_rank": 0,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -138,9 +140,10 @@
                   "source_rank": 4,
                   "program_rank": 0,
                   "effect_rank": 0,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -164,9 +167,10 @@
                   "source_rank": 5,
                   "program_rank": 0,
                   "effect_rank": 0,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -190,9 +194,10 @@
                   "source_rank": 6,
                   "program_rank": 0,
                   "effect_rank": 0,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -216,9 +221,10 @@
                   "source_rank": 3,
                   "program_rank": 0,
                   "effect_rank": 0,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -242,9 +248,10 @@
                   "source_rank": 7,
                   "program_rank": 0,
                   "effect_rank": 0,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -268,16 +275,18 @@
                   "source_rank": 9,
                   "program_rank": 0,
                   "effect_rank": 0,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               }
             ],
             "closure": {
               "kind": "complete"
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     }
@@ -339,7 +348,8 @@
                 ]
               }
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     },
@@ -395,9 +405,10 @@
                   "source_rank": 2,
                   "program_rank": 0,
                   "effect_rank": 2,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -421,9 +432,10 @@
                   "source_rank": 3,
                   "program_rank": 0,
                   "effect_rank": 2,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -447,9 +459,10 @@
                   "source_rank": 7,
                   "program_rank": 0,
                   "effect_rank": 2,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -473,9 +486,10 @@
                   "source_rank": 8,
                   "program_rank": 0,
                   "effect_rank": 2,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -499,16 +513,18 @@
                   "source_rank": 9,
                   "program_rank": 0,
                   "effect_rank": 2,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               }
             ],
             "closure": {
               "kind": "complete"
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     }
@@ -570,7 +586,8 @@
                 ]
               }
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     },
@@ -626,9 +643,10 @@
                   "source_rank": 1,
                   "program_rank": 0,
                   "effect_rank": 2,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -652,9 +670,10 @@
                   "source_rank": 2,
                   "program_rank": 0,
                   "effect_rank": 4,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -678,9 +697,10 @@
                   "source_rank": 3,
                   "program_rank": 0,
                   "effect_rank": 4,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -704,9 +724,10 @@
                   "source_rank": 7,
                   "program_rank": 0,
                   "effect_rank": 4,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -730,16 +751,18 @@
                   "source_rank": 9,
                   "program_rank": 0,
                   "effect_rank": 4,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               }
             ],
             "closure": {
               "kind": "complete"
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     }
@@ -801,7 +824,8 @@
                 ]
               }
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     },
@@ -857,9 +881,10 @@
                   "source_rank": 2,
                   "program_rank": 0,
                   "effect_rank": 1,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -883,9 +908,10 @@
                   "source_rank": 4,
                   "program_rank": 0,
                   "effect_rank": 1,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -909,9 +935,10 @@
                   "source_rank": 5,
                   "program_rank": 0,
                   "effect_rank": 1,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -935,9 +962,10 @@
                   "source_rank": 6,
                   "program_rank": 0,
                   "effect_rank": 1,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -961,9 +989,10 @@
                   "source_rank": 3,
                   "program_rank": 0,
                   "effect_rank": 1,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -987,9 +1016,10 @@
                   "source_rank": 7,
                   "program_rank": 0,
                   "effect_rank": 1,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -1013,16 +1043,18 @@
                   "source_rank": 9,
                   "program_rank": 0,
                   "effect_rank": 1,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               }
             ],
             "closure": {
               "kind": "complete"
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     }
@@ -1084,7 +1116,8 @@
                 ]
               }
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     },
@@ -1140,9 +1173,10 @@
                   "source_rank": 2,
                   "program_rank": 0,
                   "effect_rank": 3,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -1166,9 +1200,10 @@
                   "source_rank": 3,
                   "program_rank": 0,
                   "effect_rank": 3,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -1192,9 +1227,10 @@
                   "source_rank": 7,
                   "program_rank": 0,
                   "effect_rank": 3,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -1218,9 +1254,10 @@
                   "source_rank": 8,
                   "program_rank": 0,
                   "effect_rank": 3,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -1244,16 +1281,18 @@
                   "source_rank": 9,
                   "program_rank": 0,
                   "effect_rank": 3,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               }
             ],
             "closure": {
               "kind": "complete"
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     }
@@ -1315,7 +1354,8 @@
                 ]
               }
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     },
@@ -1371,9 +1411,10 @@
                   "source_rank": 1,
                   "program_rank": 0,
                   "effect_rank": 3,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -1397,9 +1438,10 @@
                   "source_rank": 2,
                   "program_rank": 0,
                   "effect_rank": 5,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -1423,9 +1465,10 @@
                   "source_rank": 3,
                   "program_rank": 0,
                   "effect_rank": 5,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -1449,9 +1492,10 @@
                   "source_rank": 7,
                   "program_rank": 0,
                   "effect_rank": 5,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               },
               {
@@ -1475,16 +1519,18 @@
                   "source_rank": 9,
                   "program_rank": 0,
                   "effect_rank": 5,
-                  "origin": {
-                    "kind": "allocation"
-                  }
+                  "slot_ranks": []
+                },
+                "origin": {
+                  "kind": "allocation"
                 }
               }
             ],
             "closure": {
               "kind": "complete"
             }
-          }
+          },
+          "ordering": "ordered"
         }
       ]
     }

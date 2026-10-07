@@ -465,7 +465,7 @@ impl<I: DefinitionSchemaIndex> ReadinessProof<'_, I> {
         }
         match read {
             PendingRead::Value(key) => self.value(key, phase)?,
-            PendingRead::Contributions(key, ..) | PendingRead::OrderedContributions(key, ..) => {
+            PendingRead::Contributions(key, ..) | PendingRead::ContributionQuery(key, ..) => {
                 charge(self.work, entity_work(&key.entity) + 1)?;
                 if let Some(producer) = self.contributions.get(key) {
                     self.require(*producer, phase)?;

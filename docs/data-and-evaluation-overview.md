@@ -39,7 +39,19 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest Import checkpoint accounts for fourteen overwritten numeric
+The current native checkpoint implements typed Boolean `Flag` contributions and
+unordered `Any` on the existing graph. Source membership and numeric ranks are
+separate; missing coverage remains unresolved even beside true. The current
+format is rules schema3 / operations22; no historical DTO loading path exists.
+Two real passive producers and five flag reducers are published in
+`runs/owned-boolean-publication-01/package`, with all five memberships still
+Partial. Native tests connect the actual producers to the existing Strength-Life
+receiver, and the all-five reimport preserves inputs, dispositions and 110 queries.
+Neither passive is selected in Original05; final Strength, final Life and the
+five selected input obligations remain unresolved. See the
+[flag packet](../data/owned/poe2/3887ae68/inherent-attribute-flags/README.md).
+
+The preceding Import checkpoint accounts for fourteen overwritten numeric
 configuration placeholders in every original. The proof binds the exact source
 scope and encounter to actual emitted raw-presence/optional-value inputs; it
 retains the ScenarioPreset link and never imports a saved calculated default.
@@ -47,7 +59,7 @@ Malformed, ambiguous, fallback/default and unproved rows retain their obligation
 All five drafts, IDs, selections and 110 queries remain unchanged. Original05 has
 44 configuration-linked origins (21 inside Config, 23 outside); complete native
 builds remain 0/5. Current configuration-policy sidecars use schema23, and the
-native package is unchanged. See the [proof and remaining consumers](owned-configuration-dispositions-proposal.md#overwritten-raw-override-placeholders-2026-10-07).
+that checkpoint changed no native package. See the [proof and remaining consumers](owned-configuration-dispositions-proposal.md#overwritten-raw-override-placeholders-2026-10-07).
 
 The preceding archived-source checkpoint accounted for fourteen generated rows
 through existing preset-scoped Pending raw-input, usage and support-discovery
@@ -60,7 +72,7 @@ now projects injected typed constructor defaults to Player, Enemy and Environmen
 external inputs, preserving explicit zero/false and refusing malformed fields.
 The source's numeric Placeholder lane is ignored only with a reviewed per-input
 opt-in. Source controls, native composition/determinism and all-five publication
-checks pass. The new baseline is `runs/owned-resistance-penalty-02/package`;
+checks pass. That checkpoint used `runs/owned-resistance-penalty-02/package`;
 Original05 has 17 external assumptions, but their full inventory remains Pending.
 
 The preceding participation publication supplied all twelve active roots' enabled
@@ -133,8 +145,9 @@ the inline properties used for catalyst scaling. All five new programs pass
 11 source-derived component cases and serial/Rayon agreement; 20 import
 controls and complete all-five preservation pass. Item source categories still
 prevent new canonical modifiers in the unchanged originals, so the issue counts
-and 0/5 result are unchanged. Work now prioritizes generated Sand Djinn/Firebolt
-participation in Original05 through the existing saved-usage model. The next
+and 0/5 result are unchanged. At that checkpoint, work next targeted generated
+Sand Djinn/Firebolt participation in Original05 through the saved-usage model.
+The [implementation plan](implementation.md) records the current priority. The next
 audit found that generated final-input preparation needs an ownership extension;
 the accepted participation contract alone cannot make those targets ready.
 Anoints are a separate future model obligation: the current pool-only grant
@@ -215,11 +228,11 @@ order is imported. BASE and global contributor inventories remain Partial.
 Native component tests use all five selected INC occurrences and all nine donor
 bodies, with BASE projections explicitly confined to fixtures. Conditional
 snapshots, complete original-build attributes and final Life remain unresolved.
-Multiple-source inherent flags need the accepted
-[Boolean aggregation contract](owned-boolean-contributions-proposal.md). The owner
-approved typed Boolean contributions with unordered `Any` on 2026-10-07; runtime
-implementation and producer migration remain outstanding. The current
-implementation has no false-default shortcut.
+Multiple-source inherent flags now use the implemented
+[Boolean aggregation contract](owned-boolean-contributions-proposal.md). Source
+coverage remains Partial despite published passive producers and reducers. The
+flags are downstream inputs to the inherent Life amount; they do not complete
+final Strength or authorize a false-default shortcut.
 
 The [shared class-start root](../data/owned/poe2/3887ae68/class-start-root/README.md)
 has a source-proved empty intrinsic inventory. Its closure changes no class

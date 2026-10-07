@@ -94,7 +94,10 @@ mandatory; numeric ranks and tie rules have no meaning for this reduction.
 Repeated true sources are idempotent, inactive/false sources cannot cancel them,
 and an unresolved active source remains unresolved even beside true. Empty=false
 is valid only for a proved complete empty domain. Direct channel reads cannot
-bypass that membership proof. See the accepted
+bypass that membership proof. Membership is declared by `ContributionMember.origin`;
+optional numeric order belongs to an explicitly Ordered group. Unordered groups
+forbid rank metadata. The compiler and loader share this contract; source
+interpretation and source-language truthiness stay outside evaluation. See the
 [Boolean contract](owned-boolean-contributions-proposal.md).
 
 Attribute inputs use distinct pass-specific Count channels, while final

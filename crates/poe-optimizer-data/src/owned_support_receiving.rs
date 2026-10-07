@@ -226,7 +226,7 @@ impl<'a, I: DefinitionSchemaIndex> Check<'a, I> {
                     } | RuleReadSource::Contributions {
                         entity: RuleEntity::Skill,
                         ..
-                    } | RuleReadSource::OrderedContributions {
+                    } | RuleReadSource::ContributionQuery {
                         entity: RuleEntity::Skill,
                         ..
                     }

@@ -65,102 +65,122 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest checkpoint: overwritten configuration placeholders have exact ownership
+## Latest checkpoint: typed Boolean contributions and real passive producers
 
-The [configuration accounting proof](owned-configuration-dispositions-proposal.md#overwritten-raw-override-placeholders-2026-10-07)
-now accounts for saved numeric placeholders that the reviewed encounter replaces.
-It reuses existing injected raw-input policies and the strict ConfigSet census;
-there is no new public model, source-name allowlist or blanket Placeholder rule.
-Exact source scope, encounter, Scenario/Choice ownership, attached Pending issue
-and emitted presence/optional-value rows must all agree. A successful leaf becomes
-source-only with its exact ScenarioPreset link. Explicit Input provenance stays
-intact, including zero. Unknown, malformed, ambiguous, fallback/default or
-otherwise unproved rows retain their obligations. No inventory is completed.
+The accepted [Boolean contract](owned-boolean-contributions-proposal.md) is now
+implemented in Core, Data and Engine. One `contribution_queries` inventory
+replaces the ordered-only shape. Every member declares its source origin;
+numeric groups separately declare semantic ranks. Boolean `Flag` contributions
+use unordered `Any`, Boolean false identity and no ranks. Active unresolved
+members remain unresolved even alongside true; deterministic diagnostics do not
+short-circuit coverage. Direct Boolean channel reads cannot bypass membership.
+Unread queries, inactive sources and nonempty support suffixes receive the same
+census. Numeric ordering/ties, stage authority and competing final writers remain
+checked. Enemy authority expands only for the reviewed Boolean query domain.
 
-The all-five public CLI reimport passes in **13.52s**, with independent fresh
-repeats and authenticated prior sidecars/draft digests. All five retire exactly
-fourteen reviewed Placeholder links. Original05's configuration inventory drops
-**58 to 44 origins**: 21 inside Config and 23 elsewhere. The earlier fourteen
-archived-source ownership changes remain intact. Every canonical draft, local ID,
-allocator watermark, saved selection, all 110 queries and selected unresolved
-issue lists are unchanged. The runtime package and all native inputs are unchanged.
+The current development format is rule-package schema **3**, operations **22**,
+rule storage/compiler hash domains **v3** and effect-plan domain **v19**.
+Definition schema remains V6. There is one current DTO reader; maintained static
+acquisition/test artifacts were rebuilt, including complete catalog and tree
+publication chains. Their numerical bodies and definition IDs did not change.
+Older operations still describe explicit capability subsets within the current
+format; they are not an old-format loading mode. The obsolete root
+`owned_generated_field_accounting` transition harness was removed after the new
+all-five check passed; Import ownership/negative tests and independent source
+witnesses remain. See the [retirement record](legacy-retirement.md#current-rule-format-cutover-2026-10-07).
 
-Validation passes: **187 Import library tests** and **311 normalization tests**,
-including ownership, malformed-source, partial projection, exact output and
-failure-recovery controls. The expanded optional PoB witness passes **29 cases in
-both JIT modes** in **121.88s**. Six new controls cover all four resistances with
-changed/absent placeholders and absent/zero/signed/fractional Inputs. Both reports
-are byte-identical (37,752,151 bytes; SHA-256
-`b16d8d172a2f9b60f78d3efe082c40bfbee1913d1b5eb2f797574fb3631b47f7`).
-The existing rating and incoming-damage reports cover the other ten fields;
-their hashes and all 23 explicit source pins per report were reauthenticated
-against the manifest and checkout. Independent review found no production defect.
-This validates Import/source semantics, not new final numerical metrics.
+The [authored flag packet](../data/owned/poe2/3887ae68/inherent-attribute-flags/README.md)
+adds Giant's Blood halving and Enhanced Effectiveness doubling, five final flag
+reducers and their exact query inventories. Both passive owners retain their
+unrelated Partial mechanics. **All five flag inventories remain Partial**:
+missing item/transformed-passive sources are not false defaults. Actual native
+producer tests feed the unchanged Strength-Life receiver and obtain 54/27/108/54
+at fixture final Strength27 for no passive/halving/doubling/both. Production never
+receives those fixture inputs. These passives are not selected in Original05,
+and flags feed the inherent Life amount downstream of final Strength. This does
+not close final Strength, final Life, or a selected input obligation.
 
-Strict workspace/all-feature/all-target Clippy passes in 22.32s after two
-test-style lint fixes; per-package Import/PoB/CLI formatting and `git diff --check`
-pass. The combined formatter command exceeded Windows' command-length limit,
-so the same checks ran separately per package. Log:
-`runs/owned-config-placeholders-clippy-02.log`. No full workspace test-suite run
-or hosted CI success is claimed for this checkpoint.
+All-five public CLI publication/reimport passed in **28.15s**, then again in
+**28.51s** from a fresh output directory after final test changes. It authenticates the
+predecessor and current source sidecars, checks the exact rule inverse and
+provenance append, and preserves all other package artifacts byte-for-byte.
+Independent fresh imports preserve every canonical draft, selection, source
+disposition, selected issue and all **110 queries**. Original05 still has five
+selected input obligations and 44 configuration-linked origins; complete native
+builds remain **0/5**.
 
-Current imports with a configuration-input policy emit **sidecar schema/domain
-23**; generated-input policies without configuration accounting use schema22.
-There is one current importer and no historical restore mode. The existing
-all-five accounting harness was extended instead of adding a duplicate importer
-comparison. The ordinary complete-source test remains active and now retains a
-fresh evidence directory, preserving historical reports.
+Validation: 184 Engine library tests, 13 contribution-binding tests, 60 selected
+Data tests, three Core operation tests, two nonempty support/stage tests, two
+actual-passive receiver tests and the authored data checks passed. The final
+Import batch passed 68 tests, including 22 migration regressions; six character
+identity tests verify the rebuilt snapshot and rejection of the retired wire
+format. Strict workspace/all-feature/all-target Clippy and formatting checks
+passed. Existing exporter regression suites passed **56 tests**; no new Python
+tests were introduced. Cold binding now performs additional bounded membership
+checks; its performance has not yet been benchmarked. Evidence:
+`runs/owned-boolean-publication-01/validation.json`,
+`runs/owned-boolean-publication-02/validation.json`,
+`runs/owned-boolean-clippy-05.log`,
+`runs/owned-boolean-static-validation-01.json` and
+`runs/owned-boolean-static-export-tests-01.log`.
 
-Evidence: `runs/owned-config-placeholders-accounting-01/validation.json`,
-`runs/owned-config-placeholders-publication-01.log`,
-`runs/owned-config-placeholders-poe_optimizer_import-01.log`,
-`runs/owned-config-placeholders-owned_normalize-01.log`,
-`runs/owned-config-placeholders-source-01.log` and
-`runs/owned-raw-override-source-01/`. Reproduce the CLI check using target
-`owned_generated_field_accounting`, ignored test
-`current_accounting_reimports_all_five_without_changing_build_inputs`, with
-`POE_OPTIMIZER_TEST_GENERATED_ACCOUNTING_BASELINE` pointing to the absolute
-`runs/owned-resistance-penalty-02` directory and
-`POE_OPTIMIZER_TEST_GENERATED_ACCOUNTING_OUTPUT` to a fresh directory.
-For the source witness, run target `owned_configuration_inputs_source` with
-`POE_CONFIGURATION_INPUTS_SOURCE_OUT` pointing to a fresh directory.
+The local publication replay is the ignored Rust test
+`owned_boolean_publication::publish_flags_and_reimport_all_five_through_the_public_cli`.
+Set `POE_OPTIMIZER_TEST_BOOLEAN_INPUT` to `runs/owned-boolean-cutover-01/input.json`,
+`POE_OPTIMIZER_TEST_BOOLEAN_PRIOR` to `runs/owned-resistance-penalty-02/package`,
+`POE_OPTIMIZER_TEST_BOOLEAN_IMPORTS` to `runs/owned-config-placeholders-accounting-01`
+and `POE_OPTIMIZER_TEST_BOOLEAN_OUTPUT` to a fresh directory, using absolute paths.
+Ordinary CI runs the source-bound authored-data and real-passive tests; it does
+not execute this local-artifact replay automatically.
 
-**Next:** implement the now-accepted [typed Boolean contribution/Any contract](owned-boolean-contributions-proposal.md)
-on the existing graph, then migrate actual selected flag producers and consumers.
-This is a shared prerequisite for inherent attribute and critical-hit calculations;
-an isolated finite fixture or assumed-false flags cannot complete it. The next
-configuration numerical slice is enemy critical chance/damage transport followed
-by its real critical-effect consumer and dependencies. The remaining nineteen
-Placeholders have different consumers and zero precedence; their
-[consumer audit](owned-configuration-dispositions-proposal.md#remaining-consumer-priorities-2026-10-07)
-records the path. Support-origin composition and FullDPS reporting remain separate
-owner decisions. Original05 remains the closest evidenced completion target:
-five selected input obligations, **0/5 complete native builds**, and D4 beginning
-immediately after the first full native/reference result.
+**Next:** enemy critical chance/damage inputs **together with the actual critical
+consumer**, using typed Enemy NeverCrit/AlwaysCrit and Player EnemyUnluckyCrit
+coverage. Input-only transport is insufficient. Final attribute BASE membership
+is a separate upstream Strength blocker: the class-plus-choice subtotal already
+has source/native validation, while item/socket/copy origins and signed/scaled
+arithmetic still prevent safe production closure. Resolve that concrete
+[BASE audit](owned-base-contribution-audit.md) through a reviewed numerical/domain
+proposal before changing semantics. Do not repeat a finite subtotal or admit
+Irongrasp solely to inflate coverage. The next-blocker audit is retained at
+`runs/owned-boolean-next-blocker-01.md`. Support-origin composition and FullDPS
+remain pending owner decisions. Original05 stays the priority; D4 starts after
+the first complete native/reference build.
+
+The critical slice can use the existing typed expressions and shared Player
+Actor binding. Retained Original05 reference runs agree on chance5 and factor
+1.015 across fresh/repeat/warm MAIN and CALCS; these are validation targets, not
+defaults or absence proofs. Encounter `31d1` supplies data-defined chance5/damage30
+only for its reviewed no-boss-skill domain. Preserve raw presence/zero, NeverCrit
+precedence over AlwaysCrit, chance clamping before unlucky squaring, and the
+source multiplication association. Configured evade and critical extra-damage
+reduction remain actual upstream dependencies. Boolean memberships remain
+Partial until their sources are accounted for. Numeric Enemy membership needs
+a separately reviewed authority extension; do not bypass it with unchecked
+direct reductions. Investigate the source's lowercase `enemyCritChance` override
+read and absence of a literal writer before proposing any override model. The
+Lesser Harm passive is a useful real unlucky-crit contrast, but is absent from
+Original05 and cannot establish complete flag coverage. See
+`runs/owned-incoming-damage-source-01` and the
+[configuration consumer plan](owned-configuration-dispositions-proposal.md).
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-resistance-penalty-02/package` as the unchanged integration
-package. The current checked imports are `original-01` through `original-05`
-under `runs/owned-config-placeholders-accounting-01/`; they compare against the
-pinned earlier imports beside that package. Exact Direct
-normalization, provider/raw-input authority and source issue correspondences
-are retained. All freshly regenerated current-package sidecars use V23;
-native schema V6 and operations V21 remain independent contracts.
-
-Its immediate predecessor is `runs/owned-cached-build-buffs-01/package`, input
-`b559c6c55aedfe5cf6e947ca210103c14444647b42f5f0483a32d5b7fa8c3d88`.
-Historical endpoint paths authenticate useful stored evidence; they are not
-separate production evaluator modes.
+Use `runs/owned-boolean-publication-01/package` and its neighboring
+`original-01` through `original-05` imports. Current sidecars remain V23;
+definition schema V6, rule schema3 and operationsV22 are independent contracts.
+The immediate predecessor is `runs/owned-resistance-penalty-02/package`, input
+`b19134496c85e208a735568b5e5191f3b60f68154be336ab4afb6fd953b6fa01`.
+Historical endpoint paths authenticate stored evidence; retired formats require
+explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `b19134496c85e208a735568b5e5191f3b60f68154be336ab4afb6fd953b6fa01` |
+| Release input | `cebc32eb98f05d6716051dde7417d26a2c7667d8361ad82afa1ea87cfc218838` |
 | Registry | `c1da329a2ea8cdde00a666f0d158851458fbfb3bb211c9d932e02e39fe1b8d18` |
 | Definitions content | `72fccd185dcf70fbf13198b295b2cc8da3672c749506db98988c4e92a2bcbba7` |
-| Rules | `01809f9d31e1893f71c03d2d6fcb828b2b0d8a7e296ea08a692e43ff9d256981` |
-| Compiled rules | `97cb3504dfc4dd88894d246a631c33021adbc20887df70ac3af48cff5ca20305` |
+| Rules | `9b3dca1ec5cec12ec21b5a2c7b3f9be52aefe06da2806412184378b5b7c60265` |
+| Compiled rules | `d5b2ccd4aa7e7dd144487450ac402ca3e853cf462a03671305280bad944dd668` |
 | Routing | `3ee884f637dd8ab1dd823f64e7c1b842be08c7ffa1834edc9150a6a0d99a2205` |
 | Mapping | `d8953fa8a2e9e663c5676eb2a42b31e8e3f3459b0acfa15be5abb17315b391fa` |
 | Skill roles | `cd44e748a11730980743266ac5d4c4d228f86767cd077ba243792fceac21289d` |
@@ -169,12 +189,12 @@ separate production evaluator modes.
 | Items | `295e01c60e706a02c3477dcb0a9ac6b97e4c795ead8192639c33b1f8ad2a32aa` |
 | Item source | `d808849e298e6dd19e66901f35ccf092249da3985bdbc7f08c59547d5af20942` |
 | Tree policy | `e408348d3fc44dedaa27d71b16a05d36454fead3ed66152f051d79819a6d5e89` |
-| Authoring commitment | `507d0afd7ca01ea6f774103b8317de4f88a54365f4f426bcbfd997a55b43aef0` |
-| Schema / operations | V6 / `owned-domain-operations-v21` |
+| Authoring commitment | `840fa8c87317873e19291f5f8eb726e11d0cd87d9fec253f70ad8c8ffda1bbec` |
+| Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
 
-The eighteen package files total **63,166,809 bytes**, with 135 provenance rows.
+The eighteen package files total **63,177,153 bytes**, with 136 provenance rows.
 Definitions use `pob-3887ae68-player-offhand-facts-v1`; the independent rules release
-remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `334d`.
+is `pob-3887ae68-inherent-attribute-flags-v1`. The registry ends at `334d`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -476,10 +496,11 @@ source readers, current consumers and the smallest proof/control work.
 
 The six Add query inventories still require actual membership and ordering
 proof; the six Increase inventories are Complete for the current rule package.
-Inherent-control Stats3315–3319 currently have no producers; implement the accepted
-[typed Boolean aggregation contract](owned-boolean-contributions-proposal.md)
-for multiple-source flag producers. Do not add five false
-defaults. No final Player Life recipe exists.
+Inherent-control Stats3315–3319 now have five reducers and two real passive
+producers through the [typed Boolean aggregation contract](owned-boolean-contributions-proposal.md).
+Their production membership remains Partial; complete the actual source census
+without false defaults. Neither published passive is selected in Original05.
+No final Player Life recipe exists.
 These are distinct production blockers, not further finite-fixture exercises.
 
 **Input resume:** keep Original05's five selected issues and 44 origins linked
@@ -1219,7 +1240,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Resource ownership and demand | [Resource-obligation proposal](owned-resource-obligations-proposal.md) awaits owner review. Ordinary sustained reservation should be independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Define Skill support recipients and contrast cost conversion, mines and stance/toggle selection; then migrate the current Action reservation bodies and validate query invariance. Gigantic's producer/status and isolated Life/Damage-factor packets are published; final reservation delivery remains open. |
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
-| Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Runtime/schema/data implementation is outstanding; no false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
+| Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. All five production flag memberships and unrelated passive mechanics remain Partial; no false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
 | Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 21 Config-local and 23 non-Config origins after selected/generated accounting, cached-Buffs, archived responsibility and overwritten-placeholder proofs. Fourteen archived rows retain their exact existing raw-input, usage and support-origin Pending owners; they gain no provider or known value. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Typed constructor defaults now reach Player/Enemy/Environment inputs; the real Player resistance-penalty consumer is published, but no global inventory closes. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
@@ -1231,9 +1252,9 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
-| Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation; six current INC memberships are now Complete; BASE membership and the global query inventory remain Partial. The BASE audit now proves a signed-scaling counterexample, real post-passive bonus copies and missing socket-origin ordering; resolve these concrete domain gaps and review typed Boolean flag aggregation. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
+| Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation; six current INC memberships are now Complete; BASE membership and the global query inventory remain Partial. The BASE audit now proves a signed-scaling counterexample, real post-passive bonus copies and missing socket-origin ordering; resolve these concrete domain gaps. Typed Boolean flag aggregation is implemented separately and does not close final attributes. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | Earlier V18/V20 and unified-usage fixture regressions are fixed; [37552883848](https://github.com/Azaril/poe-optimizer/actions/runs/37552883848) at `0ff9210` completed successfully. At 20:56 UTC on 2026-10-07, [37646478601](https://github.com/Azaril/poe-optimizer/actions/runs/37646478601) at `47f3560` had eleven successful jobs and Windows native CLI validation still running, with no reported failure. Main `f93d551` ([37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252)) was pending with no jobs; the earlier `2474ebb` pending run was cancelled when the newer revision arrived. Pending revisions may coalesce; duration alone does not establish a hung test. No hosted success for this checkpoint is claimed. Read the latest [workflow runs](https://github.com/Azaril/poe-optimizer/actions/workflows/rust.yml) before treating a revision as green. Separate compile/test timings before further sharding; retain every package/target and aggregate check. |
+| CI regression, timeout and infrastructure | At 21:24 UTC on 2026-10-07, [37646478601](https://github.com/Azaril/poe-optimizer/actions/runs/37646478601) at `47f3560` had passed all fourteen jobs, including Windows native CLI. [37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252) at `f93d551` was running with no failed steps; [37687481540](https://github.com/Azaril/poe-optimizer/actions/runs/37687481540) at `303adb2` was pending. No hosted success for the Boolean checkpoint is claimed. Pending revisions may coalesce; duration alone does not establish a hung test. Read current workflow status before treating a revision as green. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 | Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |

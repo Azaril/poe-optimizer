@@ -17,7 +17,7 @@
   },
   "before_mapping": "b2d0f60e68fe999d9783e20c67109622a0a52a061b0c55a38d8ca21a9652df92",
   "after_mapping": "f4666b2610e3c6a8c01a5da5948fc071fdf2a71d630d14bc0333ad30f8cff0f2",
-  "compiled_transition_sha256": "84d047a4bd76a3c78a7b894a391932b6ce7acf7a39c31d132914d316acea658a",
+  "compiled_transition_sha256": "d19a3c112ed86ce174ca8f7de00254a32fefea2a2779176c19a68c137d86925f",
   "preserved_definition_count": 105,
   "preserved_slot_count": 14,
   "source_execution": false,

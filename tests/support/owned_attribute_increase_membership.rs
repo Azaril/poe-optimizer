@@ -40,16 +40,16 @@ fn digest() -> OwnedContentDigest {
 }
 #[derive(Clone, Deserialize)]
 pub struct Replacement {
-    pub before: OrderedContributionQuery,
-    pub after: OrderedContributionQuery,
+    pub before: ContributionQuery,
+    pub after: ContributionQuery,
 }
 #[derive(Deserialize)]
 pub struct Dependencies {
     pub owners: Vec<DefinitionRules>,
-    pub query_registry_before: DeclaredSet<OrderedContributionQuery>,
+    pub query_registry_before: DeclaredSet<ContributionQuery>,
 }
 
-fn expected_registry(after: bool) -> DeclaredSet<OrderedContributionQuery> {
+fn expected_registry(after: bool) -> DeclaredSet<ContributionQuery> {
     let d: Dependencies = read("dependencies.json");
     let mut result = d.query_registry_before;
     assert!(!result.is_complete());
@@ -252,19 +252,22 @@ pub fn check_authored() {
         let mut positions = BTreeSet::new();
         let mut sum = 0.;
         for member in &group.members.members {
-            assert_eq!(member.order.origin, OrderedContributionOrigin::Allocation);
-            assert_eq!(member.order.program_rank, 0);
+            assert_eq!(member.origin, ContributionOrigin::Allocation);
+            assert_eq!(member.order.as_ref().unwrap().program_rank, 0);
             let contributor = b["contributors"]
                 .as_array()
                 .unwrap()
                 .iter()
                 .find(|c| c["owner"] == json!(member.owner))
                 .unwrap();
-            assert_eq!(json!(member.order.source_rank), contributor["source_rank"]);
+            assert_eq!(
+                json!(member.order.as_ref().unwrap().source_rank),
+                contributor["source_rank"]
+            );
             assert!(positions.insert((
-                member.order.source_rank,
-                member.order.program_rank,
-                member.order.effect_rank
+                member.order.as_ref().unwrap().source_rank,
+                member.order.as_ref().unwrap().program_rank,
+                member.order.as_ref().unwrap().effect_rank
             )));
             let owner = d.owners.iter().find(|o| o.owner == member.owner).unwrap();
             let program = &owner.programs.members[0];
@@ -275,7 +278,7 @@ pub fn check_authored() {
                 .enumerate()
                 .find(|(_, e)| e.id == member.effect)
                 .unwrap();
-            assert_eq!(member.order.effect_rank as usize, index);
+            assert_eq!(member.order.as_ref().unwrap().effect_rank as usize, index);
             assert_eq!(effect.when.as_ref().unwrap().as_str(), "default");
             let RuleEffectKind::Contribute {
                 entity,
@@ -332,7 +335,7 @@ fn dependencies(endpoint: &StagedOwnedRelease, after: bool) {
     let d: Dependencies = read("dependencies.json");
     let rules = &endpoint.input().recipe.rules;
     assert_eq!(rules.operations_version.as_str(), OWNED_RULE_OPERATIONS_V21);
-    assert_eq!(rules.ordered_contributions, Some(expected_registry(after)));
+    assert_eq!(rules.contribution_queries, Some(expected_registry(after)));
     for owner in d.owners {
         assert_eq!(rules.owners.iter().filter(|o| **o == owner).count(), 1);
     }
@@ -379,7 +382,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     dependencies(prior, false);
     assert!(prior.evaluation().is_none());
     let mut input = prior.input().clone();
-    input.recipe.rules.ordered_contributions = Some(expected_registry(true));
+    input.recipe.rules.contribution_queries = Some(expected_registry(true));
     input.provenance.push(OwnedReleaseProvenance {
         kind: OwnedDefinitionKey::new(KIND).unwrap(),
         prior_input: prior.receipt().input,
@@ -388,7 +391,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     let next = assemble_owned_release(input, Default::default()).unwrap();
     assert_endpoint(&next);
     let mut inverse = next.input().clone();
-    inverse.recipe.rules.ordered_contributions = Some(expected_registry(false));
+    inverse.recipe.rules.contribution_queries = Some(expected_registry(false));
     inverse.provenance.pop().unwrap();
     assert!(
         inverse == *prior.input(),

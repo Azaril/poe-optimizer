@@ -100,9 +100,10 @@ pub(super) fn read<I: DefinitionSchemaIndex>(
     l: RuleLimits,
     b: &mut Budget,
     application: Option<&EffectApplicationSource>,
+    authority: ContributionReadAuthority,
 ) -> Result<CompiledRead, RuleError> {
     let Some(source) = application else {
-        return super::read(r, p, declarations, index, path, l, b);
+        return super::read(r, p, declarations, index, path, l, b, authority);
     };
     let mapped = match &r.source {
         RuleReadSource::EffectSourceParameter { slot } => {
@@ -168,7 +169,7 @@ pub(super) fn read<I: DefinitionSchemaIndex>(
         _ => None,
     };
     let Some(mapped) = mapped else {
-        return super::read(r, p, declarations, index, path, l, b);
+        return super::read(r, p, declarations, index, path, l, b, authority);
     };
     let source_context = match source {
         EffectApplicationSource::Skill { .. } => RuleEntityKind::Skill,
@@ -206,6 +207,7 @@ pub(super) fn read<I: DefinitionSchemaIndex>(
         path,
         l,
         b,
+        authority,
     )
 }
 
@@ -347,7 +349,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             &path,
             Some(&row.source),
             operations,
-            input.ordered_contributions.as_ref(),
+            input.contribution_queries.as_ref(),
         )?;
         for mapping in &row.stacking {
             let effect = prepared

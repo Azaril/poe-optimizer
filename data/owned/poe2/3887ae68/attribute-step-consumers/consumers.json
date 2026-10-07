@@ -38,7 +38,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "strength-first-base",
@@ -62,7 +62,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "strength-first-increase",
@@ -412,7 +412,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "dexterity-first-base",
@@ -436,7 +436,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "dexterity-first-increase",
@@ -786,7 +786,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "intelligence-first-base",
@@ -810,7 +810,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "intelligence-first-increase",
@@ -1160,7 +1160,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "strength-second-base",
@@ -1184,7 +1184,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "strength-second-increase",
@@ -1534,7 +1534,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "dexterity-second-base",
@@ -1558,7 +1558,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "dexterity-second-increase",
@@ -1908,7 +1908,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "intelligence-second-base",
@@ -1932,7 +1932,7 @@
                   }
                 },
                 "source": {
-                  "kind": "ordered_contributions",
+                  "kind": "contribution_query",
                   "value": {
                     "entity": "current",
                     "query": "intelligence-second-increase",

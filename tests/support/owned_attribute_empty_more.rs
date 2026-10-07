@@ -62,7 +62,7 @@ fn expected_program(stage: &Value, unit: UnitDefId) -> RuleProgram {
         reads: vec![RuleRead {
             id: key("incoming"),
             value_type: ComputedValueType::Quantity { unit },
-            source: RuleReadSource::OrderedContributions {
+            source: RuleReadSource::ContributionQuery {
                 entity: RuleEntity::Current,
                 query: decode(&stage["query"]),
                 group: decode(&stage["group"]),
@@ -141,7 +141,7 @@ pub fn check_authored() {
     let a: Value = read("authoring.json");
     let b: Value = read("bindings.json");
     let p: Producers = read("producers.json");
-    let q: Vec<OrderedContributionQuery> = read("queries.json");
+    let q: Vec<ContributionQuery> = read("queries.json");
     let old: step::Consumers = step::read("consumers.json");
     let stages = b["stages"].as_array().unwrap();
     let old_b: Value = step::read("bindings.json");
@@ -187,11 +187,12 @@ pub fn check_authored() {
         );
         assert_eq!(
             q[i],
-            OrderedContributionQuery {
+            ContributionQuery {
                 id: decode(&stage["query"]),
                 stat: decode(&stage["input"]),
                 contribution: ContributionKind::Multiply,
-                groups: vec![OrderedContributionGroup {
+                groups: vec![ContributionGroup {
+                    ordering: ContributionOrdering::Ordered,
                     id: key("empty"),
                     reduction: ContributionReduction::Product,
                     empty: ParameterValue::Quantity(FiniteQuantity::new(1., unit.clone()).unwrap()),
@@ -217,13 +218,13 @@ pub fn check_authored() {
 }
 pub fn assert_endpoint(next: &StagedOwnedRelease) {
     let p: Producers = read("producers.json");
-    let q: Vec<OrderedContributionQuery> = read("queries.json");
-    let mut expected: DeclaredSet<OrderedContributionQuery> = step::read("queries.json");
+    let q: Vec<ContributionQuery> = read("queries.json");
+    let mut expected: DeclaredSet<ContributionQuery> = step::read("queries.json");
     assert!(!expected.is_complete());
     expected.members.extend(q);
     let rules = &next.input().recipe.rules;
     assert_eq!(rules.operations_version.as_str(), OWNED_RULE_OPERATIONS_V21);
-    assert_eq!(rules.ordered_contributions.as_ref(), Some(&expected));
+    assert_eq!(rules.contribution_queries.as_ref(), Some(&expected));
     for row in p.owners {
         assert_eq!(rules.owners.iter().filter(|o| **o == row.after).count(), 1);
     }
@@ -274,7 +275,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     }
     assert!(prior.evaluation().is_none());
     let p: Producers = read("producers.json");
-    let q: Vec<OrderedContributionQuery> = read("queries.json");
+    let q: Vec<ContributionQuery> = read("queries.json");
     let mut input = prior.input().clone();
     for row in &p.owners {
         let owner = input
@@ -304,7 +305,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         .receivers
         .members
         .extend(p.receivers.clone());
-    let registry = input.recipe.rules.ordered_contributions.as_mut().unwrap();
+    let registry = input.recipe.rules.contribution_queries.as_mut().unwrap();
     assert!(
         q.iter()
             .all(|q| !registry.members.iter().any(|v| v.id == q.id))
@@ -344,7 +345,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         let members = &mut inverse
             .recipe
             .rules
-            .ordered_contributions
+            .contribution_queries
             .as_mut()
             .unwrap()
             .members;

@@ -1,5 +1,6 @@
 //! Worker execution of a prebound effect DAG. No schema/source lookup or serialization.
 use super::*;
+mod diagnostic_order;
 
 fn invalid(message: &str) -> PlanError {
     PlanError::Invalid(message.into())
@@ -14,8 +15,8 @@ fn value_at(values: &[Option<EffectValue>], index: usize) -> Result<&EffectValue
         .ok_or_else(|| invalid("effect dependency is absent or not scheduled before its consumer"))
 }
 
-/// Stable left fold in the compiler's contribution order. Integer results remain
-/// in the exact owned integer domain; quantities retain their prebound unit.
+/// Numeric left folds retain the compiler's semantic order. Boolean Any is
+/// commutative; its failure handling still inspects every active contributor.
 fn combine(
     left: ParameterValue,
     right: &ParameterValue,
@@ -27,6 +28,9 @@ fn combine(
             let result = match reduction {
                 ContributionReduction::Sum => a.get().checked_add(b.get()),
                 ContributionReduction::Product => a.get().checked_mul(b.get()),
+                ContributionReduction::Any => {
+                    return Err(invalid("Any requires Boolean contributions"));
+                }
             }
             .and_then(|v| BoundedInteger::new(v).ok());
             Ok(match result {
@@ -41,6 +45,9 @@ fn combine(
             let value = match reduction {
                 ContributionReduction::Sum => a.value() + b.value(),
                 ContributionReduction::Product => a.value() * b.value(),
+                ContributionReduction::Any => {
+                    return Err(invalid("Any requires Boolean contributions"));
+                }
             };
             Ok(match FiniteQuantity::new(value, a.unit().clone()) {
                 Ok(value) => known(ParameterValue::Quantity(value)),
@@ -49,6 +56,11 @@ fn combine(
                     reason: NumericalFailure::NonFinite,
                 },
             })
+        }
+        (ParameterValue::Boolean(a), ParameterValue::Boolean(b))
+            if reduction == ContributionReduction::Any =>
+        {
+            Ok(known(ParameterValue::Boolean(a || *b)))
         }
         _ => Err(invalid("prebound contribution kinds or units differ")),
     }
@@ -141,6 +153,39 @@ pub(super) fn read(
             empty,
             complete: true,
         } => {
+            if *reduction == ContributionReduction::Any {
+                if *empty != ParameterValue::Boolean(false) {
+                    return Err(invalid("Any requires a Boolean false identity"));
+                }
+                let mut any = false;
+                let mut failure = None;
+                for index in effects {
+                    charge(work, 1)?;
+                    match value_at(values, *index)? {
+                        EffectValue::Inactive => {}
+                        EffectValue::Known {
+                            value: ParameterValue::Boolean(value),
+                        } => any |= value,
+                        EffectValue::Known { .. } => {
+                            return Err(invalid("Any requires Boolean contributions"));
+                        }
+                        blocked => {
+                            // A true member cannot conceal missing coverage or
+                            // execution failures. Propagation is independent of
+                            // the order of unordered membership; every original
+                            // failure remains on its own effect in the report.
+                            if failure.is_none_or(|previous| {
+                                diagnostic_order::compare(blocked, previous).is_lt()
+                            }) {
+                                failure = Some(blocked);
+                            }
+                        }
+                    }
+                }
+                return Ok(failure
+                    .cloned()
+                    .unwrap_or_else(|| known(ParameterValue::Boolean(any))));
+            }
             let mut accumulated: Option<ParameterValue> = None;
             for index in effects {
                 charge(work, 1)?;

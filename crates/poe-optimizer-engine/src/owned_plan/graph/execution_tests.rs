@@ -62,6 +62,243 @@ fn chain(value: i64) -> Vec<EffectNode> {
     ]
 }
 
+fn any(effects: Vec<usize>, complete: bool) -> ReadBinding {
+    ReadBinding::Reduction {
+        effects,
+        reduction: ContributionReduction::Any,
+        empty: ParameterValue::Boolean(false),
+        complete,
+    }
+}
+
+#[test]
+fn boolean_any_requires_complete_coverage_and_a_typed_false_identity() {
+    let node = key("query");
+    assert_eq!(
+        read(&any(vec![], true), &[], &node, &mut 100).unwrap(),
+        known(ParameterValue::Boolean(false))
+    );
+    assert_eq!(
+        read(&any(vec![], false), &[], &node, &mut 100).unwrap(),
+        EffectValue::unresolved(PlanGapReason::IncompleteContributors)
+    );
+    for empty in [ParameterValue::Boolean(true), integer(0), quantity(0.0)] {
+        let invalid = ReadBinding::Reduction {
+            effects: vec![],
+            reduction: ContributionReduction::Any,
+            empty,
+            complete: true,
+        };
+        assert!(read(&invalid, &[], &node, &mut 100).is_err());
+    }
+    for value in [integer(0), quantity(0.0)] {
+        assert!(read(&any(vec![0], true), &[Some(known(value))], &node, &mut 100).is_err());
+    }
+    for reduction in [ContributionReduction::Sum, ContributionReduction::Product] {
+        let invalid = ReadBinding::Reduction {
+            effects: vec![0],
+            reduction,
+            empty: ParameterValue::Boolean(false),
+            complete: true,
+        };
+        assert!(
+            read(
+                &invalid,
+                &[Some(known(ParameterValue::Boolean(true)))],
+                &node,
+                &mut 100
+            )
+            .is_err()
+        );
+    }
+}
+
+#[test]
+fn boolean_any_is_idempotent_permutation_invariant_and_inspects_every_member() {
+    let node = key("query");
+    let values = vec![
+        Some(known(ParameterValue::Boolean(true))),
+        Some(known(ParameterValue::Boolean(false))),
+        Some(known(ParameterValue::Boolean(true))),
+        Some(EffectValue::Inactive),
+    ];
+    for effects in [vec![0, 1, 2, 3], vec![3, 2, 1, 0], vec![1, 3, 0, 2]] {
+        let mut work = 100;
+        assert_eq!(
+            read(&any(effects, true), &values, &node, &mut work).unwrap(),
+            known(ParameterValue::Boolean(true))
+        );
+        assert_eq!(work, 95);
+    }
+    assert_eq!(
+        read(&any(vec![1, 3], true), &values, &node, &mut 100).unwrap(),
+        known(ParameterValue::Boolean(false))
+    );
+    // A leading true still demands the later member and its work allowance.
+    assert!(matches!(
+        read(&any(vec![0, 1], true), &values, &node, &mut 2),
+        Err(PlanError::Limit("work"))
+    ));
+    assert!(read(&any(vec![0, 4], true), &values, &node, &mut 100).is_err());
+}
+
+#[test]
+fn boolean_any_preserves_failure_provenance_independent_of_member_order() {
+    let node = key("query");
+    let failures = [
+        EffectValue::Unresolved {
+            reason: PlanGapReason::MissingInput,
+            read: Some(key("a")),
+        },
+        EffectValue::Unresolved {
+            reason: PlanGapReason::MissingInput,
+            read: Some(key("b")),
+        },
+        EffectValue::unresolved(PlanGapReason::MissingProducer),
+        EffectValue::UnsupportedValue { value: integer(1) },
+        EffectValue::UnsupportedValue { value: integer(2) },
+        EffectValue::UnsupportedDomain {
+            node: key("lookup"),
+            table: key("table"),
+            key: BoundedInteger::new(0).unwrap(),
+            minimum: BoundedInteger::new(1).unwrap(),
+            maximum: BoundedInteger::new(9).unwrap(),
+        },
+        EffectValue::NumericalError {
+            node: key("division"),
+            reason: NumericalFailure::DivisionByZero,
+        },
+        EffectValue::NumericalError {
+            node: key("overflow"),
+            reason: NumericalFailure::IntegerOverflow,
+        },
+    ];
+    for a in &failures {
+        for b in &failures {
+            let values = vec![
+                Some(known(ParameterValue::Boolean(true))),
+                Some(a.clone()),
+                Some(b.clone()),
+                Some(EffectValue::Inactive),
+            ];
+            let mut forward_work = 100;
+            let forward = read(
+                &any(vec![0, 1, 2, 3], true),
+                &values,
+                &node,
+                &mut forward_work,
+            )
+            .unwrap();
+            let mut reverse_work = 100;
+            let reverse = read(
+                &any(vec![3, 2, 1, 0], true),
+                &values,
+                &node,
+                &mut reverse_work,
+            )
+            .unwrap();
+            assert_eq!(forward, reverse);
+            assert!(forward == *a || forward == *b);
+            assert_eq!(forward_work, 95);
+            assert_eq!(reverse_work, forward_work);
+        }
+    }
+}
+
+#[test]
+fn boolean_any_staged_overlay_and_reused_scratch_match_fresh_execution() {
+    let complete = vec![
+        node(0, literal(ParameterValue::Boolean(false)), vec![]),
+        node(1, literal(ParameterValue::Boolean(true)), vec![]),
+        node(2, any(vec![0, 1], true), vec![0, 1]),
+    ];
+    let unknown = vec![
+        node(0, literal(ParameterValue::Boolean(true)), vec![]),
+        node(1, ReadBinding::Missing(PlanGapReason::MissingInput), vec![]),
+        node(2, any(vec![1, 0], true), vec![0, 1]),
+    ];
+    let mut scratch = OwnedPlanScratch::default();
+    for effects in [&complete, &unknown, &complete] {
+        let mut work = 100;
+        begin_graph(effects.len(), &mut scratch, &mut work).unwrap();
+        execute_graph(&graph(effects), &mut scratch, &[0], &mut work).unwrap();
+        execute_graph(&graph(effects), &mut scratch, &[1, 2], &mut work).unwrap();
+        let mut fresh = OwnedPlanScratch::default();
+        let mut fresh_work = 100;
+        begin_graph(effects.len(), &mut fresh, &mut fresh_work).unwrap();
+        execute_graph(&graph(effects), &mut fresh, &[0, 1, 2], &mut fresh_work).unwrap();
+        assert_eq!(scratch.values, fresh.values);
+        assert_eq!(work, fresh_work);
+    }
+    // Appending a contributor rebinds only the suffix's same reduction path.
+    let base = vec![complete[0].clone(), node(1, any(vec![0], true), vec![0])];
+    let appended = [node(2, literal(ParameterValue::Boolean(true)), vec![])];
+    let view = Overlay {
+        base: graph(&base),
+        effects: &appended,
+        invocations: &[],
+        changed_effects: BTreeMap::from([(1, node(1, any(vec![0, 2], true), vec![0, 2]))]),
+        changed_invocations: BTreeMap::new(),
+    };
+    let identity = attempt_identity("boolean-append");
+    let mut work = 100;
+    start_view(identity, base.len(), &mut scratch, &mut work);
+    execute_view(
+        identity,
+        &graph(&base),
+        &mut scratch,
+        &[0],
+        &mut work,
+        PlanLimits::default(),
+    )
+    .unwrap();
+    extend_attempt(
+        identity,
+        base.len(),
+        view.effect_count(),
+        &mut scratch,
+        &mut work,
+        PlanLimits::default(),
+    )
+    .unwrap();
+    execute_view(
+        identity,
+        &view,
+        &mut scratch,
+        &[2, 1],
+        &mut work,
+        PlanLimits::default(),
+    )
+    .unwrap();
+    assert_eq!(
+        scratch.values[1],
+        Some(known(ParameterValue::Boolean(true)))
+    );
+}
+
+#[test]
+fn boolean_any_exhaustion_clears_attempt_and_can_recover() {
+    let effects = vec![
+        node(0, literal(ParameterValue::Boolean(true)), vec![]),
+        node(1, literal(ParameterValue::Boolean(false)), vec![]),
+        node(2, any(vec![0, 1], true), vec![0, 1]),
+    ];
+    let mut scratch = OwnedPlanScratch::default();
+    let mut work = 100;
+    begin_graph(effects.len(), &mut scratch, &mut work).unwrap();
+    execute_graph(&graph(&effects), &mut scratch, &[0, 1], &mut work).unwrap();
+    work = 2;
+    assert!(execute_graph(&graph(&effects), &mut scratch, &[2], &mut work).is_err());
+    assert!(scratch.values.is_empty());
+    work = 100;
+    begin_graph(effects.len(), &mut scratch, &mut work).unwrap();
+    execute_graph(&graph(&effects), &mut scratch, &[0, 1, 2], &mut work).unwrap();
+    assert_eq!(
+        scratch.values[2],
+        Some(known(ParameterValue::Boolean(true)))
+    );
+}
+
 #[test]
 fn split_predecessor_schedules_match_full_values_fold_order_and_work() {
     let effects = vec![
@@ -500,7 +737,7 @@ fn typed_invocation(value_type: ComputedValueType) -> Invocation {
     let package = CompiledRulePackage::compile(
         &RulePackageInput {
             existing_actor_rules: None,
-            ordered_contributions: None,
+            contribution_queries: None,
             effect_applications: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: namespace(),

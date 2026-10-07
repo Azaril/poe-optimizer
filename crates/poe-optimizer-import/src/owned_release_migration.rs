@@ -139,6 +139,7 @@ fn check_contract(
                     OWNED_RULE_OPERATIONS_V19
                         | OWNED_RULE_OPERATIONS_V20
                         | OWNED_RULE_OPERATIONS_V21
+                        | OWNED_RULE_OPERATIONS_V22
                 )
         }
         _ => false,
@@ -189,18 +190,22 @@ fn check_contract(
         && (contract.schema_version != 6
             || !matches!(
                 contract.operations_version.as_str(),
-                OWNED_RULE_OPERATIONS_V20 | OWNED_RULE_OPERATIONS_V21
+                OWNED_RULE_OPERATIONS_V20 | OWNED_RULE_OPERATIONS_V21 | OWNED_RULE_OPERATIONS_V22
             ))
     {
         return Err(invalid(
-            "current migration requires schema v6 and operations v20 or v21",
+            "current migration requires schema v6 and operations v20, v21 or v22",
         ));
     }
     if version == 5
-        && old_operations == OWNED_RULE_OPERATIONS_V21
-        && contract.operations_version.as_str() != OWNED_RULE_OPERATIONS_V21
+        && RuleOperationsVersion::parse(old_operations)
+            .unwrap()
+            .revision()
+            > RuleOperationsVersion::parse(contract.operations_version.as_str())
+                .unwrap()
+                .revision()
     {
-        return Err(invalid("migration cannot downgrade operations v21"));
+        return Err(invalid("migration cannot downgrade current operations"));
     }
     Ok(())
 }

@@ -4,6 +4,8 @@ use poe_optimizer_core::{
 };
 use std::collections::BTreeSet;
 mod applications;
+#[cfg(test)]
+mod boolean_tests;
 
 fn known<'a, T>(lookup: SchemaLookup<'a, T>, path: &str) -> Result<&'a T, RuleError> {
     match lookup {
@@ -524,7 +526,18 @@ fn contribution<I: DefinitionSchemaIndex>(
     index: &I,
     path: &str,
 ) -> Result<(), RuleError> {
-    check(numeric(stat), path, "contribution requires numeric stat")?;
+    if kind == ContributionKind::Flag {
+        return check(
+            *stat == ComputedValueType::Boolean && *value == ComputedValueType::Boolean,
+            path,
+            "Flag requires Boolean stat and contribution value",
+        );
+    }
+    check(
+        numeric(stat),
+        path,
+        "numeric contribution requires numeric stat",
+    )?;
     match kind {
         ContributionKind::Add => check(
             stat == value,
@@ -537,7 +550,55 @@ fn contribution<I: DefinitionSchemaIndex>(
         ContributionKind::Multiply => {
             dimension(value, UnitDimension::DimensionlessFactor, index, path)
         }
+        ContributionKind::Flag => unreachable!("handled above"),
     }
+}
+/// Only the package query adapter may authorize Boolean reduction reads. This
+/// proof does not survive as a public direct-read shortcut: published programs
+/// retain the exact query/group reference for occurrence membership binding.
+#[derive(Clone, Copy, PartialEq)]
+enum ContributionReadAuthority {
+    Direct,
+    CheckedQuery,
+}
+
+fn reduction_identity(
+    kind: ContributionKind,
+    reduction: ContributionReduction,
+    empty: &ParameterValue,
+    value: &ComputedValueType,
+    path: &str,
+) -> Result<(), RuleError> {
+    if kind == ContributionKind::Flag {
+        return check(
+            reduction == ContributionReduction::Any
+                && *empty == ParameterValue::Boolean(false)
+                && *value == ComputedValueType::Boolean,
+            path,
+            "Flag requires Any with Boolean false identity",
+        );
+    }
+    let product = kind == ContributionKind::Multiply;
+    check(
+        reduction
+            == if product {
+                ContributionReduction::Product
+            } else {
+                ContributionReduction::Sum
+            },
+        path,
+        "contribution reduction mismatch",
+    )?;
+    let identity = match empty {
+        ParameterValue::Integer(v) => v.get() as f64,
+        ParameterValue::Quantity(v) => v.value(),
+        _ => return Err(fail(path, "numeric empty identity required")),
+    };
+    check(
+        value_type(empty) == *value && identity == if product { 1.0 } else { 0.0 },
+        path,
+        "wrong contribution empty identity/type",
+    )
 }
 fn quality<I: DefinitionSchemaIndex>(
     owner: &SchemaSubject,
@@ -567,6 +628,7 @@ fn quality<I: DefinitionSchemaIndex>(
     schema_type(&s, index, path, l, b)?;
     Ok(s)
 }
+#[allow(clippy::too_many_arguments)]
 fn read<I: DefinitionSchemaIndex>(
     r: &RuleRead,
     p: &RuleProgram,
@@ -575,6 +637,7 @@ fn read<I: DefinitionSchemaIndex>(
     path: &str,
     l: RuleLimits,
     b: &mut Budget,
+    authority: ContributionReadAuthority,
 ) -> Result<CompiledRead, RuleError> {
     validate_type(&r.value_type, index, path)?;
     let mut constraint = None;
@@ -777,10 +840,10 @@ fn read<I: DefinitionSchemaIndex>(
             constraint = Some(s.value.clone());
             schema_type(&s.value, index, path, l, b)?
         }
-        RuleReadSource::OrderedContributions { .. } => {
+        RuleReadSource::ContributionQuery { .. } => {
             return Err(fail(
                 path,
-                "ordered read requires checked package query context",
+                "contribution query read requires checked package query context",
             ));
         }
         RuleReadSource::Contributions {
@@ -790,30 +853,17 @@ fn read<I: DefinitionSchemaIndex>(
             reduction,
             empty,
         } => {
+            check(
+                authority == ContributionReadAuthority::CheckedQuery
+                    || (*kind != ContributionKind::Flag
+                        && *reduction != ContributionReduction::Any),
+                path,
+                "Boolean contributions require a checked contribution query",
+            )?;
             let st = stat(id, *e, p.context, owner, index, path)?;
             validate_value(empty, index, path)?;
             contribution(*kind, st, &r.value_type, index, path)?;
-            let product = *kind == ContributionKind::Multiply;
-            check(
-                *reduction
-                    == if product {
-                        ContributionReduction::Product
-                    } else {
-                        ContributionReduction::Sum
-                    },
-                path,
-                "contribution reduction mismatch",
-            )?;
-            let identity = match empty {
-                ParameterValue::Integer(v) => v.get() as f64,
-                ParameterValue::Quantity(v) => v.value(),
-                _ => return Err(fail(path, "numeric empty identity required")),
-            };
-            check(
-                value_type(empty) == r.value_type && identity == if product { 1.0 } else { 0.0 },
-                path,
-                "wrong contribution empty identity/type",
-            )?;
+            reduction_identity(*kind, *reduction, empty, &r.value_type, path)?;
             r.value_type.clone()
         }
     };
@@ -1088,7 +1138,7 @@ fn program<I: DefinitionSchemaIndex>(
     path: &str,
     application: Option<&EffectApplicationSource>,
     operations: RuleOperationsVersion,
-    ordered: Option<&DeclaredSet<OrderedContributionQuery>>,
+    queries: Option<&DeclaredSet<ContributionQuery>>,
 ) -> Result<CompiledProgram, RuleError> {
     check(
         p.context != RuleEntityKind::Modifier,
@@ -1157,28 +1207,36 @@ fn program<I: DefinitionSchemaIndex>(
             "duplicate read ID",
         )?;
         // Resolve package-owned query metadata only for type validation. The
-        // immutable published program retains its ordered read and membership.
+        // immutable published program retains its exact query and membership.
         let mapped;
-        let typed_read = if let RuleReadSource::OrderedContributions {
+        let mut authority = ContributionReadAuthority::Direct;
+        let typed_read = if let RuleReadSource::ContributionQuery {
             entity,
             query,
             group,
         } = &r.source
         {
-            let registry =
-                ordered.ok_or_else(|| fail(path, "ordered contribution registry is absent"))?;
+            let registry = queries.ok_or_else(|| fail(path, "contribution registry is absent"))?;
             b.work(registry.members.len(), l, path)?;
             let query = registry
                 .members
                 .iter()
                 .find(|row| &row.id == query)
-                .ok_or_else(|| fail(path, "ordered contribution query is absent"))?;
+                .ok_or_else(|| fail(path, "contribution query is absent"))?;
             b.work(query.groups.len(), l, path)?;
             let group = query
                 .groups
                 .iter()
                 .find(|row| &row.id == group)
-                .ok_or_else(|| fail(path, "ordered contribution group is absent"))?;
+                .ok_or_else(|| fail(path, "contribution group is absent"))?;
+            check(
+                operations.supports_boolean_contributions()
+                    || (query.contribution != ContributionKind::Flag
+                        && group.reduction != ContributionReduction::Any),
+                "operations_version",
+                "Boolean contributions require owned-domain-operations-v22",
+            )?;
+            authority = ContributionReadAuthority::CheckedQuery;
             mapped = RuleRead {
                 id: r.id.clone(),
                 value_type: r.value_type.clone(),
@@ -1203,6 +1261,7 @@ fn program<I: DefinitionSchemaIndex>(
             l,
             b,
             application,
+            authority,
         )?;
         // Preserve normal declaration/type diagnostics before checking the
         // operation-version authority. No compiled read is published yet.
@@ -1310,6 +1369,11 @@ fn program<I: DefinitionSchemaIndex>(
                 contribution: kind,
                 value,
             } => {
+                check(
+                    *kind != ContributionKind::Flag || operations.supports_boolean_contributions(),
+                    "operations_version",
+                    "Boolean contributions require owned-domain-operations-v22",
+                )?;
                 let i = resolve(value)?;
                 contribution(
                     *kind,
@@ -1711,7 +1775,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         },
     )
     .map_err(|e| RuleError::new("existing_actor_rules", e.to_string()))?;
-    poe_optimizer_data::owned_rules::validate_ordered_contributions(
+    poe_optimizer_data::owned_rules::validate_contribution_queries(
         input,
         index,
         poe_optimizer_data::owned_rules::RuleStorageLimits {
@@ -1731,7 +1795,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             ..Default::default()
         },
     )
-    .map_err(|e| RuleError::new("ordered_contributions", e.to_string()))?;
+    .map_err(|e| RuleError::new("contribution_queries", e.to_string()))?;
     let mut b = Budget::default();
     let mut targets = 0;
     for receiver in &input.receivers.members {
@@ -1865,7 +1929,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     // Streaming bound before cloning/index allocation. Source order of effects and
     // boolean operands remains meaningful; declaration tables are canonicalized.
     applications::preflight(input, index, l, &mut b)?;
-    digest_owned("owned-rule-input-v2", input, l.max_wire_bytes)
+    digest_owned("owned-rule-input-v3", input, l.max_wire_bytes)
         .map_err(|e| RuleError::new("wire", e.to_string()))?;
     receivers(input, index, l, &mut b)?;
     let mut table_ids = BTreeSet::new();
@@ -1968,13 +2032,13 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                     &format!("program.{}", p.id),
                     None,
                     operations,
-                    input.ordered_contributions.as_ref(),
+                    input.contribution_queries.as_ref(),
                 )?),
             );
         }
     }
     let applications = applications::compile(&mut input, &tables, index, l, &mut b)?;
-    let identity = digest_owned("owned-rule-programs-v2", &input, l.max_wire_bytes)
+    let identity = digest_owned("owned-rule-programs-v3", &input, l.max_wire_bytes)
         .map_err(|e| RuleError::new("wire", e.to_string()))?;
     Ok(CompiledRulePackage {
         input,

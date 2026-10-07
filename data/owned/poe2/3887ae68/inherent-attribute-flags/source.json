@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "pins": [
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "bytes": 2620112,
+      "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    }
+  ],
+  "producers": [
+    {
+      "node_id": 32349,
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000010ac"
+          }
+        }
+      },
+      "source_text": "Inherent Life granted by Strength is halved",
+      "source_flag": "HalvesLifeFromStrength",
+      "program": "strength-life-halving",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003319"
+      },
+      "remaining_mechanics": [
+        "one-handed-two-handed-martial-weapons",
+        "tripled-martial-attribute-requirements"
+      ]
+    },
+    {
+      "node_id": 58591,
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000018d9"
+          }
+        }
+      },
+      "source_text": "Inherent bonuses gained from Attributes are doubled",
+      "source_flag": "DoubledInherentAttributeBonuses",
+      "program": "inherent-bonus-doubling",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003318"
+      },
+      "remaining_mechanics": [
+        "twenty-percent-less-attributes"
+      ]
+    }
+  ],
+  "scope": {
+    "all_flag_producers_complete": false,
+    "item_sources_admitted": false,
+    "transformed_passives_admitted": false,
+    "whole_build_parity": false
+  }
+}
