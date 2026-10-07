@@ -8,9 +8,13 @@ the five-build MVP. Its read-only review is complete; those validation gates are
 not yet satisfied. The five originals remain development cases, not holdouts.
 The [design](design.md#data-driven-builds-and-breadth-of-validation) requires caller-provided
 builds and injected game definitions throughout the production path.
-The [real-build rollout](real-build-rollout.md) now defines the integration order and
-exit gates: all-five model coverage, paired Twister/minion native paths, interactions
-and independent holdouts. Historical intake errors below are not current admission status.
+The [architecture migration](architecture-migration.md#phases-and-exit-gates)
+defines the current integration order: closest complete original first, then
+owned optimizer integration alongside the remaining builds. All-five model
+coverage, contrasting player/minion paths, interactions and independent holdouts
+remain gates. The [real-build rollout](real-build-rollout.md) retains historical
+observations and fixed numerical expectations, not a requirement to finish two
+builds before search. Historical intake errors below are not current admission status.
 
 ## Supplied corpus, 2026-09-08
 

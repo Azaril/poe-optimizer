@@ -14,6 +14,24 @@ run in pinned PoB. Owned native components work, but unresolved inputs and
 mechanics still prevent complete native requests. Component parity, catalog size
 and deleted code are not substitutes for this gate.
 
+**Delivery priority, confirmed 2026-10-07: finish the closest complete build
+first.** Original05 (Skeletal Sniper / Basic Attack, skill set 4) is the current
+target: it has five selected input obligations and the most developed relevant
+native components. This is a prioritization judgment, not a completion estimate;
+input counts do not measure remaining numerical work. At each checkpoint choose
+the shortest evidenced path to one complete unchanged build, accounting for
+request admission, selected mechanics, final metrics and reference validation.
+Keep all five originals as regressions, but do not develop them in lockstep or
+require a second complete build before starting owned optimizer integration.
+
+The first complete build unlocks D4: bind a configurable objective to its exact
+owned metrics, evaluate a legal locked candidate change, compare fresh/reused/
+Rayon results and verify export/reimport. Expand candidate coverage from that
+working baseline while completing the other builds. A baseline calculation is
+not proof that its mutations work, and this gate does not reduce the eventual
+six-dimension optimizer or independent breadth requirements. Original05 is a
+development priority only; production admission remains caller/data driven.
+
 The owner confirmed that **SQLite, DuckDB and an ORM are outside the plan**.
 Use generated owned artifacts and immutable loaded Rust indexes. New features
 belong in one native path:
@@ -92,13 +110,32 @@ issues: removed importer formats, old stage metadata, fixture provider roles,
 and changed Partial diagnostic inventories. No native authority check was relaxed
 to make a fixture pass.
 
-**Next blocker: real generated preparation data.** Sand and Firebolt still have
-raw-only Partial inventories. Author Sand's ordinary preparation and shared
-prepared Skill stats for its manual/generated forms, with exact provider
-projection where a real consumer needs parameters. Keep provider-specific support
-eligibility, final-domain validation and incoming coverage explicit. The separate
+**Next blocker: Original05 request admission.** Its five selected obligations
+still stop the public finalizer before an evaluation request exists. Prioritize
+support-origin composition and selected usage/configuration/default accounting.
+Sand's preparation remains a downstream selected dependency; Firebolt-specific
+breadth work is deferred unless an Original05 dependency proves it necessary.
+The separated Sand source witness now passes; its authoring map below is retained
+for the mechanics phase, not the immediate task order. The separate
 [Boolean contribution proposal](owned-boolean-contributions-proposal.md) remains
 pending; the Player slot read is already accepted and implemented.
+
+**Subsequent evidence checkpoint: Sand source properties.** The optional Rust
+witness `owned_djinn_properties_source::sand_properties_preserve_exact_source_contributors`
+passed in **275.67s**, with eighteen cases in each independent JIT mode, fixed
+fresh/one-rebuild/two-rebuild observations, repeated fresh runs and unhooked
+controls. Both reports at `runs/owned-djinn-properties-source-01` are byte-identical:
+20,990,381 bytes, SHA-256
+`159ddd222dca8dbe7b7784eae1695b85ddab356b90bf5d2e4ef7fbe6b74f7c79`.
+Original05's actual ordinary contributors are Helmet Item21 +1, Amulet Item23 +1
+and its exact zero-percent copy +0. Manual and tree Sand receive the same +2;
+the observed supported-property results are empty. Manual counts three supports
+once per source; the tree counts none. Endpoints are manual 20→22 / actor44 and
+tree 1→3 / actor6. Provider/support/quality controls preserve exact provenance.
+The witness authenticates the population table but does not exhaustively execute
+its rows, exercise a nonzero supported-property contribution, prove native
+contributor completeness or make any original build complete. Focused strict
+Clippy passes. No runtime data or original input changed.
 
 ## Checked baseline and original-build results
 
@@ -156,7 +193,53 @@ reproducible evidence, not distributed game data.
 
 ## Next executable work
 
-**Immediate blocker: real generated preparation data.** The accepted ownership
+**Original05 completion path.** The public finalizer returns Pending while any
+selected input obligation remains, before constructing an owned request. The CLI
+therefore cannot export the complete request; `evaluate-owned` also requires an
+evaluation bundle, absent from the current package. Work in this order:
+
+1. Resolve support-origin ownership/completeness (`01de`) through the existing
+   authored-assignment and cold-composition seams. Complete runtime membership
+   depends on selected providers, so a preset-only certificate is insufficient.
+   The [composition proposal](owned-support-origin-composition-proposal.md)
+   is awaiting the owner's decision; no contract change is implemented.
+2. In parallel, account for selected preset usage (`0503`), configuration (`01f2`),
+   external assumptions (`0207`) and scenario usage (`0208`) through reviewed
+   consumers, preserved responsibilities or justified non-applicability. Reuse
+   retained source evidence; do not equate known values with complete inventories.
+3. Produce the unchanged Original05 request through the public finalizer with
+   zero selected input obligations and all 22 query identities preserved. No
+   handwritten replacement request or patched completion flags.
+4. Publish the actual evaluation bundle and resolve its selected owner, preparation,
+   receiving and metric dependencies. Both selected Sand forms still need genuine
+   coverage: the current Engine checks the complete selected plan and does not
+   authorize pruning them just because the selected damage query is Sniper.
+   Each numerical slice must name the Original05 dependency it removes.
+5. Validate the full CLI path against the fixed metric/availability manifest,
+   independent stable reference runs and fresh/reused/parallel native execution.
+   Preserve genuine infeasibility, including negative unreserved Spirit. Once
+   this gate passes, start D4 immediately while continuing the remaining builds.
+
+Only change the priority build if a checkpoint demonstrates a shorter complete
+path for another original; record the reason. Closely related contrast tests and
+regression repairs remain required, but unrelated breadth/performance/cleanup
+work must not displace this path.
+
+**Sand priority evidence.** Retained `owned-djinn-provider-source-01` controls
+disable manual Sand, reduce its raw level to one or disable its Bidding support;
+each preserves all 785 Player and 645 selected Sniper MAIN output fields in both
+JIT reports. `owned-selected-participation-source-01` case11 removes only the tree
+Sand provider plus UI focus indices and preserves the same outputs at all three
+lifecycle stages. These controls do not prove global noncontribution: the other
+Sand occurrence remains, and persistent-minion-type counts have real consumers.
+The current selected metrics contain no Sand damage/Command or combined-DPS
+query. Thus Sand's own combat/population formulas are downstream complete-plan
+coverage work, not established numerical dependencies of the selected Sniper
+outputs. Do not remove the occurrences, invent completeness or silently adopt
+the still-proposed [scoped coverage contract](owned-coverage.md). Reassess the
+actual remaining plan gaps after the request is admitted.
+
+**Retained downstream authoring map: generated preparation.** The accepted ownership
 contract now supports exact generated sources. Tree-generated Sand and
 item-generated Firebolt still lack their authored preparation and assembly
 rules. Their Partial two-slot raw-input lists must not be closed as final
@@ -183,18 +266,21 @@ level channel `30ab`, actual `30ca` direct/copy programs and snapshot reducer
 `32e4` where their proven applicability fits. Do not copy physical Gem readers,
 corruption assumptions or incomplete contributor closure into these forms.
 
-**First authoring gate: capture separated incoming property evidence.** Existing
+**Separated incoming property evidence: captured.** The new witness above
+enumerates ordinary `GemProperty` separately from once-per-source
+`SupportedGemProperty`, including applicability, original source objects and
+before/after values. It supplies the evidence for the next Sand authoring packet;
+complete native incoming coverage remains a separate proof. Earlier
 `djinn-support-preparation-source-02` reports show manual Sand 20→31 and tree
 Sand 1→12 in Original01, and manual 20→22 / tree 1→3 in Original05. Both source
 forms have PoB catalog Gem metadata even though they are not physical native
 Gem instances. Catalog metadata must stay acquisition data; do not manufacture
 native physical Gems to reproduce it. The reports establish final values and
-metadata flags, but do not enumerate ordinary `GemProperty` separately from
-once-per-source `SupportedGemProperty`. Capture both inventories and before/after
-values, including zero-support generated Sand, manual support removal and
-independent provider changes, before asserting complete channel `30ab` coverage
-or authoring a closed raw-plus-bonus formula. Endpoint differences alone are
-insufficient. Reuse retained controls rather than repeating unrelated acquisition.
+metadata flags. The new witness adds zero-support generated Sand, manual support
+removal and independent provider changes. Use those inventories before asserting
+complete channel `30ab` coverage or authoring a closed raw-plus-bonus formula.
+Endpoint differences alone are insufficient. Reuse retained controls rather than
+repeating unrelated acquisition.
 
 Retained `owned-djinn-raw-inputs-01` evidence already distinguishes raw-domain
 validation from final-domain validation: manual Sand raw 0/−1, 41 and fractional
@@ -257,6 +343,31 @@ The next input evidence work should classify the retained
 `owned-extra-stat-consumption-source-05` suppliers and filters, which already
 include inherited-node and Amulet-copy transport. Do not repeat that acquisition
 or treat a new scalar grammar as progress on these selected obligations.
+
+**Next composition review: support-origin discovery.** The selected Original05
+preset currently has sixteen physical support assignments in eight known
+sequences, but those are not the complete runtime source inventory. The source
+also discovers additional effects per Gem, ExtraSupport, generated item slot
+sharing, LinkedSupport and provider-specific noSupports behavior. Existing
+`support_inventory::Census/complete` proves physical membership only. A preset's
+`support_origins` survives independent equipment/tree changes, so an absence
+certificate derived only from today's selected Item28 or tree is unsafe. Keep
+authored support assignments distinct from complete runtime origins. Review the
+existing `support_origin_order`/shared-source/provider-resolution seam and cold
+composition validation before retiring `01de`; the
+[public ownership/completeness proposal](owned-support-origin-composition-proposal.md)
+has been presented for the owner's decision. Complete provider coverage can prove absence only
+where it accounts for every relevant capability. No new runtime origin variant
+is needed merely to describe a sound Assignment-only domain, but Partial rules
+cannot be interpreted as absence of extra supports.
+
+The same audit found no supported shortcut for the other four selected
+obligations: fifteen imported preferences do not account for all twenty usage
+rows across ten groups; configuration `01f2` still covers 73 origins (35 inside
+Config and 38 elsewhere); sixteen known external assumptions do not account for
+28 non-reward effective defaults, including seven child buff/curse/aura enables.
+Scenario usage remains empty/Pending. Preserve these distinctions rather than
+closing global inventories after adding another local scalar recipe.
 
 **Deferred coherent item-layout work.** Original04's selected Gold Amulet needs
 Paragon's granted passive, remaining Rarity accounting and all-skills quality;
@@ -1056,12 +1167,12 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Work | State and next action |
 | --- | --- |
 | Shared-contract generality | Initial review complete. Before the next public extension, exercise contrasting authored/generated sources, exact repeated occurrences and applicable stacking/receiver shapes. [Generality gates](build-generality-review.md) remain open. |
-| Generated source-property owners | Contract investigation pending: current relation owners support authored SkillUse and PlayerScenario only. Exercise a real generated owner using exact provider identity and the accepted shared input slots/producer authority. Review the owner/context extension before implementation; generated endpoints alone do not establish owner support. |
+| Generated source-property owners | Accepted contract implemented: exact generated Skills own properties and their exact declaring provider can project final inputs. Current native contract tests and component regressions pass. Sand incoming source evidence is captured; real numerical authoring remains downstream of Original05 request admission. Ownership support does not establish complete mechanic coverage. |
 | Effect-application breadth | General application model accepted and Maximum component implemented. Select a real contrasting stacking/grouping case and prove duplicate, cap, source and recipient semantics before extending its bounded policies. Do not replace the shared graph with effect-specific paths. |
 | Physical-input/reference separation | Design refinement pending: classify fields without requiring successful MAIN/CALCS selection or a live Pending usage issue to preserve known intrinsic facts. Preserve independent unknown-field/usage obligations. |
 | Immutable normalization preparation | Compile existing checked policies once per exact release; separate construction/traversal budgets and prove identical outputs. Implementation pending; no storage-layer change. |
 | Scoped numerical coverage | [Proposal](owned-coverage.md) pending concrete reviewed proof contract. Unknown effect reach remains blocking; no known-edge-only pruning or relaxation of original-build acceptance. |
-| Exact objectives and native optimization | D4 pending: bind objectives to owned actor/action/stat-set requests and execute one legal locked candidate mutation with a fixed scenario through the native path before expanding search. |
+| Closest complete build and native optimization | Original05 is the current first-completion target. Close its five input obligations, publish its real evaluation bundle and complete its selected mechanics/metrics through the public CLI. D4 begins after this first complete build, without waiting for all five: bind objectives to owned actor/action/stat-set requests and verify one legal locked candidate mutation before expanding search. Reassess the shortest complete path at every checkpoint. |
 | Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases; important ignored tests are not automatically exercised by ordinary CI. |
 | Historical replay retirement | Reimport with the one current implementation and retain useful stored source evidence. Seventeen older ignored publication harnesses need consumer review: rebase useful assertions to current semantics or remove obsolete scaffolding, rather than add compatibility paths. Declaration integrity and source parity remain required. [Retirement/migration inventory](legacy-retirement.md#historical-publication-replay-migration-2026-10-05). |
 | Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. Shared exact-provider proof now serves raw quality and requested-count import independently. Same-definition allocations in different presets remain distinct. Enabled/global/reporting dispositions and usage inventory closure remain open. [Contract and gates](owned-generated-skill-usage-proposal.md). |
@@ -1095,8 +1206,8 @@ Do not reuse the older archived D1-D5 profile milestones as current instructions
 | D0: boundaries and retirement | Owned architecture accepted; delete obsolete paths continuously, retaining named useful references |
 | D1: semantic input | Owned model/import exists; unresolved original-build input contracts remain |
 | D2: offline data/compiler | Owned packages and typed programs work; mechanic coverage/conversion is incomplete |
-| D3: native evaluation | Component execution works; first complete Twister/Sniper requests, then all five originals |
-| D4: search integration | Generic search/objectives exist; connect owned candidates and evaluator across all six dimensions |
+| D3: native evaluation | Component execution works; closest complete original first (currently Original05), then remaining originals |
+| D4: search integration | Start owned integration after the first complete original; verify bounded mutations, then joint search across all six dimensions |
 | D5: retirement and breadth | Active alongside D1-D4; finish legacy isolation and independent whole-build holdouts |
 | D6: performance and applications | Measure real native workloads, then shared reports/events, UI and web delivery |
 
@@ -1125,6 +1236,12 @@ reproducibly; optional reference tooling stays separately installable.
 ### M1 checklist: native calculation and optional reference parity
 
 - [x] Pin original PoB, preserve caller sources and retain optional reference hosting.
+- [ ] First complete unchanged original through the public CLI (currently Original05):
+  request admission, real evaluation bundle, complete selected mechanics, fixed
+  metrics/availability and independent stable reference parity. This unlocks D4.
+- [ ] Verify the first legal locked mutation through the same owned evaluator,
+  with fresh/reused/Rayon parity and export/reimport; expand optimizer integration
+  alongside the remaining M1 work, rather than waiting for all five originals.
 - [ ] Complete the owned request/scenario boundary across all five originals.
 - [ ] Produce final metrics with explicit units, availability and contributor coverage.
 - [ ] Match complete native originals and independent component references.
@@ -1243,7 +1360,11 @@ coherent replacement is [T1](architecture-migration.md#t1-rust-tooling-and-test-
 At session start, read this resume point and inspect Git state. At each coherent
 checkpoint:
 
-1. Name the subsystem changed and the actual selected-build blocker addressed.
+1. Name the closest complete-build target and its next blocking dependency. State
+   how the proposed task advances that complete request/result; counts of new
+   definitions, component tests or retired code do not establish completion.
+   Reassess the shortest complete path and explain any target change. After the
+   first build passes, begin D4 while selecting the next closest incomplete build.
 2. Rerun unchanged saved selections for all five originals; evaluate when admitted.
 3. Record exact data/source identities, commands, results and retained failures.
    Distinguish component evidence from whole-build and hosted-CI results.

@@ -121,6 +121,11 @@ shapes, with data-only extension inside implemented semantics and independent
 whole-build validation. Current bounded support is not proof of generality.
 This supplements the five-build MVP; it does not authorize named-build dispatch,
 fixture-supplied runtime defaults or relaxed completeness gates.
+Delivery prioritizes the closest complete original, currently Original05. Once
+that unchanged build passes complete native/reference validation, begin owned
+optimizer integration and verified mutations while completing the remaining
+originals. Retain contrasting player/minion contract tests and all-five regression;
+those safeguards do not require two complete builds before search work starts.
 
 Whether authors edit a small textual DSL or structured documents is a tooling choice.
 Both compile to the same project-owned typed rule representation. Optional Lua authoring

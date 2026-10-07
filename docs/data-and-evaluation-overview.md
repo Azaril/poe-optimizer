@@ -31,6 +31,14 @@ are not needed; generated owned artifacts and loaded Rust indexes remain the pla
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
 
+Delivery now explicitly prioritizes the closest complete unchanged build,
+currently Original05 (Skeletal Sniper). Its five selected input obligations
+still block request finalization, and complete native builds remain 0/5.
+The first complete native/reference result unlocks owned optimizer integration;
+we do not wait for all five. Subsequent candidate changes need their own coverage
+and fresh/reused/parallel verification. All-five regression and independent
+breadth continue through the same caller-driven model.
+
 The [scaling-data investigation](owned-scaling-data-investigation.md) now compares
 exact tables, genuine formulas and lossless range segments. Current native tables
 remain dense bounded integer lookups. A compact storage form could expand once

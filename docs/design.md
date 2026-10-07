@@ -106,6 +106,13 @@ checkpoint documents provide evidence rather than competing instructions.
 Build a Rust search engine with a fully native, parallel build evaluator. Keep versioned
 Path of Building (PoB) as an optional calculation reference for differential testing and
 validating game updates.
+Deliver the closest complete real build first, reassessing its remaining input,
+mechanic and validation dependencies at each checkpoint. That first complete
+unchanged build enables owned optimizer integration and verified candidate edits;
+completion of the other originals and independent breadth continues alongside it.
+All-five regression and generality gates remain required, but simultaneous build
+completion is not a prerequisite for starting search. Build names select test
+priorities only, never production calculation behavior.
 First prove that imported builds and controlled changes reproduce PoB's results. The first
 usable optimizer must then search class, ascendancy, passive allocations, equipment, support
 gems, and supporting skills jointly. It must preserve any user-required set of 1..N skills
