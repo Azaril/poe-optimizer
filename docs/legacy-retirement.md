@@ -31,6 +31,23 @@ Delete an obsolete path with its exclusive tests, helpers, fixtures and fingerpr
 entries. Preserve useful game-mechanic evidence and move its assertions to the
 retained boundary when needed. Git history is sufficient for abandoned experiments;
 do not add compatibility wrappers or feature gates merely to keep them buildable.
+
+### Configuration projection consolidation (2026-10-07)
+
+The current typed constructor-default projection supports Player, Enemy and
+Environment. The older string-option DTO lowers to that same implementation;
+there is one default collector and materializer. `PobFreshNumericConfigOverridesV1`,
+`PobFreshNumericConfigFallbacksV2` and the option-only authoring DTO are application
+format history, not game concepts or separate numerical backends. Earlier
+resistance/rating/block/incoming-damage packets and their publication helpers
+still read those authoring shapes. The actual release uses V3.
+
+When consolidating those publication helpers, move their useful source and
+precedence assertions to the current policy, regenerate affected commitments,
+and delete the old variants and exclusive replay scaffolding. Do not introduce
+a V4 or compatibility loader. This must preserve raw presence versus fallback
+versus constructor absence, exact targets, and all-five input/query equivalence.
+It does not precede Sniper's next required configuration/usage consumer.
 Shared code with a live acquisition or numerical consumer needs a dependency audit
 before removal. Record that consumer and the condition that ends its retention.
 

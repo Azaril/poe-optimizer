@@ -104,6 +104,7 @@ fn option_policy(f: &OptionFixture) -> NormalizationPolicy {
             recipe,
             constructor_default: f.options[0].clone(),
         }],
+        default_inputs: vec![],
     });
     policy
 }
@@ -309,6 +310,7 @@ fn option_policy_rejects_cross_lane_identities_namespaces_and_unreviewed_recipes
             inputs,
             placeholder_fallback_inputs,
             option_inputs,
+            ..
         }) = &mut policy.configuration_inputs
         else {
             panic!()
@@ -515,6 +517,7 @@ fn empty_option_extension_preserves_v1_v2_drafts_origins_and_historical_wire() {
             inputs,
             placeholder_fallback_inputs,
             option_inputs: vec![],
+            default_inputs: vec![],
         });
         for body in [
             "",

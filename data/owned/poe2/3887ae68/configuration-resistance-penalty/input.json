@@ -1,0 +1,69 @@
+{
+  "source_name": "resistancePenalty",
+  "value_input": {
+    "kind": "external_input",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000334d"
+  },
+  "target": "player",
+  "recipe": {
+    "id": "saved-player-resistance-penalty",
+    "codec": {
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "whitespace": "exact",
+      "codec": {
+        "kind": "quantity",
+        "value": {
+          "syntax": "scientific",
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "scale": {
+            "numerator": 1,
+            "denominator": 1
+          }
+        }
+      }
+    },
+    "tiers": [
+      {
+        "selectors": [
+          {
+            "lane": "input_number",
+            "name": "resistancePenalty"
+          }
+        ],
+        "duplicates": "reject"
+      }
+    ],
+    "missing": {
+      "kind": "pending"
+    }
+  },
+  "constructor_default": {
+    "kind": "quantity",
+    "value": {
+      "value": -60.0,
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      }
+    }
+  },
+  "ignore_numeric_placeholder": true
+}

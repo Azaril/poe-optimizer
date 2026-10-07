@@ -65,85 +65,94 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest checkpoint: remaining participation inputs and cached output accounting
+## Latest checkpoint: typed configuration defaults and Player resistance penalty
 
-The [participation packet](../data/owned/poe2/3887ae68/occurrence-participation-inputs/README.md)
-adds eight missing exact preferences to Original05's selected preset through the
-existing policy 332b. All twelve selected active roots now preserve their saved
-group and occurrence enabled values; total usage preferences grow from 15 to 23.
-Offering/Frost global-effect policies and independent counts remain unchanged on
-the valid originals. Generated Water uses its exact source/provider binding;
-three archived Original05 occurrences retain unresolved provider correspondence.
-No native rule, schema, readiness or complete-usage declaration changes.
+The [resistance-penalty packet](../data/owned/poe2/3887ae68/configuration-resistance-penalty/README.md)
+adds a real Original05 dependency through existing native contracts. The current
+Import configuration policy now projects typed Integer, Quantity, Boolean and
+Option constructor defaults to declared Player, Enemy or Environment targets.
+It uses authenticated fresh-configuration absence; explicit zero/false survives,
+and malformed or wrong-lane input cannot silently become a default. Existing
+option defaults use the same internal collector rather than a second runtime path.
 
-The publication passes in **60.75s**. It adds 5/0/0/1/28 preferences across all
-stored presets in Originals01-05, including eight in Original05's selected
-preset. Full package/import inverses, byte-identical rebuild, all 110 queries,
-unchanged selected issue lists and **52 controls** pass. False, absent, malformed
-and unknown-field cases never manufacture enabled values or borrow another
-occurrence. The shared group frame can conservatively refuse inherited Offering/
-Frost policies too on unknown parent fields; the controls retain that limitation
-explicitly. Source reports were authenticated, not rerun.
+The published Player input `334d` supplies -60 by default or the saved numeric
+`resistancePenalty`. One data-authored program on shared Player Actor `332a`
+adds it once to each elemental resistance channel. It does not double-count the
+all-elemental channel or affect Chaos. Source dropdown choices constrain display,
+not the saved numerical value; signed, fractional and out-of-list values remain
+valid within the declared finite adapter domain. A per-input opt-in ignores only
+validated numeric Placeholders, whose source lane never supplies this direct
+input. Wrong-lane or malformed Placeholders still refuse projection. No native
+schema, operation, Lua execution path or complete-owner declaration was added.
 
-The [cached-output packet](../data/owned/poe2/3887ae68/source-presentation-v1/README.md)
-then changes only the existing Import presentation policy's new opt-in. One flat
-Build/Buffs leaf per original becomes source-only, based on pinned Load/Save
-code: these are saved calculated lists, not configured buffs. It disposes no
-Build container, real buff setting or inventory. The all-five publication passes
-in **20.79s**, preserving exact drafts, allocators, selections and unresolved
-obligations. Original05's configuration-linked origins decrease **73 to 72**.
-An omitted/false flag authorizes no new disposition and preserves prior identity;
-there is no parallel importer or version branch.
+The fresh PoB witness passes in **55.49s**: seven controls, two independent fresh
+loads in each JIT mode, cold state and exactly two normal rebuilds, with exact
+MAIN/CALCS agreement on all three channels and the separate zero Chaos record.
+JIT reports are byte-identical. Native tests execute the real penalty and six
+permanent-resistance reward programs together; missing input, wrong target,
+actual Partial refusal and fresh/reused/Rayon determinism remain explicit.
+Final Player resistance and caps are not yet compared as complete outputs.
 
-Both ordinary packet tests and all **297 Import normalization tests** pass.
-Strict workspace/all-feature/all-target Clippy passes. No source VM was rerun;
-no fresh whole-workspace test run or hosted success for this revision is claimed.
-The native calculation bundle remains absent; complete native originals remain
-**0/5**, with selected unresolved issues **107/117/109/123/5**. These are real
-input/accounting advances, not full-build or numerical parity claims.
+Validation passes: **307 Import normalization tests**, six ordinary native tests,
+one ordinary publication test, the all-five publication in **37.74s**, and the
+retained/fresh source and published-component authentication in **2.33s**. The
+publication checks full import inverses, an identical 18-file rebuild, all 110
+queries and eleven malformed/precedence/value controls. Strict workspace/
+all-feature/all-target Clippy passes. No new full-workspace test run or hosted
+success for this revision is claimed.
 
-**Next:** resolve support-origin composition after the owner's decision, and
-continue typed configuration/default transport through existing Player usage and
-external-input ownership. Then prove complete field/inventory dispositions.
-Sand property evidence and downstream authoring remain retained below; do not
-expand its combat calculations ahead of these request blockers. Full-original
-coverage, readiness and final metrics remain independent gates.
+Original05 now has **17 external assumptions**, retaining 23 usage preferences,
+all twelve active-root participation inputs and 72 configuration-linked origins.
+Selected unresolved issues remain **107/117/109/123/5** and complete native
+builds remain **0/5**. A real consumer and its inputs are now present, but complete
+configuration, assumptions, usage, selected mechanics and final metrics remain
+separate gates. The Actor and Encounter inventories stay Partial.
+
+**Next:** finish Original05's remaining input accounting through reviewed actual
+consumers and source-field dispositions. Support-origin composition awaits the
+owner's decision. The seven child buff/curse/aura defaults have source consumers
+but no current owned child consumer programs; do not add unused flags merely to
+increase transport coverage. Complete the selected build's dependency path,
+then begin D4 immediately after full native/reference validation. The
+[configuration consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07)
+retains useful source assertions while scheduling removal of obsolete authoring
+variants; it does not take priority over this build's next blocker.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-cached-build-buffs-01/package` as the integration baseline. Its
+Use `runs/owned-resistance-penalty-02/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. All freshly regenerated sidecars use V21;
 native schema V6 and operations V21 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-occurrence-participation-01/package`, input
-`4cdd168b3791b3c0d2c80d178b0fca30090fdd10e95b373756e401f41eef6b09`.
+Its immediate predecessor is `runs/owned-cached-build-buffs-01/package`, input
+`b559c6c55aedfe5cf6e947ca210103c14444647b42f5f0483a32d5b7fa8c3d88`.
 Historical endpoint paths authenticate useful stored evidence; they are not
 separate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `b559c6c55aedfe5cf6e947ca210103c14444647b42f5f0483a32d5b7fa8c3d88` |
-| Registry | `77170e2cd8220b5fbc2bb6907c8fc506325c3abc490acd426b71a374310ffb3a` |
-| Definitions content | `9d6ee09d44c1eb022b706bc51a61b28239c7f572647c25e9c15ce2f19e48ff94` |
-| Rules | `9cc36e0d2e5bd48c303f7a91f9d2f2fe0f401fa38b9ed61c3c203aa6e3ab89a3` |
-| Compiled rules | `bf97c711b4554d5e81b1654aba5d3a129ae5df496d299bf84b91c4a211ec744f` |
-| Routing | `5b9286007c9d5b415cc6c83c22d4f4f373f2941651123f80253bb042af8d4e28` |
-| Mapping | `e923bc662644414a25789c39d5b9268dba8293e3849c3f8d7b9ef6cbb836fe70` |
-| Skill roles | `ef9f89fa061f0acaad37051e30d02bac80a6a562f480bb2d5d86861dde257eac` |
-| Normalization | `4e062172d4c7a75552bb91a04d908433c3acd500c078d9427087be446bd97443` |
-| Rewards | `9aaa507de9513904e76f0306f934a08c22d795f2ada2bbc4c8b28544e592c859` |
-| Items | `44cb569177decf3c749521cd508df4107b5cb8bb0cfef74203dc941642905ed7` |
-| Item source | `dd16e916712dcbcac94fa4da8bb7740a89d831ba14eafa6e11f4212efe6a1651` |
-| Tree policy | `afde185b58db2d21a661ee179eb1751b77c46a074443c81de039f85878e1f351` |
-| Authoring commitment | `84f8c7c2a057441460dcb97c31af94dd87615733bbb06f8cb0617f5642f4e781` |
+| Release input | `b19134496c85e208a735568b5e5191f3b60f68154be336ab4afb6fd953b6fa01` |
+| Registry | `c1da329a2ea8cdde00a666f0d158851458fbfb3bb211c9d932e02e39fe1b8d18` |
+| Definitions content | `72fccd185dcf70fbf13198b295b2cc8da3672c749506db98988c4e92a2bcbba7` |
+| Rules | `01809f9d31e1893f71c03d2d6fcb828b2b0d8a7e296ea08a692e43ff9d256981` |
+| Compiled rules | `97cb3504dfc4dd88894d246a631c33021adbc20887df70ac3af48cff5ca20305` |
+| Routing | `3ee884f637dd8ab1dd823f64e7c1b842be08c7ffa1834edc9150a6a0d99a2205` |
+| Mapping | `d8953fa8a2e9e663c5676eb2a42b31e8e3f3459b0acfa15be5abb17315b391fa` |
+| Skill roles | `cd44e748a11730980743266ac5d4c4d228f86767cd077ba243792fceac21289d` |
+| Normalization | `efa81dbfda1559f3bcd3f7cfb5394e5287adce4440906a9b8015ab52207d9af0` |
+| Rewards | `8fb0c34e474c54745576d153c5afa10690f89a6e972a7382a98f5c5ee5a1e081` |
+| Items | `295e01c60e706a02c3477dcb0a9ac6b97e4c795ead8192639c33b1f8ad2a32aa` |
+| Item source | `d808849e298e6dd19e66901f35ccf092249da3985bdbc7f08c59547d5af20942` |
+| Tree policy | `e408348d3fc44dedaa27d71b16a05d36454fead3ed66152f051d79819a6d5e89` |
+| Authoring commitment | `507d0afd7ca01ea6f774103b8317de4f88a54365f4f426bcbfd997a55b43aef0` |
 | Schema / operations | V6 / `owned-domain-operations-v21` |
 
-The eighteen package files total **63,163,632 bytes**, with 134 provenance rows.
+The eighteen package files total **63,166,809 bytes**, with 135 provenance rows.
 Definitions use `pob-3887ae68-player-offhand-facts-v1`; the independent rules release
-remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `334c`.
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `334d`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -337,34 +346,38 @@ cannot be interpreted as absence of extra supports.
 The same audit found no supported shortcut for the other four selected
 obligations: 23 imported preferences do not account for every field across twenty usage
 rows in ten groups; configuration `01f2` still covers 72 origins (35 inside
-Config and 37 elsewhere); sixteen known external assumptions do not account for
+Config and 37 elsewhere); seventeen known external assumptions do not account for
 28 non-reward effective defaults, including seven child buff/curse/aura enables.
 Scenario usage remains empty/Pending. Preserve these distinctions rather than
 closing global inventories after adding another local scalar recipe.
 
-**Concrete next configuration transport, under existing native ownership.** The
-retained `owned-configuration-inputs-source-01/source-jit-{off,on}.json`,
+**Configuration/default transport and next consumer accounting.** The retained
+`owned-configuration-inputs-source-01/source-jit-{off,on}.json`,
 `cases[4].state.saved`, identifies all 28 non-reward defaults and 34 Placeholders.
-Seven true controls have actual child-effect consumers: Spectre buffs/curses,
-Companion buffs/curses and Elemental Relic Anger/Hatred/Wrath auras. Pinned
-`ConfigOptions.lua:544-549,644-659` emits their tagged enable records;
+Typed constructor-default projection is now implemented for declared Player,
+Enemy and Environment external inputs. The real Player resistance-penalty rule
+consumes its first new published default. Exact source presence, type, default
+and Placeholder semantics remain an Import concern; the native evaluator reads
+ordinary injected inputs. This does not complete either source-field inventory.
+
+Seven true defaults have actual source child-effect consumers: Spectre buffs/
+curses, Companion buffs/curses and Elemental Relic Anger/Hatred/Wrath auras.
+Pinned `ConfigOptions.lua:544-549,644-659` emits their tagged enable records;
 `CalcPerform.lua:2592,2634,2735` consumes them. Config dispatch does not require a
 visible widget. These observations preclude an empty scenario-usage proof based
 only on Original05's absent authored controls or unselected child families.
+However, the current owned package has no corresponding child consumer programs;
+adding seven pass-through inputs alone would not remove a native blocker.
 
-Use `ScenarioInput.usage` with the existing `UsageTarget::Actor(Player)` for
-global typed preferences, then exact child/application rules can read
+For real global usage consumers, reuse `ScenarioInput.usage` with the existing
+`UsageTarget::Actor(Player)` and exact child/application rules reading
 `RuleEntity::Player`. This does not need a new Core owner, copied skill presets,
-scenario fanout or persistent child selectors. It does need real data-defined
-channels and consumers; a usage rule cannot synthesize child grants. Extend the
-current Import configuration projection in place for typed values and declared
-Enemy/Environment/Player destinations or Actor usage, authenticating constructor
-defaults and source presence/precedence. The current implementation emits only
-Enemy assumptions and never proves either full inventory. Follow projection with
-the reviewed whole-Config source-disposition census; direct readers, placeholder
-semantics and custom blocks remain in its scope. Support-discovery ownership is
-the outstanding owner question; this transport work can use the accepted native
-contracts while that decision is pending.
+scenario fanout or persistent child selectors. Establish actual selected
+applicability and native consumers before publishing preferences; a usage rule
+cannot synthesize child grants. Continue the reviewed whole-Config source-
+disposition census, including direct readers, Placeholder semantics and custom
+blocks. Support-discovery ownership remains the outstanding owner question;
+configuration accounting can proceed through the accepted contracts independently.
 
 **Deferred coherent item-layout work.** Original04's selected Gold Amulet needs
 Paragon's granted passive, remaining Rarity accounting and all-skills quality;
@@ -653,9 +666,10 @@ merely because a compatibility test asserts it, and do not silently change
 numerical outputs when game intent remains unresolved.
 
 1. **Complete generated usage and remaining source accounting.** Original05
-   now has five selected obligations. Eleven selected preferences already import:
-   four skeletal counts, Offering and Frost Bomb switches, and five Direct/Tree/Item
-   occurrence counts. Remaining activation/global/reporting usage needs the
+   now has five selected obligations and 23 selected preferences: four skeletal
+   counts, Offering and Frost Bomb switches, five Direct/Tree/Item occurrence
+   counts, and twelve requested-participation preferences. Remaining global/
+   reporting usage and full field accounting need the
    [generated applicability contract](owned-generated-skill-usage-proposal.md).
    The versioned Core contract, all-stored-row proofs, V6 permissions and V19
    input producers pass focused validation. Use that checked boundary;
@@ -696,9 +710,8 @@ numerical outputs when game intent remains unresolved.
    maps to one. Count/group transport does not complete enabled/global/Full DPS
    semantics. Account for those settings across authored and generated contexts
    without unreviewed defaults. The configuration-role issue retained 79 origins
-   after presentation/range accounting (237 in the original census); the current
-   generated-field proof reduces that to 73, including
-   global fallback records outside Config. Their complete
+   after presentation/range accounting (237 in the original census); the generated-field proof reduced that to 73 and the cached-output proof
+   to the current 72, including global fallback records outside Config. Their complete
    disposition census and actual consumers must be proved; additional numeric
    controls alone cannot certify an empty scenario-usage inventory.
 
@@ -1178,7 +1191,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Resource ownership and demand | [Resource-obligation proposal](owned-resource-obligations-proposal.md) awaits owner review. Ordinary sustained reservation should be independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Define Skill support recipients and contrast cost conversion, mines and stance/toggle selection; then migrate the current Action reservation bodies and validate query invariance. Gigantic's producer/status and isolated Life/Damage-factor packets are published; final reservation delivery remains open. |
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
-| Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 35 Config-local and 37 non-Config origins after the generated accounting and cached-Buffs proofs. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Keep scenario usage/assumptions separate. [Evidence and gates](owned-configuration-dispositions-proposal.md). |
+| Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 35 Config-local and 37 non-Config origins after the generated accounting and cached-Buffs proofs. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Typed constructor defaults now reach Player/Enemy/Environment inputs; the real Player resistance-penalty consumer is published, but no global inventory closes. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
 | Selected passive receiving | Growing Swarm's complete default two-effect owner and Sniper receiving are published through existing contracts. Conditional/unconditional cooldown sums stay distinct; final duration, area/radius, other minion receivers and complete contributor coverage remain open. [Packet and limits](../data/owned/poe2/3887ae68/growing-swarm/README.md). |
@@ -1191,7 +1204,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
 | Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation; six current INC memberships are now Complete; BASE membership and the global query inventory remain Partial. The BASE audit now proves a signed-scaling counterexample, real post-passive bonus copies and missing socket-origin ordering; resolve these concrete domain gaps and review typed Boolean flag aggregation. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | Earlier V18/V20 expectation regressions and the combined Windows compile bottleneck are fixed. Run [37409208353](https://github.com/Azaril/poe-optimizer/actions/runs/37409208353) at `230494e` completed all twelve Windows/Linux jobs successfully. Windows PoB's combined compilation/test step took 3h28m40s, within its prior successful duration range; no hang or failure was found. At the BASE audit check, run37552883848 at `0ff9210` was pending behind active run37529126901 at `7b7fb1b`. The latter exposed stale unified-usage asset paths in both engine jobs; the current main test correction passes all six ordinary target tests locally. Hosted success for that correction and this checkpoint is not yet confirmed. Read the latest [main workflow runs](https://github.com/Azaril/poe-optimizer/actions/workflows/rust.yml) before treating a newer revision as green; pending runs can be superseded by the next checkpoint. Main retains running validation and coalesces pending revisions. Separate compile/test timings before choosing further sharding. Keep every package/target and required aggregate check; infrastructure delays do not justify dropping coverage. |
+| CI regression, timeout and infrastructure | Earlier V18/V20 and unified-usage fixture regressions are fixed; [37552883848](https://github.com/Azaril/poe-optimizer/actions/runs/37552883848) at `0ff9210` completed successfully. At 19:39 UTC on 2026-10-07, [37646478601](https://github.com/Azaril/poe-optimizer/actions/runs/37646478601) at `47f3560` had eleven successful jobs and Windows native CLI validation still running, with no reported failure. Main `8408651` was pending behind it; newer revisions may coalesce pending runs. No hosted success for this checkpoint is claimed. Read the latest [workflow runs](https://github.com/Azaril/poe-optimizer/actions/workflows/rust.yml) before treating a revision as green. Separate compile/test timings before further sharding; retain every package/target and aggregate check. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 | Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |

@@ -19,6 +19,17 @@ justify completing scenario usage or assumptions.
 
 ## Evidence and current boundary
 
+The 2026-10-07 resistance-penalty checkpoint supplies a real Player assumption
+and native consumer through the existing external-input contract. Typed
+constructor projection now supports Player, Enemy and Environment; the penalty
+is one of Original05's 28 non-reward defaults. It contributes to three existing
+elemental channels through the once-per-Player Actor rule. Independent fresh
+source controls also prove that its numeric Placeholder is unused; an explicit
+data permission admits that precedence, without importing the Placeholder value.
+This does not complete any configuration, assumptions or usage inventory. See
+the [packet](../data/owned/poe2/3887ae68/configuration-resistance-penalty/README.md)
+and [current checkpoint](implementation.md) for exact publication and validation.
+
 This review inspected the unchanged five XML fixtures, the normalization policy
 and Original05 draft in `runs/owned-generated-preset-inputs-05/`, the pinned PoB
 source, and these existing reports:

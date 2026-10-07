@@ -1,10 +1,54 @@
-> Historical snapshots through generated source-property ownership and first-build priority on 2026-10-07.
+> Historical snapshots through participation inputs and cached-output accounting on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: remaining participation inputs and cached output accounting
+
+The [participation packet](../data/owned/poe2/3887ae68/occurrence-participation-inputs/README.md)
+adds eight missing exact preferences to Original05's selected preset through the
+existing policy 332b. All twelve selected active roots now preserve their saved
+group and occurrence enabled values; total usage preferences grow from 15 to 23.
+Offering/Frost global-effect policies and independent counts remain unchanged on
+the valid originals. Generated Water uses its exact source/provider binding;
+three archived Original05 occurrences retain unresolved provider correspondence.
+No native rule, schema, readiness or complete-usage declaration changes.
+
+The publication passes in **60.75s**. It adds 5/0/0/1/28 preferences across all
+stored presets in Originals01-05, including eight in Original05's selected
+preset. Full package/import inverses, byte-identical rebuild, all 110 queries,
+unchanged selected issue lists and **52 controls** pass. False, absent, malformed
+and unknown-field cases never manufacture enabled values or borrow another
+occurrence. The shared group frame can conservatively refuse inherited Offering/
+Frost policies too on unknown parent fields; the controls retain that limitation
+explicitly. Source reports were authenticated, not rerun.
+
+The [cached-output packet](../data/owned/poe2/3887ae68/source-presentation-v1/README.md)
+then changes only the existing Import presentation policy's new opt-in. One flat
+Build/Buffs leaf per original becomes source-only, based on pinned Load/Save
+code: these are saved calculated lists, not configured buffs. It disposes no
+Build container, real buff setting or inventory. The all-five publication passes
+in **20.79s**, preserving exact drafts, allocators, selections and unresolved
+obligations. Original05's configuration-linked origins decrease **73 to 72**.
+An omitted/false flag authorizes no new disposition and preserves prior identity;
+there is no parallel importer or version branch.
+
+Both ordinary packet tests and all **297 Import normalization tests** pass.
+Strict workspace/all-feature/all-target Clippy passes. No source VM was rerun;
+no fresh whole-workspace test run or hosted success for this revision is claimed.
+The native calculation bundle remains absent; complete native originals remain
+**0/5**, with selected unresolved issues **107/117/109/123/5**. These are real
+input/accounting advances, not full-build or numerical parity claims.
+
+**Next:** resolve support-origin composition after the owner's decision, and
+continue typed configuration/default transport through existing Player usage and
+external-input ownership. Then prove complete field/inventory dispositions.
+Sand property evidence and downstream authoring remain retained below; do not
+expand its combat calculations ahead of these request blockers. Full-original
+coverage, readiness and final metrics remain independent gates.
 
 ## Archived 2026-10-07 checkpoint: generated source properties and first-build priority
 

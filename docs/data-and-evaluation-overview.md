@@ -39,15 +39,21 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest input publication adds the remaining eight requested-participation
-preferences in Original05's selected preset, reusing one existing Boolean policy
-and exact occurrence bindings. All twelve active roots now retain their enabled
-preferences; the preset has 23 usage preferences total. Complete usage and native
-readiness remain separate. Import also now recognizes the strictly framed saved
-Build/Buffs leaf as cached output: pinned Load ignores it and Save produces it.
-This changes one provenance disposition per original and no canonical build
-value. All-five publication checks pass; Original05 still has five selected input
-obligations, with 72 source origins linked to its configuration obligation.
+The latest [configuration packet](../data/owned/poe2/3887ae68/configuration-resistance-penalty/README.md)
+adds a typed Player resistance-penalty input and its real native Actor rule. Import
+now projects injected typed constructor defaults to Player, Enemy and Environment
+external inputs, preserving explicit zero/false and refusing malformed fields.
+The source's numeric Placeholder lane is ignored only with a reviewed per-input
+opt-in. Source controls, native composition/determinism and all-five publication
+checks pass. The new baseline is `runs/owned-resistance-penalty-02/package`;
+Original05 has 17 external assumptions, but their full inventory remains Pending.
+
+The preceding participation publication supplied all twelve active roots' enabled
+preferences in Original05's selected preset, which retains 23 usage preferences.
+Import also accounts for the strictly framed Build/Buffs leaf as cached output,
+not a configured buff. Original05 retains five selected input obligations and
+72 configuration-linked source origins. The new penalty consumer does not close
+usage, readiness, resistance contributors/caps or complete native evaluation.
 
 The [scaling-data investigation](owned-scaling-data-investigation.md) now compares
 exact tables, genuine formulas and lossless range segments. Current native tables
@@ -65,8 +71,8 @@ bytes; no old/new behavior branch is retained. All-five validation passed in
 `runs/owned-generated-field-accounting-01/validation.json` (5.89s): Original01
 changes four origin links, Original05 changes six, and the other three change
 none. Draft values, IDs, allocator state, selections and all 110 query rows remain
-exact. Original05's configuration issue `01f2` now has 73 linked origins, down
-from the historical 79; all five selected input issues remain. Complete native
+exact. That publication reduced Original05's configuration issue `01f2` to 73 linked
+origins from 79; the later cached-output proof reduced it to the current 72; all five selected input issues remain. Complete native
 builds remain **0/5**. The [participation contract](owned-skill-participation-proposal.md)
 now has a native consumer on the existing graph and a published Sniper policy
 combining independent required group/occurrence values. Other skills still need
@@ -860,6 +866,19 @@ exact contributions and reductions separately from selected-action DPS and comba
 activation. The [configuration accounting proposal](owned-configuration-dispositions-proposal.md)
 also distinguishes saved Inputs from effective constructor defaults. Neither
 proposal closes its still-Pending native inventory or numerical gates.
+
+The current configuration projection also accepts injected typed constructor
+defaults for Player, Enemy and Environment external inputs. Import checks the
+fresh source frame, exact authored lane, declared target, encounter membership
+and typed domain. Explicit zero/false survives; malformed records do not authorize
+defaults. Matching Placeholders normally refuse projection; a reviewed numeric
+direct reader can explicitly ignore a validated numeric Placeholder, including
+one outside the unused value's output range. Defaults enter the owned scenario as values;
+native rules never read Config or invent missing assumptions. The older option
+DTO and new typed rows compile through one internal path. The first real Player
+consumer is the [elemental resistance penalty](../data/owned/poe2/3887ae68/configuration-resistance-penalty/README.md):
+shared Player rules contribute it once to each elemental channel. Full assumption
+membership and final resistance aggregation/caps remain separate gates.
 
 The corresponding owned rules consume exact occurrence counts and the existing
 level-dependent reservation coefficient, plus explicit modifier and branch

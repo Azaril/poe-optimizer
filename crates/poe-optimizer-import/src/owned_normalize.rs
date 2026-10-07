@@ -65,7 +65,8 @@ mod tree;
 mod usage_inputs;
 pub use character_reward_inventory::CharacterRewardInventoryPolicy;
 pub use configuration_inputs::{
-    ConfigurationInputsPolicy, ConfigurationNumericInput, ConfigurationOptionInput,
+    ConfigurationDefaultInput, ConfigurationInputTarget, ConfigurationInputsPolicy,
+    ConfigurationNumericInput, ConfigurationOptionInput,
 };
 pub(crate) use configuration_reward_inventory::validate_configuration_reward_inventory;
 pub use configuration_reward_inventory::{

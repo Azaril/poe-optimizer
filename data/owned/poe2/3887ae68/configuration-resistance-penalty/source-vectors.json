@@ -1,0 +1,1043 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/DropDownControl.lua",
+      "bytes": 17071,
+      "sha256": "a20fe837f44f8ca028b4cc3447fee72e6f6f102224e9b8331edbdcafa8601a8f"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    }
+  ],
+  "retained_reports": [
+    {
+      "path": "runs/owned-configuration-inputs-source-01/source-jit-off.json",
+      "bytes": 29934293,
+      "sha256": "92d9f761a2383ed841ff4a9699395181f7dc621a691a94d480357d1367ebf561"
+    },
+    {
+      "path": "runs/owned-configuration-inputs-source-01/source-jit-on.json",
+      "bytes": 29934293,
+      "sha256": "92d9f761a2383ed841ff4a9699395181f7dc621a691a94d480357d1367ebf561"
+    }
+  ],
+  "catalogue_resistance_penalty": {
+    "definition": {
+      "defaultIndex": 7,
+      "label": "Elemental Resistance penalty:",
+      "list": [
+        {
+          "label": "Act 1 (0%)",
+          "val": 0
+        },
+        {
+          "label": "Act 2 (-10%)",
+          "val": -10
+        },
+        {
+          "label": "Act 3 (-20%)",
+          "val": -20
+        },
+        {
+          "label": "Act 4 (-30%)",
+          "val": -30
+        },
+        {
+          "label": "Act 5 (-40%)",
+          "val": -40
+        },
+        {
+          "label": "Act 6 (-50%)",
+          "val": -50
+        },
+        {
+          "label": "Endgame (-60%)",
+          "val": -60
+        }
+      ],
+      "type": "list",
+      "var": "resistancePenalty"
+    },
+    "index": 2
+  },
+  "originals": [
+    {
+      "case_index": 0,
+      "name": "original-01",
+      "xml_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+      "raw_penalty_rows": [],
+      "effective_input": -60,
+      "placeholder_present": false,
+      "controls_default": -60,
+      "final_player_resistances_diagnostic": {
+        "MAIN": {
+          "FireResist": 75,
+          "ColdResist": 75,
+          "LightningResist": 71,
+          "FireResistTotal": 83,
+          "ColdResistTotal": 84,
+          "LightningResistTotal": 71
+        },
+        "CALCS": {
+          "FireResist": 75,
+          "ColdResist": 75,
+          "LightningResist": 71,
+          "FireResistTotal": 83,
+          "ColdResistTotal": 84,
+          "LightningResistTotal": 71
+        }
+      }
+    },
+    {
+      "case_index": 1,
+      "name": "original-02",
+      "xml_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+      "raw_penalty_rows": [],
+      "effective_input": -60,
+      "placeholder_present": false,
+      "controls_default": -60,
+      "final_player_resistances_diagnostic": {
+        "MAIN": {
+          "FireResist": 75,
+          "ColdResist": 75,
+          "LightningResist": 75,
+          "FireResistTotal": 99,
+          "ColdResistTotal": 93,
+          "LightningResistTotal": 133
+        },
+        "CALCS": {
+          "FireResist": 75,
+          "ColdResist": 75,
+          "LightningResist": 75,
+          "FireResistTotal": 99,
+          "ColdResistTotal": 93,
+          "LightningResistTotal": 133
+        }
+      }
+    },
+    {
+      "case_index": 2,
+      "name": "original-03",
+      "xml_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490",
+      "raw_penalty_rows": [],
+      "effective_input": -60,
+      "placeholder_present": false,
+      "controls_default": -60,
+      "final_player_resistances_diagnostic": {
+        "MAIN": {
+          "FireResist": 75,
+          "ColdResist": 67,
+          "LightningResist": 68,
+          "FireResistTotal": 75,
+          "ColdResistTotal": 67,
+          "LightningResistTotal": 68
+        },
+        "CALCS": {
+          "FireResist": 75,
+          "ColdResist": 67,
+          "LightningResist": 68,
+          "FireResistTotal": 75,
+          "ColdResistTotal": 67,
+          "LightningResistTotal": 68
+        }
+      }
+    },
+    {
+      "case_index": 3,
+      "name": "original-04",
+      "xml_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711",
+      "raw_penalty_rows": [],
+      "effective_input": -60,
+      "placeholder_present": false,
+      "controls_default": -60,
+      "final_player_resistances_diagnostic": {
+        "MAIN": {
+          "FireResist": 75,
+          "ColdResist": 75,
+          "LightningResist": 75,
+          "FireResistTotal": 79,
+          "ColdResistTotal": 99,
+          "LightningResistTotal": 76
+        },
+        "CALCS": {
+          "FireResist": 75,
+          "ColdResist": 75,
+          "LightningResist": 75,
+          "FireResistTotal": 79,
+          "ColdResistTotal": 99,
+          "LightningResistTotal": 76
+        }
+      }
+    },
+    {
+      "case_index": 4,
+      "name": "original-05",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "raw_penalty_rows": [],
+      "effective_input": -60,
+      "placeholder_present": false,
+      "controls_default": -60,
+      "final_player_resistances_diagnostic": {
+        "MAIN": {
+          "FireResist": -45,
+          "ColdResist": 5,
+          "LightningResist": -45,
+          "FireResistTotal": -45,
+          "ColdResistTotal": 5,
+          "LightningResistTotal": -45
+        },
+        "CALCS": {
+          "FireResist": -45,
+          "ColdResist": 5,
+          "LightningResist": -45,
+          "FireResistTotal": -45,
+          "ColdResistTotal": 5,
+          "LightningResistTotal": -45
+        }
+      }
+    }
+  ],
+  "source_spans": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "first_line": 111,
+      "last_line": 119,
+      "meaning": "List declaration, constructor default and adjacent distinct current-mana control.",
+      "text": "\t-- Section: General options\n\t{ section = \"General\", col = 1 },\n\t{ var = \"resistancePenalty\", type = \"list\", label = \"Elemental Resistance penalty:\", list = {{val=0,label=\"Act 1 (0%)\"},{val=-10,label=\"Act 2 (-10%)\"},{val=-20,label=\"Act 3 (-20%)\"},{val=-30,label=\"Act 4 (-30%)\"},{val=-40,label=\"Act 5 (-40%)\"},{val=-50,label=\"Act 6 (-50%)\"},{val=-60,label=\"Endgame (-60%)\"}}, defaultIndex = 7 },\n\t{ var = \"detonateDeadCorpseLife\", type = \"count\", label = \"Enemy Corpse ^xE05030Life:\", ifSkillData = \"explodeCorpse\", tooltip = \"Sets the maximum ^xE05030life ^7of the target corpse for Detonate Dead and similar skills.\\nFor reference, a level 70 monster has \"..data.monsterLifeTable[70]..\" base ^xE05030life^7, and a level 80 monster has \"..data.monsterLifeTable[80]..\".\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"SkillData\", \"LIST\", { key = \"corpseLife\", value = val }, \"Config\")\n\tend },\n\t{ var = \"multiplierCurrentManaPercentage\", type = \"count\", label = \"Current ^x7070FFMana^7 %:\", ifSkillData = \"currentManaPercentage\", defaultState = 100, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:CurrentManaPercentage\", \"BASE\", m_max(m_min(val,100), 0), \"Config\")\n\tend },\n",
+      "sha256": "fa7ed193056bac4ce3348dc990af5cbcc7f4d2693f15bf14217c82ca325a2834"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first_line": 878,
+      "last_line": 920,
+      "meaning": "Saved numeric Input overrides construction; numeric Placeholder is separate. String Placeholder is a distinct input-writing lane and is not admitted.",
+      "text": "function ConfigTabClass:Load(xml, fileName)\n\tself.activeConfigSetId = 1\n\tself.configSets = { }\n\tself.configSetOrderList = { 1 }\n\n\tlocal function setInputAndPlaceholder(node, configSetId)\n\t\tif node.elem == \"Input\" then\n\t\t\tif not node.attrib.name then\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Input' element missing name attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\t\tif node.attrib.number then\n\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = tonumber(node.attrib.number)\n\t\t\telseif node.attrib.string then\n\t\t\t\tif node.attrib.name == \"enemyIsBoss\" then\n\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string:lower():gsub(\"(%l)(%w*)\", function(a,b) return s_upper(a)..b end)\n\t\t\t\t\t:gsub(\"Uber Atziri\", \"Boss\"):gsub(\"Shaper\", \"Pinnacle\"):gsub(\"Sirus\", \"Pinnacle\")\n\t\t\t\t-- backwards compat <=3.20, Uber Atziri Flameblast -> Atziri Flameblast\n\t\t\t\telseif node.attrib.name == \"presetBossSkills\" then\n\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string:gsub(\"^Uber \", \"\")\n\t\t\t\telse\n\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string\n\t\t\t\tend\n\t\t\telseif node.attrib.boolean then\n\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.boolean == \"true\"\n\t\t\telse\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Input' element missing number, string or boolean attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\telseif node.elem == \"Placeholder\" then\n\t\t\tif not node.attrib.name then\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Placeholder' element missing name attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\t\tif node.attrib.number then\n\t\t\t\tself.configSets[configSetId].placeholder[node.attrib.name] = tonumber(node.attrib.number)\n\t\t\telseif node.attrib.string then\n\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string\n\t\t\telse\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Placeholder' element missing number\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\tend\n",
+      "sha256": "1bf60058509708b61293bdfa04a397cf4173b2068e0f2056a37f3c714906d76a"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first_line": 1047,
+      "last_line": 1062,
+      "meaning": "Updating a dropdown uses SelByValue without source input mutation.",
+      "text": "function ConfigTabClass:UpdateControls()\n\tfor var, control in pairs(self.varControls) do\n\t\tif control._className == \"EditControl\" or control._className == \"ResizableEditControl\" then\n\t\t\tcontrol:SetText(tostring(self.configSets[self.activeConfigSetId].input[var] or \"\"))\n\t\t\tif self.configSets[self.activeConfigSetId].placeholder[var] then\n\t\t\t\tcontrol:SetPlaceholder(tostring(self.configSets[self.activeConfigSetId].placeholder[var]))\n\t\t\tend\n\t\telseif control._className == \"CheckBoxControl\" then\n\t\t\tcontrol.state = self.configSets[self.activeConfigSetId].input[var]\n\t\telseif control._className == \"DropDownControl\" then\n\t\t\tcontrol:SelByValue(self.configSets[self.activeConfigSetId].input[var] or self:GetDefaultState(var), \"val\")\n\t\tend\n\tend\n\tself:UpdateCustomModsControls()\nend\n\n",
+      "sha256": "e36caf8835cf695c2d7695e8df516a50fa2ae0d2fd172cc8a0ab7a7a861c6fb8"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first_line": 1317,
+      "last_line": 1334,
+      "meaning": "Each ConfigSet receives constructor defaults before its saved children.",
+      "text": "function ConfigTabClass:CreateConfigSet(configSetId, title)\n\tlocal configSet = { id = configSetId, title = title, input = {}, placeholder = {}, customModsList = { { title = \"Default\", enabled = true, text = \"\" } } }\n\tif not configSetId then\n\t\tconfigSet.id = #self.configSets + 1\n\tend\n\t-- there are default values for input and placeholder that every new config set needs to have\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.var then\n\t\t\tconfigSet.input[varData.var] = varData.defaultState\n\t\t\tconfigSet.placeholder[varData.var] = varData.defaultPlaceholderState\n\t\t\tif varData.defaultIndex then\n\t\t\t\tconfigSet.input[varData.var] = varData.list[varData.defaultIndex].val\n\t\t\tend\n\t\tend\n\tend\n\tself.configSets[configSet.id] = configSet\n\treturn configSet\nend\n",
+      "sha256": "60ff84266cd7f571d1b199bf0dae52509d516d61c1bf8108131029fef2724dd3"
+    },
+    {
+      "path": "src/Classes/DropDownControl.lua",
+      "first_line": 142,
+      "last_line": 175,
+      "meaning": "Exact-match display selection does not clamp or rewrite out-of-list numeric inputs.",
+      "text": "function DropDownClass:SelByValue(value, key)\n\tfor index, listVal in ipairs(self.list) do\n\t\tif type(listVal) == \"table\" then\n\t\t\tif listVal[key] == value then\n\t\t\t\tself.selIndex = index\n\t\t\t\treturn\n\t\t\tend\n\t\telse\n\t\t\tif listVal == value then\n\t\t\t\tself.selIndex = index\n\t\t\t\treturn\n\t\t\tend\n\t\tend\n\tend\nend\n\nfunction DropDownClass:GetSelValueByKey(key)\n\treturn self.list[self.selIndex][key]\nend\n\nfunction DropDownClass:GetSelValue()\n\treturn self.list[self.selIndex]\nend\n\nfunction DropDownClass:SetSel(newSel, noCallSelFunc)\n\tnewSel = m_max(1, m_min(self:GetDropCount(), newSel))\n\tnewSel = self:DropIndexToListIndex(newSel)\n\tif newSel and newSel ~= self.selIndex then\n\t\tself.selIndex = newSel\n\t\tif not noCallSelFunc and self.selFunc then\n\t\t\tself.selFunc(newSel, self.list[newSel])\n\t\tend\n\tend\nend\n",
+      "sha256": "0c4f8ca293af44669985a5ba4c37c3edd991aee72c4dc6017aa8d49117d11de4"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 844,
+      "last_line": 853,
+      "meaning": "Player-only elemental BASE penalty; direct input with absent fallback, separate Chaos zero.",
+      "text": "\t\tmodDB:NewMod(\"Accuracy\", \"BASE\", data.characterConstants[\"accuracy_rating_per_level\"], \"Base\", { type = \"Multiplier\", var = \"Level\", base = -data.characterConstants[\"accuracy_rating_per_level\"] })\n\t\tmodDB:NewMod(\"CritMultiplier\", \"BASE\", data.characterConstants[\"base_critical_hit_damage_bonus\"], \"Base\")\n\t\tmodDB:NewMod(\"DotMultiplier\", \"BASE\", 50, \"Base\", { type = \"Condition\", var = \"CriticalStrike\" })\n\t\tmodDB:NewMod(\"FireResist\", \"BASE\", env.configInput.resistancePenalty or -60, \"Base\")\n\t\tmodDB:NewMod(\"ColdResist\", \"BASE\", env.configInput.resistancePenalty or -60, \"Base\")\n\t\tmodDB:NewMod(\"LightningResist\", \"BASE\", env.configInput.resistancePenalty or -60, \"Base\")\n\t\tmodDB:NewMod(\"ChaosResist\", \"BASE\", 0, \"Base\")\n\t\tmodDB:NewMod(\"TotemFireResist\", \"BASE\", 40, \"Base\")\n\t\tmodDB:NewMod(\"TotemColdResist\", \"BASE\", 40, \"Base\")\n\t\tmodDB:NewMod(\"TotemLightningResist\", \"BASE\", 40, \"Base\")\n",
+      "sha256": "a0f681b37dba7cb0889ca47a5ad2e2505761ec020bb5778c8accc25e56927fde"
+    }
+  ],
+  "runtime_coverage": {
+    "original_default": true,
+    "explicit_penalty_controls": true,
+    "meaning": "Seven fresh Original05 controls with two independent fresh loads and exactly two fixed rebuilds per load in each JIT mode. Exact MAIN/CALCS Player Base resistance records match across all observations; complete final resistance parity is not implied."
+  },
+  "artifacts": [
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-resistance-penalty/closure.json",
+      "bytes": 25153,
+      "sha256": "1a20ef4392140ebb0fa1f5e70dc628e74d47f6d45c046b89c72fcbc54b964940"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-resistance-penalty/dependencies.json",
+      "bytes": 50540,
+      "sha256": "cfb4f47d55027f410c13fc9df84202032288d9cf0c0ded82d0ddb753687bec57"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-resistance-penalty/bindings.json",
+      "bytes": 3545,
+      "sha256": "61a0c8ff846f41e3c2d775a64bb499ed503b1dcc88203bf4d972527be2861a54"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-resistance-penalty/input.json",
+      "bytes": 1448,
+      "sha256": "c64fdeeeabf6c48b84a50a4844b49ac047ddc6e092db60c64bca300ba23b1c6b"
+    }
+  ],
+  "retained_reports_scope": "Historical configuration reports authenticate five original constructor defaults; they do not contain explicit penalty mutation cases.",
+  "fresh_witness": {
+    "reports": [
+      {
+        "path": "runs/owned-resistance-penalty-source-01/source-jit-off.json",
+        "bytes": 15325,
+        "sha256": "c76eafe90420d1a722f2c7e31663d6f18b0c11848ebd24e51abc80ada5fa4b99"
+      },
+      {
+        "path": "runs/owned-resistance-penalty-source-01/source-jit-on.json",
+        "bytes": 15325,
+        "sha256": "c76eafe90420d1a722f2c7e31663d6f18b0c11848ebd24e51abc80ada5fa4b99"
+      }
+    ],
+    "implementation": [
+      {
+        "path": "crates/poe-optimizer-pob/tests/owned_resistance_penalty_source.rs",
+        "bytes": 7796,
+        "sha256": "f80b25a5d6fc7b3c323d9596ce140475b08dc2dcc7c21f7ad7e1536d69ce1b7a"
+      },
+      {
+        "path": "crates/poe-optimizer-pob/tests/support/resistance_penalty_source.lua",
+        "bytes": 1144,
+        "sha256": "f0e8a7083d79f61c12261d306b196431cb96debbe58ad24547aabeaeb12fb491"
+      },
+      {
+        "path": "crates/poe-optimizer-pob/tests/support/configuration_preparation_source.rs",
+        "bytes": 14535,
+        "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9"
+      }
+    ],
+    "fixture": {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "bytes": 106378,
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    },
+    "observation": {
+      "cases": [
+        {
+          "expected": -60.0,
+          "name": "default",
+          "observed": {
+            "input": -60,
+            "stages": [
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                }
+              }
+            ]
+          },
+          "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "expected": 0.0,
+          "name": "zero",
+          "observed": {
+            "input": 0,
+            "stages": [
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                }
+              }
+            ]
+          },
+          "xml_sha256": "d1900af69e09cbc53c088df3cca3345a4b3ded35ee44263b19abe73e6dd731c7"
+        },
+        {
+          "expected": -30.0,
+          "name": "act",
+          "observed": {
+            "input": -30,
+            "stages": [
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -30
+                  ],
+                  "FireResist": [
+                    -30
+                  ],
+                  "LightningResist": [
+                    -30
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -30
+                  ],
+                  "FireResist": [
+                    -30
+                  ],
+                  "LightningResist": [
+                    -30
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -30
+                  ],
+                  "FireResist": [
+                    -30
+                  ],
+                  "LightningResist": [
+                    -30
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -30
+                  ],
+                  "FireResist": [
+                    -30
+                  ],
+                  "LightningResist": [
+                    -30
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -30
+                  ],
+                  "FireResist": [
+                    -30
+                  ],
+                  "LightningResist": [
+                    -30
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -30
+                  ],
+                  "FireResist": [
+                    -30
+                  ],
+                  "LightningResist": [
+                    -30
+                  ]
+                }
+              }
+            ]
+          },
+          "xml_sha256": "2b86e3a612ab0e70e591fed7560978155ea960cb0a6880b6d1443d5946c92c22"
+        },
+        {
+          "expected": -12.5,
+          "name": "fraction",
+          "observed": {
+            "input": -12.5,
+            "stages": [
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -12.5
+                  ],
+                  "FireResist": [
+                    -12.5
+                  ],
+                  "LightningResist": [
+                    -12.5
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -12.5
+                  ],
+                  "FireResist": [
+                    -12.5
+                  ],
+                  "LightningResist": [
+                    -12.5
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -12.5
+                  ],
+                  "FireResist": [
+                    -12.5
+                  ],
+                  "LightningResist": [
+                    -12.5
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -12.5
+                  ],
+                  "FireResist": [
+                    -12.5
+                  ],
+                  "LightningResist": [
+                    -12.5
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -12.5
+                  ],
+                  "FireResist": [
+                    -12.5
+                  ],
+                  "LightningResist": [
+                    -12.5
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -12.5
+                  ],
+                  "FireResist": [
+                    -12.5
+                  ],
+                  "LightningResist": [
+                    -12.5
+                  ]
+                }
+              }
+            ]
+          },
+          "xml_sha256": "4d68d561474948e1acd327f3bc0e56091f5451353d65b8aba2e086b5a947bed3"
+        },
+        {
+          "expected": 10.0,
+          "name": "positive",
+          "observed": {
+            "input": 10,
+            "stages": [
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    10
+                  ],
+                  "FireResist": [
+                    10
+                  ],
+                  "LightningResist": [
+                    10
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    10
+                  ],
+                  "FireResist": [
+                    10
+                  ],
+                  "LightningResist": [
+                    10
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    10
+                  ],
+                  "FireResist": [
+                    10
+                  ],
+                  "LightningResist": [
+                    10
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    10
+                  ],
+                  "FireResist": [
+                    10
+                  ],
+                  "LightningResist": [
+                    10
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    10
+                  ],
+                  "FireResist": [
+                    10
+                  ],
+                  "LightningResist": [
+                    10
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    10
+                  ],
+                  "FireResist": [
+                    10
+                  ],
+                  "LightningResist": [
+                    10
+                  ]
+                }
+              }
+            ]
+          },
+          "xml_sha256": "c93e93d91a7eba209f737651ea3c530022bc362d54f8f20c777dcbb7a393dc46"
+        },
+        {
+          "expected": -60.0,
+          "name": "placeholder-only",
+          "observed": {
+            "input": -60,
+            "placeholder": 20,
+            "stages": [
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    -60
+                  ],
+                  "FireResist": [
+                    -60
+                  ],
+                  "LightningResist": [
+                    -60
+                  ]
+                }
+              }
+            ]
+          },
+          "xml_sha256": "c2f5f133ebddb1b5dd2ae14b09dad001a212f3277b915e0197cf800c58db5ed2"
+        },
+        {
+          "expected": 0.0,
+          "name": "zero-with-placeholder",
+          "observed": {
+            "input": 0,
+            "placeholder": 20,
+            "stages": [
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                }
+              },
+              {
+                "CALCS": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                },
+                "MAIN": {
+                  "ChaosResist": [
+                    0
+                  ],
+                  "ColdResist": [
+                    0
+                  ],
+                  "FireResist": [
+                    0
+                  ],
+                  "LightningResist": [
+                    0
+                  ]
+                }
+              }
+            ]
+          },
+          "xml_sha256": "505ee10e684672e3f531ec102a8cf21d002a80b22031f17751e9fcb71cda2535"
+        }
+      ],
+      "fixed_rebuilds": 2,
+      "independent_replays": 2,
+      "original_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+    }
+  }
+}

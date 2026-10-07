@@ -62,6 +62,7 @@ pub fn check_authored() {
         inputs,
         placeholder_fallback_inputs,
         option_inputs,
+        ..
     } = policy()
     else {
         panic!("explicit V3 string option authority")

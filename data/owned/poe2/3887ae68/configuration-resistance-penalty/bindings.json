@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "before": "b559c6c55aedfe5cf6e947ca210103c14444647b42f5f0483a32d5b7fa8c3d88",
+  "external_input": {
+    "kind": "external_input",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000334d"
+  },
+  "actor": {
+    "kind": "actor",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000332a"
+  },
+  "encounter": {
+    "kind": "encounter",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000031d1"
+  },
+  "unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "source_name": "resistancePenalty",
+  "target": "player",
+  "constructor_default": {
+    "kind": "quantity",
+    "value": {
+      "value": -60.0,
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      }
+    }
+  },
+  "admission": {
+    "minimum": -1000000.0,
+    "maximum": 1000000.0,
+    "meaning": "Finite adapter admission bound; not a game clamp or restriction to the UI list."
+  },
+  "channels": {
+    "fire": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032e6"
+    },
+    "cold": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009d4"
+    },
+    "lightning": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032e7"
+    }
+  },
+  "program": "configured-player-resistance-penalty",
+  "composition_rewards": [
+    {
+      "kind": "reward",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000027"
+    },
+    {
+      "kind": "reward",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000004d"
+    },
+    {
+      "kind": "reward",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000031"
+    },
+    {
+      "kind": "reward",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000048"
+    },
+    {
+      "kind": "reward",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000002a"
+    },
+    {
+      "kind": "reward",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000052"
+    }
+  ],
+  "scope": "Input and three Player BASE contributions; no complete inventory, resistance reduction, caps, or full-build parity.",
+  "source_precedence": {
+    "numeric_input": "A valid numeric Input overrides the constructor value, including zero and values outside the UI options.",
+    "absent_input": "Use authenticated constructor default -60.",
+    "numeric_placeholder": "Admit finite numeric text and ignore it; it does not provide a value or inherit the owned output range.",
+    "placeholder_opt_in": true,
+    "unresolved": "Malformed, ambiguous, string/Boolean or other unsupported source lanes block projection."
+  }
+}
