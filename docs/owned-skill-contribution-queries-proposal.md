@@ -151,6 +151,22 @@ and magnitude increase 25 with MORE 20 are useful nonneutral controls. Their
 custom-source origin is not proof that production custom-modifier import or
 every real support family is already admitted.
 
+The later focused Offering witness observes the original local multiplication
+and rounding rather than reconstructing them from flattened records. Two
+independently identified custom 1% MORE lines reach `1.0201`, then local `1.02`;
+reversing their order agrees. A 1% MORE / 1% LESS pair reaches `0.9999`, then `1`.
+Those records occupy the inherited Player store in the Skill query. This proves
+that reachable source boundary, not Skill-local/inherited composition in general
+or a production custom-modifier domain. Store depth remains offline provenance.
+
+Actual Danse support controls move BuffEffect INC30 with the exact Offering
+occurrence, preserve independent recipients and demonstrate non-stacking across
+duplicate Offerings. The source's separate Damage MORE30 is not BuffEffect MORE.
+Its description requires an additional consumed skeleton, which these source
+delivery controls do not prove or authorize in native activation. See the
+[implementation checkpoint](implementation.md#source-checkpoint-offering-grouping-and-exact-support-delivery)
+for validation, the narrow observer-position correction and remaining gates.
+
 ## Alternatives and first delivery
 
 | Option | Benefit | Limitation |
@@ -163,8 +179,9 @@ domain** can then be a bounded subset of that design while positive origin and
 group proofs are completed. It must use real published query-backed writers,
 not observed scalars, literal neutral producers or a hidden fallback.
 
-The immediate data packet should author the five writers `3228`–`322c` and their
-actual incoming queries on the existing source Skill and recipient Actor. Its
+The next data packet should author the remaining three writers `3228`–`322a`
+and their incoming queries on the existing source Skill, reusing the already
+published recipient writers `322b`/`322c`. Its
 magnitude writer combines independently checked INC and MORE domains using
 existing operations. Query/group memberships remain Partial wherever discovery
 or semantics are unproved. A checked complete-empty group may be published only
@@ -177,6 +194,34 @@ to Offering 62%, then combine the selected passive 68% using authored consumers.
 Add the noncritical physical endpoint consumer only once its addition,
 conversion, multiplier-group and rounding domains have explicit coverage;
 baseline endpoints alone cannot justify discarding currently zero mechanics.
+
+### Implementation audit at `bd8cd52` (pending the decision above)
+
+The first empty-domain subset needs a read-authority change in Data's
+`owned_rules/ordered.rs::read`: permit `Current` in Skill context only when the
+Stat permits Skill targets. Existing compilation, exact `SkillTarget` binding,
+frozen stages and reductions already carry that identity. No new DTO, second
+query engine or supplied neutral producer is necessary. Use four checked groups
+for source BuffEffect INC/MORE and Magnitude INC/MORE; the magnitude writer uses
+existing arithmetic. Preserve Partial real owners and the global registry.
+
+The existing candidate-wide census rejects matching contributors even on another
+Skill, including late support effects and unread groups. Keep that conservative
+scope for the empty-domain subset. Tests must cover it explicitly, along with
+wrong Stat target, unrelated read scopes, exact repeated/generated occurrences,
+Partial/missing coverage, stages, duplicate final writers and deterministic reuse.
+The current scope tests cover PropertyOwner and Enemy refusal but do not provide
+a dedicated Current-Skill admission/refusal gate; add one with the implementation.
+
+Positive sources remain separate work within the same design. Core's member
+origins currently describe direct Character, Allocation and equipment sources;
+Engine rejects generated grant paths, and supports execute with an exact
+`SupportApplication` origin. Relaxing the provider-path check would not authorize
+that relation or define numerical order. Review the actual source-to-recipient
+membership and mechanical ordering before expanding those existing declarations.
+Changing read/member authority requires consistent semantic identity invalidation
+and rebuilt artifacts, without an old-format execution branch. This audit changes
+no runtime authority and is not acceptance of the proposal.
 
 ## Acceptance gates
 

@@ -180,8 +180,186 @@ local function source_address(a)
   source=scalar(group.source),source_item_id=scalar(group.sourceItem and group.sourceItem.id),
   source_node_id=scalar(group.sourceNode and group.sourceNode.id)}
 end
+-- Compact, opt-in original-call evidence. This deliberately does not retain the
+-- broad node/item supplier snapshots used by the unchanged-input witness.
+local function focused_install(api)
+ local list=original(storeClass.List,"Classes/ModStore.lua",321)
+ local eval=original(storeClass.EvalMod,"Classes/ModStore.lua",490)
+ local listClass=assert(common.classes.ModList)
+ local listInternal=original(listClass.ListInternal,"Classes/ModList.lua",309)
+ local dbInternal=original(dbClass.ListInternal,"Classes/ModDB.lua",391)
+ local function preserved()
+  return calcs.mergeSkillInstanceMods==merge and calcs.buildActiveSkillModList==builder
+   and storeClass.List==list and storeClass.EvalMod==eval and listClass.ListInternal==listInternal and dbClass.ListInternal==dbInternal
+   and runCallback==callback
+ end
+ assert(debug.gethook()==nil and preserved())
+ local function args_at(level)
+  local out={};for i=1,128 do local name,value=debug.getlocal(level+1,i);if not name then break end;out[name]=value end
+  return out
+ end
+ local function djinn(a)
+  return a and a.activeEffect and wanted[a.activeEffect.grantedEffect.id]
+   and a.activeEffect.grantedEffect.id~="FireboltPlayer"
+ end
+ local function global_lookup(effect)
+  assert(getmetatable(effect)==nil,"reviewed catalogue effects must have plain field lookup")
+  local raw=rawget(effect,"hasGlobalEffect");local effective=effect.hasGlobalEffect
+  assert(rawequal(raw,effective),"raw absence must equal the actual CalcSetup lookup")
+  return {raw=scalar(raw),effective=scalar(effective),has_metatable=false,lookup_exact=true}
+ end
+ local function candidates(store,env,actor)
+  local result,objects,seen={},{},{}
+  while store do
+   charge();assert(type(store)=="table"and not seen[store]and #result<32);seen[store]=true
+   local entries={};local mods=rawget(store,"mods")
+   local bucket=store;if mods then bucket=rawget(mods,"ExtraSkillStat")end
+   assert(not bucket or #bucket<=16384)
+   for i,mod in ipairs(bucket or{})do
+    charge();if mod.name=="ExtraSkillStat"then entries[#entries+1]={index=i,record=plain(mod)}end
+   end
+   local parent=rawget(store,"parent");assert(parent==nil or parent==false or type(parent)=="table")
+   objects[#objects+1]=store
+   result[#result+1]={depth=#result,representation=mods and"named_bucket"or"sequence",records=entries,
+    player=rawequal(store,env.player.modDB),actor=rawequal(store,actor.modDB),item=rawequal(store,env.itemModDB),
+    parent_kind=parent==nil and"absent"or parent==false and"false_sentinel"or"store"}
+   store=parent
+  end
+  return result,objects
+ end
+ work=0;local enabled=jit.status();local rows,builders,queries,merges,internals={},{},{},{},{}
+ local callsByEnv,envObjects,envIndices={},{},{};local hook
+ hook=function(event)
+  if event~="call"and event~="return"then return end
+  local info=debug.getinfo(2,"fl");local f=info.func
+  if f==builder then
+   local args=args_at(2);local a=args.activeSkill;if not djinn(a)then return end
+   if event=="call"then
+    assert(not builders[a]and #rows<256)
+    local ei=envIndices[args.env]
+    if not ei then ei=#envObjects+1;assert(ei<=64);envObjects[ei]=args.env;envIndices[args.env]=ei end
+    local row={mode=args.env.mode,environment=ei,effect=a.activeEffect.grantedEffect.id,source=source_address(a),
+     global_effect_lookup=global_lookup(a.activeEffect.grantedEffect),
+     builder_called=true,builder_returned=false,query_called=false,query_returned=false,
+     merge_called=false,merge_returned=false,observer_requeried_list=false}
+    rows[#rows+1]=row;local frame={row=row,a=a,env=args.env}
+    builders[a]=frame;callsByEnv[args.env]=callsByEnv[args.env]or{}
+    local calls=callsByEnv[args.env][a]or{};calls[#calls+1]=#rows;callsByEnv[args.env][a]=calls
+   else
+    local frame=assert(builders[a]);assert(rawequal(frame.env,args.env))
+    frame.row.builder_returned=true;frame.row.return_line=info.currentline
+    frame.row.disabled=scalar(a.skillFlags and a.skillFlags.disable)
+    assert(not queries[a.skillModList]and not merges[a.skillModList]);builders[a]=nil
+   end
+   return
+  end
+  if f==list then
+   local caller=debug.getinfo(3,"fl");if caller.func~=builder or caller.currentline~=795 then return end
+   local parent=args_at(3);local frame=builders[parent.activeSkill];if not frame then return end
+   local args=args_at(2);local a=frame.a;local store=a.skillModList
+   assert(rawequal(args.self,store)and rawequal(args.cfg,a.skillCfg))
+   assert(rawequal(a.skillCfg.skillGrantedEffect,a.activeEffect.grantedEffect))
+   if event=="call"then
+    assert(not queries[store]and not frame.row.query_called)
+    frame.store=store;frame.cfg=args.cfg
+    frame.row.query_called=true;frame.row.query_caller_line=caller.currentline
+    frame.row.cfg=scalars(args.cfg);frame.row.cfg_flags=plain(args.cfg.skillCond)
+    frame.row.cfg_effect_id=args.cfg.skillGrantedEffect.id;frame.row.exact_filter_identity=true
+    frame.row.candidates,frame.stores=candidates(store,frame.env,a.actor)
+    frame.row.internal_calls={};queries[store]=frame
+   else
+    assert(rawequal(queries[store],frame)and args.n==1 and type(args.result)=="table")
+    frame.extra=args.result;frame.row.query_returned=true;frame.row.query_return_line=info.currentline
+    frame.row.returned_stats=plain(args.result);frame.row.returned_count=#args.result
+    assert(equal(frame.row.candidates,candidates(store,frame.env,a.actor)),"query changed raw candidates")
+    assert(#frame.row.internal_calls==#frame.stores,"every original ancestor ListInternal observed")
+    queries[store]=nil
+   end
+   return
+  end
+  if f==listInternal or f==dbInternal then
+   local args=args_at(2);local frame=queries[args.context]
+   if not frame or args.modName~="ExtraSkillStat"then return end
+   assert(rawequal(args.cfg,frame.cfg))
+   if event=="call"then
+    assert(not internals[args.self]);local depth
+    for i,store in ipairs(frame.stores)do if rawequal(store,args.self)then assert(not depth);depth=i-1 end end
+    assert(depth~=nil)
+    local row={depth=depth,flags=scalar(args.flags),keyword_flags=scalar(args.keywordFlags),source_filter=scalar(args.source),
+     name=args.modName,exact_context=true,exact_filter=true,result_count_before=#args.result,returned=false}
+    frame.row.internal_calls[#frame.row.internal_calls+1]=row
+    internals[args.self]={row=row,result=args.result}
+   else
+    local saved=assert(internals[args.self]);assert(rawequal(saved.result,args.result))
+    saved.row.returned=true;saved.row.result_count_after=#args.result;internals[args.self]=nil
+   end
+   return
+  end
+  if f~=merge then return end
+  local caller=debug.getinfo(3,"fl");if caller.func~=builder or caller.currentline~=795 then return end
+  local parent=args_at(3);local frame=builders[parent.activeSkill];if not frame then return end
+  local args=args_at(2);local row=frame.row
+  assert(rawequal(args.env,frame.env)and rawequal(args.modList,frame.store)
+   and rawequal(args.skillEffect,frame.a.activeEffect)and rawequal(args.statSet,parent.activeStatSet))
+  assert(row.query_returned and rawequal(args.extraStats,frame.extra))
+  assert(equal(row.returned_stats,plain(args.extraStats)),"original list-to-consumer payload changed")
+  if event=="call"then
+   assert(not merges[frame.store]and not row.merge_called);merges[frame.store]=frame
+   row.merge_called=true;row.merge_caller_line=caller.currentline
+   row.exact_returned_payload=true;row.admitted_stats=plain(args.extraStats);row.admitted_count=#args.extraStats
+  else
+   assert(rawequal(merges[frame.store],frame));row.merge_returned=true;row.merge_return_line=info.currentline
+   row.payload_unchanged=true;merges[frame.store]=nil
+  end
+ end
+ jit.flush();assert(jit.status()==enabled);debug.sethook(hook,"cr")
+ return function()
+  assert(debug.gethook()==hook);debug.sethook()
+  assert(preserved()and jit.status()==enabled and next(builders)==nil and next(queries)==nil
+   and next(merges)==nil and next(internals)==nil,"incomplete compact original call")
+  local environments={};for i,env in ipairs(envObjects)do
+   environments[i]={index=i,mode=env.mode,final_main=rawequal(env,build.calcsTab.mainEnv),
+    final_calcs=rawequal(env,build.calcsTab.calcsEnv)}
+  end
+  local census={}
+  for _,mode in ipairs({"MAIN","CALCS"})do
+   local env=mode=="MAIN"and build.calcsTab.mainEnv or build.calcsTab.calcsEnv
+   assert(env and env.mode==mode);local groups={}
+   for _,group in ipairs(build.skillsTab.socketGroupList)do
+    for _,gem in ipairs(group.gemList)do
+     if gem.skillId=="SummonSandDjinnPlayer"or gem.skillId=="SummonWaterDjinnPlayer"then
+      local source=source_address({socketGroup=group,activeEffect={srcInstance=gem}})
+      local effects={};assert(gem.gemData and #gem.gemData.grantedEffectList==2)
+      for i,effect in ipairs(gem.gemData.grantedEffectList)do
+       local matched,callIndices={},{}
+       for ai,a in ipairs(env.player.activeSkillList)do
+        if rawequal(a.socketGroup,group)and rawequal(a.activeEffect.srcInstance,gem)
+         and rawequal(a.activeEffect.grantedEffect,effect)then
+         matched[#matched+1]={index=ai,disabled=scalar(a.skillFlags and a.skillFlags.disable)}
+         for _,index in ipairs(callsByEnv[env]and callsByEnv[env][a]or{})do callIndices[#callIndices+1]=index end
+        end
+       end
+       effects[#effects+1]={id=effect.id,index=i,global_field="enableGlobal"..i,global_value=scalar(gem["enableGlobal"..i]),
+        has_global_effect=scalar(rawget(effect,"hasGlobalEffect")),global_effect_lookup=global_lookup(effect),
+        hide_from_sidebar=scalar(rawget(effect,"hideFromSideBar")),
+        support=scalar(rawget(effect,"support")),catalogue_identity=rawequal(data.skills[effect.id],effect),
+        active_skill_present=#matched>0,active_skills=matched,builder_call_indices=callIndices,
+        consumer_observation=#callIndices>0 and"inspect_original_call_rows"or"not_called"}
+      end
+      groups[#groups+1]={source=source,effects=effects}
+     end
+    end
+   end
+   census[#census+1]={mode=mode,environment=assert(envIndices[env]),groups=groups}
+  end
+  api.last={mode="manual_djinn_global2_original_admission_v1",calls=rows,environments=environments,census=census,work=work,
+   original_functions_preserved=true,hook_removed=true,observer_requeried_list=false,
+   native_field_disposition=false,whole_supplier_domain_complete=false}
+ end
+end
 local api={}
 function api.install()
+ if extraConsumptionFocus then return focused_install(api)end
  assert(debug.gethook()==nil and calcs.mergeSkillInstanceMods==merge and calcs.buildActiveSkillModList==builder
   and calcs.buildModListForNode==nodeBuilder and calcs.buildModListForNodeList==nodeListBuilder
   and calcs.initEnv==initEnv and storeClass.ScaleAddMod==scaleAdd and dbClass.AddMod==addMod

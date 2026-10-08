@@ -17,6 +17,604 @@ const EFFECTS: [&str; 5] = [
     "CommandWaterDjinnBubblePlayer",
     "FireboltPlayer",
 ];
+const FOCUS_TEST: &str = "generated_extra_stat_consumption::manual_djinn_global_two_reaches_original_extra_stat_admission";
+const FOCUS_CHILD: &str = "POE_MANUAL_DJINN_ADMISSION_CHILD";
+const FOCUS_OUTPUT: &str = "POE_MANUAL_DJINN_ADMISSION_OUT";
+const DJINN: [&str; 2] = ["SummonSandDjinnPlayer", "SummonWaterDjinnPlayer"];
+
+#[test]
+#[ignore = "requires original pinned PoB; compact manual Djinn consumer accounting only"]
+fn manual_djinn_global_two_reaches_original_extra_stat_admission() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .canonicalize()
+        .unwrap();
+    let out = std::env::var_os(FOCUS_OUTPUT)
+        .map(PathBuf::from)
+        .unwrap_or_else(|| root.join("runs/owned-manual-djinn-admission-source-01"));
+    if let Some(mode) = std::env::var_os(FOCUS_CHILD) {
+        assert!(mode == "off" || mode == "on");
+        run_focused(&root, &out, mode == "on");
+        return;
+    }
+    assert!(
+        !out.exists(),
+        "fresh evidence directory required: {}",
+        out.display()
+    );
+    fs::create_dir_all(&out).unwrap();
+    for mode in ["off", "on"] {
+        let path = out.join(format!("source-jit-{mode}.log"));
+        let log = fs::File::create(&path).unwrap();
+        let mut child = Command::new(std::env::current_exe().unwrap())
+            .args(["--exact", FOCUS_TEST, "--ignored", "--nocapture"])
+            .env(FOCUS_CHILD, mode)
+            .env(FOCUS_OUTPUT, &out)
+            .current_dir(root.join("vendor/path-of-building-poe2/src"))
+            .stdout(Stdio::from(log.try_clone().unwrap()))
+            .stderr(Stdio::from(log))
+            .spawn()
+            .unwrap();
+        let started = Instant::now();
+        loop {
+            if let Some(status) = child.try_wait().unwrap() {
+                assert!(
+                    status.success(),
+                    "compact source child failed: {}\n{}",
+                    path.display(),
+                    tail(&path)
+                );
+                break;
+            }
+            if started.elapsed() > Duration::from_secs(600) {
+                child.kill().unwrap();
+                child.wait().unwrap();
+                panic!(
+                    "compact source child deadline: {}\n{}",
+                    path.display(),
+                    tail(&path)
+                );
+            }
+            std::thread::sleep(Duration::from_millis(100));
+        }
+    }
+    json_evidence::assert_files_equal(
+        &out.join("source-jit-off.json"),
+        &out.join("source-jit-on.json"),
+        "exact compact original admission evidence across JIT modes",
+    );
+}
+
+fn manual_change(xml: &str, skill: &str, field: &str, value: &str) -> String {
+    assert!(DJINN.contains(&skill));
+    assert!(matches!(field, "enableGlobal2" | "enabled"));
+    let doc = roxmltree::Document::parse(xml).unwrap();
+    let skills = doc
+        .descendants()
+        .find(|n| n.has_tag_name("Skills"))
+        .unwrap();
+    let set = selected_child(
+        skills,
+        "SkillSet",
+        skills.attribute("activeSkillSet").unwrap(),
+    );
+    let found: Vec<_> = set
+        .children()
+        .filter(|n| n.has_tag_name("Skill") && n.attribute("source").is_none())
+        .flat_map(|n| n.children())
+        .filter(|n| n.has_tag_name("Gem") && n.attribute("skillId") == Some(skill))
+        .collect();
+    assert_eq!(found.len(), 1, "exact selected manual occurrence");
+    assert_eq!(found[0].attribute(field), Some("true"));
+    change_attributes(xml, found[0], &[(field, Some(value))])
+}
+
+fn focused_inputs(xml: &str) -> Vec<(&'static str, String)> {
+    let sand = manual_change(xml, DJINN[0], "enableGlobal2", "false");
+    vec![
+        ("original-05", xml.to_owned()),
+        ("manual-sand-global2-false", sand.clone()),
+        (
+            "manual-water-global2-false",
+            manual_change(xml, DJINN[1], "enableGlobal2", "false"),
+        ),
+        (
+            "both-manual-global2-false",
+            manual_change(&sand, DJINN[1], "enableGlobal2", "false"),
+        ),
+        (
+            "manual-sand-disabled",
+            manual_change(xml, DJINN[0], "enabled", "false"),
+        ),
+        (
+            "manual-water-disabled",
+            manual_change(xml, DJINN[1], "enabled", "false"),
+        ),
+        ("repeat-original-05", xml.to_owned()),
+    ]
+}
+
+// Each runtime join is backed independently by the imported XML occurrence and
+// every saved attribute. The observer's runtime position is kept separately.
+fn focused_saved_sources(xml: &str) -> Vec<Json> {
+    let doc = roxmltree::Document::parse(xml).unwrap();
+    let imported = ImportedBuildInstance::from_decoded(
+        decode_build(xml.as_bytes()).unwrap(),
+        BuildLineage::from_bytes([109; 16]),
+        InstanceImportLimits::default(),
+    )
+    .unwrap();
+    let evidence =
+        SourceProjectEvidence::collect(&imported, SourceEvidenceLimits::default()).unwrap();
+    let skills = doc
+        .descendants()
+        .find(|n| n.has_tag_name("Skills"))
+        .unwrap();
+    let set = selected_child(
+        skills,
+        "SkillSet",
+        skills.attribute("activeSkillSet").unwrap(),
+    );
+    let mut result = Vec::new();
+    for (gi, group) in set
+        .children()
+        .filter(|n| n.has_tag_name("Skill"))
+        .enumerate()
+    {
+        for (position, gem) in group
+            .children()
+            .filter(|n| n.has_tag_name("Gem"))
+            .enumerate()
+        {
+            if !gem
+                .attribute("skillId")
+                .is_some_and(|id| DJINN.contains(&id))
+            {
+                continue;
+            }
+            let mut ordinals = Vec::new();
+            for node in [group, gem] {
+                let ordinal = doc
+                    .descendants()
+                    .filter(|n| n.is_element())
+                    .position(|n| n == node)
+                    .unwrap();
+                let source = &evidence.rows()[ordinal];
+                assert_eq!(source.occurrence().id().ordinal() as usize, ordinal);
+                assert_eq!(source.occurrence().name(), node.tag_name().name());
+                let attrs: BTreeMap<_, _> = source
+                    .attributes()
+                    .iter()
+                    .map(|a| (a.origin().name.clone(), a.decoded().unwrap().to_owned()))
+                    .collect();
+                assert_eq!(attrs, attributes(node));
+                ordinals.push(ordinal);
+            }
+            result.push(json!({"preset":set.attribute("id"),"saved_group":gi+1,"saved_position":position+1,
+                "group_ordinal":ordinals[0],"gem_ordinal":ordinals[1],
+                "group_range":[group.range().start,group.range().end],"gem_range":[gem.range().start,gem.range().end],
+                "group_attributes":attributes(group),"gem_attributes":attributes(gem),
+                "group_xml_sha256":digest(xml[group.range()].as_bytes()),
+                "gem_xml_sha256":digest(xml[gem.range()].as_bytes())}));
+        }
+    }
+    assert_eq!(
+        result.len(),
+        4,
+        "two manual and two exact tree-supplied saved instances"
+    );
+    result
+}
+
+fn run_focused(root: &Path, out: &Path, enabled: bool) {
+    let input = root.join("tests/fixtures/builds/breadth-20260908/build-05.xml");
+    let xml = fs::read_to_string(&input).unwrap();
+    let index: Json =
+        serde_json::from_slice(&fs::read(input.parent().unwrap().join("index.json")).unwrap())
+            .unwrap();
+    assert_eq!(digest(xml.as_bytes()), index["builds"][4]["xml_sha256"]);
+    let inputs = focused_inputs(&xml);
+    let mut cases = Vec::new();
+    for (name, changed) in &inputs {
+        eprintln!(
+            "Compact manual Djinn admission {name}, JIT {}",
+            if enabled { "on" } else { "off" }
+        );
+        let mut case = observe_mode(root, name, changed, enabled, true, true);
+        case["saved_sources"] = json!(focused_saved_sources(changed));
+        if *name != "repeat-original-05" {
+            let uninstrumented = observe_mode(root, name, changed, enabled, false, true);
+            case["uninstrumented_states"] = uninstrumented["states"].clone();
+        }
+        cases.push(case);
+    }
+    let files = [
+        "src/Modules/CalcActiveSkill.lua",
+        "src/Modules/CalcSetup.lua",
+        "src/Modules/CalcPerform.lua",
+        "src/Modules/CalcTools.lua",
+        "src/Classes/ModStore.lua",
+        "src/Classes/ModList.lua",
+        "src/Classes/ModDB.lua",
+        "src/Classes/SkillsTab.lua",
+        "src/Modules/Data.lua",
+        "src/Data/Gems.lua",
+        "src/Data/Skills/other.lua",
+        "src/Data/SkillStatMap.lua",
+        "src/Modules/ModTools.lua",
+        "src/HeadlessWrapper.lua",
+        "src/Modules/Main.lua",
+    ];
+    let report = json!({"schema_version":1,"evidence_view":"manual_djinn_global2_original_admission_v1",
+        "source_revision":pinned::UPSTREAM_REVISION,"manifest_sha256":pinned::manifest_sha256(),
+        "observer_sha256":digest(OBSERVER.as_bytes()),
+        "test_sha256":digest(include_str!("generated_extra_stat_consumption.rs").as_bytes()),
+        "original_path":"tests/fixtures/builds/breadth-20260908/build-05.xml","original_sha256":digest(xml.as_bytes()),
+        "source_frame":source_frame(&xml),"lifecycle":STAGES,
+        "execution_counts_per_jit":{"fresh_vm_loads":13,"normal_rebuilds":26,"lifecycle_state_captures":39},
+        "selection_scope":"exact selected manual Sand/Water and separate Tree:13289/32705 copies",
+        "admission_scope":"original List at CalcActiveSkill:795, original per-ancestor filtering, identical returned table at original merge call and return",
+        "environment_scope":"every original call retained in call order, including ancillary MAIN/CALCULATOR environments; absence census covers only identity-checked final MAIN/CALCS environments",
+        "not_called_scope":"explicit selected-source/effect census; absence is not a queried empty result",
+        "native_inventory_authority":false,"native_build_parity":false,"field_non_applicability_certificate":false,
+        "all_suppliers_or_transforms_proved":false,"dormant_presets_covered":false,"business_wrappers":false,
+        "observer_requeries_extra_stats":false,"numeric_tolerance":0,"projection_or_deduplication":false,
+        "files":files.map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})),"cases":cases});
+    let bytes = serde_json::to_vec(&report).unwrap();
+    let mode = if enabled { "on" } else { "off" };
+    fs::write(out.join(format!("source-jit-{mode}.raw.json")), &bytes).unwrap();
+    assert!(
+        // First complete capture was 9,327,788 bytes: 168 original calls per
+        // enabled state, including ancillary calculator environments. Retain
+        // every call rather than deduplicate it against the final view census.
+        bytes.len() <= 16 * 1024 * 1024,
+        "compact source evidence bound (16 MiB, all original calls retained)"
+    );
+    validate_focused(&report);
+    assert_json_equal(
+        &report["cases"][0]["states"],
+        &report["cases"][6]["states"],
+        "independent compact fresh replay",
+    );
+    assert_eq!(fs::read_to_string(input).unwrap(), xml);
+    fs::write(out.join(format!("source-jit-{mode}.json")), bytes).unwrap();
+}
+
+fn validate_focused(report: &Json) {
+    let cases = report["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 7);
+    for (ci, case) in cases.iter().enumerate() {
+        assert_eq!(
+            case["selected"],
+            json!({"skills":4,"items":2,"passives":3,"config":1})
+        );
+        for stage in STAGES {
+            if ci != 6 {
+                assert_json_equal(
+                    &case["states"][stage]["outputs"],
+                    &case["uninstrumented_states"][stage]["outputs"],
+                    &format!("compact hook noninterference {} {stage}", case["name"]),
+                );
+                assert!(
+                    case["uninstrumented_states"][stage]
+                        .get("consumer")
+                        .is_none()
+                );
+            }
+            let state = &case["states"][stage]["consumer"];
+            for flag in ["original_functions_preserved", "hook_removed"] {
+                assert_eq!(state[flag], true);
+            }
+            for flag in [
+                "observer_requeried_list",
+                "native_field_disposition",
+                "whole_supplier_domain_complete",
+            ] {
+                assert_eq!(state[flag], false);
+            }
+            let calls = rows(&state["calls"]);
+            let environments = rows(&state["environments"]);
+            let final_environments = focused_final_environments(environments);
+            let mut final_call_indices = BTreeSet::new();
+            for (i, call) in calls.iter().enumerate() {
+                let environment = call["environment"].as_u64().unwrap() as usize;
+                assert!((1..=environments.len()).contains(&environment));
+                assert_eq!(call["mode"], environments[environment - 1]["mode"]);
+                focused_saved_source(case, &call["source"]);
+                assert!(
+                    djinn_effects(call["source"]["instance"]["skillId"].as_str().unwrap())
+                        .contains(&call["effect"].as_str().unwrap())
+                );
+                validate_focused_call(call);
+                if final_environments.contains(&environment) {
+                    final_call_indices.insert(i + 1);
+                }
+            }
+            let census = rows(&state["census"]);
+            assert_eq!(census.len(), 2);
+            let mut used = BTreeSet::new();
+            let mut census_environments = BTreeSet::new();
+            for mode in census {
+                assert!(matches!(mode["mode"].as_str(), Some("MAIN" | "CALCS")));
+                let environment = mode["environment"].as_u64().unwrap() as usize;
+                assert!(final_environments.contains(&environment));
+                assert!(census_environments.insert(environment));
+                assert_eq!(mode["mode"], environments[environment - 1]["mode"]);
+                let groups = rows(&mode["groups"]);
+                assert_eq!(groups.len(), 4);
+                let mut identities = BTreeSet::new();
+                for group in groups {
+                    let src = &group["source"];
+                    let saved = focused_saved_source(case, src);
+                    assert!(identities.insert(saved["gem_ordinal"].as_u64().unwrap()));
+                    assert_eq!(
+                        src["source_present"],
+                        saved["group_attributes"].get("source").is_some()
+                    );
+                    let enabled = saved["gem_attributes"]["enabled"] == "true";
+                    assert_eq!(src["instance"]["enabled"], enabled);
+                    assert_eq!(rows(&group["effects"]).len(), 2);
+                    for (ei, effect) in rows(&group["effects"]).iter().enumerate() {
+                        assert_eq!(effect["catalogue_identity"], true);
+                        assert_eq!(effect["index"], ei + 1);
+                        let field = format!("enableGlobal{}", ei + 1);
+                        assert_eq!(effect["global_field"], field);
+                        assert_eq!(
+                            effect["global_value"],
+                            saved["gem_attributes"][&field] == "true"
+                        );
+                        assert_eq!(
+                            effect["has_global_effect"],
+                            json!({"kind":"absent"}),
+                            "bounded pinned catalogue fact only"
+                        );
+                        validate_global_lookup(&effect["global_effect_lookup"]);
+                        let expected_effect =
+                            djinn_effects(src["instance"]["skillId"].as_str().unwrap())[ei];
+                        assert_eq!(effect["id"], expected_effect);
+                        assert_eq!(effect["active_skill_present"], enabled);
+                        assert_eq!(rows(&effect["active_skills"]).len(), usize::from(enabled));
+                        let indices = rows(&effect["builder_call_indices"]);
+                        if !enabled {
+                            assert!(indices.is_empty());
+                            assert_eq!(effect["consumer_observation"], "not_called");
+                            continue;
+                        }
+                        assert_eq!(effect["consumer_observation"], "inspect_original_call_rows");
+                        assert!(!indices.is_empty(), "active original consumer was observed");
+                        for index in indices {
+                            let index = index.as_u64().unwrap() as usize;
+                            assert!((1..=calls.len()).contains(&index));
+                            assert!(used.insert(index));
+                            let call = &calls[index - 1];
+                            assert_eq!(call["source"]["runtime"], src["runtime"]);
+                            assert_eq!(call["effect"], effect["id"]);
+                            assert_eq!(call["mode"], mode["mode"]);
+                            assert_eq!(call["environment"], mode["environment"]);
+                        }
+                    }
+                }
+            }
+            assert_eq!(census_environments, final_environments);
+            assert_eq!(
+                used, final_call_indices,
+                "every final-view call has one exact census join; ancillary calls remain independently validated"
+            );
+        }
+    }
+}
+
+fn djinn_effects(skill: &str) -> [&'static str; 2] {
+    match skill {
+        "SummonSandDjinnPlayer" => [DJINN[0], "CommandSandDjinnKnifeThrowPlayer"],
+        "SummonWaterDjinnPlayer" => [DJINN[1], "CommandWaterDjinnBubblePlayer"],
+        _ => panic!("unexpected selected source {skill}"),
+    }
+}
+
+fn focused_saved_source<'a>(case: &'a Json, src: &Json) -> &'a Json {
+    assert_eq!(src["runtime"]["preset"], 4);
+    assert_eq!(rows(&src["runtime"]["positions"]).len(), 1);
+    let saved: Vec<_> = rows(&case["saved_sources"])
+        .iter()
+        .filter(|s| {
+            s["gem_attributes"]["skillId"] == src["instance"]["skillId"]
+                && s["group_attributes"]["source"].as_str() == src["source"].as_str()
+        })
+        .collect();
+    assert_eq!(saved.len(), 1, "exact saved supplier join");
+    assert_eq!(
+        src["source_present"],
+        saved[0]["group_attributes"].get("source").is_some()
+    );
+    assert_eq!(
+        src["instance"]["enabled"],
+        saved[0]["gem_attributes"]["enabled"] == "true"
+    );
+    saved[0]
+}
+
+fn focused_final_environments(environments: &[Json]) -> BTreeSet<usize> {
+    let mut found = BTreeMap::new();
+    for (i, env) in environments.iter().enumerate() {
+        assert_eq!(env["index"], i + 1);
+        assert!(matches!(
+            env["mode"].as_str(),
+            Some("MAIN" | "CALCS" | "CALCULATOR")
+        ));
+        for (flag, mode) in [("final_main", "MAIN"), ("final_calcs", "CALCS")] {
+            if env[flag].as_bool().unwrap() {
+                assert_eq!(env["mode"], mode);
+                assert!(
+                    found.insert(mode, i + 1).is_none(),
+                    "one exact final environment per view"
+                );
+            }
+        }
+    }
+    assert_eq!(found.len(), 2);
+    found.into_values().collect()
+}
+
+fn validate_global_lookup(lookup: &Json) {
+    assert_eq!(lookup["has_metatable"], false);
+    assert_eq!(lookup["lookup_exact"], true);
+    assert_eq!(lookup["raw"], json!({"kind":"absent"}));
+    assert_eq!(
+        lookup["effective"], lookup["raw"],
+        "raw absence is not effective absence without this proof"
+    );
+}
+
+fn validate_focused_call(call: &Json) {
+    validate_global_lookup(&call["global_effect_lookup"]);
+    for flag in [
+        "builder_called",
+        "builder_returned",
+        "query_called",
+        "query_returned",
+        "merge_called",
+        "merge_returned",
+        "exact_filter_identity",
+        "exact_returned_payload",
+        "payload_unchanged",
+    ] {
+        assert_eq!(call[flag], true, "missing {flag}");
+    }
+    assert_eq!(call["observer_requeried_list"], false);
+    assert_eq!(call["query_caller_line"], 795);
+    assert_eq!(call["merge_caller_line"], 795);
+    assert_eq!(call["cfg_effect_id"], call["effect"]);
+    assert_eq!(call["returned_count"], 0);
+    assert_eq!(call["admitted_count"], 0);
+    assert_json_equal(
+        &call["returned_stats"],
+        &call["admitted_stats"],
+        "original result table handed to consumer",
+    );
+    assert_eq!(call["returned_stats"]["kind"], "raw_table");
+    assert_eq!(call["returned_stats"]["has_metatable"], false);
+    assert!(rows(&call["returned_stats"]["fields"]).is_empty());
+    let chain = rows(&call["candidates"]);
+    assert!(!chain.is_empty());
+    let internal = rows(&call["internal_calls"]);
+    assert_eq!(chain.len(), internal.len());
+    for (depth, (raw, actual)) in chain.iter().zip(internal).enumerate() {
+        assert_eq!(raw["depth"], depth);
+        assert!(
+            rows(&raw["records"]).is_empty(),
+            "bounded empty ExtraSkillStat bucket; no general filter law"
+        );
+        assert_eq!(actual["depth"], depth);
+        assert_eq!(actual["name"], "ExtraSkillStat");
+        for flag in ["exact_context", "exact_filter", "returned"] {
+            assert_eq!(actual[flag], true);
+        }
+        assert_eq!(actual["result_count_before"], 0);
+        assert_eq!(actual["result_count_after"], 0);
+    }
+}
+
+#[test]
+fn manual_djinn_controls_change_only_the_exact_saved_manual_fields() {
+    let xml = include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-05.xml");
+    let before = focused_saved_sources(xml);
+    for (name, changed) in focused_inputs(xml) {
+        let sources = focused_saved_sources(&changed);
+        for (old, new) in before.iter().zip(&sources) {
+            assert_eq!(old["gem_ordinal"], new["gem_ordinal"]);
+            assert_eq!(old["group_ordinal"], new["group_ordinal"]);
+            let mut old_attrs = old["gem_attributes"].clone();
+            let mut new_attrs = new["gem_attributes"].clone();
+            if old["group_attributes"].get("source").is_none() {
+                old_attrs.as_object_mut().unwrap().remove("enableGlobal2");
+                new_attrs.as_object_mut().unwrap().remove("enableGlobal2");
+                old_attrs.as_object_mut().unwrap().remove("enabled");
+                new_attrs.as_object_mut().unwrap().remove("enabled");
+            }
+            assert_eq!(
+                old_attrs, new_attrs,
+                "{name}: no unrelated gem field mutation"
+            );
+        }
+        let old_frame = source_frame(xml);
+        let new_frame = source_frame(&changed);
+        for field in [
+            "axes",
+            "equipment_uses",
+            "spec_xml",
+            "config_xml",
+            "item_set_xml",
+            "party_xml",
+        ] {
+            assert_eq!(
+                old_frame[field], new_frame[field],
+                "{name}: unchanged {field}"
+            );
+        }
+    }
+}
+
+#[test]
+fn compact_admission_rejects_unqueried_or_missing_transport_as_empty() {
+    let empty = json!({"kind":"raw_table","has_metatable":false,"fields":[]});
+    let valid = json!({"builder_called":true,"builder_returned":true,"query_called":true,"query_returned":true,
+        "global_effect_lookup":{"raw":{"kind":"absent"},"effective":{"kind":"absent"},"has_metatable":false,"lookup_exact":true},
+        "merge_called":true,"merge_returned":true,"exact_filter_identity":true,"exact_returned_payload":true,
+        "payload_unchanged":true,"observer_requeried_list":false,"query_caller_line":795,"merge_caller_line":795,
+        "effect":"bounded-test-effect","cfg_effect_id":"bounded-test-effect","returned_count":0,"admitted_count":0,
+        "returned_stats":empty,"admitted_stats":empty,"candidates":[{"depth":0,"records":[]}],
+        "internal_calls":[{"depth":0,"name":"ExtraSkillStat","exact_context":true,"exact_filter":true,
+            "returned":true,"result_count_before":0,"result_count_after":0}]});
+    validate_focused_call(&valid);
+    let mut unqueried = valid.clone();
+    unqueried["query_called"] = json!(false);
+    let mut missing = valid.clone();
+    missing
+        .as_object_mut()
+        .unwrap()
+        .remove("exact_returned_payload");
+    let mut no_consumer = valid.clone();
+    no_consumer["merge_called"] = json!(false);
+    let mut candidate = valid.clone();
+    candidate["candidates"][0]["records"] = json!([{"unreviewed":true}]);
+    let mut changed = valid;
+    changed["admitted_stats"]["fields"] = json!([{"key":"unreviewed"}]);
+    for invalid in [unqueried, missing, no_consumer, candidate, changed] {
+        assert!(std::panic::catch_unwind(|| validate_focused_call(&invalid)).is_err());
+    }
+}
+
+#[test]
+fn compact_admission_keeps_ancillary_environments_and_rejects_raw_only_metadata() {
+    let environments = json!([
+        {"index":1,"mode":"MAIN","final_main":true,"final_calcs":false},
+        {"index":2,"mode":"MAIN","final_main":false,"final_calcs":false},
+        {"index":3,"mode":"CALCULATOR","final_main":false,"final_calcs":false},
+        {"index":4,"mode":"CALCS","final_main":false,"final_calcs":true}
+    ]);
+    assert_eq!(
+        focused_final_environments(rows(&environments)),
+        BTreeSet::from([1, 4])
+    );
+    let mut duplicate = environments.clone();
+    duplicate[1]["final_main"] = json!(true);
+    let mut wrong = environments;
+    wrong[2]["final_main"] = json!(true);
+    for invalid in [duplicate, wrong] {
+        assert!(std::panic::catch_unwind(|| focused_final_environments(rows(&invalid))).is_err());
+    }
+    let valid = json!({"raw":{"kind":"absent"},"effective":{"kind":"absent"},"has_metatable":false,"lookup_exact":true});
+    validate_global_lookup(&valid);
+    let mut inherited = valid.clone();
+    inherited["has_metatable"] = json!(true);
+    inherited["effective"] = json!(true);
+    let mut missing = valid;
+    missing.as_object_mut().unwrap().remove("effective");
+    for invalid in [inherited, missing] {
+        assert!(std::panic::catch_unwind(|| validate_global_lookup(&invalid)).is_err());
+    }
+}
 
 #[test]
 #[ignore = "requires original pinned PoB; finite unchanged-source evidence only"]
@@ -321,8 +919,20 @@ fn semantic_report(mut report: Json) -> Json {
 }
 
 fn observe(root: &Path, name: &str, xml: &str, enabled: bool, instrumented: bool) -> Json {
+    observe_mode(root, name, xml, enabled, instrumented, false)
+}
+
+fn observe_mode(
+    root: &Path,
+    name: &str,
+    xml: &str,
+    enabled: bool,
+    instrumented: bool,
+    focused: bool,
+) -> Json {
     let before = |lua: &Lua| -> Result<(), RuntimeError> {
         lua.globals().set("consumerJit", enabled)?;
+        lua.globals().set("extraConsumptionFocus", focused)?;
         lua.globals()
             .set("extraConsumptionEffects", lua.to_value(&EFFECTS)?)?;
         lua.load("if consumerJit then jit.on() else jit.off();jit.flush() end")

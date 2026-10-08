@@ -88,6 +88,17 @@ local function recipientOccurrence(env,actor)
  end
  return {matches=matches}
 end
+local function offeringSupports(active)
+ local out={}
+ for _,support in ipairs(active.supportList or {}) do
+  local admitted=false;for _,effect in ipairs(active.effectList or {}) do if effect==support then admitted=true end end
+  out[#out+1]={effect_id=support.grantedEffect.id,level=support.level,quality=support.quality,
+   modifier_source=support.grantedEffect.modSource,admitted_by_original_effect_list=admitted,
+   supports_exact_source=not not (support.isSupporting and support.isSupporting[active.activeEffect.srcInstance]),
+   source_occurrence=sourceOccurrence({activeEffect=support,socketGroup=active.socketGroup})}
+ end
+ return out
+end
 local function sourceConfig(active,cfg)
  if not cfg then return {present=false} end
  -- Config contains definition graph references and sparse numeric skill-type
@@ -258,6 +269,34 @@ local function benefitSnapshot()
  return {main=frame(build.calcsTab.mainEnv),calcs=frame(build.calcsTab.calcsEnv)}
 end
 if physicalDamageBenefitEvidence and physicalDamagePhase=="benefit_snapshot" then return benefitSnapshot() end
+local function offeringOutputSnapshot()
+ -- This projection only reads identities and already-calculated scalar outputs.
+ -- It is shared by instrumented and entirely uninstrumented fresh VMs; it does
+ -- not query modifier stores, rerun a calculation or mirror any formula.
+ assert(debug.gethook()==nil)
+ local function output(value) return {available=value~=nil,scalars=scalars(value)} end
+ local function frame(env,cached)
+  local actors={}
+  for ordinal,summoner in ipairs(env.player.activeSkillList) do
+   local actor=summoner.minion
+   if actor then
+    local children={}
+    for index,active in ipairs(actor.activeSkillList or {}) do
+     children[#children+1]={index=index,effect_id=active.activeEffect.grantedEffect.id,
+      selected=actor.mainSkill==active,output=output(active.output)}
+    end
+    actors[#actors+1]={ordinal=ordinal,source_occurrence=sourceOccurrence(summoner),
+     actor_profile=actor.type,selected=actor==env.minion,output=output(actor.output),children=children}
+   end
+  end
+  return {mode=env.mode,main_group=env.mainSocketGroup,selected_minion=env.minion and recipientOccurrence(env,env.minion),
+   player_output=output(env.player.output),cached_output=output(cached),
+   player_selected={effect_id=env.player.mainSkill.activeEffect.grantedEffect.id,source_occurrence=sourceOccurrence(env.player.mainSkill),output=output(env.player.mainSkill.output)},
+   actors=actors}
+ end
+ return {main=frame(build.calcsTab.mainEnv,build.calcsTab.mainOutput),calcs=frame(build.calcsTab.calcsEnv,build.calcsTab.calcsOutput)}
+end
+if physicalDamageOfferingEvidence and physicalDamagePhase=="offering_snapshot" then return offeringOutputSnapshot() end
 local methods={
  {common.classes.SkillsTab,"LoadSkill","Classes/SkillsTab.lua",303},
  {common.classes.CalcsTab,"BuildOutput","Classes/CalcsTab.lua",486},
@@ -302,9 +341,12 @@ if physicalDamagePhase=="before" then
   cooldown=cooldown,cooldown_calls={},command_recipients={},life_calls={},
   init_minion=initMinion,life_selections={},life_initializers={},life_base_objects={},
   transfer_minion=transferMinion,life_transfers={},life_delivered_objects={},
-  intrinsic_definitions=physicalDamageIntrinsicLifeEvidence and intrinsicLifeDefinitions({data=data}) or nil}
+  intrinsic_definitions=physicalDamageIntrinsicLifeEvidence and intrinsicLifeDefinitions({data=data}) or nil,
+  offering_more_calls={}}
  local pending,lifePending,selectionPending,initPending,deliveryPending
- local baseHookMask=physicalDamageBenefitEvidence and "cr" or "r"
+ local moreStack={}
+ local baseHookMask=(physicalDamageBenefitEvidence or physicalDamageOfferingEvidence) and "cr" or "r"
+ local function lineMask() return baseHookMask.."l" end
  local function relevant(active)
   return not physicalDamageCommandEvidence and active and active.actor and active.actor.minionData and active.activeEffect.grantedEffect.id=="MinionMeleeBow"
  end
@@ -314,6 +356,68 @@ if physicalDamagePhase=="before" then
  end
  local function hook(event,line)
   local f=debug.getinfo(2,"f").func
+  if physicalDamageOfferingEvidence and (f==common.classes.ModDB.MoreInternal or f==common.classes.ModList.MoreInternal) then
+   local vars={};for i=1,160 do local name,value=debug.getlocal(2,i);if not name then break end;vars[name]=value end
+   if event=="call" and (vars.modName=="BuffEffect" or vars.modName=="BuffEffectOnSelf" or vars.modName=="Magnitude") then
+    local caller,callerLine
+    for depth=3,24 do
+     local info=debug.getinfo(depth,"fl");if not info then break end
+     if info.func==calcs.perform then
+      caller={};callerLine=info.currentline
+      for i=1,160 do local name,value=debug.getlocal(depth,i);if not name then break end;caller[name]=value end
+      break
+     end
+    end
+    -- This is the original Offering -> minion scaling expression, not queries
+    -- made by this observer or a different buff/display consumer.
+    if caller and callerLine==2147 and caller.activeSkill and caller.activeSkill.activeEffect.grantedEffect.id=="PainOfferingPlayer" then
+     local env,active=assert(caller.env),caller.activeSkill
+     local domain
+     if vars.context==caller.modStore then domain=caller.buff.activeSkillBuff and "source_skill" or "source_actor"
+     elseif vars.context==env.minion.modDB then domain="recipient_actor" else error("unknown Offering MORE context") end
+     local depth,store=0,vars.context
+     while store~=vars.self do store=assert(store.parent);depth=depth+1;assert(depth<16) end
+     local own={};for i,mod in ipairs(vars.self.mods and (vars.self.mods[vars.modName] or {}) or vars.self) do
+      if mod.name==vars.modName then own[#own+1]={position=i,mod=modRecord(mod)} end
+     end
+     local row={name=vars.modName,domain=domain,source_occurrence=sourceOccurrence(active),recipient_occurrence=recipientOccurrence(env,env.minion),
+      caller_line=callerLine,store_kind=f==common.classes.ModDB.MoreInternal and "ModDB" or "ModList",
+      original_function_line=f==common.classes.ModDB.MoreInternal and 214 or 164,
+      context_is_source_skill=vars.context==active.skillModList,context_is_recipient_actor=vars.context==env.minion.modDB,
+      local_store_is_source_skill=vars.self==active.skillModList,local_store_is_player_actor=vars.self==env.player.modDB,
+      local_store_is_recipient_actor=vars.self==env.minion.modDB,source_store_depth=depth,
+      flags=vars.flags,keyword_flags=vars.keywordFlags,source_filter=vars.source,cfg=scalars(vars.cfg),
+      local_candidates=own,original_steps={}}
+     local calls=auth.offering_more_calls[env] or {};auth.offering_more_calls[env]=calls
+     calls[#calls+1]=row;assert(#calls<=512)
+     moreStack[#moreStack+1]={f=f,store=vars.self,row=row};assert(#moreStack<=16)
+     debug.sethook(hook,lineMask())
+    end
+   else
+    local top=moreStack[#moreStack]
+    if top and top.f==f and top.store==vars.self then
+     local db=f==common.classes.ModDB.MoreInternal
+     if event=="line" then
+      if (db and line==233) or (not db and (line==172 or line==174)) then
+       top.step={mod=modRecord(assert(vars.mod)),product_before=assert(vars.modResult),line=line,evaluated_value=db and vars.value or nil}
+      elseif (db and line==234) or (not db and line==176) then
+       assert(top.step);top.step.product_after=assert(vars.modResult)
+       top.row.original_steps[#top.row.original_steps+1]=top.step;top.step=nil
+      elseif (db and line==242) or (not db and line==183) then
+       top.row.local_product_before_rounding=assert(vars.modResult);top.row.precision_present=vars.modPrecision~=nil;top.row.precision=vars.modPrecision
+      elseif (db and line==248) or (not db and line==189) then
+       top.row.local_result_before_parent=assert(vars.result)
+      end
+     elseif event=="return" then
+      assert(not top.step and top.row.local_product_before_rounding and top.row.local_result_before_parent)
+      top.row.original_return_result=assert(vars.result);top.row.return_observed=true
+      table.remove(moreStack)
+      if #moreStack==0 and not pending then debug.sethook(hook,baseHookMask) end
+     end
+    end
+   end
+   return
+  end
   if physicalDamageLifeDeliveryEvidence then
    if f==transferMinion then
     local vars={};for i=1,160 do local name,value=debug.getlocal(2,i);if not name then break end;vars[name]=value end
@@ -502,7 +606,7 @@ if physicalDamagePhase=="before" then
    if callerInfo and callerInfo.func==calcs.offence and callerInfo.currentline==4134 then
     local caller={};for i=1,160 do local name,value=debug.getlocal(3,i);if not name then break end;caller[name]=value end
     if relevant(caller.activeSkill) then
-     assert(not pending);pending={kind="base",active=caller.activeSkill,cfg=caller.cfg};debug.sethook(hook,physicalDamageBenefitEvidence and "crl" or "rl")
+     assert(not pending);pending={kind="base",active=caller.activeSkill,cfg=caller.cfg};debug.sethook(hook,lineMask())
     end
    end
    return
@@ -536,7 +640,7 @@ if physicalDamagePhase=="before" then
     minimum_more_records=records(store,"MORE",cfg,"Min"..vars.damageType.."Damage"),maximum_more_records=records(store,"MORE",cfg,"Max"..vars.damageType.."Damage"),
     cfg=scalars(cfg),skill_conditions=scalars(cfg.skillCond),query_state_preserved=true}
    checked();assert(equal(cfg,oldCfg))
-   pending={kind="damage",active=active,cfg=cfg,row=row};debug.sethook(hook,physicalDamageBenefitEvidence and "crl" or "rl")
+   pending={kind="damage",active=active,cfg=cfg,row=row};debug.sethook(hook,lineMask())
   elseif event=="line" then
    auth.line_events=auth.line_events+1;assert(pending.active==active and pending.cfg==vars.cfg)
    if pending.kind=="base" then
@@ -578,7 +682,7 @@ if physicalDamagePhase=="before" then
  local enabled=jit.status();jit.flush();assert(jit.status()==enabled);debug.sethook(hook,baseHookMask)
  physicalDamageAuth=auth
  return function()
-  assert(debug.gethook()==hook and not pending and not lifePending and not selectionPending and not initPending and not deliveryPending);debug.sethook(oldHook,oldMask,oldCount);assert(jit.status()==enabled)
+  assert(debug.gethook()==hook and not pending and not lifePending and not selectionPending and not initPending and not deliveryPending and #moreStack==0);debug.sethook(oldHook,oldMask,oldCount);assert(jit.status()==enabled)
   for i,row in ipairs(methods) do assert(row[1][row[2]]==refs[i]) end
   assert(upvalue(calcs.offence,"calcDamage")==calcDamage and upvalue(calcs.perform,"mergeBuff")==mergeBuff);auth.finished=true
   if physicalDamageCommandEvidence then assert(calcSkillCooldown==cooldown) end
@@ -632,7 +736,8 @@ local function environment(env)
   skills[#skills+1]={ordinal=ordinal,effect_id=summoner.activeEffect.grantedEffect.id,effective_level=summoner.activeEffect.level,
    source_occurrence=sourceOccurrence(summoner),
    physical_level=summoner.activeEffect.srcInstance and summoner.activeEffect.srcInstance.level,
-   skill_data=scalars(summoner.skillData),flags=scalars(summoner.skillFlags),buffs=buffs}
+   skill_data=scalars(summoner.skillData),flags=scalars(summoner.skillFlags),buffs=buffs,
+   offering_supports=physicalDamageOfferingEvidence and summoner.activeEffect.grantedEffect.id=="PainOfferingPlayer" and offeringSupports(summoner) or nil}
   local actor=summoner.minion
   if actor then
    assert(not auth.previous_actors[actor] and not identities[actor]);identities[actor]=true
@@ -655,6 +760,7 @@ local function environment(env)
  end
  return {mode=env.mode,main_group=env.mainSocketGroup,selected_minion=env.minion and recipientOccurrence(env,env.minion),effective=not not env.mode_effective,combat=not not env.mode_combat,buffs_enabled=not not env.mode_buffs,actors=actors,skills=skills,
   offering_merge_events=auth.buff_events[env] or {},
+  offering_more_calls=physicalDamageOfferingEvidence and (auth.offering_more_calls[env] or {}) or nil,
   player=consumer(env,env.player,env.player.mainSkill),output=scalars(env.player.output)}
 end
 local config=build.configTab.configSets[build.configTab.activeConfigSetId]
@@ -707,6 +813,24 @@ local result={selected=selection,main=environment(mainEnv),calcs=environment(cal
  offering_definition=offeringDefinition(),
  config={custom_blocks=clone(config.customModsList)},modifier_precision={default=data.defaultHighPrecision,overrides=precision},
  plain_minion_damage_family=family,observed_offence_count=auth.count,bounded_caller_line_events=auth.line_events}
+if physicalDamageOfferingEvidence then
+ result.offering_output_snapshot=offeringOutputSnapshot()
+ local support=assert(data.skills.SupportDanseMacabrePlayer)
+ local set=assert(support.statSets[1]);local maps={}
+ for _,name in ipairs({"offering_spells_effect_+%_if_consumed_additional_skeleton","support_danse_macabre_offering_skill_damage_+%_final_if_consumed_additional_skeleton"}) do
+  local mods={};for _,mod in ipairs(assert(rawget(set.statMap,name))) do mods[#mods+1]=modRecord(mod) end
+  maps[#maps+1]={stat=name,modifiers=mods}
+ end
+ result.offering_support_definition={effect_id=support.id,name=support.name,description=support.description,
+  constant_stats=clone(set.constantStats),stat_map=maps}
+ local inventory={}
+ for _,group in ipairs(build.skillsTab.socketGroupList) do for _,gem in ipairs(group.gemList) do
+  if gem.grantedEffect and gem.grantedEffect.id=="SupportDanseMacabrePlayer" then
+   inventory[#inventory+1]=sourceOccurrence({activeEffect={srcInstance=gem},socketGroup=group})
+  end
+ end end
+ result.offering_support_inventory=inventory
+end
 if physicalDamageBenefitEvidence then result.benefit_snapshot=benefitSnapshot() end
 if physicalDamageIntrinsicLifeEvidence then
  result.intrinsic_life_definitions=intrinsicLifeDefinitions(mainEnv)

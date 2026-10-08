@@ -25,6 +25,8 @@ const TEST: &str = "fresh_minion_physical_damage_observes_original_calls";
 const CHILD: &str = "POE_MINION_PHYSICAL_DAMAGE_SOURCE_CHILD";
 const COMMAND_TEST: &str = "command_cooldown_receiving_observes_original_contexts";
 const COMMAND_CHILD: &str = "POE_MINION_COMMAND_RECEIVING_SOURCE_CHILD";
+const OFFERING_TEST: &str = "offering_source_scopes_and_original_more_rounding";
+const OFFERING_CHILD: &str = "POE_OFFERING_SCALING_SOURCE_CHILD";
 const OBSERVE: &str = include_str!("support/owned_minion_physical_damage_source.lua");
 const SNIPER: &str = "SummonSkeletalSnipersPlayer";
 const FILES: &[&str] = &[
@@ -2104,6 +2106,893 @@ fn gigantic_benefits_observe_original_life_and_damage_consumers() {
         "runs/owned-gigantic-benefits-source-01",
         run_benefit_child,
     );
+}
+
+#[test]
+#[ignore = "requires pinned PoB runtime; focused Offering arithmetic and support-origin evidence"]
+fn offering_source_scopes_and_original_more_rounding() {
+    run_life_source_modes(
+        OFFERING_TEST,
+        OFFERING_CHILD,
+        "POE_OFFERING_SCALING_SOURCE_OUT",
+        "runs/owned-offering-scaling-source-01",
+        run_offering_child,
+    );
+}
+
+fn offering_custom_pair(xml: &str, values: [i32; 2], reverse: bool) -> String {
+    let mut out = xml.to_owned();
+    for index in if reverse { [1, 0] } else { [0, 1] } {
+        out = custom(
+            &out,
+            &format!(
+                "{}% {} Buff Effect",
+                values[index].unsigned_abs(),
+                if values[index] < 0 { "less" } else { "more" }
+            ),
+        );
+        let title = "Physical damage source control";
+        assert_eq!(out.matches(title).count(), 1);
+        out = out.replacen(title, &format!("Offering grouping {}", index + 1), 1);
+    }
+    out
+}
+
+fn offering_support_pair(
+    xml: &str,
+    supported: Option<usize>,
+    enabled: bool,
+    reverse: bool,
+) -> String {
+    let recipients = offering_selected_recipient_groups(xml);
+    let doc = roxmltree::Document::parse(xml).unwrap();
+    let group = selected_gem(&doc, "PainOfferingPlayer").parent().unwrap();
+    assert_eq!(group.attribute("label"), Some(""));
+    let groups: Vec<_> = (0..2)
+        .map(|index| {
+            let mut copy = xml[group.range()].replacen(
+                "label=\"\"",
+                &format!("label=\"Offering {}\"", index + 1),
+                1,
+            );
+            if supported == Some(index) {
+                let gem = format!(
+                    "<Gem corruptLevel=\"0\" corrupted=\"false\" level=\"1\" count=\"1\" gemId=\"Metadata/Items/Gem/SupportGemDanseMacabre\" enabled=\"{enabled}\" variantId=\"DanseMacabreSupport\" quality=\"0\" enableGlobal2=\"true\" enableGlobal1=\"true\" skillId=\"SupportDanseMacabrePlayer\" nameSpec=\"Danse Macabre\"/>"
+                );
+                copy.insert_str(copy.len() - "</Skill>".len(), &gem);
+            }
+            copy
+        })
+        .collect();
+    let mut out = xml.to_owned();
+    out.replace_range(
+        group.range(),
+        &if reverse {
+            format!("{}{}", groups[1], groups[0])
+        } else {
+            groups.concat()
+        },
+    );
+    // Inserting a sibling Offering moves later source occurrences. Resolve the
+    // saved selection against the unchanged exact recipient groups in the final
+    // input, rather than assuming either recipient's old numeric position.
+    let final_doc = roxmltree::Document::parse(&out).unwrap();
+    let final_groups: Vec<_> = selected_skill_set(&final_doc)
+        .children()
+        .filter(|n| n.has_tag_name("Skill"))
+        .collect();
+    let positions = recipients.map(|recipient| {
+        let matches: Vec<_> = final_groups
+            .iter()
+            .enumerate()
+            .filter(|(_, group)| &out[group.range()] == recipient)
+            .collect();
+        assert_eq!(
+            matches.len(),
+            1,
+            "recipient group must resolve exactly once"
+        );
+        matches[0].0 + 1
+    });
+    let build = final_doc
+        .root_element()
+        .children()
+        .find(|n| n.has_tag_name("Build"))
+        .unwrap();
+    let old_main = build.attribute("mainSocketGroup").unwrap();
+    let range = build.range();
+    let updated = out[range.clone()].replacen(
+        &format!("mainSocketGroup=\"{old_main}\""),
+        &format!("mainSocketGroup=\"{}\"", positions[0]),
+        1,
+    );
+    out.replace_range(range, &updated);
+    calcs_input(&out, "skill_number", "number", &positions[1].to_string())
+}
+
+fn offering_selected_recipient_groups(xml: &str) -> [&str; 2] {
+    let doc = roxmltree::Document::parse(xml).unwrap();
+    let groups: Vec<_> = selected_skill_set(&doc)
+        .children()
+        .filter(|n| n.has_tag_name("Skill"))
+        .collect();
+    let main = doc
+        .root_element()
+        .children()
+        .find(|n| n.has_tag_name("Build"))
+        .unwrap()
+        .attribute("mainSocketGroup")
+        .unwrap()
+        .parse::<usize>()
+        .unwrap();
+    let calcs = doc
+        .root_element()
+        .children()
+        .find(|n| n.has_tag_name("Calcs"))
+        .unwrap()
+        .children()
+        .filter(|n| n.attribute("name") == Some("skill_number"))
+        .collect::<Vec<_>>();
+    assert_eq!(calcs.len(), 1);
+    let calcs = calcs[0]
+        .attribute("number")
+        .unwrap()
+        .parse::<usize>()
+        .unwrap();
+    [main, calcs].map(|index| &xml[groups[index - 1].range()])
+}
+
+fn offering_cases(original: &str) -> Vec<Case> {
+    let recipients = duplicate_recipients(original, false);
+    let supported = offering_support_pair(&recipients, Some(0), true, false);
+    let mut cases = Vec::new();
+    for name in ["original", "original-repeat"] {
+        cases.push(Case {
+            name: name.into(),
+            xml: original.into(),
+            warm: None,
+            original: true,
+        });
+    }
+    cases.push(Case {
+        name: "warm-support-pair-to-original".into(),
+        xml: original.into(),
+        warm: Some(supported.clone()),
+        original: true,
+    });
+    for (name, values, reverse) in [
+        ("more-one-one", [1, 1], false),
+        ("more-one-one-reversed", [1, 1], true),
+        ("more-zero-zero", [0, 0], false),
+        ("more-one-negative", [1, -1], false),
+        ("more-one-negative-reversed", [1, -1], true),
+    ] {
+        push(
+            &mut cases,
+            name,
+            offering_custom_pair(original, values, reverse),
+        );
+    }
+    for (name, slot, enabled, reverse) in [
+        ("pair-no-danse", None, true, false),
+        ("pair-danse-first", Some(0), true, false),
+        ("pair-danse-second", Some(1), true, false),
+        ("pair-danse-disabled", Some(0), false, false),
+        ("pair-danse-reordered", Some(0), true, true),
+    ] {
+        push(
+            &mut cases,
+            name,
+            offering_support_pair(&recipients, slot, enabled, reverse),
+        );
+    }
+    assert_eq!(cases.len(), 13);
+    for (left, right) in [
+        ("more-one-one", "more-one-one-reversed"),
+        ("more-one-negative", "more-one-negative-reversed"),
+        ("pair-danse-first", "pair-danse-second"),
+        ("pair-danse-first", "pair-danse-disabled"),
+        ("pair-danse-first", "pair-danse-reordered"),
+    ] {
+        let input = |name| &cases.iter().find(|case| case.name == name).unwrap().xml;
+        assert_ne!(input(left), input(right), "distinct control {left}/{right}");
+        assert_ne!(
+            digest(input(left).as_bytes()),
+            digest(input(right).as_bytes()),
+            "distinct control identity {left}/{right}"
+        );
+    }
+    cases
+}
+
+#[test]
+fn offering_controls_preserve_unrelated_inputs_and_exact_support_assignment() {
+    let original = include_str!("../../../tests/fixtures/builds/breadth-20260908/build-05.xml");
+    let before = roxmltree::Document::parse(original).unwrap();
+    let recipient_input = duplicate_recipients(original, false);
+    let expected_recipients = offering_selected_recipient_groups(&recipient_input);
+    assert_ne!(expected_recipients[0], expected_recipients[1]);
+    for recipient in expected_recipients {
+        let doc = roxmltree::Document::parse(recipient).unwrap();
+        let gem = doc
+            .root_element()
+            .children()
+            .find(|n| n.has_tag_name("Gem"))
+            .unwrap();
+        assert_eq!(gem.attribute("skillId"), Some(SNIPER));
+    }
+    for case in offering_cases(original) {
+        let after = roxmltree::Document::parse(&case.xml).unwrap();
+        for tag in ["Tree", "Items", "Build"] {
+            let a = before
+                .root_element()
+                .children()
+                .find(|n| n.has_tag_name(tag))
+                .unwrap();
+            let b = after
+                .root_element()
+                .children()
+                .find(|n| n.has_tag_name(tag))
+                .unwrap();
+            assert_eq!(
+                &original[a.range()],
+                &case.xml[b.range()],
+                "{} {tag}",
+                case.name
+            );
+        }
+        let selected = selected_skill_set(&after);
+        let offerings: Vec<_> = selected
+            .descendants()
+            .filter(|n| n.attribute("skillId") == Some("PainOfferingPlayer"))
+            .collect();
+        assert_eq!(
+            offerings.len(),
+            if case.name.starts_with("pair-") { 2 } else { 1 }
+        );
+        if case.name.starts_with("pair-") {
+            assert_eq!(
+                offering_selected_recipient_groups(&case.xml),
+                expected_recipients
+            );
+        }
+        if let Some(warm) = &case.warm {
+            assert_eq!(
+                offering_selected_recipient_groups(warm),
+                expected_recipients
+            );
+        }
+        let supports: Vec<_> = selected
+            .descendants()
+            .filter(|n| n.attribute("skillId") == Some("SupportDanseMacabrePlayer"))
+            .collect();
+        let has_support = case.name.starts_with("pair-danse-");
+        assert_eq!(supports.len(), usize::from(has_support));
+        if has_support {
+            assert_eq!(supports[0].attribute("level"), Some("1"));
+            assert_eq!(
+                supports[0].attribute("enabled"),
+                Some(if case.name == "pair-danse-disabled" {
+                    "false"
+                } else {
+                    "true"
+                })
+            );
+            assert_eq!(
+                supports[0].parent().unwrap().attribute("label"),
+                Some(if case.name == "pair-danse-second" {
+                    "Offering 2"
+                } else {
+                    "Offering 1"
+                })
+            );
+        }
+    }
+}
+
+fn offering_projection(state: &Json) -> Json {
+    let state = stable_state(state);
+    let mut result = json!({
+        "support_definition":state["offering_support_definition"],
+        "saved_support_inventory":state["offering_support_inventory"],
+        "config":state["config"],
+        "output_snapshot":state["offering_output_snapshot"]
+    });
+    for name in [
+        "original_functions_preserved",
+        "loaded_state_preserved",
+        "cached_outputs_preserved",
+        "saved_specs_preserved",
+        "fresh_actor_construction",
+        "query_state_preserved",
+        "source_actor_level_mutated",
+        "business_method_wrappers",
+    ] {
+        result[name] = state[name].clone();
+    }
+    for mode in ["main", "calcs"] {
+        result[mode] = json!({
+            "mode":state[mode]["mode"],"selected_minion":state[mode]["selected_minion"],
+            "buffs_enabled":state[mode]["buffs_enabled"],
+            "skills":rows(&state[mode]["skills"]).iter().filter(|s|s["effect_id"]=="PainOfferingPlayer").collect::<Vec<_>>(),
+            "offering_merge_events":state[mode]["offering_merge_events"],
+            "offering_more_calls":state[mode]["offering_more_calls"],
+            "player_output":state[mode]["output"],
+            "recipients":rows(&state[mode]["actors"]).iter().map(|a|json!({"source_occurrence":a["source_occurrence"],"actor_profile":a["actor_profile"],"is_environment_minion":a["is_environment_minion"],"children":rows(&a["children"]).iter().map(|c|json!({"effect_id":c["effect_id"],"output":c["output"]})).collect::<Vec<_>>()})).collect::<Vec<_>>()
+        });
+    }
+    result
+}
+
+fn run_offering_child(root: &Path, out: &Path, enabled: bool) {
+    assert_eq!(
+        pinned::manifest_sha256(),
+        "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+    );
+    let path = root.join("tests/fixtures/builds/breadth-20260908/build-05.xml");
+    let original = fs::read_to_string(&path).unwrap();
+    assert_eq!(
+        digest(original.as_bytes()),
+        "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    );
+    fs::create_dir_all(out.join("inputs")).unwrap();
+    let mut observed_cases = Vec::new();
+    for case in offering_cases(&original) {
+        eprintln!("focused Offering source case {}", case.name);
+        fs::write(
+            out.join("inputs").join(format!("{}.xml", case.name)),
+            &case.xml,
+        )
+        .unwrap();
+        let before = |lua: &Lua| {
+            lua.globals().set("physicalDamageJit", enabled)?;
+            lua.globals().set("physicalDamageOfferingEvidence", true)?;
+            lua.load("if physicalDamageJit then jit.on() else jit.off();jit.flush() end")
+                .exec()?;
+            Ok(())
+        };
+        let install = |lua: &Lua| {
+            lua.globals().set("physicalDamagePhase", "before")?;
+            Ok(lua
+                .load(OBSERVE)
+                .set_name("@offering-scaling-authentication")
+                .eval::<Function>()?)
+        };
+        let observe = |lua: &Lua| -> Result<Json, RuntimeError> {
+            lua.globals().set("physicalDamagePhase", "after")?;
+            let value: Value = lua
+                .load(OBSERVE)
+                .set_name("@offering-scaling-observation")
+                .eval()?;
+            Ok(lua.from_value(value)?)
+        };
+        let snapshot = |lua: &Lua| -> Result<Json, RuntimeError> {
+            lua.globals()
+                .set("physicalDamagePhase", "offering_snapshot")?;
+            let value: Value = lua
+                .load(OBSERVE)
+                .set_name("@offering-uninstrumented-output-snapshot")
+                .eval()?;
+            Ok(lua.from_value(value)?)
+        };
+        let scratch = tempfile::tempdir().unwrap();
+        let observed = source::observe_with_build_hook_unwrapped(
+            &root.join("vendor/path-of-building-poe2"),
+            scratch.path(),
+            &case.xml,
+            case.warm.as_deref(),
+            !case.original,
+            Some(&before),
+            Some(&install),
+            Some(&observe),
+        );
+        let scratch = tempfile::tempdir().unwrap();
+        let plain = source::observe_with_build_hook_unwrapped(
+            &root.join("vendor/path-of-building-poe2"),
+            scratch.path(),
+            &case.xml,
+            case.warm.as_deref(),
+            !case.original,
+            Some(&before),
+            None,
+            Some(&snapshot),
+        );
+        let mut row = match observed {
+            Ok(value) => {
+                assert_eq!(value["configuration_method_wrappers"], false);
+                assert_eq!(value["original_build_output_available"], true);
+                assert_eq!(value["source_hash"], pinned::manifest_sha256());
+                json!({"name":case.name,"xml_sha256":digest(case.xml.as_bytes()),"warm_xml_sha256":case.warm.as_ref().map(|v|digest(v.as_bytes())),"available":true,"state":offering_projection(&value["additional_observation"])})
+            }
+            Err(error) => {
+                json!({"name":case.name,"available":false,"source_error":error.to_string()})
+            }
+        };
+        match plain {
+            Ok(value) => {
+                assert_eq!(value["configuration_method_wrappers"], false);
+                assert_eq!(value["original_build_output_available"], true);
+                assert_eq!(value["source_hash"], pinned::manifest_sha256());
+                row["unhooked_available"] = json!(true);
+                row["unhooked"] = value["additional_observation"].clone();
+            }
+            Err(error) => {
+                row["unhooked_available"] = json!(false);
+                row["unhooked_source_error"] = json!(error.to_string());
+            }
+        }
+        observed_cases.push(row);
+        fs::write(
+            out.join(format!(
+                "source-jit-{}-progress.json",
+                if enabled { "on" } else { "off" }
+            )),
+            serde_json::to_vec_pretty(&observed_cases).unwrap(),
+        )
+        .unwrap();
+    }
+    assert_eq!(fs::read_to_string(path).unwrap(), original);
+    let report = json!({"source_revision":"3887ae68a6a6b8bb7b41d1b61998f1aa184201e4","source_hash":pinned::manifest_sha256(),
+        "evidence":{"case_count":13,"complete_load_attempts_per_jit":28,"instrumented_load_attempts_per_jit":14,"uninstrumented_load_attempts_per_jit":14,"observer_sha256":digest(OBSERVE.as_bytes()),
+            "test_sha256":digest(include_bytes!("owned_minion_physical_damage_source.rs")),
+            "files":FILES.iter().copied().chain(["src/Data/Skills/sup_int.lua"]).map(|p|json!({"path":p,"sha256":pinned::expected_file_sha256(p).unwrap()})).collect::<Vec<_>>(),
+            "custom_controls":"Arithmetic probes via ordinary Config custom blocks; no matching legal game producer is inferred.",
+            "support_controls":"Actual Danse Macabre gem assignments establish pinned PoB source/delivery only. Its description requires an additional consumed skeleton; the pinned statMap's Offering tag does not prove gameplay activation/availability.",
+            "scope":"Original local MORE product before rounding, rounded local result before parent multiplication, and original returned result. Source-store depth is diagnostic PoB provenance only, not an owned grouping model.",
+            "instrumentation_check":"Each case is loaded again in an independent uninstrumented VM with the identical XML and warm input. Exact MAIN/CALCS cached, Player and minion child scalar output availability/values and selected source identities must match.",
+            "deterministic_projection":{"id":"offering-rejected-modlist-position-v1",
+                "raw":"Full pre-projection report retained as source-jit-{mode}-raw.json; source-jit-{mode}-receipt.json commits raw/semantic bytes and every omitted metadata path.",
+                "excluded":"Only positive absolute mixed-ModList positions on local_candidates whose type is not MORE. ModList::MoreInternal line170 rejects them before tag evaluation or multiplication. Candidate order, full records, all accepted MORE positions, every original execution step, arithmetic result, identity and output remain exact. ModDB positions remain exact.",
+                "source01_observed":"The complete off/on comparison had exactly two differences: pair-danse-reordered MAIN/CALCS offering_more_calls[8].local_candidates[0].position was5 versus4 for the same rejected Danse BuffEffect INC30. Everything else agreed.",
+                "source01_inference":"CalcActiveSkill mergeStatSet iterates pairs(stats) before appending different-channel support modifiers. The exact neighboring modifier swapped with Danse INC was not retained and is not claimed as observed."},
+            "native_coverage":false,"whole_build_parity":false,"business_method_wrappers":false},"cases":observed_cases});
+    let report = write_offering_reports(out, enabled, &report);
+    check_offering_scope_report(&report);
+}
+
+fn offering_semantic_report(raw: &Json) -> (Json, Vec<String>) {
+    let mut semantic = raw.clone();
+    let mut omitted = Vec::new();
+    for (case_index, case) in semantic["cases"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .enumerate()
+    {
+        if case["available"] != true {
+            continue;
+        }
+        for mode in ["main", "calcs"] {
+            let calls = &mut case["state"][mode]["offering_more_calls"];
+            let Some(calls) = calls.as_array_mut() else {
+                assert!(rows(calls).is_empty());
+                continue;
+            };
+            for (call_index, call) in calls.iter_mut().enumerate() {
+                if call["store_kind"] != "ModList" {
+                    // ModDB indices refer to its named bucket. This narrow
+                    // projection makes no equivalence claim about those indices.
+                    continue;
+                }
+                assert_eq!(call["original_function_line"], 164);
+                assert_eq!(call["caller_line"], 2147);
+                let name = call["name"].as_str().unwrap().to_owned();
+                let steps = rows(&call["original_steps"]);
+                assert!(
+                    steps
+                        .iter()
+                        .all(|s| s["mod"]["name"] == name && s["mod"]["type"] == "MORE")
+                );
+                let candidates = &mut call["local_candidates"];
+                let Some(candidates) = candidates.as_array_mut() else {
+                    assert!(rows(candidates).is_empty());
+                    continue;
+                };
+                let mut previous = 0;
+                for (candidate_index, candidate) in candidates.iter_mut().enumerate() {
+                    let position = candidate["position"]
+                        .as_u64()
+                        .expect("raw position must be an integer");
+                    assert!(
+                        position > previous,
+                        "raw mixed-store positions must be positive and strictly increasing"
+                    );
+                    previous = position;
+                    assert_eq!(candidate["mod"]["name"], name);
+                    let kind = candidate["mod"]["type"].as_str().unwrap();
+                    assert!(!kind.is_empty());
+                    if kind != "MORE" {
+                        // Original MoreInternal's first conjunction rejects
+                        // this record before reading tags or evaluating values.
+                        // Preserve its identity and original relative position
+                        // within this candidate array; omit only the index in
+                        // the larger mixed-channel store, never sort records.
+                        candidate
+                            .as_object_mut()
+                            .unwrap()
+                            .remove("position")
+                            .unwrap();
+                        omitted.push(format!("cases[{case_index}].state.{mode}.offering_more_calls[{call_index}].local_candidates[{candidate_index}].position"));
+                    }
+                }
+            }
+        }
+    }
+    (semantic, omitted)
+}
+
+fn write_offering_reports(out: &Path, enabled: bool, raw: &Json) -> Json {
+    let mode = if enabled { "on" } else { "off" };
+    let raw_bytes = serde_json::to_vec_pretty(raw).unwrap();
+    let raw_name = format!("source-jit-{mode}-raw.json");
+    fs::write(out.join(&raw_name), &raw_bytes).unwrap();
+    let (semantic, omitted) = offering_semantic_report(raw);
+    let semantic_bytes = serde_json::to_vec_pretty(&semantic).unwrap();
+    let semantic_name = format!("source-jit-{mode}.json");
+    fs::write(out.join(&semantic_name), &semantic_bytes).unwrap();
+    let receipt = json!({"schema_version":1,"projection":"offering-rejected-modlist-position-v1",
+        "raw":{"path":raw_name,"bytes":raw_bytes.len(),"sha256":digest(&raw_bytes)},
+        "semantic":{"path":semantic_name,"bytes":semantic_bytes.len(),"sha256":digest(&semantic_bytes)},
+        "omitted_metadata_paths":omitted});
+    fs::write(
+        out.join(format!("source-jit-{mode}-receipt.json")),
+        serde_json::to_vec_pretty(&receipt).unwrap(),
+    )
+    .unwrap();
+    semantic
+}
+
+fn offering_projection_control() -> Json {
+    let inc =
+        json!({"name":"BuffEffect","type":"INC","value":30,"source":"support","tags":[],"flags":0});
+    let first =
+        json!({"name":"BuffEffect","type":"MORE","value":1,"source":"first","tags":[],"flags":0});
+    let second =
+        json!({"name":"BuffEffect","type":"MORE","value":2,"source":"second","tags":[],"flags":0});
+    json!({"cases":[{"available":true,"state":{
+        "main":{"offering_more_calls":[{"store_kind":"ModList","original_function_line":164,"caller_line":2147,"name":"BuffEffect",
+            "source_occurrence":{"group":7},"recipient_occurrence":{"group":3},
+            "local_candidates":[{"position":2,"mod":inc},{"position":4,"mod":first.clone()},{"position":6,"mod":second.clone()}],
+            "original_steps":[{"mod":first,"product_after":1.01},{"mod":second,"product_after":1.0302}],
+            "local_product_before_rounding":1.0302,"local_result_before_parent":1.03,"original_return_result":1.03}]},
+        "calcs":{"offering_more_calls":[]},"output_snapshot":{"available":true,"damage":80}}}]})
+}
+
+#[test]
+fn offering_projection_omits_only_rejected_absolute_positions_and_retains_raw() {
+    let raw = offering_projection_control();
+    let before = raw.clone();
+    let (semantic, omitted) = offering_semantic_report(&raw);
+    assert_eq!(raw, before);
+    assert_eq!(
+        omitted,
+        vec!["cases[0].state.main.offering_more_calls[0].local_candidates[0].position"]
+    );
+    let mut moved = raw.clone();
+    moved["cases"][0]["state"]["main"]["offering_more_calls"][0]["local_candidates"][0]["position"] =
+        json!(3);
+    assert_eq!(offering_semantic_report(&moved).0, semantic);
+    let dir = tempfile::tempdir().unwrap();
+    assert_eq!(write_offering_reports(dir.path(), false, &raw), semantic);
+    assert_eq!(read(&dir.path().join("source-jit-off-raw.json")), raw);
+    assert_eq!(read(&dir.path().join("source-jit-off.json")), semantic);
+    let receipt = read(&dir.path().join("source-jit-off-receipt.json"));
+    assert_eq!(receipt["omitted_metadata_paths"], json!(omitted));
+    for (kind, name) in [
+        ("raw", "source-jit-off-raw.json"),
+        ("semantic", "source-jit-off.json"),
+    ] {
+        let bytes = fs::read(dir.path().join(name)).unwrap();
+        assert_eq!(receipt[kind]["bytes"], json!(bytes.len()));
+        assert_eq!(receipt[kind]["sha256"], digest(&bytes));
+    }
+}
+
+#[test]
+fn offering_projection_keeps_records_order_duplicates_execution_and_outputs_exact() {
+    let raw = offering_projection_control();
+    let expected = offering_semantic_report(&raw).0;
+    for mutation in 0..10 {
+        let mut changed = raw.clone();
+        let call = &mut changed["cases"][0]["state"]["main"]["offering_more_calls"][0];
+        match mutation {
+            0 => {
+                call["local_candidates"][0]["mod"]["value"] = json!(31);
+            }
+            1 => {
+                call["local_candidates"][0]["mod"]["source"] = json!("different support");
+            }
+            2 => {
+                call["local_candidates"][1]["position"] = json!(5);
+            }
+            3 => {
+                let candidates = call["local_candidates"].as_array_mut().unwrap();
+                candidates.swap(1, 2);
+                candidates[1]["position"] = json!(4);
+                candidates[2]["position"] = json!(6);
+            }
+            4 => {
+                let mut duplicate = call["local_candidates"][0].clone();
+                duplicate["position"] = json!(3);
+                call["local_candidates"]
+                    .as_array_mut()
+                    .unwrap()
+                    .insert(1, duplicate);
+            }
+            5 => {
+                call["original_steps"].as_array_mut().unwrap().swap(0, 1);
+            }
+            6 => {
+                call["original_steps"][0]["product_after"] = json!(1.0101);
+            }
+            7 => {
+                call["original_return_result"] = json!(1.0302);
+            }
+            8 => {
+                call["recipient_occurrence"]["group"] = json!(4);
+            }
+            9 => {
+                changed["cases"][0]["state"]["output_snapshot"]["available"] = json!(false);
+            }
+            _ => unreachable!(),
+        }
+        assert_ne!(
+            offering_semantic_report(&changed).0,
+            expected,
+            "meaningful mutation {mutation}"
+        );
+    }
+    let mut bucket = raw.clone();
+    let call = &mut bucket["cases"][0]["state"]["main"]["offering_more_calls"][0];
+    call["store_kind"] = json!("ModDB");
+    call["original_function_line"] = json!(214);
+    let (unchanged, omitted) = offering_semantic_report(&bucket);
+    assert_eq!(unchanged, bucket);
+    assert!(omitted.is_empty());
+}
+
+#[test]
+fn offering_projection_refuses_invalid_raw_position_or_execution_claims() {
+    for mutation in 0..5 {
+        let mut raw = offering_projection_control();
+        let call = &mut raw["cases"][0]["state"]["main"]["offering_more_calls"][0];
+        match mutation {
+            0 => call["local_candidates"][0]["position"] = json!(0),
+            1 => call["local_candidates"][0]["position"] = json!(2.5),
+            2 => call["local_candidates"][1]["position"] = json!(2),
+            3 => call["local_candidates"][0]["mod"]["name"] = json!("unrelated"),
+            4 => call["original_steps"][0]["mod"]["type"] = json!("INC"),
+            _ => unreachable!(),
+        }
+        assert!(
+            std::panic::catch_unwind(|| offering_semantic_report(&raw)).is_err(),
+            "invalid claim {mutation}"
+        );
+    }
+}
+
+fn offering_damage(modifiers: &Json) -> f64 {
+    let found: Vec<_> = rows(modifiers)
+        .iter()
+        .filter(|m| m["name"] == "Damage" && m["type"] == "INC")
+        .collect();
+    assert_eq!(found.len(), 1);
+    number(&found[0]["value"])
+}
+
+fn check_offering_scope_report(report: &Json) {
+    let cases = rows(&report["cases"]);
+    assert_eq!(cases.len(), 13);
+    for case in cases {
+        assert_eq!(
+            case["available"], true,
+            "{} {}",
+            case["name"], case["source_error"]
+        );
+        assert_eq!(
+            case["unhooked_available"], true,
+            "{} unhooked {}",
+            case["name"], case["unhooked_source_error"]
+        );
+        let state = &case["state"];
+        assert_eq!(
+            json_evidence::first_difference(
+                &state["output_snapshot"],
+                &case["unhooked"],
+                "uninstrumented"
+            ),
+            None,
+            "{}: instrumentation must preserve output values, availability and selected identities",
+            case["name"]
+        );
+        for field in [
+            "original_functions_preserved",
+            "loaded_state_preserved",
+            "cached_outputs_preserved",
+            "saved_specs_preserved",
+            "fresh_actor_construction",
+            "query_state_preserved",
+        ] {
+            assert_eq!(state[field], true, "{} {field}", case["name"]);
+        }
+        assert_eq!(state["business_method_wrappers"], false);
+        assert_eq!(state["source_actor_level_mutated"], false);
+        assert_eq!(
+            state["support_definition"]["effect_id"],
+            "SupportDanseMacabrePlayer"
+        );
+        assert!(
+            state["support_definition"]["description"]
+                .as_str()
+                .unwrap()
+                .contains("additional skeletal Minion")
+        );
+        for mode in ["main", "calcs"] {
+            let env = &state[mode];
+            assert_eq!(env["buffs_enabled"], true);
+            let calls = rows(&env["offering_more_calls"]);
+            assert!(
+                !calls.is_empty(),
+                "{} {mode}: original Offering consumer must execute",
+                case["name"]
+            );
+            for call in calls {
+                assert_eq!(call["caller_line"], 2147);
+                assert_eq!(call["return_observed"], true);
+                assert_eq!(call["recipient_occurrence"], env["selected_minion"]);
+                assert_eq!(rows(&call["source_occurrence"]["matches"]).len(), 1);
+                assert!(call["local_product_before_rounding"].is_number());
+                assert!(call["local_result_before_parent"].is_number());
+                assert!(call["original_return_result"].is_number());
+                if call["domain"] == "source_skill" {
+                    assert_eq!(call["context_is_source_skill"], true);
+                } else {
+                    assert_eq!(call["domain"], "recipient_actor");
+                    assert_eq!(call["context_is_recipient_actor"], true);
+                }
+            }
+            for event in rows(&env["offering_merge_events"]) {
+                assert_eq!(event["minion_destination"], true);
+                assert_eq!(event["recipient_occurrence"], env["selected_minion"]);
+                let root: Vec<_> = calls
+                    .iter()
+                    .filter(|c| {
+                        c["name"] == "BuffEffect"
+                            && c["domain"] == "source_skill"
+                            && c["source_store_depth"] == 0
+                            && c["source_occurrence"] == event["source_occurrence"]
+                    })
+                    .collect();
+                assert_eq!(root.len(), 1);
+                close(
+                    number(&event["scaling_more"]),
+                    number(&root[0]["original_return_result"]),
+                );
+            }
+        }
+    }
+    for name in ["original-repeat", "warm-support-pair-to-original"] {
+        assert_eq!(
+            named(cases, "original")["state"],
+            named(cases, name)["state"],
+            "{name}"
+        );
+    }
+    for (name, values, before, rounded, order) in [
+        ("more-one-one", [1.0, 1.0], 1.0201, 1.02, [1, 2]),
+        ("more-one-one-reversed", [1.0, 1.0], 1.0201, 1.02, [2, 1]),
+        ("more-zero-zero", [0.0, 0.0], 1.0, 1.0, [1, 2]),
+        ("more-one-negative", [1.0, -1.0], 0.9999, 1.0, [1, 2]),
+        (
+            "more-one-negative-reversed",
+            [-1.0, 1.0],
+            0.9999,
+            1.0,
+            [2, 1],
+        ),
+    ] {
+        for mode in ["main", "calcs"] {
+            let env = &named(cases, name)["state"][mode];
+            let grouped: Vec<_> = rows(&env["offering_more_calls"])
+                .iter()
+                .filter(|c| c["name"] == "BuffEffect" && rows(&c["original_steps"]).len() == 2)
+                .collect();
+            assert_eq!(grouped.len(), 1, "{name} {mode}");
+            let call = grouped[0];
+            assert_eq!(call["domain"], "source_skill");
+            assert_eq!(call["precision_present"], false);
+            close(number(&call["local_product_before_rounding"]), before);
+            close(number(&call["local_result_before_parent"]), rounded);
+            for (index, step) in rows(&call["original_steps"]).iter().enumerate() {
+                close(number(&step["mod"]["value"]), values[index]);
+                assert_eq!(
+                    step["mod"]["source"],
+                    format!("Custom:Offering grouping {}", order[index])
+                );
+            }
+            close(
+                number(&rows(&env["offering_merge_events"])[0]["scaling_more"]),
+                rounded,
+            );
+        }
+    }
+    for (name, supported) in [
+        ("pair-no-danse", None),
+        ("pair-danse-first", Some("Offering 1")),
+        ("pair-danse-second", Some("Offering 2")),
+        ("pair-danse-disabled", None),
+        ("pair-danse-reordered", Some("Offering 1")),
+    ] {
+        let state = &named(cases, name)["state"];
+        assert_ne!(
+            state["main"]["selected_minion"],
+            state["calcs"]["selected_minion"]
+        );
+        for mode in ["main", "calcs"] {
+            let env = &state[mode];
+            assert_eq!(rows(&env["selected_minion"]["matches"]).len(), 1);
+            assert_eq!(env["selected_minion"]["matches"][0]["effect_id"], SNIPER);
+            assert_eq!(rows(&env["skills"]).len(), 2);
+            for skill in rows(&env["skills"]) {
+                let occurrence = &skill["source_occurrence"]["matches"][0];
+                let label = occurrence["group_label"].as_str().unwrap();
+                let active = supported == Some(label);
+                let danse: Vec<_> = rows(&skill["offering_supports"])
+                    .iter()
+                    .filter(|s| s["effect_id"] == "SupportDanseMacabrePlayer")
+                    .collect();
+                let admitted: Vec<_> = danse
+                    .iter()
+                    .filter(|s| s["admitted_by_original_effect_list"] == true)
+                    .collect();
+                assert_eq!(admitted.len(), usize::from(active), "{name} {mode} {label}");
+                let scaling = &rows(&skill["buffs"])[0]["scaling"];
+                close(
+                    number(&scaling["source_buff_increased"]["value"]),
+                    if active { 30.0 } else { 0.0 },
+                );
+                close(number(&scaling["source_buff_more"]["value"]), 1.0);
+                close(number(&scaling["recipient_increased"]["value"]), 0.0);
+                close(number(&scaling["recipient_more"]["value"]), 1.0);
+                let received = rows(&scaling["source_buff_increased"]["records"]);
+                assert_eq!(received.len(), usize::from(active));
+                if active {
+                    let support = admitted[0];
+                    assert_eq!(support["supports_exact_source"], true);
+                    assert_eq!(
+                        support["source_occurrence"]["matches"][0]["group_index"],
+                        occurrence["group_index"]
+                    );
+                    assert_eq!(
+                        support["source_occurrence"]["matches"][0]["source_enabled"],
+                        true
+                    );
+                    assert_eq!(received[0]["mod"]["source"], support["modifier_source"]);
+                    assert_eq!(received[0]["mod"]["type"], "INC");
+                    close(number(&received[0]["value"]), 30.0);
+                }
+                let events: Vec<_> = rows(&env["offering_merge_events"])
+                    .iter()
+                    .filter(|e| e["source_occurrence"] == skill["source_occurrence"])
+                    .collect();
+                assert_eq!(events.len(), 1);
+                close(
+                    number(&events[0]["scaling_increased"]),
+                    if active { 30.0 } else { 0.0 },
+                );
+                close(
+                    offering_damage(&events[0]["source_modifiers"]),
+                    if active { 80.0 } else { 62.0 },
+                );
+            }
+            let events = rows(&env["offering_merge_events"]);
+            assert_eq!(events.len(), 2);
+            close(
+                offering_damage(&events.last().unwrap()["merged_modifiers"]),
+                if supported.is_some() { 80.0 } else { 62.0 },
+            );
+        }
+    }
 }
 
 fn run_life_source_modes(

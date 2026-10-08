@@ -31,6 +31,25 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Offering arithmetic provenance, 2026-10-07:** retain original-call evidence
+for local multiplication/rounding and exact support delivery, rather than adding
+a second formula implementation to the observer. Source modifier-store depth,
+inheritance and mixed-list storage positions are not native ownership concepts.
+The focused evidence comparison retains raw reports and excludes only validated
+absolute positions of non-MORE ModList candidates rejected by the original MORE
+consumer; records, execution order and values remain exact. Do not generalize
+that evidence rule to accepted modifiers or native arithmetic. Mapping a proven
+source partition to owned mechanical groups still requires review.
+
+**Manual Djinn source accounting, 2026-10-07:** the existing optional observer now
+has a compact admission view for exact manual global2 controls. Keep its
+queried-empty/not-called distinction and original filter/transport evidence;
+do not export source environment identities, metatable behavior or Lua absence
+into the native model. Its purpose is to support review of selected usage and
+configuration responsibilities, not to grant a blanket inert-field exception.
+The broad observer remains a separate useful evidence view in the same harness,
+not another evaluation backend. See the [source checkpoint](implementation.md#source-checkpoint-manual-djinn-admission-accounting).
+
 **Incoming-critical source review, 2026-10-07:** do not automatically translate
 the lowercase `enemyCritChance` Override lookup into a second native override
 model. The pinned ordinary XML/custom-modifier source path has no known producer;

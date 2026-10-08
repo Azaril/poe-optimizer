@@ -153,12 +153,28 @@ separate Gigantic factors. Missing/Partial or unlisted sources remain refusals.
 This is finite numerical integration: final Life/Damage aggregation, reservation
 delivery and post-mutation tree legality remain separate gates.
 
+The manual Djinn global2 witness now follows original consumer admission in
+seven Original05 controls with exact JIT-off/on and independent uninstrumented
+agreement. Queried sources have empty ExtraSkillStat lists; disabled manual
+sources are explicitly unqueried, while separate tree copies remain present.
+The observer retains ancillary calculation environments and validates effective
+metadata lookup, so neither final-output equality nor raw-field absence is used
+as a substitute for consumer evidence. This remains optional PoB source
+accounting; native field dispositions and complete inventories are still open.
+See the [checkpoint](implementation.md#source-checkpoint-manual-djinn-admission-accounting).
+
 Next, Offering needs its three source-Skill scaling producers before its
 application can add the measured 62%. Checked queries reject Current Skill reads
 and generated member paths. The proposed
 [exact Skill query extension](owned-skill-contribution-queries-proposal.md) reuses
-the existing graph and requires owner review; it is not implemented. Nonempty
-multiplier grouping also needs evidence beyond flattened source records.
+the existing graph and requires owner review; it is not implemented. The focused
+Offering witness now observes original multiplication and local rounding in an
+inherited source store, plus exact Danse assignment and duplicate non-stacking.
+It does not establish generic owned group meaning or Danse's additional-skeleton
+activation. Raw source evidence is retained; only guarded absolute positions of
+rejected non-MORE candidates are excluded from its deterministic comparison.
+All executed arithmetic, identities and outputs remain exact. See the
+[source checkpoint](implementation.md#source-checkpoint-offering-grouping-and-exact-support-delivery).
 The authored-root disable control remains distinct from typed requested
 participation and does not establish that later integration's coverage.
 

@@ -138,6 +138,113 @@ Evidence: `runs/owned-gigantic-flags-{authoring,source,publication}-01.log`,
 logs retain initial failures; their named corrected cases pass in the later
 focused runs. There is no claim that those initial invocations were all green.
 
+## Source checkpoint: Offering grouping and exact support delivery
+
+The focused Offering witness adds thirteen controls to the existing optional
+PoB harness, with 28 loads per JIT mode: fourteen instrumented and fourteen
+independent uninstrumented loads, including warm restoration. It observes
+original multiplication steps, pre-round products, local rounding and original
+returns. Saved MAIN's Sniper and CALCS' Arsonist remain distinct in the original;
+paired controls explicitly bind two separate Sniper recipients. Source selectors
+are relocated by exact group identity after inserting another Offering.
+
+| Control | Observed result and scope |
+| --- | --- |
+| Two distinct 1% MORE custom lines | Original local product `1.0201`, rounded to `1.02`; reversed identified sources agree. |
+| 1% MORE / 1% LESS; two zero lines | `0.9999` rounds to `1`; zeros remain `1` with both records retained. |
+| Danse on either Offering, disabled, or source order reversed | BuffEffect INC30 follows only its supported occurrence; recipient scaling is unchanged. |
+| Duplicate Offering merge | Supported source emits 80 versus ordinary 62; final merge stays 80, or 62 without Danse, never the sum of duplicate copies. |
+
+The custom MORE records occupy an inherited Player store. They establish a
+reachable source grouping/rounding boundary, not a generic owned group model or
+an admitted legal game producer. Danse's separate Damage MORE30 is not BuffEffect
+MORE. Its description requires an additional consumed skeleton; the captured
+stat map and support delivery do not prove gameplay activation. No native query,
+support-origin or contributor coverage closes from these observations.
+
+The first run's child checks passed under both JIT modes, but the parent correctly
+failed exact comparison after **623.51s**. Full comparison found only two
+differences: a rejected INC record's absolute position in the mixed ModList was
+5 versus 4. Every record, execution step, result, identity and output matched.
+The original MORE consumer checks name and type before evaluation, so this
+non-MORE position has no arithmetic role. A different unrelated neighbor's
+insertion order is an inference, not an observed source fact.
+
+The corrected evidence view retains full raw reports and separate hash receipts.
+Only non-MORE ModList candidate positions may be omitted, after validating the
+pinned function/caller, query name, strictly increasing positive raw indices and
+actual MORE-only execution steps. Candidate order/multiplicity, complete records,
+accepted MORE positions, ModDB positions, arithmetic, recipients and output
+availability remain exact. Three negative-control tests and independent review
+cover those limits. This changes offline observation semantics, not source
+execution or native determinism. The fresh `-02` run **passes in 427.23s**:
+JIT-off/on checked reports are byte-identical at 8,363,147 bytes, SHA-256
+`5245263a3cbbc14daebbafed0c5f26f8702899213f87cb5c4c34e7d6aa7fea35`.
+Raw reports retain differing rejected-position metadata; each is 8,363,345 bytes.
+Their receipts pin both hashes and the six exact omitted metadata paths. All
+thirteen independent uninstrumented comparisons, the fresh repeat and warm
+restoration pass. No retry-until-pass or numerical tolerance was introduced for
+determinism; the failed first reports remain available.
+
+The existing source suite passes **37 cases in both JIT modes** in **777.55s**;
+every case field matches the retained Source02 baseline. This checks the default
+observer view after adding the opt-in witness. All fifteen authored-membership
+ordinary tests and eleven final Offering ordinary tests pass; strict workspace
+all-feature/all-target Clippy passes. Both focused source witnesses are ignored
+in ordinary CI and were run explicitly here; they are not a hosted complete-build
+gate. Evidence is retained in
+`runs/owned-offering-scaling-source-{01,02}`, their adjacent logs,
+`runs/owned-offering-djinn-ordinary-regression-01.log`,
+`runs/owned-offering-default-view-comparison-01.json`,
+`runs/owned-offering-scaling-authoring-03.log` and
+`runs/owned-offering-djinn-{clippy,format}-02.log`.
+
+**Next native dependency remains `3228`–`322a`.** The
+[Skill-query proposal](owned-skill-contribution-queries-proposal.md) now includes
+the minimal implementation audit. Its read/member authority is still pending;
+the first checked empty-domain packet can reuse current exact Skill binding,
+staging and reductions after approval. Positive support membership/group meaning
+remain explicit additional gates. Do not inject measured 62%, neutral factors or
+precomputed final inputs to bypass these producers. Original05 still has five
+input obligations; complete native originals remain **0/5**.
+
+## Source checkpoint: manual Djinn admission accounting
+
+The focused Original05 Sand/Water witness passes in **131.37s**. Its seven
+observed cases cover the unchanged build, each manual global2 switch, both
+switches, each disabled manual source and an independent fresh repeat. Per JIT
+mode it performs 13 fresh VM loads and 26 fixed normal rebuilds, including six
+independent uninstrumented comparisons. JIT-off/on reports are byte-identical:
+9,839,040 bytes, SHA-256
+`50f1f16913fc32818a98aef3f7246a597a56d19b495cdf67e3ee5264f921765c`.
+
+The observer follows original `ExtraSkillStat` queries, filters and transport into
+the original consumer. It retains all **3,204 calls per JIT mode**, including
+312 calls in final MAIN/CALCS environments and 2,892 in explicitly identified
+ancillary environments. Every queried list in this finite domain is empty.
+Disabled manual Summon/Command sources are explicitly **not called**, not
+classified as empty; separate tree-granted copies remain present. Effective and
+raw `hasGlobalEffect` lookups agree and are absent, with no metatable fallback.
+Fresh repeats and instrumented/uninstrumented outputs agree exactly through all
+three lifecycle stages. This is evidence for selected-field accounting, not
+native disposition authority, nonempty transport laws, dormant-preset coverage
+or a complete supplier inventory. It closes none of the five input obligations.
+
+The first capture exceeded the original 8 MiB report bound and exposed an
+overstrict final-environment-only validator. The corrected 16 MiB bound retains
+every observed call; ancillary calls are validated without pretending they are
+in the final census. New refusal tests reject missing transport, unqueried-as-empty
+claims, incorrect final-environment identity and raw-only metadata evidence.
+No source business method is replaced. This observer is opt-in in the existing
+test harness; it introduces no native path, source-specific runtime model or
+new import policy.
+
+Evidence: `runs/owned-manual-djinn-admission-source-02.log` and its adjacent
+directory's `source-jit-{off,on}.json`; the failed `-01` capture is retained.
+Use this bounded evidence when reviewing the remaining `0503`/`01f2` field
+responsibilities. Do not repeat the same source capture or infer a complete
+inventory from unchanged final metrics.
+
 ## In progress: incoming critical source proof and Actor read decision
 
 The independent complete-PoB witness now **passes 26 cases under both JIT modes**,
@@ -313,6 +420,12 @@ membership/grouping evidence and selected-input obligations under existing
 contracts while that answer is pending. Do not let a pending model decision
 stall independent approved work or assume approval.
 
+The follow-up audit found no established final-Life shortcut: the selected saved
+Life query is Player, whose BASE/ordering and class/shared-Actor coverage remain
+open. Joining the already-published six minion-Life sources would add component
+coverage but would not close that metric. Do not replace the current dependency
+with another supplied scalar or count that test composition as a complete build.
+
 The checkpoint's input audit found no existing-authority shortcut to close the
 other four obligations. `0503` retains twenty Skill/Gem source rows despite 23
 known preferences; global switches, action selection and FullDPS responsibilities
@@ -329,25 +442,19 @@ selected obligation unchanged.
 
 **Narrow source follow-ups under existing authority:**
 
-- Offering's retained Source02 proves empty domains and separates source from
-  recipient scaling, but its flattened records do not prove nonempty grouping
-  or positive support-origin delivery. Observe the original MORE consumer with
-  two 1% custom BuffEffect lines, reversed order and zero/negative controls to
-  distinguish grouped 1.02 from 1.0201. These are arithmetic probes, not evidence
-  that a matching legal game producer exists. Independently use duplicate
-  Offerings with real Danse Macabre on one, move/disable that support and swap
-  occurrence order. Danse supplies Increase30, not MORE: record exact supplier
-  and recipient identities and pre-round consumer results without treating
-  cross-domain 25%/50% controls as intradomain grouping proof. Do not widen the
-  native Skill or support-origin contract before the pending decisions.
-- Existing occurrence-input tests already toggle global1/global2. For `0503`
-  and `01f2`, extend the existing generated ExtraSkillStat observer to the actual
-  Original05 manual Sand/Water global2 suppliers, using the fixed MAIN/CALCS
-  lifecycle. Retain exact filter/supplier identity before transport and after
-  original consumer admission (`CalcActiveSkill.lua`'s ExtraSkillStat call).
-  Existing other-SkillName and Purifying controls need not be duplicated.
-  A skipped/nonqueried consumer or unchanged Sniper/Player number is not an
-  inertness proof and cannot close the inventory.
+- The [focused Offering witness](#source-checkpoint-offering-grouping-and-exact-support-delivery)
+  now records original local products/rounding and exact Danse delivery. Use it
+  to review owned group membership and support applicability; do not rerun the
+  same probes or mistake an inherited source store for native ownership. The
+  additional-skeleton activation condition remains unresolved. Do not widen
+  native Skill or support-origin authority before the pending decisions.
+- The [manual Djinn admission witness](#source-checkpoint-manual-djinn-admission-accounting)
+  now records the actual Original05 global2 controls through original consumer
+  admission. Next use its exact queried-empty versus not-called distinction in
+  the `0503`/`01f2` disposition review. Preserve unresolved supplier and archived
+  responsibilities; neither unchanged numbers nor this finite witness certifies
+  an entire inventory. Existing other-SkillName and Purifying controls need not
+  be duplicated.
 
 **Original05 completion path.** The public finalizer returns Pending while any
 selected input obligation remains, before constructing an owned request. The CLI
