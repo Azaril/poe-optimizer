@@ -1,6 +1,6 @@
 {
   "before": "dafd7c805646bc91dfa6c7394d1a44110fb3c26a0998ce4b154fc5c476a53784",
-  "release": "pob-3887ae68-selected-life-item-placement-v1",
+  "release": "pob-3887ae68-selected-equipment-placement-v1",
   "items": [
     {
       "template": {
@@ -11,18 +11,27 @@
         },
         "key": "def.000000000000238c"
       },
-      "equipment_slot": {
-        "kind": "equipment_slot",
-        "namespace": {
-          "game": "poe2",
-          "version": "owned-mechanics-v1"
-        },
-        "key": "def.0000000000000067"
-      },
-      "source_slot": "Body Armour",
+      "equipment_slots": [
+        {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000067"
+        }
+      ],
+      "source_slots": [
+        "Body Armour"
+      ],
+      "selected_source_slots": [
+        "Body Armour"
+      ],
+      "item_type": "Body Armour",
       "base_name": "Tattered Robe",
       "source_module": "src/Data/Bases/body.lua",
       "source_item_id": 19,
+      "boundary_slot": "Body Armour 1",
       "original_item": {
         "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
         "local": "0000000000000288"
@@ -171,18 +180,27 @@
         },
         "key": "def.0000000000002007"
       },
-      "equipment_slot": {
-        "kind": "equipment_slot",
-        "namespace": {
-          "game": "poe2",
-          "version": "owned-mechanics-v1"
-        },
-        "key": "def.0000000000000068"
-      },
-      "source_slot": "Gloves",
+      "equipment_slots": [
+        {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000068"
+        }
+      ],
+      "source_slots": [
+        "Gloves"
+      ],
+      "selected_source_slots": [
+        "Gloves"
+      ],
+      "item_type": "Gloves",
       "base_name": "Rope Cuffs",
       "source_module": "src/Data/Bases/gloves.lua",
       "source_item_id": 20,
+      "boundary_slot": "Gloves 1",
       "original_item": {
         "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
         "local": "000000000000028a"
@@ -329,20 +347,349 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.0000000000001e84"
+        "key": "def.00000000000009dc"
       },
-      "equipment_slot": {
-        "kind": "equipment_slot",
+      "equipment_slots": [
+        {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000006b"
+        },
+        {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000006c"
+        },
+        {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000006d"
+        }
+      ],
+      "source_slots": [
+        "Ring 1",
+        "Ring 2",
+        "Ring 3"
+      ],
+      "selected_source_slots": [
+        "Ring 1",
+        "Ring 2"
+      ],
+      "item_type": "Ring",
+      "base_name": "Sapphire Ring",
+      "source_module": "src/Data/Bases/ring.lua",
+      "source_item_id": 26,
+      "boundary_slot": "Ring 4",
+      "original_item": {
+        "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+        "local": "000000000000029e"
+      },
+      "original_uses": [
+        {
+          "id": {
+            "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+            "local": "00000000000002cb"
+          },
+          "item": {
+            "kind": "known",
+            "value": {
+              "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+              "local": "000000000000029e"
+            }
+          },
+          "destination": {
+            "kind": "character_slot",
+            "value": {
+              "kind": "known",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006b"
+              }
+            }
+          },
+          "scope": {
+            "kind": "known",
+            "value": {
+              "kind": "shared"
+            }
+          }
+        },
+        {
+          "id": {
+            "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+            "local": "00000000000002cd"
+          },
+          "item": {
+            "kind": "known",
+            "value": {
+              "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+              "local": "000000000000029e"
+            }
+          },
+          "destination": {
+            "kind": "character_slot",
+            "value": {
+              "kind": "known",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006c"
+              }
+            }
+          },
+          "scope": {
+            "kind": "known",
+            "value": {
+              "kind": "shared"
+            }
+          }
+        },
+        {
+          "id": {
+            "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+            "local": "00000000000002d5"
+          },
+          "item": {
+            "kind": "known",
+            "value": {
+              "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+              "local": "000000000000029e"
+            }
+          },
+          "destination": {
+            "kind": "character_slot",
+            "value": {
+              "kind": "known",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006b"
+              }
+            }
+          },
+          "scope": {
+            "kind": "known",
+            "value": {
+              "kind": "shared"
+            }
+          }
+        },
+        {
+          "id": {
+            "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+            "local": "00000000000002d7"
+          },
+          "item": {
+            "kind": "known",
+            "value": {
+              "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+              "local": "000000000000029e"
+            }
+          },
+          "destination": {
+            "kind": "character_slot",
+            "value": {
+              "kind": "known",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006c"
+              }
+            }
+          },
+          "scope": {
+            "kind": "known",
+            "value": {
+              "kind": "shared"
+            }
+          }
+        },
+        {
+          "id": {
+            "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+            "local": "00000000000002df"
+          },
+          "item": {
+            "kind": "known",
+            "value": {
+              "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+              "local": "000000000000029e"
+            }
+          },
+          "destination": {
+            "kind": "character_slot",
+            "value": {
+              "kind": "known",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006b"
+              }
+            }
+          },
+          "scope": {
+            "kind": "known",
+            "value": {
+              "kind": "shared"
+            }
+          }
+        },
+        {
+          "id": {
+            "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+            "local": "00000000000002e1"
+          },
+          "item": {
+            "kind": "known",
+            "value": {
+              "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+              "local": "000000000000029e"
+            }
+          },
+          "destination": {
+            "kind": "character_slot",
+            "value": {
+              "kind": "known",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006c"
+              }
+            }
+          },
+          "scope": {
+            "kind": "known",
+            "value": {
+              "kind": "shared"
+            }
+          }
+        },
+        {
+          "id": {
+            "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+            "local": "00000000000002e9"
+          },
+          "item": {
+            "kind": "known",
+            "value": {
+              "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+              "local": "000000000000029e"
+            }
+          },
+          "destination": {
+            "kind": "character_slot",
+            "value": {
+              "kind": "known",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006b"
+              }
+            }
+          },
+          "scope": {
+            "kind": "known",
+            "value": {
+              "kind": "shared"
+            }
+          }
+        },
+        {
+          "id": {
+            "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+            "local": "00000000000002eb"
+          },
+          "item": {
+            "kind": "known",
+            "value": {
+              "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+              "local": "000000000000029e"
+            }
+          },
+          "destination": {
+            "kind": "character_slot",
+            "value": {
+              "kind": "known",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006c"
+              }
+            }
+          },
+          "scope": {
+            "kind": "known",
+            "value": {
+              "kind": "shared"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "template": {
+        "kind": "item_template",
         "namespace": {
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.000000000000006e"
+        "key": "def.0000000000001e84"
       },
-      "source_slot": "Belt",
+      "equipment_slots": [
+        {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000006e"
+        }
+      ],
+      "source_slots": [
+        "Belt"
+      ],
+      "selected_source_slots": [
+        "Belt"
+      ],
+      "item_type": "Belt",
       "base_name": "Fine Belt",
       "source_module": "src/Data/Bases/belt.lua",
       "source_item_id": 27,
+      "boundary_slot": "Belt 1",
       "original_item": {
         "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
         "local": "00000000000002a1"
@@ -477,6 +824,85 @@
             "kind": "known",
             "value": {
               "kind": "shared"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d75"
+      },
+      "equipment_slots": [
+        {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000064"
+        }
+      ],
+      "source_slots": [
+        "Weapon 1",
+        "Weapon 1 Swap"
+      ],
+      "selected_source_slots": [
+        "Weapon 1"
+      ],
+      "item_type": "Staff",
+      "base_name": "Ashen Staff",
+      "source_module": "src/Data/Bases/staff.lua",
+      "source_item_id": 28,
+      "boundary_slot": "Weapon",
+      "original_item": {
+        "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+        "local": "00000000000002a5"
+      },
+      "original_uses": [
+        {
+          "id": {
+            "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+            "local": "00000000000002d0"
+          },
+          "item": {
+            "kind": "known",
+            "value": {
+              "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+              "local": "00000000000002a5"
+            }
+          },
+          "destination": {
+            "kind": "character_slot",
+            "value": {
+              "kind": "known",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000064"
+              }
+            }
+          },
+          "scope": {
+            "kind": "known",
+            "value": {
+              "kind": "selected",
+              "value": {
+                "loadouts": [
+                  {
+                    "lineage": "540fdb13f8de8f05af2d2a0046b5bad2",
+                    "local": "00000000000002b4"
+                  }
+                ]
+              }
             }
           }
         }

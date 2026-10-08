@@ -60,7 +60,7 @@ fn request(
     draft: &DraftSessionInput,
     selected: EvaluationSelection,
     item: &ItemRecord,
-    usage: Option<EquipmentUse>,
+    equipment: Vec<EquipmentUse>,
 ) -> OwnedEvaluationRequest {
     let character = draft
         .character_presets
@@ -82,7 +82,7 @@ fn request(
             .contains(&selected.build.active_weapon_loadout)
     );
     let limits = OwnedInputLimits::default();
-    // Only this rolled item record, one real use, the selected character identity and
+    // Only this rolled item record, the explicit uses, the selected character identity and
     // enemy identity are in this explicit test request. Pending collection
     // inventories in the imported session are never promoted to Complete.
     OwnedEvaluationRequest::new(
@@ -97,11 +97,11 @@ fn request(
                     level: character.level.to_resolved().unwrap(),
                     rewards: vec![],
                 },
-                weapon_loadouts: vec![selected.build.active_weapon_loadout],
+                weapon_loadouts: draft.weapon_loadouts.members.clone(),
                 active_weapon_loadout: selected.build.active_weapon_loadout,
                 items: vec![item.clone()],
                 gems: vec![],
-                equipment: usage.into_iter().collect(),
+                equipment,
                 allocations: vec![],
                 skills: vec![],
                 supports: vec![],
@@ -140,7 +140,17 @@ fn bind(
     endpoint: &StagedOwnedRelease,
     request: &OwnedEvaluationRequest,
 ) -> DefinitionBindingReport {
-    bind_owned_request(endpoint.assembled().schema(), request, Default::default()).unwrap()
+    let report =
+        bind_owned_request(endpoint.assembled().schema(), request, Default::default()).unwrap();
+    assert_eq!(report.data_identity(), &endpoint.receipt().definitions);
+    report
+}
+fn same_outcomes(a: &DefinitionBindingReport, b: &DefinitionBindingReport) {
+    // Request/data commitments intentionally change across releases or loadouts.
+    // Compare the complete binding result, retaining independent identity checks.
+    assert_eq!(a.schema(), b.schema());
+    assert_eq!(a.issues(), b.issues());
+    assert_eq!(a.queries(), b.queries());
 }
 fn destination(report: &DefinitionBindingReport, usage: ItemSlotUseId) -> Vec<BindingIssue> {
     report
@@ -185,8 +195,8 @@ fn expected(usage: ItemSlotUseId, slot: &EquipmentSlotDefId, complete: bool) -> 
 }
 
 pub fn check() {
-    let prior_path = path("POE_OPTIMIZER_TEST_SELECTED_LIFE_ITEM_PLACEMENT_PRIOR");
-    let next_path = path("POE_OPTIMIZER_TEST_SELECTED_LIFE_ITEM_PLACEMENT_RELEASE");
+    let prior_path = path("POE_OPTIMIZER_TEST_SELECTED_EQUIPMENT_PLACEMENT_PRIOR");
+    let next_path = path("POE_OPTIMIZER_TEST_SELECTED_EQUIPMENT_PLACEMENT_RELEASE");
     let before_inventory = release::inventory(&prior_path);
     let after_inventory = release::inventory(&next_path);
     let prior = release::load(&prior_path);
@@ -231,11 +241,15 @@ pub fn check() {
         .collect();
     assert_eq!(slots.len(), 20);
     let mut checked_uses = 0;
+    let mut accepted_slots = 0;
+    let mut rejected_slots = 0;
+    let mut scope_refusals = 0;
     for binding in b["items"].as_array().unwrap() {
         let template: ItemTemplateDefId =
             serde_json::from_value(binding["template"].clone()).unwrap();
-        let slot: EquipmentSlotDefId =
-            serde_json::from_value(binding["equipment_slot"].clone()).unwrap();
+        let allowed: Vec<EquipmentSlotDefId> =
+            serde_json::from_value(binding["equipment_slots"].clone()).unwrap();
+        assert!(!allowed.is_empty());
         let old_item: Vec<_> = old_draft
             .items
             .members
@@ -274,7 +288,14 @@ pub fn check() {
             .filter(|u| u.item.to_resolved() == Some(item.id))
             .collect();
         assert_eq!(json!(old_uses), binding["original_uses"]);
-        assert_eq!(uses.len(), 4);
+        let source_item = binding["source_item_id"].as_u64().unwrap();
+        let expected_uses = match source_item {
+            19 | 20 | 27 => 4,
+            26 => 8,
+            28 => 1,
+            _ => panic!("unexpected source item"),
+        };
+        assert_eq!(uses.len(), expected_uses);
         assert_same_instances(
             binding["original_uses"].clone(),
             before_lineage,
@@ -295,7 +316,7 @@ pub fn check() {
                 .iter()
                 .filter(|id| uses.iter().any(|u| u.id == **id))
                 .count(),
-            1
+            if source_item == 26 { 2 } else { 1 }
         );
         let SchemaLookup::Known(before_schema) = prior.assembled().schema().definition(&template)
         else {
@@ -306,10 +327,21 @@ pub fn check() {
             panic!("known successor")
         };
         assert!(!before_schema.equipment_slots.is_complete());
-        assert!(before_schema.equipment_slots.members.is_empty());
+        assert!(
+            before_schema
+                .equipment_slots
+                .members
+                .iter()
+                .all(|s| allowed.contains(s))
+        );
+        if source_item == 26 {
+            assert_eq!(before_schema.equipment_slots.members, allowed);
+        } else {
+            assert!(before_schema.equipment_slots.members.is_empty());
+        }
         assert_eq!(
             after_schema.equipment_slots,
-            DeclaredSet::complete(vec![slot.clone()])
+            DeclaredSet::complete(allowed.clone())
         );
         let mut inverse = after_schema.clone();
         inverse.equipment_slots = before_schema.equipment_slots.clone();
@@ -335,21 +367,71 @@ pub fn check() {
             .unwrap();
         assert_eq!(before_owner, after_owner);
         assert!(!after_owner.programs.is_complete());
+        let uses: Vec<_> = uses.into_iter().map(|u| u.to_resolved().unwrap()).collect();
+        if source_item == 26 {
+            let pair: Vec<_> = uses
+                .iter()
+                .filter(|u| selected_preset.equipment.members.contains(&u.id))
+                .cloned()
+                .collect();
+            assert_eq!(pair.len(), 2);
+            assert_ne!(pair[0].id, pair[1].id);
+            assert_eq!(pair[0].item, pair[1].item);
+            assert_ne!(pair[0].destination, pair[1].destination);
+            let both = request(&draft, selection, &item, pair.clone());
+            assert_eq!(both.build().input().equipment, pair);
+            let before = bind(&prior, &both);
+            let after = bind(&next, &both);
+            // These exact ring slots were already known members of the old
+            // Partial set. Closing the set must not manufacture an old error.
+            assert_eq!(before.request_digest(), after.request_digest());
+            assert_ne!(before.data_identity(), after.data_identity());
+            same_outcomes(&before, &after);
+            for removed in &pair {
+                let kept = pair
+                    .iter()
+                    .filter(|u| u.id != removed.id)
+                    .cloned()
+                    .collect();
+                let remaining = request(&draft, selection, &item, kept);
+                let expected: Vec<_> = before
+                    .issues()
+                    .iter()
+                    .filter(|i| i.site.location != BindingLocation::Equipment(removed.id))
+                    .cloned()
+                    .collect();
+                assert_eq!(bind(&prior, &remaining).issues(), expected);
+                assert_eq!(bind(&next, &remaining).issues(), expected);
+                assert_eq!(remaining.build().input().equipment.len(), 1);
+                assert_ne!(remaining.build().input().equipment[0].id, removed.id);
+            }
+        }
         for usage in uses {
-            let usage = usage.to_resolved().unwrap();
             checked_uses += 1;
-            assert_eq!(
-                usage.destination,
-                EquipmentDestination::CharacterSlot(slot.clone())
-            );
-            assert_eq!(usage.scope, LoadoutScope::Shared);
-            let actual = request(&draft, selection, &item, Some(usage.clone()));
+            let EquipmentDestination::CharacterSlot(slot) = &usage.destination else {
+                panic!("actual character-slot use")
+            };
+            assert!(allowed.contains(slot));
+            if source_item == 28 {
+                assert_eq!(
+                    usage.scope,
+                    LoadoutScope::Selected {
+                        loadouts: vec![selection.build.active_weapon_loadout],
+                    }
+                );
+                assert_eq!(draft.weapon_loadouts.members.len(), 2);
+            } else {
+                assert_eq!(usage.scope, LoadoutScope::Shared);
+            }
+            let actual = request(&draft, selection, &item, vec![usage.clone()]);
             let before = bind(&prior, &actual);
             let after = bind(&next, &actual);
-            assert_eq!(
-                destination(&before, usage.id),
-                [expected(usage.id, &slot, false)]
-            );
+            let expected_before = if before_schema.equipment_slots.members.contains(slot) {
+                vec![]
+            } else {
+                vec![expected(usage.id, slot, false)]
+            };
+            assert_eq!(destination(&before, usage.id), expected_before);
             assert!(destination(&after, usage.id).is_empty());
             assert_eq!(
                 other_issues(&before, usage.id),
@@ -359,42 +441,106 @@ pub fn check() {
             assert_eq!(
                 bind(&prior, &actual),
                 before,
-                "restoring the real Partial predecessor refuses membership again"
+                "restoring the real predecessor preserves its exact known/unknown membership"
             );
             for (other, scope) in &slots {
-                if *other == slot {
-                    continue;
-                }
-                let mut wrong = usage.clone();
-                wrong.destination = EquipmentDestination::CharacterSlot(other.clone());
-                wrong.scope = match scope {
+                let mut candidate = usage.clone();
+                candidate.destination = EquipmentDestination::CharacterSlot(other.clone());
+                candidate.scope = match scope {
                     ScopePolicy::Selected => LoadoutScope::Selected {
                         loadouts: vec![selection.build.active_weapon_loadout],
                     },
                     ScopePolicy::Shared | ScopePolicy::Either => LoadoutScope::Shared,
                 };
-                let wrong = request(&draft, selection, &item, Some(wrong));
-                let old = bind(&prior, &wrong);
-                let rejected = bind(&next, &wrong);
-                assert_eq!(
-                    destination(&old, usage.id),
-                    [expected(usage.id, other, false)]
-                );
-                assert_eq!(
-                    destination(&rejected, usage.id),
-                    [expected(usage.id, other, true)]
-                );
+                let candidate = request(&draft, selection, &item, vec![candidate]);
+                let old = bind(&prior, &candidate);
+                let current = bind(&next, &candidate);
+                let expected_old = if before_schema.equipment_slots.members.contains(other) {
+                    vec![]
+                } else {
+                    vec![expected(usage.id, other, false)]
+                };
+                assert_eq!(destination(&old, usage.id), expected_old);
+                if allowed.contains(other) {
+                    accepted_slots += 1;
+                    assert!(destination(&current, usage.id).is_empty());
+                } else {
+                    rejected_slots += 1;
+                    assert_eq!(
+                        destination(&current, usage.id),
+                        [expected(usage.id, other, true)]
+                    );
+                    assert_eq!(current.schema(), SchemaBindingStatus::Invalid);
+                }
                 assert_eq!(
                     other_issues(&old, usage.id),
                     other_issues(&before, usage.id)
                 );
                 assert_eq!(
-                    other_issues(&rejected, usage.id),
+                    other_issues(&current, usage.id),
                     other_issues(&after, usage.id)
                 );
-                assert_eq!(rejected.schema(), SchemaBindingStatus::Invalid);
             }
-            let removed = request(&draft, selection, &item, None);
+            let policy = slots.iter().find(|(id, _)| id == slot).unwrap().1;
+            let mut wrong_scope = usage.clone();
+            wrong_scope.scope = match policy {
+                ScopePolicy::Selected => LoadoutScope::Shared,
+                ScopePolicy::Shared => LoadoutScope::Selected {
+                    loadouts: vec![selection.build.active_weapon_loadout],
+                },
+                ScopePolicy::Either => panic!("selected original slots have explicit scope"),
+            };
+            let wrong_scope = bind(&next, &request(&draft, selection, &item, vec![wrong_scope]));
+            let scope_issue = BindingIssue {
+                site: BindingSite {
+                    location: BindingLocation::Equipment(usage.id),
+                    facet: BindingFacet::Scope,
+                },
+                class: IssueClass::Invalid,
+                code: BindingIssueCode::IncompatibleScope,
+                subject: Some(SchemaSubject::Definition(slot.address())),
+            };
+            assert_eq!(
+                wrong_scope
+                    .issues()
+                    .iter()
+                    .filter(|i| i.site == scope_issue.site)
+                    .cloned()
+                    .collect::<Vec<_>>(),
+                std::slice::from_ref(&scope_issue)
+            );
+            assert_eq!(
+                wrong_scope
+                    .issues()
+                    .iter()
+                    .filter(|i| i.site != scope_issue.site)
+                    .cloned()
+                    .collect::<Vec<_>>(),
+                after.issues()
+            );
+            assert_eq!(wrong_scope.schema(), SchemaBindingStatus::Invalid);
+            scope_refusals += 1;
+            if source_item == 28 {
+                // Weapon 1 and Weapon 1 Swap are the same typed slot with
+                // distinct real loadout scopes. These explicit candidates test
+                // structural binding only, not active execution or saved usage.
+                for loadout in &draft.weapon_loadouts.members {
+                    let mut scoped = usage.clone();
+                    scoped.scope = LoadoutScope::Selected {
+                        loadouts: vec![*loadout],
+                    };
+                    for active in &draft.weapon_loadouts.members {
+                        let mut selected = selection;
+                        selected.build.active_weapon_loadout = *active;
+                        let candidate = request(&draft, selected, &item, vec![scoped.clone()]);
+                        same_outcomes(&bind(&prior, &candidate), &before);
+                        same_outcomes(&bind(&next, &candidate), &after);
+                        assert_eq!(candidate.build().input().active_weapon_loadout, *active);
+                        assert_eq!(candidate.build().input().equipment[0].scope, scoped.scope);
+                    }
+                }
+            }
+            let removed = request(&draft, selection, &item, vec![]);
             let remaining: Vec<_> = before
                 .issues()
                 .iter()
@@ -405,10 +551,48 @@ pub fn check() {
             assert_eq!(bind(&next, &removed).issues(), remaining);
         }
     }
-    assert_eq!(checked_uses, 12);
+    assert_eq!(checked_uses, 21);
+    assert_eq!(accepted_slots, 37);
+    assert_eq!(rejected_slots, 383);
+    assert_eq!(scope_refusals, 21);
+    let selected_preset = draft
+        .equipment_presets
+        .members
+        .iter()
+        .find(|p| p.id == selection.build.equipment)
+        .unwrap();
+    let mut templates = std::collections::BTreeSet::new();
+    assert_eq!(selected_preset.equipment.members.len(), 9);
+    for id in &selected_preset.equipment.members {
+        let usage = draft
+            .equipment
+            .members
+            .iter()
+            .find(|u| u.id == *id)
+            .unwrap()
+            .to_resolved()
+            .unwrap();
+        let item = draft
+            .items
+            .members
+            .iter()
+            .find(|i| i.id == usage.item)
+            .unwrap();
+        let template = item.template.to_resolved().unwrap();
+        let SchemaLookup::Known(schema) = next.assembled().schema().definition(&template) else {
+            panic!("selected template schema");
+        };
+        let EquipmentDestination::CharacterSlot(slot) = &usage.destination else {
+            panic!("selected character slot");
+        };
+        assert!(schema.equipment_slots.is_complete());
+        assert!(schema.equipment_slots.members.contains(slot));
+        templates.insert(template);
+    }
+    assert_eq!(templates.len(), 8);
     assert_eq!(release::inventory(&prior_path), before_inventory);
     assert_eq!(release::inventory(&next_path), after_inventory);
     println!(
-        "12 exact retained equipment uses, 228 alternative-slot refusals, Partial predecessor and removed-use controls; all unrelated diagnostics preserved. Binding only, no complete-build numerical claim."
+        "All 9 selected uses / 8 templates have complete character-slot placement. 21 exact retained equipment uses, 37 allowed-slot bindings, 383 alternative-slot refusals, 21 scope refusals, distinct ring uses and both declared staff loadouts; prior Partial and removed-use controls preserve unrelated diagnostics. Binding only, no complete-build numerical claim."
     );
 }

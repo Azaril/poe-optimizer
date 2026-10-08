@@ -1,6 +1,8 @@
 # Checked contributions from Actors and rewards
 
-Status: **proposed; not accepted or implemented**. Date: 2026-10-08.
+Status: **accepted 2026-10-08; implementation pending**. The owner approved
+extending the existing graph, with exact sources and recipients, duplicate
+occurrences, explicit numeric ordering and incomplete-coverage failures.
 
 ## Concrete blocker
 
@@ -76,7 +78,7 @@ shared rules or copy shared Life back into every Class.
   Relevant source/recipient/membership changes invalidate plan identity. Rebuild
   current artifacts instead of preserving old development-format branches.
 
-This is distinct from the pending
+This is distinct from the separately accepted
 [exact Skill query proposal](owned-skill-contribution-queries-proposal.md): that
 also extends query *read* scope to Skills for Offering scaling. The two should
 share membership machinery, but neither decision silently authorizes unrelated
@@ -91,7 +93,7 @@ rules. Using unchecked contribution reads would bypass the completeness proof.
 Deferring final Life avoids that public change now but leaves a blocker for the
 first complete build.
 
-After approval, specify the minimal member declarations and admitted origins in
+Before implementation, specify the minimal member declarations and admitted origins in
 Core/Data/Engine together. Test exact source/recipient identity, multiple minions
 and providers, independent rewards, duplicates, partial/unavailable sources,
 inactive/late effects, ordering ties, cache identity and fresh/reused/Rayon
@@ -121,4 +123,4 @@ proves combined-operation equivalence for finite operands at or below 2^52;
 it does not prove that the actual contributor/input domain stays within that
 bound, or validate the preceding arithmetic. The raw conversion Sum remains
 unobserved. These arithmetic and coverage requirements remain separate from the
-pending origin-authority decision.
+accepted origin-authority implementation.

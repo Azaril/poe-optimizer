@@ -1,4 +1,4 @@
-//! Exact original placement calls for three selected Life-bearing item bases.
+//! Exact original placement calls for five selected equipment bases.
 //! No native algorithm, item mechanics closure, or augment admission is supplied.
 #![cfg(not(target_arch = "wasm32"))]
 #[path = "support/item_assembly_graph.rs"]
@@ -26,10 +26,10 @@ use std::{
     time::{Duration, Instant},
 };
 const BINDING: &str = include_str!("support/item_slot_validity_source.lua");
-const OBSERVE: &str = include_str!("support/selected_life_item_placement_source.lua");
-const TEST: &str = "actual_selected_life_item_placement_is_stable_across_slots_sets_and_flags";
-const CHILD: &str = "POE_SELECTED_LIFE_ITEM_PLACEMENT_CHILD";
-const OUTPUT: &str = "POE_OPTIMIZER_TEST_SELECTED_LIFE_ITEM_PLACEMENT_SOURCE_OUT";
+const OBSERVE: &str = include_str!("support/selected_equipment_placement_source.lua");
+const TEST: &str = "actual_selected_equipment_placement_is_stable_across_slots_sets_and_flags";
+const CHILD: &str = "POE_SELECTED_EQUIPMENT_PLACEMENT_CHILD";
+const OUTPUT: &str = "POE_OPTIMIZER_TEST_SELECTED_EQUIPMENT_PLACEMENT_SOURCE_OUT";
 fn hash(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
@@ -43,6 +43,15 @@ fn rows(value: &Json) -> &[Json] {
         assert!(value.as_object().is_some_and(|o| o.is_empty()));
         &[]
     }
+}
+fn profiles() -> [Json; 5] {
+    [
+        json!({"id":19,"base_name":"Tattered Robe","item_type":"Body Armour","source_slots":["Body Armour"],"selected_source_slots":["Body Armour"],"boundary_slot":"Body Armour 1"}),
+        json!({"id":20,"base_name":"Rope Cuffs","item_type":"Gloves","source_slots":["Gloves"],"selected_source_slots":["Gloves"],"boundary_slot":"Gloves 1"}),
+        json!({"id":26,"base_name":"Sapphire Ring","item_type":"Ring","source_slots":["Ring 1","Ring 2","Ring 3"],"selected_source_slots":["Ring 1","Ring 2"],"boundary_slot":"Ring 4"}),
+        json!({"id":27,"base_name":"Fine Belt","item_type":"Belt","source_slots":["Belt"],"selected_source_slots":["Belt"],"boundary_slot":"Belt 1"}),
+        json!({"id":28,"base_name":"Ashen Staff","item_type":"Staff","source_slots":["Weapon 1","Weapon 1 Swap"],"selected_source_slots":["Weapon 1"],"boundary_slot":"Weapon"}),
+    ]
 }
 fn observed(root: &Path, xml: &str, enabled: bool, execute: bool) -> Json {
     let module = Rc::new(RefCell::new(None::<Table>));
@@ -69,15 +78,11 @@ fn observed(root: &Path, xml: &str, enabled: bool, execute: bool) -> Json {
             .call(())?;
         let observer: Function = lua
             .load(OBSERVE)
-            .set_name("@selected_life_item_placement_source.lua")
+            .set_name("@selected_equipment_placement_source.lua")
             .eval()?;
         let mut results = Vec::new();
-        for (id, name, slot) in [
-            (19, "Tattered Robe", "Body Armour"),
-            (20, "Rope Cuffs", "Gloves"),
-            (27, "Fine Belt", "Belt"),
-        ] {
-            let profile = lua.to_value(&json!({"id":id,"base_name":name,"slot":slot}))?;
+        for profile in profiles() {
+            let profile = lua.to_value(&profile)?;
             let result: Table = observer.call((bound.clone(), execute, enabled, profile))?;
             let before: Table = result.raw_get("context_before")?;
             let after: Table = result.raw_get("context_after")?;
@@ -124,21 +129,17 @@ fn without_calls(mut host: Json) -> Json {
 }
 fn check(host: &Json) {
     let states = rows(&host["state"]);
-    assert_eq!(states.len(), 3);
-    for (s, (id, name, slot)) in states.iter().zip([
-        (19, "Tattered Robe", "Body Armour"),
-        (20, "Rope Cuffs", "Gloves"),
-        (27, "Fine Belt", "Belt"),
-    ]) {
+    assert_eq!(states.len(), 5);
+    for (s, profile) in states.iter().zip(profiles()) {
         assert_eq!(s["executed"], true);
         assert_eq!(
             s["method"],
             json!({"path":"Classes/ItemsTab.lua","first":2603,"last":2687})
         );
-        assert_eq!(s["item"]["id"], id);
-        assert_eq!(s["item"]["base_name"], name);
-        assert_eq!(s["item"]["item_type"], slot);
-        assert_eq!(s["item"]["base"]["type"], slot);
+        assert_eq!(s["item"]["id"], profile["id"]);
+        assert_eq!(s["item"]["base_name"], profile["base_name"]);
+        assert_eq!(s["item"]["item_type"], profile["item_type"]);
+        assert_eq!(s["item"]["base"]["type"], profile["item_type"]);
         let slots = rows(&s["registered_slots"]);
         assert_eq!(slots.len(), 113);
         assert!(slots.windows(2).all(|w| w[0].as_str() < w[1].as_str()));
@@ -149,20 +150,20 @@ fn check(host: &Json) {
             s["selected"],
             json!({"items":2,"spec":3,"skills":4,"config":1,"group":3})
         );
-        assert!(
-            rows(&s["selected_uses"])
-                .iter()
-                .any(|u| u == &json!({"set":2,"slot":slot}))
-        );
-        for tag in [
-            "onehand",
-            "twohand",
-            "one_hand_weapon",
-            "axe",
-            "mace",
-            "sword",
-        ] {
+        for slot in rows(&profile["selected_source_slots"]) {
+            assert!(
+                rows(&s["selected_uses"])
+                    .iter()
+                    .any(|u| u == &json!({"set":2,"slot":slot}))
+            );
+        }
+        for tag in ["onehand", "one_hand_weapon", "axe", "mace", "sword"] {
             assert!(s["item"]["base"]["tags"].get(tag).is_none());
+        }
+        if profile["item_type"] == "Staff" {
+            assert_eq!(s["item"]["base"]["tags"]["twohand"], true);
+        } else {
+            assert!(s["item"]["base"]["tags"].get("twohand").is_none());
         }
         let calls = rows(&s["calls"]);
         assert_eq!(calls.len(), 7119);
@@ -189,11 +190,14 @@ fn check(host: &Json) {
                 }
                 _ => panic!("unknown original return"),
             }
-            assert_eq!(o["value"] == true, r["slot"] == slot);
+            assert_eq!(
+                o["value"] == true,
+                rows(&profile["source_slots"]).contains(&r["slot"])
+            );
         }
         assert_eq!(
             s["boundary"],
-            json!({"slot":format!("{slot} 1"),"registered":false,"outcome":{"return_count":1,"kind":"boolean","value":true},"native_admission":false})
+            json!({"slot":profile["boundary_slot"],"registered":false,"outcome":{"return_count":1,"kind":"boolean","value":true},"native_admission":false})
         );
         for flag in [
             "exact_catalogue_base",
@@ -220,7 +224,7 @@ fn check(host: &Json) {
     }
 }
 #[test]
-fn actual_selected_life_item_placement_is_stable_across_slots_sets_and_flags() {
+fn actual_selected_equipment_placement_is_stable_across_slots_sets_and_flags() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../..")
         .canonicalize()
@@ -250,7 +254,7 @@ fn actual_selected_life_item_placement_is_stable_across_slots_sets_and_flags() {
         .unwrap();
         let evidence =
             SourceProjectEvidence::collect(&imported, SourceEvidenceLimits::default()).unwrap();
-        let source_items:Vec<_>=["19","20","27"].into_iter().map(|id|{
+        let source_items:Vec<_>=["19","20","26","27","28"].into_iter().map(|id|{
             let item:Vec<_>=evidence.rows().iter().filter(|r|r.occurrence().name()=="Item"&&r.attribute("id").and_then(|a|a.decoded().ok())==Some(id)).collect();
             assert_eq!(item.len(),1);
             json!({"id":id.parse::<u32>().unwrap(),"ordinal":item[0].occurrence().id().ordinal(),"content_entry":0})
@@ -280,7 +284,7 @@ fn actual_selected_life_item_placement_is_stable_across_slots_sets_and_flags() {
                 "fresh_runtimes":3,"unhooked":true,"independent_replay_equal":true,"no_call_control_equal":true,
                 "scope":"registered-source-slot-catalogue-only",
                 "files":(["src/Classes/ItemsTab.lua","src/Classes/Item.lua","src/Classes/ModStore.lua",
-                    "src/Classes/ModDB.lua","src/Modules/Build.lua", "src/Modules/Common.lua","src/Data/Bases/body.lua","src/Data/Bases/gloves.lua","src/Data/Bases/belt.lua"]
+                    "src/Classes/ModDB.lua","src/Modules/Build.lua", "src/Modules/Common.lua","src/Data/Bases/body.lua","src/Data/Bases/gloves.lua","src/Data/Bases/belt.lua","src/Data/Bases/ring.lua","src/Data/Bases/staff.lua"]
                     .map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})))},
             "control":control,"original":first,"repeat":repeat});
         fs::write(

@@ -6,6 +6,63 @@
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
 
+## Archived 2026-10-08 checkpoint: selected Life-item placement
+
+Original05 remains the closest build. Its joined Life graph previously invented
+three selected equipment destinations because the actual template inventories
+were empty and Partial. The new [placement packet](../data/owned/poe2/3887ae68/selected-life-item-placement/README.md)
+publishes those existing relations through the accepted descriptor migration:
+Tattered Robe `238c` to Body Armour `0067`, Rope Cuffs `2007` to Gloves `0068`,
+and Fine Belt `1e84` to Belt `006e`. Each becomes a singleton Complete inventory.
+No definitions, rule programs, numerical owners or other declarations change.
+
+The original-method witness covers three actual items across 113 registered
+slots, seven default/saved-set contexts and nine flag settings: 21,357 contexts
+per observed VM. Calls repeat in place, fresh observed replays and no-call
+controls agree, and both JIT reports are byte-identical. Pinned base/type/tag
+branches rule out other accepting destinations; a finite observation alone
+does not close the inventory. Three source-target checks pass in **14.46s**;
+the default temporary-output path also passes in **19.29s**. Raw nil/false/no-return
+distinctions and unregistered suffix labels remain source-only diagnostics.
+
+Publication passes in **27.43s**, with an exact recipe inverse and byte-identical
+rebuild. All five drafts, selections, source identities and 110 queries survive;
+selected issues remain **107/117/109/123/5**. Three ordinary packet checks pass.
+Public binding checks pass in **4.39s**, covering 12 actual saved uses, 228
+alternative-slot refusals, restored Partial predecessors, removed uses and
+unchanged unrelated diagnostics. The initial publication rejected noncanonical
+definition order; the current migration is sorted and its checks look up each
+replacement by identity. The failed log remains.
+
+The joined graph now consumes the three production placement inventories and
+passes **59 checks in 45.79s**, including fresh/reused/Rayon execution. The obsolete
+fixture insertion, stored-descriptor bookkeeping and its one refusal test are
+removed; the new public binder checks preserve the refusal coverage. Sapphire
+Ring already lists its ring slots but remains Partial; its existing finite
+fixture closure is explicitly retained. Numerical owners, sockets, catalog
+completion and whole-build coverage are not established by this checkpoint.
+
+Current package: `runs/owned-selected-life-item-placement-publication-02/package`.
+Evidence: `runs/owned-selected-life-item-placement-source-02/`, source parent
+`runs/owned-selected-life-item-placement-source-03.log`, and
+`runs/owned-selected-life-item-placement-{ordinary-02,publication-02,binding-01,joined-01}.log`.
+The source reports are 36,859,788 bytes each at SHA-256
+`7595e3f509c2d7db0d39dfdd0751e5c0bb8970f02105f995e6d98539616e8790`.
+Changed Rust formatting passes, and strict workspace/all-feature/all-target
+Clippy passes in **0.38s** (`runs/owned-selected-life-item-placement-clippy-02.log`).
+The first lint pass caught a fixed-size chunking style in the new CI test;
+the equivalent array-chunk iteration and its remainder refusal are retested.
+The first source command selected zero tests through an incorrect `--ignored`
+filter; it is not counted as validation. The ordinary entry is tested and uses
+isolated temporary output unless an explicit immutable evidence path is supplied.
+
+**Resume:** no original is complete (**0/5**). Keep Original05 first. Final
+Player Life still needs the pending Actor/reward contribution-query decision;
+Offering's three source-scaling writers need the separate exact Skill query
+decision. This data-only checkpoint implements neither proposal. Remaining
+selected input obligations and numerical coverage are listed below; no scalar
+or fixture-completeness shortcut is authorized.
+
 ## Archived 2026-10-08 checkpoint: first Player Life consumer witness
 
 The optional Rust test `owned_player_life_source` now separates internal data

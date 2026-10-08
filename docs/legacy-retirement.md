@@ -1105,14 +1105,17 @@ represents eligibility only. Neither Lua return conventions nor source labels
 become runtime contracts. The existing binding API required no compatibility
 branch or public-model change.
 
-The selected Life-item placement packet applies the same boundary to Tattered
-Robe, Rope Cuffs and Fine Belt. It retires the joined fixture's three fabricated
-placement members and their obsolete stored-descriptor refusal helper. Exact
-production predecessor/successor binding controls retain Partial and wrong-slot
-refusals. These are data-only static relations: the optional source witness
-retains raw Lua return distinctions, while native binding consumes typed slot
-identities. Sapphire Ring's broader Partial placement and every unrelated item
-owner/socket obligation remain explicit; this cleanup does not retire them.
+The selected equipment placement packet applies the same boundary to Tattered
+Robe, Rope Cuffs, Sapphire Ring, Fine Belt and Ashen Staff. It replaces the former
+three-template Life-item packet, source target and public-binding helpers in
+place; historical evidence remains, with one current authoring path. It retires
+the joined fixture's three fabricated members, stored-descriptor refusal helper
+and last finite Ring closure. Public predecessor/successor binding controls
+retain Partial, wrong-slot, duplicate-use and loadout-scope refusals. These are
+data-only static relations: the source witness retains raw Lua return
+distinctions, while native binding consumes typed identities. All nine selected
+uses now have complete character-slot placement; unrelated item owners, sockets,
+stock and numerical coverage remain explicit obligations.
 
 The [local defence publication](../data/owned/poe2/3887ae68/local-defence-composition/README.md)
 adds shared native Armour/ES receivers using the existing rule operations and

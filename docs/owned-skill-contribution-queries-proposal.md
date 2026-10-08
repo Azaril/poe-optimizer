@@ -1,6 +1,7 @@
 # Checked contribution queries for exact Skill occurrences
 
-**Status:** Proposed; not accepted or implemented.
+**Status:** Accepted 2026-10-08; implementation pending. The owner approved
+exact Skill query reads and membership in the existing contribution graph.
 **Date:** 2026-10-07.
 **Decider:** Project owner.
 **Scope:** Extend the existing contribution graph's ownership and membership
@@ -115,12 +116,12 @@ Skill contribution pipeline or persist source-runtime objects.
    Rebuild artifacts for the current contract rather than maintaining an older
    runtime interpretation.
 
-These principles need owner approval. The exact minimal wire declarations and
+These principles are approved. The exact minimal wire declarations and
 admitted origin families must then be specified and tested before implementation;
 this proposal does not approve arbitrary provider paths or settle all support
 origin semantics. The separate
 [support-origin composition proposal](owned-support-origin-composition-proposal.md)
-remains open.
+was also accepted on 2026-10-08; implementation remains pending.
 
 ## Grouped multipliers and source evidence
 

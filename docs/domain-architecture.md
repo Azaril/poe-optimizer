@@ -889,6 +889,34 @@ report inputs it cannot represent. Finalist verification can run a fresh native 
 and an optional matched PoB comparison; native correctness and deployment do not require
 a reference process for every search candidate.
 
+## Accepted contribution and support composition boundaries
+
+The owner approved these extensions on 2026-10-08; their implementation is
+tracked separately in the [implementation plan](implementation.md).
+
+The existing checked contribution graph admits reviewed shared-Actor,
+supplied-Actor and selected reward sources, and exact Skill query recipients and
+members. Each contribution retains its exact occurrence, provider relation and
+recipient. Numeric reductions require explicit semantic order/grouping;
+Boolean Any is unordered. Missing coverage stays unresolved, including inactive
+or identity-valued potential members. Neither an Actor ancestor nor a shared
+definition implicitly authorizes delivery. Cold planning validates membership
+and produces immutable indices for native workers; these changes create no
+second aggregator or runtime source interpreter. See the
+[Actor/reward](owned-actor-reward-contribution-queries-proposal.md) and
+[Skill](owned-skill-contribution-queries-proposal.md) contracts for scope and
+acceptance requirements.
+
+Skill presets own authored support assignments and their declared order.
+Complete effective support origins are derived from the composed request and
+injected capability data during cold planning. Changing equipment, tree,
+loadouts or provider inputs invalidates dependent discovery. Direct requests
+and staged evaluation enforce the same coverage gate. Unsupported extra/linked
+origins remain blocking; absence must be proved. Move the current mixed-scope
+Import obligation only after authored input accounting and the mandatory native
+gate exist. Rebuild current artifacts without a compatibility branch. See
+[support composition](owned-support-origin-composition-proposal.md).
+
 ## Options and consequences
 
 | Approach | Benefit | Cost / decision |

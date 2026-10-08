@@ -1,6 +1,8 @@
 # Support origins belong to the composed request
 
-**Status:** Proposed; not accepted or implemented.
+**Status:** Accepted 2026-10-08; implementation pending. The owner approved
+discovery from each composed build, preserving authored assignments and order
+on the skill preset.
 **Date:** 2026-10-07.
 **Decider:** Project owner.
 **Scope:** The next input/composition decision needed for the first complete

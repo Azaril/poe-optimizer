@@ -1,4 +1,4 @@
-//! Three exact placement inventories. No numerical or other item coverage changes.
+//! Five exact placement inventories. No numerical or other item coverage changes.
 use super::migration_preservation;
 use poe_optimizer_core::{
     owned_content::{OwnedContentDigest, digest_owned},
@@ -19,12 +19,12 @@ use std::{
     fs,
     path::PathBuf,
 };
-pub const KIND: &str = "source-bound-selected-life-item-placement";
+pub const KIND: &str = "source-bound-selected-equipment-placement";
 fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
 pub fn data() -> PathBuf {
-    root().join("data/owned/poe2/3887ae68/selected-life-item-placement")
+    root().join("data/owned/poe2/3887ae68/selected-equipment-placement")
 }
 pub fn read<T: DeserializeOwned>(name: &str) -> T {
     serde_json::from_slice(&fs::read(data().join(name)).unwrap()).unwrap()
@@ -43,7 +43,7 @@ fn digest() -> OwnedContentDigest {
     .map(read)
     .into();
     digest_owned(
-        "owned-selected-life-item-placement-v1",
+        "owned-selected-equipment-placement-v1",
         &payloads,
         4 * 1024 * 1024,
     )
@@ -66,7 +66,7 @@ pub fn check_authored() {
     );
     assert_eq!(
         m.release.as_str(),
-        "pob-3887ae68-selected-life-item-placement-v1"
+        "pob-3887ae68-selected-equipment-placement-v1"
     );
     assert!(
         m.owners.is_empty()
@@ -75,20 +75,22 @@ pub fn check_authored() {
             && m.query_targets.is_empty()
             && m.evaluation.is_none()
     );
-    assert_eq!(m.schema.len(), 3);
-    assert_eq!(b["items"].as_array().unwrap().len(), 3);
-    assert_eq!(d["templates"].as_array().unwrap().len(), 3);
-    assert_eq!(d["slots"].as_array().unwrap().len(), 3);
-    assert_eq!(d["owners"].as_array().unwrap().len(), 3);
-    assert_eq!(d["mappings"].as_array().unwrap().len(), 6);
+    assert_eq!(m.schema.len(), 5);
+    assert_eq!(b["items"].as_array().unwrap().len(), 5);
+    assert_eq!(d["templates"].as_array().unwrap().len(), 5);
+    assert_eq!(d["slots"].as_array().unwrap().len(), 7);
+    assert_eq!(d["owners"].as_array().unwrap().len(), 5);
+    assert_eq!(d["mappings"].as_array().unwrap().len(), 13);
     let catalogue_path = root().join(a["catalogue"]["path"].as_str().unwrap());
     let bytes = fs::read(catalogue_path).unwrap();
     assert_eq!(hash(&bytes), a["catalogue"]["sha256"]);
     let catalogue: Value = serde_json::from_slice(&bytes).unwrap();
-    for (i, (template, slot, name)) in [
-        ("238c", "0067", "Tattered Robe"),
-        ("2007", "0068", "Rope Cuffs"),
-        ("1e84", "006e", "Fine Belt"),
+    for (i, (template, slots, name, uses)) in [
+        ("238c", &["0067"][..], "Tattered Robe", 4),
+        ("2007", &["0068"][..], "Rope Cuffs", 4),
+        ("09dc", &["006b", "006c", "006d"][..], "Sapphire Ring", 8),
+        ("1e84", &["006e"][..], "Fine Belt", 4),
+        ("1d75", &["0064"][..], "Ashen Staff", 1),
     ]
     .into_iter()
     .enumerate()
@@ -98,14 +100,23 @@ pub fn check_authored() {
             binding["template"]["key"],
             format!("def.000000000000{template}")
         );
-        assert_eq!(
-            binding["equipment_slot"]["key"],
-            format!("def.000000000000{slot}")
-        );
+        let allowed = binding["equipment_slots"].as_array().unwrap();
+        assert_eq!(allowed.len(), slots.len());
+        for (id, slot) in allowed.iter().zip(slots) {
+            assert_eq!(id["key"], format!("def.000000000000{slot}"));
+            assert_eq!(
+                d["slots"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .filter(|s| s["value"]["id"] == *id)
+                    .count(),
+                1
+            );
+        }
         assert_eq!(binding["base_name"], name);
         let old = &d["templates"][i];
         assert_eq!(old["value"]["id"], binding["template"]);
-        assert_eq!(d["slots"][i]["value"]["id"], binding["equipment_slot"]);
         let new = m
             .schema
             .iter()
@@ -121,10 +132,17 @@ pub fn check_authored() {
         let mut restored = json!(new);
         assert_eq!(
             restored["value"]["schema"]["value"]["equipment_slots"],
-            json!({"members":[binding["equipment_slot"]],"closure":{"kind":"complete"}})
+            json!({"members":allowed,"closure":{"kind":"complete"}})
         );
         let prior = &old["value"]["schema"]["value"]["equipment_slots"];
-        assert_eq!(prior["members"], json!([]));
+        assert_eq!(
+            prior["members"],
+            if template == "09dc" {
+                json!(allowed)
+            } else {
+                json!([])
+            }
+        );
         assert_eq!(prior["closure"]["kind"], "partial");
         restored["value"]["schema"]["value"]["equipment_slots"] = prior.clone();
         assert_eq!(
@@ -142,31 +160,68 @@ pub fn check_authored() {
                 .unwrap()
                 .iter()
                 .filter(|x| x["name"] == binding["base_name"]
-                    && x["item_type"] == binding["source_slot"]
+                    && x["item_type"] == binding["item_type"]
                     && x["source_module"] == binding["source_module"]
                     && x["weapon_field"] == "absent")
                 .count(),
             1
         );
-        assert_eq!(binding["original_uses"].as_array().unwrap().len(), 4);
+        let mappings = d["mappings"].as_array().unwrap();
+        let base: Vec<_> = mappings
+            .iter()
+            .filter(|row| {
+                row["source"]["kind"] == "definition"
+                    && row["source"]["value"]["kind"] == "item_template"
+                    && row["source"]["value"]["value"]["base"]
+                        == json!({"kind":"text","value":name})
+            })
+            .collect();
+        assert_eq!(base.len(), 1);
+        assert_eq!(
+            base[0]["outcome"]["value"]["target"],
+            json!({"kind":"definition","value":{"kind":"item_template","value":binding["template"]}})
+        );
+        let mut destinations = BTreeSet::new();
+        for label in binding["source_slots"].as_array().unwrap() {
+            let rows: Vec<_> = mappings
+                .iter()
+                .filter(|row| {
+                    row["source"]["kind"] == "catalog"
+                        && row["source"]["value"]["kind"] == "equipment_slot"
+                        && row["source"]["value"]["key"] == json!({"kind":"text","value":label})
+                })
+                .collect();
+            assert_eq!(rows.len(), 1);
+            let target = &rows[0]["outcome"]["value"]["target"];
+            assert_eq!(target["kind"], "definition");
+            assert_eq!(target["value"]["kind"], "equipment_slot");
+            assert!(allowed.contains(&target["value"]["value"]));
+            destinations.insert(target["value"]["value"].to_string());
+        }
+        assert_eq!(destinations, allowed.iter().map(Value::to_string).collect());
+        assert_eq!(binding["original_uses"].as_array().unwrap().len(), uses);
         for u in binding["original_uses"].as_array().unwrap() {
             assert_eq!(
                 u["item"],
                 json!({"kind":"known","value":binding["original_item"]})
             );
+            assert_eq!(u["destination"]["kind"], "character_slot");
+            assert_eq!(u["destination"]["value"]["kind"], "known");
+            assert!(allowed.contains(&u["destination"]["value"]["value"]));
+            assert_eq!(u["scope"]["kind"], "known");
             assert_eq!(
-                u["destination"],
-                json!({"kind":"character_slot","value":{"kind":"known","value":binding["equipment_slot"]}})
-            );
-            assert_eq!(
-                u["scope"],
-                json!({"kind":"known","value":{"kind":"shared"}})
+                u["scope"]["value"]["kind"],
+                if template == "1d75" {
+                    "selected"
+                } else {
+                    "shared"
+                }
             );
         }
     }
     assert_eq!(
         a["scope"],
-        json!({"equipment_slot_inventories_closed":3,"new_definitions":0,"new_programs":0,"closed_rule_owners":0,"other_declaration_changes":0,"numerical_parity":false,"item_set_membership_changed":false,"socket_configuration_admission":false,"whole_build_parity":false})
+        json!({"equipment_slot_inventories_closed":5,"new_definitions":0,"new_programs":0,"closed_rule_owners":0,"other_declaration_changes":0,"numerical_parity":false,"item_set_membership_changed":false,"socket_configuration_admission":false,"whole_build_parity":false})
     );
     for (n, expected) in a["artifact_sha256"].as_object().unwrap() {
         let bytes = fs::read(data().join(format!("{n}.json"))).unwrap();
@@ -179,7 +234,7 @@ pub fn check_authored() {
 pub fn check_vectors(v: &Value) {
     let b: Value = read("bindings.json");
     assert_eq!(v["status"], "passed");
-    assert_eq!(v["projection"].as_array().unwrap().len(), 3);
+    assert_eq!(v["projection"].as_array().unwrap().len(), 5);
     for (p, b) in v["projection"]
         .as_array()
         .unwrap()
@@ -193,8 +248,8 @@ pub fn check_vectors(v: &Value) {
         assert_eq!(s["executed"], true);
         assert_eq!(s["item"]["id"], b["source_item_id"]);
         assert_eq!(s["item"]["base_name"], b["base_name"]);
-        assert_eq!(s["item"]["item_type"], b["source_slot"]);
-        assert_eq!(s["item"]["base"]["type"], b["source_slot"]);
+        assert_eq!(s["item"]["item_type"], b["item_type"]);
+        assert_eq!(s["item"]["base"]["type"], b["item_type"]);
         assert_eq!(
             s["method"],
             json!({"path":"Classes/ItemsTab.lua","first":2603,"last":2687})
@@ -216,16 +271,22 @@ pub fn check_vectors(v: &Value) {
             base["subType"].as_str(),
             Some("Transcendent Arm" | "Transcendent Leg")
         ));
-        for tag in [
-            "onehand",
-            "twohand",
-            "one_hand_weapon",
-            "axe",
-            "mace",
-            "sword",
-        ] {
+        for tag in ["onehand", "one_hand_weapon", "axe", "mace", "sword"] {
             assert!(base["tags"].get(tag).is_none());
         }
+        if b["item_type"] == "Staff" {
+            assert_eq!(base["tags"]["twohand"], true);
+        } else {
+            assert!(base["tags"].get("twohand").is_none());
+        }
+        let selected: Vec<_> = s["selected_uses"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|u| u["set"] == 2)
+            .map(|u| u["slot"].clone())
+            .collect();
+        assert_eq!(json!(selected), b["selected_source_slots"]);
         let slots = s["registered_slots"].as_array().unwrap();
         assert_eq!(slots.len(), 113);
         assert!(slots.windows(2).all(|w| w[0].as_str() < w[1].as_str()));
@@ -267,13 +328,16 @@ pub fn check_vectors(v: &Value) {
                     }
                     _ => panic!("unrepresented original result"),
                 }
-                assert_eq!(o["value"] == true, *slot == b["source_slot"]);
+                assert_eq!(
+                    o["value"] == true,
+                    b["source_slots"].as_array().unwrap().contains(slot)
+                );
             }
             assert_eq!(count, 63);
         }
         assert_eq!(
             s["boundary"],
-            json!({"slot":format!("{} 1",b["source_slot"].as_str().unwrap()),"registered":false,"outcome":{"return_count":1,"kind":"boolean","value":true},"native_admission":false})
+            json!({"slot":b["boundary_slot"],"registered":false,"outcome":{"return_count":1,"kind":"boolean","value":true},"native_admission":false})
         );
         for flag in [
             "exact_catalogue_base",
@@ -370,7 +434,7 @@ fn check_source(full: bool) {
     let manifest: Value = serde_json::from_slice(&manifest).unwrap();
     assert_eq!(manifest["upstream_revision"], a["source_revision"]);
     let pins = a["source_files"].as_array().unwrap();
-    assert_eq!(pins.len(), 9);
+    assert_eq!(pins.len(), 11);
     let mut unique = BTreeSet::new();
     for pin in pins {
         assert!(unique.insert(pin["path"].as_str().unwrap()));
@@ -400,7 +464,7 @@ fn check_source(full: bool) {
     assert_eq!(meta["source_xml_sha256"], a["source_xml_sha256"]);
     assert_eq!(
         meta["source_items"],
-        json!([{"id":19,"ordinal":572,"content_entry":0},{"id":20,"ordinal":574,"content_entry":0},{"id":27,"ordinal":590,"content_entry":0}])
+        json!([{"id":19,"ordinal":572,"content_entry":0},{"id":20,"ordinal":574,"content_entry":0},{"id":26,"ordinal":587,"content_entry":0},{"id":27,"ordinal":590,"content_entry":0},{"id":28,"ordinal":594,"content_entry":0}])
     );
     let e = &meta["evidence"];
     assert_eq!(e["manifest_sha256"], a["source_manifest_sha256"]);
@@ -416,7 +480,7 @@ fn check_source(full: bool) {
     for field in ["binding_sha256", "observer_sha256"] {
         assert_eq!(e[field], a[field]);
     }
-    assert_eq!(e["files"].as_array().unwrap().len(), 9);
+    assert_eq!(e["files"].as_array().unwrap().len(), 11);
     for p in e["files"].as_array().unwrap() {
         assert_eq!(
             pins.iter()
@@ -439,7 +503,7 @@ fn check_source(full: bool) {
         ),
         (
             "observer_sha256",
-            "crates/poe-optimizer-pob/tests/support/selected_life_item_placement_source.lua",
+            "crates/poe-optimizer-pob/tests/support/selected_equipment_placement_source.lua",
         ),
     ] {
         assert_eq!(hash(&fs::read(root().join(path)).unwrap()), a[field]);
@@ -591,7 +655,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     assert_eq!(
         restored,
         prior.input().recipe,
-        "whole recipe inverse admits only the three placement inventories"
+        "whole recipe inverse admits only the five placement inventories"
     );
     migration_preservation::assert_import_rebindings_only(prior, &next);
     assert_eq!(next.query_sets(), prior.query_sets());

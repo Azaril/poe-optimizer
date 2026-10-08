@@ -60,8 +60,12 @@ return function(bound, execute, expectedJit, profile)
         assert(not slotSet[name] and tab.slots[name]); slotSet[name] = true
     end
     for _, name in ipairs(baseSlots) do assert(slotSet[name]) end
+    local accepted = {}
+    for _, name in ipairs(profile.source_slots) do
+        assert(slotSet[name] and not accepted[name]); accepted[name] = true
+    end
     local item = assert(bound.items[profile.id])
-    assert(item.id == profile.id and item.baseName == profile.base_name and item.type == profile.slot)
+    assert(item.id == profile.id and item.baseName == profile.base_name and item.type == profile.item_type)
     assert(item.base == data.itemBases[profile.base_name])
     local snapshot = {id = item.id, base_name = item.baseName, item_type = item.type,
         rarity = item.rarity, raw = item.raw, base = plain(item.base),
@@ -92,7 +96,9 @@ return function(bound, execute, expectedJit, profile)
         end
     end
     table.sort(uses, function(a,b) return a.set == b.set and a.slot < b.slot or a.set < b.set end)
-    assert(env.player.itemList[profile.slot] == item and build.calcsTab.calcsEnv.player.itemList[profile.slot] == item)
+    for _, name in ipairs(profile.selected_source_slots) do
+        assert(accepted[name] and env.player.itemList[name] == item and build.calcsTab.calcsEnv.player.itemList[name] == item)
+    end
     local flag = env.modDB.Flag
     local flagInfo = debug.getinfo(flag, "S")
     assert(flagInfo.what == "Lua" and flagInfo.source:gsub("\\", "/"):sub(-#"Classes/ModStore.lua") == "Classes/ModStore.lua")
@@ -120,7 +126,7 @@ return function(bound, execute, expectedJit, profile)
                     assert(equal(value, outcome(method(tab, item, name, context.set, flags.values))))
                     -- Rejection may be false, nil or no return for different
                     -- weapon partners/flags. Retain each raw pack independently.
-                    assert((value.kind == "boolean" and value.value == true) == (name == profile.slot))
+                    assert((value.kind == "boolean" and value.value == true) == (accepted[name] == true))
                     calls[#calls + 1] = {set = context.id, slot = name, flags = flags.id, outcome = value}
                 end
             end
@@ -130,9 +136,9 @@ return function(bound, execute, expectedJit, profile)
     -- not an equipment destination and cannot extend the checked slot catalogue.
     local boundary
     if execute then
-        assert(not slotSet[(profile.slot .. " 1")])
-        boundary = {slot = (profile.slot .. " 1"), registered = false,
-            outcome = outcome(method(tab, item, (profile.slot .. " 1"), nil, nil)), native_admission = false}
+        assert(not slotSet[profile.boundary_slot])
+        boundary = {slot = profile.boundary_slot, registered = false,
+            outcome = outcome(method(tab, item, profile.boundary_slot, nil, nil)), native_admission = false}
     end
     bound.verify()
     assert(class.ItemsTab == ctor and class.Load == loader and class.IsItemValidForSlot == method)

@@ -41,6 +41,16 @@
       "sha256": "05b91c71f9292f120482355447566db285cb513f6b506e349e9a29efa0b329f2"
     },
     {
+      "path": "src/Data/Bases/ring.lua",
+      "bytes": 8348,
+      "sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382"
+    },
+    {
+      "path": "src/Data/Bases/staff.lua",
+      "bytes": 18732,
+      "sha256": "6b04f45c0763088f865b8902733cecc6126829871a6766955a953a54cd657bf7"
+    },
+    {
       "path": "src/Modules/Build.lua",
       "bytes": 116017,
       "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
@@ -51,10 +61,10 @@
       "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
     }
   ],
-  "observer_sha256": "6fb1d3dfc713699bd83f63c7b5f9e11e9d7822b2b7f280178c92139d6309d0cb",
+  "observer_sha256": "ad2d7b1bf2f7534b0bcd04e276be0d13c87a5913b98d070eb986fe557bb9e98c",
   "binding_sha256": "aaad94cb0b359866e245a9a9d4e7da823eeee943e1d4eb90194197992ff4e2f0",
   "scope": {
-    "equipment_slot_inventories_closed": 3,
+    "equipment_slot_inventories_closed": 5,
     "new_definitions": 0,
     "new_programs": 0,
     "closed_rule_owners": 0,
@@ -65,10 +75,10 @@
     "whole_build_parity": false
   },
   "artifact_sha256": {
-    "bindings": "d917e4a9766cea1af7935a744ab590c10adcdd38f61e39136a80403fb98dac7b",
-    "dependencies": "d88212446abb55b193ef43fed521d781abdbb14b691e72c3a6a60b5369afc80e",
-    "migration": "cf2ee1daa788757078bcac34228a9c3275a11cd4efe8433849f6c644f62cbbde",
-    "source-vectors": "a84037f76819e4f06c56aed82cf976cd42431a235a7f87ba772e7ac74ee0d498"
+    "bindings": "51f0f7a33eb1aa8cc9751596517d96e05c749c97a6019e45da063e7963c99e72",
+    "dependencies": "4007f810c9c02eea6a5f24d3645ad15c6dc508a6d47fd18dd8d99e3cd744f8cd",
+    "migration": "55f8993a28b17dcaf78c4d130aa39c482523467b497ba120f862cf34331036fc",
+    "source-vectors": "23b8ce6712167eac81609a3c4adf676649693b65c8f13e2bc6accb9b9c51ba58"
   },
   "catalogue": {
     "path": "data/owned/poe2/3887ae68/item-bases/catalog.json",

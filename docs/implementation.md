@@ -65,62 +65,87 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest native data checkpoint: selected Life-item placement
+## Accepted decisions and next implementation boundary
 
-Original05 remains the closest build. Its joined Life graph previously invented
-three selected equipment destinations because the actual template inventories
-were empty and Partial. The new [placement packet](../data/owned/poe2/3887ae68/selected-life-item-placement/README.md)
-publishes those existing relations through the accepted descriptor migration:
-Tattered Robe `238c` to Body Armour `0067`, Rope Cuffs `2007` to Gloves `0068`,
-and Fine Belt `1e84` to Belt `006e`. Each becomes a singleton Complete inventory.
-No definitions, rule programs, numerical owners or other declarations change.
+On October 8 the owner approved all three recently prompted decisions:
 
-The original-method witness covers three actual items across 113 registered
-slots, seven default/saved-set contexts and nine flag settings: 21,357 contexts
-per observed VM. Calls repeat in place, fresh observed replays and no-call
-controls agree, and both JIT reports are byte-identical. Pinned base/type/tag
-branches rule out other accepting destinations; a finite observation alone
-does not close the inventory. Three source-target checks pass in **14.46s**;
-the default temporary-output path also passes in **19.29s**. Raw nil/false/no-return
-distinctions and unregistered suffix labels remain source-only diagnostics.
+- [Actor/reward contributions](owned-actor-reward-contribution-queries-proposal.md):
+  extend the existing checked graph to exact shared Actors, supplied Actors and
+  selected rewards, preserving recipients, multiplicity, numeric order and
+  incomplete-coverage failures. This is the next Player Life dependency.
+- [Exact Skill queries](owned-skill-contribution-queries-proposal.md): extend
+  query reads and member authority using the same occurrence graph. Repeated
+  authored/generated skills remain distinct. This enables Offering scaling.
+- [Support composition](owned-support-origin-composition-proposal.md): presets
+  retain authored assignments/order; cold native planning derives complete
+  support origins from each composed request and injected capabilities. Install
+  mandatory direct/staged request coverage before moving Import obligation
+  `01de`; unsupported origin families remain blocking.
 
-Publication passes in **27.43s**, with an exact recipe inverse and byte-identical
-rebuild. All five drafts, selections, source identities and 110 queries survive;
-selected issues remain **107/117/109/123/5**. Three ordinary packet checks pass.
-Public binding checks pass in **4.39s**, covering 12 actual saved uses, 228
-alternative-slot refusals, restored Partial predecessors, removed uses and
-unchanged unrelated diagnostics. The initial publication rejected noncanonical
-definition order; the current migration is sorted and its checks look up each
-replacement by identity. The failed log remains.
+All three are **accepted, not implemented**. These decisions supersede older
+checkpoint statements below describing them as awaiting approval. Specify and
+test their minimal source/recipient declarations together so Life and Skill
+queries share one membership implementation. Start with Actor/reward authority
+and the real Player Life consumer, then exact Skill scaling; support discovery
+can proceed independently once its contract is concrete. Preserve the general
+model and incomplete coverage throughout. Actor-to-Enemy reads, resource demand,
+configuration/reporting and scoped coverage proposals have not been approved by
+these answers. Ask when one becomes the next necessary design boundary.
 
-The joined graph now consumes the three production placement inventories and
-passes **59 checks in 45.79s**, including fresh/reused/Rayon execution. The obsolete
-fixture insertion, stored-descriptor bookkeeping and its one refusal test are
-removed; the new public binder checks preserve the refusal coverage. Sapphire
-Ring already lists its ring slots but remains Partial; its existing finite
-fixture closure is explicitly retained. Numerical owners, sockets, catalog
-completion and whole-build coverage are not established by this checkpoint.
+## Latest native data checkpoint: all selected equipment placement
 
-Current package: `runs/owned-selected-life-item-placement-publication-02/package`.
-Evidence: `runs/owned-selected-life-item-placement-source-02/`, source parent
-`runs/owned-selected-life-item-placement-source-03.log`, and
-`runs/owned-selected-life-item-placement-{ordinary-02,publication-02,binding-01,joined-01}.log`.
-The source reports are 36,859,788 bytes each at SHA-256
-`7595e3f509c2d7db0d39dfdd0751e5c0bb8970f02105f995e6d98539616e8790`.
-Changed Rust formatting passes, and strict workspace/all-feature/all-target
-Clippy passes in **0.38s** (`runs/owned-selected-life-item-placement-clippy-02.log`).
-The first lint pass caught a fixed-size chunking style in the new CI test;
-the equivalent array-chunk iteration and its remainder refusal are retested.
-The first source command selected zero tests through an incorrect `--ignored`
-filter; it is not counted as validation. The ordinary entry is tested and uses
-isolated temporary output unless an explicit immutable evidence path is supplied.
+The [current packet](../data/owned/poe2/3887ae68/selected-equipment-placement/README.md)
+closes five existing template inventories: Tattered Robe, Rope Cuffs, Sapphire
+Ring, Fine Belt and Ashen Staff. Combined with earlier data, **all nine selected
+uses / eight templates** have Complete character-slot destinations. The Ring
+retains three known slots and two distinct equipped uses; Staff's two source
+weapon-set labels map to one typed slot with existing loadout scope. No item
+name dispatch, new definitions, numerical programs or alternate slot model is
+added. Complete placement does not establish sockets, stock, requirements,
+support origins, weapon attack profiles or complete item mechanics.
 
-**Resume:** no original is complete (**0/5**). Keep Original05 first. Final
-Player Life still needs the pending Actor/reward contribution-query decision;
-Offering's three source-scaling writers need the separate exact Skill query
-decision. This data-only checkpoint implements neither proposal. Remaining
-selected input obligations and numerical coverage are listed below; no scalar
-or fixture-completeness shortcut is authorized.
+This supersedes the three-item packet and its source/binding helpers in place,
+rebuilt from the same flat-Life predecessor. The obsolete current paths are
+removed; prior reports remain immutable. The joined Life fixture now requires
+published Complete inventories for every relevant template, retiring its last
+finite Ring closure without replacing it with a new fixture allowance.
+
+Validation:
+
+- Three optional source-target checks pass in **16.79s**. Five real items each
+  cover 113 registered slots, seven equipment contexts and nine flag settings:
+  **35,595 calls per observed VM**. Exact repeats, fresh observed replays,
+  no-call controls and JIT-off/on reports agree. A pinned branch/type/tag audit
+  establishes destination completeness beyond this finite census. Lua return
+  distinctions and unregistered labels remain reference-only evidence.
+- Three ordinary packet checks pass. Publication passes in **28.41s**, including
+  full-report authentication, exact recipe inverse and byte-identical rebuild.
+  All five drafts, saved selections and 110 queries survive; selected input
+  issues remain **107/117/109/123/5**, with no evaluation bundle.
+- Public binding passes in **4.44s**: 21 actual saved uses, 37 allowed bindings,
+  383 other-slot refusals and 21 wrong-scope refusals. Ring multiplicity, both
+  Staff loadouts, restored Partial data, removed uses and unrelated diagnostics
+  are checked. The first run incorrectly compared whole reports across changed
+  release identities; the repaired check independently validates identities
+  and compares full binding outcomes. No production binding behavior changed.
+- All **59** joined Sniper checks pass in **33.69s**, including source evidence,
+  mutation/coverage refusals, fresh/reused/Rayon execution and distinct minions.
+  Changed-file formatting and strict workspace/all-feature/all-target Clippy
+  pass. Clippy's single clone-to-slice style finding is corrected.
+
+Current package: `runs/owned-selected-equipment-placement-publication-01/package`.
+Evidence: `runs/owned-selected-equipment-placement-source-01/`, parent source
+log, `{ordinary-01,publication-01,binding-03,joined-01,clippy-02,format-01}.log`
+with the same prefix, and publication `{receipt,validation}.json`. Each full
+source report is 61,444,068 bytes at SHA-256
+`17b24c4937313b1d35495210ca0f1d73af193246bef5a2c6ae524b4cb6a1619d`.
+
+**Resume:** Original05 is still closest, with five selected input obligations
+and **0/5** complete originals. Implement the now-approved contribution-query
+boundary above, then the real final-Life consumer with checked ordering and
+coverage. Offering scaling and composed support discovery follow their accepted
+contracts. Existing numerical and source components are prerequisites, not a
+complete build or permission to inject measured scalar results.
 
 ## CI throughput checkpoint: complete CLI target partitioning
 
@@ -398,7 +423,7 @@ its source/observer/harness identities. The original six-case checkpoint is
 preserved in [history](implementation-history.md#archived-2026-10-08-checkpoint-first-player-life-consumer-witness).
 
 **Resume:** use these observed operands and the justified arithmetic domain when
-authoring final Life after the pending Actor/reward query decision. Operand
+authoring final Life after the accepted Actor/reward query implementation. Operand
 generation, positive ExtraLife/Total/conversion/override suppliers, raw conversion
 Sum, complete owner/recipient coverage and whole-build parity remain unproved.
 No production schema, rules, import policy, evaluation bundle or original input
@@ -673,7 +698,7 @@ query registry and Sniper Actor remain Partial. Selected issues are unchanged at
 
 **Resume: complete Offering delivery and selected-input accounting.** Activation
 `3227` and recipient scaling `322b/322c` have real producers. Source-Skill scaling
-`3228`–`322a` still needs the pending [exact Skill query decision](owned-skill-contribution-queries-proposal.md).
+`3228`–`322a` still needs implementation of the accepted [exact Skill query contract](owned-skill-contribution-queries-proposal.md).
 Do not infer approval from this Allocation-to-Actor Boolean cutover. The Offering
 and Djinn source controls below are now complete; the next independent numerical
 work is the bounded BASE slice above, now published with joined numerical
@@ -840,8 +865,8 @@ authority`. Shared Actor rules currently admit Enemy external inputs but not
 these computed reads. The [Actor-to-Enemy read proposal](owned-actor-enemy-reads-proposal.md)
 is awaiting the owner's decision; do not relocate the formula, copy Enemy facts
 onto Player Stats, remove the real Actor binding from tests, or change validation
-to get around that decision. The separate support-origin composition decision
-has also been re-prompted. Neither pending answer is approval.
+to get around that decision. Support-origin composition was separately accepted
+October 8; it does not authorize Actor-to-Enemy reads.
 
 Uncommitted preparatory files are `incoming-critical-effect/{extension,policy,
 native-inputs,queries,README}` and the two new root critical test targets and
@@ -929,7 +954,7 @@ local validation is not hosted success for its eventual commit.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-selected-life-item-placement-publication-02/package` and its neighboring
+Use `runs/owned-selected-equipment-placement-publication-01/package` and its neighboring
 `original-01` through `original-05` imports. Current sidecars remain V23;
 definition schema V6, rule schema3 and operationsV22 are independent contracts.
 The immediate predecessor is `runs/owned-flat-life-scalability-publication-01/package`,
@@ -940,25 +965,25 @@ explicit offline reauthoring and are not alternate production evaluator modes.
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `1c4b377bb04f95eb8708d9944b8df690ad3763231c836107e33f5d7c09c5e298` |
+| Release input | `1678aa624785a6b65a32ab8e5810acb0d1dbc98cdfd6ae342a4023e5a1c9b91a` |
 | Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
-| Definitions content | `79d71d2aef6610b2d7cdc587c72ca7a3b30e9a3df13e02d113d0e19dbc9bb5b2` |
-| Rules | `b2f7f00a37c59b2038a0eb8f32d400837d05465ac85b350080fee0cd82e4d591` |
-| Compiled rules | `8628557ce8037476522546cf073e4468e92341a251c399205492ad70b810fdb6` |
-| Routing | `7ae72f7cba5144aaa48d69724a4db23b3c39fdc9f242a0209b2d95778e24439d` |
-| Mapping | `e42f9e45649825d1344d8481c946a661acc77a265a64681070a1493af0f363a6` |
-| Skill roles | `6ec3367d32f31cdb9b27e8bd75bd07cfeae391bb4bdee7185b0adc6b728fdfa3` |
-| Normalization | `a59e58fdd35f0daf4d87b72ec26219a6fc83c6977324c3229b525cfb9a46d56b` |
-| Rewards | `da9972ed807c9dbcc35eb22a4cb46592e9b335ed77f8cadf834bca520bddfb40` |
-| Items | `2233daa9532757de505ab9f07d7f28f04b349257f0547afc75675ed2c9c5fcae` |
-| Item source | `7e8c59b8892567d52cdabb72a9f0e604a63fed5d3ec8cb8d4cde88a997f51391` |
-| Tree policy | `ce0d80d921afa3e4c94f96c1a97843d9b77764ed6663934f15a98e3331ea7225` |
-| Authoring commitment | `789f3b772b2265257ac3b23ec3da837b38b36ad533874c980dca56aa2499a303` |
+| Definitions content | `3fe7e6094b612465179acb5f89db56fae1ecfc18ac33a0c539d375be938c7565` |
+| Rules | `ac20047e65c72e85665b3d81b8218edf48c3a248304f27d8d952e7667e67a7ba` |
+| Compiled rules | `5891f848e19952f603140cbd76cc645194e7c0296336b1f7cdfb496b6ba54c88` |
+| Routing | `3a4147e1ea67d3c35343ff787db47e38552f02e7c8b46711d5527f09cf69d4b3` |
+| Mapping | `44f9c7bc7ef718fe3e2fe742d03f00c88e197688501e1b7300b60c87771bbde9` |
+| Skill roles | `b845ff2130f17ccc4737e9ff8a3d33253d058233cb78ce6ceb528eb802553b70` |
+| Normalization | `b8d29cd1152fa190689c773ce43a694f59f80881b70bd1c04378fa8a0a0db0cc` |
+| Rewards | `9a95660a78c61717de6bec138a2894ed4b44a7fd3fe726af63cd3f85fd34931e` |
+| Items | `911313606bb74d6aebb4e8c8d8faf8918974749fe26830f85130763850de342d` |
+| Item source | `f7ae55f6c1b1b084da9fcf2bd78d2272663bf17f136f42bd06ad9170601c926e` |
+| Tree policy | `b3cde9d5eb7e65aed865603c22e69fe0cfecdb2944166dd8d172678dbc8bede6` |
+| Placement authoring commitment | `d5f36ca516198d3dd23e6537a468415b199100edeb5572ba473c7194887a67f8` |
 | Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
 
-The eighteen package files total **63,887,352 bytes**, with 148 provenance rows.
-Definitions and rules use `pob-3887ae68-selected-life-item-placement-v1`. The registry ends at
-`3352`; the latest publication allocates no IDs and changes only three placement inventories.
+The eighteen package files total **63,886,917 bytes**, with 148 provenance rows.
+Definitions and rules use `pob-3887ae68-selected-equipment-placement-v1`. The registry ends at
+`3352`; the latest publication allocates no IDs and changes only five placement inventories.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -982,12 +1007,13 @@ reproducible evidence, not distributed game data.
 
 The selected-passive, recipient-buff, Gigantic and inherent-Life joins above pass.
 The actual Player Life contributor join and independent final-Life consumer
-witness now pass. The next native reductions need the
-Actor/reward origin decision for Life and exact Skill query authority for
-Offering's three source-scaling producers. Inspect source membership/grouping
-evidence and selected-input obligations under existing contracts while those
-answers are pending. Do not let a pending model decision stall independent
-approved work or assume approval.
+witness now pass. Implement the accepted Actor/reward membership boundary for
+Life and exact Skill queries for Offering in the existing graph. Their common
+source/recipient authority, semantic numeric ordering, candidate-wide census
+and identity invalidation need explicit tests before publishing consumer data.
+The independently accepted composed support-discovery work can proceed in
+parallel without editing the same graph files. No approval is outstanding for
+these three directions; other proposals retain their separate review gates.
 
 The follow-up audit found no established final-Life shortcut: the selected saved
 Life query is Player, whose BASE/ordering and class/shared-Actor coverage remain
@@ -1016,7 +1042,7 @@ selected obligation unchanged.
   to review owned group membership and support applicability; do not rerun the
   same probes or mistake an inherited source store for native ownership. The
   additional-skeleton activation condition remains unresolved. Do not widen
-  native Skill or support-origin authority before the pending decisions.
+  native Skill or support-origin authority before the accepted contracts are implemented.
 - The [manual Djinn admission witness](#source-checkpoint-manual-djinn-admission-accounting)
   now records the actual Original05 global2 controls through original consumer
   admission. Next use its exact queried-empty versus not-called distinction in
@@ -1035,7 +1061,7 @@ evaluation bundle, absent from the current package. Work in this order:
    authored-assignment and cold-composition seams. Complete runtime membership
    depends on selected providers, so a preset-only certificate is insufficient.
    The [composition proposal](owned-support-origin-composition-proposal.md)
-   is awaiting the owner's decision; no contract change is implemented.
+   was accepted October 8; implement the mandatory native discovery gate before moving the Import obligation.
 2. In parallel, account for selected preset usage (`0503`), configuration (`01f2`),
    external assumptions (`0207`) and scenario usage (`0208`) through reviewed
    consumers, preserved responsibilities or justified non-applicability. Reuse
@@ -1117,9 +1143,9 @@ The [selector/supply separation proposal](owned-source-action-root-separation-pr
 records the structural boundary, the genuine reusable child action and the
 conditional 44-to-36 accounting target. This is a pending Import decision;
 do not add a fake physical Gem or weaken root checks. The immediate native
-priority remains the pending Actor/reward and exact Skill query decisions.
+priority remains the accepted Actor/reward and exact Skill query implementations.
 
-**Next composition review: support-origin discovery.** The selected Original05
+**Accepted composition work: support-origin discovery.** The selected Original05
 preset currently has sixteen physical support assignments in eight known
 sequences, but those are not the complete runtime source inventory. The source
 also discovers additional effects per Gem, ExtraSupport, generated item slot
@@ -1131,7 +1157,7 @@ authored support assignments distinct from complete runtime origins. Review the
 existing `support_origin_order`/shared-source/provider-resolution seam and cold
 composition validation before retiring `01de`; the
 [public ownership/completeness proposal](owned-support-origin-composition-proposal.md)
-has been presented for the owner's decision. Complete provider coverage can prove absence only
+was accepted October 8; implementation is pending. Complete provider coverage can prove absence only
 where it accounts for every relevant capability. No new runtime origin variant
 is needed merely to describe a sound Assignment-only domain, but Partial rules
 cannot be interpreted as absence of extra supports.
@@ -1217,7 +1243,7 @@ still rules out the old class/item-prefix plus passive-suffix shortcut. Nonempty
 MORE grouping remains unresolved. Use the actual published producers, not
 fixture literals or a cache-dependent native mode. Inherent flags and their
 Life contribution are finished prerequisites; final pool aggregation now needs
-the pending origin-authority decision and its own coverage/arithmetic law.
+the accepted origin-authority implementation and its own coverage/arithmetic law.
 
 **Class coverage follow-up:** Original05's Class `0a23` still has its inherited
 `tree-game-rules-not-converted` marker. Its Count bases and intrinsic attack row remain class-owned; intrinsic Life
@@ -2003,7 +2029,9 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
-| Exact Skill contribution queries | Proposed for Offering scaling: extend the existing checked graph to exact Skill recipients and reviewed occurrence-qualified member origins/order. Current Skill reads and generated paths are rejected today. Actor recipient producers are now published with guarded empty query domains; nonempty group ownership still needs independent proof. Owner review pending; no runtime authority changed. [Proposal](owned-skill-contribution-queries-proposal.md). |
+| Actor/reward contribution queries | Accepted October 8: extend the existing membership graph to exact shared/supplied Actor and selected reward occurrences. Preserve distinct sources, recipients, ordering and candidate-wide coverage. Implementation pending; next Player Life boundary. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
+| Composed support discovery | Accepted October 8: presets own authored assignments/order; native cold planning derives complete origins from the composed request and injected provider capabilities. Enforce the direct/staged-request gate before moving Import `01de`; rebuild current artifacts. Implementation pending. [Contract](owned-support-origin-composition-proposal.md). |
+| Exact Skill contribution queries | Accepted October 8 for Offering scaling: extend the existing checked graph to exact Skill recipients and reviewed occurrence-qualified member origins/order. Current Skill reads and generated paths are rejected today. Actor recipient producers are now published with guarded empty query domains; nonempty group ownership still needs independent proof. Implementation pending; no runtime authority changed. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |
 | Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 21 Config-local and 23 non-Config origins after selected/generated accounting, cached-Buffs, archived responsibility and overwritten-placeholder proofs. Fourteen archived rows retain their exact existing raw-input, usage and support-origin Pending owners; they gain no provider or known value. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Typed constructor defaults now reach Player/Enemy/Environment inputs; the real Player resistance-penalty consumer is published, but no global inventory closes. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |

@@ -360,19 +360,9 @@ pub(super) fn install(
             panic!()
         };
         assert!(s.modifiers.members.contains(&d(0x3100)));
-        // Placement members come unchanged from the published template. The
-        // ring's broader inventory remains Partial and receives only the same
-        // explicit finite projection as the unrelated schemas below. The three
-        // other Life-bearing templates now have published complete placements.
-        if source.item.template == d(0x09dc) {
-            assert!(!s.equipment_slots.is_complete());
-            assert_eq!(
-                s.equipment_slots.members,
-                vec![d(0x006b), d(0x006c), d(0x006d)]
-            );
-        } else {
-            assert!(s.equipment_slots.is_complete());
-        }
+        // All selected Life-item placement inventories now come unchanged from
+        // production data, including both uses of the same physical ring.
+        assert!(s.equipment_slots.is_complete());
         for equipped in census.equipment.iter().filter(|e| e.item == source.item.id) {
             let EquipmentDestination::CharacterSlot(slot) = &equipped.destination else {
                 panic!("this finite source slice contains only selected character slots")

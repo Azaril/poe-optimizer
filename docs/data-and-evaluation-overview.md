@@ -60,11 +60,14 @@ complete numerical/routing coverage. Five-build publication preservation and
 all 60 joined checks pass on the new package. This is coverage reconciliation,
 not a new final-Life calculation or additional complete build.
 
-The current [placement packet](../data/owned/poe2/3887ae68/selected-life-item-placement/README.md)
-then closes three selected item destination inventories. Five-build preservation,
-12 actual-use binding controls and all 59 remaining joined checks pass. The
-obsolete placement insertion/refusal fixture is retired; numerical coverage
-and the five selected input obligations remain unfinished.
+The current [placement packet](../data/owned/poe2/3887ae68/selected-equipment-placement/README.md)
+closes five selected item destination inventories, including Ring and Staff.
+All nine selected equipment uses (eight templates) then have complete
+character-slot placement. Public binding controls cover 21 saved uses, including
+the two Ring uses and Staff loadout scopes. The older three-item packet and
+remaining fixture placement closure are retired; numerical coverage and the
+five selected input obligations remain unfinished. Validation and current
+package identities are recorded in the implementation plan.
 
 The preceding data checkpoint replaces Gigantic's numeric presence with typed
 Boolean Flag/Any and joins its real selected allocation and intrinsic Life in the
@@ -195,9 +198,12 @@ See the [checkpoint](implementation.md#source-checkpoint-manual-djinn-admission-
 
 Next, Offering needs its three source-Skill scaling producers before its
 application can add the measured 62%. Checked queries reject Current Skill reads
-and generated member paths. The proposed
+and generated member paths. The accepted
 [exact Skill query extension](owned-skill-contribution-queries-proposal.md) reuses
-the existing graph and requires owner review; it is not implemented. The focused
+the existing graph; the owner approved it on October 8, but it is not yet
+implemented. Actor/reward contribution membership and composed support-source
+discovery were approved alongside it. See the linked proposals and implementation
+plan for their separate delivery gates. The focused
 Offering witness now observes original multiplication and local rounding in an
 inherited source store, plus exact Danse assignment and duplicate non-stacking.
 It does not establish generic owned group meaning or Danse's additional-skeleton
@@ -496,15 +502,14 @@ placement is separate from saved equipment selection, sockets, physical stock,
 requirements and numerical coverage; valid schema binding is not a complete
 evaluation.
 
-The selected Life-bearing Tattered Robe, Rope Cuffs and Fine Belt use that same
-destination model. Their reviewed complete inventories contain Body Armour,
-Gloves and Belt respectively. This closes static template relations through
-data; it adds no item-name dispatch, slot-label parser or numerical program to
-the evaluator. The joined Life fixture now requires these published members
-instead of inventing the three selected placements. Sapphire Ring still has a
-Partial inventory with three known ring slots; its finite fixture closure is
-explicit and is not production coverage. Socket destinations, physical stock
-and the three templates' other declarations and numerical owners remain open.
+The selected Tattered Robe, Rope Cuffs, Sapphire Ring, Fine Belt and Ashen Staff
+use that same destination model. Their reviewed Complete inventories contain
+Body Armour, Gloves, three Ring slots, Belt and loadout-scoped Weapon 1.
+This closes static template relations through data; it adds no item-name
+dispatch, slot-label parser or numerical program to the evaluator. The joined
+Life fixture requires published inventories without inserting members or
+changing closure. Socket destinations, physical stock, other declarations and
+numerical owners remain open.
 
 Actual default parsing also rejects seven selected Puppet/Archon nodes. Two
 Djinn unlocking lines are unknown even though their child actions are supplied
