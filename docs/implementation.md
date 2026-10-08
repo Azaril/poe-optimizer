@@ -101,6 +101,11 @@ The bounded follow-up audit found no additional live rule-schema-2 constructors
 or stale compiler-default assertions; unrelated 16 MiB limits remain valid.
 The historical D3 wording now distinguishes its old bound from the current one.
 Both identified CLI targets are locally green; hosted green remains unproven.
+At **06:23:44 UTC** on October 8, current `5629e2c` run `37737284986` was
+pending with no jobs started. The older `6a3aae3` Windows CLI job remained
+running; Engine, Import and PoB jobs passed on both platforms. No failure
+annotation identified a new target beyond the four already repaired locally.
+Step status alone does not establish execution progress in the long CLI job.
 
 The public job annotations for run `37715752732` identify two failures on both
 Windows and Ubuntu: allocation export reproduction and Data's
@@ -198,14 +203,79 @@ all-target Clippy passes in **3.01s** and changed-file formatting passes in
 `runs/owned-player-life-{clippy-01,format-02}.log`. The joined integration checks
 remain ignored in ordinary CI until artifact provisioning is implemented.
 
-**Resume:** capture the exact original Player Life consumer calls described
-below; the new optional source witness is under validation. Final aggregation still awaits the
+**Resume:** the Player Life reference validation below passes. Final aggregation still awaits the
 [Actor/reward query decision](owned-actor-reward-contribution-queries-proposal.md);
 Offering's source scaling awaits the separate
 [exact Skill query decision](owned-skill-contribution-queries-proposal.md).
 Both were sent for owner review on October 8. Neither authorizes unrelated
 support composition or Actor-to-Enemy reads. Keep Original05 first and preserve
 all five originals; complete native builds remain **0/5**.
+
+## Player Life reference checkpoint
+
+The optional Rust test `owned_player_life_source` now separates internal data
+acquisition from numerical reference execution. For each of six cases it uses a
+fixed protocol: two fresh observed JIT-off acquisitions, two fresh uninstrumented
+JIT-off references and two fresh uninstrumented JIT-on references. No calculation
+body or business method is wrapped or replaced. The acquisition requires the
+original Player consumer's line-97 checkpoint and preserves each observed
+precalculation/defence invocation, its original locals and returned Life. Assigned
+nil is distinct from an unobserved assignment. It captures the post-clamp
+conversion local, not the raw conversion Sum, and does not observe the rounding
+operand.
+
+The controls are the unchanged Original05, actual level 92 to 91, selected Robe
+Life 17 to 18, and three source-only custom modifiers for increased Life, more
+Life and Chaos Inoculation. Custom controls establish no obtainable game item or
+complete supplier domain. Repeat acquisitions, repeat references, cross-JIT
+references and acquisition-to-plain-off projections must agree exactly. The
+declared reference projection includes all captured Player scalar outputs,
+selected input identity, explicit Life-related buckets and scalar conditions/
+multipliers. It excludes nested outputs and unrelated stores; it proves neither
+complete Player state nor internal cross-JIT execution. Nonfinite numbers have
+distinct evidence tags; conflicting source-table keys reject. These test-only
+encodings are not owned game types or runtime defaults.
+
+**Validation complete:** all **36 fresh loads** pass in **288.50s**, with exact
+repeat, cross-JIT reference and acquisition-to-reference agreement. Five ordinary
+checks also pass, including real-encoder type fidelity and strict reference
+comparison. The acquisition retains **72 original Player invocations per load**,
+including four for each final MAIN/CALCS environment. Both modes produce these
+final consumer values:
+
+| Source case | Base | Increase | More | Final Life |
+| --- | ---: | ---: | ---: | ---: |
+| Unchanged Original05 | 1257 | 5 | 1 | 1320 |
+| Character level 91 | 1245 | 5 | 1 | 1307 |
+| Selected Robe Life 18 | 1258 | 5 | 1 | 1321 |
+| Custom increased Life | 1257 | 15 | 1 | 1446 |
+| Custom more Life | 1257 | 5 | 1.1 | 1452 |
+| Custom Chaos Inoculation | 1257 | 5 | 1 | 1 |
+
+ExtraLife, LifeTotal and the post-clamp conversion local are zero in these
+controls; override is assigned nil. Chaos Inoculation is true only in its custom
+case. These are captured values, not a claim that other suppliers are absent.
+Evidence is in `runs/owned-player-life-source-08/{comparison,summary}.json`, the
+three separately pinned acquisition/reference reports, raw per-case files and
+child logs. The parent log is `runs/owned-player-life-source-08.log`. Report
+SHA-256 identities were independently rechecked against the receipt. Strict
+workspace/all-feature/all-target Clippy passes in **0.47s**
+(`runs/owned-player-life-clippy-03.log`), and changed Rust formatting passes.
+Independent review found no remaining blocker.
+Earlier observer variants could not reliably see LuaJIT's compiled debug events;
+they are removed, not retained as fallbacks. Their failure does not establish
+varying PoB results. Run 07 was cancelled before acceptance to repair the
+nonfinite-number/string evidence collision; its partial files and cancellation
+receipt remain. Fresh-run disagreement or a missing required JIT-off checkpoint
+still fails; there is no retry-until-pass or settling protocol.
+
+After the pending query-origin decision is resolved, author final Life using
+this evidence, checked real contributors and a bounded arithmetic
+domain. Positive ExtraLife, LifeTotal, conversion and override suppliers,
+whole-float-domain rounding, complete owner/recipient coverage and full-build
+parity remain unproved. Do not infer empty supplier inventories or neutral
+constants from an unchanged build's observations. Keep the first complete
+Original05 gate and subsequent D4 optimizer integration as the delivery target.
 
 ## Native checkpoint: real Strength and checked flags reach inherent Life
 
@@ -272,15 +342,13 @@ pure and deliver its derived amount through the existing shared Player Actor
 owner. Do not bypass the candidate-wide census, revive the retired Life alias,
 or declare complete metrics before real receiving, source and owner coverage.
 
-The final-pool audit confirms retained Original05 Life records totaling 1257 Add
-and 5 Increase, with saved MAIN/CALCS Life 1320. These are diagnostics, not a
-native recipe or proof of absent families. Current witnesses do not capture the
-Player's actual `doActorLifeManaSpirit` reads for ExtraLife, LifeTotal, conversion,
-overrides and Chaos Inoculation; the existing detailed consumer observer filters
-Sniper. Extend that established original-call observer to the exact Player before
-publishing final Life arithmetic or neutral-domain constants. Preserve each
-precalculation/defence invocation and its original reads/return, plus independent
-unobserved and JIT checks. In `CalcDefence.lua:74`–`134`, conversion has an upper
+The final-pool audit retained Original05 Life records totaling 1257 Add and
+5 Increase, with saved MAIN/CALCS Life 1320. These are diagnostics, not a native
+recipe or proof of absent families. The subsequent
+[Player consumer witness](#player-life-reference-checkpoint) addresses the
+missing original-local evidence separately from uninstrumented reference runs;
+the earlier detailed observer covered only Sniper. In
+`CalcDefence.lua:74`–`134`, conversion has an upper
 cap but no lower clamp, Extra precedes scaling, Total follows it, overrides bypass
 ordinary rounding/clamping, and Chaos Inoculation follows the pool calculation.
 The source `floor(x+0.5)` and native mathematical tie rounding also need bounded

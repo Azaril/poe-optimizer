@@ -107,8 +107,14 @@ and independent source evidence; do not paste the observed subtotal/final pool
 into a producer. Origin admission does not prove the final-Life formula or the
 absence of other conversion, override or conditional families. Full owner,
 receiving, input and metric coverage remain required before declaring the build
-complete. The implementation plan now records the missing Player consumer-local
-witness: retained output 1320 and visible Life modifiers do not establish absent
-ExtraLife, LifeTotal, conversion, override or Chaos Inoculation inputs. Native
-mathematical tie rounding also needs a bounded comparison to the source's
-`floor(x+0.5)` implementation. Neither issue is settled by origin authority.
+complete. The [Player consumer witness](implementation.md#player-life-reference-checkpoint)
+now passes six controls through 36 fresh loads. It captures original consumer
+locals in fixed JIT-off acquisitions and requires exact uninstrumented reference
+agreement across both JIT modes. Original05 has base 1257, Increase 5 and final
+Life 1320; the observed ExtraLife/Total/post-clamp conversion are zero, and
+override/Chaos Inoculation are absent. That is finite source evidence, not proof
+of globally empty supplier families. Positive Extra/Total/conversion/override
+suppliers and the raw rounding operand remain unobserved. Native mathematical
+tie rounding still needs a bounded comparison to the source's `floor(x+0.5)`
+implementation. These arithmetic and coverage requirements remain separate from
+the pending origin-authority decision.

@@ -1287,6 +1287,23 @@ appropriately inside the optional reference adapter. Parity compares imported
 meaning and calculated results; it does not require the native engine to expose
 PoB's UI objects or reproduce irrelevant internal callbacks.
 
+Internal acquisition and numerical reference execution have separate evidence
+roles. The Player Life witness uses a fixed JIT-off observer to read original
+consumer locals, with mandatory checkpoints and independent fresh repeats.
+Untouched fresh runs in both JIT modes separately check exact calculated results.
+LuaJIT debug notifications are not a reliable record of compiled internal calls;
+missing notifications must not be interpreted as missing game effects or repaired
+by retrying until a trace appears. This protocol proves only its declared
+projection: all captured Player scalar outputs, selected input identity and
+explicit Life-related stores. It does not prove identical internal paths,
+complete Player state or cross-JIT consumer locals. These observer mechanics and
+evidence encoding remain inside optional PoB tests; they add no native type,
+default or rule semantics. See the current [validation checkpoint](implementation.md#player-life-reference-checkpoint).
+The six-case Player Life witness passes all 36 fresh loads with exact declared
+projection agreement, including the unchanged build and level, equipped-item,
+increase, more and Chaos Inoculation controls. This establishes source evidence;
+it does not publish a final native Life reducer or close contributor coverage.
+
 The ordinary authenticated Main lifecycle also loads PoB's stored modifier
 parser cache. A HeadlessWrapper comment about CI does not disable that cache in
 the pinned revision. Reference evidence must distinguish a stored result from
