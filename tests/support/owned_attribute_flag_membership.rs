@@ -128,7 +128,7 @@ fn census(owners: &[DefinitionRules], applications: &[EffectApplicationRule]) {
         );
     }
 }
-fn source(full: bool) -> Value {
+pub fn authenticate_source(full: bool) -> Value {
     let v: Value = read("source-vectors.json");
     assert_eq!(v["status"], "passed");
     let pins = v["source_packets"].as_array().unwrap();
@@ -226,7 +226,7 @@ fn source(full: bool) -> Value {
     proof
 }
 pub fn checked_source() -> Value {
-    source(false)
+    authenticate_source(false)
 }
 pub fn check_authored() {
     let a: Value = read("authoring.json");
@@ -305,7 +305,7 @@ pub fn check_authored() {
         }
     }
     census(&d.owners, &[]);
-    source(false);
+    authenticate_source(false);
 }
 fn dependencies(endpoint: &StagedOwnedRelease) {
     let d: Dependencies = read("dependencies.json");
@@ -396,7 +396,7 @@ pub fn assert_component(endpoint: &StagedOwnedRelease) {
 }
 pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     check_authored();
-    source(true);
+    authenticate_source(true);
     dependencies(prior);
     let b: Value = read("bindings.json");
     let receipt = json!(prior.receipt());

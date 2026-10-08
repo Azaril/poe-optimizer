@@ -5,15 +5,15 @@ Status: **proposed; not accepted or implemented**. Date: 2026-10-08.
 ## Concrete blocker
 
 Original05 now calculates both attribute passes from its actual Class and
-selected passive choices. The next approved component connects final Strength
+selected passive choices. The approved component connects final Strength
 and the five inherent Boolean flags to the existing inherent-Life producer.
 That does not finish the Life pool.
 
 Final Life must combine contributions from several existing owners. Shared
 Player Actor `332a` supplies intrinsic Life; reward selections supply quest
 Life; physical items supply their rolled Life. The Strength receiver derives the
-inherent amount `331a` but currently emits no Life contribution. A shared Player
-Actor rule can read that amount and deliver it once to canonical Life `311a`,
+inherent amount `331a` without emitting a contribution itself. The published
+shared Player Actor rule reads that amount and delivers it once to canonical Life `311a`,
 reusing the accepted ExistingActor ownership model. These remain distinct domain
 sources. Stat receivers retain their single final-derive responsibility; no new
 Receiver contribution authority is needed for this connection.
@@ -97,13 +97,18 @@ and providers, independent rewards, duplicates, partial/unavailable sources,
 inactive/late effects, ordering ties, cache identity and fresh/reused/Rayon
 equivalence. Preserve canonical `311a` and the real shared Player owner.
 
-Then connect the actual imported Life-bearing items and reward selections. The
-existing Sniper item fixture primarily prepares Crown and Solar Amulet sources;
-it is not proof that all Life equipment has been assembled. Original05's retained
+The separate contributor checkpoint joins the actual imported Life-bearing items
+and reward selections in the existing finite Sniper fixture. It adds to the
+Crown and Solar Amulet preparation but is not complete equipment coverage.
+Original05's retained
 source evidence includes a Tattered Robe, Rope Cuffs, two uses of the Sapphire
 Ring record, Fine Belt and two quest rewards. Authenticate these through import
 and independent source evidence; do not paste the observed subtotal/final pool
 into a producer. Origin admission does not prove the final-Life formula or the
 absence of other conversion, override or conditional families. Full owner,
-receiving, input and metric coverage remain required
-before declaring the build complete.
+receiving, input and metric coverage remain required before declaring the build
+complete. The implementation plan now records the missing Player consumer-local
+witness: retained output 1320 and visible Life modifiers do not establish absent
+ExtraLife, LifeTotal, conversion, override or Chaos Inoculation inputs. Native
+mathematical tie rounding also needs a bounded comparison to the source's
+`floor(x+0.5)` implementation. Neither issue is settled by origin authority.

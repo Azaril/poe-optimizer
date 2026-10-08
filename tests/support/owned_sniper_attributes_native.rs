@@ -121,7 +121,7 @@ pub(super) fn install(
             .all(|a| a.access == AllocationAccess::Ordinary && a.scope == LoadoutScope::Shared)
     );
     // Character authority comes from the supplied canonical imported selection,
-    // not a fixture class chosen to reproduce an observed subtotal.
+    // including its actual level before shared Player programs are installed.
     let draft: Value = shared::read(package.parent().unwrap().join("original-05/draft.json"));
     let selection: Value = shared::read(package.parent().unwrap().join("selected-05.json"));
     let character = draft["draft"]["character_presets"]["members"]
@@ -132,6 +132,8 @@ pub(super) fn install(
         .unwrap();
     assert_eq!(character["class"]["kind"], "known");
     let class: ClassDefId = decode(&character["class"]["value"]);
+    assert_eq!(character["level"]["kind"], "known");
+    let level = decode(&character["level"]["value"]);
     let actual_class = owners
         .iter()
         .find(|o| o.owner == subject(class.clone()))
@@ -296,6 +298,7 @@ pub(super) fn install(
         *selected = owner;
     }
     f.build.character.class = class;
+    f.build.character.level = level;
     let selected: Vec<_> = original
         .iter()
         .enumerate()

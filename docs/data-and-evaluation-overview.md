@@ -39,11 +39,16 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest joined checkpoint calculates both attribute passes from the actual
+The joined graph calculates both attribute passes from the actual
 imported class/passive sources, resolves the five inherent Boolean flags through
 checked membership, and derives inherent Life. It produces Strength 27 and
-inherent Life 54 for Original05 without supplied calculated values. All 44 joined
-checks and five-build publication preservation pass. Final Life, complete owner
+inherent Life 54 for Original05 without supplied calculated values. The published program
+delivers the inherent amount through the existing shared Player Actor, preserving
+disabled absence versus enabled zero. Integration uses the actual character
+level (92, intrinsic Life 1120), four Life-bearing item records with five equipment
+uses, and two quest rewards. All 60 joined checks and five-build publication
+preservation pass. Actual catalog, placement and owner gaps remain explicit;
+finite test projections do not close them. Final aggregation, complete owner
 coverage and request admission remain unfinished. Current artifacts and the
 review questions are in the [implementation plan](implementation.md).
 
@@ -201,7 +206,11 @@ unlisted contributors reject, including inactive or false sources; donor owners
 and global coverage remain Partial. The joined Sniper graph calculates both
 attribute passes, resolves the five flags, and derives inherent Life 54 from
 Strength 27. Neither passive is selected in the unchanged build. No measured
-Strength or flag is a native input. Final Life delivery, full-build attributes
+Strength or flag is a native input. The
+[inherent contribution packet](../data/owned/poe2/3887ae68/inherent-life-contribution/README.md)
+adds a guarded read-to-contribution program on the shared Player Actor without
+changing the pure amount receiver. Disabled bonuses emit no record; enabled zero
+Strength emits one zero record. Final Life aggregation, full-build attributes
 and the five selected input obligations remain unresolved; all-five input and
 110-query preservation pass.
 

@@ -34,6 +34,13 @@ mod inherent_life_native;
 mod passive_damage_evidence;
 #[path = "support/owned_sniper_passive_damage_native.rs"]
 mod passive_damage_native;
+#[path = "support/owned_sniper_player_life_contribution.rs"]
+mod player_life_contribution_native;
+#[allow(dead_code)]
+#[path = "support/owned_inherent_life_contribution.rs"]
+mod player_life_family;
+#[path = "support/owned_sniper_player_life_inputs.rs"]
+mod player_life_inputs_native;
 use accuracy_family::preservation as migration_preservation;
 #[allow(dead_code)]
 #[path = "support/owned_release_fixture.rs"]
@@ -90,6 +97,8 @@ struct World {
     gigantic: gigantic_native::Census,
     attributes: attribute_base_native::Census,
     inherent_life: inherent_life_native::Census,
+    player_life: player_life_contribution_native::Census,
+    life_inputs: player_life_inputs_native::Census,
 }
 impl World {
     fn load() -> Self {
@@ -396,6 +405,8 @@ impl World {
         let gigantic = gigantic_native::install(&mut w, &endpoint, &path);
         let attributes = attribute_base_native::install(&mut w, &endpoint, &path);
         let inherent_life = inherent_life_native::install(&mut w, &endpoint, &path);
+        let player_life = player_life_contribution_native::install(&mut w, &endpoint);
+        let life_inputs = player_life_inputs_native::install(&mut w, &endpoint, &path);
         Self {
             sniper: w,
             actual_actor_coverage,
@@ -407,6 +418,8 @@ impl World {
             gigantic,
             attributes,
             inherent_life,
+            player_life,
+            life_inputs,
         }
     }
     fn action(&self, index: usize) -> ActionSelection {
@@ -524,6 +537,7 @@ impl World {
             gigantic_native::configure(stages);
             attribute_base_native::configure(stages);
             inherent_life_native::configure(stages);
+            player_life_contribution_native::configure(stages);
             configure(stages);
         })
     }
@@ -647,6 +661,16 @@ impl World {
         let origins: Vec<_> = build
             .equipment
             .iter()
+            .filter(|equipment| {
+                build
+                    .items
+                    .iter()
+                    .find(|item| item.id == equipment.item)
+                    .unwrap()
+                    .modifiers
+                    .iter()
+                    .any(|modifier| modifier.definition == d(0x30ca))
+            })
             .map(|equipment| {
                 let item = build.items.iter().find(|i| i.id == equipment.item).unwrap();
                 assert_eq!(item.modifiers.len(), 1);

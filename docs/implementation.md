@@ -67,6 +67,18 @@ exist only for backward compatibility.
 
 ## CI repair checkpoint: downstream Boolean cutover checks
 
+**October 8 follow-up:** the older `6a3aae3` run subsequently completed Ubuntu's
+CLI job with failures in `owned_configuration_resistance_penalty_native` and
+`owned_extension_cli`. Both PoB jobs passed; Windows CLI was still running, and
+`0ca44ee` run `37731323865` was pending. Detailed job logs still return 403, so the
+public annotations establish failing targets rather than their assertion causes.
+Current local reproduction in `runs/ci-owned-cli-reproduction-01.log` found a
+historical rules-schema header in the finite resistance fixture and a stale
+16 MiB default-budget assertion in the extension chain. The repair constructs
+the resistance fixture in the current format and checks the shared content
+budget constant; historical source pins and the explicit 8 MiB refusal test
+remain. Full target reruns are pending; do not claim hosted or local green yet.
+
 The public job annotations for run `37715752732` identify two failures on both
 Windows and Ubuntu: allocation export reproduction and Data's
 `owned_support_outputs` target. Full log downloads return HTTP 403; both failures
@@ -112,7 +124,67 @@ does not distinguish compilation from execution, so a hang is unproven. Main's
 configured concurrency explains the pending/coalesced runs. Original05 remains
 the target, with five selected input obligations and **0/5** complete builds.
 
-## Latest native checkpoint: real Strength and checked flags reach inherent Life
+## Latest native checkpoint: real Player Life contributions in the joined graph
+
+The shared Player Actor `332a` now has one ordinary authored program that reads
+the pure inherent amount `331a` and emits it once to canonical Life `311a`.
+The existing Boolean disable flags guard emission: disabled means no record,
+whereas enabled zero Strength emits one zero record. The independent thirteen-case
+source witness and compiled-rule checks preserve that distinction. There is no
+new formula, measured constant, receiver or public model extension.
+
+Publication passes in **20.75s**, preserving all five imported drafts, origins,
+selections, 110 queries and issue counts **107/117/109/123/5**. Its exact inverse
+allows only the appended Actor program and provenance receipt; a rebuild is
+byte-identical. Actual Actor/global coverage remains Partial, and no evaluation
+bundle or final-Life metric is added. The current integration package is
+`runs/owned-inherent-life-contribution-publication-01/package`, input
+`77647de61486b91c2de2d4e73547c6fd2e5ef40f506c947d84bf82a04836726b`, rules
+`3e650238f83dcf35e0d868f766743575d6e36d634e62660bdf5a4b987919a008`, compiled rules
+`8ae86b988ca39964b7ee8f12089cd6a2bdf5caa702d4bb4556d82fa7b19e7fcc`.
+
+The joined fixture now loads the imported character's actual level instead of
+retaining the earlier component fixture's level 100. It also imports four actual
+Life-bearing item records with five equipped uses, including two distinct uses
+of the same Sapphire Ring record, and the two selected quest rewards. Numeric
+preparation, catalyst inputs and delivery use existing current rule bodies.
+These finite checks exclude unrelated item mechanics and do not certify complete
+equipment or reward inventories. All **60** joined checks pass in **34.61s**:
+53 artifact-backed integration checks plus seven ordinary checks. They establish
+intrinsic Life **1120** at imported level 92, calculated inherent Life **54**, the
+five item deliveries **17/16/10/10/10**, and reward Add **20** / Increase **5** as
+distinct contributions, without supplying final Life. Controls cover actual
+source identities, ring mutation/removal, query/input order, missing inputs,
+stage constraints, incomplete inventories and fresh/reused/Rayon equivalence.
+
+The failed runs exposed fixture assumptions, not production fixes: global
+catalogs are Pending; three equipment templates have Partial slot inventories;
+removing all requested attacks invalidates the retained Action programs; and
+Partial early-preparation owners reject before plan construction. Repairs retain
+the actual catalog/placement/owner obligations, admit only exact imported slots
+in the finite fixture, preserve required attack contexts for the query-order
+check, and assert the earlier preparation refusal. Complete production coverage
+is not inferred from these projections. The Crown/Amulet origin check now scopes
+its existing exact assertions to its modifier family, alongside the separate
+five-Life-use checks. Failed logs remain available.
+
+Evidence: `runs/owned-inherent-life-contribution-{authoring,publication}-01.log`,
+publication `{validation,receipt}.json`, and
+`runs/owned-player-life-native-complete-05.log`. Strict workspace/all-feature/
+all-target Clippy passes in **3.01s** and changed-file formatting passes in
+`runs/owned-player-life-{clippy-01,format-02}.log`. The joined integration checks
+remain ignored in ordinary CI until artifact provisioning is implemented.
+
+**Resume:** capture the exact original Player Life consumer calls described
+below; the new optional source witness is under validation. Final aggregation still awaits the
+[Actor/reward query decision](owned-actor-reward-contribution-queries-proposal.md);
+Offering's source scaling awaits the separate
+[exact Skill query decision](owned-skill-contribution-queries-proposal.md).
+Both were sent for owner review on October 8. Neither authorizes unrelated
+support composition or Actor-to-Enemy reads. Keep Original05 first and preserve
+all five originals; complete native builds remain **0/5**.
+
+## Native checkpoint: real Strength and checked flags reach inherent Life
 
 The five existing Boolean Any queries `3315`–`3319` now have checked bounded
 membership. Two authenticate the exact direct passive writers for doubling and
@@ -165,8 +237,8 @@ the current joined package is reproducibly provisioned in CI, or transfer its
 ordinary execution coverage first. Keep the independent Strength-Life witness
 and receiver tests for disabling, zero-versus-absence and lazy missingness.
 
-**Resume:** Original05 remains the closest-build target. Prepare its actual
-Life-bearing equipment and selected rewards, retaining distinct physical uses.
+**Follow-up:** the checkpoint above adds actual Life-bearing equipment and
+selected rewards, retaining distinct physical uses.
 Final Life query origin authority is pending in the
 [Actor/reward proposal](owned-actor-reward-contribution-queries-proposal.md);
 Offering's source scaling still needs the
@@ -176,6 +248,21 @@ authorize unrelated support composition or Actor-to-Enemy reads. Keep `331a`
 pure and deliver its derived amount through the existing shared Player Actor
 owner. Do not bypass the candidate-wide census, revive the retired Life alias,
 or declare complete metrics before real receiving, source and owner coverage.
+
+The final-pool audit confirms retained Original05 Life records totaling 1257 Add
+and 5 Increase, with saved MAIN/CALCS Life 1320. These are diagnostics, not a
+native recipe or proof of absent families. Current witnesses do not capture the
+Player's actual `doActorLifeManaSpirit` reads for ExtraLife, LifeTotal, conversion,
+overrides and Chaos Inoculation; the existing detailed consumer observer filters
+Sniper. Extend that established original-call observer to the exact Player before
+publishing final Life arithmetic or neutral-domain constants. Preserve each
+precalculation/defence invocation and its original reads/return, plus independent
+unobserved and JIT checks. In `CalcDefence.lua:74`–`134`, conversion has an upper
+cap but no lower clamp, Extra precedes scaling, Total follows it, overrides bypass
+ordinary rounding/clamping, and Chaos Inoculation follows the pool calculation.
+The source `floor(x+0.5)` and native mathematical tie rounding also need bounded
+parity evidence rather than a blanket Lua-compatibility claim. Keep the current
+item Modifier `3100` and incoming minion-Life `32e5` coverage explicit.
 
 ## Native checkpoint: bounded class/passive BASE membership
 
@@ -671,12 +758,14 @@ reproducible evidence, not distributed game data.
 
 ## Next executable work
 
-The selected-passive, recipient-buff and Gigantic/Life joins above pass. The next numerical
-dependency is Offering's three source-Skill scaling producers and application
-delivery. Exact Skill query authority is awaiting review; inspect source
-membership/grouping evidence and selected-input obligations under existing
-contracts while that answer is pending. Do not let a pending model decision
-stall independent approved work or assume approval.
+The selected-passive, recipient-buff, Gigantic and inherent-Life joins above pass.
+The current numerical work joins actual Player Life contributors and captures
+the original Player final-Life consumer. The next native reductions need the
+Actor/reward origin decision for Life and exact Skill query authority for
+Offering's three source-scaling producers. Inspect source membership/grouping
+evidence and selected-input obligations under existing contracts while those
+answers are pending. Do not let a pending model decision stall independent
+approved work or assume approval.
 
 The follow-up audit found no established final-Life shortcut: the selected saved
 Life query is Player, whose BASE/ordering and class/shared-Actor coverage remain

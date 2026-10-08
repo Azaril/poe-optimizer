@@ -162,6 +162,7 @@ pub struct World {
     pub schema: SchemaPackageInput,
     pub operations: OwnedDefinitionKey,
     pub owners: Vec<DefinitionRules>,
+    pub existing_actor_rules: Option<DeclaredSet<ExistingActorRuleApplication>>,
     pub build: BuildInput,
     pub families: Vec<Value>,
     pub preparation: SupportPreparationInput,
@@ -452,6 +453,7 @@ impl World {
             operations: endpoint.input().recipe.rules.operations_version.clone(),
             schema,
             owners: finite(&original_owners),
+            existing_actor_rules: None,
             build: BuildInput {
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([119; 16]),
@@ -1101,7 +1103,7 @@ impl World {
         };
         let stored = OwnedRulePackage::new(
             RulePackageInput {
-                existing_actor_rules: None,
+                existing_actor_rules: self.existing_actor_rules.clone(),
                 // The caller declares the finite query inventory. Stored and
                 // compiled rule checks still bind every read and contributor.
                 contribution_queries,
