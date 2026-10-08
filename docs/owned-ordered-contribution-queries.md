@@ -2,7 +2,7 @@
 
 Status: bounded implementation of the accepted [contribution-stage direction](owned-contribution-stages.md). This framework does not choose a PoE numerical grouping or rounding law, close a game owner, or make another original build executable. Game-specific adoption still requires actual consumer evidence and complete contributor coverage.
 
-The shared contract is an optional `contribution_queries` registry on `RulePackageInput`, introduced by operationsV21 and generalized by operationsV22. Each query names one Stat and contribution kind. Its fixed named groups declare a reduction, typed empty identity, and a `DeclaredSet` of exact definition-owner/program/effect members. Programs read a named group through `RuleReadSource::ContributionQuery { entity, query, group }`. The query is authored data; concrete membership is bound from the current candidate's discovered effect occurrences.
+The shared contract is an optional `contribution_queries` registry on `RulePackageInput`, introduced by operationsV21 and generalized by operationsV22/V23. Each query names one Stat and contribution kind. Its fixed named groups declare a reduction, typed empty identity, and a `DeclaredSet` of exact owner/program/effect members. Programs read a named group through `RuleReadSource::ContributionQuery { entity, query, group }`. The query is authored data; concrete membership is bound from the current candidate's discovered effect occurrences.
 
 An authored member is not one runtime value. A repeated modifier produces one contribution per actual modifier occurrence. The same rolled item in two equipment uses produces separate occurrences. Removing a passive, changing an item, changing semantic modifier order, or selecting another loadout changes candidate membership. Renaming or rebasing opaque instance IDs must not change numerical order. Existing discovery determines whether alternate-loadout roots are available; the query does not introduce a second participation policy.
 
@@ -10,20 +10,37 @@ Every actual effect on the query's recipient/channel must match exactly one memb
 
 ## Bounded ordering contract
 
-Members name exact definition owners, program IDs, effect IDs and source origins. Numeric groups require `ordering: ordered`; each member carries a separate `ContributionOrder`, whose slot ranks exactly cover its origin membership. The authored order is compared lexicographically as:
+Members name exact definition or admitted Actor-slot owners, program IDs, effect IDs and source origins. Numeric groups require `ordering: ordered`; each member carries a separate `ContributionOrder`, whose equipment-slot ranks exactly cover its equipment origin membership. The authored order is compared lexicographically as:
 
 `(source_rank, slot_rank, modifier_position, program_rank, effect_rank)`
 
 Nonapplicable slot and modifier positions are zero. No instance ID, display name, insertion order, hash order, or discovery index breaks a tie. Rank values have meaning only within the authored group; no implicit game order is inferred from a definition key.
 
-| Origin policy | Admitted direct owner | Candidate-derived ordering component |
+| Origin policy | Admitted owner | Candidate-derived ordering component |
 | --- | --- | --- |
 | `Character` | Class or Ascendancy | Its singleton character root; explicit source/program/effect ranks |
 | `Allocation` | PassiveNode | Its exact allocated definition; explicit source/program/effect ranks |
 | `EquipmentUse` | ItemTemplate | Exact declared equipment-slot rank |
 | `ItemModifier` | Modifier | Exact declared equipment-slot rank, then position in the rolled item's `modifier_order` |
+| `ExistingActor` (V23) | Actor definition with the exact applicability declaration | Explicit source/program/effect ranks; currently the existing Player |
+| `Reward` (V23) | Selected Reward definition | Explicit source/program/effect ranks; distinct occurrences remain distinct |
+| `SuppliedActor` (V23) | Explicit Actor slot or its declared Actor provider definition | Exact checked supply relation and Actor recipient; explicit source/program/effect ranks |
 
-Initial membership is restricted to direct roots with an empty grant path. Granted, socketed, support-assignment, reward and effect-application origins have no implicit fallback ordering. Their eventual policies need explicit design and evidence. This is a limit on the new read, not a second build model or a removal of those existing occurrences.
+Direct provider policies require an empty grant path. Supplied Actors instead
+use the validated Actor-to-provider relation, also retained for support suffix
+checks. Their keys contain the parent provider, so raw path equality or an
+assumed grant depth is insufficient. An explicit slot list authorizes only those
+Actor supplies; arbitrary generated, socketed, support-assignment and
+effect-application origins remain unsupported. A shared Actor application is
+not a fabricated provider root.
+
+Numeric occurrences that share a recipient and semantic position reject. This
+includes repeated selections of one Reward definition or several supplied
+Actors writing the same Player channel without a reviewed ordering law. Separate
+minion recipients do not need an ordering between their IDs. Unordered Boolean
+groups preserve the full source and invocation identity instead of ranking or
+deduplicating those occurrences. These are membership capabilities, not game
+grouping laws or complete source inventories.
 
 Within a group, all equipment members of the same origin category share the same source rank and slot map. This makes equipment-slot order and modifier order precede definition/program order. Slot IDs and slot ranks are unique, finite, known declarations. Programs of one owner share its source rank; effects of one program share source/program ranks. Exact runtime ties are errors. These restrictions prevent an author from accidentally using modifier-definition order instead of the selected item's authored modifier sequence.
 
@@ -43,7 +60,8 @@ Data validates the registry's exact references, origin/owner/context agreement, 
 
 Rule packages use schema3. There is no old/new query DTO parser. OperationsV21
 introduces numeric queries; V22 adds typed Boolean contributions and unordered
-Any, using effect-plan domainv19. Explicit older operation subsets still reject
+Any, using effect-plan domainv19. V23 adds Actor/reward membership and uses
+effect-plan domainv20. Explicit older operation subsets still reject
 unsupported operations, but do not preserve historical package/hash formats.
 Maintained acquisition/test artifacts were rebuilt with rule storage/compiler
 hash domainsv3. The [Boolean contract](owned-boolean-contributions-proposal.md)

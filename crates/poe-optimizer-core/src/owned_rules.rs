@@ -14,6 +14,8 @@ pub const OWNED_RULE_PACKAGE_VERSION: u32 = 3;
 /// Baseline operation subset used when authors do not opt into newer capabilities.
 /// Package schema and content identity domains always use the current format.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+/// Exact shared/supplied Actor and selected reward contribution membership.
+pub const OWNED_RULE_OPERATIONS_V23: &str = "owned-domain-operations-v23";
 /// Typed Boolean contribution channels with unordered, complete Any reductions.
 pub const OWNED_RULE_OPERATIONS_V22: &str = "owned-domain-operations-v22";
 /// Candidate-bound ordered contribution groups. Earlier reductions stay unchanged.
@@ -70,6 +72,7 @@ pub enum RuleOperationsVersion {
     V20,
     V21,
     V22,
+    V23,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -91,6 +94,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V20 => Self::V20,
             OWNED_RULE_OPERATIONS_V21 => Self::V21,
             OWNED_RULE_OPERATIONS_V22 => Self::V22,
+            OWNED_RULE_OPERATIONS_V23 => Self::V23,
             _ => return None,
         })
     }
@@ -113,6 +117,7 @@ impl RuleOperationsVersion {
             Self::V20 => 20,
             Self::V21 => 21,
             Self::V22 => 22,
+            Self::V23 => 23,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -163,6 +168,9 @@ impl RuleOperationsVersion {
     pub const fn supports_boolean_contributions(self) -> bool {
         self.revision() >= 22
     }
+    pub const fn supports_actor_reward_contributions(self) -> bool {
+        self.revision() >= 23
+    }
     /// Current explicit Skill participation in V4 readiness metadata.
     pub const fn supports_skill_participation(self) -> bool {
         self.revision() >= 21
@@ -188,6 +196,7 @@ impl RuleOperationsVersion {
             Self::V20 => "owned-effect-plan-v17",
             Self::V21 => "owned-effect-plan-v18",
             Self::V22 => "owned-effect-plan-v19",
+            Self::V23 => "owned-effect-plan-v20",
         }
     }
 }
@@ -290,16 +299,31 @@ pub struct ContributionOrder {
     pub effect_rank: u32,
     pub slot_ranks: Vec<ContributionSlotRank>,
 }
-/// Initially only direct provider roots with an empty grant path are admitted.
-/// Granted, socketed, support and application occurrences need a separately
-/// reviewed policy; they must not fall back to their opaque identity ordering.
+/// Explicit source authority. Direct origins require empty grant paths. Supplied
+/// Actors use the already-validated exact actor-to-provider relation. Other
+/// generated, socketed, support and application origins remain unsupported.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum ContributionOrigin {
     Character,
     Allocation,
-    EquipmentUse { slots: Vec<EquipmentSlotDefId> },
-    ItemModifier { slots: Vec<EquipmentSlotDefId> },
+    EquipmentUse {
+        slots: Vec<EquipmentSlotDefId>,
+    },
+    ItemModifier {
+        slots: Vec<EquipmentSlotDefId>,
+    },
+    /// The exact applicability declaration of an already-existing Actor owner.
+    ExistingActor {
+        application: OwnedDefinitionKey,
+    },
+    /// A selected reward occurrence, authenticated against its Reward owner.
+    Reward,
+    /// One of these declared Actor slots, reached through its validated grant.
+    /// This admits Actor-slot or matching provider-Actor definition owners only.
+    SuppliedActor {
+        slots: Vec<DeclaredSlot<ActorSlotDefId>>,
+    },
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]

@@ -477,7 +477,7 @@ fn delivered(report: &SupportEffectsReport) -> Vec<&BoundEffectResult> {
         })
         .collect()
 }
-fn check(w: &World, report: &SupportEffectsReport) {
+pub(super) fn check(w: &World, report: &SupportEffectsReport) {
     let f = &w.sniper.base.source.base.inner;
     let rows = delivered(report);
     let uses: Vec<_> = f
@@ -657,7 +657,7 @@ fn actual_selected_life_items_and_rewards_deliver_exact_source_occurrences() {
     assert_ne!(ring_uses[0].id, ring_uses[1].id);
     assert_ne!(ring_uses[0].destination, ring_uses[1].destination);
 }
-fn change_ring(w: &mut World, value: f64) -> ItemRecordId {
+pub(super) fn change_ring(w: &mut World, value: f64) -> ItemRecordId {
     let item = w
         .life_inputs
         .items

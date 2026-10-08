@@ -82,15 +82,80 @@ On October 8 the owner approved all three recently prompted decisions:
   mandatory direct/staged request coverage before moving Import obligation
   `01de`; unsupported origin families remain blocking.
 
-All three are **accepted, not implemented**. These decisions supersede older
-checkpoint statements below describing them as awaiting approval. Specify and
-test their minimal source/recipient declarations together so Life and Skill
-queries share one membership implementation. Start with Actor/reward authority
-and the real Player Life consumer, then exact Skill scaling; support discovery
-can proceed independently once its contract is concrete. Preserve the general
-model and incomplete coverage throughout. Actor-to-Enemy reads, resource demand,
-configuration/reporting and scoped coverage proposals have not been approved by
+Actor/reward membership is now implemented in Core/Data/Engine operations V23;
+game-data adoption and the final Player Life consumer remain pending. Exact Skill
+queries and composed support discovery remain **accepted, not implemented**.
+These decisions supersede older checkpoint statements below describing them as
+awaiting approval. Reuse the same membership implementation for the subsequent
+Skill extension. Continue the real Player Life consumer, then exact Skill
+scaling; support discovery can proceed independently once its contract is
+concrete. Preserve the general model and incomplete coverage throughout.
+Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
+coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
+
+## Latest runtime checkpoint: checked Actor and reward contributions
+
+Operations V23 adds `ExistingActor { application }`, `Reward` and
+`SuppliedActor { slots }` to the existing contribution membership contract. Data
+authenticates exact owners, applicability declarations, declared Actor slots and
+provider definitions. Engine follows the validated Actor supply relation, also
+retained for late support-suffix checks; it does not equate a parent provider
+address with the entered grant path. Direct provider roots remain constrained
+to empty paths. Worker reduction/execution is unchanged: no separate aggregator,
+Lua behavior, build names, Life formulas or source-specific runtime code.
+
+Full occurrence and recipient identity survives binding. Numeric same-recipient
+ties reject, including repeated numeric reward selections and multiple supplied
+Actors writing the same Player channel without an ordering law. Boolean Any
+preserves duplicate sources without assigning a numeric rank. Inactive, unread,
+zero and Partial contributors retain existing coverage checks. Schema3 remains
+current; V23 uses effect-plan domain20 to invalidate prior semantic identities.
+The published game package below is still operations V22: no data or five-build
+admission claim is changed by this runtime extension.
+
+The real joined Sniper fixture now has opt-in checked Life reduction probes over
+its existing imported equipment, rewards, shared Player and two distinct minion
+occurrences. They emit test-only diagnostic Stats, never final canonical Life.
+The test order covers a finite exact integral Player BASE domain; it is not a
+general game ordering law. Remaining minion INC, complete inventories, resource
+formula, overrides and conversions are explicitly outside that fixture closure.
+The first compile caught a test field-name typo. The first integration run kept
+all 59 prior checks passing and rejected the new fixture's incorrect use of two
+source ranks for one shared owner; it now uses one source rank and two program
+ranks. The next run rejected diagnostic receivers left in the fixture's default
+early-readiness phase; these now explicitly execute after contribution stages.
+No correction weakens a production guard.
+
+The three new joined checks pass in **28.24s**: actual Player BASE **1257**, INC
+**5**, empty Player MORE **1**, and separate minion BASE/MORE. Existing individual
+producer/source checks remain in that same graph. A level change, quest removal,
+ring roll change and removal of one ring use produce BASE **1243** without changing
+minions. Fresh/reused A/B/A and four Rayon workers agree exactly; storage reversal,
+unread missing minion membership and Partial coverage are checked. The original
+59 joined checks passed in the earlier combined run. These are component results;
+the unchanged final-Life target remains **1320**, not yet supplied natively.
+
+Regression validation passes: **3 Core**, **28 Data** and **20 Engine** tests
+(seven new Actor/reward checks plus 13 existing contribution checks). These cover
+raw/stored validation, round trips, wrong origin/applicability, duplicate rewards,
+unread/inactive members, typed Boolean uncertainty, Partial coverage, work bounds
+and deterministic fresh/reused/Rayon execution. The existing Engine test's
+checked empty-support/readiness construction is now shared, removing a duplicate
+fixture rather than bypassing staging. A leftover unused import was removed.
+Changed-file formatting and strict workspace/all-feature/all-target Clippy pass;
+Clippy finished in **36.09s**.
+
+Evidence: `runs/owned-actor-reward-joined-{02,03,04}.{jsonl,log}` (final joined
+run `04`), `{core-01,data-01,engine-04,format-01,clippy-01}.log` with the same
+prefix. Source/game artifacts and the five-build input report remain unchanged.
+
+**Next blocker:** publish reviewed canonical Life membership and semantic
+ordering, then the actual Player consumer. Preserve remaining producer/owner
+obligations, prove bounds for the composed arithmetic and account for
+ExtraLife/Total/post-clamp conversions, overrides and Chaos Inoculation. Do not
+promote the fixture's empty or finite domains to production completeness. Exact
+Skill queries and composed support discovery remain approved follow-on work.
 
 ## Latest native data checkpoint: all selected equipment placement
 
@@ -1007,10 +1072,12 @@ reproducible evidence, not distributed game data.
 
 The selected-passive, recipient-buff, Gigantic and inherent-Life joins above pass.
 The actual Player Life contributor join and independent final-Life consumer
-witness now pass. Implement the accepted Actor/reward membership boundary for
-Life and exact Skill queries for Offering in the existing graph. Their common
-source/recipient authority, semantic numeric ordering, candidate-wide census
-and identity invalidation need explicit tests before publishing consumer data.
+witness now pass. Actor/reward membership is implemented in operations V23;
+finish its real reduction verification, then author reviewed game membership,
+ordering and final Player Life arithmetic using the retained source witness.
+Publish complete coverage only where supplier domains and numerical bounds are
+proved. Exact Skill queries for Offering remain the next graph extension. Reuse
+the same source/recipient authority and candidate-wide membership machinery.
 The independently accepted composed support-discovery work can proceed in
 parallel without editing the same graph files. No approval is outstanding for
 these three directions; other proposals retain their separate review gates.
@@ -1143,7 +1210,8 @@ The [selector/supply separation proposal](owned-source-action-root-separation-pr
 records the structural boundary, the genuine reusable child action and the
 conditional 44-to-36 accounting target. This is a pending Import decision;
 do not add a fake physical Gem or weaken root checks. The immediate native
-priority remains the accepted Actor/reward and exact Skill query implementations.
+priority is Life-consumer adoption of the implemented Actor/reward graph,
+followed by the accepted exact Skill query extension.
 
 **Accepted composition work: support-origin discovery.** The selected Original05
 preset currently has sixteen physical support assignments in eight known
@@ -2029,7 +2097,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
-| Actor/reward contribution queries | Accepted October 8: extend the existing membership graph to exact shared/supplied Actor and selected reward occurrences. Preserve distinct sources, recipients, ordering and candidate-wide coverage. Implementation pending; next Player Life boundary. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
+| Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership implemented in operations V23. Exact shared/supplied Actor and selected reward sources retain recipients, multiplicity, ordering and candidate-wide coverage. Published game data remains V22; real membership/ordering and final Player Life consumer adoption are next. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
 | Composed support discovery | Accepted October 8: presets own authored assignments/order; native cold planning derives complete origins from the composed request and injected provider capabilities. Enforce the direct/staged-request gate before moving Import `01de`; rebuild current artifacts. Implementation pending. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8 for Offering scaling: extend the existing checked graph to exact Skill recipients and reviewed occurrence-qualified member origins/order. Current Skill reads and generated paths are rejected today. Actor recipient producers are now published with guarded empty query domains; nonempty group ownership still needs independent proof. Implementation pending; no runtime authority changed. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |

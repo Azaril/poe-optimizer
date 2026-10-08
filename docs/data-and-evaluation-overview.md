@@ -201,8 +201,8 @@ application can add the measured 62%. Checked queries reject Current Skill reads
 and generated member paths. The accepted
 [exact Skill query extension](owned-skill-contribution-queries-proposal.md) reuses
 the existing graph; the owner approved it on October 8, but it is not yet
-implemented. Actor/reward contribution membership and composed support-source
-discovery were approved alongside it. See the linked proposals and implementation
+implemented. Actor/reward contribution membership is implemented in operations
+V23; composed support-source discovery remains accepted but pending. See the linked proposals and implementation
 plan for their separate delivery gates. The focused
 Offering witness now observes original multiplication and local rounding in an
 inherited source store, plus exact Danse assignment and duplicate non-stacking.
@@ -217,7 +217,7 @@ participation and does not establish that later integration's coverage.
 The preceding native checkpoint implements typed Boolean `Flag` contributions and
 unordered `Any` on the existing graph. Source membership and numeric ranks are
 separate; missing coverage remains unresolved even beside true. The current
-format is rules schema3 / operations22; no historical DTO loading path exists.
+published format is rules schema3 / operations22; no historical DTO loading path exists.
 The original [flag packet](../data/owned/poe2/3887ae68/inherent-attribute-flags/README.md)
 published two real passive producers and five reducers with Partial memberships.
 The subsequent [bounded membership packet](../data/owned/poe2/3887ae68/inherent-attribute-flag-membership/README.md)
@@ -233,6 +233,15 @@ changing the pure amount receiver. Disabled bonuses emit no record; enabled zero
 Strength emits one zero record. Final Life aggregation, full-build attributes
 and the five selected input obligations remain unresolved; all-five input and
 110-query preservation pass.
+
+The V23 runtime adds checked shared Actor, supplied Actor and selected reward
+origins to that same contribution graph. Membership follows exact applicability
+and supply relations, including late suffix checks. Duplicate occurrences retain
+their identities; ambiguous numeric ties reject. New semantic plans use identity
+domain20. The published artifact remains V22 until reviewed game membership and
+consumer data are authored. The joined Sniper reduction probes are finite test
+coverage, not complete inventories or a final Life calculation. Native worker
+execution remains Rust over compiled indices with per-worker scratch.
 
 The next critical-hit slice has passed an independent PoB witness: 26 cases in
 each JIT mode, byte-identical reports, and 52 measured MAIN/CALCS vectors. The

@@ -126,7 +126,7 @@ fn player_rows(report: &SupportEffectsReport) -> Vec<&BoundEffectResult> {
         .filter(|e| e.key.invocation.owner == owner())
         .collect()
 }
-fn check(w: &World, report: &SupportEffectsReport, intrinsic: f64, inherent: f64) {
+pub(super) fn check(w: &World, report: &SupportEffectsReport, intrinsic: f64, inherent: f64) {
     let rows = player_rows(report);
     assert_eq!(rows.len(), 2, "one invocation per actual shared program");
     for (program, amount) in [(INTRINSIC, intrinsic), (BRIDGE, inherent)] {

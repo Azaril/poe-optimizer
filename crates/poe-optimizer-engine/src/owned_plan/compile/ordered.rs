@@ -5,6 +5,7 @@ use super::*;
 pub(super) struct Sources<'a> {
     pub rules: &'a RulePackageInput,
     pub build: &'a BuildInput,
+    pub actor_supplies: &'a BTreeMap<OwnedActorKey, ProviderKey>,
     pub effects: &'a [EffectOccurrenceKey],
     pub appended: &'a [EffectOccurrenceKey],
 }
@@ -12,11 +13,21 @@ fn invalid(message: &str) -> PlanError {
     PlanError::Invalid(message.into())
 }
 type Position = (u32, u32, usize, u32, u32);
-fn owner(subject: &SchemaSubject) -> Result<&DefinitionAddress> {
+#[derive(Clone, Copy, Eq, PartialEq, Ord, PartialOrd)]
+enum Owner<'a> {
+    Definition(&'a DefinitionAddress),
+    Slot(&'a SlotAddress),
+}
+fn owner(subject: &SchemaSubject) -> Owner<'_> {
     match subject {
-        SchemaSubject::Definition(id) => Ok(id),
-        SchemaSubject::Slot(_) => Err(invalid("contribution requires a direct definition owner")),
+        SchemaSubject::Definition(id) => Owner::Definition(id),
+        SchemaSubject::Slot(id) => Owner::Slot(id),
     }
+}
+#[derive(Clone, Copy, Eq, PartialEq, Ord, PartialOrd)]
+enum Source<'a> {
+    Provider(&'a ProviderKey),
+    ExistingActor(&'a OwnedDefinitionKey, &'a ActorKey),
 }
 impl Sources<'_> {
     fn effect(&self, index: usize) -> Result<&EffectOccurrenceKey> {
@@ -27,16 +38,74 @@ impl Sources<'_> {
         }
         .ok_or_else(|| invalid("contribution effect index is absent"))
     }
-    fn provider<'a>(
+    fn source<'a>(
         &self,
         effect: &'a EffectOccurrenceKey,
-        origin: &ContributionOrigin,
+        member: &ContributionMember,
         work: &mut usize,
-    ) -> Result<&'a ProviderKey> {
+    ) -> Result<Source<'a>> {
+        let origin = &member.origin;
+        if let ContributionOrigin::ExistingActor { application } = origin {
+            let RuleOrigin::ExistingActor {
+                application: actual,
+                actor,
+            } = &effect.invocation.origin
+            else {
+                return Err(invalid(
+                    "contribution requires its exact existing Actor application",
+                ));
+            };
+            if actual != application
+                || actor != &ActorKey::Player
+                || effect.invocation.entity != ConcreteEntity::Actor(actor.clone())
+            {
+                return Err(invalid(
+                    "existing Actor contribution occurrence differs from membership",
+                ));
+            }
+            let registry = self
+                .rules
+                .existing_actor_rules
+                .as_ref()
+                .ok_or_else(|| invalid("existing Actor contribution registry is absent"))?;
+            charge(work, registry.members.len())?;
+            let row = registry
+                .members
+                .iter()
+                .find(|r| &r.id == actual)
+                .ok_or_else(|| invalid("existing Actor contribution application is absent"))?;
+            charge(work, row.targets.len())?;
+            if member.owner != SchemaSubject::Definition(row.owner.address())
+                || !row.targets.contains(&ExistingActorRuleTarget::Player)
+            {
+                return Err(invalid(
+                    "existing Actor contribution applicability differs from membership",
+                ));
+            }
+            return Ok(Source::ExistingActor(actual, actor));
+        }
         let RuleOrigin::Provider { provider } = &effect.invocation.origin else {
             return Err(invalid("contribution requires a reviewed provider origin"));
         };
         charge(work, provider.grant_path.len() + 1)?;
+        if let ContributionOrigin::SuppliedActor { slots } = origin {
+            let ConcreteEntity::Actor(ActorKey::Owned(actor)) = &effect.invocation.entity else {
+                return Err(invalid(
+                    "supplied Actor contribution requires its exact Actor occurrence",
+                ));
+            };
+            charge(work, slots.len() + actor.provider.grant_path.len() + 1)?;
+            if !slots.contains(&actor.slot)
+                || self.actor_supplies.get(actor.as_ref()) != Some(provider)
+            {
+                return Err(invalid(
+                    "supplied Actor contribution differs from the validated actor supply",
+                ));
+            }
+            // ActorKey retains the parent address. Use the discovered grant
+            // relation; raw path equality or assuming a fixed depth is wrong.
+            return Ok(Source::Provider(provider));
+        }
         if !provider.grant_path.is_empty() {
             return Err(invalid(
                 "contribution membership does not admit generated provider paths",
@@ -45,6 +114,21 @@ impl Sources<'_> {
         match (origin, &provider.root) {
             (ContributionOrigin::Character, ProviderRoot::Character)
             | (ContributionOrigin::Allocation, ProviderRoot::Allocation(_)) => {}
+            (ContributionOrigin::Reward, ProviderRoot::Reward(id)) => {
+                charge(work, self.build.character.rewards.len())?;
+                let reward = self
+                    .build
+                    .character
+                    .rewards
+                    .iter()
+                    .find(|r| &r.id == id)
+                    .ok_or_else(|| invalid("contribution reward selection is absent"))?;
+                if member.owner != SchemaSubject::Definition(reward.definition.address()) {
+                    return Err(invalid(
+                        "contribution reward definition differs from membership",
+                    ));
+                }
+            }
             (ContributionOrigin::EquipmentUse { slots }, ProviderRoot::EquipmentUse(id)) => {
                 self.equipment(*id, slots, work)?;
             }
@@ -69,43 +153,53 @@ impl Sources<'_> {
                 ));
             }
         }
-        Ok(provider)
+        Ok(Source::Provider(provider))
     }
     fn position(
         &self,
-        provider: &ProviderKey,
+        source: Source<'_>,
         origin: &ContributionOrigin,
         policy: &ContributionOrder,
         work: &mut usize,
     ) -> Result<Position> {
-        let (slot, modifier) = match (origin, &provider.root) {
-            (ContributionOrigin::Character, ProviderRoot::Character)
-            | (ContributionOrigin::Allocation, ProviderRoot::Allocation(_)) => (0, 0),
-            (ContributionOrigin::EquipmentUse { slots }, ProviderRoot::EquipmentUse(id)) => {
-                let (slot, _) = self.equipment(*id, slots, work)?;
-                (Self::slot_rank(slot, policy, work)?, 0)
-            }
-            (
-                ContributionOrigin::ItemModifier { slots },
-                ProviderRoot::ItemModifier {
-                    equipment_use,
-                    modifier,
-                },
-            ) => {
-                let (slot, item) = self.equipment(*equipment_use, slots, work)?;
-                charge(work, item.modifier_order.len())?;
-                let position = item
-                    .modifier_order
-                    .iter()
-                    .position(|id| id == modifier)
-                    .ok_or_else(|| {
-                        invalid("ordered contribution modifier has no explicit item order")
-                    })?;
-                (Self::slot_rank(slot, policy, work)?, position)
-            }
+        let (slot, modifier) = match (origin, source) {
+            (ContributionOrigin::ExistingActor { .. }, Source::ExistingActor(_, _))
+            | (ContributionOrigin::SuppliedActor { .. }, Source::Provider(_)) => (0, 0),
+            (_, Source::Provider(provider)) => match (origin, &provider.root) {
+                (ContributionOrigin::Character, ProviderRoot::Character)
+                | (ContributionOrigin::Allocation, ProviderRoot::Allocation(_))
+                | (ContributionOrigin::Reward, ProviderRoot::Reward(_)) => (0, 0),
+                (ContributionOrigin::EquipmentUse { slots }, ProviderRoot::EquipmentUse(id)) => {
+                    let (slot, _) = self.equipment(*id, slots, work)?;
+                    (Self::slot_rank(slot, policy, work)?, 0)
+                }
+                (
+                    ContributionOrigin::ItemModifier { slots },
+                    ProviderRoot::ItemModifier {
+                        equipment_use,
+                        modifier,
+                    },
+                ) => {
+                    let (slot, item) = self.equipment(*equipment_use, slots, work)?;
+                    charge(work, item.modifier_order.len())?;
+                    let position = item
+                        .modifier_order
+                        .iter()
+                        .position(|id| id == modifier)
+                        .ok_or_else(|| {
+                            invalid("ordered contribution modifier has no explicit item order")
+                        })?;
+                    (Self::slot_rank(slot, policy, work)?, position)
+                }
+                _ => {
+                    return Err(invalid(
+                        "ordered contribution provider role differs from membership",
+                    ));
+                }
+            },
             _ => {
                 return Err(invalid(
-                    "ordered contribution provider role differs from membership",
+                    "ordered contribution source differs from membership",
                 ));
             }
         };
@@ -222,7 +316,7 @@ impl Sources<'_> {
         for row in &query.groups {
             charge(work, row.members.members.len())?;
             for member in &row.members.members {
-                let identity = (owner(&member.owner)?, &member.program, &member.effect);
+                let identity = (owner(&member.owner), &member.program, &member.effect);
                 if policies.insert(identity, (row, member)).is_some() {
                     return Err(invalid(
                         "contribution effect occurs in multiple membership rows",
@@ -241,17 +335,17 @@ impl Sources<'_> {
             let effect = self.effect(*index)?;
             let invocation = &effect.invocation;
             let identity = (
-                owner(&invocation.owner)?,
+                owner(&invocation.owner),
                 &invocation.program,
                 &effect.effect,
             );
             let (group, member) = policies
                 .get(&identity)
                 .ok_or_else(|| invalid("actual contribution has no declared membership"))?;
-            let provider = self.provider(effect, &member.origin, work)?;
+            let source = self.source(effect, member, work)?;
             match (group.ordering, &member.order) {
                 (ContributionOrdering::Ordered, Some(policy)) => {
-                    let position = self.position(provider, &member.origin, policy, work)?;
+                    let position = self.position(source, &member.origin, policy, work)?;
                     if positions
                         .entry(&group.id)
                         .or_default()
@@ -264,7 +358,7 @@ impl Sources<'_> {
                 (ContributionOrdering::Unordered, None) => {
                     // Stable identity order makes binding structure deterministic.
                     // It has no semantic rank or effect on Any or diagnostic priority.
-                    let canonical = (identity, provider, &invocation.entity);
+                    let canonical = (identity, source, &invocation.entity);
                     if unordered
                         .entry(&group.id)
                         .or_insert_with(BTreeMap::new)

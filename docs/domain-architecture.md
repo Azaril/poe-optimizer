@@ -893,6 +893,9 @@ a reference process for every search candidate.
 
 The owner approved these extensions on 2026-10-08; their implementation is
 tracked separately in the [implementation plan](implementation.md).
+Operations V23 now implements the Actor/reward source portion. Exact Skill
+queries, composed support discovery and production Life-consumer adoption remain
+separate delivery work; their target contracts below are not completion claims.
 
 The existing checked contribution graph admits reviewed shared-Actor,
 supplied-Actor and selected reward sources, and exact Skill query recipients and

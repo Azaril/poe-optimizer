@@ -566,6 +566,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     let ordered_sources = ordered::Sources {
         rules: rules.input(),
         build: request.build().input(),
+        actor_supplies: &b.actor_supplies,
         effects: &ordered_effects,
         appended: &[],
     };
@@ -690,6 +691,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
             values: b.values,
             query_gates,
             preparation_gates,
+            actor_supplies: b.actor_supplies,
         },
         receiving: bound_receiving,
         symbolic,
@@ -2374,6 +2376,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     ordered: ordered::Sources {
                         rules: self.rules.input(),
                         build: self.request.build().input(),
+                        actor_supplies: &self.actor_supplies,
                         effects: &[],
                         appended: &[],
                     },

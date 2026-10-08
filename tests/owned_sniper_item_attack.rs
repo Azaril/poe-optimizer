@@ -30,6 +30,8 @@ mod gigantic_family;
 mod gigantic_native;
 #[path = "support/owned_sniper_inherent_life_native.rs"]
 mod inherent_life_native;
+#[path = "support/owned_sniper_life_queries.rs"]
+mod life_queries_native;
 #[path = "support/owned_sniper_passive_damage_evidence.rs"]
 mod passive_damage_evidence;
 #[path = "support/owned_sniper_passive_damage_native.rs"]

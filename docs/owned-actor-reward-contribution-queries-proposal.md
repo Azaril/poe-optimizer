@@ -1,6 +1,8 @@
 # Checked contributions from Actors and rewards
 
-Status: **accepted 2026-10-08; implementation pending**. The owner approved
+Status: **accepted 2026-10-08; runtime membership implemented in operations V23**.
+Real game-data membership and the final Player Life consumer remain pending.
+The owner approved
 extending the existing graph, with exact sources and recipients, duplicate
 occurrences, explicit numeric ordering and incomplete-coverage failures.
 
@@ -20,14 +22,15 @@ reusing the accepted ExistingActor ownership model. These remain distinct domain
 sources. Stat receivers retain their single final-derive responsibility; no new
 Receiver contribution authority is needed for this connection.
 
-The current checked query contract only admits direct Character, Allocation,
-EquipmentUse and ItemModifier origins. Data's
-[`ordered.rs`](../crates/poe-optimizer-data/src/owned_rules/ordered.rs) rejects
-other definition/slot owners. Engine's
+Before this implementation, the checked query contract admitted only direct
+Character, Allocation, EquipmentUse and ItemModifier origins. Data's
+[`ordered.rs`](../crates/poe-optimizer-data/src/owned_rules/ordered.rs)
+rejected other definition/slot owners. Engine's
 [`ordered.rs`](../crates/poe-optimizer-engine/src/owned_plan/compile/ordered.rs)
-requires `RuleOrigin::Provider` with an empty grant path. Consequently it cannot
-admit the actual shared Player invocation, reward provider, or supplied Actor
-slot invocation. This is missing membership authority, not missing arithmetic.
+required `RuleOrigin::Provider` with an empty grant path. Consequently it could
+not admit the actual shared Player invocation, reward provider, or supplied
+Actor-slot invocation. V23 supplies this authority in the same graph; it does
+not by itself supply final resource arithmetic or completeness.
 
 Life `311a` is intentionally one canonical stat for Player and minion Actors.
 The candidate census validates every concrete recipient channel for a registered
@@ -93,11 +96,17 @@ rules. Using unchecked contribution reads would bypass the completeness proof.
 Deferring final Life avoids that public change now but leaves a blocker for the
 first complete build.
 
-Before implementation, specify the minimal member declarations and admitted origins in
-Core/Data/Engine together. Test exact source/recipient identity, multiple minions
+The minimal declarations are `ExistingActor { application }`, `Reward` and
+`SuppliedActor { slots }`. Their implementation is shared by cold binding and
+support-suffix validation, with effect-plan domain20. The published package
+remains V22 pending game-data adoption. Validation covers exact source/recipient
+identity, multiple minions
 and providers, independent rewards, duplicates, partial/unavailable sources,
 inactive/late effects, ordering ties, cache identity and fresh/reused/Rayon
-equivalence. Preserve canonical `311a` and the real shared Player owner.
+equivalence. The [runtime checkpoint](implementation.md#latest-runtime-checkpoint-checked-actor-and-reward-contributions)
+records focused regressions and the actual joined Life reduction probes. Those
+probes preserve canonical `311a` and the real shared Player owner, but do not
+publish a final-Life receiver or certify complete game membership.
 
 The separate contributor checkpoint joins the actual imported Life-bearing items
 and reward selections in the existing finite Sniper fixture. It adds to the

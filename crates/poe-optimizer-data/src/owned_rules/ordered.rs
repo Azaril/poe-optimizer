@@ -142,6 +142,7 @@ fn order<I: DefinitionSchemaIndex>(
     member: &ContributionMember,
     ordering: ContributionOrdering,
     program: &RuleProgram,
+    input: &RulePackageInput,
     index: &I,
     usage: &mut RuleStorageUse,
     limits: RuleStorageLimits,
@@ -151,6 +152,109 @@ fn order<I: DefinitionSchemaIndex>(
         return Err(invalid(
             "contribution member ordering differs from its group",
         ));
+    }
+    let extended = matches!(
+        member.origin,
+        ContributionOrigin::ExistingActor { .. }
+            | ContributionOrigin::Reward
+            | ContributionOrigin::SuppliedActor { .. }
+    );
+    if extended {
+        if !RuleOperationsVersion::parse(input.operations_version.as_str())
+            .is_some_and(RuleOperationsVersion::supports_actor_reward_contributions)
+        {
+            return Err(invalid(
+                "Actor/reward contribution origins require owned-domain-operations-v23",
+            ));
+        }
+        if program.context != RuleEntityKind::Actor
+            || member
+                .order
+                .as_ref()
+                .is_some_and(|o| !o.slot_ranks.is_empty())
+        {
+            return Err(invalid(
+                "Actor/reward contribution origins require Actor context and no equipment ranks",
+            ));
+        }
+        match &member.origin {
+            ContributionOrigin::ExistingActor { application } => {
+                let SchemaSubject::Definition(DefinitionAddress::Actor(actor)) = &member.owner
+                else {
+                    return Err(invalid(
+                        "existing Actor contribution requires an Actor definition owner",
+                    ));
+                };
+                let registry = input.existing_actor_rules.as_ref().ok_or(invalid(
+                    "existing Actor contribution requires declared applicability",
+                ))?;
+                work(usage, limits, registry.members.len())?;
+                let row = registry
+                    .members
+                    .iter()
+                    .find(|r| &r.id == application)
+                    .ok_or(invalid("existing Actor contribution application is absent"))?;
+                if &row.owner != actor || !matches!(index.definition(actor), SchemaLookup::Known(_))
+                {
+                    return Err(invalid(
+                        "existing Actor contribution application has a different owner",
+                    ));
+                }
+            }
+            ContributionOrigin::Reward => {
+                let SchemaSubject::Definition(DefinitionAddress::Reward(reward)) = &member.owner
+                else {
+                    return Err(invalid(
+                        "reward contribution requires a Reward definition owner",
+                    ));
+                };
+                if !matches!(index.definition(reward), SchemaLookup::Known(_)) {
+                    return Err(invalid(
+                        "reward contribution requires a known Reward schema",
+                    ));
+                }
+            }
+            ContributionOrigin::SuppliedActor { slots } => {
+                add(&mut usage.ordered_slots, slots.len())?;
+                work(usage, limits, slots.len())?;
+                if slots.is_empty() {
+                    return Err(invalid(
+                        "supplied Actor contribution requires explicit slot membership",
+                    ));
+                }
+                let mut seen = BTreeSet::new();
+                for slot in slots {
+                    if !seen.insert(slot) {
+                        return Err(invalid("duplicate supplied Actor contribution slot"));
+                    }
+                    let SchemaLookup::Known(schema) = index.slot(slot) else {
+                        return Err(invalid("supplied Actor contribution slot must be known"));
+                    };
+                    let Some(actor) = &schema.provider_definition else {
+                        return Err(invalid(
+                            "supplied Actor contribution requires an explicit provider definition",
+                        ));
+                    };
+                    if !matches!(index.definition(actor), SchemaLookup::Known(_)) {
+                        return Err(invalid(
+                            "supplied Actor contribution provider must be known",
+                        ));
+                    }
+                    let valid = match &member.owner {
+                        SchemaSubject::Definition(DefinitionAddress::Actor(id)) => id == actor,
+                        SchemaSubject::Slot(SlotAddress::Actor(id)) => id == slot,
+                        _ => false,
+                    };
+                    if !valid {
+                        return Err(invalid(
+                            "supplied Actor contribution owner differs from its slot",
+                        ));
+                    }
+                }
+            }
+            _ => unreachable!(),
+        }
+        return Ok(None);
     }
     let definition = match &member.owner {
         SchemaSubject::Definition(id) => id,
@@ -199,6 +303,11 @@ fn order<I: DefinitionSchemaIndex>(
             RuleEntityKind::EquipmentUse,
             Some((true, slots)),
         ),
+        ContributionOrigin::ExistingActor { .. }
+        | ContributionOrigin::Reward
+        | ContributionOrigin::SuppliedActor { .. } => {
+            unreachable!("extended origins checked above")
+        }
     };
     if !valid || program.context != context {
         return Err(invalid(
@@ -568,7 +677,8 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                         "ordered producer recipient is not admitted by its stat",
                     ));
                 }
-                if let Some(lane) = order(member, group.ordering, program, index, usage, limits)?
+                if let Some(lane) =
+                    order(member, group.ordering, program, input, index, usage, limits)?
                     && let Some(prior) = lanes.insert(lane.modifier, lane.clone())
                     && prior != lane
                 {

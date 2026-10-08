@@ -504,6 +504,8 @@ pub struct OwnedEffectPlan<I> {
     // alone do not establish activation of an actor or action.
     query_gates: Vec<Vec<ReadBinding>>,
     preparation_gates: BTreeMap<SkillTarget, Vec<ReadBinding>>,
+    /// The cold discovery proof, reused when a support suffix checks membership.
+    actor_supplies: BTreeMap<OwnedActorKey, ProviderKey>,
 }
 impl<I: DefinitionSchemaIndex> OwnedEffectPlan<I> {
     pub fn compile(

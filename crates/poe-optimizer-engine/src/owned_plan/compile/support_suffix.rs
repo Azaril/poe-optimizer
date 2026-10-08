@@ -498,6 +498,7 @@ impl SymbolicBindings {
             ordered: ordered::Sources {
                 rules: plan.rules.input(),
                 build: plan.request.build().input(),
+                actor_supplies: &plan.actor_supplies,
                 effects: &ordered_base,
                 appended: &ordered_appended,
             },
