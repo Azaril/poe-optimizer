@@ -1,12 +1,15 @@
 //! One finite native graph: imported Crown/Solar rolls -> physical Sniper
-//! preparation -> population -> published intrinsic Basic Attack. Other item,
+//! preparation -> population -> intrinsic Basic Attack and checked hit chance. Other item,
 //! support, Actor and action behavior remains outside this component. Nothing
 //! here completes a real request or supplies final level/weapon-value literals.
+#[allow(dead_code)]
+#[path = "support/owned_minion_accuracy_flags.rs"]
+mod accuracy_family;
+#[path = "support/owned_sniper_accuracy_native.rs"]
+mod accuracy_native;
 #[path = "support/owned_sniper_item_attack_evidence.rs"]
 mod evidence;
-#[allow(dead_code)]
-#[path = "support/owned_release_migration_preservation.rs"]
-mod migration_preservation;
+use accuracy_family::preservation as migration_preservation;
 #[allow(dead_code)]
 #[path = "support/owned_release_fixture.rs"]
 mod release;
@@ -54,6 +57,9 @@ fn path() -> PathBuf {
 struct World {
     sniper: sniper::World,
     actual_actor_coverage: SchemaClosure,
+    actual_accuracy_queries: DeclaredSet<ContributionQuery>,
+    block: evidence::BlockCase,
+    block_cases: Vec<evidence::BlockCase>,
 }
 impl World {
     fn load() -> Self {
@@ -65,6 +71,7 @@ impl World {
         let before = release::inventory(&path);
         let endpoint = release::load(&path);
         activation_family::assert_component(&endpoint);
+        accuracy_family::assert_component(&endpoint);
         evidence::assert_current(&endpoint);
         let recipe = &endpoint.input().recipe;
         // This loader already performs a fresh canonical Original05 item import,
@@ -110,6 +117,27 @@ impl World {
             };
             addresses.push(value.address());
         }
+        for family in ["configuration-block-inputs", "minion-accuracy"] {
+            let directory = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("data/owned/poe2/3887ae68")
+                .join(family);
+            let dependencies: Vec<DefinitionDescriptor> =
+                shared::read(directory.join("dependencies.json"));
+            addresses.extend(dependencies.iter().map(DefinitionDescriptor::address));
+            let old: poe_optimizer_import::owned_recipe_extension::OwnedRecipeExtension =
+                shared::read(directory.join("extension.json"));
+            for row in old.schema {
+                let poe_optimizer_import::owned_recipe_extension::SchemaExtensionEntry::Definition(
+                    value,
+                ) = row
+                else {
+                    panic!("accuracy adds definition dependencies only")
+                };
+                // Historical identities select dependencies; their current
+                // descriptors below include the authenticated Boolean cutover.
+                addresses.push(value.address());
+            }
+        }
         let inner = &mut w.base.source.base.inner;
         for address in addresses {
             let actual = recipe
@@ -136,6 +164,20 @@ impl World {
                     .retain(|g| g.slot == d(0x3092));
                 assert_eq!(schema.declarations.grants.members.len(), 1);
                 assert_eq!(schema.declarations.skill_grants.members.len(), 1);
+            }
+            if let DefinitionDescriptor::Encounter(DefinitionEntry {
+                schema: SchemaState::Known(schema),
+                ..
+            }) = &mut finite
+            {
+                // The finite Encounter contains only the actual block consumer
+                // below. Other real configuration inputs/behaviors remain out
+                // of scope, and the published Encounter remains Partial.
+                schema
+                    .external_inputs
+                    .members
+                    .retain(|input| [d(0x3216), d(0x3217)].contains(input));
+                assert_eq!(schema.external_inputs.members.len(), 2);
             }
             if let Some(existing) = inner
                 .schema
@@ -198,11 +240,23 @@ impl World {
             ),
             (
                 SchemaSubject::Slot(SlotAddress::Actor(actor_slot())),
-                vec!["finite-actor-baseline", "intrinsic-minion-attack-source"],
+                vec![
+                    "finite-actor-baseline",
+                    "intrinsic-minion-attack-source",
+                    "intrinsic-minion-cannot-be-evaded",
+                ],
             ),
             (
                 SchemaSubject::Slot(SlotAddress::ActionOutput(basic_output())),
                 vec!["actor-level-input"],
+            ),
+            (
+                subject(d::<SkillDefinition>(0x21)),
+                vec!["ordinary-minion-attack-hit-chance"],
+            ),
+            (
+                subject(d::<EncounterDefinition>(0x31d1)),
+                vec!["configured-enemy-block-base"],
             ),
         ];
         for (owner, names) in selections {
@@ -226,15 +280,6 @@ impl World {
                 .collect();
             inner.owner_mut(owner).programs = DeclaredSet::complete(programs);
         }
-        // Its hit chance and other action calculations are deliberately not part
-        // of this component; no Action-scoped summoning program is introduced.
-        assert!(
-            inner
-                .owner_mut(subject(d::<SkillDefinition>(0x21)))
-                .programs
-                .members
-                .is_empty()
-        );
         let table = recipe
             .rules
             .tables
@@ -244,11 +289,21 @@ impl World {
         let old_tables: Vec<IntegerRuleTable> = decode(&historical["tables"]);
         assert_eq!(Some(table), old_tables.iter().find(|t| t.id == table.id));
         w.base.tables.push(table.clone());
-        let authored: Vec<ActionOutputRoutes> = shared::read(
+        let mut authored: Vec<ActionOutputRoutes> = shared::read(
             PathBuf::from(env!("CARGO_MANIFEST_DIR"))
                 .join("data/owned/poe2/3887ae68/minion-attack-source/routes.json"),
         );
         assert_eq!(authored.len(), 1);
+        let accuracy_routes: Vec<ActionOutputRoutes> = shared::read(
+            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("data/owned/poe2/3887ae68/minion-accuracy/routes.json"),
+        );
+        assert_eq!(accuracy_routes.len(), 1);
+        assert_eq!(accuracy_routes[0].output, basic_output());
+        authored[0]
+            .routes
+            .members
+            .extend(accuracy_routes[0].routes.members.clone());
         let actual = recipe
             .routing
             .outputs
@@ -266,6 +321,21 @@ impl World {
             routes: DeclaredSet::complete(authored[0].routes.members.clone()),
             source_selectors: Some(DeclaredSet::complete(vec![])),
         }];
+        let queries = recipe.rules.contribution_queries.as_ref().unwrap();
+        let mut actual_accuracy_queries = DeclaredSet::complete(vec![]);
+        for query in [
+            "minion-accuracy-inheritance-flags",
+            "minion-accuracy-cannot-block-flags",
+        ] {
+            let rows: Vec<_> = queries
+                .members
+                .iter()
+                .filter(|q| q.id == key(query))
+                .collect();
+            assert_eq!(rows.len(), 1);
+            actual_accuracy_queries.members.push(rows[0].clone());
+        }
+        w.base.contribution_queries = sniper::offering::prolonged::finite(&actual_accuracy_queries);
         for descriptor in &mut inner.schema.definitions {
             if let DefinitionDescriptor::Metric(DefinitionEntry {
                 schema: SchemaState::Known(schema),
@@ -285,9 +355,18 @@ impl World {
                     || p.id == key("intrinsic-reservation-coefficients"))
         );
         assert_eq!(before, release::inventory(&path));
+        let block_cases = evidence::normalized_block_inputs(&path);
+        let block = block_cases
+            .iter()
+            .find(|c| c.case_name == "original-05")
+            .unwrap()
+            .clone();
         Self {
             sniper: w,
             actual_actor_coverage,
+            actual_accuracy_queries,
+            block,
+            block_cases,
         }
     }
     fn action(&self, index: usize) -> ActionSelection {
@@ -330,9 +409,12 @@ impl World {
                 .any(|q| matches!(&q.target, MetricTarget::Action(a)
             if a.action.output == slot(SlotOwnerDefId::Skill(d(0x12)), 0x15)))
         );
+        let mut scenario = original.scenario().input().clone();
+        scenario.enemy = self.block.enemy.clone();
+        scenario.assumptions.extend(self.block.assumptions.clone());
         let request = OwnedEvaluationRequest::new(
             original.build().clone(),
-            original.scenario().clone(),
+            ScenarioSpec::new(scenario, Default::default()).unwrap(),
             QuerySpec::new(queries, Default::default()).unwrap(),
             Default::default(),
         )
@@ -341,6 +423,14 @@ impl World {
             for row in &mut stages.programs.members {
                 if row.program == key("basic-attack-activation") {
                     row.stage = key("source-prepare");
+                }
+                if matches!(
+                    row.program.as_str(),
+                    "intrinsic-minion-cannot-be-evaded" | "ordinary-minion-attack-hit-chance"
+                ) {
+                    // These consumers depend on ordinary execution-stage
+                    // contributions and the exact Actor-to-Action route.
+                    row.stage = key("deliver");
                 }
             }
             let ready = stages.readiness.as_mut().unwrap();
@@ -722,6 +812,96 @@ fn sniper_items_missing_copy_input_and_out_of_domain_final_level_cannot_produce_
 #[ignore = "requires retained source reports; authenticates evidence without a source VM"]
 fn sniper_items_authenticate_retained_full_source_reports() {
     evidence::check_retained_reports();
+    evidence::check_accuracy_reports();
+}
+
+#[test]
+#[ignore = "requires current Boolean accuracy release; actual imported configuration controls"]
+fn sniper_items_and_imported_block_controls_reach_measured_hit_chance() {
+    let baseline = World::load();
+    let intrinsic = evidence::checked_cases();
+    let mut compared = 0;
+    for row in evidence::accuracy_cases() {
+        let name = row["case"].as_str().unwrap();
+        if matches!(name, "sniper-physical-40" | "block-cannot-block-custom") {
+            // The former requires unimplemented raw-level recovery. The latter
+            // has a parsed custom modifier outside current import admission.
+            // Its Boolean law is covered by explicit native counterfactuals.
+            continue;
+        }
+        let mut w = baseline.clone();
+        let configurations: Vec<_> = w
+            .block_cases
+            .iter()
+            .filter(|c| c.source_config == row["config"]["enemy_block"])
+            .collect();
+        assert_eq!(
+            configurations.len(),
+            1,
+            "exact imported configuration for {name}"
+        );
+        w.block = configurations[0].clone();
+        let raw = row["physical_level"].as_u64().unwrap() as u16;
+        for index in 0..2 {
+            w.sniper.raw(index, raw, 0., 0.);
+        }
+        let expected = intrinsic
+            .iter()
+            .find(|r| r["physical_level"] == raw)
+            .unwrap();
+        let report = w.evaluate();
+        w.check(&report, [expected, expected]);
+        let passes = row["consumer"]["passes"].as_array().unwrap();
+        assert_eq!(passes.len(), 1);
+        let outputs = &passes[0]["output"];
+        for index in 0..2 {
+            w.check_accuracy(
+                &report,
+                index,
+                outputs["enemyBlockChance"].as_f64().unwrap(),
+                outputs["HitChance"].as_f64().unwrap(),
+            );
+        }
+        compared += 1;
+    }
+    assert_eq!(compared, 11);
+}
+
+#[test]
+#[ignore = "requires current Boolean accuracy release; explicit native custom-source law control"]
+fn sniper_typed_cannot_block_source_matches_retained_custom_control() {
+    let rows = evidence::accuracy_cases();
+    let row = rows
+        .iter()
+        .find(|r| r["case"] == "block-cannot-block-custom")
+        .unwrap();
+    let pass = &row["consumer"]["passes"][0];
+    let records = pass["block"]["cannot_block_records"].as_array().unwrap();
+    assert_eq!(records.len(), 1);
+    assert_eq!(records[0]["mod"]["type"], "FLAG");
+    assert_eq!(pass["flags"]["enemy_cannot_block_attacks"], true);
+    let mut w = World::load();
+    // Explicit typed counterfactual, not a claim that the current importer
+    // admits the reference build's custom-modifier text.
+    w.set_block(
+        Some(true),
+        Some(row["config"]["enemy_block"]["input"].as_f64().unwrap()),
+    );
+    w.flag(
+        "counterfactual-source-cannot-block",
+        RuleEntity::Enemy,
+        0x321e,
+        true,
+    );
+    let report = w.evaluate();
+    for index in 0..2 {
+        w.check_accuracy(
+            &report,
+            index,
+            pass["output"]["enemyBlockChance"].as_f64().unwrap(),
+            pass["output"]["HitChance"].as_f64().unwrap(),
+        );
+    }
 }
 
 #[test]

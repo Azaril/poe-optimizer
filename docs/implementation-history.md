@@ -1,10 +1,84 @@
-> Historical snapshots through the early Amulet copy consumer on 2026-10-07.
+> Historical snapshots through item-driven Sniper intrinsic attack on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: item-driven Sniper intrinsic attack
+
+The [activation packet](../data/owned/poe2/3887ae68/sniper-activation-readiness/README.md)
+separates two existing constant grant activations from numerical projections:
+Sniper `ordinary-population-inputs` and Actor `basic-attack-supply`. Only the new
+activation fragments run as Structural PreparationFacts. Parent and child final
+inputs, numerical projections and descendant execution remain Execution work.
+This fixes the measured early-readiness conflict by changing owned data, without
+changing the Engine's preparation policy or adding a runtime exception.
+
+The shared partition proof checks exact reachable dependencies, original row
+order and single ownership of every effect. Its inverse reconstructs the complete
+predecessor input. No definition, table, effect, route, input policy or closure
+changes; two program IDs and one provenance row are added. Two new authoring
+checks and three existing population-partition checks pass. The all-five
+publication passes in **24.96s**, including an identical-byte rebuild and all
+110 queries. Selected input issues remain **107/117/109/123/5**. No owner becomes
+Complete and no evaluation bundle is added; complete builds remain **0/5**.
+
+The new finite native integration connects fresh imported Crown/Solar rolls,
+actual modifier applicability and Amulet snapshot/copy, physical Sniper source
+preparation, population, Actor supply and intrinsic Basic Attack in one plan.
+It uses current published programs and exact occurrence identities; no producer
+supplies a precomputed final level or weapon value. Four retained measured cases
+cover raw levels 1/7/20/30, prepared levels 3/9/22/32 and Actor levels 6/18/44/64.
+The physical min/max values are 8/14, 33/62, 208/387 and 632/1175; rate is 2/3 and
+base critical chance is 5. Existing full source reports are authenticated, not
+reacquired in a new PoB VM. Raw40 plus the two bonuses remains a native domain
+refusal; the source's recovery/clamp at40 is diagnostic, not successful parity.
+
+Repeated occurrences, independent parent quality with child quality0, restored
+scratch and four-worker Rayon replay pass. Missing copy inputs, source assembly,
+support ordering and actual Partial owner coverage remain refused, as does moving
+either activation after preparation. Disabling an authored root while retaining
+its child query produces exactly one `UnresolvedTopology` gap at that provider
+and output; preflight then returns `IncompleteContributors`. The test checks that
+exact refusal and successful scratch restoration. It changes `SkillUse.enabled`,
+not the separate typed requested-participation input, and does not claim to
+exercise evaluated descendant participation. All **seven joined tests pass in
+14.58s**, including retained full source-report authentication.
+The five existing Sniper final-input regressions pass in **15.27s**, and seven
+Offering regressions pass in **10.01s** on the successor. Strict workspace,
+all-feature, all-target Clippy and changed-file formatting pass. This integration
+does not prove complete support membership, final damage, DPS or a real request.
+
+**Resume: join ordinary hit chance after replacing its two legacy integer flags.**
+Replace `3219` (Player minion-accuracy inheritance) and `321e` (Enemy cannot-block)
+with typed Boolean Flag/Any through checked contribution queries and resolved
+Boolean Stats. Keep one current representation and preserve Partial memberships;
+`321a` is already a legitimate singular Boolean. Then retain Actor `321b`, the
+exact `321b`→`321c` Basic route and Action `321f`/`3220` in this same item-driven
+graph. Use saved configuration through the existing block policy (`3216/3217`),
+Encounter block `3218` and Action reduction `321d`. The retained 13 accuracy
+vectors include original hit chance100 and block37 hit chance63. Verify duplicate
+and unknown flags, exact recipients, missing-input refusal, block clamp/reduction
+order and fresh/reused/parallel determinism. This uses the approved Boolean model;
+Action-context Enemy reads do not need the pending shared-Actor read extension.
+
+Final damage still needs added damage/conversion, INC/MORE grouping and rounding,
+critical/mitigation/timing and exact metric bindings. Gigantic/quality grouping
+remains unresolved. Do not invent a parent Action demand or erase actual support
+and owner coverage to claim a whole build. The five input obligations, Crown
+sockets, the five retained `30ca` obligations and complete numerical owners remain
+open. Original05 stays first; D4 starts when one unchanged native/reference build
+passes, without waiting for all five.
+
+Evidence: `runs/owned-sniper-activation-readiness-publication-01/validation.json`,
+`runs/owned-sniper-activation-tests-01.log`,
+`runs/owned-sniper-activation-old-partition-tests-01.log`,
+`runs/owned-sniper-item-attack-tests-03.log`,
+`runs/owned-sniper-activation-final-inputs-regression-02.log`,
+`runs/owned-sniper-activation-offering-regression-01.log` and
+`runs/owned-sniper-activation-clippy-01.log`.
 
 ## Archived 2026-10-07 checkpoint: early Amulet copy consumer
 

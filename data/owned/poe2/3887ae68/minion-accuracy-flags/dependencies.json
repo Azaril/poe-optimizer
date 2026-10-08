@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "prior_input": "7473da9a5220e6e8ddb453cab1caf13f42d8d2f3565d5c0d3d6f27e223defe42",
+  "prior_schema_release": "pob-3887ae68-crown-declarations-v1",
+  "prior_rules_release": "pob-3887ae68-sniper-activation-readiness-v1",
+  "pins": [
+    {
+      "path": "data/owned/poe2/3887ae68/minion-accuracy/extension.json",
+      "bytes": 25772,
+      "sha256": "a9525d8fe85ca63835d51c331b796c84fa45b94099e5eb43fa6846795f351e64"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/minion-accuracy/authoring.json",
+      "bytes": 3099,
+      "sha256": "1c6001662a0d48a4821b2c7e152f1703e3eba369d1283f293c512444208d6a82"
+    },
+    {
+      "path": "tests/fixtures/calibration/minion-accuracy-3887ae68.json",
+      "bytes": 90679,
+      "sha256": "963cab8070505a19ad935ff8d77bc743aa2dab73238996434d5751c2b7294b97"
+    },
+    {
+      "path": "tests/support/minion_accuracy_source_vectors.rs",
+      "bytes": 7344,
+      "sha256": "61842eae32b36d10886732052dd4aa6b28e87e60242680166bd4b545d04ef874"
+    }
+  ]
+}

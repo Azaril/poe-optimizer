@@ -44,6 +44,7 @@ pub struct World {
     pub item_programs: Vec<(SchemaSubject, OwnedDefinitionKey)>,
     pub tables: Vec<IntegerRuleTable>,
     pub action_routes: Vec<ActionOutputRoutes>,
+    pub contribution_queries: DeclaredSet<ContributionQuery>,
     pub actual_modifier: DefinitionRules,
 }
 impl World {
@@ -130,6 +131,7 @@ impl World {
             item_programs,
             tables: vec![table],
             action_routes: vec![],
+            contribution_queries: DeclaredSet::complete(vec![]),
             actual_modifier,
         }
     }
@@ -375,6 +377,7 @@ impl World {
                 receivers,
                 source_properties: Some(self.relation.clone()),
                 action_routes: self.action_routes.clone(),
+                contribution_queries: self.contribution_queries.clone(),
             },
             |stages| {
                 // Explicit V4 local preparation authority. The same declaration is

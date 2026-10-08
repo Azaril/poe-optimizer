@@ -730,13 +730,55 @@ introduced into native semantics. Finite-result law parity is distinct from the
 native contract's deliberate nonfinite refusal. See the
 [certificate and retained gaps](../data/owned/poe2/3887ae68/amulet-copy-consumer/README.md).
 
-The old accuracy integer-presence channels `3219/321e` remain migration debt.
-They predate typed Boolean contributions; they are not game concepts and must
-not gain new producers or consumers. Before integrating their next numerical
-consumer, reconcile their source semantics and replace their producers and
-consumers together with the existing typed Boolean Flag/Any graph. Preserve
-incomplete coverage as unknown, and retire the integer lane rather than carrying
-two flag systems.
+### Accuracy integer channels and precomputed fixture retirement (2026-10-07)
+
+The current accuracy channels `3219/321e` now use the existing typed Boolean
+Flag/Any graph. Their integer presence counts and negative-total guards were
+application implementation history, not game concepts, and are no longer a
+current runtime lane. The [replacement packet](../data/owned/poe2/3887ae68/minion-accuracy-flags/README.md)
+keeps the same identities, exact numeric block arithmetic and actor/action
+recipients. Empty source inventories remain Partial; true does not conceal
+unknown coverage or an active unresolved contributor. No real flag-producing
+family or inherited-player-accuracy calculation is admitted by this cutover.
+
+Removed `crates/poe-optimizer-engine/tests/owned_minion_accuracy.rs` and its sole
+helper `tests/support/minion_accuracy_fixture.rs` within that crate. A repository
+consumer audit found no other caller or explicit CI/script dependency. Their
+useful controls now run in `tests/owned_sniper_item_attack.rs` and its
+`owned_sniper_accuracy_native` child on the same canonical item → source
+preparation → final inputs → population → Basic Attack graph. This retires the
+accuracy fixture's supplied final-parent-level boundary without adding a second
+staged evaluator fixture. Sixteen joined tests, five Sniper and seven Offering
+regressions, Boolean publication/source checks and strict workspace Clippy pass.
+
+The deleted target previously ran in ordinary CI. Two nonignored tests in
+`crates/poe-optimizer-engine/tests/owned_minion_accuracy_rules.rs` retain execution
+of the current authored rule laws, all thirteen source controls and missing/type/
+scratch checks without cloning a staged build fixture. They use explicit resolved
+facts and do not claim contributor or provider completeness. The joined target's
+ignored tests still need reproducible package provisioning in CI; that separate
+integration gap is tracked in the implementation plan.
+
+All thirteen source observations remain retained: eleven ordinary observations
+match the joined graph, one custom CannotBlockAttacks observation validates the
+consumer with an explicit finite typed source, and raw level 40 remains a source
+clamp diagnostic/native refusal when actual item bonuses produce 42. The custom
+control does not admit custom-modifier import; intrinsic component evidence at
+final level 40 does not establish raw-level-40 whole-graph parity. The complete
+original builds remain open.
+
+The old `minion-accuracy/extension.json` integer bodies remain only for offline
+exact-inverse/source proof. Named consumers are the historical root
+`tests/owned_minion_accuracy.rs` publication test and helper, and the current
+`owned_minion_accuracy_flags` cutover/preservation helper. Retire their historical
+orchestration and old bodies when maintained current-format acquisition plus
+retained independent proof covers the unchanged schema/rule and source-law
+claims. Do not keep a runtime branch to replay them. The optional
+`poe-optimizer-pob` minion accuracy source witness remains a separate useful
+oracle for updates; deleting the obsolete Engine fixture does not retire that
+witness, its calibration, or the unrelated intrinsic-attack component.
+
+### Population and activation partition cleanup
 
 The Command component's V20 integration exposed a mixed-phase owned program in
 the published Sniper data. `ordinary-population-inputs` previously bundled actor

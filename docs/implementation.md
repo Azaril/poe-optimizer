@@ -65,79 +65,99 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest published native checkpoint: item-driven Sniper intrinsic attack
+## Latest published native checkpoint: typed accuracy flags and joined hit chance
 
-The [activation packet](../data/owned/poe2/3887ae68/sniper-activation-readiness/README.md)
-separates two existing constant grant activations from numerical projections:
-Sniper `ordinary-population-inputs` and Actor `basic-attack-supply`. Only the new
-activation fragments run as Structural PreparationFacts. Parent and child final
-inputs, numerical projections and descendant execution remain Execution work.
-This fixes the measured early-readiness conflict by changing owned data, without
-changing the Engine's preparation policy or adding a runtime exception.
+The [accuracy flag packet](../data/owned/poe2/3887ae68/minion-accuracy-flags/README.md)
+replaces `3219/321e`'s integer-presence representation with Boolean values at the
+same identities. The existing consumers now read two checked contribution queries:
+`Flag`, unordered `Any`, false identity. Their resolved query values are already
+Boolean; no intermediary Stat, new ID, receiver or public runtime model is needed.
+The real query memberships remain Partial and unknown remains distinct from false,
+including beside a true source. The inherited-Player-accuracy branch stays
+unsupported; this does not introduce the pending shared-Actor-to-Enemy authority.
 
-The shared partition proof checks exact reachable dependencies, original row
-order and single ownership of every effect. Its inverse reconstructs the complete
-predecessor input. No definition, table, effect, route, input policy or closure
-changes; two program IDs and one provenance row are added. Two new authoring
-checks and three existing population-partition checks pass. The all-five
-publication passes in **24.96s**, including an identical-byte rebuild and all
-110 queries. Selected input issues remain **107/117/109/123/5**. No owner becomes
-Complete and no evaluation bundle is added; complete builds remain **0/5**.
+The offline revision replaces exactly two Stat schemas and two programs, adds two
+queries, and rebinds affected content identities. Its checked intermediate is never
+published. Exact inverse checks preserve every other schema, rule, route and import
+fact except required dependency commitments. Two authoring checks pass. Retained
+JIT source authentication and all-five publication pass together in **35.31s**,
+including an identical-byte rebuild, unchanged 110 queries and selected issues
+**107/117/109/123/5**. No actual producer, owner or query membership becomes Complete;
+no evaluation bundle is added. Complete unchanged builds remain **0/5**.
 
-The new finite native integration connects fresh imported Crown/Solar rolls,
-actual modifier applicability and Amulet snapshot/copy, physical Sniper source
-preparation, population, Actor supply and intrinsic Basic Attack in one plan.
-It uses current published programs and exact occurrence identities; no producer
-supplies a precomputed final level or weapon value. Four retained measured cases
-cover raw levels 1/7/20/30, prepared levels 3/9/22/32 and Actor levels 6/18/44/64.
-The physical min/max values are 8/14, 33/62, 208/387 and 632/1175; rate is 2/3 and
-base critical chance is 5. Existing full source reports are authenticated, not
-reacquired in a new PoB VM. Raw40 plus the two bonuses remains a native domain
-refusal; the source's recovery/clamp at40 is diagnostic, not successful parity.
+The existing item-driven Sniper graph now includes intrinsic accuracy, exact
+Actor `321b`→Action `321c` routing, configured Enemy block `3218`, Action reduction
+`321d`, effective block `321f` and hit chance `3220`. Numerical source ordering is
+unchanged: clamp the aggregate block at100, subtract reduction, clamp below at0,
+then apply the Boolean cannot-block bypass and accuracy multiplier. The fixture
+selects only that Encounter consumer and its two declared inputs; this is not
+complete Encounter/configuration coverage.
 
-Repeated occurrences, independent parent quality with child quality0, restored
-scratch and four-worker Rayon replay pass. Missing copy inputs, source assembly,
-support ordering and actual Partial owner coverage remain refused, as does moving
-either activation after preparation. Disabling an authored root while retaining
-its child query produces exactly one `UnresolvedTopology` gap at that provider
-and output; preflight then returns `IncompleteContributors`. The test checks that
-exact refusal and successful scratch restoration. It changes `SkillUse.enabled`,
-not the separate typed requested-participation input, and does not claim to
-exercise evaluated descendant participation. All **seven joined tests pass in
-14.58s**, including retained full source-report authentication.
-The five existing Sniper final-input regressions pass in **15.27s**, and seven
-Offering regressions pass in **10.01s** on the successor. Strict workspace,
-all-feature, all-target Clippy and changed-file formatting pass. This integration
-does not prove complete support membership, final damage, DPS or a real request.
+Baseline plus seven measured XML controls are freshly imported through the
+**current V3 policy**, with exact source hashes and selected-scenario identities.
+The original yields `3216=false` and no `3217`; explicit Input0 overrides
+Placeholder37. No observed output is fed back as an input. Eleven ordinary source
+rows pass on the joined graph, including raw1 and both retained CALCS controls.
+Original hit chance is100 and Placeholder37 gives63. The single custom cannot-block
+row is replayed using an explicitly synthetic typed contributor, not a claim of
+custom-text import support. Raw40 plus item bonuses remains a native domain refusal;
+the source's clamp/recovery remains diagnostic, not joined parity.
 
-**Resume: join ordinary hit chance after replacing its two legacy integer flags.**
-Replace `3219` (Player minion-accuracy inheritance) and `321e` (Enemy cannot-block)
-with typed Boolean Flag/Any through checked contribution queries and resolved
-Boolean Stats. Keep one current representation and preserve Partial memberships;
-`321a` is already a legitimate singular Boolean. Then retain Actor `321b`, the
-exact `321b`→`321c` Basic route and Action `321f`/`3220` in this same item-driven
-graph. Use saved configuration through the existing block policy (`3216/3217`),
-Encounter block `3218` and Action reduction `321d`. The retained 13 accuracy
-vectors include original hit chance100 and block37 hit chance63. Verify duplicate
-and unknown flags, exact recipients, missing-input refusal, block clamp/reduction
-order and fresh/reused/parallel determinism. This uses the approved Boolean model;
-Action-context Enemy reads do not need the pending shared-Actor read extension.
+All **16 joined tests pass in 24.15s**. They preserve the prior item/preparation/
+intrinsic checks and cover Boolean false and duplicate sources, exact recipients,
+unknown/inactive distinctions, unsupported inheritance, numeric/direct-read and
+unlisted-source rejection, real Partial membership refusal, missing inputs,
+block/reduction ordering, independent actions, scratch restoration and Rayon.
+The five Sniper preparation and seven Offering regressions pass in **15.93s** and
+**10.31s**. The two ordinary Engine `owned_minion_accuracy_rules` tests compile
+the current authored programs and pass all thirteen measured controls plus
+missing facts, Boolean typing, inherited-accuracy refusal and scratch restoration
+in **0.01s**. These preserve ordinary CI rule-law coverage using explicit resolved
+facts; they do not replace the joined graph's membership, routing or import checks.
+The sixteen joined tests require the local published package and are currently
+ignored by ordinary CI. Provisioning their reproducible integration subset remains
+tracked below. Strict workspace/all-feature/all-target Clippy and changed-file
+formatting pass.
 
-Final damage still needs added damage/conversion, INC/MORE grouping and rounding,
-critical/mitigation/timing and exact metric bindings. Gigantic/quality grouping
-remains unresolved. Do not invent a parent Action demand or erase actual support
-and owner coverage to claim a whole build. The five input obligations, Crown
-sockets, the five retained `30ca` obligations and complete numerical owners remain
-open. Original05 stays first; D4 starts when one unchanged native/reference build
-passes, without waiting for all five.
+Removed the old Engine accuracy test target and its exclusive fixture after its
+useful assertions moved to this graph. That path supplied final parent levels and
+would otherwise need a second staged evaluator fixture. Retain the independent
+intrinsic-attack tests, original source witness, calibration/projector and offline
+accuracy acquisition/inverse artifacts. Historical integer bodies authenticate
+the cutover only; no alternate current integer evaluator lane remains.
 
-Evidence: `runs/owned-sniper-activation-readiness-publication-01/validation.json`,
-`runs/owned-sniper-activation-tests-01.log`,
-`runs/owned-sniper-activation-old-partition-tests-01.log`,
-`runs/owned-sniper-item-attack-tests-03.log`,
-`runs/owned-sniper-activation-final-inputs-regression-02.log`,
-`runs/owned-sniper-activation-offering-regression-01.log` and
-`runs/owned-sniper-activation-clippy-01.log`.
+**Resume: join actual selected passive Minion Damage contributions.** Reuse the
+existing Player `1d33` reducer and exact Sniper Actor `1d34` receiver. All ten
+Original05 unconditional passive owners are now Complete; retain their complete
+bodies, including paired Life/cooldown effects. Bring their actual selected
+occurrences into this same item→Sniper→Basic graph using the established passive
+assembly pattern. The retained source census proves ten contributions totalling
+68%; removing source node95 also disconnects8737 and yields eight totalling48%.
+Use the existing `plain-minion-damage-passives` bindings, dependency rules,
+receivers and source records, plus the current published owner bodies.
+
+Do not equate these ten owners with complete global `1d33` membership: the current
+package contains 41 ordinary producers and seven other passive-view contributors,
+and item/external transformations remain separate. Prove exact origins and
+recipients, the connected removal control, missing/Partial refusals and scratch/
+Rayon replay. This is a 68% passive subtotal, not the full 130% Increase or final
+damage. It needs no new public model or pending support decision. Offering has a
+real activation supplier but still lacks five scaling producers; do not substitute
+synthetic defaults to join its 62% contribution. Bidding's Djinn delivery and
+Gigantic's unresolved MORE grouping are separate dependencies.
+
+After that join, reassess the nearest remaining unchanged-build blocker. Final
+damage, support composition, the five input obligations, Crown sockets and the
+retained Amulet obligations remain open. Original05 stays first; D4 begins when
+one complete unchanged native/reference build passes, without waiting for all five.
+
+Evidence: `runs/owned-minion-accuracy-flags-tests-01.log`,
+`runs/owned-minion-accuracy-flags-publication-01/validation.json`,
+`runs/owned-sniper-accuracy-join-tests-02.log`,
+`runs/owned-sniper-accuracy-preparation-regression-01.log`,
+`runs/owned-sniper-accuracy-offering-regression-01.log` and
+`runs/owned-minion-accuracy-rules-tests-01.log` and
+`runs/owned-sniper-accuracy-clippy-03.log`.
 
 ## In progress: incoming critical source proof and Actor read decision
 
@@ -247,46 +267,46 @@ source-only investigation. It retains Partial contributor/readiness coverage and
 selected input obligations. The unapproved incoming-critical packet provisionally
 uses `3353`–`3364`, after Sand's five allocations; its source evidence is unchanged.
 
-CI snapshot at 00:42 UTC (2026-10-08): Amulet checkpoint `8e04b25` run
-[37706887647](https://github.com/Azaril/poe-optimizer/actions/runs/37706887647)
-is pending. The intervening `93ee736`/`3ca9383` pending runs were superseded
-and cancelled. Older `f93d551` run
+CI snapshot at 01:17 UTC (2026-10-08): intrinsic checkpoint `ca570dc` run
+[37709552240](https://github.com/Azaril/poe-optimizer/actions/runs/37709552240)
+is pending. The intervening `8e04b25`/`93ee736`/`3ca9383` pending runs were
+superseded and cancelled. Older `f93d551` run
 [37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252)
 has ten passed jobs, two running and no reported failures. Later pushes can
 supersede pending runs; local checks are not hosted success for this checkpoint.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-sniper-activation-readiness-publication-01/package` and its neighboring
+Use `runs/owned-minion-accuracy-flags-publication-01/package` and its neighboring
 `original-01` through `original-05` imports. Current sidecars remain V23;
 definition schema V6, rule schema3 and operationsV22 are independent contracts.
-The immediate predecessor is `runs/owned-amulet-copy-consumer-publication-02/package`,
-input `7b840bb204974fed6e44e686d899396987cd25f2b86a40261dccd7ab5e0d6f6e`.
+The immediate predecessor is `runs/owned-sniper-activation-readiness-publication-01/package`,
+input `7473da9a5220e6e8ddb453cab1caf13f42d8d2f3565d5c0d3d6f27e223defe42`.
 Historical endpoint paths authenticate stored evidence; retired formats require
 explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `7473da9a5220e6e8ddb453cab1caf13f42d8d2f3565d5c0d3d6f27e223defe42` |
+| Release input | `949598559007abfc850ee4122616616bfae484f1d30d12b2df26ec2255c23ef3` |
 | Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
-| Definitions content | `6c339c996870dbc85c1f2dffe62b64a95134d501bc6ad7e4876a986bd8542a99` |
-| Rules | `290a9ca1de215253fcc8137c5cc50cb691fe0443c12cbe43a190d9db8d7b1d85` |
-| Compiled rules | `14105ee1e34a8d5aede9e04c837be109946a2e8b10d8cc62fb35b93deedb6492` |
-| Routing | `9c4eb5d88257fa37c5d65d637907483c32f02c5fd7ff056369786eddd2762809` |
-| Mapping | `a8aeb0e92863d49b5ae99fc580467c70a016b6e53db2d4fc9a51a5c6d074f790` |
-| Skill roles | `701ece0c17de2a42bb07e175a896ba77fa882ba582ddf288358a494fbe41002c` |
-| Normalization | `9f3ebfa318ce77bbccc88c7975621a07148cc7795da4f0bdc555ffbc64e41191` |
-| Rewards | `6b46aaf53e60b8a09f2f1c2a230e3fa2c929fe33958b03468112d83153952fa8` |
-| Items | `1ca7459a798378a6441bfde3549899912a1da8ba70557909007c27c7552bfd6d` |
-| Item source | `d977add5dbc0b01605cc87637642c777afa1b728373069bbaef5cf67782f8b50` |
-| Tree policy | `d2b3a0fe5c87e8994710783c4b585a92c435eccc6061924a10c36873bc09664a` |
-| Authoring commitment | `e418a01d30b88541d4238758fed9456b3df5828bae79a579fdc0a7f40045ac72` |
+| Definitions content | `b6fa4166e3e511ee1c66c58e5a3e63f2400a9a20d2b20e8d71a40523e00d6434` |
+| Rules | `d8a1b4c76916ca74442bd71396ae1a8301e28a0378a7d170a017f494b29bd498` |
+| Compiled rules | `52ce1addd77e04dab1eed002b9ab9e1bbced20f66b1d8577603e41f345e63f96` |
+| Routing | `5a2b4275de5febebe5cb36247ad42233477c5ba2e1f38bea3dd10251953cf46c` |
+| Mapping | `ea20f42a725e345df4c37f6dcaab5f113c36e88b7512aa4d829594a745345f92` |
+| Skill roles | `a32ec329bdae3da995903bea7e509fdc9ebc889644cbbd3953de2e5e7a61c5ea` |
+| Normalization | `e88cb710fce6489943032d7b326c8d583279c59879bd60df69c6baa6b0b56a98` |
+| Rewards | `c530582ca36c0888d5eb423d8ea73f359816592bc42efee28603882cc4ea2823` |
+| Items | `209d2e7c3b3b08a147f511fdd64121efcd4328a49b4d3fe86b38dc57bde658d3` |
+| Item source | `99a8aae92d73df090d5e067cbfc1cdcd59bbc550399e9397498876deaea7992d` |
+| Tree policy | `4cca240cce123dd472b7bc44c9d41513b72241c2a8894e875f5f172c3e633d72` |
+| Authoring commitment | `8b56ca15f211929f7ab9a09c246f2c8215191307df7158bd7226a18e0427f669` |
 | Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
 
-The eighteen package files total **63,191,779 bytes**, with 140 provenance rows.
-Definitions retain `pob-3887ae68-crown-declarations-v1`; rules use
-`pob-3887ae68-sniper-activation-readiness-v1`. The registry ends at `3352`.
+The eighteen package files total **63,192,328 bytes**, with 141 provenance rows.
+Definitions and rules use `pob-3887ae68-minion-accuracy-flags-v1`. The registry ends
+at `3352`; this cutover allocates no IDs.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -308,7 +328,7 @@ reproducible evidence, not distributed game data.
 
 ## Next executable work
 
-The immediate numerical checkpoint is the typed-flag/hit-chance join above.
+The immediate numerical checkpoint is the selected-passive damage join above.
 Continue it while support-origin and Actor-to-Enemy decisions remain pending;
 those questions must not stall an independent approved numerical consumer.
 
@@ -1262,7 +1282,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Immutable normalization preparation | Compile existing checked policies once per exact release; separate construction/traversal budgets and prove identical outputs. Implementation pending; no storage-layer change. |
 | Scoped numerical coverage | [Proposal](owned-coverage.md) pending concrete reviewed proof contract. Unknown effect reach remains blocking; no known-edge-only pruning or relaxation of original-build acceptance. |
 | Closest complete build and native optimization | Original05 is the current first-completion target. Close its five input obligations, publish its real evaluation bundle and complete its selected mechanics/metrics through the public CLI. D4 begins after this first complete build, without waiting for all five: bind objectives to owned actor/action/stat-set requests and verify one legal locked candidate mutation before expanding search. Reassess the shortest complete path at every checkpoint. |
-| Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases; important ignored tests are not automatically exercised by ordinary CI. |
+| Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases. Ordinary CI now executes the current accuracy rule laws, but the joined Sniper graph and its import/membership/staging checks are ignored without their published package. Provision the exact current package and retained source controls reproducibly in CI, run that joined subset explicitly, and fail on missing artifacts; do not treat component tests as an equivalent gate. |
 | Historical replay retirement | Reimport with the one current implementation and retain useful stored source evidence. Seventeen older ignored publication harnesses need consumer review: rebase useful assertions to current semantics or remove obsolete scaffolding, rather than add compatibility paths. Declaration integrity and source parity remain required. [Retirement/migration inventory](legacy-retirement.md#historical-publication-replay-migration-2026-10-05). |
 | Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. Shared exact-provider proof now serves raw quality and requested-count import independently. Same-definition allocations in different presets remain distinct. Enabled/global/reporting dispositions and usage inventory closure remain open. [Contract and gates](owned-generated-skill-usage-proposal.md). |
 | Requested participation | [Common gate](owned-skill-participation-proposal.md), unified typed Import and first Sniper packet are validated. All-five/source/native checks preserve count, effect controls and mechanical availability. Next close genuine parameter inventories for remaining skills before readiness publication; no PoB preview bypass or default is imported. Full-original coverage remains open. |

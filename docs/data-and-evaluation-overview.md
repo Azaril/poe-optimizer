@@ -39,7 +39,14 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest data checkpoint splits constant mechanical grant activation from
+The latest data checkpoint replaces accuracy's integer flag channels `3219/321e`
+with checked Boolean Flag/Any queries at the same stat identities. Existing
+programs consume the resolved query values directly, with no intermediary Stat or
+new runtime model. Actual memberships remain Partial; incomplete coverage and
+unknown values are not false. Original source arithmetic and all five imports
+are preserved. See the [Boolean packet](../data/owned/poe2/3887ae68/minion-accuracy-flags/README.md).
+
+The preceding data checkpoint splits constant mechanical grant activation from
 level-dependent projection in Sniper's population and Basic Attack supply.
 The exact dependency-closed fragments preserve every original effect; only the
 activation runs during structural preparation. Final inputs and descendant
@@ -74,7 +81,7 @@ data-authored programs on existing owners, without skill-name dispatch in Rust.
 Their Partial source/support inventories and remaining combat/population modes
 still prevent full owner closure. All-five reimports preserve selections and
 110 queries; Original05's five obligations and the 0/5 completion count remain.
-The current package is `runs/owned-sniper-activation-readiness-publication-01/package`.
+The current package is `runs/owned-minion-accuracy-flags-publication-01/package`.
 See the [packet and coverage limits](../data/owned/poe2/3887ae68/sand-preparation/README.md).
 
 A joined finite test now supplies Sand's ordinary level from the real Crown/Solar
@@ -91,11 +98,24 @@ precomputed final-level or weapon-value producer. Four retained source controls
 and fresh/reused/parallel replay agree. Its selected numerical projection leaves
 production owners and contributor inventories Partial: full support coverage,
 input finalization and final damage/metric formulas remain separate gates.
-The next join is ordinary hit chance, after replacing its integer flag channels
-`3219/321e` with the accepted typed Boolean Flag/Any model. Existing block inputs
-and Actor-to-Action routes already support this path; no new public model is
-needed. The authored-root disable control is separate from typed requested
-participation and does not establish that later integration's coverage.
+This same graph now includes ordinary hit chance through its exact
+Actor-to-Action route and actual block configuration imports. Eleven ordinary
+source controls agree; one custom-source law uses an explicitly synthetic typed
+contributor, and raw40 recovery remains unsupported. Current V3 import preserves
+Input0 over Placeholder37 and absence without manufacturing a value. Sixteen
+joined tests include unknown flags, exact recipients and parallel replay. The
+old Engine accuracy fixture was removed after its useful assertions moved here;
+source acquisition and calibration remain independent. Two ordinary Engine tests
+execute the current accuracy rule laws in CI. The joined graph still needs its
+published package provisioned for explicit CI execution; it is currently an
+ignored integration target, not an automatically enforced build-completion gate.
+
+The next integration joins the ten actual selected passive Minion Damage donors
+to the existing Player `1d33` reducer and Sniper Actor `1d34` receiver. Their 68%
+subtotal is already source-measured, including the connected-removal control at
+48%; it is not global contributor completeness or final damage. No new public
+model is required. The authored-root disable control remains distinct from typed
+requested participation and does not establish that later integration's coverage.
 
 The preceding native checkpoint implements typed Boolean `Flag` contributions and
 unordered `Any` on the existing graph. Source membership and numeric ranks are

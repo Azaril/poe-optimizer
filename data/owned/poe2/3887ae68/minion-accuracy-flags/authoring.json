@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "minion-accuracy-flags-v1",
+  "before": "7473da9a5220e6e8ddb453cab1caf13f42d8d2f3565d5c0d3d6f27e223defe42",
+  "release": "pob-3887ae68-minion-accuracy-flags-v1",
+  "artifacts": [
+    {
+      "file": "schemas.json",
+      "bytes": 875,
+      "sha256": "31a5bb4d82436be56e32a84100afc6978a376fbd5fd1e38252d3a9dea2e68a21"
+    },
+    {
+      "file": "programs.json",
+      "bytes": 12976,
+      "sha256": "b012734870af13b75518fcc674a0dd85ea026c478a5b8a52df21607013ed511a"
+    },
+    {
+      "file": "queries.json",
+      "bytes": 2624,
+      "sha256": "d28afb373f5f1c146b0ab4493e4d3a98dddc6b50ea9f359429fd2ba35c65ef66"
+    },
+    {
+      "file": "dependencies.json",
+      "bytes": 1018,
+      "sha256": "a033e50bd0c993067925b4cb22b5c42faccb1fa5468a72ab6ad0a347ca2fa2bf"
+    }
+  ],
+  "scope": {
+    "schema_replacements": 2,
+    "replaced_programs": 2,
+    "new_queries": 2,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "new_producers": 0,
+    "closed_rule_owners": 0,
+    "closed_query_memberships": 0,
+    "evaluation_bundle_added": false,
+    "whole_build_parity": false
+  }
+}

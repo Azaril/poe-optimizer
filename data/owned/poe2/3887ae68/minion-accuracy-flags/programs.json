@@ -1,0 +1,474 @@
+{
+  "schema_version": 1,
+  "programs": [
+    {
+      "owner": {
+        "kind": "slot",
+        "value": {
+          "kind": "actor",
+          "value": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000012"
+              }
+            },
+            "slot": {
+              "kind": "actor_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000001f"
+            }
+          }
+        }
+      },
+      "program": {
+        "id": "intrinsic-minion-cannot-be-evaded",
+        "context": "actor",
+        "reads": [
+          {
+            "id": "inheritance-flags",
+            "value_type": {
+              "kind": "boolean"
+            },
+            "source": {
+              "kind": "contribution_query",
+              "value": {
+                "entity": "player",
+                "query": "minion-accuracy-inheritance-flags",
+                "group": "sources"
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "flags",
+            "expression": {
+              "kind": "read",
+              "input": "inheritance-flags"
+            }
+          },
+          {
+            "id": "no-inheritance",
+            "expression": {
+              "kind": "not",
+              "value": "flags"
+            }
+          },
+          {
+            "id": "guaranteed-accuracy",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "value": 100,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "cannot-be-evaded",
+            "when": null,
+            "effect": {
+              "kind": "derive",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000321a"
+              },
+              "value": "no-inheritance"
+            }
+          },
+          {
+            "id": "accuracy-hit-chance",
+            "when": "no-inheritance",
+            "effect": {
+              "kind": "derive",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000321b"
+              },
+              "value": "guaranteed-accuracy"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000021"
+          }
+        }
+      },
+      "program": {
+        "id": "ordinary-minion-attack-hit-chance",
+        "context": "action",
+        "reads": [
+          {
+            "id": "accuracy",
+            "value_type": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            },
+            "source": {
+              "kind": "stat",
+              "value": {
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000321c"
+                }
+              }
+            }
+          },
+          {
+            "id": "block-base",
+            "value_type": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            },
+            "source": {
+              "kind": "contributions",
+              "value": {
+                "entity": "enemy",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003218"
+                },
+                "contribution": "add",
+                "reduction": "sum",
+                "empty": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "block-reduction",
+            "value_type": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            },
+            "source": {
+              "kind": "contributions",
+              "value": {
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000321d"
+                },
+                "contribution": "add",
+                "reduction": "sum",
+                "empty": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "cannot-block-flags",
+            "value_type": {
+              "kind": "boolean"
+            },
+            "source": {
+              "kind": "contribution_query",
+              "value": {
+                "entity": "enemy",
+                "query": "minion-accuracy-cannot-block-flags",
+                "group": "sources"
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "accuracy",
+            "expression": {
+              "kind": "read",
+              "input": "accuracy"
+            }
+          },
+          {
+            "id": "raw-block",
+            "expression": {
+              "kind": "read",
+              "input": "block-base"
+            }
+          },
+          {
+            "id": "reduction",
+            "expression": {
+              "kind": "read",
+              "input": "block-reduction"
+            }
+          },
+          {
+            "id": "flags",
+            "expression": {
+              "kind": "read",
+              "input": "cannot-block-flags"
+            }
+          },
+          {
+            "id": "zero-percent",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "value": 0,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "hundred-percent",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "value": 100,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "one-factor",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "value": 1,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "capped-base",
+            "expression": {
+              "kind": "minimum",
+              "left": "raw-block",
+              "right": "hundred-percent"
+            }
+          },
+          {
+            "id": "reduced-block",
+            "expression": {
+              "kind": "subtract",
+              "left": "capped-base",
+              "right": "reduction"
+            }
+          },
+          {
+            "id": "nonnegative-block",
+            "expression": {
+              "kind": "maximum",
+              "left": "reduced-block",
+              "right": "zero-percent"
+            }
+          },
+          {
+            "id": "effective-block",
+            "expression": {
+              "kind": "select",
+              "condition": "flags",
+              "when_true": "zero-percent",
+              "when_false": "nonnegative-block"
+            }
+          },
+          {
+            "id": "block-factor",
+            "expression": {
+              "kind": "percent_as_factor",
+              "percent": "effective-block",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          },
+          {
+            "id": "unblocked-factor",
+            "expression": {
+              "kind": "subtract",
+              "left": "one-factor",
+              "right": "block-factor"
+            }
+          },
+          {
+            "id": "hit-chance",
+            "expression": {
+              "kind": "scale",
+              "value": "accuracy",
+              "factor": "unblocked-factor"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "effective-enemy-block",
+            "when": null,
+            "effect": {
+              "kind": "derive",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000321f"
+              },
+              "value": "effective-block"
+            }
+          },
+          {
+            "id": "hit-chance",
+            "when": null,
+            "effect": {
+              "kind": "derive",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003220"
+              },
+              "value": "hit-chance"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

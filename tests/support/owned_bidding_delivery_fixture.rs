@@ -41,6 +41,7 @@ pub struct PlanComponents {
     pub receivers: DeclaredSet<StatReceiver>,
     pub source_properties: Option<SourcePropertyPreparationInput>,
     pub action_routes: Vec<ActionOutputRoutes>,
+    pub contribution_queries: DeclaredSet<ContributionQuery>,
 }
 impl Default for PlanComponents {
     fn default() -> Self {
@@ -49,6 +50,7 @@ impl Default for PlanComponents {
             receivers: DeclaredSet::complete(vec![]),
             source_properties: None,
             action_routes: vec![],
+            contribution_queries: DeclaredSet::complete(vec![]),
         }
     }
 }
@@ -1084,28 +1086,25 @@ impl World {
             OwnedDefinitionSchemaPackage::new(self.schema.clone(), Default::default())
                 .map_err(|e| e.to_string())?,
         );
+        let contribution_queries = if RuleOperationsVersion::parse(self.operations.as_str())
+            .expect("known finite fixture operations")
+            .supports_contribution_queries()
+        {
+            Some(components.contribution_queries)
+        } else {
+            if !components.contribution_queries.members.is_empty()
+                || !components.contribution_queries.is_complete()
+            {
+                return Err("fixture query inventory requires query-capable operations".into());
+            }
+            None
+        };
         let stored = OwnedRulePackage::new(
             RulePackageInput {
                 existing_actor_rules: None,
-                // This finite fixture includes every owner below and has no
-                // contribution-query reads. V21 and V22 require an explicit
-                // numeric/Boolean query inventory even with no such consumer;
-                // the asserted finite empty inventory is not build coverage.
-                contribution_queries: if RuleOperationsVersion::parse(self.operations.as_str())
-                    .expect("known finite fixture operations")
-                    .supports_contribution_queries()
-                {
-                    assert!(
-                        self.owners
-                            .iter()
-                            .flat_map(|o| &o.programs.members)
-                            .flat_map(|p| &p.reads)
-                            .all(|r| !matches!(r.source, RuleReadSource::ContributionQuery { .. }))
-                    );
-                    Some(DeclaredSet::complete(vec![]))
-                } else {
-                    None
-                },
+                // The caller declares the finite query inventory. Stored and
+                // compiled rule checks still bind every read and contributor.
+                contribution_queries,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: ns(),
                 release: key("fixture.rules"),

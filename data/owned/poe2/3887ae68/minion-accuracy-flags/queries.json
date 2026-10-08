@@ -1,0 +1,104 @@
+[
+  {
+    "id": "minion-accuracy-inheritance-flags",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003219"
+    },
+    "contribution": "flag",
+    "groups": [
+      {
+        "id": "sources",
+        "reduction": "any",
+        "empty": {
+          "kind": "boolean",
+          "value": false
+        },
+        "members": {
+          "members": [],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "stat",
+                      "value": {
+                        "kind": "stat",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003219"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "accuracy-flag-producer-domain-unproved"
+                }
+              ]
+            }
+          }
+        },
+        "ordering": "unordered"
+      }
+    ]
+  },
+  {
+    "id": "minion-accuracy-cannot-block-flags",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000321e"
+    },
+    "contribution": "flag",
+    "groups": [
+      {
+        "id": "sources",
+        "reduction": "any",
+        "empty": {
+          "kind": "boolean",
+          "value": false
+        },
+        "members": {
+          "members": [],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "stat",
+                      "value": {
+                        "kind": "stat",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000321e"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "accuracy-flag-producer-domain-unproved"
+                }
+              ]
+            }
+          }
+        },
+        "ordering": "unordered"
+      }
+    ]
+  }
+]
