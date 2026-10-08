@@ -11,7 +11,10 @@ use poe_optimizer_core::{
     owned_stages::*,
     owned_support_outputs::*,
 };
-use poe_optimizer_data::owned_support_outputs::*;
+use poe_optimizer_data::{
+    owned_rules::{OwnedRulePackage, RuleStorageError},
+    owned_support_outputs::*,
+};
 
 #[test]
 fn canonical_complete_type_map_roundtrips_with_exact_dependencies() {
@@ -183,8 +186,8 @@ fn partial_whole_owner_does_not_hide_known_consumers_or_gain_closure() {
 }
 
 #[test]
-fn output_reads_cannot_be_reinterpreted_as_actor_stats_or_numeric_collections() {
-    for case in 0..5 {
+fn output_reads_cannot_be_reinterpreted_as_actor_stats_numeric_values_or_transforms() {
+    for case in 0..4 {
         let f = Fixture::with(
             |r| {
                 let p = &mut r.owners[0].programs.members[0];
@@ -197,15 +200,6 @@ fn output_reads_cannot_be_reinterpreted_as_actor_stats_or_numeric_collections() 
                     }
                     1 => p.reads[0].value_type = ComputedValueType::Integer,
                     2 => {
-                        p.reads[0].source = RuleReadSource::Contributions {
-                            entity: RuleEntity::Skill,
-                            stat: id("final-duration"),
-                            contribution: ContributionKind::Add,
-                            reduction: ContributionReduction::Sum,
-                            empty: ParameterValue::Boolean(false),
-                        }
-                    }
-                    3 => {
                         p.reads[0].source = RuleReadSource::ModifierTransforms {
                             stat: id("final-duration"),
                             initial: id("wrong-value"),
@@ -226,6 +220,27 @@ fn output_reads_cannot_be_reinterpreted_as_actor_stats_or_numeric_collections() 
             Err(SupportOutputStorageError::Invalid(_))
         ));
     }
+}
+
+#[test]
+fn direct_boolean_output_reductions_are_rejected_before_output_binding() {
+    let f = Fixture::new();
+    let mut rules = f.rules.input().clone();
+    rules.owners[0].programs.members[0].reads[0].source = RuleReadSource::Contributions {
+        entity: RuleEntity::Skill,
+        stat: id("final-duration"),
+        contribution: ContributionKind::Add,
+        reduction: ContributionReduction::Sum,
+        empty: ParameterValue::Boolean(false),
+    };
+    // This malformed Boolean reduction cannot reach support-output validation:
+    // rule-package admission now requires checked Boolean query membership.
+    assert!(matches!(
+        OwnedRulePackage::new(rules, &f.schema, Default::default()),
+        Err(RuleStorageError::Structure(
+            "Boolean contributions require checked query membership"
+        ))
+    ));
 }
 
 #[test]

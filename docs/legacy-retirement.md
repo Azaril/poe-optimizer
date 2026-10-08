@@ -20,6 +20,13 @@ fixtures were rebuilt; their V6 operation subset is an explicit capability
 selection, not an alternative artifact loader. Independent source evidence stays
 pinned to its original bytes.
 
+The Boolean cutover's CI follow-up found a stale allocation provenance receipt
+and one test that expected malformed Boolean collection reads to reach a later
+support-output boundary. Regenerate the dependent receipt and assert the actual
+earlier checked-query refusal; do not reintroduce an old read mode to keep the
+fixture buildable. Allocation rule bytes and production validation remain the
+authority. Current validation is recorded in the implementation checkpoint.
+
 Removed the root `owned_generated_field_accounting` test after the new current
 all-five publication check passed. It exclusively replayed the completed
 schema21-to23 transition against a retired package and had no direct CI/script

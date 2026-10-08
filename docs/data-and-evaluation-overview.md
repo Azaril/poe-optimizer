@@ -161,6 +161,9 @@ The observer retains ancillary calculation environments and validates effective
 metadata lookup, so neither final-output equality nor raw-field absence is used
 as a substitute for consumer evidence. This remains optional PoB source
 accounting; native field dispositions and complete inventories are still open.
+The current provenance join confirms these Djinn rows already retain usage-only
+responsibility, so this witness cannot retire another configuration fallback.
+Syntax guards named `inert_fields` do not establish mechanical non-applicability.
 See the [checkpoint](implementation.md#source-checkpoint-manual-djinn-admission-accounting).
 
 Next, Offering needs its three source-Skill scaling producers before its

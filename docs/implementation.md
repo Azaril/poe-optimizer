@@ -65,6 +65,42 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
+## CI repair checkpoint: downstream Boolean cutover checks
+
+The public job annotations for run `37715752732` identify two failures on both
+Windows and Ubuntu: allocation export reproduction and Data's
+`owned_support_outputs` target. Full log downloads return HTTP 403; both failures
+were reproduced locally against `288bfe8`, so the repair is based on actual
+failing assertions rather than inferred job titles. The successor run
+`37723486352` was still pending at that inspection.
+
+- The Boolean migration changed the current bundle's `transition.json` but left
+  allocation `source-facts.json` with its previous digest. The unchanged exporter
+  regenerated the receipt; only `bundle_transition_sha256` changed, to
+  `72002ae25afc70a51e22c22f968b3bf366200b94cad657f0635447f39b88e878`.
+  Allocation rules remain byte-identical at SHA-256
+  `30a79be0d556a022ac30e60edf2beabb6d8e32bd16a101e0c10ecb40ca6898b3`.
+  All fourteen existing exporter tests and strict `--check-dir` reproduction pass.
+- The support-output test constructed an unchecked Boolean collection read.
+  Rule admission now correctly rejects it before support-output validation.
+  The Rust test asserts that exact earlier refusal, while retaining all four
+  later output-boundary checks. All twelve tests pass. No production validator,
+  fixture semantics or historical compatibility path was changed.
+
+Evidence: `runs/ci-support-outputs-{reproduction,repair}-01.log`,
+`runs/ci-owned-allocations-reproduction-01.log`,
+`runs/ci-owned-allocations-repair-{tests,check}-01.log` and regenerated review
+files in `runs/ci-owned-allocations-refresh-01`.
+
+**Validation in progress:** the broader command
+`cargo test -p poe-optimizer-data --all-features --locked --no-fail-fast` is running
+under execution session `19524`, with output in
+`runs/ci-owned-data-regression-01.log`. Revalidate that handle before waiting or
+starting a replacement; a partial log is not a terminal outcome. Complete this
+run and then perform the final Clippy check. No hosted-green or complete-build
+claim is made from the focused fixes. Original05 remains the target, with five
+selected input obligations and 0/5 complete native builds.
+
 ## Latest native checkpoint: Boolean Gigantic and intrinsic Life in the Sniper graph
 
 The [Gigantic cutover](../data/owned/poe2/3887ae68/gigantic-flags/README.md)
@@ -241,9 +277,21 @@ new import policy.
 
 Evidence: `runs/owned-manual-djinn-admission-source-02.log` and its adjacent
 directory's `source-jit-{off,on}.json`; the failed `-01` capture is retained.
-Use this bounded evidence when reviewing the remaining `0503`/`01f2` field
-responsibilities. Do not repeat the same source capture or infer a complete
-inventory from unchanged final metrics.
+The subsequent join of all 799 current source origins to the original XML shows
+that manual Sand `215/216`, manual Water `228/229`, generated Sand `208/209` and
+generated Water `226/227` already retain only `0503`. No Djinn pair remains on
+`01f2`; that issue's ten unaccounted generated rows are Warrior and archived
+Firebolt. The new witness therefore supplies evidence for usage review, not an
+existing-authority configuration-link retirement.
+
+Existing `inert_fields` declarations are syntax guards, not semantic
+non-applicability certificates: compilation reserves the usage fields, and
+deferred-usage accounting deliberately retains the same-preset Pending issue.
+A bounded field-consumer proof still needs the reviewed Import authority
+described in the [configuration proposal](owned-configuration-dispositions-proposal.md).
+It must preserve participation, reference-selection and FullDPS responsibilities.
+Do not repeat the same source capture, reinterpret a guard as that authority or
+infer a complete inventory from unchanged final metrics.
 
 ## In progress: incoming critical source proof and Actor read decision
 
@@ -451,10 +499,11 @@ selected obligation unchanged.
 - The [manual Djinn admission witness](#source-checkpoint-manual-djinn-admission-accounting)
   now records the actual Original05 global2 controls through original consumer
   admission. Next use its exact queried-empty versus not-called distinction in
-  the `0503`/`01f2` disposition review. Preserve unresolved supplier and archived
-  responsibilities; neither unchanged numbers nor this finite witness certifies
-  an entire inventory. Existing other-SkillName and Purifying controls need not
-  be duplicated.
+  the `0503` disposition review. All these Djinn rows already have usage-only
+  responsibility; they cannot remove any further `01f2` link. Preserve unresolved
+  supplier and archived responsibilities; neither unchanged numbers nor this
+  finite witness certifies an entire inventory. Existing other-SkillName and
+  Purifying controls need not be duplicated.
 
 **Original05 completion path.** The public finalizer returns Pending while any
 selected input obligation remains, before constructing an owned request. The CLI
@@ -1608,6 +1657,11 @@ checkpoint:
 2. Rerun unchanged saved selections for all five originals; evaluate when admitted.
 3. Record exact data/source identities, commands, results and retained failures.
    Distinguish component evidence from whole-build and hosted-CI results.
+   After changing a current bundle or transition, regenerate its dependent
+   provenance receipts and run their strict reproduction checks, even when the
+   dependent numerical artifact is unchanged. A rule-admission change also needs
+   the downstream test suites that construct those rules; Clippy alone cannot
+   verify which boundary rejects a malformed fixture.
 4. Update this compact current state and next action. Append detailed completed
    checkpoints to history; do not accumulate competing current plans here.
    Reconcile new discussion findings with the session register and the existing
