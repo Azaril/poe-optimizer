@@ -217,7 +217,8 @@ participation and does not establish that later integration's coverage.
 The preceding native checkpoint implements typed Boolean `Flag` contributions and
 unordered `Any` on the existing graph. Source membership and numeric ranks are
 separate; missing coverage remains unresolved even beside true. The current
-published format is rules schema3 / operations22; no historical DTO loading path exists.
+rule format is schema3; no historical DTO loading path exists. Operations22
+introduced flags; the current Life query packet adopts operations23.
 The original [flag packet](../data/owned/poe2/3887ae68/inherent-attribute-flags/README.md)
 published two real passive producers and five reducers with Partial memberships.
 The subsequent [bounded membership packet](../data/owned/poe2/3887ae68/inherent-attribute-flag-membership/README.md)
@@ -238,10 +239,13 @@ The V23 runtime adds checked shared Actor, supplied Actor and selected reward
 origins to that same contribution graph. Membership follows exact applicability
 and supply relations, including late suffix checks. Duplicate occurrences retain
 their identities; ambiguous numeric ties reject. New semantic plans use identity
-domain20. The published artifact remains V22 until reviewed game membership and
-consumer data are authored. The joined Sniper reduction probes are finite test
-coverage, not complete inventories or a final Life calculation. Native worker
-execution remains Rust over compiled indices with per-worker scratch.
+domain20. The published Life queries now account for eight current writers in
+seven groups. Six have a zero/one-contributor domain enforced by tie rejection;
+equipment's multiple-amount reduction remains Partial. Global and owner
+inventories remain Partial, with no final Life consumer. The joined Sniper probes
+read the published memberships and retain explicit finite equipment/minion
+exclusions. Native workers remain Rust over compiled indices with per-worker
+scratch. See the [packet](../data/owned/poe2/3887ae68/life-contribution-queries/README.md).
 
 The next critical-hit slice has passed an independent PoB witness: 26 cases in
 each JIT mode, byte-identical reports, and 52 measured MAIN/CALCS vectors. The

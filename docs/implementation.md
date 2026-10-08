@@ -82,8 +82,9 @@ On October 8 the owner approved all three recently prompted decisions:
   mandatory direct/staged request coverage before moving Import obligation
   `01de`; unsupported origin families remain blocking.
 
-Actor/reward membership is now implemented in Core/Data/Engine operations V23;
-game-data adoption and the final Player Life consumer remain pending. Exact Skill
+Actor/reward membership is implemented in Core/Data/Engine operations V23 and
+adopted by canonical Life query data. Equipment reduction coverage and the final
+Player Life consumer remain pending. Exact Skill
 queries and composed support discovery remain **accepted, not implemented**.
 These decisions supersede older checkpoint statements below describing them as
 awaiting approval. Reuse the same membership implementation for the subsequent
@@ -111,8 +112,8 @@ Actors writing the same Player channel without an ordering law. Boolean Any
 preserves duplicate sources without assigning a numeric rank. Inactive, unread,
 zero and Partial contributors retain existing coverage checks. Schema3 remains
 current; V23 uses effect-plan domain20 to invalidate prior semantic identities.
-The published game package below is still operations V22: no data or five-build
-admission claim is changed by this runtime extension.
+At this runtime-only checkpoint the game package remained V22. The subsequent
+Life query publication below adopts V23; five-build admission is unchanged.
 
 The real joined Sniper fixture now has opt-in checked Life reduction probes over
 its existing imported equipment, rewards, shared Player and two distinct minion
@@ -150,14 +151,76 @@ Evidence: `runs/owned-actor-reward-joined-{02,03,04}.{jsonl,log}` (final joined
 run `04`), `{core-01,data-01,engine-04,format-01,clippy-01}.log` with the same
 prefix. Source/game artifacts and the five-build input report remain unchanged.
 
-**Next blocker:** publish reviewed canonical Life membership and semantic
-ordering, then the actual Player consumer. Preserve remaining producer/owner
+**Follow-up:** the query publication below supplies canonical membership. Finish
+equipment's reduction domain and the actual Player consumer. Preserve remaining producer/owner
 obligations, prove bounds for the composed arithmetic and account for
 ExtraLife/Total/post-clamp conversions, overrides and Chaos Inoculation. Do not
 promote the fixture's empty or finite domains to production completeness. Exact
 Skill queries and composed support discovery remain approved follow-on work.
 
-## Latest native data checkpoint: all selected equipment placement
+## Latest native data checkpoint: canonical Life contribution queries
+
+The [Life query packet](../data/owned/poe2/3887ae68/life-contribution-queries/README.md)
+adopts operations V23 and adds three canonical `311a` queries with seven groups
+and eight exact known writers. Five full donor owners are authenticated. No
+producer, receiver, definition, input, selected build or owner closure changes.
+The equipment policy includes all twenty known native equipment slots rather
+than specializing to Original05's currently occupied Life-bearing slots.
+
+Six groups have Complete **bounded membership**: intrinsic, inherent, rewards,
+received minion increase and the one current MORE source. Every member in each
+of these groups has the same all-zero semantic position and a non-equipment
+origin. A successful candidate binding therefore has at most one potential
+effect per recipient; duplicates tie and reject even before activation. Empty
+or singleton Sum/Product needs no associativity or source insertion-order claim.
+This proof is independent of saved-build values. It does not close global or
+owner inventories, or declare other Life sources absent.
+
+Equipment is the seventh group and stays Partial: it may contain several
+effective amounts. Its provisional slot ranks do not establish a general
+ordering/rounding law. The publication census checks every current potential
+Life contributor, including inactive effects and effect applications; adding a
+writer or changing a donor's guard/recipient requires a renewed audit. Group
+coverage does not authorize a final resource result.
+
+The joined Sniper fixture now reads this packet's exact query data and removes
+its local member/rank constructor and obsolete empty-identity constants. It
+keeps one explicit finite exclusion for the received-minion-Life program not
+yet installed in that graph. Only its tested equipment domain is closed in the
+fixture. All **65 joined checks pass in 33.76s**, including Player BASE1257 / INC5,
+changed-input BASE1243, separate minions, packet coverage refusals, duplicate
+reward ties, storage reversal and fresh/reused/four-worker execution. No final
+canonical Life is supplied by those diagnostic probes.
+
+Two ordinary packet checks and publication pass in **23.38s**. The V5 metadata
+migration reuses the current importer and identity rebinding; after it, the exact
+inverse removes only three queries and restores the authoring receipt.
+Byte-identical rebuilds and all-five import/selection/110-query preservation
+pass. Issue counts remain **107/117/109/123/5**. All **six V5 migration tests**
+pass in **2.06s**, including V23 preservation, repeated rebuilds and downgrade
+refusal. Changed-file formatting and strict workspace/all-feature/all-target
+Clippy pass; the final Clippy run took **3.08s** after removing an unused test
+module import. No source VM ran and no new PoB numerical law was inferred.
+
+Current package: `runs/owned-life-queries-publication-02/package`. Evidence uses
+`runs/owned-life-queries-{ordinary-01,publication-02,joined-01}` plus the publication
+directory's receipt and validation, plus `{migration-01,format-01,clippy-02}.log`
+with the same prefix. The earlier `publication-01` output records
+the pre-proof all-Partial groups; it is immutable evidence, not the active package.
+
+**Resume:** equipment's effective-Life amount domain is the next numerical
+dependency. Its raw amount is bounded, but remaining magnitude transforms,
+canonical input admission, routing/copy and external-contributor obligations
+prevent a blanket exact-sum proof. Reuse the existing numeric compiler and
+retained item evidence to retire those actual blockers. Then connect the
+original final-Life arithmetic, conversions/extra/total/override/CI inputs and
+operand bounds. Do not insert known-empty values from Original05 observations.
+Exact Skill queries and composed support discovery remain approved parallel
+work; no new public-model decision was introduced here. At **18:12:49 UTC**,
+the preceding `bfcb877` CI run `37818578183` remained pending; local checks are
+not evidence of hosted success. Snapshot: `runs/owned-life-queries-prior-ci-01.json`.
+
+## Previous native data checkpoint: all selected equipment placement
 
 The [current packet](../data/owned/poe2/3887ae68/selected-equipment-placement/README.md)
 closes five existing template inventories: Tattered Robe, Rope Cuffs, Sapphire
@@ -198,7 +261,7 @@ Validation:
   Changed-file formatting and strict workspace/all-feature/all-target Clippy
   pass. Clippy's single clone-to-slice style finding is corrected.
 
-Current package: `runs/owned-selected-equipment-placement-publication-01/package`.
+Checkpoint package: `runs/owned-selected-equipment-placement-publication-01/package`.
 Evidence: `runs/owned-selected-equipment-placement-source-01/`, parent source
 log, `{ordinary-01,publication-01,binding-03,joined-01,clippy-02,format-01}.log`
 with the same prefix, and publication `{receipt,validation}.json`. Each full
@@ -1019,36 +1082,36 @@ local validation is not hosted success for its eventual commit.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-selected-equipment-placement-publication-01/package` and its neighboring
+Use `runs/owned-life-queries-publication-02/package` and its neighboring
 `original-01` through `original-05` imports. Current sidecars remain V23;
-definition schema V6, rule schema3 and operationsV22 are independent contracts.
-The immediate predecessor is `runs/owned-flat-life-scalability-publication-01/package`,
-input `dafd7c805646bc91dfa6c7394d1a44110fb3c26a0998ce4b154fc5c476a53784`.
+definition schema V6, rule schema3 and operationsV23 are independent contracts.
+The immediate predecessor is `runs/owned-selected-equipment-placement-publication-01/package`,
+input `1678aa624785a6b65a32ab8e5810acb0d1dbc98cdfd6ae342a4023e5a1c9b91a`.
 Historical endpoint paths authenticate stored evidence; retired formats require
 explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `1678aa624785a6b65a32ab8e5810acb0d1dbc98cdfd6ae342a4023e5a1c9b91a` |
+| Release input | `c37eea7e87864407494c4b42574e3cfa4521afbdddd32a87096b266acc476b71` |
 | Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
-| Definitions content | `3fe7e6094b612465179acb5f89db56fae1ecfc18ac33a0c539d375be938c7565` |
-| Rules | `ac20047e65c72e85665b3d81b8218edf48c3a248304f27d8d952e7667e67a7ba` |
-| Compiled rules | `5891f848e19952f603140cbd76cc645194e7c0296336b1f7cdfb496b6ba54c88` |
-| Routing | `3a4147e1ea67d3c35343ff787db47e38552f02e7c8b46711d5527f09cf69d4b3` |
-| Mapping | `44f9c7bc7ef718fe3e2fe742d03f00c88e197688501e1b7300b60c87771bbde9` |
-| Skill roles | `b845ff2130f17ccc4737e9ff8a3d33253d058233cb78ce6ceb528eb802553b70` |
-| Normalization | `b8d29cd1152fa190689c773ce43a694f59f80881b70bd1c04378fa8a0a0db0cc` |
-| Rewards | `9a95660a78c61717de6bec138a2894ed4b44a7fd3fe726af63cd3f85fd34931e` |
-| Items | `911313606bb74d6aebb4e8c8d8faf8918974749fe26830f85130763850de342d` |
-| Item source | `f7ae55f6c1b1b084da9fcf2bd78d2272663bf17f136f42bd06ad9170601c926e` |
-| Tree policy | `b3cde9d5eb7e65aed865603c22e69fe0cfecdb2944166dd8d172678dbc8bede6` |
-| Placement authoring commitment | `d5f36ca516198d3dd23e6537a468415b199100edeb5572ba473c7194887a67f8` |
-| Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
+| Definitions content | `2e46fdd4e18f72662de8b9acd9bd40168194fd68bb850dfca3e5a1aa0d70345e` |
+| Rules | `c8958ebf26241a2c62608d177ecc57987bfd5eb549d6edc29d66098b945a75ae` |
+| Compiled rules | `d8e930d37777de1bc6e9a1643f550dca2e6d4fecfa4d9a7bcf2f60d1165195d2` |
+| Routing | `bd8ec64b3593de40a19d3a6d01b7e2a9c10d63ea9ac9005668e9651a0b076e81` |
+| Mapping | `403fa585d9aeb478fab2fad94c59d0c8306b65dfffdd22729b4f24ddd063b7d1` |
+| Skill roles | `72a1a3a6e09bdfcdd01419d6aef6cabcc7b9471e3314fd1eccedda0d7f306cfa` |
+| Normalization | `9dfd9515a9d252c4175a2c6b9e2470380de55d573978df375e16c2e6098a0524` |
+| Rewards | `c71520dad31b021de051df001b2d4c1b88f18f982aa5126f68d595e1b2b6ad4b` |
+| Items | `6e47aa81f7219d2e0c6b8dbcaf0ba2aa0f20b81cfd2d3dec830b47ed426e2678` |
+| Item source | `fbe9a7a6a8bbce2b299b33c974b1b978fdd7f6c46707fb35801143fae5cfafe2` |
+| Tree policy | `bcea9f71a039aa2b6f6d1b0af1ec1ad857648abe0b502790f3391b47f66faa96` |
+| Life-query authoring commitment | `e1baa20f1a0a9976a9fece244442c229fbf0d737d3f354514f7766a52e7a1fbe` |
+| Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v23` |
 
-The eighteen package files total **63,886,917 bytes**, with 148 provenance rows.
-Definitions and rules use `pob-3887ae68-selected-equipment-placement-v1`. The registry ends at
-`3352`; the latest publication allocates no IDs and changes only five placement inventories.
+The eighteen package files total **63,898,826 bytes**, with 149 provenance rows.
+Definitions and rules use `pob-3887ae68-life-contribution-queries-v1`. The registry ends at
+`3352`; the latest publication allocates no IDs and adds three contribution queries.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -1073,8 +1136,8 @@ reproducible evidence, not distributed game data.
 The selected-passive, recipient-buff, Gigantic and inherent-Life joins above pass.
 The actual Player Life contributor join and independent final-Life consumer
 witness now pass. Actor/reward membership is implemented in operations V23;
-finish its real reduction verification, then author reviewed game membership,
-ordering and final Player Life arithmetic using the retained source witness.
+its actual Life query data and finite reductions now pass. Prove the remaining
+equipment reduction domain, then final Player Life arithmetic using the retained source witness.
 Publish complete coverage only where supplier domains and numerical bounds are
 proved. Exact Skill queries for Offering remain the next graph extension. Reuse
 the same source/recipient authority and candidate-wide membership machinery.
@@ -1296,7 +1359,7 @@ changes the 0/5 complete-build result.
 **Player-Life dependency status:** the Strength-to-Life receiver, Count cutover,
 six ordinary attribute consumers, guarded empty-MORE producers, six BASE/INC
 memberships and five inherent-flag memberships are implemented and tested. The
-current package uses rule schema 3 and operations V22. Its six BASE query groups
+current package uses rule schema 3 and operations V23. Its six BASE query groups
 are Complete (328/328/330 members in each pass); the five flag groups are Complete
 with 0/0/0/1/1 declared sources. Global query/owner coverage remains Partial.
 The existing conservative validator still rejects an unmatched potential effect
@@ -1838,7 +1901,7 @@ numerical outputs when game intent remains unresolved.
 
    Prove complete real external/support inventories and all relevant owner
    programs before publishing receiving V3/stages V3 or claiming a working original.
-   The current operations V22 Partial release does not weaken that gate. Establish real
+   The current operations V23 Partial release does not weaken that gate. Establish real
    admission predicates and supporting mechanics for all six observed Ice support
    candidates; the finite arithmetic component's already-admitted positions are
    not that proof. Supported/final quality and broader ordinary property families
@@ -2097,7 +2160,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
-| Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership implemented in operations V23. Exact shared/supplied Actor and selected reward sources retain recipients, multiplicity, ordering and candidate-wide coverage. Published game data remains V22; real membership/ordering and final Player Life consumer adoption are next. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
+| Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Equipment ordering, global/owner coverage and the final Life consumer remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
 | Composed support discovery | Accepted October 8: presets own authored assignments/order; native cold planning derives complete origins from the composed request and injected provider capabilities. Enforce the direct/staged-request gate before moving Import `01de`; rebuild current artifacts. Implementation pending. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8 for Offering scaling: extend the existing checked graph to exact Skill recipients and reviewed occurrence-qualified member origins/order. Current Skill reads and generated paths are rejected today. Actor recipient producers are now published with guarded empty query domains; nonempty group ownership still needs independent proof. Implementation pending; no runtime authority changed. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |

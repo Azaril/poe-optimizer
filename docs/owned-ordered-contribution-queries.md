@@ -75,6 +75,15 @@ unread and inactive effects, Partial coverage, nonempty support suffixes, frozen
 stages, scratch recovery, rebasing and Rayon determinism. These establish the
 framework contract, not a game-specific aggregation law or item obtainability.
 
+The canonical [Life packet](../data/owned/poe2/3887ae68/life-contribution-queries/README.md)
+now uses V23 for eight known writers in seven groups. Six groups deliberately
+give every member the same semantic position. Tie rejection proves that any
+successfully bound recipient has at most one potential effect in such a group;
+this gives a bounded empty/singleton reduction without an associativity claim.
+Equipment retains its separate unresolved multiple-amount group. Neither this
+partition nor Complete bounded membership closes global/owner coverage or
+supplies the final Life formula.
+
 The attribute consumer checkpoint binds real Original05 class/choice occurrences
 to the same six receiver bodies in a finite fixture, using authenticated source
 record order. The guarded empty-MORE packet now supplies six explicit factors

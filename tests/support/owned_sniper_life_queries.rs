@@ -7,118 +7,51 @@ use poe_optimizer_core::owned_stages::{EvaluationStage, FrozenStageChannel, Stag
 
 const READY: &str = "life-contributions-ready";
 const PROBE: &str = "life-query-probes";
-const CHANNELS: [(&str, ContributionKind, u64, f64); 3] = [
-    ("fixture.life-add", ContributionKind::Add, 0x3119, 0.),
-    ("fixture.life-inc", ContributionKind::Increase, 2, 0.),
-    ("fixture.life-more", ContributionKind::Multiply, 1, 1.),
+const CHANNELS: [(&str, ContributionKind, u64); 3] = [
+    ("fixture.life-add", ContributionKind::Add, 0x3119),
+    ("fixture.life-inc", ContributionKind::Increase, 2),
+    ("fixture.life-more", ContributionKind::Multiply, 1),
 ];
-fn member(
-    owner: SchemaSubject,
-    program: &str,
-    effect: &str,
-    origin: ContributionOrigin,
-    rank: u32,
-) -> ContributionMember {
-    ContributionMember {
-        owner,
-        program: key(program),
-        effect: key(effect),
-        origin,
-        order: Some(ContributionOrder {
-            source_rank: rank,
-            slot_ranks: vec![],
-            program_rank: 0,
-            effect_rank: 0,
-        }),
-    }
-}
+const QUERY_IDS: [&str; 3] = [
+    "life-base-contributions",
+    "life-increased-contributions",
+    "life-more-contributions",
+];
 fn world() -> World {
     let mut w = World::load();
     let f = &mut w.sniper.base.source.base.inner;
-    assert_eq!(f.operations, key(OWNED_RULE_OPERATIONS_V22));
-    f.operations = key(OWNED_RULE_OPERATIONS_V23);
-    let application = f.existing_actor_rules.as_ref().unwrap().members[0]
-        .id
-        .clone();
-    let shared = ContributionOrigin::ExistingActor { application };
-    let supplied = ContributionOrigin::SuppliedActor {
-        slots: vec![actor_slot()],
-    };
-    let actor = SchemaSubject::Slot(SlotAddress::Actor(actor_slot()));
-    let slots: Vec<_> = [0x67, 0x68, 0x6b, 0x6c, 0x6e].into_iter().map(d).collect();
-    let mut equipment = member(
-        subject(d::<ModifierDefinition>(0x3100)),
-        "contribute-player-flat-life",
-        "direct-flat-life",
-        ContributionOrigin::ItemModifier {
-            slots: slots.clone(),
-        },
-        2,
+    assert_eq!(f.operations, key(OWNED_RULE_OPERATIONS_V23));
+    let mut queries = life_query_family::queries();
+    // This existing finite graph has no received-minion-Life producer. Keep
+    // that one exclusion explicit rather than silently filtering by selection.
+    let excluded = queries[1].groups[1].members.members.pop().unwrap();
+    assert_eq!(excluded.program, key("received-minion-life-increase"));
+    assert!(queries[1].groups[1].members.members.is_empty());
+    assert!(
+        !f.owners
+            .iter()
+            .flat_map(|o| &o.programs.members)
+            .any(|p| p.id == excluded.program)
     );
-    equipment.order.as_mut().unwrap().slot_ranks = slots
-        .into_iter()
-        .enumerate()
-        .map(|(rank, slot)| ContributionSlotRank {
-            slot,
-            rank: rank as u32,
-        })
-        .collect();
-    // Explicit test order only: current selected Player BASE operands are
-    // nonnegative integers with subtotal < 2^53. This does not claim a general
-    // game fold law for arbitrary equipment, rewards or fractional Life.
-    let mut members = [
-        vec![
-            member(
-                subject(d::<ActorDefinition>(0x332a)),
-                "intrinsic-player-life",
-                "intrinsic-life",
-                shared.clone(),
-                0,
-            ),
-            member(
-                subject(d::<ActorDefinition>(0x332a)),
-                "contribute-inherent-strength-life",
-                "inherent-life",
-                shared,
-                1,
-            ),
-            equipment,
-            member(
-                subject(d::<RewardDefinition>(0x29)),
-                "flat-resource-contribution",
-                "grant",
-                ContributionOrigin::Reward,
-                3,
-            ),
-            member(
-                actor.clone(),
-                "intrinsic-allied-minion-life",
-                "intrinsic-life",
-                supplied.clone(),
-                0,
-            ),
-        ],
-        vec![member(
-            subject(d::<RewardDefinition>(0x53)),
-            "permanent-reward-contributions",
-            "grant-0",
-            ContributionOrigin::Reward,
-            0,
-        )],
-        vec![member(
-            actor,
-            "gigantic-life-and-damage",
-            "life_more",
-            supplied,
-            0,
-        )],
-    ];
-    // Both shared programs have one owner/source rank; program order is a
-    // separate semantic component, not a second shared Actor occurrence.
-    let inherent_order = members[0][1].order.as_mut().unwrap();
-    inherent_order.source_rank = 0;
-    inherent_order.program_rank = 1;
-    for ((name, kind, unit, empty), members) in CHANNELS.into_iter().zip(members) {
+    for descriptor in life_query_family::definitions() {
+        if matches!(descriptor, DefinitionDescriptor::EquipmentSlot(_))
+            && !f
+                .schema
+                .definitions
+                .iter()
+                .any(|d| d.address() == descriptor.address())
+        {
+            f.owner_mut(SchemaSubject::Definition(descriptor.address()));
+            f.schema.definitions.push(descriptor);
+        }
+    }
+    for ((name, kind, unit), mut query) in CHANNELS.into_iter().zip(queries) {
+        assert_eq!(query.contribution, kind);
+        // Only this finite diagnostic graph closes equipment's remaining gap.
+        // The packet retains that gap, all donor bodies and no final pool.
+        for group in &mut query.groups {
+            group.members.closure = SchemaClosure::Complete;
+        }
         let stat: StatDefId = def(name);
         let ty = ComputedValueType::Quantity { unit: d(unit) };
         f.schema
@@ -130,33 +63,57 @@ fn world() -> World {
                     targets: vec![RuleEntityKind::Actor],
                 }),
             }));
+        let mut reads = vec![];
+        let mut nodes = vec![];
+        let mut total = key("part-0");
+        for (i, group) in query.groups.iter().enumerate() {
+            let part = key(&format!("part-{i}"));
+            reads.push(RuleRead {
+                id: part.clone(),
+                value_type: ty.clone(),
+                source: RuleReadSource::ContributionQuery {
+                    entity: RuleEntity::Current,
+                    query: query.id.clone(),
+                    group: group.id.clone(),
+                },
+            });
+            nodes.push(RuleNode {
+                id: part.clone(),
+                expression: RuleExpression::Read {
+                    input: part.clone(),
+                },
+            });
+            if i > 0 {
+                assert_ne!(
+                    kind,
+                    ContributionKind::Multiply,
+                    "MORE remains a single explicit group"
+                );
+                let next = key(&format!("subtotal-{i}"));
+                nodes.push(RuleNode {
+                    id: next.clone(),
+                    expression: RuleExpression::Add {
+                        left: total,
+                        right: part,
+                    },
+                });
+                total = next;
+            }
+        }
         f.owners.push(DefinitionRules {
             owner: subject(stat.clone()),
             programs: DeclaredSet::complete(vec![RuleProgram {
                 id: key(name),
                 context: RuleEntityKind::Actor,
-                reads: vec![RuleRead {
-                    id: key("value"),
-                    value_type: ty,
-                    source: RuleReadSource::ContributionQuery {
-                        entity: RuleEntity::Current,
-                        query: key(name),
-                        group: key("sources"),
-                    },
-                }],
-                nodes: vec![RuleNode {
-                    id: key("value"),
-                    expression: RuleExpression::Read {
-                        input: key("value"),
-                    },
-                }],
+                reads,
+                nodes,
                 effects: vec![RuleEffect {
                     id: key("observe"),
                     when: None,
                     effect: RuleEffectKind::Derive {
                         entity: RuleEntity::Current,
                         stat: stat.clone(),
-                        value: key("value"),
+                        value: total,
                     },
                 }],
             }]),
@@ -170,26 +127,7 @@ fn world() -> World {
                 StatReceiverTarget::OwnedSlot { slot: actor_slot() },
             ],
         });
-        w.sniper
-            .base
-            .contribution_queries
-            .members
-            .push(ContributionQuery {
-                id: key(name),
-                stat: d(0x311a),
-                contribution: kind,
-                groups: vec![ContributionGroup {
-                    id: key("sources"),
-                    reduction: if kind == ContributionKind::Multiply {
-                        ContributionReduction::Product
-                    } else {
-                        ContributionReduction::Sum
-                    },
-                    ordering: ContributionOrdering::Ordered,
-                    empty: quantity(empty, &d(unit)),
-                    members: DeclaredSet::complete(members),
-                }],
-            });
+        w.sniper.base.contribution_queries.members.push(query);
     }
     w
 }
@@ -248,7 +186,7 @@ fn value<'a>(r: &'a SupportEffectsReport, actor: ActorKey, name: &str) -> &'a Ef
         .value
 }
 fn player(r: &SupportEffectsReport, base: f64, increase: f64) {
-    for ((name, _, unit, _), expected) in CHANNELS.into_iter().zip([base, increase, 1.]) {
+    for ((name, _, unit), expected) in CHANNELS.into_iter().zip([base, increase, 1.]) {
         assert_eq!(
             value(r, ActorKey::Player, name),
             &EffectValue::Known {
@@ -389,7 +327,7 @@ fn unread_minion_membership_and_partial_life_queries_cannot_be_skipped() {
         .contribution_queries
         .members
         .iter_mut()
-        .find(|q| q.id == key(CHANNELS[0].0))
+        .find(|q| q.id == key(QUERY_IDS[0]))
         .unwrap();
     q.groups[0]
         .members
@@ -406,15 +344,12 @@ fn unread_minion_membership_and_partial_life_queries_cannot_be_skipped() {
         .contribution_queries
         .members
         .iter_mut()
-        .find(|q| q.id == key(CHANNELS[0].0))
+        .find(|q| q.id == key(QUERY_IDS[0]))
         .unwrap();
-    q.groups[0].members.closure = SchemaClosure::Partial {
-        gaps: vec![SchemaGap {
-            subject: subject(d::<StatDefinition>(0x311a)),
-            facet: SchemaFacet::GameRules,
-            code: key("unconverted-life-sources"),
-        }],
-    };
+    q.groups[2].members.closure = life_query_family::queries()[0].groups[2]
+        .members
+        .closure
+        .clone();
     let p = plan(&w);
     assert!(matches!(
         p.evaluate(&mut p.new_scratch()).unwrap().outcome,
@@ -423,4 +358,27 @@ fn unread_minion_membership_and_partial_life_queries_cannot_be_skipped() {
             ..
         }
     ));
+}
+
+#[test]
+#[ignore = "requires current joined Sniper release"]
+fn singleton_life_groups_reject_duplicate_rewards_before_values_or_activation() {
+    for definition in [d::<RewardDefinition>(0x29), d(0x53)] {
+        let mut w = world();
+        let f = &mut w.sniper.base.source.base.inner;
+        let mut duplicate = f
+            .build
+            .character
+            .rewards
+            .iter()
+            .find(|r| r.definition == definition)
+            .unwrap()
+            .clone();
+        duplicate.id = id(9101);
+        f.build.character.rewards.push(duplicate);
+        assert!(
+            w.checked_plan_configured(configure)
+                .is_err_and(|e| e.contains("semantic positions are tied"))
+        );
+    }
 }

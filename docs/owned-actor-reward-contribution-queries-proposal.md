@@ -1,7 +1,8 @@
 # Checked contributions from Actors and rewards
 
 Status: **accepted 2026-10-08; runtime membership implemented in operations V23**.
-Real game-data membership and the final Player Life consumer remain pending.
+Canonical Life query data is published with six bounded singleton groups;
+equipment's reduction proof and the final Player Life consumer remain pending.
 The owner approved
 extending the existing graph, with exact sources and recipients, duplicate
 occurrences, explicit numeric ordering and incomplete-coverage failures.
@@ -98,8 +99,8 @@ first complete build.
 
 The minimal declarations are `ExistingActor { application }`, `Reward` and
 `SuppliedActor { slots }`. Their implementation is shared by cold binding and
-support-suffix validation, with effect-plan domain20. The published package
-remains V22 pending game-data adoption. Validation covers exact source/recipient
+support-suffix validation, with effect-plan domain20. The published Life query
+package adopts V23; its equipment, global and owner gaps remain. Validation covers exact source/recipient
 identity, multiple minions
 and providers, independent rewards, duplicates, partial/unavailable sources,
 inactive/late effects, ordering ties, cache identity and fresh/reused/Rayon

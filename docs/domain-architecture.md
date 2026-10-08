@@ -894,8 +894,12 @@ a reference process for every search candidate.
 The owner approved these extensions on 2026-10-08; their implementation is
 tracked separately in the [implementation plan](implementation.md).
 Operations V23 now implements the Actor/reward source portion. Exact Skill
-queries, composed support discovery and production Life-consumer adoption remain
+queries, composed support discovery and the final Life consumer remain
 separate delivery work; their target contracts below are not completion claims.
+The published Life query data now adopts exact Actor/reward membership. Numeric
+groups may establish an explicit zero/one-contributor domain through semantic
+tie rejection. That does not establish a multiple-contributor order law, permit
+deduplication or close unrelated owners and global coverage.
 
 The existing checked contribution graph admits reviewed shared-Actor,
 supplied-Actor and selected reward sources, and exact Skill query recipients and

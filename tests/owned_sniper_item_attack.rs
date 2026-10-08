@@ -32,6 +32,9 @@ mod gigantic_native;
 mod inherent_life_native;
 #[path = "support/owned_sniper_life_queries.rs"]
 mod life_queries_native;
+#[allow(dead_code)]
+#[path = "support/owned_life_contribution_queries.rs"]
+mod life_query_family;
 #[path = "support/owned_sniper_passive_damage_evidence.rs"]
 mod passive_damage_evidence;
 #[path = "support/owned_sniper_passive_damage_native.rs"]
@@ -114,6 +117,7 @@ impl World {
         activation_family::assert_component(&endpoint);
         accuracy_family::assert_component(&endpoint);
         evidence::assert_current(&endpoint);
+        life_query_family::assert_component(&endpoint);
         let recipe = &endpoint.input().recipe;
         // This loader already performs a fresh canonical Original05 item import,
         // retains all 24 roll slots and uses actual applicability/copy/snapshot.

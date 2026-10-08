@@ -102,6 +102,59 @@ fn exact_v19_and_v20_predecessors_preserve_source_queries_and_rebuilds() {
 }
 
 #[test]
+fn actor_reward_contract_preserves_membership_and_rejects_downgrades() {
+    let mut input = prior().input().clone();
+    input.recipe.rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
+    let prior = v3_fixture::contract(input, 6, OWNED_RULE_OPERATIONS_V22, "actor-reward-prior");
+    let mut migration = header(&prior);
+    migration.release = key("actor-reward-contract");
+    migration.contract.operations_version = key(OWNED_RULE_OPERATIONS_V23);
+    let next =
+        compile_owned_release_migration(&prior, migration.clone(), Default::default()).unwrap();
+    assert_source_inputs_preserved(&prior, &next);
+    assert_eq!(
+        next.input().recipe.rules.owners,
+        prior.input().recipe.rules.owners
+    );
+    assert_eq!(
+        next.input().recipe.rules.contribution_queries,
+        prior.input().recipe.rules.contribution_queries
+    );
+    assert_eq!(
+        next.input().recipe.rules.existing_actor_rules,
+        prior.input().recipe.rules.existing_actor_rules
+    );
+    assert_ne!(
+        next.receipt().compiled_rules,
+        prior.receipt().compiled_rules
+    );
+    let repeated = compile_owned_release_migration(&prior, migration, Default::default()).unwrap();
+    assert!(next.artifacts().eq(repeated.artifacts()));
+    for operations in [
+        OWNED_RULE_OPERATIONS_V20,
+        OWNED_RULE_OPERATIONS_V21,
+        OWNED_RULE_OPERATIONS_V22,
+    ] {
+        let mut backward = header(&next);
+        backward.contract.operations_version = key(operations);
+        assert!(matches!(
+            compile_owned_release_migration(&next, backward, Default::default()),
+            Err(OwnedReleaseError::Invalid(
+                "migration cannot downgrade current operations"
+            ))
+        ));
+    }
+    let mut same = header(&next);
+    same.contract.operations_version = key(OWNED_RULE_OPERATIONS_V23);
+    assert!(matches!(
+        compile_owned_release_migration(&next, same, Default::default()),
+        Err(OwnedReleaseError::Invalid(
+            "migration contains no semantic changes"
+        ))
+    ));
+}
+
+#[test]
 fn v5_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
     let original = prior();
     let prior = v3_fixture::contract(
@@ -127,7 +180,7 @@ fn v5_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
         assert!(matches!(
             compile_owned_release_migration(&prior, bad, Default::default()),
             Err(OwnedReleaseError::Invalid(
-                "current migration requires schema v6 and operations v20, v21 or v22"
+                "current migration requires schema v6 and operations v20 through v23"
             ))
         ));
     }
