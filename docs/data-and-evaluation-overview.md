@@ -18,8 +18,8 @@ passive Life Increase delivery, Solar intrinsic declaration closure, local
 Armour/ES composition before per-level additions and overrides, canonical Cold
 item contribution delivery, selected item parameter inventories, Leggings
 placement, component-scalability reconciliation, intrinsic Player Life,
-Strength-derived inherent Life, six ordinary attribute consumers over the V21
-query boundary, guarded empty-MORE producers, the shared default class-start
+Strength-derived inherent Life, six ordinary attribute consumers over checked
+contribution queries, guarded empty-MORE producers, the shared default class-start
 closure, once-per-Player Actor rule ownership, generated-field accounting,
 native requested-participation gates, strict group-value projection, shared
 Player equipment-slot reads, unified typed physical usage, the first Sniper
@@ -51,6 +51,14 @@ preservation pass. Actual catalog, placement and owner gaps remain explicit;
 finite test projections do not close them. Final aggregation, complete owner
 coverage and request admission remain unfinished. Current artifacts and the
 review questions are in the [implementation plan](implementation.md).
+
+The latest [flat-Life metadata packet](../data/owned/poe2/3887ae68/flat-life-scalability/README.md)
+retires one already-proven component-scalability obligation on Modifier `3100`.
+Its five programs, source admission and six other owner gaps are unchanged.
+Source component classification is distinct from the unscalable input and from
+complete numerical/routing coverage. Five-build publication preservation and
+all 60 joined checks pass on the new package. This is coverage reconciliation,
+not a new final-Life calculation or additional complete build.
 
 The preceding data checkpoint replaces Gigantic's numeric presence with typed
 Boolean Flag/Any and joins its real selected allocation and intrinsic Life in the
@@ -1144,6 +1152,15 @@ Reference contexts and source ordinals stay outside Core and Engine. The initial
 Ice Nova packet declares two action alternatives with Partial mechanics; selection
 does not close input inventories or execute calculations. See the
 [source-action boundary](owned-source-actions.md).
+
+The current selector contract still couples these mappings to physical Gem or
+manual Direct root authority. Item-only Warrior exposes the missing generated
+case: its catalogue Gem identity is source metadata, not proof of a physical
+supplier. The [proposed separation](owned-source-action-root-separation-proposal.md)
+would share selector interpretation while independently validating actual
+Gem/Direct/Item/Tree supply. It is not implemented. Eight archived Warrior rows
+remain on Original05's configuration obligation; no new provider, successful
+input or accounting closure follows from the audit.
 
 The additive physical V3 disposition uses that adapter to account for reference
 settings separately from intrinsic Gem parameters. Five injected recipes validate

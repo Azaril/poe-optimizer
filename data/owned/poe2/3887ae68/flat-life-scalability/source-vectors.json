@@ -1,0 +1,667 @@
+{
+  "status": "passed",
+  "scope": {
+    "retired_obligations": 1,
+    "retained_obligations": 6,
+    "closed_existing_rule_owners": 0,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "numerical_program_changes": 0,
+    "import_guard_changes": 0,
+    "source_admission_widened": false,
+    "routing_completed": false,
+    "whole_build_parity": false,
+    "final_life": false
+  },
+  "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "evidence": {
+    "files": [
+      {
+        "path": "src/Classes/Item.lua",
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      {
+        "path": "src/Classes/ItemsTab.lua",
+        "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+      },
+      {
+        "path": "src/Classes/ModDB.lua",
+        "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+      },
+      {
+        "path": "src/Modules/CalcSetup.lua",
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      },
+      {
+        "path": "src/Modules/ItemTools.lua",
+        "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+      },
+      {
+        "path": "src/Modules/ModParser.lua",
+        "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+      },
+      {
+        "path": "src/Data/ModScalability.lua",
+        "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+      },
+      {
+        "path": "src/Data/ModItem.lua",
+        "sha256": "019c586b060d6992b693d8372e0fdb0ac6b067d41037869d344094d739b26dde"
+      }
+    ],
+    "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+    "native_parity": false,
+    "whole_life_metric_coverage": false
+  },
+  "source_lines": [
+    {
+      "path": "src/Data/ModScalability.lua",
+      "first": 434,
+      "last": 434,
+      "lines": [
+        "\t[\"# to maximum Life\"] = { { isScalable = true } },"
+      ]
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "first": 275,
+      "last": 278,
+      "lines": [
+        "\t\t\tif scalability.isScalable and ((baseValueScalar and baseValueScalar ~= 1) or (valueScalar and valueScalar ~= 1)) then",
+        "\t\t\t\tscalableValues[i] = itemLib.formatValue(scalableValues[i], baseValueScalar, valueScalar, precision or 1, displayPrecision, ifRequired)",
+        "\t\t\telse",
+        "\t\t\t\tscalableValues[i] = itemLib.formatValue(scalableValues[i], 1, 1, precision or 1, displayPrecision, ifRequired)"
+      ]
+    }
+  ],
+  "numeric_binding_path": "data/owned/poe2/3887ae68/flat-life/numeric-binding.json",
+  "numeric_binding_sha256": "bf3fbf30d707dc4ae01913bd92ebd86b189bd0ac4feb3116adb7ed295cd72d2b",
+  "numeric_binding": {
+    "modifier": {
+      "key": "def.0000000000003100",
+      "kind": "modifier",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      }
+    },
+    "program": "effective-amount",
+    "input": {
+      "declaration": {
+        "definition": {
+          "key": "def.0000000000003100",
+          "kind": "modifier",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "kind": "modifier"
+      },
+      "slot": {
+        "key": "def.0000000000003101",
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        }
+      }
+    },
+    "unit": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000295a"
+    },
+    "output": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000295b"
+    },
+    "precision": 1,
+    "display_precision": 0,
+    "sign": {
+      "kind": "direct"
+    },
+    "scaling": {
+      "kind": "scaled",
+      "corrupted_base": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002541"
+      },
+      "magnitude": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000253d"
+      }
+    }
+  },
+  "dependencies": [
+    {
+      "path": "data/owned/poe2/3887ae68/flat-life/numeric-binding.json",
+      "bytes": 1453,
+      "sha256": "bf3fbf30d707dc4ae01913bd92ebd86b189bd0ac4feb3116adb7ed295cd72d2b"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/flat-life/item-rule.json",
+      "bytes": 9321,
+      "sha256": "99794b52e89edd3ee6d5bafb1ae91748a47b3f4792a1e70eef1b97f89e182d5d"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/flat-life/source-condition.json",
+      "bytes": 351,
+      "sha256": "a6b8ca5f96565c2dd4a0cd8d03c424cc47da4c43835f0a87d439ee52e5777eda"
+    }
+  ],
+  "reports": [
+    {
+      "path": "runs/owned-flat-life-source-01/source-jit-off.json",
+      "bytes": 397880,
+      "sha256": "3bbf0ef76d795f8477a16554db6aefdd1ad9bb320c4ad466460330d862c65b61"
+    },
+    {
+      "path": "runs/owned-flat-life-source-01/source-jit-on.json",
+      "bytes": 397880,
+      "sha256": "3bbf0ef76d795f8477a16554db6aefdd1ad9bb320c4ad466460330d862c65b61"
+    }
+  ],
+  "cases": [
+    {
+      "build": 1,
+      "variant": "original",
+      "xml_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+      "scalability": [
+        {
+          "isScalable": true
+        }
+      ],
+      "physical_line_count": 1,
+      "probe_count": 0
+    },
+    {
+      "build": 2,
+      "variant": "original",
+      "xml_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+      "scalability": [
+        {
+          "isScalable": true
+        }
+      ],
+      "physical_line_count": 8,
+      "probe_count": 0
+    },
+    {
+      "build": 3,
+      "variant": "original",
+      "xml_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490",
+      "scalability": [
+        {
+          "isScalable": true
+        }
+      ],
+      "physical_line_count": 1,
+      "probe_count": 0
+    },
+    {
+      "build": 4,
+      "variant": "original",
+      "xml_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711",
+      "scalability": [
+        {
+          "isScalable": true
+        }
+      ],
+      "physical_line_count": 7,
+      "probe_count": 0
+    },
+    {
+      "build": 5,
+      "variant": "original",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "scalability": [
+        {
+          "isScalable": true
+        }
+      ],
+      "physical_line_count": 7,
+      "probe_count": 23
+    },
+    {
+      "build": 5,
+      "variant": "overlay-zero",
+      "xml_sha256": "3c925da7b274c5ba139af7db02271a38838a97fa7554c9de4678517023889967",
+      "scalability": [
+        {
+          "isScalable": true
+        }
+      ],
+      "physical_line_count": 7,
+      "probe_count": 0
+    },
+    {
+      "build": 5,
+      "variant": "overlay-one",
+      "xml_sha256": "e6490d5889df85d07d1c6531f0dd7c5254a76adb220689c7c273402c4a0c8977",
+      "scalability": [
+        {
+          "isScalable": true
+        }
+      ],
+      "physical_line_count": 7,
+      "probe_count": 0
+    }
+  ],
+  "observations": [
+    {
+      "pointer": "/cases/4/state/probes/0",
+      "value": {
+        "name": "fixed",
+        "input_line": "+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 10
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/1",
+      "value": {
+        "name": "zero",
+        "input_line": "+0 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/2",
+      "value": {
+        "name": "bare-unsigned",
+        "input_line": "17 to maximum Life",
+        "active": {}
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/3",
+      "value": {
+        "name": "fraction-down",
+        "input_line": "+10.49 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 10
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/4",
+      "value": {
+        "name": "fraction-half",
+        "input_line": "+10.5 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 11
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/5",
+      "value": {
+        "name": "negative-half",
+        "input_line": "-10.5 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": -11
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/6",
+      "value": {
+        "name": "untagged-flesh",
+        "input_line": "+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 10
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/7",
+      "value": {
+        "name": "tagged-flesh",
+        "input_line": "{tags:life}+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 12
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/8",
+      "value": {
+        "name": "wrong-catalyst",
+        "input_line": "{tags:life}+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 10
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/9",
+      "value": {
+        "name": "explicit-magnitude",
+        "input_line": "+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 15
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/10",
+      "value": {
+        "name": "implicit-mismatch",
+        "input_line": "+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 10
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/11",
+      "value": {
+        "name": "untagged-life-magnitude",
+        "input_line": "+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 10
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/12",
+      "value": {
+        "name": "tagged-life-magnitude",
+        "input_line": "{tags:life}+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 15
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/13",
+      "value": {
+        "name": "add-then-double",
+        "input_line": "+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 30
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/14",
+      "value": {
+        "name": "double-then-add",
+        "input_line": "+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 25
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/15",
+      "value": {
+        "name": "corrupted-fixed",
+        "input_line": "{corruptedRange:1.25}+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 13
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/16",
+      "value": {
+        "name": "corrupted-fixed-magnitude",
+        "input_line": "{corruptedRange:1.25}+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 15
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/17",
+      "value": {
+        "name": "corrupted-ranged-magnitude",
+        "input_line": "{range:0.5}{corruptedRange:1.25}+(10-10) to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 19
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/18",
+      "value": {
+        "name": "range-midpoint",
+        "input_line": "{range:0.5}+(10-20) to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 15
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/19",
+      "value": {
+        "name": "unscalable",
+        "input_line": "{unscalable}{tags:life}+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 10
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/20",
+      "value": {
+        "name": "disabled",
+        "input_line": "{disabled}+10 to maximum Life",
+        "active": {}
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/21",
+      "value": {
+        "name": "implicit-magnitude",
+        "input_line": "{implicit}+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 15
+          }
+        ]
+      }
+    },
+    {
+      "pointer": "/cases/4/state/probes/22",
+      "value": {
+        "name": "enchant-magnitude",
+        "input_line": "{enchant}+10 to maximum Life",
+        "active": [
+          {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Life",
+            "source": "Item:9001:New Item, Tattered Robe",
+            "tags": {},
+            "type": "BASE",
+            "value": 15
+          }
+        ]
+      }
+    }
+  ],
+  "observation_fields": [
+    "name",
+    "input_line",
+    "active"
+  ]
+}

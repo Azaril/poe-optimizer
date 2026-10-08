@@ -1,0 +1,81 @@
+{
+  "before": "77647de61486b91c2de2d4e73547c6fd2e5ef40f506c947d84bf82a04836726b",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-gigantic-flags-v1",
+    "schema_version": 6,
+    "content_sha256": "420769f5d29c7ee28f02caceddbe01e42ecb06c2b4c3553ef5a2ef366fcee1f5",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea",
+  "rules": "3e650238f83dcf35e0d868f766743575d6e36d634e62660bdf5a4b987919a008",
+  "mapping": "35712202381f0b5d73cff66b755217f4af1fdd99def422b8167b5131a5299714",
+  "roles": "f6a0648cc7be92387ecadb4c49f9178666035dcb2c4d347ca4247e4836bcbc27",
+  "normalization": "01b61ed3793da8a7eb9135aaaae6c7b1d0ea94cf5138f4ed06afa26b87c78f5b",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Data/ModItem.lua",
+      "bytes": 1063203,
+      "sha256": "019c586b060d6992b693d8372e0fdb0ac6b067d41037869d344094d739b26dde"
+    }
+  ],
+  "registry_last_issued_before": 13138,
+  "registry_last_issued_after": 13138,
+  "scope": {
+    "retired_obligations": 1,
+    "retained_obligations": 6,
+    "closed_existing_rule_owners": 0,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "numerical_program_changes": 0,
+    "import_guard_changes": 0,
+    "source_admission_widened": false,
+    "routing_completed": false,
+    "whole_build_parity": false,
+    "final_life": false
+  },
+  "artifact_sha256": {
+    "bindings": "127097a7afceb637c526e4f4216dd59675396a241feeb3fec7bea99d507831d1",
+    "coverage": "d7c3ce1f2769a9544864a093718e93180c429e9a552b4024f8ebea7c961efdba",
+    "dependencies": "9999ad9896eded27102ef06906479c03fee0e922f7bd55bcdc3d595ce8e7498c",
+    "source-vectors": "46d1e076ece76682d54ddbd670f82a75f99f47150773de64b28b344ab3cf9a9a"
+  }
+}

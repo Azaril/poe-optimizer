@@ -152,7 +152,51 @@ does not distinguish compilation from execution, so a hang is unproven. Main's
 configured concurrency explains the pending/coalesced runs. Original05 remains
 the target, with five selected input obligations and **0/5** complete builds.
 
-## Latest native checkpoint: real Player Life contributions in the joined graph
+## Latest coverage checkpoint: flat-Life component scalability
+
+The selected Life modifier `3100` had one stale component-metadata obligation.
+The retained original-source reports and the current injected numeric compiler
+already prove its sole component scalable. The new
+[packet](../data/owned/poe2/3887ae68/flat-life-scalability/README.md) removes only
+`numeric-component-scalability-unproved`, taking seven owner gaps to six.
+All five programs, raw inputs, the sole emitting item rule, source guard and
+every other coverage declaration remain unchanged. Component scalability is
+distinct from the separate unscalable input and does not prove arbitrary
+numeric domains, routing, Amulet copies, contributor coverage or final Life.
+
+Two ordinary checks pass, including rejection of an additional emitter, changed
+guard and changed component. Publication passes in **22.30s**. It authenticates
+the retained seven-case/23-control source reports without starting PoB, recompiles
+the numeric binding to the exact existing writer, and proves a whole-input
+inverse allowing only the retired gap plus provenance. All five drafts/local
+identities, 110 queries and selected issue counts **107/117/109/123/5** survive;
+the rebuilt package is byte-identical. The existing joined graph passes all
+**60** checks in **34.16s** against the successor, including actual Partial-owner
+refusal, duplicate physical ring uses, mutation/order controls and reused/Rayon
+execution. No numerical formula or new fixture was added.
+
+The current integration package is
+`runs/owned-flat-life-scalability-publication-01/package`, input
+`dafd7c805646bc91dfa6c7394d1a44110fb3c26a0998ce4b154fc5c476a53784`, rules
+`69d122ac6640a5b93377b9728e1d21b8a8741961cfc1d5ba4bc32fe89899c74c`, compiled rules
+`ffac0a8c5117bd02e1446cf8c0f3968a495f9e57c707392bcfe5b74bab8deaba`.
+Evidence: `runs/owned-flat-life-scalability-{ordinary-02,publication-01,native-01}.log`
+and publication `{receipt,validation}.json`. The initial helper compile caught a
+moved-value borrow in the inverse assertion; binding the restore target before
+moving the owner fixed it. The failed build log remains. Changed Rust formatting
+passes, and strict workspace/all-feature/all-target Clippy passes in **26.95s**
+(`runs/owned-flat-life-scalability-{format,clippy}-01.log`).
+
+**Resume:** Original05 remains closest, with five selected input obligations and
+**0/5 complete builds**. Its next native aggregation still needs the pending
+Actor/reward contribution-query decision; Offering needs the separate exact
+Skill query decision. Both were re-prompted after the source checkpoint. The
+archived Warrior preflight found a separate Import contract boundary, recorded
+below; it produced no authority or source-link reduction. Do not re-open the
+completed attribute/flag memberships or treat this metadata retirement as a
+complete modifier owner.
+
+## Native checkpoint: real Player Life contributions in the joined graph
 
 The shared Player Actor `332a` now has one ordinary authored program that reads
 the pure inherent amount `331a` and emits it once to canonical Life `311a`.
@@ -444,12 +488,13 @@ documents that pending public boundary. Pure receiver `331a` must remain a deriv
 amount; deliver it through the existing shared Player rule owner rather than
 expanding receiver responsibilities.
 
-The separate Warrior audit found an accepted-contract path for eight archived
-origins: actual Rattling grant/raw-input data plus private reuse of the existing
-Physical singleton-minion selector and deferred-usage proof. It needs real
-structural authoring, not a role change or fabricated physical/Direct occurrence.
+The subsequent Warrior preflight disproved the proposed private-reuse path for
+eight archived origins: the Physical selector requires actual Gem supply, which
+the item-only Warrior does not have. The
+[selector/supply separation](owned-source-action-root-separation-proposal.md)
+is proposed, not accepted; no source links or unresolved owners were removed.
 Keep it behind the selected numerical prerequisite. The archived Firebolt pair
-has Complete-empty usage, so it cannot use this Pending-responsibility proof.
+has Complete-empty usage, so it cannot use a Pending-responsibility proof.
 
 ## Source checkpoint: prepared hands and original condition writes
 
@@ -850,8 +895,8 @@ reproducible evidence, not distributed game data.
 ## Next executable work
 
 The selected-passive, recipient-buff, Gigantic and inherent-Life joins above pass.
-The current numerical work joins actual Player Life contributors and captures
-the original Player final-Life consumer. The next native reductions need the
+The actual Player Life contributor join and independent final-Life consumer
+witness now pass. The next native reductions need the
 Actor/reward origin decision for Life and exact Skill query authority for
 Offering's three source-scaling producers. Inspect source membership/grouping
 evidence and selected-input obligations under existing contracts while those
@@ -976,6 +1021,18 @@ The next input evidence work should classify the retained
 include inherited-node and Amulet-copy transport. Do not repeat that acquisition
 or treat a new scalar grammar as progress on these selected obligations.
 
+**Archived Warrior preflight (2026-10-08):** eight remaining `01f2` source links
+belong to four item-granted Warrior pairs in presets 3/5/6/1. Exact generated,
+usage and support Pending owners already exist, but the current selector adapter
+requires either physical Gem supply or a manually selectable root. Warrior is
+item-only; private adapter reuse would invent that authority. No data was
+authored, the exploratory private reuse was removed, and the count remains 44.
+The [selector/supply separation proposal](owned-source-action-root-separation-proposal.md)
+records the structural boundary, the genuine reusable child action and the
+conditional 44-to-36 accounting target. This is a pending Import decision;
+do not add a fake physical Gem or weaken root checks. The immediate native
+priority remains the pending Actor/reward and exact Skill query decisions.
+
 **Next composition review: support-origin discovery.** The selected Original05
 preset currently has sixteen physical support assignments in eight known
 sequences, but those are not the complete runtime source inventory. The source
@@ -1056,24 +1113,25 @@ its data-only extension boundary. Preserve the five original requests and their
 110 query rows at every publication. Neither this review nor producer coverage
 changes the 0/5 complete-build result.
 
-**Deferred Player-Life dependency:** the Strength-to-Life receiver, Count cutover, six ordinary
-attribute consumers and guarded empty-MORE producers are implemented and tested.
-Use the explicit query producers instead of fixture factor literals. V21 rejects
-an unmatched potential effect as `PlanError::Invalid`, even if inactive; retain
-this conservative admitted domain. The six current INC memberships are now
-Complete. BASE/global inventories, Class coverage and original builds remain open.
+**Player-Life dependency status:** the Strength-to-Life receiver, Count cutover,
+six ordinary attribute consumers, guarded empty-MORE producers, six BASE/INC
+memberships and five inherent-flag memberships are implemented and tested. The
+current package uses rule schema 3 and operations V22. Its six BASE query groups
+are Complete (328/328/330 members in each pass); the five flag groups are Complete
+with 0/0/0/1/1 declared sources. Global query/owner coverage remains Partial.
+The existing conservative validator still rejects an unmatched potential effect
+even if inactive; membership completion does not admit unsupported donors.
 
-When this dependency becomes the closest-build blocker, establish real BASE
-contributor closure and semantic ordering, including
-all current item donors and inactive alternatives. Reuse the importer's explicit
-modifier-order proof; raw saved line order is not source modifier-list order.
-The executable BASE audit now proves a declared-domain signed-cancellation
-counterexample and real post-passive bonus copies. Resolve destination-complete
-ordering and grouped bonus projections before promoting those memberships;
-the class/item-prefix plus passive-suffix shortcut is insufficient. Nonempty
-MORE grouping remains unresolved; there is no native cache-dependent mode.
-Comparison snapshots and stage-dependent donors remain on the accepted finite
-stage plan. Resolve inherent-bonus controls before connecting final Player Life.
+The BASE publication follows the bounded Class/passive donor law described in
+the checkpoint above. Broader item donors and post-passive bonus copies still
+need destination-complete ordering and grouping proofs before expanding that
+domain. Reuse the importer's explicit modifier-order proof; raw saved line order
+is not source modifier-list order. The retained signed-cancellation counterexample
+still rules out the old class/item-prefix plus passive-suffix shortcut. Nonempty
+MORE grouping remains unresolved. Use the actual published producers, not
+fixture literals or a cache-dependent native mode. Inherent flags and their
+Life contribution are finished prerequisites; final pool aggregation now needs
+the pending origin-authority decision and its own coverage/arithmetic law.
 
 **Class coverage follow-up:** Original05's Class `0a23` still has its inherited
 `tree-game-rules-not-converted` marker. Its Count bases and intrinsic attack row remain class-owned; intrinsic Life
@@ -1085,8 +1143,8 @@ intrinsic inventory; do not reopen its proven empty lists or use that result to
 close Class behavior, neighboring modifiers or external transformations.
 
 The owner accepted [existing-actor rule ownership](owned-existing-actor-rule-ownership-proposal.md)
-on 2026-10-06. Reuse Actor definitions with explicit applicability to the existing
-Player, then move shared intrinsic Life out of all eight Class owners. Keep the
+on 2026-10-06. Actor `332a` now binds explicitly to the existing Player, and shared
+intrinsic Life has been removed from all eight Class owners. Keep the
 unimplemented shared initialization inventory Partial. This supplies honest
 ownership without duplicating universal rules across classes or manufacturing
 a Player grant. Contract implementation, the first data migration and source/native
@@ -1103,14 +1161,13 @@ substitute Action query selection or template identity for hand state. Keep all
 eight Class markers and shared Actor `332a` Partial. The audit records exact
 source readers, current consumers and the smallest proof/control work.
 
-The six Add query inventories still require actual membership and ordering
-proof; the six Increase inventories are Complete for the current rule package.
-Inherent-control Stats3315–3319 now have five reducers and two real passive
-producers through the [typed Boolean aggregation contract](owned-boolean-contributions-proposal.md).
-Their production membership remains Partial; complete the actual source census
-without false defaults. Neither published passive is selected in Original05.
-No final Player Life recipe exists.
-These are distinct production blockers, not further finite-fixture exercises.
+The six Add and six Increase queries and the five inherent-control queries have
+the bounded membership described above. Neither flag-producing passive is selected
+in Original05. The real selected class/passive stream now gives Strength 27 and
+inherent Life 54 through the
+[typed Boolean aggregation contract](owned-boolean-contributions-proposal.md).
+Class/global-owner coverage and final Player Life remain open; do not reopen
+finished query memberships or confuse them with these distinct blockers.
 
 **Input resume:** keep Original05's five selected issues and 44 origins linked
 to configuration issue `01f2` open. Its 101 item-range records already have exact
@@ -1516,10 +1573,12 @@ numerical outputs when game intent remains unresolved.
    programs. Exact dense tables remain valid during the lossless segment study;
    hostile/replacement profiles still need separate admission and data.
 
-   Player intrinsic Life is now published independently for all eight Classes.
+   Player intrinsic Life is now published once on shared Actor `332a`, with
+   applicability independent of the selected Class.
    Original05's saved Life query targets Player, so final Player attributes and
-   inherent bonuses take priority over a minion-only final total. The attribute
-   grouping structure is accepted; its numerical grouping policy remains open.
+   inherent bonuses take priority over a minion-only final total. Bounded attribute
+   memberships and inherent controls now pass; broader donor and nonempty-MORE
+   grouping domains remain open.
 
    Complete Life must account for extra/total contributions, Increase, More,
    conversion, overrides, relevant branches, rounding/minimum and full ownership.
@@ -1599,7 +1658,7 @@ numerical outputs when game intent remains unresolved.
 
    Prove complete real external/support inventories and all relevant owner
    programs before publishing receiving V3/stages V3 or claiming a working original.
-   The current operations V21 Partial release does not weaken that gate. Establish real
+   The current operations V22 Partial release does not weaken that gate. Establish real
    admission predicates and supporting mechanics for all six observed Ice support
    candidates; the finite arithmetic component's already-admitted positions are
    not that proof. Supported/final quality and broader ordinary property families
@@ -1845,6 +1904,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated source-property owners | Accepted contract implemented: exact generated Skills own properties and their exact declaring provider can project final inputs. Current native contract tests and component regressions pass. Sand incoming source evidence is captured; real numerical authoring remains downstream of Original05 request admission. Ownership support does not establish complete mechanic coverage. |
 | Effect-application breadth | General application model accepted and Maximum component implemented. Select a real contrasting stacking/grouping case and prove duplicate, cap, source and recipient semantics before extending its bounded policies. Do not replace the shared graph with effect-specific paths. |
 | Physical-input/reference separation | Design refinement pending: classify fields without requiring successful MAIN/CALCS selection or a live Pending usage issue to preserve known intrinsic facts. Preserve independent unknown-field/usage obligations. |
+| Generated selector/supply separation | [Proposal](owned-source-action-root-separation-proposal.md) pending. Archived item-only Warrior exposes physical/manual root coupling in the source-selector adapter. Separate selector interpretation from checked supply, reuse existing child topology, and preserve all unresolved owners. No 44-to-36 source-link reduction or native authority is published. |
 | Immutable normalization preparation | Compile existing checked policies once per exact release; separate construction/traversal budgets and prove identical outputs. Implementation pending; no storage-layer change. |
 | Scoped numerical coverage | [Proposal](owned-coverage.md) pending concrete reviewed proof contract. Unknown effect reach remains blocking; no known-edge-only pruning or relaxation of original-build acceptance. |
 | Closest complete build and native optimization | Original05 is the current first-completion target. Close its five input obligations, publish its real evaluation bundle and complete its selected mechanics/metrics through the public CLI. D4 begins after this first complete build, without waiting for all five: bind objectives to owned actor/action/stat-set requests and verify one legal locked candidate mutation before expanding search. Reassess the shortest complete path at every checkpoint. |
@@ -1856,7 +1916,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Resource ownership and demand | [Resource-obligation proposal](owned-resource-obligations-proposal.md) awaits owner review. Ordinary sustained reservation should be independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Define Skill support recipients and contrast cost conversion, mines and stance/toggle selection; then migrate the current Action reservation bodies and validate query invariance. Gigantic's producer/status and isolated Life/Damage-factor packets are published; final reservation delivery remains open. |
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
-| Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. All five production flag memberships and unrelated passive mechanics remain Partial; no false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
+| Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
 | Exact Skill contribution queries | Proposed for Offering scaling: extend the existing checked graph to exact Skill recipients and reviewed occurrence-qualified member origins/order. Current Skill reads and generated paths are rejected today. Actor recipient producers are now published with guarded empty query domains; nonempty group ownership still needs independent proof. Owner review pending; no runtime authority changed. [Proposal](owned-skill-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |
 | Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 21 Config-local and 23 non-Config origins after selected/generated accounting, cached-Buffs, archived responsibility and overwritten-placeholder proofs. Fourteen archived rows retain their exact existing raw-input, usage and support-origin Pending owners; they gain no provider or known value. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Typed constructor defaults now reach Player/Enemy/Environment inputs; the real Player resistance-penalty consumer is published, but no global inventory closes. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
