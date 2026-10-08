@@ -182,7 +182,7 @@ Evidence: `runs/owned-attribute-base-publication-03/{validation,receipt}.json`,
 `runs/owned-attribute-base-native-choice-02.log` and
 `runs/owned-attribute-base-clippy-01.log`. The regression log preserves the initial
 choice-test failure; only its focused corrected replay is green. The optional
-prepared-hand source witness is still being completed.
+prepared-hand source witness is complete at the separate checkpoint below.
 
 **Resume:** bind the five inherent-attribute Boolean memberships to their actual
 current producer census and join the real second-pass Strength into the existing
@@ -192,6 +192,10 @@ their checked inputs. Final Life additionally needs real item/reward sources and
 reviewed query authority for shared/generated Actors and Rewards. The current
 direct-provider-only query boundary cannot admit those sources; do not move their
 ownership or bypass membership validation merely to obtain a number.
+The [Actor/reward query proposal](owned-actor-reward-contribution-queries-proposal.md)
+documents that pending public boundary. Pure receiver `331a` must remain a derived
+amount; deliver it through the existing shared Player rule owner rather than
+expanding receiver responsibilities.
 
 The separate Warrior audit found an accepted-contract path for eight archived
 origins: actual Rattling grant/raw-input data plus private reuse of the existing
@@ -200,7 +204,44 @@ structural authoring, not a role change or fabricated physical/Direct occurrence
 Keep it behind the selected numerical prerequisite. The archived Firebolt pair
 has Complete-empty usage, so it cannot use this Pending-responsibility proof.
 
-## Latest native checkpoint: Boolean Gigantic and intrinsic Life in the Sniper graph
+## Source checkpoint: prepared hands and original condition writes
+
+The optional prepared-hand extension passes in **262.41s**. Eight controls each
+use a fresh observed load, independent observed replay and fresh unobserved load
+in both LuaJIT modes: **48 complete cold loads**. Reports are byte-identical at
+24,635,377 bytes each, SHA-256
+`608f0579f3cc59bad4dae8827ce43c65730cdfc8c3ac481b2d45dcb8860c140a`.
+Original methods, exact environment/Actor/store identities, raw line events and
+source inputs are preserved. The unchanged Original05 default observation also
+matches the authenticated historical off-hand report. The old observer file is
+unchanged; this is an opt-in extension, not a second runtime evaluator.
+
+The controls distinguish occupied caster main hand, empty hand, ordinary mace,
+glove presence, synthetic Facebreaker text and actual off-hand filtering of the
+main item. Original05 retains the Ashen Staff but receives PoB's intrinsic
+`None` attack profile and `Unarmed=true`. Removing gloves changes the observed
+`Unencumbered` state. The Facebreaker-text control preserves the observed raw
+`actor.Gloves` absence separately from equipped gloves. These are source facts,
+not a native law or proof that synthetic items are obtainable. Positive
+`DisableWeapons`, Hollow Palm and warm/rebuilt behavior remain unproved; captured
+Player scalars do not cover the entire minion/output graph. Shared Actor/Class
+closure remains withheld. Any Lua-specific behavior needs its own domain or
+source-defect decision before native authoring.
+
+Source01 failed before VM execution because one new verifier hashed raw CRLF
+checkout bytes. It now uses the existing pinned normalized-text verifier with
+path guards; no source pin changed. Source02 then exposed a witness bug:
+LuaJIT can repeat the compound assignment's line event within one function call.
+The observer now tracks actual call/return frames, retains every entry revisit,
+and still rejects missing/reentrant/unfinished frames. Source03 passes without
+retry-until-match, event normalization or calculation changes. The ordinary
+control-isolation test and formatting pass; strict workspace Clippy also passed
+with this source code. Evidence: `runs/owned-player-prepared-hands-source-03`,
+`runs/owned-player-prepared-hands-source-03.log`,
+`runs/owned-player-prepared-hands-ordinary-02.log` and
+`runs/owned-attribute-base-clippy-01.log`. Failed directories remain immutable.
+
+## Previous native checkpoint: Boolean Gigantic and intrinsic Life in the Sniper graph
 
 The [Gigantic cutover](../data/owned/poe2/3887ae68/gigantic-flags/README.md)
 replaces integer-presence Stat `3307` with a Boolean Flag at the same identity.

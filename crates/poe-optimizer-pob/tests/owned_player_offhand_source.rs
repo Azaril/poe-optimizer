@@ -27,6 +27,11 @@ const OBSERVE: &str = include_str!("support/player_offhand_source.lua");
 const TEST: &str = "actual_player_offhand_branch_preserves_selected_and_prepared_boundaries";
 const CHILD: &str = "POE_PLAYER_OFFHAND_SOURCE_CHILD";
 const OUTPUT: &str = "POE_OPTIMIZER_TEST_PLAYER_OFFHAND_SOURCE_OUT";
+const HANDS_OBSERVE: &str = include_str!("support/player_prepared_hands_source.lua");
+const HANDS_TEST: &str =
+    "actual_player_prepared_hands_distinguish_item_profile_and_condition_writes";
+const HANDS_CHILD: &str = "POE_PLAYER_PREPARED_HANDS_SOURCE_CHILD";
+const HANDS_OUTPUT: &str = "POE_OPTIMIZER_TEST_PLAYER_PREPARED_HANDS_SOURCE_OUT";
 fn hash(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
@@ -39,6 +44,9 @@ fn rows(v: &Json) -> &[Json] {
     }
 }
 fn observed(root: &Path, xml: &str, jit: bool, hooked: bool) -> Json {
+    observed_with_hands(root, xml, jit, hooked, false)
+}
+fn observed_with_hands(root: &Path, xml: &str, jit: bool, hooked: bool, hands: bool) -> Json {
     let module = Rc::new(RefCell::new(None::<Table>));
     let before_source = |lua: &Lua| {
         lua.load(if jit {
@@ -50,10 +58,17 @@ fn observed(root: &Path, xml: &str, jit: bool, hooked: bool) -> Json {
         Ok(())
     };
     let before_build = |lua: &Lua| -> Result<Function, RuntimeError> {
-        let observer: Table = lua
+        let mut observer: Table = lua
             .load(OBSERVE)
             .set_name("@player_offhand_source.lua")
             .eval()?;
+        if hands {
+            observer = lua
+                .load(HANDS_OBSERVE)
+                .set_name("@player_prepared_hands_source.lua")
+                .eval::<Function>()?
+                .call(observer)?;
+        }
         let cleanup = observer.raw_get::<Function>("begin")?.call((hooked, jit))?;
         *module.borrow_mut() = Some(observer);
         Ok(cleanup)
@@ -533,17 +548,32 @@ fn child(root: &Path, out: &Path, jit: bool) {
 #[test]
 #[ignore = "requires complete pinned PoB source; bounded original off-hand observer"]
 fn actual_player_offhand_branch_preserves_selected_and_prepared_boundaries() {
+    run_source_test(
+        TEST,
+        CHILD,
+        OUTPUT,
+        "runs/owned-player-offhand-source-01",
+        child,
+    );
+}
+fn run_source_test(
+    test: &str,
+    child_var: &str,
+    output_var: &str,
+    default_out: &str,
+    run_child: fn(&Path, &Path, bool),
+) {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../..")
         .canonicalize()
         .unwrap();
-    let out = std::env::var_os(OUTPUT)
+    let out = std::env::var_os(output_var)
         .map(PathBuf::from)
         .map(|p| if p.is_absolute() { p } else { root.join(p) })
-        .unwrap_or_else(|| root.join("runs/owned-player-offhand-source-01"));
-    if let Some(mode) = std::env::var_os(CHILD) {
+        .unwrap_or_else(|| root.join(default_out));
+    if let Some(mode) = std::env::var_os(child_var) {
         assert!(mode == "off" || mode == "on");
-        child(&root, &out, mode == "on");
+        run_child(&root, &out, mode == "on");
         return;
     }
     assert!(!out.exists(), "fresh immutable source output required");
@@ -552,9 +582,9 @@ fn actual_player_offhand_branch_preserves_selected_and_prepared_boundaries() {
         let path = out.join(format!("source-jit-{mode}.log"));
         let log = fs::File::create(&path).unwrap();
         let mut process = Command::new(std::env::current_exe().unwrap())
-            .args(["--ignored", "--exact", TEST, "--nocapture"])
-            .env(CHILD, mode)
-            .env(OUTPUT, &out)
+            .args(["--ignored", "--exact", test, "--nocapture"])
+            .env(child_var, mode)
+            .env(output_var, &out)
             .current_dir(root.join("vendor/path-of-building-poe2/src"))
             .stdout(Stdio::from(log.try_clone().unwrap()))
             .stderr(Stdio::from(log))
@@ -578,5 +608,519 @@ fn actual_player_offhand_branch_preserves_selected_and_prepared_boundaries() {
         fs::read(out.join("source-jit-off.json")).unwrap()
             == fs::read(out.join("source-jit-on.json")).unwrap(),
         "both JIT modes must produce byte-identical evidence"
+    );
+}
+
+struct HandCase {
+    name: &'static str,
+    xml: String,
+    main_present: bool,
+    gloves_present: bool,
+    profile_type: &'static str,
+    unencumbered: bool,
+    filtered_main: bool,
+    facebreaker_lines: bool,
+}
+fn hand_cases(original: &str) -> Vec<HandCase> {
+    let empty = slot_item(original, "Weapon 1", 0);
+    let club = item_text(original, "28", Some("\nRarity: NORMAL\nWooden Club\n"));
+    let facebreaker = item_text(
+        &empty,
+        "20",
+        Some(
+            "\nRarity: NORMAL\nStocky Mitts\nImplicits: 0\nCan Attack as though using a One Handed Mace while both of your hand slots are empty\nUnarmed Attacks that would use an Equipped One Hand Mace's damage use this Item's damage\n",
+        ),
+    );
+    let disabled = slot_item(
+        &item_text(
+            &club,
+            "24",
+            Some("\nRarity: NORMAL\nWooden Club\nImplicits: 0\nUses both hand slots\n"),
+        ),
+        "Weapon 2",
+        24,
+    );
+    [
+        (
+            "original-05",
+            original.to_owned(),
+            true,
+            true,
+            "None",
+            false,
+            false,
+            false,
+        ),
+        (
+            "caster-without-gloves",
+            slot_item(original, "Gloves", 0),
+            true,
+            false,
+            "None",
+            true,
+            false,
+            false,
+        ),
+        (
+            "empty-with-gloves",
+            empty.clone(),
+            false,
+            true,
+            "None",
+            false,
+            false,
+            false,
+        ),
+        (
+            "empty-without-gloves",
+            slot_item(&empty, "Gloves", 0),
+            false,
+            false,
+            "None",
+            true,
+            false,
+            false,
+        ),
+        (
+            "ordinary-weapon",
+            club.clone(),
+            true,
+            true,
+            "One Hand Mace",
+            false,
+            false,
+            false,
+        ),
+        (
+            "ordinary-weapon-without-gloves",
+            slot_item(&club, "Gloves", 0),
+            true,
+            false,
+            "One Hand Mace",
+            false,
+            false,
+            false,
+        ),
+        (
+            "empty-facebreaker-lines",
+            facebreaker,
+            false,
+            true,
+            "None",
+            false,
+            false,
+            true,
+        ),
+        (
+            "offhand-filters-main",
+            disabled,
+            false,
+            true,
+            "None",
+            false,
+            true,
+            false,
+        ),
+    ]
+    .into_iter()
+    .map(
+        |(
+            name,
+            xml,
+            main_present,
+            gloves_present,
+            profile_type,
+            unencumbered,
+            filtered_main,
+            facebreaker_lines,
+        )| HandCase {
+            name,
+            xml,
+            main_present,
+            gloves_present,
+            profile_type,
+            unencumbered,
+            filtered_main,
+            facebreaker_lines,
+        },
+    )
+    .collect()
+}
+fn hand_source_frame(xml: &str) -> Json {
+    let mut frame = source_frame(xml);
+    let doc = roxmltree::Document::parse(xml).unwrap();
+    let set = selected_set(&doc);
+    let gloves = set
+        .children()
+        .find(|n| n.has_tag_name("Slot") && n.attribute("name") == Some("Gloves"))
+        .unwrap();
+    let id = gloves.attribute("itemId").unwrap().parse::<u64>().unwrap();
+    frame["gloves"] = json!({"slot_name":"Gloves","item_id":id});
+    frame
+}
+fn without_hand_capture(mut host: Json) -> Json {
+    let hands = host["state"]["prepared_hands"].as_object_mut().unwrap();
+    hands.remove("hooked");
+    hands.remove("invocations");
+    for mode in ["MAIN", "CALCS"] {
+        hands.get_mut("modes").unwrap()[mode]
+            .as_object_mut()
+            .unwrap()
+            .remove("provenance");
+    }
+    host
+}
+fn hand_invocation<'a>(state: &'a Json, mode: &str, kind: &str) -> &'a Json {
+    let receipt = &state["modes"][mode]["provenance"][kind];
+    assert_eq!(receipt["exact_actor"], true);
+    assert_eq!(receipt["exact_store"], true);
+    let i = receipt["invocation"].as_u64().unwrap() as usize;
+    let invocation = &rows(&state["invocations"])[i - 1];
+    assert_eq!(invocation["kind"], kind);
+    assert_eq!(invocation["mode"], mode);
+    assert!(invocation["source_invocation"].as_u64().unwrap() > 0);
+    let entries = rows(&invocation["entry_events"]);
+    assert!(!entries.is_empty());
+    assert_eq!(entries[0]["state"], invocation["before"]);
+    for entry in entries {
+        assert_eq!(entry["line"], invocation["first"]);
+    }
+    assert_eq!(
+        invocation[if mode == "MAIN" {
+            "exact_final_main"
+        } else {
+            "exact_final_calcs"
+        }],
+        true
+    );
+    invocation
+}
+fn check_hand_capture(host: &Json, c: &HandCase, hooked: bool) {
+    let s = &host["state"];
+    let hands = &s["prepared_hands"];
+    assert_eq!(hands["hooked"], hooked);
+    assert_eq!(
+        s["hooked"], false,
+        "the historical observer remains unmodified and unhooked"
+    );
+    assert_eq!(hands["methods"]["initializer"]["first"], 717);
+    assert_eq!(hands["methods"]["actor"]["first"], 264);
+    assert_eq!(hands["methods"]["perform"]["first"], 1193);
+    let source = hand_source_frame(&c.xml);
+    for mode in ["MAIN", "CALCS"] {
+        let final_state = &hands["modes"][mode]["final"];
+        let ordinary = &s["modes"][mode];
+        assert_eq!(
+            ordinary["saved_main_hand"]["selected_item_id"],
+            source["weapon_one"]["item_id"]
+        );
+        assert_eq!(
+            ordinary["saved_slot"]["selected_item_id"],
+            source["weapon_two"]["item_id"]
+        );
+        assert_eq!(final_state["prepared_main"]["present"], c.main_present);
+        assert_eq!(final_state["prepared_gloves"]["present"], c.gloves_present);
+        if c.main_present {
+            assert_eq!(
+                final_state["prepared_main"]["source_item_id"]["value"],
+                source["weapon_one"]["item_id"]
+            );
+        }
+        if c.gloves_present {
+            assert_eq!(
+                final_state["prepared_gloves"]["source_item_id"]["value"],
+                source["gloves"]["item_id"]
+            );
+        }
+        assert_eq!(final_state["primary"]["value"]["type"], c.profile_type);
+        assert_eq!(
+            final_state["primary_is_catalogue_object"], false,
+            "copied intrinsic profiles are not catalogue aliases"
+        );
+        assert_eq!(
+            final_state["primary_is_item_profile"],
+            c.profile_type == "One Hand Mace"
+        );
+        assert_eq!(
+            final_state["conditions"]["Unarmed"]["present"],
+            c.profile_type == "None"
+        );
+        assert_eq!(
+            final_state["conditions"]["Unencumbered"]["present"],
+            c.unencumbered
+        );
+        assert_eq!(
+            final_state["legacy_player_gloves"]["present"], false,
+            "capture the different late-branch field; do not substitute itemList.Gloves"
+        );
+        for channel in rows(&final_state["ancestry"]) {
+            assert!(rows(&channel["modifiers"]["DisableWeapons"]).is_empty());
+        }
+        if !hooked {
+            assert!(hands["modes"][mode]["provenance"].is_null());
+            continue;
+        }
+        let init = hand_invocation(hands, mode, "initialization");
+        assert_eq!(
+            (init["first"].as_u64(), init["last"].as_u64()),
+            (Some(1853), Some(1889))
+        );
+        assert_eq!(init["after"]["primary"]["value"]["type"], c.profile_type);
+        assert_eq!(init["after"]["prepared_main"]["present"], c.main_present);
+        assert_eq!(
+            init["after"]["primary_equals_catalogue"],
+            c.profile_type == "None" && !c.facebreaker_lines
+        );
+        let init_events = rows(&init["events"]);
+        assert_eq!(init_events.iter().filter(|e| e["line"] == 1854).count(), 1);
+        for line in [1873, 1877] {
+            assert_eq!(
+                init_events.iter().filter(|e| e["line"] == line).count(),
+                usize::from(c.facebreaker_lines)
+            );
+        }
+        if c.facebreaker_lines {
+            assert_eq!(
+                init["after"]["primary"]["value"]["asThoughUsing"]["One Hand Mace"],
+                true
+            );
+            assert_eq!(
+                init["after"]["primary"]["value"]["FacebreakerItemDamage"],
+                true
+            );
+        }
+        let condition = hand_invocation(hands, mode, "conditions");
+        assert_eq!(
+            (condition["first"].as_u64(), condition["last"].as_u64()),
+            (Some(280), Some(319))
+        );
+        let events = rows(&condition["events"]);
+        assert_eq!(
+            events.iter().filter(|e| e["line"] == 281).count(),
+            usize::from(c.profile_type == "None")
+        );
+        assert_eq!(
+            events.iter().filter(|e| e["line"] == 283).count(),
+            usize::from(c.unencumbered)
+        );
+        for (name, wrote) in [
+            ("Unarmed", c.profile_type == "None"),
+            ("Unencumbered", c.unencumbered),
+        ] {
+            if wrote {
+                assert_eq!(
+                    condition["after"]["conditions"][name],
+                    json!({"present":true,"kind":"boolean","value":true})
+                );
+            } else {
+                assert_eq!(
+                    condition["after"]["conditions"][name],
+                    condition["before"]["conditions"][name]
+                );
+            }
+        }
+        let late = hand_invocation(hands, mode, "late_disable");
+        assert_eq!(
+            (late["first"].as_u64(), late["last"].as_u64()),
+            (Some(3229), Some(3240))
+        );
+        assert!(
+            rows(&late["events"]).is_empty(),
+            "no actual DisableWeapons producer in these controls"
+        );
+        for field in [
+            "primary",
+            "conditions",
+            "prepared_main",
+            "prepared_gloves",
+            "legacy_player_gloves",
+        ] {
+            assert_eq!(late["before"][field], late["after"][field]);
+        }
+        if c.filtered_main {
+            assert_eq!(ordinary["saved_main_hand"]["item"]["present"], true);
+            assert_eq!(final_state["prepared_main"]["present"], false);
+            assert_eq!(ordinary["prepared_item"]["source_item_id"]["value"], 24);
+            assert!(
+                rows(&ordinary["prepared_item"]["disables_item"])
+                    .iter()
+                    .any(|r| rows(&r["tags"])
+                        .iter()
+                        .any(|t| t["type"] == "DisablesItem" && t["slotName"] == "Weapon 1"))
+            );
+        }
+    }
+    assert_eq!(hands["evidence"]["late_disable_activated"], false);
+    assert_eq!(hands["evidence"]["full_native_build_parity"], false);
+    assert_eq!(hands["evidence"]["effective_condition_closure"], false);
+    assert_eq!(hands["evidence"]["business_method_wrappers"], false);
+}
+
+#[test]
+fn prepared_hand_controls_change_only_selected_item_inputs() {
+    let original = include_str!("../../../tests/fixtures/builds/breadth-20260908/build-05.xml");
+    let cases = hand_cases(original);
+    assert_eq!(cases.len(), 8);
+    let hashes: std::collections::BTreeSet<_> =
+        cases.iter().map(|c| hash(c.xml.as_bytes())).collect();
+    assert_eq!(hashes.len(), cases.len());
+    let doc = roxmltree::Document::parse(original).unwrap();
+    for c in &cases {
+        let changed = roxmltree::Document::parse(&c.xml).unwrap();
+        for name in ["Build", "Tree", "Skills", "Config"] {
+            let before = doc
+                .root_element()
+                .children()
+                .find(|n| n.has_tag_name(name))
+                .unwrap();
+            let after = changed
+                .root_element()
+                .children()
+                .find(|n| n.has_tag_name(name))
+                .unwrap();
+            assert_eq!(
+                &original[before.range()],
+                &c.xml[after.range()],
+                "{} {name}",
+                c.name
+            );
+        }
+        assert_eq!(hand_source_frame(&c.xml)["selected_item_set"], 2);
+    }
+    assert_eq!(
+        hash(original.as_bytes()),
+        "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    );
+}
+
+fn hand_child(root: &Path, out: &Path, jit: bool) {
+    let xml = fs::read_to_string(root.join("tests/fixtures/builds/breadth-20260908/build-05.xml"))
+        .unwrap();
+    assert_eq!(
+        hash(xml.as_bytes()),
+        "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    );
+    let paths = [
+        "src/Modules/CalcSetup.lua",
+        "src/Modules/CalcPerform.lua",
+        "src/Modules/Data.lua",
+        "src/Classes/Item.lua",
+        "src/Classes/ItemsTab.lua",
+        "src/Classes/ModStore.lua",
+        "src/Modules/ModParser.lua",
+        "src/Data/Bases/mace.lua",
+        "src/Data/Bases/staff.lua",
+        "src/Data/Bases/gloves.lua",
+        "src/Data/Uniques/gloves.lua",
+    ];
+    let files: Vec<_> = paths
+        .iter()
+        .map(|path| {
+            let expected = pinned::expected_file_sha256(path).unwrap();
+            let verified =
+                pinned::read_verified_text(&root.join("vendor/path-of-building-poe2"), path)
+                    .unwrap();
+            assert_eq!(
+                hash(verified.as_bytes()),
+                expected,
+                "normalized source pin: {path}"
+            );
+            json!({"path":path,"sha256":expected})
+        })
+        .collect();
+    let cases = hand_cases(&xml);
+    let mode = if jit { "on" } else { "off" };
+    // A current independent unhooked load must also retain every historical
+    // off-hand field for Original05. Do not repin that report to this extension.
+    let prior_path = format!("runs/owned-player-offhand-source-02/source-jit-{mode}.json");
+    let prior_bytes = fs::read(root.join(&prior_path)).unwrap();
+    let prior_sha256 = hash(&prior_bytes);
+    assert_eq!(
+        prior_sha256,
+        "d4bbaebc058287d511cc9bdd1497feb8a9f8ba7eea8d65c40d26a01f54bf27b7"
+    );
+    let prior: Json = serde_json::from_slice(&prior_bytes).unwrap();
+    assert_eq!(prior["observer_sha256"], hash(OBSERVE.as_bytes()));
+    let prior_original = rows(&prior["cases"])
+        .iter()
+        .find(|c| c["name"] == "original-05")
+        .unwrap();
+    let mut captures = Vec::new();
+    for (i, c) in cases.iter().enumerate() {
+        eprintln!(
+            "Player prepared hands {}/{} {} JIT {mode}",
+            i + 1,
+            cases.len(),
+            c.name
+        );
+        let original = observed_with_hands(root, &c.xml, jit, true, true);
+        let repeat = observed_with_hands(root, &c.xml, jit, true, true);
+        let unhooked = observed_with_hands(root, &c.xml, jit, false, true);
+        let capture = json!({"name":c.name,"source":hand_source_frame(&c.xml),
+            "synthetic_item_lines":c.profile_type == "One Hand Mace" || c.filtered_main || c.facebreaker_lines,
+            "original":original,"repeat":repeat,"unhooked":unhooked});
+        fs::write(
+            out.join(format!("source-jit-{mode}-case-{:02}.raw.json", i + 1)),
+            serde_json::to_vec_pretty(&capture).unwrap(),
+        )
+        .unwrap();
+        for (observed, hooked) in [(&original, true), (&repeat, true), (&unhooked, false)] {
+            check_hand_capture(observed, c, hooked);
+        }
+        assert!(
+            original == repeat,
+            "fresh deterministic replay {} (raw reports retained)",
+            c.name
+        );
+        assert!(
+            without_hand_capture(original.clone()) == without_hand_capture(unhooked.clone()),
+            "read-only hooks changed source state or scalar output {} (raw reports retained)",
+            c.name
+        );
+        if c.name == "original-05" {
+            let mut base_snapshot = unhooked;
+            base_snapshot["state"]
+                .as_object_mut()
+                .unwrap()
+                .remove("prepared_hands");
+            assert!(
+                base_snapshot == prior_original["unhooked"],
+                "original off-hand default fields differ from the authenticated earlier unhooked load"
+            );
+        }
+        captures.push(capture);
+    }
+    let report = json!({"schema_version":1,"source_revision":pinned::UPSTREAM_REVISION,
+        "manifest_sha256":pinned::manifest_sha256(),"observer_sha256":hash(HANDS_OBSERVE.as_bytes()),
+        "base_observer_sha256":hash(OBSERVE.as_bytes()),
+        "bootstrap_sha256":hash(include_bytes!("support/configuration_preparation_source.rs")),
+        "harness_sha256":hash(include_bytes!("owned_player_offhand_source.rs")),"files":files,
+        "historical_default_regression":{"directory":"runs/owned-player-offhand-source-02","sha256":prior_sha256,
+            "matching_jit_report_checked":true,"case":"original-05","all_default_fields_equal":true},
+        "case_count":cases.len(),"complete_loads_per_jit":cases.len()*3,"cases":captures,
+        "scope":{"class_dependency":"shared Player prepared hand and Unarmed/Unencumbered state remains unconverted; selected slot occupancy alone is insufficient",
+            "original_profile_assignment":true,"original_condition_write_branches":true,"fresh_repeat":true,
+            "fresh_unhooked_comparison":true,"scalar_output_comparison":true,"no_retry_or_settling":true,
+            "separate_late_disable_branch":true,"late_disable_activated":false,
+            "late_disable_positive_producer":"none identified in pinned source; no injected flag",
+            "full_effective_condition_closure":false,"native_prepared_profile_law":false,
+            "class_owner_closed":false,"actor_owner_closed":false,"full_native_build_parity":false,
+            "synthetic_items_obtainable":false,"full_output_graph":false}});
+    fs::write(
+        out.join(format!("source-jit-{mode}.json")),
+        serde_json::to_vec_pretty(&report).unwrap(),
+    )
+    .unwrap();
+}
+
+#[test]
+#[ignore = "requires complete pinned PoB source; bounded original prepared-hand observer"]
+fn actual_player_prepared_hands_distinguish_item_profile_and_condition_writes() {
+    run_source_test(
+        HANDS_TEST,
+        HANDS_CHILD,
+        HANDS_OUTPUT,
+        "runs/owned-player-prepared-hands-source-01",
+        hand_child,
     );
 }

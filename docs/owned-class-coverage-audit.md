@@ -1,7 +1,7 @@
 # Remaining Class coverage audit
 
-Status: audited on 2026-10-06 at `81227b8`; updated after the loaded-class witness
-and accepted Player slot-read implementation passed. Class closure is withheld.
+Status: audited on 2026-10-06 at `81227b8`; updated 2026-10-08 after the loaded-class,
+Player slot-read and optional prepared-hand witnesses passed. Class closure is withheld.
 This audit does not publish game data or change Class coverage.
 
 The checked baseline is `runs/owned-player-rule-ownership-01/package`, input
@@ -147,9 +147,26 @@ for separately accounting for shared Actor conditions used outside an attack.
 
 The accepted [shared Actor ownership](owned-existing-actor-rule-ownership-proposal.md)
 inventory currently identifies shared initialization in `CalcSetup.lua:26`–`114`
-and `834`–`899`. Actor `332a` still owns exactly the intrinsic-Life program with
-`shared-player-initialization-not-converted`. This audit does not silently expand
-that marker to certify the equipment-state branches above.
+and `834`–`899`. At the current Gigantic checkpoint, Actor `332a` owns three real
+programs: `intrinsic-player-life`, `selected-player-offhand-facts` and
+`configured-player-resistance-penalty`. Its shared initialization coverage remains
+Partial. The slot-fact and Boolean work has not supplied the effective-hand,
+Unarmed, Unencumbered, Hollow Palm, DisableWeapons or Facebreaker producers above.
+Neither the occupied slot nor template capability `1d3b` proves those prepared
+conditions: the selected Ashen Staff occupies Weapon 1 while its capability is
+false. This audit does not silently expand the Partial marker to certify those
+branches or close Class coverage merely because attribute subtotals now match.
+
+The new [prepared-hand checkpoint](implementation.md#source-checkpoint-prepared-hands-and-original-condition-writes)
+observes the actual assignment and condition-write branches across eight cold-load
+controls, independent replay/unobserved runs and both JIT modes. It proves that
+the occupied caster main hand can select PoB's intrinsic `None` profile while
+still remaining equipped; Original05 then observes `Unarmed=true`. It also
+preserves glove presence, raw `actor.Gloves` absence, the synthetic Facebreaker
+control and actual item filtering. Positive DisableWeapons and Hollow Palm,
+warm/rebuilt behavior and a native prepared-profile law remain unproved.
+This evidence does not itself justify reproducing source-specific behavior or
+closing any Actor/Class owner.
 
 ## Reusing existing delivery: what works and what is missing
 
@@ -199,8 +216,9 @@ active-loadout/ambiguity checks and keeps item profile presence separate from
 occupancy. Core/Data/Engine now implement that shared resolver,
 exact existing-Player invocation authority, computed dependency binding and
 stage checks. Focused empty/occupied, ambiguous/unknown, repeated/loadout,
-query-independent and Rayon controls pass. No equipment-state formula has yet
-been published, so this does not close any equipment-state owner or Class.
+query-independent and Rayon controls pass. The structural off-hand formulas
+below are published; prepared-hand and effective-condition formulas remain
+unpublished. This does not close the equipment-state owner or Class.
 
 ## Next bounded producer packet: off-hand structural facts
 

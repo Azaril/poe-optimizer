@@ -284,6 +284,14 @@ through shared Player Actor rules. It changes no native operation or public
 contract. Source/native checks and all-five input/query preservation pass;
 Actor, item and Class coverage remains Partial.
 
+The optional prepared-hand witness now distinguishes selected equipment,
+constructed attack profiles and actual condition writes through unchanged PoB
+calls. Eight controls, independent fresh observed/unobserved loads and both JIT
+modes agree. It is cold-load source evidence for the next native equipment-state
+decision, not implemented native conditions or complete Actor/Class coverage.
+The [checkpoint](implementation.md#source-checkpoint-prepared-hands-and-original-condition-writes)
+records unproved positive branches and the retained observer failures.
+
 The [BASE contribution audit](owned-base-contribution-audit.md) adds executable
 evidence without changing that runtime package. It retains all five builds'
 actual ordered attribute records, including post-passive equipment bonus copies,
