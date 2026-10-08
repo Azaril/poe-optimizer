@@ -58,6 +58,14 @@ the canonical game package still needs reviewed support-domain data. Import
 also uses the pending origin inventory to account for some archived generated
 fields, so moving its responsibility requires reconciling those saved relations.
 
+Presets and composed builds now persist `authored_support_order`: exact targets
+and ordered physical assignment IDs. They no longer store runtime origin
+variants. Core retains membership/target/order validation; Engine constructs
+runtime provenance for preparation and delivery. This current-format change
+requires fresh imports of saved build documents. The mixed-scope Import issue
+still remains Pending until source relationships are fully accounted for;
+changing the DTO does not close it or establish native coverage.
+
 The latest integration connects imported Offering activation, item-prepared final
 level and checked source/recipient scaling to its actual application. The finite
 joined graph produces 62% increased damage per Sniper recipient at level22;

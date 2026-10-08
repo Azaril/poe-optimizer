@@ -210,7 +210,7 @@ fn fixture() -> DraftSessionInput {
     input.skill_presets = list(vec![SkillPresetDraft {
         intent: None,
         usage_preferences: None,
-        support_origins: None,
+        authored_support_order: None,
         id: id(23),
         skills: list(vec![id(8), id(11)]),
         supports: list(vec![id(9)]),

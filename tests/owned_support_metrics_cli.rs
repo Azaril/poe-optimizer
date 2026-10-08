@@ -343,7 +343,7 @@ fn missing_source_order_is_reported_without_numeric_fallback() {
     let directory = tempfile::tempdir().unwrap();
     let (mut input, mapping, rules) = fixture(2);
     let mut build = input.request.build().input().clone();
-    build.support_origins = None;
+    build.authored_support_order = None;
     let limits = OwnedInputLimits::default();
     input.request = Arc::new(
         OwnedEvaluationRequest::new(

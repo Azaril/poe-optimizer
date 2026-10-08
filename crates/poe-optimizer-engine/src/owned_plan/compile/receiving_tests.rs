@@ -388,18 +388,21 @@ fn generated_targets_preserve_entering_paths_siblings_and_actor_once_contexts() 
 
 fn authored_fixture() -> Fixture {
     let mut f = source_fixture();
-    let mut sequences = BTreeMap::<SkillTarget, Vec<SupportOrigin>>::new();
+    let mut sequences = BTreeMap::<SkillTarget, Vec<SupportAssignmentId>>::new();
     for (index, assignment) in f.build.supports.iter_mut().enumerate() {
         assignment.target = SkillTarget::Authored(occurrence(if index < 4 { 30 } else { 31 }));
         sequences
             .entry(assignment.target.clone())
             .or_default()
-            .push(SupportOrigin::Assignment(assignment.id));
+            .push(assignment.id);
     }
-    f.build.support_origins = Some(
+    f.build.authored_support_order = Some(
         sequences
             .into_iter()
-            .map(|(target, origins)| SupportOriginSequence { target, origins })
+            .map(|(target, assignments)| AuthoredSupportOrder {
+                target,
+                assignments,
+            })
             .collect(),
     );
     f

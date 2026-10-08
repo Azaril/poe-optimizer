@@ -190,7 +190,10 @@ fn compare(
             targets, 6,
             "inventory proof preserves exact unresolved targets"
         );
-        assert_eq!(preset["support_origins"]["completion"]["kind"], "pending");
+        assert_eq!(
+            preset["authored_support_order"]["completion"]["kind"],
+            "pending"
+        );
     }
     let before_count = before["finalization"]["issues"].as_array().unwrap().len();
     let after_count = after["finalization"]["issues"].as_array().unwrap().len();

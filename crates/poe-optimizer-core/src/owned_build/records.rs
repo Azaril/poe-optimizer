@@ -2,7 +2,7 @@
 use crate::{build_identity::*, owned_definitions::*};
 use serde::{Deserialize, Deserializer, Serialize, de};
 
-/// Compatibility extensions may be absent, but explicit null is never knowledge.
+/// Optional authored fields may be absent, but explicit null is never knowledge.
 pub(crate) fn non_null_extension<'de, D: Deserializer<'de>, T: Deserialize<'de>>(
     d: D,
 ) -> Result<Option<T>, D::Error> {
@@ -33,14 +33,15 @@ pub struct BuildInput {
     pub allocations: Vec<Allocation>,
     pub skills: Vec<SkillUse>,
     pub supports: Vec<SupportAssignment>,
-    /// Complete semantic encounter order per exact target. Absence is unconverted,
+    /// Authored physical assignment order per exact target. Absence is unconverted,
     /// never an empty sequence or permission to infer order from occurrence IDs.
+    /// This does not certify the runtime support sources of a composed build.
     #[serde(
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "non_null_extension"
     )]
-    pub support_origins: Option<Vec<SupportOriginSequence>>,
+    pub authored_support_order: Option<Vec<AuthoredSupportOrder>>,
     /// Selected preset-authored inputs for exact generated occurrences. This
     /// supplies values only; providers and native rules still supply the skills.
     #[serde(
@@ -222,16 +223,18 @@ pub struct SupportAssignment {
     rename_all = "snake_case",
     deny_unknown_fields
 )]
+/// Derived runtime provenance. It is not a persisted preset inventory.
 pub enum SupportOrigin {
     Assignment(SupportAssignmentId),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct SupportOriginSequence {
+pub struct AuthoredSupportOrder {
     pub target: SkillTarget,
-    /// Input origins are unique. Policy-retained duplicate positions are derived.
-    pub origins: Vec<SupportOrigin>,
+    /// Physical assignments are unique. Runtime origins and any retained duplicate
+    /// positions are derived after composed-build coverage and selection checks.
+    pub assignments: Vec<SupportAssignmentId>,
 }
 
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]

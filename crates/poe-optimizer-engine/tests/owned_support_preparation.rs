@@ -801,12 +801,9 @@ fn build_input(origins: &[ResolvedSupportOrigin]) -> BuildInput {
                 enabled: origin.enabled.unwrap(),
             })
             .collect(),
-        support_origins: Some(vec![SupportOriginSequence {
+        authored_support_order: Some(vec![AuthoredSupportOrder {
             target,
-            origins: origins
-                .iter()
-                .map(|origin| SupportOrigin::Assignment(origin.assignment))
-                .collect(),
+            assignments: origins.iter().map(|origin| origin.assignment).collect(),
         }]),
         payload_links: vec![],
         choices: vec![],
@@ -855,7 +852,7 @@ fn build_adapter_consumes_explicit_order_and_never_physical_level_or_id_sort() {
         }
     ));
     let mut unordered = build.into_input();
-    unordered.support_origins = None;
+    unordered.authored_support_order = None;
     let unordered = BuildSpec::new(unordered, OwnedInputLimits::default()).unwrap();
     assert!(matches!(
         prepare_build_supports(
@@ -949,14 +946,14 @@ fn build_adapter_cannot_use_another_targets_effective_values() {
         scope: LoadoutScope::Shared,
     });
     input.supports[1].target = sibling.clone();
-    input.support_origins = Some(vec![
-        SupportOriginSequence {
+    input.authored_support_order = Some(vec![
+        AuthoredSupportOrder {
             target: target().target,
-            origins: vec![SupportOrigin::Assignment(origins[0].assignment)],
+            assignments: vec![origins[0].assignment],
         },
-        SupportOriginSequence {
+        AuthoredSupportOrder {
             target: sibling,
-            origins: vec![SupportOrigin::Assignment(origins[1].assignment)],
+            assignments: vec![origins[1].assignment],
         },
     ]);
     let build = BuildSpec::new(input, OwnedInputLimits::default()).unwrap();
@@ -1002,7 +999,7 @@ fn build_adapter_caller_cannot_activate_a_skill_in_another_loadout() {
 fn complete_global_order_can_prove_empty_target_membership() {
     let pkg = package(vec![("one", definition("one"))]);
     let mut input = build_input(&[]);
-    input.support_origins = Some(vec![]);
+    input.authored_support_order = Some(vec![]);
     let build = BuildSpec::new(input.clone(), OwnedInputLimits::default()).unwrap();
     assert_eq!(
         prepare_build_supports(
@@ -1015,7 +1012,7 @@ fn complete_global_order_can_prove_empty_target_membership() {
         .unwrap(),
         prepare(&pkg, &[], &target())
     );
-    input.support_origins = None;
+    input.authored_support_order = None;
     let unknown = BuildSpec::new(input, OwnedInputLimits::default()).unwrap();
     assert!(matches!(
         prepare_build_supports(
@@ -1053,7 +1050,7 @@ fn build_adapter_preserves_generated_target_without_entering_a_guessed_grant() {
     }));
     let mut input = build_input(&origins);
     input.supports[0].target = target.target.clone();
-    input.support_origins.as_mut().unwrap()[0].target = target.target.clone();
+    input.authored_support_order.as_mut().unwrap()[0].target = target.target.clone();
     let build = BuildSpec::new(input, OwnedInputLimits::default()).unwrap();
     let observed = prepare_build_supports(
         &pkg,
@@ -1250,7 +1247,7 @@ fn build_budget_accounts_for_binding_and_preparation_without_double_allowance() 
     assert_eq!(short, 0);
 
     let mut missing_order = build_input(&origins);
-    missing_order.support_origins = None;
+    missing_order.authored_support_order = None;
     let missing_order = BuildSpec::new(missing_order, OwnedInputLimits::default()).unwrap();
     let mut work = 5;
     assert_eq!(

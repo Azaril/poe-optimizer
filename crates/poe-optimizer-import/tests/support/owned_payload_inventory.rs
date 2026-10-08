@@ -93,7 +93,7 @@ fn empty_payload_inventory_is_independent_and_preserves_every_other_fact() {
             pending(&after);
             assert!(
                 after.draft().input().skill_presets.members[0]
-                    .support_origins
+                    .authored_support_order
                     .is_none()
             );
         }

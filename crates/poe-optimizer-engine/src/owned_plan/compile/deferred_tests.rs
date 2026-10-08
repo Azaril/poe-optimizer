@@ -251,7 +251,7 @@ impl Fixture {
                 equipment: vec![],
                 allocations: vec![],
                 supports: vec![],
-                support_origins: None,
+                authored_support_order: None,
                 payload_links: vec![],
                 choices: vec![],
                 gems: vec![GemInstance {

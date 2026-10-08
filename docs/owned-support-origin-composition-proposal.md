@@ -26,8 +26,10 @@ Missing/Unmapped coverage blocks both preparation and retained delivery.
 Synthetic component fixtures explicitly declare their finite source domains.
 Those assertions are not publication evidence for game definitions. Current
 game data has not adopted these declarations, Import `01de` is still pending,
-and authored-order naming/accounting and exact provider exclusions still need
-their adoption checkpoint. No new positive origin family is implemented.
+and authored-input accounting and exact provider exclusions still need their
+adoption checkpoint. Preset/Draft/Build order has now moved to the explicit
+`authored_support_order` contract described below. No new positive origin family
+is implemented.
 
 The existing `OwnedRecipeExtension` now accepts `support_source_domains`, with
 an appended-row count in its receipt. Only new or identical declarations are
@@ -59,12 +61,16 @@ the independently selected items, passive tree and generated providers. A proof
 that the current item/tree combination contributes no additional support cannot
 remain valid merely because the skill preset is unchanged.
 
-Today, `SkillPreset.support_origins` is copied into the composed build by
-`owned_project::compose_validated`. Core checks exact assignment membership and
-targets; it does not discover additional sources. `SupportOrigin` currently has
-only `Assignment`. Import's `support_inventory::Census/complete` certifies the
-physical assignment list, while `support_order::OrderIndex` preserves local
-order. Neither certifies complete runtime origins.
+`SkillPreset.authored_support_order` is copied into the composed build by
+`owned_project::compose_validated`. Each `AuthoredSupportOrder` contains an exact
+target and `Vec<SupportAssignmentId>`, with a matching Draft record. Core checks
+exact assignment membership and targets; it does not discover additional sources.
+Runtime `SupportOrigin` values are derived by Engine. The former `support_origins`
+field and its wrapped-origin payload have no compatibility aliases. Import's
+`support_inventory::Census/complete` certifies the physical assignment list,
+while `support_order::OrderIndex` preserves local order. Neither certifies
+complete runtime origins; the existing mixed-scope issue remains open until the
+remaining saved relationships are accounted for.
 
 The current whole-request gates must remain. `DraftSession::finalize_with`
 returns Pending before constructing a request if selected input obligations
@@ -273,7 +279,7 @@ The next native implementation must therefore:
   `SkillPreset`, `compose_validated`.
 - [Core support records](../crates/poe-optimizer-core/src/owned_build/records.rs)
   and [structural validation](../crates/poe-optimizer-core/src/owned_build/structure.rs):
-  `SupportOrigin`, `SupportOriginSequence`, `support_origins`.
+  `AuthoredSupportOrder`, `authored_support_order`, and derived `SupportOrigin`.
 - [Checked draft finalization](../crates/poe-optimizer-core/src/owned_draft/intent.rs)
   and [selected-input gate](../crates/poe-optimizer-core/src/owned_draft/finalize.rs):
   `finalize_selection_checked`, `finalize_with`.

@@ -477,7 +477,7 @@ impl World {
                 allocations: vec![],
                 skills: vec![],
                 supports: vec![],
-                support_origins: Some(vec![]),
+                authored_support_order: Some(vec![]),
                 generated_inputs: None,
                 payload_links: vec![],
                 choices: vec![],
@@ -958,13 +958,13 @@ impl World {
             target: target.clone(),
             enabled: true,
         });
-        let origins = self.build.support_origins.as_mut().unwrap();
+        let origins = self.build.authored_support_order.as_mut().unwrap();
         if let Some(row) = origins.iter_mut().find(|r| r.target == target) {
-            row.origins.push(SupportOrigin::Assignment(assignment));
+            row.assignments.push(assignment);
         } else {
-            origins.push(SupportOriginSequence {
+            origins.push(AuthoredSupportOrder {
                 target,
-                origins: vec![SupportOrigin::Assignment(assignment)],
+                assignments: vec![assignment],
             });
         }
     }

@@ -258,7 +258,7 @@ fn input() -> ProjectInput {
             SkillPreset {
                 intent: None,
                 usage_preferences: None,
-                support_origins: None,
+                authored_support_order: None,
                 id: id(131),
                 skills: vec![id(62)],
                 supports: vec![],
@@ -267,7 +267,7 @@ fn input() -> ProjectInput {
             SkillPreset {
                 intent: None,
                 usage_preferences: None,
-                support_origins: None,
+                authored_support_order: None,
                 id: id(130),
                 skills: vec![id(61), id(60)],
                 supports: vec![id(70)],
@@ -276,7 +276,7 @@ fn input() -> ProjectInput {
             SkillPreset {
                 intent: None,
                 usage_preferences: None,
-                support_origins: None,
+                authored_support_order: None,
                 id: id(132),
                 skills: vec![id(60)],
                 supports: vec![id(71)],
@@ -1089,7 +1089,7 @@ fn equipment_and_allocation_contributions_compose_all_four_independent_selection
             let expected = BuildSpec::new(
                 BuildInput {
                     generated_inputs: None,
-                    support_origins: None,
+                    authored_support_order: None,
                     allocator: raw.allocator,
                     revision: raw.revision,
                     game_version: namespace(),

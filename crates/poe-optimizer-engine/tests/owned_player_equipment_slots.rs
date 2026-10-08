@@ -289,7 +289,7 @@ fn raw_compiler_cannot_bypass_slot_type_namespace_or_existing_player_authority()
 fn listed_actor_owner_does_not_authorize_a_generated_actor_invocation() {
     let mut f = fixture();
     f.build.supports.clear();
-    f.build.support_origins = Some(vec![]);
+    f.build.authored_support_order = Some(vec![]);
     f.queries.requests.clear();
     for slot in &mut f.schema.slots {
         if let SlotDescriptor::Actor(e) = slot

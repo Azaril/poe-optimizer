@@ -106,7 +106,7 @@ fn request(
                 allocations: vec![],
                 skills: vec![],
                 supports: vec![],
-                support_origins: None,
+                authored_support_order: None,
                 generated_inputs: None,
                 payload_links: vec![],
                 choices: vec![],

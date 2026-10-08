@@ -3,7 +3,6 @@
 use super::*;
 use poe_optimizer_core::{
     build_identity::InstanceAllocator,
-    owned_draft::{DraftLimits, decode_draft},
     owned_preset_intent::*,
     owned_project::*,
     owned_stages::{EvaluationStage, FrozenStageChannel, StageChannel, StagedEffectApplication},
@@ -11,7 +10,7 @@ use poe_optimizer_core::{
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_import::owned_release::StagedOwnedRelease;
 use serde_json::json;
-use std::{fs, path::Path};
+use std::path::Path;
 
 const APPLICATION: &str = "pain-offering-minion-damage";
 const DELIVER: &str = "offering-application";
@@ -35,21 +34,7 @@ fn policy_owner() -> SchemaSubject {
     subject(d::<UsagePolicyDefinition>(0x3259))
 }
 
-fn imported_preferences(package: &Path) -> Vec<PresetUsageBinding> {
-    let dir = package.parent().unwrap();
-    let bytes = fs::read(dir.join("original-05/draft.json")).unwrap();
-    let draft = decode_draft(&bytes, DraftLimits::default()).unwrap();
-    let side: Value = shared::read(dir.join("original-05/sidecar.json"));
-    assert_eq!(
-        json!(
-            draft
-                .digest(DraftLimits::default().input.max_wire_bytes)
-                .unwrap()
-        ),
-        side["draft"]
-    );
-    let draft: Value = serde_json::from_slice(&bytes).unwrap();
-    let selection: Value = shared::read(dir.join("selected-05.json"));
+fn imported_preferences(draft: &Value, selection: &Value) -> Vec<PresetUsageBinding> {
     let preset = draft["draft"]["skill_presets"]["members"]
         .as_array()
         .unwrap()
@@ -148,7 +133,8 @@ fn imported_preferences(package: &Path) -> Vec<PresetUsageBinding> {
 pub(super) fn install(
     w: &mut sniper::World,
     endpoint: &StagedOwnedRelease,
-    package: &Path,
+    draft: &Value,
+    selection: &Value,
 ) -> Census {
     let recipe = &endpoint.input().recipe;
     let inner = &mut w.base.source.base.inner;
@@ -205,7 +191,7 @@ pub(super) fn install(
     assert!(w.base.effect_applications.members.is_empty());
     w.base.effect_applications = DeclaredSet::complete(authored.members);
     Census {
-        preferences: imported_preferences(package),
+        preferences: imported_preferences(draft, selection),
         overrides: vec![],
         application_closure: actual.closure.clone(),
     }
@@ -256,7 +242,7 @@ pub(super) fn compose(
                 id: selection.skills,
                 skills: b.skills.iter().map(|r| r.id).collect(),
                 supports: b.supports.iter().map(|r| r.id).collect(),
-                support_origins: b.support_origins,
+                authored_support_order: b.authored_support_order,
                 payload_links: b.payload_links.iter().map(|r| r.id).collect(),
                 usage_preferences: None,
                 intent: Some(SkillPresetIntentV1 {

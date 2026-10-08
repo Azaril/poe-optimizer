@@ -157,7 +157,7 @@ fn absent_input_owners_never_turn_relation_external_programs_into_ordinary_invoc
     let mut f = fixture();
     f.build.skills.clear();
     f.build.supports.clear();
-    f.build.support_origins = Some(vec![]);
+    f.build.authored_support_order = Some(vec![]);
     f.queries.requests.clear();
     let plan = compile(&f).expect("zero matching source owners is a complete empty relation");
     let report = plan.evaluate(&mut plan.new_scratch()).unwrap();

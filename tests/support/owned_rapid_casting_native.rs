@@ -197,7 +197,7 @@ impl World {
             }
         }
         base.inner.build.supports.clear();
-        base.inner.build.support_origins = Some(vec![]);
+        base.inner.build.authored_support_order = Some(vec![]);
         base.inner.build.gems.retain(|g| g.id == id(900));
         base.inner.build.skills.retain(|s| s.id == id(22));
         let mut gem = base.inner.build.gems[0].clone();
@@ -455,13 +455,13 @@ fn rapid_disable_and_removal_do_not_affect_the_other_physical_root() {
             w.base
                 .inner
                 .build
-                .support_origins
+                .authored_support_order
                 .as_mut()
                 .unwrap()
                 .iter_mut()
                 .find(|r| r.target == SkillTarget::Authored(id(20 + source as u64)))
                 .unwrap()
-                .origins
+                .assignments
                 .clear();
         } else {
             w.base

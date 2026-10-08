@@ -40,7 +40,7 @@ fn item(record: u64, modifiers: &[u64]) -> ItemRecord {
 fn input() -> BuildInput {
     BuildInput {
         generated_inputs: None,
-        support_origins: None,
+        authored_support_order: None,
         allocator: InstanceAllocatorState::from_parts(lineage(), 100),
         revision: BuildRevision::INITIAL,
         game_version: namespace(),

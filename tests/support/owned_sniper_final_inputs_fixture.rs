@@ -632,12 +632,12 @@ fn install_sniper(
             .base
             .inner
             .build
-            .support_origins
+            .authored_support_order
             .as_mut()
             .unwrap()
-            .push(SupportOriginSequence {
+            .push(AuthoredSupportOrder {
                 target: SkillTarget::Authored(id(7200 + index)),
-                origins: vec![],
+                assignments: vec![],
             });
     }
     assert_eq!(b["target"]["physical_gem"], json!(gem()));

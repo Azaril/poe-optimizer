@@ -178,7 +178,7 @@ fn target_activation_precedes_missing_mapping_without_aliasing_sibling_queries()
 #[test]
 fn unresolved_order_and_incomplete_inventory_preserve_every_query_and_mapping() {
     let mut f = fixture();
-    f.build.support_origins = None;
+    f.build.authored_support_order = None;
     let plan = compile(&f);
     let mut scratch = plan.new_scratch();
     let allowance = PlanLimits::default().max_work;

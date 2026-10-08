@@ -964,7 +964,6 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
 
 #[test]
 fn reviewed_local_support_order_preserves_all_original_presets_and_query_rows() {
-    use poe_optimizer_core::owned_build::SupportOrigin;
     use std::collections::BTreeMap;
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let reference_dir = root.join("tests/fixtures/breadth-expectations");
@@ -1043,16 +1042,13 @@ fn reviewed_local_support_order_preserves_all_original_presets_and_query_rows() 
                         &supports[id].target
                     && let Some(preset) = presets.get(id)
                 {
-                    expected
-                        .entry((*preset, *target))
-                        .or_default()
-                        .push(SupportOrigin::Assignment(*id));
+                    expected.entry((*preset, *target)).or_default().push(*id);
                 }
             }
         }
         let mut actual = BTreeMap::new();
         for preset in &draft.skill_presets.members {
-            let order = preset.support_origins.as_ref().unwrap();
+            let order = preset.authored_support_order.as_ref().unwrap();
             assert!(matches!(
                 order.completion,
                 DraftListCompletion::Pending { .. }
@@ -1063,7 +1059,7 @@ fn reviewed_local_support_order_preserves_all_original_presets_and_query_rows() 
                 else {
                     panic!("only exact authored targets may be admitted")
                 };
-                let DraftField::Known { value: members } = &sequence.origins else {
+                let DraftField::Known { value: members } = &sequence.assignments else {
                     panic!("local order should be retained")
                 };
                 assert!(

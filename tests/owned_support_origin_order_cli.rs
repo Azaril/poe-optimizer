@@ -1,10 +1,12 @@
 //! Publish the existing reviewed local support-order policy for the actual originals.
 #[path = "support/owned_release_fixture.rs"]
 mod release;
+#[allow(dead_code)]
+#[path = "support/owned_selected_request.rs"]
+mod selected;
 use poe_optimizer_core::{
     build_identity::*,
     data::DataIdentity,
-    owned_build::SupportOrigin,
     owned_content::{OwnedContentDigest, digest_owned},
     owned_definitions::OwnedDefinitionKey,
     owned_draft::*,
@@ -148,7 +150,7 @@ fn check_order(xml: &[u8], out: &Path, selected: Option<&str>) -> Value {
         .iter()
         .flat_map(|p| p.supports.members.iter().map(move |s| (*s, p.id)))
         .collect();
-    let mut expected = BTreeMap::<(SkillPresetId, SkillUseId), Vec<SupportOrigin>>::new();
+    let mut expected = BTreeMap::<(SkillPresetId, SkillUseId), Vec<SupportAssignmentId>>::new();
     let mut source_rows = BTreeMap::new();
     for row in e.rows() {
         for id in linked::<SupportAssignmentId>(&sidecar, row.occurrence().id(), "support") {
@@ -159,13 +161,13 @@ fn check_order(xml: &[u8], out: &Path, selected: Option<&str>) -> Value {
                 expected
                     .entry((presets[&id], *target))
                     .or_default()
-                    .push(SupportOrigin::Assignment(id));
+                    .push(id);
             }
         }
     }
     let mut actual = BTreeMap::new();
     for p in &d.skill_presets.members {
-        let order = p.support_origins.as_ref().unwrap();
+        let order = p.authored_support_order.as_ref().unwrap();
         assert!(
             matches!(&order.completion,DraftListCompletion::Pending{code,..} if code.as_str()=="support-origin-discovery-not-converted")
         );
@@ -175,7 +177,7 @@ fn check_order(xml: &[u8], out: &Path, selected: Option<&str>) -> Value {
             else {
                 panic!("exact authored target")
             };
-            let DraftField::Known { value: origins } = &row.origins else {
+            let DraftField::Known { value: origins } = &row.assignments else {
                 panic!("known local order")
             };
             assert!(actual.insert((p.id, *target), origins.clone()).is_none());
@@ -223,14 +225,7 @@ fn check_order(xml: &[u8], out: &Path, selected: Option<&str>) -> Value {
                         "ProlongedDurationSupportTwo"
                     ]
                 );
-                assert_eq!(
-                    actual[&(preset[0], targets[0])],
-                    selected_supports
-                        .iter()
-                        .copied()
-                        .map(SupportOrigin::Assignment)
-                        .collect::<Vec<_>>()
-                );
+                assert_eq!(actual[&(preset[0], targets[0])], selected_supports);
             }
             "sniper" => {
                 assert_eq!(attr(set, "id"), "4");
@@ -330,6 +325,45 @@ fn mutated_twister(xml: &str, mode: &str) -> String {
     };
     assert_ne!(revised, text);
     format!("{}{}{}", &xml[..range.start], revised, &xml[range.end..])
+}
+
+#[test]
+#[ignore = "requires SUPPORT_ORDER_CURRENT_RELEASE and a fresh SUPPORT_ORDER_REIMPORT_OUTPUT"]
+fn current_release_reimports_all_five_with_exact_authored_assignment_order() {
+    let package = PathBuf::from(
+        std::env::var_os("POE_OPTIMIZER_TEST_SUPPORT_ORDER_CURRENT_RELEASE")
+            .expect("checked current release"),
+    );
+    let out = PathBuf::from(
+        std::env::var_os("POE_OPTIMIZER_TEST_SUPPORT_ORDER_REIMPORT_OUTPUT")
+            .expect("fresh output directory"),
+    );
+    assert!(!out.exists());
+    let before = release::inventory(&package);
+    let loaded = release::load(&package);
+    fs::create_dir_all(&out).unwrap();
+    let mut reports = vec![];
+    for case in 1..=5 {
+        let source = root().join(format!(
+            "tests/fixtures/builds/breadth-20260908/build-{case:02}.xml"
+        ));
+        let bytes = fs::read(&source).unwrap();
+        let directory = out.join(format!("original-{case:02}"));
+        release::normalize(&package, &source, case, &directory);
+        let order = check_order(&bytes, &directory, None);
+        let selection = selected::finalize_with_definitions(
+            &bytes,
+            &directory,
+            &out.join(format!("selected-{case:02}.json")),
+            &package.join("schema.json"),
+        );
+        reports.push(json!({"case":case,"authored_order":order,"selection":selection}));
+    }
+    assert_eq!(release::inventory(&package), before);
+    write(
+        out.join("validation.json"),
+        &json!({"release":loaded.receipt().input,"cases":reports}),
+    );
 }
 #[test]
 #[ignore = "requires the explicit checked twelve-family successor"]

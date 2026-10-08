@@ -87,7 +87,7 @@ fn offering_inputs_retain_both_support_tiers_removal_and_disabled_origins() {
     let mut w = World::load();
     for tier in [0usize, 1] {
         w.source.base.inner.build.supports.clear();
-        w.source.base.inner.build.support_origins = Some(vec![]);
+        w.source.base.inner.build.authored_support_order = Some(vec![]);
         for source in [2, 3, 4] {
             w.source.base.inner.add_support(source, tier);
         }
@@ -102,7 +102,7 @@ fn offering_inputs_retain_both_support_tiers_removal_and_disabled_origins() {
     check(&w, &report, [22, 22], [0.0, 0.0]);
     check_census_and_delivery(&w, &report, None);
     w.source.base.inner.build.supports.clear();
-    w.source.base.inner.build.support_origins = Some(vec![]);
+    w.source.base.inner.build.authored_support_order = Some(vec![]);
     let report = evaluate(&w);
     check(&w, &report, [22, 22], [0.0, 0.0]);
     check_census_and_delivery(&w, &report, None);

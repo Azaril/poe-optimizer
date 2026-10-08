@@ -135,7 +135,7 @@ pub fn fixture() -> Fixture {
             slot: readiness::summon_supply(),
         }));
     }
-    for sequence in f.build.support_origins.as_mut().unwrap() {
+    for sequence in f.build.authored_support_order.as_mut().unwrap() {
         let SkillTarget::Authored(id) = sequence.target else {
             unreachable!()
         };

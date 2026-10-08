@@ -262,7 +262,7 @@ impl World {
                     id: selection.skills,
                     skills: b.skills.iter().map(|s| s.id).collect(),
                     supports: vec![],
-                    support_origins: None,
+                    authored_support_order: None,
                     payload_links: vec![],
                     usage_preferences: Some(self.preferences.clone()),
                 }],

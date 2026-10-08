@@ -1345,7 +1345,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 draft.skill_presets.members.push(SkillPresetDraft {
                     intent: None,
                     usage_preferences: None,
-                    support_origins: support_order::initialize(
+                    authored_support_order: support_order::initialize(
                         &mut b,
                         s,
                         policy.support_origin_order.as_ref(),

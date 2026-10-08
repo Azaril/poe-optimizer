@@ -332,7 +332,7 @@ fn compare(
     {
         assert_eq!(before["id"], after["id"]);
         let members = after["skills"]["members"].as_array().unwrap().clone();
-        if let Some(order) = after.get_mut("support_origins") {
+        if let Some(order) = after.get_mut("authored_support_order") {
             order["members"].as_array_mut().unwrap().retain(|sequence| {
                 let target = &sequence["target"]["value"]["value"];
                 let Some(rows) = target
@@ -347,7 +347,7 @@ fn compare(
                     "the exact target belongs to this saved preset"
                 );
                 assert!(
-                    !before["support_origins"]["members"]
+                    !before["authored_support_order"]["members"]
                         .as_array()
                         .unwrap()
                         .iter()
@@ -367,7 +367,7 @@ fn compare(
                 false
             });
             assert_eq!(
-                *order, before["support_origins"],
+                *order, before["authored_support_order"],
                 "discovery obligation and old sequences survive exactly"
             );
         }

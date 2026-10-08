@@ -294,7 +294,7 @@ impl World {
                 allocations,
                 skills: vec![],
                 supports: vec![],
-                support_origins: Some(vec![]),
+                authored_support_order: Some(vec![]),
                 generated_inputs: Some(GeneratedSkillInputsV1 {
                     schema_version: 1,
                     bindings: vec![],

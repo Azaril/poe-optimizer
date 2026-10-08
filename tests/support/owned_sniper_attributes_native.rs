@@ -74,6 +74,8 @@ pub(super) fn install(
     sniper: &mut sniper::World,
     endpoint: &StagedOwnedRelease,
     package: &Path,
+    draft: &Value,
+    selection: &Value,
 ) -> Census {
     attribute_base_family::assert_component(endpoint);
     let recipe = &endpoint.input().recipe;
@@ -120,10 +122,8 @@ pub(super) fn install(
             .iter()
             .all(|a| a.access == AllocationAccess::Ordinary && a.scope == LoadoutScope::Shared)
     );
-    // Character authority comes from the supplied canonical imported selection,
+    // Character authority comes from the fresh canonical imported selection,
     // including its actual level before shared Player programs are installed.
-    let draft: Value = shared::read(package.parent().unwrap().join("original-05/draft.json"));
-    let selection: Value = shared::read(package.parent().unwrap().join("selected-05.json"));
     let character = draft["draft"]["character_presets"]["members"]
         .as_array()
         .unwrap()

@@ -282,12 +282,9 @@ fn authored_skill_targets_use_computed_facts_and_respect_enabled_state() {
     for support in &mut f.build.supports {
         support.target = target.clone();
     }
-    f.build.support_origins = Some(vec![SupportOriginSequence {
+    f.build.authored_support_order = Some(vec![AuthoredSupportOrder {
         target: target.clone(),
-        origins: vec![
-            SupportOrigin::Assignment(occurrence(60)),
-            SupportOrigin::Assignment(occurrence(61)),
-        ],
+        assignments: vec![occurrence(60), occurrence(61)],
     }]);
     assert_eq!(
         prepared(&evaluate(&f, target.clone())).selected[0].assignment,
@@ -348,9 +345,8 @@ fn partial(subject: SchemaSubject) -> SchemaClosure {
 fn whole_owner_coverage_is_required_even_with_only_one_support() {
     let mut f = generated_fixture();
     f.build.supports.retain(|s| s.id != occurrence(61));
-    for row in f.build.support_origins.as_mut().unwrap() {
-        row.origins
-            .retain(|s| *s != SupportOrigin::Assignment(occurrence(61)));
+    for row in f.build.authored_support_order.as_mut().unwrap() {
+        row.assignments.retain(|s| *s != occurrence(61));
     }
     f.owner_mut(&class_owner()).programs.closure = partial(class_owner());
     let report = evaluate(&f, target(30, "first"));

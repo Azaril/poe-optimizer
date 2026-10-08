@@ -192,25 +192,18 @@ fn exact_direct_targets_preserve_every_other_field_and_spent_issue_identity() {
         .iter()
         .zip(&mut restored.skill_presets.members)
     {
-        let order = new.support_origins.as_ref().unwrap();
+        let order = new.authored_support_order.as_ref().unwrap();
         assert_eq!(
             order.completion,
-            old.support_origins.as_ref().unwrap().completion
+            old.authored_support_order.as_ref().unwrap().completion
         );
         assert_eq!(order.members.len(), 1);
         assert_eq!(order.members[0].target, target);
         assert_eq!(
-            order.members[0].origins.to_resolved(),
-            Some(
-                after
-                    .supports
-                    .members
-                    .iter()
-                    .map(|s| SupportOrigin::Assignment(s.id))
-                    .collect()
-            )
+            order.members[0].assignments.to_resolved(),
+            Some(after.supports.members.iter().map(|s| s.id).collect())
         );
-        new.support_origins = old.support_origins.clone();
+        new.authored_support_order = old.authored_support_order.clone();
     }
     assert_eq!(&restored, before);
     for (a, b) in old.sidecar().origins.iter().zip(&new.sidecar().origins) {

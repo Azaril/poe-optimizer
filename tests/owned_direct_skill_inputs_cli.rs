@@ -383,7 +383,10 @@ fn compare(
                 .count(),
             6
         );
-        assert_eq!(preset["support_origins"]["completion"]["kind"], "pending");
+        assert_eq!(
+            preset["authored_support_order"]["completion"]["kind"],
+            "pending"
+        );
     }
     b["draft"]["skills"]["members"]
         .as_array_mut()

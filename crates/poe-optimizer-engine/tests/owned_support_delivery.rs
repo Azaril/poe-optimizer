@@ -192,7 +192,7 @@ fn missing_or_partial_inventory_keeps_the_whole_attempt_unavailable() {
 #[test]
 fn absent_authored_order_cannot_be_replaced_by_assignment_id_sorting() {
     let mut f = source_fixture();
-    f.build.support_origins = None;
+    f.build.authored_support_order = None;
     let plan = compile(&f);
     let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
     assert!(

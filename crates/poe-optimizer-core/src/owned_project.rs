@@ -53,12 +53,14 @@ pub struct SkillPreset {
     pub id: SkillPresetId,
     pub skills: Vec<SkillUseId>,
     pub supports: Vec<SupportAssignmentId>,
+    /// Authored order only; independent equipment/tree selections require fresh
+    /// runtime support-source discovery during native request preparation.
     #[serde(
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "non_null_extension"
     )]
-    pub support_origins: Option<Vec<SupportOriginSequence>>,
+    pub authored_support_order: Option<Vec<AuthoredSupportOrder>>,
     pub payload_links: Vec<PayloadLinkId>,
     /// Optional authored preferences. Absence asserts neither game defaults nor
     /// completeness of an imported usage inventory.
@@ -405,7 +407,7 @@ fn validate_project(
             .map(|preset| owned_build::PresetRecordGroup {
                 skills: &preset.skills,
                 supports: &preset.supports,
-                support_origins: preset.support_origins.as_deref(),
+                authored_support_order: preset.authored_support_order.as_deref(),
                 usage: preset.usage_preferences.as_deref(),
             })
             .collect::<Vec<_>>(),
@@ -534,7 +536,7 @@ fn canonicalize_project(input: &mut ProjectInput) {
     for preset in &mut input.skill_presets {
         preset.skills.sort();
         preset.supports.sort();
-        if let Some(sequences) = &mut preset.support_origins {
+        if let Some(sequences) = &mut preset.authored_support_order {
             sequences.sort_by(|a, b| a.target.cmp(&b.target));
         }
         preset.payload_links.sort();
@@ -729,7 +731,7 @@ pub(crate) fn compose_validated(
             ),
             skills,
             supports,
-            support_origins: skill_preset.support_origins.clone(),
+            authored_support_order: skill_preset.authored_support_order.clone(),
             payload_links: selected_records(
                 &input.payload_links,
                 &skill_preset.payload_links,

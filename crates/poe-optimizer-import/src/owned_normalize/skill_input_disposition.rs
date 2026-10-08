@@ -436,7 +436,7 @@ pub(super) fn pending_generated_responsibilities(
     set: SourceOccurrenceId,
     preset: &SkillPresetDraft,
 ) -> Result<Option<[DraftIssueId; 3]>> {
-    let (Some(intent), Some(supports)) = (&preset.intent, &preset.support_origins) else {
+    let (Some(intent), Some(supports)) = (&preset.intent, &preset.authored_support_order) else {
         return Ok(None);
     };
     let mut issues = Vec::new();

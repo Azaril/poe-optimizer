@@ -525,7 +525,7 @@ pub fn fixture() -> Fixture {
     for support in &mut f.build.supports {
         support.target = retarget(&support.target);
     }
-    for sequence in f.build.support_origins.as_mut().unwrap() {
+    for sequence in f.build.authored_support_order.as_mut().unwrap() {
         sequence.target = retarget(&sequence.target);
     }
     f.queries.requests = [(30, "first"), (30, "second"), (31, "first")]

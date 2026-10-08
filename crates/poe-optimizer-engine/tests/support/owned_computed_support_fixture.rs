@@ -352,7 +352,7 @@ pub fn generated_fixture() -> Fixture {
     .into_iter()
     .enumerate()
     {
-        let mut origins = vec![];
+        let mut assignments = vec![];
         for offset in 0..2 {
             let serial = (group * 2 + offset) as u64;
             let gem = occurrence(50 + serial);
@@ -370,11 +370,14 @@ pub fn generated_fixture() -> Fixture {
                 target: target.clone(),
                 enabled: true,
             });
-            origins.push(SupportOrigin::Assignment(assignment));
+            assignments.push(assignment);
         }
-        sequences.push(SupportOriginSequence { target, origins });
+        sequences.push(AuthoredSupportOrder {
+            target,
+            assignments,
+        });
     }
-    f.build.support_origins = Some(sequences);
+    f.build.authored_support_order = Some(sequences);
     f
 }
 

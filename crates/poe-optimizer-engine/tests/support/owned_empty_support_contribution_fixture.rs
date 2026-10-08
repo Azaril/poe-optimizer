@@ -65,7 +65,12 @@ pub fn checked_plan(
             .as_ref()
             .is_none_or(|v| v.schema_version == 1 && v.bindings.is_empty())
     );
-    assert!(build.support_origins.as_ref().is_none_or(Vec::is_empty));
+    assert!(
+        build
+            .authored_support_order
+            .as_ref()
+            .is_none_or(Vec::is_empty)
+    );
     assert_eq!(
         rules_input.effect_applications,
         Some(DeclaredSet::complete(vec![]))
@@ -287,7 +292,7 @@ pub fn checked_plan(
         .unwrap(),
     );
     let mut build = build.clone();
-    build.support_origins = Some(vec![]);
+    build.authored_support_order = Some(vec![]);
     build.generated_inputs = Some(GeneratedSkillInputsV1 {
         schema_version: 1,
         bindings: vec![],

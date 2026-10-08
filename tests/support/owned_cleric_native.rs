@@ -145,7 +145,7 @@ impl World {
         let build = BuildSpec::new(
             BuildInput {
                 generated_inputs: None,
-                support_origins: None,
+                authored_support_order: None,
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([115; 16]),
                     30,

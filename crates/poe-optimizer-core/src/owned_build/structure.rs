@@ -93,7 +93,7 @@ pub enum StructuralErrorKind {
     },
     DuplicateAssignment,
     InvalidModifierOrder,
-    InvalidSupportOrigins,
+    InvalidAuthoredSupportOrder,
     WrongDeclaration,
     WrongProviderOwner,
     EmptyLoadoutScope,
@@ -159,7 +159,7 @@ pub(crate) struct RecordTableValidation {
 pub(crate) struct PresetRecordGroup<'a> {
     pub skills: &'a [SkillUseId],
     pub supports: &'a [SupportAssignmentId],
-    pub support_origins: Option<&'a [SupportOriginSequence]>,
+    pub authored_support_order: Option<&'a [AuthoredSupportOrder]>,
     pub usage: Option<&'a [UsagePolicySelection]>,
 }
 
@@ -190,9 +190,9 @@ pub(crate) fn validate_record_tables(
     }
     check.record_values(tables)?;
     for (i, preset) in preset_groups.iter().enumerate() {
-        if let Some(sequences) = preset.support_origins {
-            check.support_origins(
-                &format!("skill_presets.support_origins[{i}]"),
+        if let Some(sequences) = preset.authored_support_order {
+            check.authored_support_order(
+                &format!("skill_presets.authored_support_order[{i}]"),
                 sequences,
                 preset.supports,
             )?;
@@ -403,21 +403,23 @@ impl<'a> StructuralCheck<'a> {
     }
     /// Ordered candidates preserve encounter positions and cannot introduce a
     /// support outside the selected membership or move one to another target.
-    pub(crate) fn support_origin_sequence(
+    pub(crate) fn authored_support_assignments(
         &mut self,
         path: &str,
         target: Option<&SkillTarget>,
-        origins: &[SupportOrigin],
+        assignments: &[SupportAssignmentId],
         members: &BTreeSet<SupportAssignmentId>,
     ) -> Result {
-        self.collection(path, origins.len())?;
+        self.collection(path, assignments.len())?;
         let mut seen = BTreeSet::new();
-        for (i, origin) in origins.iter().enumerate() {
+        for (i, id) in assignments.iter().enumerate() {
             let path = format!("{path}[{i}]");
-            let SupportOrigin::Assignment(id) = origin;
             self.known_reference(&path, *id, OccurrenceKind::SupportAssignment)?;
             if !members.contains(id) || !seen.insert(*id) {
-                return Err(error(&path, StructuralErrorKind::InvalidSupportOrigins));
+                return Err(error(
+                    &path,
+                    StructuralErrorKind::InvalidAuthoredSupportOrder,
+                ));
             }
             if let (Some(target), Some(expected)) = (target, self.support_targets.get(id))
                 && target != expected
@@ -427,10 +429,10 @@ impl<'a> StructuralCheck<'a> {
         }
         Ok(())
     }
-    pub(crate) fn support_origins(
+    pub(crate) fn authored_support_order(
         &mut self,
         path: &str,
-        sequences: &[SupportOriginSequence],
+        sequences: &[AuthoredSupportOrder],
         members: &[SupportAssignmentId],
     ) -> Result {
         self.collection(path, sequences.len())?;
@@ -443,21 +445,23 @@ impl<'a> StructuralCheck<'a> {
             if !targets.insert(&sequence.target) {
                 return Err(error(&p, StructuralErrorKind::DuplicateAssignment));
             }
-            self.support_origin_sequence(
-                &format!("{p}.origins"),
+            self.authored_support_assignments(
+                &format!("{p}.assignments"),
                 Some(&sequence.target),
-                &sequence.origins,
+                &sequence.assignments,
                 &members,
             )?;
-            for origin in &sequence.origins {
-                let SupportOrigin::Assignment(id) = origin;
+            for id in &sequence.assignments {
                 if !seen.insert(*id) {
                     return Err(error(&p, StructuralErrorKind::DuplicateAssignment));
                 }
             }
         }
         if seen != members {
-            return Err(error(path, StructuralErrorKind::InvalidSupportOrigins));
+            return Err(error(
+                path,
+                StructuralErrorKind::InvalidAuthoredSupportOrder,
+            ));
         }
         Ok(())
     }
@@ -924,9 +928,9 @@ impl<'a> StructuralCheck<'a> {
         if let Some(inputs) = &build.generated_inputs {
             self.generated_inputs("build.generated_inputs", inputs)?;
         }
-        if let Some(sequences) = &build.support_origins {
-            self.support_origins(
-                "build.support_origins",
+        if let Some(sequences) = &build.authored_support_order {
+            self.authored_support_order(
+                "build.authored_support_order",
                 sequences,
                 &build
                     .supports
@@ -1218,7 +1222,7 @@ pub(crate) fn canonicalize_build(build: &mut BuildInput) {
             canonicalize_parameters(&mut row.parameters);
         }
     }
-    if let Some(sequences) = &mut build.support_origins {
+    if let Some(sequences) = &mut build.authored_support_order {
         sequences.sort_by(|a, b| a.target.cmp(&b.target));
     }
     canonicalize_record_tables(RecordTablesMut {

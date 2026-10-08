@@ -77,7 +77,7 @@ fn mixed() -> Fixture {
         };
         strip_direct_path(&mut skill.provider);
     }
-    for sequence in f.build.support_origins.as_mut().unwrap() {
+    for sequence in f.build.authored_support_order.as_mut().unwrap() {
         let SkillTarget::Generated(skill) = &mut sequence.target else {
             unreachable!()
         };
@@ -95,12 +95,12 @@ fn mixed() -> Fixture {
         target: MetricTarget::Action(Box::new(action(32, "first"))),
     });
     f.build
-        .support_origins
+        .authored_support_order
         .as_mut()
         .unwrap()
-        .push(SupportOriginSequence {
+        .push(AuthoredSupportOrder {
             target: target(32, "first"),
-            origins: vec![],
+            assignments: vec![],
         });
     f
 }

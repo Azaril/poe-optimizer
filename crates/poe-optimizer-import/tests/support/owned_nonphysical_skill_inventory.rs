@@ -82,7 +82,7 @@ fn injected_nonphysical_skill_row_retires_only_physical_inventory() {
         DraftListCompletion::Pending { .. }
     ));
     assert!(matches!(
-        preset.support_origins.as_ref().unwrap().completion,
+        preset.authored_support_order.as_ref().unwrap().completion,
         DraftListCompletion::Pending { .. }
     ));
     assert_only_inventory_retired(before, &after);

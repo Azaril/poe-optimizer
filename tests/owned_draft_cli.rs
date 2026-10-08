@@ -108,7 +108,7 @@ fn draft(pending: bool) -> DraftSession {
             skill_presets: list(vec![SkillPresetDraft {
                 intent: None,
                 usage_preferences: None,
-                support_origins: None,
+                authored_support_order: None,
                 id: id(5),
                 skills: list(vec![]),
                 supports: list(vec![]),

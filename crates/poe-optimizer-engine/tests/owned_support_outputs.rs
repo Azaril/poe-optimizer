@@ -70,9 +70,9 @@ fn prepared_types_are_distinct_from_initial_inputs_and_feed_receiving_skill_read
 fn empty_target_fixture() -> Fixture {
     let mut f = source_fixture();
     f.build.supports.clear();
-    f.build.support_origins = Some(vec![SupportOriginSequence {
+    f.build.authored_support_order = Some(vec![AuthoredSupportOrder {
         target: target(30, "first"),
-        origins: vec![],
+        assignments: vec![],
     }]);
     f.queries.requests = vec![MetricRequest {
         id: QueryId::new("one-action").unwrap(),
@@ -113,7 +113,7 @@ fn consumed_zero_support_target_uses_proven_empty_order_and_does_not_visit_irrel
             stat: def("prepared-spell")
         }));
     let mut absent = f;
-    absent.build.support_origins = None;
+    absent.build.authored_support_order = None;
     let plan = compile(&absent);
     let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
     assert!(
@@ -258,12 +258,12 @@ fn direct_and_inherited_contexts_for_one_skill_cannot_publish_a_shared_stat() {
         enabled: true,
     });
     f.build
-        .support_origins
+        .authored_support_order
         .as_mut()
         .unwrap()
-        .push(SupportOriginSequence {
+        .push(AuthoredSupportOrder {
             target: SkillTarget::Authored(occurrence(30)),
-            origins: vec![SupportOrigin::Assignment(occurrence(67))],
+            assignments: vec![occurrence(67)],
         });
     let (args, outputs) = inputs_with(
         &f,
@@ -353,7 +353,7 @@ fn inherited_outputs_keep_child_types_parent_selection_and_explicit_summoner_con
             assignment.target = parent.clone();
         }
     }
-    for sequence in f.build.support_origins.as_mut().unwrap() {
+    for sequence in f.build.authored_support_order.as_mut().unwrap() {
         if sequence.target == child {
             sequence.target = parent.clone();
         }

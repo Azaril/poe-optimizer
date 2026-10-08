@@ -153,7 +153,7 @@ fn absent_and_off_loadout_providers_do_not_invoke_assembly_or_retarget_another_c
     f.build.allocations.clear();
     f.build.skills.clear();
     f.build.supports.clear();
-    f.build.support_origins = Some(vec![]);
+    f.build.authored_support_order = Some(vec![]);
     f.queries.requests.clear();
     let report = evaluate(&compile(&f).unwrap());
     assert!(

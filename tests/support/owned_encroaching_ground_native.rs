@@ -220,7 +220,7 @@ fn world() -> World {
                 }
             }
             w.inner.build.supports.clear();
-            w.inner.build.support_origins = Some(vec![]);
+            w.inner.build.authored_support_order = Some(vec![]);
             w.inner.build.gems.retain(|g| g.id == id(900));
             w.inner.build.skills.retain(|s| s.id == id(22));
             let mut gem = w.inner.build.gems[0].clone();
@@ -511,10 +511,8 @@ fn encroaching_removal_and_disable_preserve_the_other_receiver_and_magnified() {
                     .support;
                 w.inner.build.supports.retain(|s| s.id != target);
                 w.inner.build.gems.retain(|g| g.id != gem);
-                for sequence in w.inner.build.support_origins.as_mut().unwrap() {
-                    sequence
-                        .origins
-                        .retain(|o| *o != SupportOrigin::Assignment(target));
+                for sequence in w.inner.build.authored_support_order.as_mut().unwrap() {
+                    sequence.assignments.retain(|o| *o != target);
                 }
             } else {
                 disable(&mut w, target);

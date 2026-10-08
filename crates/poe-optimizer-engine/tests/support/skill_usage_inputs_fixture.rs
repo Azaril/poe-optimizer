@@ -174,7 +174,7 @@ impl World {
                     id: selection.skills,
                     skills: b.skills.iter().map(|row| row.id).collect(),
                     supports: b.supports.iter().map(|row| row.id).collect(),
-                    support_origins: b.support_origins.clone(),
+                    authored_support_order: b.authored_support_order.clone(),
                     payload_links: b.payload_links.iter().map(|row| row.id).collect(),
                     usage_preferences: Some(self.preferences.clone()),
                 }],

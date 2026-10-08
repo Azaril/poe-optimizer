@@ -616,7 +616,7 @@ impl Fixture {
             allocations: vec![],
             skills: vec![],
             supports: vec![],
-            support_origins: Some(vec![]),
+            authored_support_order: Some(vec![]),
             payload_links: vec![],
             choices: vec![],
         };

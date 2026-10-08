@@ -539,12 +539,12 @@ fn direct_authored_copies_use_explicit_permission_and_preserve_each_occurrence()
             parameters: None,
         });
         w.f.build
-            .support_origins
+            .authored_support_order
             .as_mut()
             .unwrap()
-            .push(SupportOriginSequence {
+            .push(AuthoredSupportOrder {
                 target: SkillTarget::Authored(occurrence(id)),
-                origins: vec![],
+                assignments: vec![],
             });
     }
     for (name, rank) in [("level", 0), ("bonus", 1)] {
@@ -648,12 +648,12 @@ fn direct_authored_copies_use_explicit_permission_and_preserve_each_occurrence()
     assert_eq!(supplied.len(), 2);
     for target in &supplied {
         w.f.build
-            .support_origins
+            .authored_support_order
             .as_mut()
             .unwrap()
-            .push(SupportOriginSequence {
+            .push(AuthoredSupportOrder {
                 target: target.clone(),
-                origins: vec![],
+                assignments: vec![],
             });
     }
     for row in w

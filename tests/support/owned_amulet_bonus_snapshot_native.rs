@@ -377,7 +377,7 @@ fn amulet_snapshot_zero_uses_real_receiver_with_both_support_tiers() {
     let mut w = World::load();
     for tier in [0, 1] {
         w.base.source.base.inner.build.supports.clear();
-        w.base.source.base.inner.build.support_origins = Some(vec![]);
+        w.base.source.base.inner.build.authored_support_order = Some(vec![]);
         for source in [2, 3, 4] {
             w.base.source.base.inner.add_support(source, tier);
         }

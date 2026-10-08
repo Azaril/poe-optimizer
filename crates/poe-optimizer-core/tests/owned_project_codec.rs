@@ -71,7 +71,7 @@ fn input() -> ProjectInput {
         skill_presets: vec![SkillPreset {
             intent: None,
             usage_preferences: None,
-            support_origins: None,
+            authored_support_order: None,
             id: id(7),
             skills: vec![],
             supports: vec![],

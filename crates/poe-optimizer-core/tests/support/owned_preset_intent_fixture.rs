@@ -246,7 +246,7 @@ pub fn project_input() -> ProjectInput {
             id: id(130),
             skills: vec![],
             supports: vec![],
-            support_origins: None,
+            authored_support_order: None,
             payload_links: vec![],
             usage_preferences: None,
             intent: Some(intent(PresetApplicability::WhenExactSourceSelected)),

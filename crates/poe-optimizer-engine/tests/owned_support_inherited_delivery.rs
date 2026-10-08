@@ -326,7 +326,7 @@ fn distinct_supports(f: &mut Fixture, names: &[&str]) {
     }
     f.build.supports.retain(|s| s.target == target(30, "first"));
     f.build
-        .support_origins
+        .authored_support_order
         .as_mut()
         .unwrap()
         .retain(|s| s.target == target(30, "first"));
@@ -357,9 +357,9 @@ fn distinct_supports(f: &mut Fixture, names: &[&str]) {
                 target: target(30, "first"),
                 enabled: true,
             });
-            f.build.support_origins.as_mut().unwrap()[0]
-                .origins
-                .push(SupportOrigin::Assignment(occurrence(assignment)));
+            f.build.authored_support_order.as_mut().unwrap()[0]
+                .assignments
+                .push(occurrence(assignment));
         }
     }
 }

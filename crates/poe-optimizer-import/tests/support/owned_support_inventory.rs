@@ -124,7 +124,7 @@ fn exact_physical_inventory_retires_only_its_issue_and_retains_spent_identity() 
     assert_eq!(input.supports.members[0].enabled.to_resolved(), Some(false));
     assert_eq!(input.supports.members[1].enabled.to_resolved(), Some(true));
     assert!(matches!(
-        preset.support_origins.as_ref().unwrap().completion,
+        preset.authored_support_order.as_ref().unwrap().completion,
         DraftListCompletion::Pending { .. }
     ));
     assert!(matches!(
@@ -176,7 +176,7 @@ fn provider_only_and_multiple_active_roots_do_not_require_resolved_support_targe
         let preset = &input.skill_presets.members[0];
         assert_eq!(preset.supports.completion, DraftListCompletion::Complete);
         assert!(matches!(
-            preset.support_origins.as_ref().unwrap().completion,
+            preset.authored_support_order.as_ref().unwrap().completion,
             DraftListCompletion::Pending { .. }
         ));
         origin_integrity_with_retired(&source, &after, 1);
@@ -242,7 +242,7 @@ fn known_generated_active_roots_do_not_require_physical_support_origin_admission
     let preset = &draft.skill_presets.members[0];
     assert_eq!(preset.supports.completion, DraftListCompletion::Complete);
     assert!(matches!(
-        preset.support_origins.as_ref().unwrap().completion,
+        preset.authored_support_order.as_ref().unwrap().completion,
         DraftListCompletion::Pending { .. }
     ));
     assert!(matches!(

@@ -578,7 +578,7 @@ fn independent_passive_presets_keep_same_node_occurrences_and_receivers_separate
                 id: occurrence(64),
                 skills: vec![],
                 supports: vec![],
-                support_origins: None,
+                authored_support_order: None,
                 payload_links: vec![],
             }],
             choice_presets: vec![ChoicePreset {

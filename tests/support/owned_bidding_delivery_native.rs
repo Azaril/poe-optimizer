@@ -291,13 +291,13 @@ fn bidding_repeated_physical_sources_and_family_selection_preserve_occurrence_id
     ] {
         mixed
             .build
-            .support_origins
+            .authored_support_order
             .as_mut()
             .unwrap()
             .iter_mut()
             .find(|row| row.target == SkillTarget::Authored(id(20)))
             .unwrap()
-            .origins = order.into_iter().map(SupportOrigin::Assignment).collect();
+            .assignments = order.to_vec();
         let r = report(&mixed);
         check_selected(
             &mixed,

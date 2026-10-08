@@ -27,7 +27,7 @@ fn input() -> OwnedDocument {
             BuildSpec::new(
                 BuildInput {
                     generated_inputs: None,
-                    support_origins: None,
+                    authored_support_order: None,
                     allocator: InstanceAllocatorState::from_parts(lineage, 1),
                     revision: BuildRevision::from_u64(1),
                     game_version: ns(),

@@ -227,7 +227,7 @@ fn three_owners(result: &NormalizedImport) -> [DraftIssueId; 3] {
         ),
         owner(&intent.usage.completion, "usage-preferences-not-converted"),
         owner(
-            &preset.support_origins.as_ref().unwrap().completion,
+            &preset.authored_support_order.as_ref().unwrap().completion,
             "support-origin-discovery-not-converted",
         ),
     ];
@@ -407,7 +407,7 @@ fn archived_generated_accounting_refuses_unselected_ambiguity_or_missing_existin
     let result = run(&f, &original);
     assert!(
         result.draft().input().skill_presets.members[0]
-            .support_origins
+            .authored_support_order
             .is_none()
     );
     for ordinal in pair(&original) {

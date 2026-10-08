@@ -31,12 +31,14 @@ pub struct SkillPresetDraft {
     pub id: SkillPresetId,
     pub skills: DraftList<SkillUseId>,
     pub supports: DraftList<SupportAssignmentId>,
+    /// Imported authored assignment order, with unresolved source relationships
+    /// retained as obligations. This is not complete runtime source discovery.
     #[serde(
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "non_null_extension"
     )]
-    pub support_origins: Option<DraftList<SupportOriginSequenceDraft>>,
+    pub authored_support_order: Option<DraftList<AuthoredSupportOrderDraft>>,
     pub payload_links: DraftList<PayloadLinkId>,
     /// None preserves an unauthored layer, not a complete imported inventory.
     #[serde(
@@ -198,7 +200,7 @@ impl From<SkillPreset> for SkillPresetDraft {
             id: value.id,
             skills: value.skills.into(),
             supports: value.supports.into(),
-            support_origins: value.support_origins.map(Into::into),
+            authored_support_order: value.authored_support_order.map(Into::into),
             payload_links: value.payload_links.into(),
             usage_preferences: value.usage_preferences.map(Into::into),
             intent: value.intent.map(Into::into),
@@ -212,7 +214,7 @@ impl ResolveDraft for SkillPresetDraft {
             id: self.id,
             skills: self.skills.to_resolved()?,
             supports: self.supports.to_resolved()?,
-            support_origins: match &self.support_origins {
+            authored_support_order: match &self.authored_support_order {
                 Some(value) => Some(value.to_resolved()?),
                 None => None,
             },

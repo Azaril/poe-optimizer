@@ -174,8 +174,8 @@ fn disabled_assignments_and_staged_empty_orders_cannot_bypass_discovery() {
         ComputedSupportOutcome::Unavailable { .. }
     ));
     f.build.supports.clear();
-    for sequence in f.build.support_origins.as_mut().unwrap() {
-        sequence.origins.clear();
+    for sequence in f.build.authored_support_order.as_mut().unwrap() {
+        sequence.assignments.clear();
     }
     let empty = prepared_plan(&f, None);
     assert!(matches!(

@@ -286,9 +286,8 @@ fn prolonged_removal_and_disable_do_not_affect_other_roots() {
                     .support;
                 w.base.inner.build.supports.retain(|s| s.id != origin);
                 w.base.inner.build.gems.retain(|g| g.id != gem);
-                for row in w.base.inner.build.support_origins.as_mut().unwrap() {
-                    row.origins
-                        .retain(|o| *o != SupportOrigin::Assignment(origin));
+                for row in w.base.inner.build.authored_support_order.as_mut().unwrap() {
+                    row.assignments.retain(|o| *o != origin);
                 }
             } else {
                 w.base

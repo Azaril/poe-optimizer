@@ -842,7 +842,7 @@ fn composed_preferences_and_whole_record_overrides_execute_through_the_same_requ
                 id: selection.skills,
                 skills: b.skills.iter().map(|s| s.id).collect(),
                 supports: vec![],
-                support_origins: None,
+                authored_support_order: None,
                 payload_links: vec![],
                 usage_preferences: Some(vec![
                     usage("skill-usage", authored(20), true),

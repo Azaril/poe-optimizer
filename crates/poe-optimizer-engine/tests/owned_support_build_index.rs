@@ -179,17 +179,14 @@ fn input() -> BuildInput {
                 enabled: true,
             })
             .collect(),
-        support_origins: Some(vec![
-            SupportOriginSequence {
+        authored_support_order: Some(vec![
+            AuthoredSupportOrder {
                 target: target(100),
-                origins: vec![
-                    SupportOrigin::Assignment(id(11)),
-                    SupportOrigin::Assignment(id(10)),
-                ],
+                assignments: vec![id(11), id(10)],
             },
-            SupportOriginSequence {
+            AuthoredSupportOrder {
                 target: target(101),
-                origins: vec![SupportOrigin::Assignment(id(12))],
+                assignments: vec![id(12)],
             },
         ]),
         payload_links: vec![],
@@ -294,7 +291,7 @@ fn complete_empty_membership_and_generated_entering_paths_remain_distinct() {
     let mut input = input();
     let generated_target = generated(101, 1);
     input.supports[2].target = generated_target.clone();
-    input.support_origins.as_mut().unwrap()[1].target = generated_target.clone();
+    input.authored_support_order.as_mut().unwrap()[1].target = generated_target.clone();
     let index = SupportBuildIndex::new(&build(input), Default::default()).unwrap();
     assert_eq!(index.authored_activity(&generated_target), None);
     assert_eq!(
@@ -386,7 +383,7 @@ fn missing_order_and_bad_scalars_keep_their_precedence_over_inactivity() {
             Err(SupportPreparationError::Invalid(expected))
         );
     }
-    input.support_origins = None;
+    input.authored_support_order = None;
     let index = SupportBuildIndex::new(&build(input), Default::default()).unwrap();
     assert!(!index.has_origin_order());
     assert_eq!(index.authored_activity(&target(100)), Some(false));

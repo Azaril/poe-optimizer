@@ -288,7 +288,7 @@ fn measured_controls(
                 "payload-membership-not-converted"
             );
         }
-        for field in ["skills", "support_origins"] {
+        for field in ["skills", "authored_support_order"] {
             assert_eq!(
                 preset[field]["completion"]["kind"], "pending",
                 "independent {name} {field}"

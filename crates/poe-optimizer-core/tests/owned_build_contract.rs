@@ -34,7 +34,7 @@ fn build_input() -> BuildInput {
     let support_owner = SlotOwnerDefId::Gem(definition("support-gem"));
     BuildInput {
         generated_inputs: None,
-        support_origins: None,
+        authored_support_order: None,
         allocator: InstanceAllocatorState::from_parts(lineage(), 100),
         revision: BuildRevision::from_u64(7),
         game_version: namespace(),
@@ -217,17 +217,14 @@ fn ordered_support_input() -> BuildInput {
     disabled.id = id(30);
     disabled.enabled = false;
     raw.supports.insert(0, disabled);
-    raw.support_origins = Some(vec![
-        SupportOriginSequence {
+    raw.authored_support_order = Some(vec![
+        AuthoredSupportOrder {
             target: SkillTarget::Authored(id(9)),
-            origins: vec![],
+            assignments: vec![],
         },
-        SupportOriginSequence {
+        AuthoredSupportOrder {
             target: SkillTarget::Authored(id(8)),
-            origins: vec![
-                SupportOrigin::Assignment(id(30)),
-                SupportOrigin::Assignment(id(11)),
-            ],
+            assignments: vec![id(30), id(11)],
         },
     ]);
     raw
@@ -241,18 +238,12 @@ fn support_order_survives_membership_sorting_and_changes_identity() {
         a.input().supports.iter().map(|s| s.id).collect::<Vec<_>>(),
         vec![id(11), id(30)]
     );
-    let sequences = a.input().support_origins.as_ref().unwrap();
+    let sequences = a.input().authored_support_order.as_ref().unwrap();
     assert_eq!(sequences[0].target, SkillTarget::Authored(id(8)));
-    assert_eq!(
-        sequences[0].origins,
-        vec![
-            SupportOrigin::Assignment(id(30)),
-            SupportOrigin::Assignment(id(11))
-        ]
-    );
+    assert_eq!(sequences[0].assignments, vec![id(30), id(11)]);
     let mut reordered = a.clone().into_input();
-    reordered.support_origins.as_mut().unwrap()[0]
-        .origins
+    reordered.authored_support_order.as_mut().unwrap()[0]
+        .assignments
         .reverse();
     let b = BuildSpec::new(reordered, limits()).unwrap();
     assert_ne!(
@@ -269,30 +260,30 @@ fn support_order_survives_membership_sorting_and_changes_identity() {
 #[test]
 fn support_order_requires_disabled_members_exact_targets_and_unique_origins() {
     let mut missing = ordered_support_input();
-    missing.support_origins.as_mut().unwrap()[1]
-        .origins
+    missing.authored_support_order.as_mut().unwrap()[1]
+        .assignments
         .remove(0);
     assert_eq!(
         BuildSpec::new(missing, limits()).unwrap_err().kind,
-        StructuralErrorKind::InvalidSupportOrigins
+        StructuralErrorKind::InvalidAuthoredSupportOrder
     );
     let mut duplicate = ordered_support_input();
-    duplicate.support_origins.as_mut().unwrap()[1]
-        .origins
-        .push(SupportOrigin::Assignment(id(11)));
+    duplicate.authored_support_order.as_mut().unwrap()[1]
+        .assignments
+        .push(id(11));
     assert_eq!(
         BuildSpec::new(duplicate, limits()).unwrap_err().kind,
-        StructuralErrorKind::InvalidSupportOrigins
+        StructuralErrorKind::InvalidAuthoredSupportOrder
     );
     let mut wrong = ordered_support_input();
-    wrong.support_origins.as_mut().unwrap().remove(0);
-    wrong.support_origins.as_mut().unwrap()[0].target = SkillTarget::Authored(id(9));
+    wrong.authored_support_order.as_mut().unwrap().remove(0);
+    wrong.authored_support_order.as_mut().unwrap()[0].target = SkillTarget::Authored(id(9));
     assert_eq!(
         BuildSpec::new(wrong, limits()).unwrap_err().kind,
         StructuralErrorKind::WrongProviderOwner
     );
     let mut dangling = ordered_support_input();
-    dangling.support_origins.as_mut().unwrap()[1].origins[0] = SupportOrigin::Assignment(id(99));
+    dangling.authored_support_order.as_mut().unwrap()[1].assignments[0] = id(99);
     assert!(matches!(
         BuildSpec::new(dangling, limits()).unwrap_err().kind,
         StructuralErrorKind::MissingReference {
@@ -301,7 +292,8 @@ fn support_order_requires_disabled_members_exact_targets_and_unique_origins() {
         }
     ));
     let mut repeated_target = ordered_support_input();
-    repeated_target.support_origins.as_mut().unwrap()[0].target = SkillTarget::Authored(id(8));
+    repeated_target.authored_support_order.as_mut().unwrap()[0].target =
+        SkillTarget::Authored(id(8));
     assert_eq!(
         BuildSpec::new(repeated_target, limits()).unwrap_err().kind,
         StructuralErrorKind::DuplicateAssignment
@@ -309,24 +301,57 @@ fn support_order_requires_disabled_members_exact_targets_and_unique_origins() {
 }
 
 #[test]
-fn legacy_order_omission_stays_omitted_and_null_rejects() {
+fn missing_authored_order_stays_unknown_and_null_rejects() {
     let document = OwnedDocument::Build(Box::new(BuildSpec::new(build_input(), limits()).unwrap()));
     let bytes = encode_owned(&document, limits()).unwrap();
-    assert!(!String::from_utf8_lossy(&bytes).contains("support_origins"));
+    assert!(!String::from_utf8_lossy(&bytes).contains("authored_support_order"));
     assert_eq!(
         encode_owned(&decode_owned(&bytes, limits()).unwrap(), limits()).unwrap(),
         bytes
     );
     let mut wire: Value = serde_json::from_slice(&bytes).unwrap();
-    wire["document"]["value"]["support_origins"] = Value::Null;
+    wire["document"]["value"]["authored_support_order"] = Value::Null;
     assert!(decode_owned(&serde_json::to_vec(&wire).unwrap(), limits()).is_err());
     let mut too_many = ordered_support_input();
-    too_many.support_origins.as_mut().unwrap()[1].origins =
-        vec![SupportOrigin::Assignment(id(11)); limits().max_collection_entries + 1];
+    too_many.authored_support_order.as_mut().unwrap()[1].assignments =
+        vec![id(11); limits().max_collection_entries + 1];
     assert_eq!(
         BuildSpec::new(too_many, limits()).unwrap_err().kind,
         StructuralErrorKind::LimitExceeded
     );
+}
+
+#[test]
+fn authored_order_wire_contains_only_assignment_ids_and_has_no_legacy_alias() {
+    let raw = ordered_support_input();
+    let wire = serde_json::to_value(&raw).unwrap();
+    assert_eq!(
+        wire["authored_support_order"][1]["assignments"],
+        serde_json::to_value(vec![id::<SupportAssignmentId>(30), id(11)]).unwrap()
+    );
+    assert_eq!(
+        serde_json::from_value::<BuildInput>(wire.clone()).unwrap(),
+        raw
+    );
+    let mut wrong = wire.clone();
+    wrong["support_origins"] = wrong
+        .as_object_mut()
+        .unwrap()
+        .remove("authored_support_order")
+        .unwrap();
+    assert!(serde_json::from_value::<BuildInput>(wrong).is_err());
+    let mut wrong = wire.clone();
+    let row = wrong["authored_support_order"][1].as_object_mut().unwrap();
+    let assignments = row.remove("assignments").unwrap();
+    row.insert("origins".into(), assignments);
+    assert!(serde_json::from_value::<BuildInput>(wrong).is_err());
+    let mut wrong = wire;
+    wrong["authored_support_order"][1]["assignments"] = serde_json::to_value(vec![
+        SupportOrigin::Assignment(id(30)),
+        SupportOrigin::Assignment(id(11)),
+    ])
+    .unwrap();
+    assert!(serde_json::from_value::<BuildInput>(wrong).is_err());
 }
 
 #[test]

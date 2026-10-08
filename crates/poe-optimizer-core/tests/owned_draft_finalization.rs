@@ -207,7 +207,7 @@ fn project_input() -> ProjectInput {
             SkillPreset {
                 intent: None,
                 usage_preferences: None,
-                support_origins: None,
+                authored_support_order: None,
                 id: id(130),
                 skills: vec![id(61), id(60)],
                 supports: vec![id(70)],
@@ -216,7 +216,7 @@ fn project_input() -> ProjectInput {
             SkillPreset {
                 intent: None,
                 usage_preferences: None,
-                support_origins: None,
+                authored_support_order: None,
                 id: id(131),
                 skills: vec![id(62)],
                 supports: vec![],
@@ -357,10 +357,10 @@ fn pending_result(session: &DraftSession) -> (Vec<DraftIssue>, QueryDraft) {
     }
 }
 
-fn support_sequence_draft() -> SupportOriginSequenceDraft {
-    SupportOriginSequence {
+fn support_sequence_draft() -> AuthoredSupportOrderDraft {
+    AuthoredSupportOrder {
         target: generated(),
-        origins: vec![SupportOrigin::Assignment(id(70))],
+        assignments: vec![id(70)],
     }
     .into()
 }
@@ -368,16 +368,17 @@ fn support_sequence_draft() -> SupportOriginSequenceDraft {
 #[test]
 fn generated_support_order_survives_project_and_draft_projection() {
     let mut raw = input();
-    raw.skill_presets.members[0].support_origins = Some(vec![support_sequence_draft()].into());
+    raw.skill_presets.members[0].authored_support_order =
+        Some(vec![support_sequence_draft()].into());
     let session = DraftSession::new(raw, limits()).unwrap();
     let bytes = encode_draft(&session, limits()).unwrap();
     let restored = decode_draft(&bytes, limits()).unwrap();
     let result = ready(&restored, selection());
     assert_eq!(
-        result.request().build().input().support_origins,
-        Some(vec![SupportOriginSequence {
+        result.request().build().input().authored_support_order,
+        Some(vec![AuthoredSupportOrder {
             target: generated(),
-            origins: vec![SupportOrigin::Assignment(id(70))]
+            assignments: vec![id(70)]
         }])
     );
     assert_eq!(
@@ -390,9 +391,8 @@ fn generated_support_order_survives_project_and_draft_projection() {
 fn pending_support_order_is_an_owned_issue_and_never_selects_a_candidate() {
     let mut raw = input();
     let mut sequence = support_sequence_draft();
-    sequence.origins =
-        DraftField::Pending(pending(210, vec![vec![SupportOrigin::Assignment(id(70))]]));
-    raw.skill_presets.members[0].support_origins = Some(vec![sequence].into());
+    sequence.assignments = DraftField::Pending(pending(210, vec![vec![id(70)]]));
+    raw.skill_presets.members[0].authored_support_order = Some(vec![sequence].into());
     let session = DraftSession::new(raw, limits()).unwrap();
     let bytes = encode_draft(&session, limits()).unwrap();
     let restored = decode_draft(&bytes, limits()).unwrap();
@@ -414,35 +414,30 @@ fn pending_support_order_is_an_owned_issue_and_never_selects_a_candidate() {
 fn support_order_draft_validates_candidates_membership_and_null() {
     let mut raw = input();
     let mut sequence = support_sequence_draft();
-    sequence.origins = DraftField::Pending(pending(
-        210,
-        vec![vec![
-            SupportOrigin::Assignment(id(70)),
-            SupportOrigin::Assignment(id(70)),
-        ]],
-    ));
-    raw.skill_presets.members[0].support_origins = Some(vec![sequence].into());
+    sequence.assignments = DraftField::Pending(pending(210, vec![vec![id(70), id(70)]]));
+    raw.skill_presets.members[0].authored_support_order = Some(vec![sequence].into());
     assert_eq!(
         DraftSession::new(raw, limits()).unwrap_err().kind,
-        StructuralErrorKind::InvalidSupportOrigins
+        StructuralErrorKind::InvalidAuthoredSupportOrder
     );
     let mut missing = input();
-    missing.skill_presets.members[0].support_origins = Some(
-        vec![SupportOriginSequenceDraft {
+    missing.skill_presets.members[0].authored_support_order = Some(
+        vec![AuthoredSupportOrderDraft {
             target: generated().into(),
-            origins: vec![].into(),
+            assignments: vec![].into(),
         }]
         .into(),
     );
     assert_eq!(
         DraftSession::new(missing, limits()).unwrap_err().kind,
-        StructuralErrorKind::InvalidSupportOrigins
+        StructuralErrorKind::InvalidAuthoredSupportOrder
     );
     let legacy = DraftSession::new(input(), limits()).unwrap();
     let bytes = encode_draft(&legacy, limits()).unwrap();
-    assert!(!String::from_utf8_lossy(&bytes).contains("support_origins"));
+    assert!(!String::from_utf8_lossy(&bytes).contains("authored_support_order"));
     let mut wire: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
-    wire["draft"]["skill_presets"]["members"][0]["support_origins"] = serde_json::Value::Null;
+    wire["draft"]["skill_presets"]["members"][0]["authored_support_order"] =
+        serde_json::Value::Null;
     assert!(decode_draft(&serde_json::to_vec(&wire).unwrap(), limits()).is_err());
 }
 
@@ -457,7 +452,7 @@ fn complete_selection_matches_explicit_composition_and_shared_record_identity() 
     let direct = BuildSpec::new(
         BuildInput {
             generated_inputs: None,
-            support_origins: None,
+            authored_support_order: None,
             allocator: p.allocator,
             revision: p.revision,
             game_version: p.game_version,

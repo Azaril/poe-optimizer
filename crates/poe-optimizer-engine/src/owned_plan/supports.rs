@@ -285,10 +285,10 @@ impl<I: DefinitionSchemaIndex> OwnedSupportPreparationPlan<I> {
                 .request
                 .build()
                 .input()
-                .support_origins
+                .authored_support_order
                 .as_ref()
                 .and_then(|rows| rows.iter().find(|s| s.target == self.target))
-            && let Some(SupportOrigin::Assignment(id)) = sequence.origins.get(*index)
+            && let Some(id) = sequence.assignments.get(*index)
             && let Some((level, quality)) = failures.get(id)
         {
             let cause = if *reason == SupportPreparationGap::EffectiveLevel {

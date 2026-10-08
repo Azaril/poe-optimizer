@@ -941,6 +941,16 @@ Import obligation only after authored input accounting and the mandatory native
 gate exist. Rebuild current artifacts without a compatibility branch. See
 [support composition](owned-support-origin-composition-proposal.md).
 
+The persisted contract is `authored_support_order` on `SkillPreset`, its Draft
+form and the composed Build. Each `AuthoredSupportOrder` binds an exact
+`SkillTarget` to an ordered list of physical `SupportAssignmentId` values.
+Core checks exact membership, targets, duplicates and bounds. Preset order cannot
+contain runtime `SupportOrigin` values; Engine derives those identities for
+preparation and retained delivery. Missing authored order remains unknown.
+Neither an authored Complete inventory nor an empty assignment list certifies
+composed support-source coverage. Earlier development field/payload shapes are
+rejected and affected build documents are reimported, without aliases.
+
 The first native source domain is explicitly `AuthoredAssignmentsOnly` in
 `RulePackageInput.support_discovery`, keyed by an owned definition or slot.
 It certifies the reviewed absence of other support origins throughout that

@@ -374,7 +374,7 @@ mod tests {
             id: SkillPresetId::from_instance_id(instance(2)),
             skills: complete(vec![]),
             supports: complete(vec![]),
-            support_origins: None,
+            authored_support_order: None,
             payload_links: complete(vec![]),
             usage_preferences: None,
             intent: Some(SkillPresetIntentDraftV1 {

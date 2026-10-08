@@ -2,7 +2,7 @@
 use super::*;
 use poe_optimizer_core::{
     build_identity::GemInstanceId,
-    owned_build::{BuildSpec, LoadoutScope, OwnedInputLimits, SupportOrigin},
+    owned_build::{BuildSpec, LoadoutScope, OwnedInputLimits},
     owned_definitions::GameVersionNamespace,
 };
 use std::collections::BTreeMap;
@@ -116,7 +116,7 @@ impl SupportBuildIndex {
 
     fn new_inner(build: &BuildSpec, budget: &mut Budget) -> Result<Self> {
         let input = build.input();
-        let sequences = input.support_origins.as_deref().unwrap_or_default();
+        let sequences = input.authored_support_order.as_deref().unwrap_or_default();
         let total = [
             input.gems.len(),
             input.supports.len(),
@@ -145,16 +145,16 @@ impl SupportBuildIndex {
             max_target_depth = max_target_depth.max(target_depth);
         }
         for sequence in sequences {
-            if sequence.origins.len() > budget.limits.max_origins {
+            if sequence.assignments.len() > budget.limits.max_origins {
                 return Err(SupportPreparationError::Limit("origins"));
             }
-            budget.charge(sequence.origins.len())?;
+            budget.charge(sequence.assignments.len())?;
         }
         // All input collection sizes/depths are checked before secondary indexes
         // allocate or clone source keys. Per-row work precedes each insertion.
         let mut result = Self {
             namespace: input.game_version.clone(),
-            has_origin_order: input.support_origins.is_some(),
+            has_origin_order: input.authored_support_order.is_some(),
             gems: Vec::with_capacity(input.gems.len()),
             assignments: Vec::with_capacity(input.supports.len()),
             assignment_lookup: BTreeMap::new(),
@@ -200,9 +200,8 @@ impl SupportBuildIndex {
         }
         for sequence in sequences {
             let target = result.insert_target(&sequence.target, budget)?;
-            let mut ordered = Vec::with_capacity(sequence.origins.len());
-            for origin in &sequence.origins {
-                let SupportOrigin::Assignment(id) = origin;
+            let mut ordered = Vec::with_capacity(sequence.assignments.len());
+            for id in &sequence.assignments {
                 budget.charge(lookup_work(result.assignment_lookup.len()))?;
                 let row =
                     *result
@@ -367,7 +366,7 @@ fn prepare_build_supports_inner(
     }
     // Preserve the existing cheap missing-order outcome, including its budget
     // boundary, before doing optional cold indexing that cannot resolve it.
-    if build.input().support_origins.is_none() {
+    if build.input().authored_support_order.is_none() {
         return Ok(unresolved(SupportPreparationGap::OriginOrder, None));
     }
     let index = SupportBuildIndex::new_inner(build, budget)?;

@@ -558,7 +558,7 @@ fn ordinary_execution_final_writers_still_resolve_after_native_selection() {
         .supports
         .retain(|row| row.target != target(30, "second"));
     f.build
-        .support_origins
+        .authored_support_order
         .as_mut()
         .unwrap()
         .retain(|row| row.target != target(30, "second"));

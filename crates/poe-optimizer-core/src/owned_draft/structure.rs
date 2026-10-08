@@ -820,13 +820,13 @@ impl Visit<'_> {
             &value.payload_links,
             OccurrenceKind::PayloadLink,
         )?;
-        if let Some(sequences) = &value.support_origins {
+        if let Some(sequences) = &value.authored_support_order {
             let members: BTreeSet<_> = value.supports.members.iter().copied().collect();
             let mut targets = BTreeSet::new();
             let mut seen = BTreeSet::new();
             let mut complete = matches!(sequences.completion, DraftListCompletion::Complete);
             self.list(
-                &format!("{path}.support_origins"),
+                &format!("{path}.authored_support_order"),
                 sequences,
                 |v, p, sequence| {
                     v.skill_target(&format!("{p}.target"), &sequence.target)?;
@@ -842,17 +842,20 @@ impl Visit<'_> {
                         return Err(error(p, StructuralErrorKind::DuplicateAssignment));
                     }
                     v.field(
-                        &format!("{p}.origins"),
-                        &sequence.origins,
+                        &format!("{p}.assignments"),
+                        &sequence.assignments,
                         |v, p, origins| {
-                            v.check
-                                .support_origin_sequence(p, target.as_ref(), origins, &members)
+                            v.check.authored_support_assignments(
+                                p,
+                                target.as_ref(),
+                                origins,
+                                &members,
+                            )
                         },
                     )?;
                     if !v.gathering {
-                        if let DraftField::Known { value: origins } = &sequence.origins {
-                            for origin in origins {
-                                let SupportOrigin::Assignment(id) = origin;
+                        if let DraftField::Known { value: origins } = &sequence.assignments {
+                            for id in origins {
                                 if !seen.insert(*id) {
                                     return Err(error(p, StructuralErrorKind::DuplicateAssignment));
                                 }
@@ -870,8 +873,8 @@ impl Visit<'_> {
                 && seen != members
             {
                 return Err(error(
-                    &format!("{path}.support_origins"),
-                    StructuralErrorKind::InvalidSupportOrigins,
+                    &format!("{path}.authored_support_order"),
+                    StructuralErrorKind::InvalidAuthoredSupportOrder,
                 ));
             }
         }

@@ -149,7 +149,7 @@ impl World {
         }
         let physical_owner = install_physical_source(&mut base, &endpoint, &bindings["target"]);
         base.inner.build.supports.clear();
-        base.inner.build.support_origins = Some(vec![]);
+        base.inner.build.authored_support_order = Some(vec![]);
         base.inner.build.gems.retain(|g| g.id == id(900));
         base.inner.build.skills.retain(|s| s.id == id(22));
         for source in OFFERINGS {

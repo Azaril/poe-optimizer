@@ -33,8 +33,11 @@ fn normalize(
     )
 }
 
-fn sequence(preset: &SkillPresetDraft) -> &[SupportOriginSequenceDraft] {
-    let order = preset.support_origins.as_ref().expect("reviewed order");
+fn sequence(preset: &SkillPresetDraft) -> &[AuthoredSupportOrderDraft] {
+    let order = preset
+        .authored_support_order
+        .as_ref()
+        .expect("reviewed order");
     let DraftListCompletion::Pending { code, .. } = &order.completion else {
         panic!("local order cannot close merged origin discovery")
     };
@@ -43,8 +46,8 @@ fn sequence(preset: &SkillPresetDraft) -> &[SupportOriginSequenceDraft] {
     &order.members
 }
 
-fn members(sequence: &SupportOriginSequenceDraft) -> &[SupportOrigin] {
-    let DraftField::Known { value } = &sequence.origins else {
+fn members(sequence: &AuthoredSupportOrderDraft) -> &[SupportAssignmentId] {
+    let DraftField::Known { value } = &sequence.assignments else {
         panic!("exact local assignment order should be preserved")
     };
     value
@@ -80,7 +83,7 @@ fn source_order_preserves_disabled_and_duplicate_definitions_without_selecting_w
             .supports
             .members
             .iter()
-            .map(|row| SupportOrigin::Assignment(row.id))
+            .map(|row| row.id)
             .collect::<Vec<_>>()
     );
     assert_eq!(input.supports.members[0].enabled.to_resolved(), Some(false));
@@ -110,24 +113,17 @@ fn source_order_preserves_disabled_and_duplicate_definitions_without_selecting_w
     relabeled.supports.members[0].id = second;
     relabeled.supports.members[1].id = first;
     let origins = &mut relabeled.skill_presets.members[0]
-        .support_origins
+        .authored_support_order
         .as_mut()
         .unwrap()
         .members[0]
-        .origins;
-    *origins = vec![
-        SupportOrigin::Assignment(second),
-        SupportOrigin::Assignment(first),
-    ]
-    .into();
+        .assignments;
+    *origins = vec![second, first].into();
     relabeled.supports.members.sort_by_key(|row| row.id);
     validate_draft(&relabeled, DraftLimits::default()).unwrap();
     assert_eq!(
         members(&sequence(&relabeled.skill_presets.members[0])[0]),
-        &[
-            SupportOrigin::Assignment(second),
-            SupportOrigin::Assignment(first)
-        ]
+        &[second, first]
     );
     assert_eq!(
         relabeled.supports.members[0].enabled.to_resolved(),
@@ -263,7 +259,7 @@ fn omitted_policy_preserves_wire_digest_and_allocator_behavior() {
     );
     assert!(
         original.draft().input().skill_presets.members[0]
-            .support_origins
+            .authored_support_order
             .is_none()
     );
     let reviewed = normalize(

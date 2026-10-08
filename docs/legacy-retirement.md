@@ -44,8 +44,10 @@ subsets receive the same gate and new plan identity; older packages receive
 coverage gaps, not a compatibility execution path. Test-only assignment-domain
 assertions describe finite synthetic worlds and must never become a production
 default. Structural provider inspection reuses Core's existing resolver and
-does not enable disabled providers. Preset authored-order naming/accounting,
-game-data publication and relocation of Import `01de` remain follow-up work.
+does not enable disabled providers. Preset authored order now uses physical
+assignment IDs in `authored_support_order`, with no old-field or runtime-origin
+payload alias. Game-data publication, source-input accounting and relocation of
+Import `01de` remain follow-up work.
 
 The ordinary recipe-extension authoring path now accepts reviewed support-source
 domains and carries them through existing publication. Retain that shared route;
@@ -54,6 +56,19 @@ Publication tests exercise missing/Unmapped preservation and reject replacement
 of prior authority. During the preset cleanup, reconcile archived generated-field
 responsibilities and saved `slot` relationships before retiring the mixed-scope
 issue. No compatibility alias or second persisted support model is needed.
+
+The authored-order cutover updates the existing Core/Draft/Project records and
+their consumers in place. Runtime support provenance and the source-construction
+witness remain useful and separate. Preserve the native source-coverage gate and
+old source evidence; reimport affected development documents instead of adding
+an old-document runtime reader. The pre-existing untracked incoming-critical
+draft was not migrated and remains outside tracked-target validation.
+
+The joined Sniper fixture no longer reads saved character/Offering drafts or
+selection files beside the data package. It reimports unchanged source XML,
+checks the fresh draft commitment and derives the saved selection through the
+shared source helper. This removes an actual retired-format consumer rather
+than introducing a legacy decoder for its stale files.
 
 **Support-origin source census, 2026-10-08:** the new optional observer reuses
 the existing Rust source runner and records actual original constructor/query

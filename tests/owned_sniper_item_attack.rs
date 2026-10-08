@@ -29,6 +29,7 @@ mod buff_sources_native;
 use buff_effect_family::evidence as source_evidence;
 #[path = "support/owned_sniper_item_attack_evidence.rs"]
 mod evidence;
+use evidence::selected;
 #[allow(dead_code)]
 #[path = "support/owned_gigantic_flags.rs"]
 mod gigantic_family;
@@ -97,6 +98,31 @@ fn path() -> PathBuf {
         std::env::var_os("POE_OPTIMIZER_TEST_SNIPER_ITEM_ATTACK_RELEASE")
             .expect("checked current release containing item routing and Sniper preparation"),
     )
+}
+/// Saved drafts beside a data package may belong to a retired development
+/// format. Always derive the component's input and selection from original XML.
+fn imported_selection(package: &std::path::Path) -> (Value, Value) {
+    use poe_optimizer_core::owned_draft::{DraftLimits, decode_draft};
+    let source = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/builds/breadth-20260908/build-05.xml");
+    let xml = std::fs::read(&source).unwrap();
+    let temp = tempfile::tempdir().unwrap();
+    let output = temp.path().join("canonical");
+    release::normalize(package, &source, 5, &output);
+    let bytes = std::fs::read(output.join("draft.json")).unwrap();
+    let draft = decode_draft(&bytes, DraftLimits::default()).unwrap();
+    let side: Value = shared::read(output.join("sidecar.json"));
+    assert_eq!(
+        serde_json::to_value(
+            draft
+                .digest(DraftLimits::default().input.max_wire_bytes)
+                .unwrap()
+        )
+        .unwrap(),
+        side["draft"]
+    );
+    let selection = selected::selection(&xml, &output);
+    (serde_json::from_slice(&bytes).unwrap(), selection)
 }
 #[derive(Clone)]
 struct World {
@@ -420,11 +446,14 @@ impl World {
         let recipient_buffs = buff_effect_recipients_native::install(&mut w, &endpoint);
         let source_buffs = buff_sources_native::install(&mut w, &endpoint);
         let gigantic = gigantic_native::install(&mut w, &endpoint, &path);
-        let attributes = attribute_base_native::install(&mut w, &endpoint, &path);
+        let (draft, selection) = imported_selection(&path);
+        let attributes =
+            attribute_base_native::install(&mut w, &endpoint, &path, &draft, &selection);
         let inherent_life = inherent_life_native::install(&mut w, &endpoint, &path);
         let player_life = player_life_contribution_native::install(&mut w, &endpoint);
         let life_inputs = player_life_inputs_native::install(&mut w, &endpoint, &path);
-        let offering = offering_application_native::install(&mut w, &endpoint, &path);
+        let offering = offering_application_native::install(&mut w, &endpoint, &draft, &selection);
+        assert_eq!(before, release::inventory(&path));
         Self {
             sniper: w,
             actual_actor_coverage,
@@ -840,7 +869,7 @@ fn sniper_items_keep_partial_coverage_missing_assembly_and_unknown_support_refus
             .contains("unknown source property program")
     );
     let mut w = World::load();
-    w.sniper.base.source.base.inner.build.support_origins = None;
+    w.sniper.base.source.base.inner.build.authored_support_order = None;
     assert!(matches!(
         w.evaluate().outcome,
         SupportEffectsOutcome::PreparationUnresolved {

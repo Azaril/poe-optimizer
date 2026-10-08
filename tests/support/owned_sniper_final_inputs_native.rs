@@ -106,7 +106,7 @@ fn sniper_final_inputs_refuse_invalid_or_missing_preparation() {
     );
     let mut w = World::load();
     let baseline = w.evaluate();
-    let inventory = w.base.source.base.inner.build.support_origins.take();
+    let inventory = w.base.source.base.inner.build.authored_support_order.take();
     assert!(inventory.is_some());
     let missing = w.evaluate();
     assert!(
@@ -120,7 +120,7 @@ fn sniper_final_inputs_refuse_invalid_or_missing_preparation() {
         ),
         "missing outer inventory must not become a complete empty list: {missing:?}"
     );
-    w.base.source.base.inner.build.support_origins = inventory;
+    w.base.source.base.inner.build.authored_support_order = inventory;
     let restored = w.evaluate();
     assert_eq!(restored, baseline);
     w.check(&restored, [22, 22], [0., 0.]);

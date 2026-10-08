@@ -388,7 +388,7 @@ impl World {
         inner.build.gems.clear();
         inner.build.supports.clear();
         inner.build.skills.clear();
-        inner.build.support_origins = Some(vec![]);
+        inner.build.authored_support_order = Some(vec![]);
         inner.sources.clear();
         // Keep shared explicit Djinn activation/admission facts, replacing only
         // support-owner selection with this publication's complete real bodies.

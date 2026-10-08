@@ -444,7 +444,7 @@ mod tests {
             id: preset_id,
             skills: vec![skill_id].into(),
             supports: vec![].into(),
-            support_origins: None,
+            authored_support_order: None,
             payload_links: vec![].into(),
             usage_preferences: None,
         };
@@ -584,7 +584,7 @@ mod tests {
                             .closure(set, "generated-skill-inputs-not-converted", vec![])
                             .unwrap(),
                     });
-                    preset.support_origins = Some(
+                    preset.authored_support_order = Some(
                         b.closure(set, "support-origin-discovery-not-converted", vec![])
                             .unwrap(),
                     );
@@ -599,7 +599,7 @@ mod tests {
                     let completion = match owner {
                         0 => &mut preset.intent.as_mut().unwrap().generated_inputs.completion,
                         1 => &mut preset.intent.as_mut().unwrap().usage.completion,
-                        2 => &mut preset.support_origins.as_mut().unwrap().completion,
+                        2 => &mut preset.authored_support_order.as_mut().unwrap().completion,
                         _ => unreachable!(),
                     };
                     match case {
@@ -622,7 +622,7 @@ mod tests {
                         }
                         5 => {
                             if owner == 2 {
-                                preset.support_origins = None
+                                preset.authored_support_order = None
                             } else {
                                 preset.intent = None
                             }

@@ -260,13 +260,13 @@ fn magnified_removal_disable_and_same_skill_occurrences_are_independent() {
     removed
         .inner
         .build
-        .support_origins
+        .authored_support_order
         .as_mut()
         .unwrap()
         .iter_mut()
         .find(|r| r.target == target)
         .unwrap()
-        .origins
+        .assignments
         .clear();
     let r = evaluate(&removed);
     assert!(
@@ -418,7 +418,7 @@ fn magnified_missing_facts_partial_owners_and_disabled_roots_refuse_closure() {
     partial.inner.owner_mut(subject(gem)).programs.closure = closure;
     assert!(partial.checked_plan().is_err());
     let mut origins = World::load();
-    origins.inner.build.support_origins = None;
+    origins.inner.build.authored_support_order = None;
     if let Ok(p) = origins.checked_plan() {
         assert!(!matches!(
             p.evaluate(&mut p.new_scratch()).unwrap().outcome,

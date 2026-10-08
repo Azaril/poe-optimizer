@@ -175,12 +175,11 @@ pub fn evaluate(facts: Facts) -> OwnedEffectsReport {
     };
     f.build.supports.retain(|s| s.id == occurrence(60));
     f.build
-        .support_origins
+        .authored_support_order
         .as_mut()
         .unwrap()
         .retain(|r| r.target == delivery::target(30, "first"));
-    f.build.support_origins.as_mut().unwrap()[0].origins =
-        vec![SupportOrigin::Assignment(occurrence(60))];
+    f.build.authored_support_order.as_mut().unwrap()[0].assignments = vec![occurrence(60)];
     f.schema
         .definitions
         .push(DefinitionDescriptor::Unit(DefinitionEntry {

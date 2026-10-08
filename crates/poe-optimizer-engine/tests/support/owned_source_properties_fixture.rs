@@ -288,20 +288,14 @@ pub fn fixture() -> Fixture {
             owner(31)
         };
     }
-    f.build.support_origins = Some(vec![
-        SupportOriginSequence {
+    f.build.authored_support_order = Some(vec![
+        AuthoredSupportOrder {
             target: owner(30),
-            origins: vec![
-                SupportOrigin::Assignment(occurrence(60)),
-                SupportOrigin::Assignment(occurrence(61)),
-            ],
+            assignments: vec![occurrence(60), occurrence(61)],
         },
-        SupportOriginSequence {
+        AuthoredSupportOrder {
             target: owner(31),
-            origins: vec![
-                SupportOrigin::Assignment(occurrence(64)),
-                SupportOrigin::Assignment(occurrence(65)),
-            ],
+            assignments: vec![occurrence(64), occurrence(65)],
         },
     ]);
     f.queries.requests = [30, 31]
@@ -485,8 +479,8 @@ pub fn metrics(plan: Effects) -> Metrics {
 }
 pub fn without_supports(f: &mut Fixture) {
     f.build.supports.clear();
-    for sequence in f.build.support_origins.as_mut().unwrap() {
-        sequence.origins.clear();
+    for sequence in f.build.authored_support_order.as_mut().unwrap() {
+        sequence.assignments.clear();
     }
 }
 pub fn evaluated(report: &SupportEffectsReport) -> &OwnedEffectsReport {
@@ -608,12 +602,9 @@ pub fn direct_fixture() -> Fixture {
     for row in &mut f.build.supports {
         row.target = owner(32)
     }
-    f.build.support_origins = Some(vec![SupportOriginSequence {
+    f.build.authored_support_order = Some(vec![AuthoredSupportOrder {
         target: owner(32),
-        origins: vec![
-            SupportOrigin::Assignment(occurrence(60)),
-            SupportOrigin::Assignment(occurrence(61)),
-        ],
+        assignments: vec![occurrence(60), occurrence(61)],
     }]);
     f.queries.requests.clear();
     f
@@ -780,18 +771,14 @@ pub fn family_fixture() -> Fixture {
     f.build
         .supports
         .retain(|row| [occurrence(90), occurrence(91), occurrence(61)].contains(&row.id));
-    f.build.support_origins = Some(vec![
-        SupportOriginSequence {
+    f.build.authored_support_order = Some(vec![
+        AuthoredSupportOrder {
             target: owner(30),
-            origins: vec![
-                SupportOrigin::Assignment(occurrence(90)),
-                SupportOrigin::Assignment(occurrence(91)),
-                SupportOrigin::Assignment(occurrence(61)),
-            ],
+            assignments: vec![occurrence(90), occurrence(91), occurrence(61)],
         },
-        SupportOriginSequence {
+        AuthoredSupportOrder {
             target: owner(31),
-            origins: vec![],
+            assignments: vec![],
         },
     ]);
     f

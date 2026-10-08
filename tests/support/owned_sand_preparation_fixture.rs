@@ -419,14 +419,14 @@ impl World {
                 ]),
             }],
             supports: vec![],
-            support_origins: Some(vec![
-                SupportOriginSequence {
+            authored_support_order: Some(vec![
+                AuthoredSupportOrder {
                     target: manual(),
-                    origins: vec![],
+                    assignments: vec![],
                 },
-                SupportOriginSequence {
+                AuthoredSupportOrder {
                     target: tree(),
-                    origins: vec![],
+                    assignments: vec![],
                 },
             ]),
             generated_inputs: Some(GeneratedSkillInputsV1 {

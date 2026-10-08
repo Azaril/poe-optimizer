@@ -450,7 +450,7 @@ fn rejects_level(package: &StagedOwnedRelease, gem: &GemDraft) -> bool {
                 allocations: vec![],
                 skills: vec![],
                 supports: vec![],
-                support_origins: None,
+                authored_support_order: None,
                 payload_links: vec![],
                 choices: vec![],
             },

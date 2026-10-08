@@ -101,7 +101,68 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Current publication checkpoint: support-source authoring
+## Current contract checkpoint: authored support order
+
+Preset, Draft and composed Build records now use `authored_support_order` and
+`AuthoredSupportOrder { target, assignments }`. The assignments are physical
+`SupportAssignmentId` values in explicit order; runtime `SupportOrigin` variants
+are no longer a possible saved preset payload. Core retains exact target and
+membership validation, duplicate rejection, bounds, Pending candidates and
+independent preset composition. Engine derives runtime origins for preparation
+and delivery through the existing support index. No execution algorithm, source
+discovery capability or provider exclusion was inferred from this format change.
+
+The current wire shape rejects the old field and wrapped-origin values. Existing
+test fixtures and callers use the new shape; no compatibility alias or second
+build model was added. Optional order still means unknown when absent. Rules and
+game-data packages contain no saved build documents and need no content rewrite
+for this DTO change; source builds must be normalized afresh.
+
+Validation: **249 Core, 120 Engine and 314 Import checks pass**, plus the new
+current-package five-build CLI reimport check. Strict Clippy passes for all
+library targets/features and the binary plus all 194 tracked CLI test targets.
+The pre-existing untracked incoming-critical draft remains excluded and untouched.
+Logs use the `runs/owned-authored-support-order-` prefix:
+`core-01.log`, `engine-01.log`, `import-01.log`, `reimport-01.log`,
+`clippy-libs-04.log` and `clippy-cli-04.log`.
+
+The reimport report is `runs/owned-authored-support-order-reimport-01/validation.json`.
+All five unchanged originals preserve source-derived assignment order across
+all presets, retain **107/117/109/123/5** selected input obligations and each
+retain 22 queries. The checked data package is byte-identical. The adjacent
+`migration-comparison.json` records exact prior/current draft and sidecar
+comparison after the intended DTO transformation and a bijective relabel of
+the one host-assigned import lineage. Every local ID, relationship, allocator
+watermark, issue and provenance row is preserved. The CLI deliberately assigns
+a fresh lineage per import; this is identity allocation, not nondeterministic
+evaluation. Draft commitments change, and no issue is retired.
+
+The joined Sniper fixture initially exposed an old saved-draft dependency in
+its Offering preference reader. Character and Offering inputs now share a fresh
+import of the original XML and a source-derived selection, with the current
+draft commitment checked. Neither reads sibling drafts beside the data package.
+The first failing run and isolated error are retained as `sniper-01.log` and
+`sniper-isolate-01.log` under the same prefix; no legacy decoder was added.
+After this correction, **all 76 joined Sniper checks pass in 37.62s**
+(`runs/owned-authored-support-order-sniper-02.log`), bringing this checkpoint's
+passing checks to **760**. This covers the actual imported item inputs,
+attributes, Life components, accuracy, Offering activation/non-stacking,
+unresolved coverage and reused/Rayon results within the finite component graph;
+it does not produce a complete original-build evaluation.
+Strict Clippy also passes after the joined-fixture correction
+(`runs/owned-authored-support-order-clippy-sniper-02.log`).
+
+**Resume:** finish authored-input accounting using the shared whole-source
+census and exact generated-provider bindings, while preserving unresolved saved
+relations and their provenance. The former mixed-scope completion issue still
+exists at the new authored-order field and remains Pending. It must not be
+cleared by the rename, a physical assignment count, or empty observed source
+buckets. Review support-domain data and exact provider exclusions for the
+closest build through the publication path below. Original05 still has five
+selected input obligations; complete native builds remain **0/5**. The separate
+application-group contribution-query decision remains awaiting owner input.
+
+## Publication checkpoint: support-source authoring
 
 `OwnedRecipeExtension.support_source_domains` now publishes reviewed support
 declarations through the existing offline authoring path. It accepts new exact
@@ -1667,13 +1728,15 @@ sequences, but those are not the complete runtime source inventory. The source
 also discovers additional effects per Gem, ExtraSupport, generated item slot
 sharing, LinkedSupport and provider-specific noSupports behavior. Existing
 `support_inventory::Census/complete` proves physical membership only. A preset's
-`support_origins` survives independent equipment/tree changes, so an absence
-certificate derived only from today's selected Item28 or tree is unsafe. Keep
+former `support_origins` field survived independent equipment/tree changes, so
+an absence certificate derived only from today's selected Item28 or tree is unsafe. Keep
 authored support assignments distinct from complete runtime origins. Review the
 existing `support_origin_order`/shared-source/provider-resolution seam and cold
 composition validation before retiring `01de`; the
 [public ownership/completeness proposal](owned-support-origin-composition-proposal.md)
-was accepted October 8; implementation is pending. Complete provider coverage can prove absence only
+was accepted October 8. The current checkpoint above implements the authored-order
+DTO and common native gate; source accounting and game-data adoption remain pending.
+Complete provider coverage can prove absence only
 where it accounts for every relevant capability. No new runtime origin variant
 is needed merely to describe a sound Assignment-only domain, but Partial rules
 cannot be interpreted as absence of extra supports.

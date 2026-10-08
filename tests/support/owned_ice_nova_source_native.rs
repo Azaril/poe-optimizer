@@ -311,7 +311,7 @@ impl SourceFixture {
     pub fn raw(&mut self, levels: &[u16]) {
         self.f.levels(&vec![17; levels.len()]);
         self.f.build.supports.clear();
-        self.f.build.support_origins = Some(vec![]);
+        self.f.build.authored_support_order = Some(vec![]);
         for (copy, level) in levels.iter().copied().enumerate() {
             self.f.build.gems[copy].level = level;
             self.f.build.gems[copy].quality = Some(QualitySelection {
@@ -320,12 +320,12 @@ impl SourceFixture {
             });
             self.f
                 .build
-                .support_origins
+                .authored_support_order
                 .as_mut()
                 .unwrap()
-                .push(SupportOriginSequence {
+                .push(AuthoredSupportOrder {
                     target: Self::owner(copy),
-                    origins: vec![],
+                    assignments: vec![],
                 });
         }
         assert!(
@@ -397,17 +397,17 @@ impl SourceFixture {
                 target: Self::owner(copy),
                 enabled: true,
             });
-            origins.push(SupportOrigin::Assignment(assignment));
+            origins.push(assignment);
         }
         self.f
             .build
-            .support_origins
+            .authored_support_order
             .as_mut()
             .unwrap()
             .iter_mut()
             .find(|s| s.target == Self::owner(copy))
             .unwrap()
-            .origins = origins;
+            .assignments = origins;
     }
     pub fn plan(&self) -> Plan {
         self.f.plan_with_source(Some(&self.config))

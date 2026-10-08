@@ -27,7 +27,7 @@ pub(super) fn initialize(
     b: &mut Builder<'_, '_>,
     source: SourceOccurrenceId,
     policy: Option<&SupportOriginOrderPolicy>,
-) -> Result<Option<DraftList<SupportOriginSequenceDraft>>> {
+) -> Result<Option<DraftList<AuthoredSupportOrderDraft>>> {
     match policy {
         None => Ok(None),
         Some(_) => Ok(Some(b.closure(
@@ -52,7 +52,7 @@ impl OrderIndex {
         assignment: SupportAssignmentId,
         target: &DraftSkillTarget,
     ) -> Result<()> {
-        let Some(order) = &mut preset.support_origins else {
+        let Some(order) = &mut preset.authored_support_order else {
             return Ok(());
         };
         b.charge(1)?;
@@ -71,21 +71,21 @@ impl OrderIndex {
                 return Err(NormalizationError::Limit("support origin sequences"));
             }
             let index = order.members.len();
-            order.members.push(SupportOriginSequenceDraft {
+            order.members.push(AuthoredSupportOrderDraft {
                 target: DraftSkillTarget::Authored((*target).into()),
-                origins: Vec::<SupportOrigin>::new().into(),
+                assignments: Vec::<SupportAssignmentId>::new().into(),
             });
             self.sequences.insert(key, index);
             index
         };
-        let DraftField::Known { value: origins } = &mut order.members[index].origins else {
+        let DraftField::Known { value: origins } = &mut order.members[index].assignments else {
             unreachable!("source-order collector only creates known local sequences")
         };
         b.charge(1)?;
         if origins.len() >= limit {
             return Err(NormalizationError::Limit("support origin sequence members"));
         }
-        origins.push(SupportOrigin::Assignment(assignment));
+        origins.push(assignment);
         Ok(())
     }
 }
