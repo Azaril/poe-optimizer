@@ -7,7 +7,11 @@ param(
     [string] $FilePath,
 
     [Parameter(Mandatory)]
-    [string[]] $ArgumentList
+    [string[]] $ArgumentList,
+
+    # Dispatchers can run independent checks before returning an aggregate
+    # failure. Existing callers retain the original process-exit behavior.
+    [switch] $ReturnExitCode
 )
 
 $ErrorActionPreference = 'Stop'
@@ -56,5 +60,8 @@ if ($commandExitCode -ne 0) {
         $message = $message.Replace('%', '%25').Replace("`r", '%0D').Replace("`n", '%0A')
         Write-Host "::error title=Command failed::$message"
     }
+}
+if ($ReturnExitCode) {
+    return [int] $commandExitCode
 }
 exit $commandExitCode

@@ -30,7 +30,6 @@ pub(super) struct Census {
     equipment: Vec<EquipmentUse>,
     rewards: Vec<RewardSelection>,
     actual_owners: Vec<DefinitionRules>,
-    actual_templates: Vec<DefinitionDescriptor>,
     source_records: Vec<Value>,
     catalog_obligations: Vec<Value>,
 }
@@ -262,7 +261,6 @@ fn import(package: &Path) -> Census {
         equipment,
         rewards,
         actual_owners: vec![],
-        actual_templates: vec![],
         source_records,
         catalog_obligations,
     }
@@ -354,7 +352,6 @@ pub(super) fn install(
             .find(|r| r.address() == source.item.template.address())
             .unwrap()
             .clone();
-        census.actual_templates.push(descriptor.clone());
         let DefinitionDescriptor::ItemTemplate(DefinitionEntry {
             schema: SchemaState::Known(s),
             ..
@@ -363,20 +360,24 @@ pub(super) fn install(
             panic!()
         };
         assert!(s.modifiers.members.contains(&d(0x3100)));
-        // These three otherwise-known template bodies still have an empty
-        // Partial placement inventory. The numerical fixture admits only the
-        // exact imported selected placement; this is not published placement
-        // authority. Its unchanged real inventory is retained below and must
-        // refuse an end-to-end plan when restored.
+        // Placement members come unchanged from the published template. The
+        // ring's broader inventory remains Partial and receives only the same
+        // explicit finite projection as the unrelated schemas below. The three
+        // other Life-bearing templates now have published complete placements.
+        if source.item.template == d(0x09dc) {
+            assert!(!s.equipment_slots.is_complete());
+            assert_eq!(
+                s.equipment_slots.members,
+                vec![d(0x006b), d(0x006c), d(0x006d)]
+            );
+        } else {
+            assert!(s.equipment_slots.is_complete());
+        }
         for equipped in census.equipment.iter().filter(|e| e.item == source.item.id) {
             let EquipmentDestination::CharacterSlot(slot) = &equipped.destination else {
                 panic!("this finite source slice contains only selected character slots")
             };
-            if !s.equipment_slots.members.contains(slot) {
-                assert!(!s.equipment_slots.is_complete());
-                assert!(s.equipment_slots.members.is_empty());
-                s.equipment_slots.members.push(slot.clone());
-            }
+            assert!(s.equipment_slots.members.contains(slot));
         }
         s.modifiers = DeclaredSet::complete(vec![d(0x3100)]);
         s.declarations.parameters = DeclaredSet::complete(slots.into_iter().collect());
@@ -765,90 +766,4 @@ fn life_item_partial_owners_remain_unavailable_in_the_same_graph() {
             "invalid evaluation stages: early readiness needs an early phase and complete owner programs"
         );
     }
-}
-
-#[test]
-#[ignore = "requires current joined Sniper release"]
-fn actual_partial_item_placement_is_not_completed_by_the_numerical_fixture() {
-    use poe_optimizer_core::owned_binding::{
-        BindingFacet, BindingIssueCode, BindingLocation, IssueClass, bind_owned_request,
-    };
-    use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
-    let baseline = World::load();
-    let mut checked = 0;
-    for actual in &baseline.life_inputs.actual_templates {
-        let DefinitionDescriptor::ItemTemplate(DefinitionEntry {
-            id: template,
-            schema: SchemaState::Known(actual_schema),
-        }) = actual
-        else {
-            panic!()
-        };
-        if !actual_schema.equipment_slots.members.is_empty() {
-            continue;
-        }
-        assert!(!actual_schema.equipment_slots.is_complete());
-        let mut w = baseline.clone();
-        let descriptor = inner(&mut w)
-            .schema
-            .definitions
-            .iter_mut()
-            .find(|d| d.address() == actual.address())
-            .unwrap();
-        let DefinitionDescriptor::ItemTemplate(DefinitionEntry {
-            schema: SchemaState::Known(s),
-            ..
-        }) = descriptor
-        else {
-            panic!()
-        };
-        s.equipment_slots = actual_schema.equipment_slots.clone();
-        let f = &w.sniper.base.source.base.inner;
-        let definitions =
-            OwnedDefinitionSchemaPackage::new(f.schema.clone(), Default::default()).unwrap();
-        let bindings = bind_owned_request(&definitions, &f.request(), Default::default()).unwrap();
-        let item = w
-            .life_inputs
-            .items
-            .iter()
-            .find(|i| &i.item.template == template)
-            .unwrap();
-        let equipped = w
-            .life_inputs
-            .equipment
-            .iter()
-            .find(|e| e.item == item.item.id)
-            .unwrap();
-        let EquipmentDestination::CharacterSlot(slot) = &equipped.destination else {
-            panic!()
-        };
-        assert!(
-            bindings
-                .issues()
-                .iter()
-                .any(|issue| issue.class == IssueClass::Unresolved
-                    && issue.code == BindingIssueCode::PartialMembership
-                    && issue.site.location == BindingLocation::Equipment(equipped.id)
-                    && issue.site.facet == BindingFacet::Destination
-                    && issue.subject == Some(subject(slot.clone())))
-        );
-        let p = w.plan();
-        assert!(
-            p.gaps()
-                .iter()
-                .any(|g| g.reason == PlanGapReason::SchemaUnresolved)
-        );
-        assert_eq!(
-            p.evaluate(&mut p.new_scratch()).unwrap().outcome,
-            SupportEffectsOutcome::Unavailable {
-                cause: EffectValue::Unresolved {
-                    reason: PlanGapReason::IncompleteContributors,
-                    read: None
-                },
-                input: None
-            }
-        );
-        checked += 1;
-    }
-    assert_eq!(checked, 3);
 }

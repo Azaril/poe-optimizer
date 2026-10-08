@@ -47,18 +47,24 @@ delivers the inherent amount through the existing shared Player Actor, preservin
 disabled absence versus enabled zero. Integration uses the actual character
 level (92, intrinsic Life 1120), four Life-bearing item records with five equipment
 uses, and two quest rewards. All 60 joined checks and five-build publication
-preservation pass. Actual catalog, placement and owner gaps remain explicit;
+preservation pass. Actual catalog, remaining placement and owner gaps remain explicit;
 finite test projections do not close them. Final aggregation, complete owner
 coverage and request admission remain unfinished. Current artifacts and the
 review questions are in the [implementation plan](implementation.md).
 
-The latest [flat-Life metadata packet](../data/owned/poe2/3887ae68/flat-life-scalability/README.md)
+The preceding [flat-Life metadata packet](../data/owned/poe2/3887ae68/flat-life-scalability/README.md)
 retires one already-proven component-scalability obligation on Modifier `3100`.
 Its five programs, source admission and six other owner gaps are unchanged.
 Source component classification is distinct from the unscalable input and from
 complete numerical/routing coverage. Five-build publication preservation and
 all 60 joined checks pass on the new package. This is coverage reconciliation,
 not a new final-Life calculation or additional complete build.
+
+The current [placement packet](../data/owned/poe2/3887ae68/selected-life-item-placement/README.md)
+then closes three selected item destination inventories. Five-build preservation,
+12 actual-use binding controls and all 59 remaining joined checks pass. The
+obsolete placement insertion/refusal fixture is retired; numerical coverage
+and the five selected input obligations remain unfinished.
 
 The preceding data checkpoint replaces Gigantic's numeric presence with typed
 Boolean Flag/Any and joins its real selected allocation and intrinsic Life in the
@@ -489,6 +495,16 @@ Different raw rejection forms remain optional reference diagnostics. Complete
 placement is separate from saved equipment selection, sockets, physical stock,
 requirements and numerical coverage; valid schema binding is not a complete
 evaluation.
+
+The selected Life-bearing Tattered Robe, Rope Cuffs and Fine Belt use that same
+destination model. Their reviewed complete inventories contain Body Armour,
+Gloves and Belt respectively. This closes static template relations through
+data; it adds no item-name dispatch, slot-label parser or numerical program to
+the evaluator. The joined Life fixture now requires these published members
+instead of inventing the three selected placements. Sapphire Ring still has a
+Partial inventory with three known ring slots; its finite fixture closure is
+explicit and is not production coverage. Socket destinations, physical stock
+and the three templates' other declarations and numerical owners remain open.
 
 Actual default parsing also rejects seven selected Puppet/Archon nodes. Two
 Djinn unlocking lines are unknown even though their child actions are supplied

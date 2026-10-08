@@ -65,6 +65,95 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
+## Latest native data checkpoint: selected Life-item placement
+
+Original05 remains the closest build. Its joined Life graph previously invented
+three selected equipment destinations because the actual template inventories
+were empty and Partial. The new [placement packet](../data/owned/poe2/3887ae68/selected-life-item-placement/README.md)
+publishes those existing relations through the accepted descriptor migration:
+Tattered Robe `238c` to Body Armour `0067`, Rope Cuffs `2007` to Gloves `0068`,
+and Fine Belt `1e84` to Belt `006e`. Each becomes a singleton Complete inventory.
+No definitions, rule programs, numerical owners or other declarations change.
+
+The original-method witness covers three actual items across 113 registered
+slots, seven default/saved-set contexts and nine flag settings: 21,357 contexts
+per observed VM. Calls repeat in place, fresh observed replays and no-call
+controls agree, and both JIT reports are byte-identical. Pinned base/type/tag
+branches rule out other accepting destinations; a finite observation alone
+does not close the inventory. Three source-target checks pass in **14.46s**;
+the default temporary-output path also passes in **19.29s**. Raw nil/false/no-return
+distinctions and unregistered suffix labels remain source-only diagnostics.
+
+Publication passes in **27.43s**, with an exact recipe inverse and byte-identical
+rebuild. All five drafts, selections, source identities and 110 queries survive;
+selected issues remain **107/117/109/123/5**. Three ordinary packet checks pass.
+Public binding checks pass in **4.39s**, covering 12 actual saved uses, 228
+alternative-slot refusals, restored Partial predecessors, removed uses and
+unchanged unrelated diagnostics. The initial publication rejected noncanonical
+definition order; the current migration is sorted and its checks look up each
+replacement by identity. The failed log remains.
+
+The joined graph now consumes the three production placement inventories and
+passes **59 checks in 45.79s**, including fresh/reused/Rayon execution. The obsolete
+fixture insertion, stored-descriptor bookkeeping and its one refusal test are
+removed; the new public binder checks preserve the refusal coverage. Sapphire
+Ring already lists its ring slots but remains Partial; its existing finite
+fixture closure is explicitly retained. Numerical owners, sockets, catalog
+completion and whole-build coverage are not established by this checkpoint.
+
+Current package: `runs/owned-selected-life-item-placement-publication-02/package`.
+Evidence: `runs/owned-selected-life-item-placement-source-02/`, source parent
+`runs/owned-selected-life-item-placement-source-03.log`, and
+`runs/owned-selected-life-item-placement-{ordinary-02,publication-02,binding-01,joined-01}.log`.
+The source reports are 36,859,788 bytes each at SHA-256
+`7595e3f509c2d7db0d39dfdd0751e5c0bb8970f02105f995e6d98539616e8790`.
+Changed Rust formatting passes, and strict workspace/all-feature/all-target
+Clippy passes in **0.38s** (`runs/owned-selected-life-item-placement-clippy-02.log`).
+The first lint pass caught a fixed-size chunking style in the new CI test;
+the equivalent array-chunk iteration and its remainder refusal are retested.
+The first source command selected zero tests through an incorrect `--ignored`
+filter; it is not counted as validation. The ordinary entry is tested and uses
+isolated temporary output unless an explicit immutable evidence path is supplied.
+
+**Resume:** no original is complete (**0/5**). Keep Original05 first. Final
+Player Life still needs the pending Actor/reward contribution-query decision;
+Offering's three source-scaling writers need the separate exact Skill query
+decision. This data-only checkpoint implements neither proposal. Remaining
+selected input obligations and numerical coverage are listed below; no scalar
+or fixture-completeness shortcut is authorized.
+
+## CI throughput checkpoint: complete CLI target partitioning
+
+The CLI now has four target shards on each CI platform. Cargo metadata selects
+every binary and integration target exactly once; each shard runs both
+`--all-features` and `--no-default-features`. The native-only test step moves
+out of validation into these shards. Formatting, Clippy, boundary/dependency
+checks, WASM, other package suites and the final matrix gate remain required.
+The actual Cargo build-script target is separately accounted for as a build
+dependency, executed by Cargo rather than selected as a test. There is no
+maintained target allowlist. Unsupported future target kinds,
+required features or disabled test targets fail planning rather than disappear.
+
+Each shard attempts both profiles even if the first fails, retains the first
+nonzero exit code and emits the existing bounded failure annotations. Four Rust
+tests pass in both feature modes (**3.81s / 3.80s**), covering complete disjoint
+coverage, source-order independence, discovery of a new target, unsupported
+metadata, success/failure propagation and both profile invocation orders.
+The actual metadata plan initially exposed the build-script classification gap;
+the corrected partition accounts for all testable targets plus that dependency.
+An initial test driver normalized PowerShell's nested exit 7 to process exit 1;
+the corrected driver explicitly propagates `LASTEXITCODE`, as the hosted runner
+does. Production failure handling needed no further change. The failed log is
+retained alongside `runs/ci-cli-shards-{all-features-03,native-02}.log`. After the
+lint-only array-chunk change, all four tests pass again in the native profile in
+**3.77s** (`runs/ci-cli-shards-native-03.log`). The actual-metadata proof is
+`runs/ci-cli-shards-plan-summary-02.json`: 195 testable local targets, one
+Cargo-managed build dependency and a maximum command length of 1,751 characters.
+That census includes two protected untracked test drafts; the committed checkout
+has 192 integration targets plus one binary. The dispatcher discovers this
+difference automatically and has no hardcoded target count.
+Hosted completion and speedup remain unproven until the new workflow runs.
+
 ## CI repair checkpoint: downstream Boolean cutover checks
 
 **October 8 follow-up:** the older `6a3aae3` run subsequently completed Ubuntu's
@@ -152,7 +241,7 @@ does not distinguish compilation from execution, so a hang is unproven. Main's
 configured concurrency explains the pending/coalesced runs. Original05 remains
 the target, with five selected input obligations and **0/5** complete builds.
 
-## Latest coverage checkpoint: flat-Life component scalability
+## Preceding coverage checkpoint: flat-Life component scalability
 
 The selected Life modifier `3100` had one stale component-metadata obligation.
 The retained original-source reports and the current injected numeric compiler
@@ -313,7 +402,8 @@ authoring final Life after the pending Actor/reward query decision. Operand
 generation, positive ExtraLife/Total/conversion/override suppliers, raw conversion
 Sum, complete owner/recipient coverage and whole-build parity remain unproved.
 No production schema, rules, import policy, evaluation bundle or original input
-changed; the current flat-Life package remains the integration baseline. Keep
+changed in that source checkpoint; its flat-Life baseline is now superseded by
+the selected placement package above. Keep
 Original05 first, with five selected input obligations and **0/5 complete builds**.
 
 
@@ -839,36 +929,36 @@ local validation is not hosted success for its eventual commit.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-flat-life-scalability-publication-01/package` and its neighboring
+Use `runs/owned-selected-life-item-placement-publication-02/package` and its neighboring
 `original-01` through `original-05` imports. Current sidecars remain V23;
 definition schema V6, rule schema3 and operationsV22 are independent contracts.
-The immediate predecessor is `runs/owned-inherent-life-contribution-publication-01/package`,
-input `77647de61486b91c2de2d4e73547c6fd2e5ef40f506c947d84bf82a04836726b`.
+The immediate predecessor is `runs/owned-flat-life-scalability-publication-01/package`,
+input `dafd7c805646bc91dfa6c7394d1a44110fb3c26a0998ce4b154fc5c476a53784`.
 Historical endpoint paths authenticate stored evidence; retired formats require
 explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `dafd7c805646bc91dfa6c7394d1a44110fb3c26a0998ce4b154fc5c476a53784` |
+| Release input | `1c4b377bb04f95eb8708d9944b8df690ad3763231c836107e33f5d7c09c5e298` |
 | Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
-| Definitions content | `420769f5d29c7ee28f02caceddbe01e42ecb06c2b4c3553ef5a2ef366fcee1f5` |
-| Rules | `69d122ac6640a5b93377b9728e1d21b8a8741961cfc1d5ba4bc32fe89899c74c` |
-| Compiled rules | `ffac0a8c5117bd02e1446cf8c0f3968a495f9e57c707392bcfe5b74bab8deaba` |
-| Routing | `be1abd42ed7edc1c75c7c12b47ba99ec5039df74972882e09e2ab4ff0e47dd69` |
-| Mapping | `35712202381f0b5d73cff66b755217f4af1fdd99def422b8167b5131a5299714` |
-| Skill roles | `f6a0648cc7be92387ecadb4c49f9178666035dcb2c4d347ca4247e4836bcbc27` |
-| Normalization | `01b61ed3793da8a7eb9135aaaae6c7b1d0ea94cf5138f4ed06afa26b87c78f5b` |
-| Rewards | `edfb7ad84d395d53daaf2955ed2d59237a49c78e3d9629f381508a7b78fb2971` |
-| Items | `857a7fb2b36a5d9f297cad57d8d5bbfe579406756c92a4c276328f4054cd113e` |
-| Item source | `21631d7d6b08aeda1fe5fa9e1a4a147d46e240b32aeaaeabc48d6db667eca3f1` |
-| Tree policy | `bc58b3c280033e373949902a69824c43ebb2a3fa3db48574ceb6bf5745aa7d5a` |
-| Authoring commitment | `558a6197b06a36b0a739d6066ef4195d677b37d429900a39e4d368447959cbea` |
+| Definitions content | `79d71d2aef6610b2d7cdc587c72ca7a3b30e9a3df13e02d113d0e19dbc9bb5b2` |
+| Rules | `b2f7f00a37c59b2038a0eb8f32d400837d05465ac85b350080fee0cd82e4d591` |
+| Compiled rules | `8628557ce8037476522546cf073e4468e92341a251c399205492ad70b810fdb6` |
+| Routing | `7ae72f7cba5144aaa48d69724a4db23b3c39fdc9f242a0209b2d95778e24439d` |
+| Mapping | `e42f9e45649825d1344d8481c946a661acc77a265a64681070a1493af0f363a6` |
+| Skill roles | `6ec3367d32f31cdb9b27e8bd75bd07cfeae391bb4bdee7185b0adc6b728fdfa3` |
+| Normalization | `a59e58fdd35f0daf4d87b72ec26219a6fc83c6977324c3229b525cfb9a46d56b` |
+| Rewards | `da9972ed807c9dbcc35eb22a4cb46592e9b335ed77f8cadf834bca520bddfb40` |
+| Items | `2233daa9532757de505ab9f07d7f28f04b349257f0547afc75675ed2c9c5fcae` |
+| Item source | `7e8c59b8892567d52cdabb72a9f0e604a63fed5d3ec8cb8d4cde88a997f51391` |
+| Tree policy | `ce0d80d921afa3e4c94f96c1a97843d9b77764ed6663934f15a98e3331ea7225` |
+| Authoring commitment | `789f3b772b2265257ac3b23ec3da837b38b36ad533874c980dca56aa2499a303` |
 | Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
 
-The eighteen package files total **63,887,238 bytes**, with 147 provenance rows.
-Definitions and rules use `pob-3887ae68-gigantic-flags-v1`. The registry ends at
-`3352`; the latest publication allocates no IDs and changes only one coverage gap.
+The eighteen package files total **63,887,352 bytes**, with 148 provenance rows.
+Definitions and rules use `pob-3887ae68-selected-life-item-placement-v1`. The registry ends at
+`3352`; the latest publication allocates no IDs and changes only three placement inventories.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
