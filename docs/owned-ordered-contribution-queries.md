@@ -2,7 +2,7 @@
 
 Status: bounded implementation of the accepted [contribution-stage direction](owned-contribution-stages.md). This framework does not choose a PoE numerical grouping or rounding law, close a game owner, or make another original build executable. Game-specific adoption still requires actual consumer evidence and complete contributor coverage.
 
-The shared contract is an optional `contribution_queries` registry on `RulePackageInput`, introduced by operationsV21 and generalized by operationsV22/V23. Each query names one Stat and contribution kind. Its fixed named groups declare a reduction, typed empty identity, and a `DeclaredSet` of exact owner/program/effect members. Programs read a named group through `RuleReadSource::ContributionQuery { entity, query, group }`. The query is authored data; concrete membership is bound from the current candidate's discovered effect occurrences.
+The shared contract is an optional `contribution_queries` registry on `RulePackageInput`, introduced by operationsV21 and generalized by operationsV22/V23/V24. Each query names one Stat and contribution kind. Its fixed named groups declare a reduction, typed empty identity, and a `DeclaredSet` of exact owner/program/effect members. Programs read a named group through `RuleReadSource::ContributionQuery { entity, query, group }`. The query is authored data; concrete membership is bound from the current candidate's discovered effect occurrences.
 
 An authored member is not one runtime value. A repeated modifier produces one contribution per actual modifier occurrence. The same rolled item in two equipment uses produces separate occurrences. Removing a passive, changing an item, changing semantic modifier order, or selecting another loadout changes candidate membership. Renaming or rebasing opaque instance IDs must not change numerical order. Existing discovery determines whether alternate-loadout roots are available; the query does not introduce a second participation policy.
 
@@ -25,12 +25,14 @@ Nonapplicable slot and modifier positions are zero. No instance ID, display name
 | `ExistingActor` (V23) | Actor definition with the exact applicability declaration | Explicit source/program/effect ranks; currently the existing Player |
 | `Reward` (V23) | Selected Reward definition | Explicit source/program/effect ranks; distinct occurrences remain distinct |
 | `SuppliedActor` (V23) | Explicit Actor slot or its declared Actor provider definition | Exact checked supply relation and Actor recipient; explicit source/program/effect ranks |
+| `Skill` (V24) | Skill definition; explicit direct-use permission and/or supplied Skill slots | Exact authored use or validated supply relation; self-recipient only; explicit source/program/effect ranks |
 
 Direct provider policies require an empty grant path. Supplied Actors instead
 use the validated Actor-to-provider relation, also retained for support suffix
 checks. Their keys contain the parent provider, so raw path equality or an
 assumed grant depth is insufficient. An explicit slot list authorizes only those
-Actor supplies; arbitrary generated, socketed, support-assignment and
+Actor supplies; the Skill policy separately admits its listed Skill supplies.
+Arbitrary generated, socketed, support-assignment and
 effect-application origins remain unsupported. A shared Actor application is
 not a fabricated provider root.
 
@@ -44,7 +46,7 @@ grouping laws or complete source inventories.
 
 Within a group, all equipment members of the same origin category share the same source rank and slot map. This makes equipment-slot order and modifier order precede definition/program order. Slot IDs and slot ranks are unique, finite, known declarations. Programs of one owner share its source rank; effects of one program share source/program ranks. Exact runtime ties are errors. These restrictions prevent an author from accidentally using modifier-definition order instead of the selected item's authored modifier sequence.
 
-The initial read scope is Player, Actor from Actor/Action programs, or Current from Actor/EquipmentUse programs, with the Stat admitting that target kind. Skill, property-owner, support and application-relative source scopes are not inferred. Expanding this domain must preserve their existing authority and readiness contracts.
+The initial read scope is Player, Actor from Actor/Action programs, or Current from Actor/EquipmentUse programs, with the Stat admitting that target kind. V24 also permits Current from an exact Skill invocation. Property-owner, relative Skill, support and application-relative source scopes are not inferred. Skill member origins require Skill-owned programs with Current-only contributions. `authored: true` permits directly selectable Skill uses; `supplies` names known, unique slots supplying the same definition. At least one permission is required. A definition may have both kinds of occurrence without duplicating its program or query member. Generated binding uses the discovered Skill supply map, including its entered grant path, and retains that proof for late support checks. This adds no inheritance or source-property authority.
 
 ## Arithmetic, scheduling and coverage
 
@@ -61,7 +63,8 @@ Data validates the registry's exact references, origin/owner/context agreement, 
 Rule packages use schema3. There is no old/new query DTO parser. OperationsV21
 introduces numeric queries; V22 adds typed Boolean contributions and unordered
 Any, using effect-plan domainv19. V23 adds Actor/reward membership and uses
-effect-plan domainv20. Explicit older operation subsets still reject
+effect-plan domainv20. V24 adds exact Skill reads/self-membership and uses
+effect-plan domainv21. Explicit older operation subsets still reject
 unsupported operations, but do not preserve historical package/hash formats.
 Maintained acquisition/test artifacts were rebuilt with rule storage/compiler
 hash domainsv3. The [Boolean contract](owned-boolean-contributions-proposal.md)

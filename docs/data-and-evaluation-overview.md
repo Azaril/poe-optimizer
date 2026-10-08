@@ -197,12 +197,14 @@ Syntax guards named `inert_fields` do not establish mechanical non-applicability
 See the [checkpoint](implementation.md#source-checkpoint-manual-djinn-admission-accounting).
 
 Next, Offering needs its three source-Skill scaling producers before its
-application can add the measured 62%. Checked queries reject Current Skill reads
-and generated member paths. The accepted
+application can add the measured 62%. The accepted
 [exact Skill query extension](owned-skill-contribution-queries-proposal.md) reuses
-the existing graph; the owner approved it on October 8, but it is not yet
-implemented. Actor/reward contribution membership is implemented in operations
-V23; composed support-source discovery remains accepted but pending. See the linked proposals and implementation
+the existing graph. V24 now admits Current Skill reads and explicitly permitted
+direct/generated Skill self-contributions using validated supply relations;
+Offering's canonical writers and inherited/support memberships remain pending.
+Actor/reward contribution membership is implemented in operations V23. The
+active game package remains V23 until data adoption is rebuilt and checked;
+composed support-source discovery remains accepted but pending. See the linked proposals and implementation
 plan for their separate delivery gates. The focused
 Offering witness now observes original multiplication and local rounding in an
 inherited source store, plus exact Danse assignment and duplicate non-stacking.

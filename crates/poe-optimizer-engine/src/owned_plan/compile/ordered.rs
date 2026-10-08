@@ -6,6 +6,7 @@ pub(super) struct Sources<'a> {
     pub rules: &'a RulePackageInput,
     pub build: &'a BuildInput,
     pub actor_supplies: &'a BTreeMap<OwnedActorKey, ProviderKey>,
+    pub skill_supplies: &'a BTreeMap<GeneratedSkillKey, ProviderKey>,
     pub effects: &'a [EffectOccurrenceKey],
     pub appended: &'a [EffectOccurrenceKey],
 }
@@ -88,6 +89,53 @@ impl Sources<'_> {
             return Err(invalid("contribution requires a reviewed provider origin"));
         };
         charge(work, provider.grant_path.len() + 1)?;
+        if let ContributionOrigin::Skill { authored, supplies } = origin {
+            let ConcreteEntity::Skill(target) = &effect.invocation.entity else {
+                return Err(invalid(
+                    "Skill contribution requires its exact Skill occurrence",
+                ));
+            };
+            match target.as_ref() {
+                SkillTarget::Generated(skill) => {
+                    charge(work, supplies.len() + skill.provider.grant_path.len() + 1)?;
+                    if !supplies.contains(&skill.slot)
+                        || self.skill_supplies.get(skill.as_ref()) != Some(provider)
+                    {
+                        return Err(invalid(
+                            "supplied Skill contribution differs from the validated skill supply",
+                        ));
+                    }
+                }
+                SkillTarget::Authored(id) => {
+                    if !authored
+                        || !provider.grant_path.is_empty()
+                        || provider.root != ProviderRoot::SkillUse(*id)
+                    {
+                        return Err(invalid(
+                            "authored Skill contribution requires permission for its exact direct use",
+                        ));
+                    }
+                    charge(work, self.build.skills.len())?;
+                    let skill = self
+                        .build
+                        .skills
+                        .iter()
+                        .find(|s| &s.id == id)
+                        .ok_or_else(|| invalid("contribution Skill use is absent"))?;
+                    let AuthoredSkillSource::Direct(definition) = &skill.source else {
+                        return Err(invalid(
+                            "authored Skill contribution requires a direct Skill source",
+                        ));
+                    };
+                    if member.owner != SchemaSubject::Definition(definition.address()) {
+                        return Err(invalid(
+                            "authored Skill contribution definition differs from membership",
+                        ));
+                    }
+                }
+            }
+            return Ok(Source::Provider(provider));
+        }
         if let ContributionOrigin::SuppliedActor { slots } = origin {
             let ConcreteEntity::Actor(ActorKey::Owned(actor)) = &effect.invocation.entity else {
                 return Err(invalid(
@@ -164,7 +212,8 @@ impl Sources<'_> {
     ) -> Result<Position> {
         let (slot, modifier) = match (origin, source) {
             (ContributionOrigin::ExistingActor { .. }, Source::ExistingActor(_, _))
-            | (ContributionOrigin::SuppliedActor { .. }, Source::Provider(_)) => (0, 0),
+            | (ContributionOrigin::SuppliedActor { .. }, Source::Provider(_))
+            | (ContributionOrigin::Skill { .. }, Source::Provider(_)) => (0, 0),
             (_, Source::Provider(provider)) => match (origin, &provider.root) {
                 (ContributionOrigin::Character, ProviderRoot::Character)
                 | (ContributionOrigin::Allocation, ProviderRoot::Allocation(_))

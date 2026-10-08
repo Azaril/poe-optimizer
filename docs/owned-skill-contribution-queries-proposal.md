@@ -1,7 +1,8 @@
 # Checked contribution queries for exact Skill occurrences
 
-**Status:** Accepted 2026-10-08; implementation pending. The owner approved
-exact Skill query reads and membership in the existing contribution graph.
+**Status:** Accepted 2026-10-08. V24 implements exact Current Skill query reads
+and Skill-owned self-contribution membership. Canonical Offering data adoption,
+inherited adjustments and support delivery membership remain pending.
 **Date:** 2026-10-07.
 **Decider:** Project owner.
 **Scope:** Extend the existing contribution graph's ownership and membership
@@ -39,6 +40,31 @@ increase to reach 130%. Final physical endpoints, speed, critical hits,
 mitigation and complete request coverage still need their own checked consumers.
 
 ## What exists and what does not
+
+The V24 runtime now uses the existing query/reduction engine for exact Skill
+recipients. `ContributionOrigin::Skill { authored, supplies }` gives a single
+definition/program/effect explicit direct-use and/or declared-supply permission.
+The owner must be that Skill definition; generated slots must supply it, and
+the contribution recipient must be Current. Generated binding follows the
+validated supply relation, not raw parent-path equality. The same proof is
+retained for late support checks. Numeric ties, Boolean Any, complete coverage,
+stages and worker scratch keep their existing semantics. Effect-plan identity
+domain21 invalidates the previous semantic contract; package schema3 is unchanged.
+This does not admit a Gem's source-property program, support/application origin,
+or inherited Actor contribution. Those relations need independent authority.
+
+The ten runtime tests exercise positive numeric and Boolean Skill membership,
+the same definition acquired directly and through items, distinct nested
+generated copies, denied permissions, wrong supply/owner/context, Partial and
+complete-empty inventories, unknown values, unread/inactive/neutral members,
+late support additions, storage/raw validation, bounded work and deterministic
+fresh/reused/Rayon execution. Existing contribution and joined Sniper regressions
+also pass. This validates the structural boundary; the published package remains
+V23 until Offering data adoption and five-build reimport/rebuild are complete.
+
+The authority audit below records the pre-V24 boundary. Its Current-Skill and
+Skill self-membership restrictions are now superseded as described above;
+unreviewed positive origin families remain excluded.
 
 Core already represents exact authored/generated `SkillTarget`s, provider roots,
 declared grant paths and effect occurrences. Its `ContributionQuery` partitions
@@ -116,8 +142,9 @@ Skill contribution pipeline or persist source-runtime objects.
    Rebuild artifacts for the current contract rather than maintaining an older
    runtime interpretation.
 
-These principles are approved. The exact minimal wire declarations and
-admitted origin families must then be specified and tested before implementation;
+These principles are approved. The V24 wire declaration and initial self-origin
+family are specified above. Additional admitted origin families must be
+specified and tested before implementation;
 this proposal does not approve arbitrary provider paths or settle all support
 origin semantics. The separate
 [support-origin composition proposal](owned-support-origin-composition-proposal.md)
@@ -196,7 +223,7 @@ Add the noncritical physical endpoint consumer only once its addition,
 conversion, multiplier-group and rounding domains have explicit coverage;
 baseline endpoints alone cannot justify discarding currently zero mechanics.
 
-### Implementation audit at `bd8cd52` (pending the decision above)
+### Historical implementation audit at `bd8cd52` (before approval and V24)
 
 The first empty-domain subset needs a read-authority change in Data's
 `owned_rules/ordered.rs::read`: permit `Current` in Skill context only when the
@@ -243,4 +270,4 @@ no runtime authority and is not acceptance of the proposal.
   unavailable. Fresh, reused-scratch and Rayon evaluation agree exactly.
 - Publication preserves all five normalized inputs and 110 queries. Retain
   source-backed application/stacking controls and scope every parity claim;
-  this work alone does not produce a complete build or authorize optimizer use.
+this work alone does not produce a complete build or authorize optimizer use.

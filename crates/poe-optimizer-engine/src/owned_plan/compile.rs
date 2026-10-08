@@ -567,6 +567,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
         rules: rules.input(),
         build: request.build().input(),
         actor_supplies: &b.actor_supplies,
+        skill_supplies: &b.skill_supplies,
         effects: &ordered_effects,
         appended: &[],
     };
@@ -692,6 +693,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
             query_gates,
             preparation_gates,
             actor_supplies: b.actor_supplies,
+            skill_supplies: b.skill_supplies,
         },
         receiving: bound_receiving,
         symbolic,
@@ -2377,6 +2379,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         rules: self.rules.input(),
                         build: self.request.build().input(),
                         actor_supplies: &self.actor_supplies,
+                        skill_supplies: &self.skill_supplies,
                         effects: &[],
                         appended: &[],
                     },

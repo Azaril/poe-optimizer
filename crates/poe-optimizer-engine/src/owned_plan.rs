@@ -506,6 +506,7 @@ pub struct OwnedEffectPlan<I> {
     preparation_gates: BTreeMap<SkillTarget, Vec<ReadBinding>>,
     /// The cold discovery proof, reused when a support suffix checks membership.
     actor_supplies: BTreeMap<OwnedActorKey, ProviderKey>,
+    skill_supplies: BTreeMap<GeneratedSkillKey, ProviderKey>,
 }
 impl<I: DefinitionSchemaIndex> OwnedEffectPlan<I> {
     pub fn compile(

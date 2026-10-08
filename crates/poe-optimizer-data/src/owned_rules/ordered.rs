@@ -153,6 +153,60 @@ fn order<I: DefinitionSchemaIndex>(
             "contribution member ordering differs from its group",
         ));
     }
+    if let ContributionOrigin::Skill { authored, supplies } = &member.origin {
+        if !RuleOperationsVersion::parse(input.operations_version.as_str())
+            .is_some_and(RuleOperationsVersion::supports_skill_contribution_queries)
+        {
+            return Err(invalid(
+                "Skill contribution origins require owned-domain-operations-v24",
+            ));
+        }
+        if program.context != RuleEntityKind::Skill
+            || member
+                .order
+                .as_ref()
+                .is_some_and(|o| !o.slot_ranks.is_empty())
+        {
+            return Err(invalid(
+                "Skill contribution origins require Skill context and no equipment ranks",
+            ));
+        }
+        let SchemaSubject::Definition(DefinitionAddress::Skill(skill)) = &member.owner else {
+            return Err(invalid(
+                "Skill contribution requires a Skill definition owner",
+            ));
+        };
+        let SchemaLookup::Known(schema) = index.definition(skill) else {
+            return Err(invalid("Skill contribution requires a known Skill schema"));
+        };
+        if *authored && !schema.directly_selectable {
+            return Err(invalid(
+                "authored Skill contribution requires a directly selectable Skill",
+            ));
+        }
+        add(&mut usage.ordered_slots, supplies.len())?;
+        work(usage, limits, supplies.len())?;
+        if !authored && supplies.is_empty() {
+            return Err(invalid(
+                "Skill contribution requires authored permission or explicit supply membership",
+            ));
+        }
+        let mut seen = BTreeSet::new();
+        for slot in supplies {
+            if !seen.insert(slot) {
+                return Err(invalid("duplicate supplied Skill contribution slot"));
+            }
+            let SchemaLookup::Known(supply) = index.slot(slot) else {
+                return Err(invalid("supplied Skill contribution slot must be known"));
+            };
+            if &supply.skill != skill {
+                return Err(invalid(
+                    "supplied Skill contribution owner differs from its slot",
+                ));
+            }
+        }
+        return Ok(None);
+    }
     let extended = matches!(
         member.origin,
         ContributionOrigin::ExistingActor { .. }
@@ -305,7 +359,8 @@ fn order<I: DefinitionSchemaIndex>(
         ),
         ContributionOrigin::ExistingActor { .. }
         | ContributionOrigin::Reward
-        | ContributionOrigin::SuppliedActor { .. } => {
+        | ContributionOrigin::SuppliedActor { .. }
+        | ContributionOrigin::Skill { .. } => {
             unreachable!("extended origins checked above")
         }
     };
@@ -401,8 +456,10 @@ fn read<I: DefinitionSchemaIndex>(
             "ordered read has an unknown query/group or mismatched type",
         ));
     }
-    // These queries initially consume direct actor/equipment contributions. In
-    // particular they cannot bypass the separate source-property/Skill contracts.
+    // Skill reads address the exact current occurrence; source-property and
+    // cross-Skill relations require their own authority and remain excluded.
+    let skill_allowed = RuleOperationsVersion::parse(input.operations_version.as_str())
+        .is_some_and(RuleOperationsVersion::supports_skill_contribution_queries);
     let enemy_allowed = catalog.queries[query].contribution == ContributionKind::Flag
         && RuleOperationsVersion::parse(input.operations_version.as_str())
             .is_some_and(RuleOperationsVersion::supports_boolean_contributions);
@@ -415,6 +472,7 @@ fn read<I: DefinitionSchemaIndex>(
                 p.context,
                 RuleEntityKind::Actor | RuleEntityKind::EquipmentUse
             ) || (p.context == RuleEntityKind::Enemy && enemy_allowed)
+                || (p.context == RuleEntityKind::Skill && skill_allowed)
         }
         _ => false,
     };
@@ -656,6 +714,13 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                 if channel != &query.stat || contribution != &query.contribution {
                     return Err(RuleStorageError::Structure(
                         "ordered member contribution channel differs from query",
+                    ));
+                }
+                if matches!(member.origin, ContributionOrigin::Skill { .. })
+                    && *entity != RuleEntity::Current
+                {
+                    return Err(RuleStorageError::Structure(
+                        "Skill contribution membership admits only the exact current Skill recipient",
                     ));
                 }
                 let target = match entity {

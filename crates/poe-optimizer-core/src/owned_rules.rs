@@ -14,6 +14,8 @@ pub const OWNED_RULE_PACKAGE_VERSION: u32 = 3;
 /// Baseline operation subset used when authors do not opt into newer capabilities.
 /// Package schema and content identity domains always use the current format.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+/// Checked query reads and self-contributions on exact authored/supplied Skills.
+pub const OWNED_RULE_OPERATIONS_V24: &str = "owned-domain-operations-v24";
 /// Exact shared/supplied Actor and selected reward contribution membership.
 pub const OWNED_RULE_OPERATIONS_V23: &str = "owned-domain-operations-v23";
 /// Typed Boolean contribution channels with unordered, complete Any reductions.
@@ -73,6 +75,7 @@ pub enum RuleOperationsVersion {
     V21,
     V22,
     V23,
+    V24,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -95,6 +98,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V21 => Self::V21,
             OWNED_RULE_OPERATIONS_V22 => Self::V22,
             OWNED_RULE_OPERATIONS_V23 => Self::V23,
+            OWNED_RULE_OPERATIONS_V24 => Self::V24,
             _ => return None,
         })
     }
@@ -118,6 +122,7 @@ impl RuleOperationsVersion {
             Self::V21 => 21,
             Self::V22 => 22,
             Self::V23 => 23,
+            Self::V24 => 24,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -171,6 +176,9 @@ impl RuleOperationsVersion {
     pub const fn supports_actor_reward_contributions(self) -> bool {
         self.revision() >= 23
     }
+    pub const fn supports_skill_contribution_queries(self) -> bool {
+        self.revision() >= 24
+    }
     /// Current explicit Skill participation in V4 readiness metadata.
     pub const fn supports_skill_participation(self) -> bool {
         self.revision() >= 21
@@ -197,6 +205,7 @@ impl RuleOperationsVersion {
             Self::V21 => "owned-effect-plan-v18",
             Self::V22 => "owned-effect-plan-v19",
             Self::V23 => "owned-effect-plan-v20",
+            Self::V24 => "owned-effect-plan-v21",
         }
     }
 }
@@ -300,8 +309,8 @@ pub struct ContributionOrder {
     pub slot_ranks: Vec<ContributionSlotRank>,
 }
 /// Explicit source authority. Direct origins require empty grant paths. Supplied
-/// Actors use the already-validated exact actor-to-provider relation. Other
-/// generated, socketed, support and application origins remain unsupported.
+/// Actors and Skills use the already-validated exact supply relation. Skill
+/// origins admit only self-contributions, not inherited or support delivery.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum ContributionOrigin {
@@ -323,6 +332,13 @@ pub enum ContributionOrigin {
     /// This admits Actor-slot or matching provider-Actor definition owners only.
     SuppliedActor {
         slots: Vec<DeclaredSlot<ActorSlotDefId>>,
+    },
+    /// Exact Skill self-contributions. One definition/program/effect may serve
+    /// both direct authored uses and these explicitly admitted generated supplies.
+    /// At least one source permission is required; this grants no inheritance.
+    Skill {
+        authored: bool,
+        supplies: Vec<DeclaredSlot<SkillGrantSlotDefId>>,
     },
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
