@@ -101,7 +101,61 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Current native checkpoint: composed support coverage
+## Current publication checkpoint: support-source authoring
+
+`OwnedRecipeExtension.support_source_domains` now publishes reviewed support
+declarations through the existing offline authoring path. It accepts new exact
+definition/slot rows and identical replays, preserves missing coverage on an
+empty extension, and rejects duplicate or conflicting authority. Existing
+Unmapped declarations cannot silently become Known. Ordinary Data validation
+and compilation enforce identities and gap shape; compiled identities include
+the declarations. The receipt reports the number of added domains.
+
+Both compact successor and complete release assembly preserve this field.
+Their outer validation budgets now include provider rows and gap payloads at
+both endpoints where applicable. No new publication pipeline, native source
+interpreter or compatibility branch was introduced. The canonical game package
+below is unchanged: this checkpoint supplies its authoring route, not reviewed
+game coverage, and Original05 still has five selected input obligations.
+
+Validation: **74 Import checks pass** across recipe extension, membership patch,
+compact succession, complete release publication and prior successor behavior.
+This includes nine new domain-authoring/publication/budget regressions. The
+complete release round trip retains all five query sets and 110 query rows;
+it is a publication fixture, not an original-build evaluation. Logs:
+`runs/owned-support-domain-authoring-tests-01.log`,
+`runs/owned-support-domain-publication-tests-01.log` and
+`runs/owned-support-domain-preflight-tests-01.log`. Strict Clippy passes for
+all Import targets and features
+(`runs/owned-support-domain-clippy-import-01.log`).
+The actual CLI's five publication checks pass, including a new no-overwrite,
+no-output-on-conflict control (`runs/owned-support-domain-cli-tests-01.log`).
+All **76 joined Sniper checks pass in 38.64s** against the unchanged canonical
+package, including scratch reuse and Rayon
+(`runs/owned-support-domain-sniper-01.log`).
+Strict Clippy also passes for the binary and all **194 tracked CLI integration
+targets**, with the same all-feature check and `-D warnings`
+(`runs/owned-support-domain-clippy-cli-01.log`; target list in
+`runs/owned-support-domain-tracked-cli-targets.txt`). The unrelated untracked
+incoming-critical draft remains untouched. At 21:10:17 UTC, predecessor
+`d822ff6`'s hosted run `37843055066` was pending; local validation is not a hosted
+success claim (`runs/owned-support-domain-prior-ci-01.json`).
+
+**Next blocker:** review actual support-source domains and exact provider
+exclusions, then reconcile authored support order with generated-field
+accounting. `skill_input_disposition::pending_generated_responsibilities` still
+requires the mixed-scope issue as one of three responsibilities for archived
+generated syntax. The strict source frame permits `slot`; source evidence shows
+that this field can affect support sharing. Preserve an Import obligation for
+every unconverted saved relation instead of clearing `01de` from a complete
+physical assignment list or empty observed runtime buckets. Positive
+ExtraSupport/LinkedSupport producers exist in pinned `ModParser.lua`; source
+behavior does not by itself establish legal game admission.
+
+The pending application-group contribution-query decision is unchanged and
+independent of this approved work. Complete native builds remain **0/5**.
+
+## Native checkpoint: composed support coverage
 
 The current rule format carries optional `support_discovery` declarations. Each
 exact owned definition/slot has either reviewed `AuthoredAssignmentsOnly` scope

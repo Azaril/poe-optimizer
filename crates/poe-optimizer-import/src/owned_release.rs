@@ -40,7 +40,7 @@ use poe_optimizer_core::{
     data::DataIdentity,
     owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},
     owned_definitions::OwnedDefinitionKey,
-    owned_schema::SchemaClosure,
+    owned_schema::{SchemaClosure, SchemaState},
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -387,6 +387,14 @@ pub(crate) fn preflight(input: &OwnedReleaseInput, limits: OwnedReleaseLimits) -
     }
     for table in &recipe.rules.tables {
         charge(&mut left, table.rows.len(), "validation entries")?;
+    }
+    if let Some(discovery) = &recipe.rules.support_discovery {
+        charge(&mut left, discovery.providers.len(), "validation entries")?;
+        for row in &discovery.providers {
+            if let SchemaState::Unmapped { gaps } = &row.domain {
+                charge(&mut left, gaps.len(), "validation entries")?;
+            }
+        }
     }
     for owner in &recipe.rules.owners {
         charge(

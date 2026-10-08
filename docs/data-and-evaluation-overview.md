@@ -50,6 +50,14 @@ adoption and input accounting remain pending; the census does not resolve the
 selected support-origin input obligation. See
 the [source checkpoint](implementation.md#latest-source-checkpoint-composed-support-origins).
 
+The existing offline recipe-extension path can now author those declarations.
+It validates exact owned subjects, preserves existing declarations, and carries
+the result through compact and complete release publication. Unmapped domains
+stay Unmapped, and omitted rows stay unknown. This is a publication facility;
+the canonical game package still needs reviewed support-domain data. Import
+also uses the pending origin inventory to account for some archived generated
+fields, so moving its responsibility requires reconciling those saved relations.
+
 The latest integration connects imported Offering activation, item-prepared final
 level and checked source/recipient scaling to its actual application. The finite
 joined graph produces 62% increased damage per Sniper recipient at level22;

@@ -29,6 +29,22 @@ game data has not adopted these declarations, Import `01de` is still pending,
 and authored-order naming/accounting and exact provider exclusions still need
 their adoption checkpoint. No new positive origin family is implemented.
 
+The existing `OwnedRecipeExtension` now accepts `support_source_domains`, with
+an appended-row count in its receipt. Only new or identical declarations are
+admitted; differing prior domains are rejected. The ordinary rule constructor
+validates subjects and gaps, canonicalizes storage and compiles the endpoint.
+Both compact succession and complete release assembly preserve the field and
+charge its rows/gaps against their outer publication budgets. This supplies the
+data-authoring route, not game-specific absence evidence or Import completion.
+
+During input migration, also reconcile
+`skill_input_disposition::pending_generated_responsibilities`: archived generated
+syntax currently requires the origin-discovery issue alongside generated-input
+and usage obligations. Do not remove that responsibility without accounting for
+every saved relationship. The strict source frame permits a `slot` attribute;
+the source sharing control shows why merely recognizing its syntax is not proof
+that its support relation was converted.
+
 ## Context
 
 Original05's selected skill preset contains sixteen physical support assignments

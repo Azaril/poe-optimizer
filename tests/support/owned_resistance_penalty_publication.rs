@@ -68,6 +68,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         .members
         .drain(..old_owner.programs.members.len());
     let extension = OwnedRecipeExtension {
+        support_source_domains: vec![],
         schema_version: 1,
         version: key("pob-3887ae68-player-resistance-penalty-v1"),
         schema: serde_json::from_value::<Vec<_>>(closure["definitions"].clone())

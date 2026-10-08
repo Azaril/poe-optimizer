@@ -73,6 +73,95 @@ fn files(release: &StagedOwnedRelease) -> BTreeMap<String, Vec<u8>> {
 }
 
 #[test]
+fn support_domain_extension_survives_complete_release_publication_and_rebuild() {
+    use poe_optimizer_core::owned_rules::*;
+    use poe_optimizer_import::owned_recipe_extension::*;
+    let mut supplied = input();
+    let before = stage(supplied.clone());
+    let owner = SchemaSubject::Definition(supplied.recipe.schema.definitions[0].address());
+    let slot = SchemaSubject::Slot(supplied.recipe.schema.slots[0].address());
+    let extension = OwnedRecipeExtension {
+        schema_version: 1,
+        version: key("support-source-authoring-fixture"),
+        schema: vec![],
+        operations_version: None,
+        tables: vec![],
+        owners: vec![],
+        receivers: vec![],
+        support_source_domains: vec![
+            SupportSourceDomainDeclaration {
+                owner,
+                domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+            },
+            SupportSourceDomainDeclaration {
+                owner: slot.clone(),
+                domain: SchemaState::Unmapped {
+                    gaps: vec![SchemaGap {
+                        subject: slot,
+                        facet: SchemaFacet::GameRules,
+                        code: key("unreviewed-support-domain"),
+                    }],
+                },
+            },
+        ],
+    };
+    let extended = extend_owned_recipe(before.assembled(), &extension, Default::default()).unwrap();
+    supplied.recipe = extended.successor;
+    let expected = supplied.recipe.rules.support_discovery.clone();
+    let after = stage(supplied.clone());
+    assert_eq!(after.input().recipe.rules.support_discovery, expected);
+    assert_eq!(after.input().normalization, before.input().normalization);
+    assert_eq!(after.input().query_sets, before.input().query_sets);
+    assert_eq!(after.input().mapping, before.input().mapping);
+    assert_eq!(after.input().recipe.schema, before.input().recipe.schema);
+    assert_ne!(after.receipt().input, before.receipt().input);
+    assert_ne!(
+        after.assembled().manifest().compiled_rules,
+        before.assembled().manifest().compiled_rules
+    );
+    let emitted = files(&after);
+    let published: RulePackageInput = serde_json::from_slice(&emitted["rules.json"]).unwrap();
+    assert_eq!(published.support_discovery, expected);
+    let rebuilt =
+        decode_owned_release(&serde_json::to_vec(&supplied).unwrap(), Default::default()).unwrap();
+    assert_eq!(files(&rebuilt), emitted);
+    assert_eq!(rebuilt.input().recipe.rules.support_discovery, expected);
+    assert_eq!(rebuilt.receipt().query_sets, 5);
+    assert_eq!(rebuilt.receipt().query_rows, 110);
+}
+
+#[test]
+fn release_preflight_charges_support_domain_gaps_before_rule_indexing() {
+    use poe_optimizer_core::owned_rules::*;
+    let mut supplied = input();
+    let limits = OwnedReleaseLimits {
+        max_validation_entries: 100_000,
+        ..Default::default()
+    };
+    assemble_owned_release(supplied.clone(), limits).unwrap();
+    let owner = SchemaSubject::Definition(supplied.recipe.schema.definitions[0].address());
+    let gap = SchemaGap {
+        subject: owner.clone(),
+        facet: SchemaFacet::GameRules,
+        code: key("unreviewed"),
+    };
+    supplied.recipe.rules.support_discovery = Some(SupportDiscoveryInput {
+        providers: vec![SupportSourceDomainDeclaration {
+            owner,
+            domain: SchemaState::Unmapped {
+                gaps: vec![gap; limits.max_validation_entries],
+            },
+        }],
+    });
+    // These repeated gaps would fail structural validation. The tighter outer
+    // publication budget must stop first, before making any secondary index.
+    assert!(matches!(
+        assemble_owned_release(supplied, limits),
+        Err(OwnedReleaseError::Limit("validation entries"))
+    ));
+}
+
+#[test]
 fn legacy_wire_layout_and_input_digest_are_unchanged_when_evaluation_is_omitted() {
     // Freeze the v1 field sequence independently of OwnedReleaseInput. An absent
     // v2 field must not alter historical bytes or the old content-hash domain.

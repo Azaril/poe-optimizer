@@ -128,6 +128,7 @@ impl Fixture {
         input.registry = registry.input().clone();
         let base = assemble(input);
         let mut extension = OwnedRecipeExtension {
+            support_source_domains: vec![],
             schema_version: 1,
             version: key("membership-fixture"),
             schema: vec![],

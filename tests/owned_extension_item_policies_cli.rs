@@ -70,6 +70,7 @@ impl Fixture {
             .unwrap();
         unit.id = id;
         let extension = OwnedRecipeExtension {
+            support_source_domains: vec![],
             schema_version: 1,
             version: OwnedDefinitionKey::new("paired-policy-extension").unwrap(),
             schema: vec![SchemaExtensionEntry::Definition(
@@ -219,6 +220,64 @@ fn exact_v3_policy_pair_preserves_selected_history_queries_tree_and_prior() {
     assert_eq!(
         rerun_report["publication"]["after"],
         report["publication"]["after"]
+    );
+}
+
+#[test]
+fn reviewed_support_domains_publish_and_replay_without_overwriting_authority() {
+    use poe_optimizer_core::{owned_rules::*, owned_schema::*};
+    let fixture = Fixture::new(false);
+    let mut extension: OwnedRecipeExtension =
+        serde_json::from_slice(&fs::read(&fixture.extension).unwrap()).unwrap();
+    let owner = SchemaSubject::Definition(baseline().recipe().schema.definitions[0].address());
+    extension
+        .support_source_domains
+        .push(SupportSourceDomainDeclaration {
+            owner: owner.clone(),
+            domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+        });
+    write(&fixture.extension, &extension);
+    let destination = fixture.temp.path().join("support-domains");
+    let report = success(
+        fixture
+            .command(&fixture.prior, &destination)
+            .output()
+            .unwrap(),
+    );
+    assert_eq!(report["extension"]["appended_support_source_domains"], 1);
+    let expected = serde_json::to_value(SupportDiscoveryInput {
+        providers: extension.support_source_domains.clone(),
+    })
+    .unwrap();
+    assert_eq!(
+        json(destination.join("rules.json"))["support_discovery"],
+        expected
+    );
+    let rerun = fixture.temp.path().join("support-domain-replay");
+    let replay = success(fixture.command(&destination, &rerun).output().unwrap());
+    assert_eq!(replay["extension"]["appended_support_source_domains"], 0);
+    assert_eq!(
+        replay["publication"]["after"],
+        report["publication"]["after"]
+    );
+    extension.support_source_domains[0].domain = SchemaState::Unmapped {
+        gaps: vec![SchemaGap {
+            subject: owner,
+            facet: SchemaFacet::GameRules,
+            code: OwnedDefinitionKey::new("different-authority").unwrap(),
+        }],
+    };
+    write(&fixture.extension, &extension);
+    let rejected = fixture.temp.path().join("conflicting-support-domains");
+    let output = fixture.command(&destination, &rejected).output().unwrap();
+    assert!(!output.status.success());
+    assert!(
+        String::from_utf8_lossy(&output.stderr).contains("existing support source domain differs")
+    );
+    assert!(!rejected.exists());
+    assert_eq!(
+        json(destination.join("rules.json"))["support_discovery"],
+        expected
     );
 }
 

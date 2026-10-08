@@ -92,6 +92,7 @@ fn rebind(input: &mut OwnedRecipeInput) {
 }
 fn empty() -> OwnedRecipeExtension {
     OwnedRecipeExtension {
+        support_source_domains: vec![],
         schema_version: 1,
         version: key("extension-test"),
         schema: vec![],
@@ -972,4 +973,213 @@ fn reversed_members_and_receiver_targets_canonicalize_to_a_repeatable_extension(
     let reordered = extend_owned_recipe(&next, &extension, Default::default()).unwrap();
     assert_eq!(reordered.successor, first.successor);
     assert!(reordered.refinement.is_none());
+}
+
+fn support_domain(owner: SchemaSubject) -> SupportSourceDomainDeclaration {
+    SupportSourceDomainDeclaration {
+        owner,
+        domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+    }
+}
+
+#[test]
+fn support_domains_preserve_missing_coverage_and_publish_exact_definitions_and_slots() {
+    let f = Fixture::new();
+    assert!(f.base.rules().input().support_discovery.is_none());
+    let unchanged = f.extend(&empty()).unwrap();
+    assert!(unchanged.successor.rules.support_discovery.is_none());
+    let mut extension = empty();
+    let slot = SchemaSubject::Slot(f.base.schema().input().slots[0].address());
+    extension.support_source_domains = vec![
+        support_domain(SchemaSubject::Definition(f.modifier.address())),
+        support_domain(slot),
+    ];
+    let changed = f.extend(&extension).unwrap();
+    assert_eq!(changed.receipt.appended_support_source_domains, 2);
+    assert!(changed.refinement.is_none());
+    assert_eq!(changed.successor.schema, unchanged.successor.schema);
+    assert_eq!(
+        changed.successor.rules.owners,
+        unchanged.successor.rules.owners
+    );
+    assert_eq!(changed.successor.routing, unchanged.successor.routing);
+    assert_eq!(
+        changed
+            .successor
+            .rules
+            .support_discovery
+            .as_ref()
+            .unwrap()
+            .providers
+            .len(),
+        2
+    );
+    let next = assemble_owned_recipe(changed.successor.clone(), Default::default()).unwrap();
+    assert_ne!(next.rules().identity(), f.base.rules().identity());
+    assert_ne!(
+        next.manifest().compiled_rules,
+        f.base.manifest().compiled_rules
+    );
+    let replay = extend_owned_recipe(&next, &extension, Default::default()).unwrap();
+    assert_eq!(replay.receipt.appended_support_source_domains, 0);
+    assert_eq!(replay.successor, changed.successor);
+    extension.support_source_domains.reverse();
+    assert_eq!(f.extend(&extension).unwrap().successor, changed.successor);
+    assert_eq!(
+        extend_owned_recipe(&next, &empty(), Default::default())
+            .unwrap()
+            .successor,
+        changed.successor
+    );
+    assert!(f.base.rules().input().support_discovery.is_none());
+}
+
+#[test]
+fn support_domain_authoring_keeps_unmapped_gaps_and_forbids_overwriting_prior_authority() {
+    let f = Fixture::new();
+    let owner = SchemaSubject::Definition(f.item.address());
+    let mut row = support_domain(owner.clone());
+    row.domain = SchemaState::Unmapped {
+        gaps: vec![SchemaGap {
+            subject: owner,
+            facet: SchemaFacet::GameRules,
+            code: key("unreviewed-additional-supports"),
+        }],
+    };
+    let mut extension = empty();
+    extension.support_source_domains.push(row.clone());
+    let first = f.extend(&extension).unwrap();
+    assert_eq!(
+        first
+            .successor
+            .rules
+            .support_discovery
+            .as_ref()
+            .unwrap()
+            .providers,
+        vec![row]
+    );
+    let next = assemble_owned_recipe(first.successor.clone(), Default::default()).unwrap();
+    assert_eq!(
+        extend_owned_recipe(&next, &extension, Default::default())
+            .unwrap()
+            .receipt
+            .appended_support_source_domains,
+        0
+    );
+    extension.support_source_domains[0].domain =
+        SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly);
+    assert!(matches!(
+        extend_owned_recipe(&next, &extension, Default::default()),
+        Err(RecipeExtensionError::Invalid(
+            "existing support source domain differs"
+        ))
+    ));
+    let known = f.extend(&extension).unwrap();
+    let next = assemble_owned_recipe(known.successor, Default::default()).unwrap();
+    extension.support_source_domains[0].domain = first
+        .successor
+        .rules
+        .support_discovery
+        .unwrap()
+        .providers
+        .remove(0)
+        .domain;
+    assert!(matches!(
+        extend_owned_recipe(&next, &extension, Default::default()),
+        Err(RecipeExtensionError::Invalid(
+            "existing support source domain differs"
+        ))
+    ));
+}
+
+#[test]
+fn support_domain_authoring_uses_normal_rule_validation_and_rejects_duplicates() {
+    let f = Fixture::new();
+    let valid = support_domain(SchemaSubject::Definition(f.modifier.address()));
+    let mut registry = f.base.registry().clone();
+    let unknown: ModifierDefId = registry.allocate_definition().unwrap();
+    for case in 0..6 {
+        let mut extension = empty();
+        let mut row = valid.clone();
+        match case {
+            0 => extension.support_source_domains.push(valid.clone()),
+            1 => row.owner = SchemaSubject::Definition(unknown.address()),
+            2 => row.domain = SchemaState::Unmapped { gaps: vec![] },
+            _ => {
+                let mut gap = SchemaGap {
+                    subject: row.owner.clone(),
+                    facet: SchemaFacet::GameRules,
+                    code: key("unreviewed"),
+                };
+                if case == 3 {
+                    gap.subject = SchemaSubject::Definition(f.item.address());
+                }
+                if case == 4 {
+                    gap.facet = SchemaFacet::InputSchema;
+                }
+                let mut gaps = vec![gap.clone()];
+                if case == 5 {
+                    gaps.push(gap);
+                }
+                row.domain = SchemaState::Unmapped { gaps };
+            }
+        }
+        extension.support_source_domains.push(row);
+        assert!(f.extend(&extension).is_err(), "case {case}");
+        assert!(f.base.rules().input().support_discovery.is_none());
+    }
+}
+
+#[test]
+fn support_domain_can_target_a_definition_allocated_in_the_same_transaction() {
+    let f = Fixture::new();
+    let mut extension = f.receiver();
+    extension
+        .support_source_domains
+        .push(support_domain(extension.schema[0].subject()));
+    let changed = f.extend(&extension).unwrap();
+    assert_eq!(changed.receipt.allocated_entries, 1);
+    assert_eq!(changed.receipt.appended_support_source_domains, 1);
+}
+
+#[test]
+fn support_domain_work_bounds_include_prior_and_new_rows_and_gap_payloads() {
+    let f = Fixture::new();
+    let baseline = f.extend(&empty()).unwrap().receipt.work_used;
+    let mut extension = empty();
+    let owner = SchemaSubject::Definition(f.modifier.address());
+    extension
+        .support_source_domains
+        .push(SupportSourceDomainDeclaration {
+            owner: owner.clone(),
+            domain: SchemaState::Unmapped {
+                gaps: (0..4)
+                    .map(|n| SchemaGap {
+                        subject: owner.clone(),
+                        facet: SchemaFacet::GameRules,
+                        code: key(&format!("unreviewed-{n}")),
+                    })
+                    .collect(),
+            },
+        });
+    let changed = f.extend(&extension).unwrap();
+    assert_eq!(changed.receipt.work_used, baseline + 5);
+    let limits = RecipeExtensionLimits {
+        max_work: changed.receipt.work_used - 1,
+        ..Default::default()
+    };
+    assert!(matches!(
+        extend_owned_recipe(&f.base, &extension, limits),
+        Err(RecipeExtensionError::Limit("work"))
+    ));
+    let next = assemble_owned_recipe(changed.successor, Default::default()).unwrap();
+    let prior_only = extend_owned_recipe(&next, &empty(), Default::default()).unwrap();
+    assert_eq!(prior_only.receipt.work_used, baseline + 5);
+    assert!(matches!(
+        extend_owned_recipe(&next, &empty(), limits),
+        Err(RecipeExtensionError::Limit("work"))
+    ));
+    let replay = extend_owned_recipe(&next, &extension, Default::default()).unwrap();
+    assert_eq!(replay.receipt.work_used, baseline + 10);
 }

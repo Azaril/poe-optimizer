@@ -623,6 +623,7 @@ pub fn compile_owned_modifier_values(
         });
     }
     let extension = OwnedRecipeExtension {
+        support_source_domains: vec![],
         schema_version: 1,
         version: policy.version.clone(),
         schema: vec![],

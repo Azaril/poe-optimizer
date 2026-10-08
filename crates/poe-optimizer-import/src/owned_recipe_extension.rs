@@ -54,6 +54,10 @@ pub struct OwnedRecipeExtension {
     /// closure evidence must match exactly; a complete owner cannot gain programs.
     pub owners: Vec<DefinitionRules>,
     pub receivers: Vec<StatReceiver>,
+    /// Reviewed support-source domains for exact definitions or slots. Omission
+    /// preserves prior declarations; existing domains cannot be overwritten.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub support_source_domains: Vec<SupportSourceDomainDeclaration>,
 }
 #[derive(Clone, Copy, Debug)]
 pub struct RecipeExtensionLimits {
@@ -99,6 +103,7 @@ pub struct RecipeExtensionReceipt {
     pub appended_tables: usize,
     pub appended_programs: usize,
     pub appended_receivers: usize,
+    pub appended_support_source_domains: usize,
     pub work_used: usize,
 }
 pub struct StagedRecipeExtension {
@@ -237,6 +242,24 @@ pub fn extend_owned_recipe(
     }
     base.registry().validate_successor(&registry)?;
     let schema = OwnedDefinitionSchemaPackage::new(schema, limits.recipe.schema)?;
+    // Charge the complete domain inventory, including gap payloads, before
+    // cloning or indexing it. An omitted declaration never certifies absence.
+    let prior_domains = base
+        .rules()
+        .input()
+        .support_discovery
+        .as_ref()
+        .map_or(&[][..], |discovery| discovery.providers.as_slice());
+    charge(prior_domains.len())?;
+    charge(extension.support_source_domains.len())?;
+    for row in prior_domains
+        .iter()
+        .chain(&extension.support_source_domains)
+    {
+        if let SchemaState::Unmapped { gaps } = &row.domain {
+            charge(gaps.len())?;
+        }
+    }
     let mut rules = base.rules().input().clone();
     let mut routing = base.routing().input().clone();
     rules.definitions = schema.identity().clone();
@@ -373,6 +396,42 @@ pub fn extend_owned_recipe(
             appended_receivers += 1;
         }
     }
+    let mut appended_support_source_domains = 0;
+    if !extension.support_source_domains.is_empty() {
+        let discovery = rules
+            .support_discovery
+            .get_or_insert_with(|| SupportDiscoveryInput {
+                providers: Vec::new(),
+            });
+        let mut providers: BTreeMap<_, _> = discovery
+            .providers
+            .iter()
+            .enumerate()
+            .map(|(i, row)| (subject_key(&row.owner).clone(), i))
+            .collect();
+        seen.clear();
+        for row in &extension.support_source_domains {
+            let key = subject_key(&row.owner).clone();
+            if !seen.insert(key.clone()) {
+                return Err(RecipeExtensionError::Invalid(
+                    "duplicate support source domain request",
+                ));
+            }
+            if let Some(i) = providers.get(&key) {
+                if discovery.providers[*i] != *row {
+                    return Err(RecipeExtensionError::Invalid(
+                        "existing support source domain differs",
+                    ));
+                }
+            } else {
+                providers.insert(key, discovery.providers.len());
+                discovery.providers.push(row.clone());
+                appended_support_source_domains += 1;
+            }
+        }
+    }
+    // The ordinary recipe constructor validates exact subject identity and
+    // domain/gap shape, canonicalizes rows, and compiles the resulting rules.
     let after = assemble_owned_recipe(
         OwnedRecipeInput {
             schema_version: OWNED_RECIPE_VERSION,
@@ -416,6 +475,7 @@ pub fn extend_owned_recipe(
             appended_tables,
             appended_programs,
             appended_receivers,
+            appended_support_source_domains,
             work_used: limits.max_work - left,
         },
         refinement,

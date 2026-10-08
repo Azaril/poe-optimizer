@@ -332,6 +332,7 @@ impl Inputs {
                     contribution: b.effective,
                 },
                 extension: OwnedRecipeExtension {
+                    support_source_domains: vec![],
                     schema_version: 1,
                     version: "finite-passive-receiving".parse().unwrap(),
                     schema,

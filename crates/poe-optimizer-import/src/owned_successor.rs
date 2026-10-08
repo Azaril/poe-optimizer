@@ -580,6 +580,14 @@ fn preflight(
         for table in &recipe.rules.tables {
             charge(&mut left, table.rows.len(), "validation entries")?;
         }
+        if let Some(discovery) = &recipe.rules.support_discovery {
+            charge(&mut left, discovery.providers.len(), "validation entries")?;
+            for row in &discovery.providers {
+                if let SchemaState::Unmapped { gaps } = &row.domain {
+                    charge(&mut left, gaps.len(), "validation entries")?;
+                }
+            }
+        }
         for owner in &recipe.rules.owners {
             charge(
                 &mut left,

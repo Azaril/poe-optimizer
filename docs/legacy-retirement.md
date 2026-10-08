@@ -47,10 +47,18 @@ default. Structural provider inspection reuses Core's existing resolver and
 does not enable disabled providers. Preset authored-order naming/accounting,
 game-data publication and relocation of Import `01de` remain follow-up work.
 
+The ordinary recipe-extension authoring path now accepts reviewed support-source
+domains and carries them through existing publication. Retain that shared route;
+do not add a separate support-data loader or infer declarations from rule owners.
+Publication tests exercise missing/Unmapped preservation and reject replacement
+of prior authority. During the preset cleanup, reconcile archived generated-field
+responsibilities and saved `slot` relationships before retiring the mixed-scope
+issue. No compatibility alias or second persisted support model is needed.
+
 **Support-origin source census, 2026-10-08:** the new optional observer reuses
 the existing Rust source runner and records actual original constructor/query
 calls. It adds no runtime Lua, source evaluator or native group model. Retain it
-as reference evidence for source updates and the forthcoming cold-discovery
+as reference evidence for source updates and the common cold-discovery
 gate. Its `gemData`, `fromTree`, group indices, source slot names and bucket
 records are source provenance only. Manual Djinn can carry the same definition
 metadata as generated Djinn, and the slot-sharing control is not a legal-game

@@ -240,6 +240,7 @@ impl Inputs {
                 contribution_unit: b.unit,
             },
             extension: OwnedRecipeExtension {
+                support_source_domains: vec![],
                 schema_version: 1,
                 version: key("actual-fine-belt-numeric-component"),
                 schema,

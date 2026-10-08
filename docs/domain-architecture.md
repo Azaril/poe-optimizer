@@ -952,6 +952,16 @@ off-loadout equipment is reconsidered when its loadout is selected. Program-list
 completeness is not support-source completeness. This changes the common plan
 identity for every operation subset, without a compatibility bypass.
 
+Reviewed source-domain declarations enter through the existing offline recipe
+extension (`support_source_domains`), then ordinary rule validation, compilation
+and release publication. Extensions may add exact definition/slot declarations
+or repeat identical ones; they cannot overwrite prior authority, including
+Unmapped gaps. A correction requires explicitly authoring and validating a new
+complete endpoint. Empty authoring input preserves missing coverage. Neither
+publication nor a receipt establishes the truth of a game-domain absence claim;
+that still requires reviewed evidence over its admitted inputs. Publication
+budgets include both provider rows and their gap payloads.
+
 Support admission can depend on the exact supplying occurrence even when two
 occurrences share one Skill definition. Provider-specific exclusions must not
 disable a manually authored occurrence or suppress independent external

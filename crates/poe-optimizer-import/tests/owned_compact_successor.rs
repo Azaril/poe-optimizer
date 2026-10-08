@@ -11,6 +11,75 @@ fn compact(input: SuccessorBundleInput) -> StagedSuccessorBundle {
 }
 
 #[test]
+fn support_domain_authority_survives_compact_successor_reconstruction() {
+    use poe_optimizer_core::{owned_rules::*, owned_schema::*};
+    let mut supplied = input();
+    let before = compact(supplied.clone());
+    let owner = SchemaSubject::Definition(supplied.successor.schema.definitions[0].address());
+    let discovery = SupportDiscoveryInput {
+        providers: vec![SupportSourceDomainDeclaration {
+            owner,
+            domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+        }],
+    };
+    supplied.successor.rules.support_discovery = Some(discovery.clone());
+    let after = compact(supplied);
+    assert_ne!(
+        before.transition().after.rules,
+        after.transition().after.rules
+    );
+    assert_eq!(before.query_sets(), after.query_sets());
+    let published: BTreeMap<_, _> = after.artifacts().collect();
+    let rules: RulePackageInput = serde_json::from_slice(published["rules.json"]).unwrap();
+    assert_eq!(rules.support_discovery, Some(discovery));
+    assert_eq!(rules, after.recipe().rules);
+    let rebuilt = assemble_owned_recipe(after.recipe().clone(), Default::default()).unwrap();
+    assert_eq!(
+        rebuilt.manifest().compiled_rules,
+        after.assembled().manifest().compiled_rules
+    );
+    assert_eq!(rebuilt.rules().input(), &rules);
+}
+
+#[test]
+fn successor_preflight_bounds_support_domain_payloads_at_both_endpoints() {
+    use poe_optimizer_core::{
+        owned_definitions::OwnedDefinitionKey, owned_rules::*, owned_schema::*,
+    };
+    let limits = SuccessorBundleLimits {
+        max_validation_entries: 100_000,
+        ..Default::default()
+    };
+    transition_owned_bundle_compact(input(), limits).unwrap();
+    for prior in [false, true] {
+        let mut supplied = input();
+        let recipe = if prior {
+            &mut supplied.prior
+        } else {
+            &mut supplied.successor
+        };
+        let owner = SchemaSubject::Definition(recipe.schema.definitions[0].address());
+        let gap = SchemaGap {
+            subject: owner.clone(),
+            facet: SchemaFacet::GameRules,
+            code: OwnedDefinitionKey::new("unreviewed").unwrap(),
+        };
+        recipe.rules.support_discovery = Some(SupportDiscoveryInput {
+            providers: vec![SupportSourceDomainDeclaration {
+                owner,
+                domain: SchemaState::Unmapped {
+                    gaps: vec![gap; limits.max_validation_entries],
+                },
+            }],
+        });
+        assert!(matches!(
+            transition_owned_bundle_compact(supplied, limits),
+            Err(SuccessorBundleError::Limit("validation entries"))
+        ));
+    }
+}
+
+#[test]
 fn v1_preserves_supplied_order_and_original_digest_while_v2_reconstructs_canonically() {
     let mut supplied = input();
     supplied.successor.schema.definitions.reverse();

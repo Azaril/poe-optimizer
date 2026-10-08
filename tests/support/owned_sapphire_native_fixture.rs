@@ -254,6 +254,7 @@ impl Inputs {
                     contribution_unit: id(namespace, 2),
                 },
                 extension: OwnedRecipeExtension {
+                    support_source_domains: vec![],
                     schema_version: 1,
                     version: key("actual-cold-numeric-component"),
                     schema,
