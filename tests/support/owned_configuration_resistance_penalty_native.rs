@@ -359,6 +359,10 @@ impl World {
         );
         schema["slots"] = json!([]);
         let mut rules = d["headers"]["rules"].clone();
+        // Build this finite fixture in the current format. The frozen source
+        // receipt still authenticates the historical header and rule bodies;
+        // it is not a serialized package accepted by the current loader.
+        rules["schema_version"] = json!(OWNED_RULE_PACKAGE_VERSION);
         rules["tables"] = json!([]);
         rules["owners"] = json!([]);
         rules["receivers"] = json!({"members":[],"closure":{"kind":"complete"}});

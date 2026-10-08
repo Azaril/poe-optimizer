@@ -849,8 +849,10 @@ D3's component package adds eight assembled elemental/chaos endpoints and one sh
 local-elemental percentage channel. Eight effective-value contributions and eight receiver
 programs use existing owned operations for all 337 weapon templates. Complete actual
 occurrence evaluation, action routing and whole-build parity remain open. The real rule
-artifact crossed the old 8 MiB Engine wire ceiling; its bounded ceiling is now 16 MiB with
-all structural/work guards unchanged and explicit smaller-limit rejection tested.
+artifact crossed the old 8 MiB Engine wire ceiling; D3 raised its then-current bound
+to 16 MiB. The current compiler uses Core's 64 MiB content ceiling, with all
+structural/work guards unchanged and explicit smaller-limit rejection tested;
+see the [current implementation checkpoint](implementation.md#native-checkpoint-bounded-classpassive-base-membership).
 
 **Next acceptance sequence:**
 

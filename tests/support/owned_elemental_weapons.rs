@@ -3,6 +3,7 @@
 use super::support::{bundle, data, json, success};
 use poe_optimizer_core::{
     owned_build::ParameterValue,
+    owned_content::MAX_OWNED_CONTENT_BYTES,
     owned_definitions::{FiniteQuantity, ModifierDefId, OwnedDefinitionKey, StatDefId},
     owned_rules::{
         ContributionKind, ContributionReduction, RuleEffectKind, RuleEntity, RuleProgram,
@@ -472,7 +473,10 @@ pub fn check_elemental_weapons(cwd: &Path, prior: &Path) -> PathBuf {
     let old_wire_limit = 8 * 1024 * 1024;
     let wire_bytes = serde_json::to_vec(c.staged.rules().input()).unwrap().len();
     assert!(wire_bytes > old_wire_limit);
-    assert_eq!(RuleLimits::default().max_wire_bytes, 16 * 1024 * 1024);
+    assert_eq!(
+        RuleLimits::default().max_wire_bytes,
+        MAX_OWNED_CONTENT_BYTES
+    );
     assert!(wire_bytes <= RuleLimits::default().max_wire_bytes);
     let error = CompiledRulePackage::compile(
         c.staged.rules().input(),

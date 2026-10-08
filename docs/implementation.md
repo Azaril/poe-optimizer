@@ -77,7 +77,30 @@ historical rules-schema header in the finite resistance fixture and a stale
 16 MiB default-budget assertion in the extension chain. The repair constructs
 the resistance fixture in the current format and checks the shared content
 budget constant; historical source pins and the explicit 8 MiB refusal test
-remain. Full target reruns are pending; do not claim hosted or local green yet.
+remain. The resistance target now passes **six** ordinary checks with one retained
+source-dependent ignored check (`runs/ci-owned-resistance-repair-01.log`).
+
+The full extension replay then exposed a stale `before.rules` commitment in the
+current item-attribute membership artifact; a backtrace identifies that exact
+publication step. These are active offline authoring inputs, so the repair
+regenerates the three affected attribute/rarity-chaos/defence membership patches,
+rather than adding historical rebinding to the test or loader. The existing Rust
+`assemble-owned-recipe` command generated current typed identities. Exact inverse
+checks prove registry/schema/routing bytes and extension commitments unchanged;
+rule bodies differ only in the current package header, and each patch changes
+only `before.rules`. Stale-binding refusal tests remain. Verification is in
+`runs/ci-scalar-membership-regeneration-01/{prepared,regeneration-verification}.json`.
+The full extension pipeline now passes: **two** ordinary checks, one retained
+source-dependent ignored check, **715.94s**
+(`runs/ci-owned-extension-repair-03.log`). This traverses the actual regenerated
+predecessors and retains numerical checks, all-five/query preservation and
+stale-before/extension rejection. Earlier failed reproduction and backtrace logs
+remain. Strict workspace/all-feature/all-target Clippy passes in **2.08s**
+(`runs/owned-player-life-clippy-02.log`), and affected Rust formatting passes.
+The bounded follow-up audit found no additional live rule-schema-2 constructors
+or stale compiler-default assertions; unrelated 16 MiB limits remain valid.
+The historical D3 wording now distinguishes its old bound from the current one.
+Both identified CLI targets are locally green; hosted green remains unproven.
 
 The public job annotations for run `37715752732` identify two failures on both
 Windows and Ubuntu: allocation export reproduction and Data's

@@ -16,6 +16,10 @@ use std::path::PathBuf;
 #[test]
 fn authored_penalty_preserves_current_owners_and_uses_exact_player_channels() {
     authored();
+    assert_eq!(
+        World::new(None, false).recipe.rules.schema_version,
+        poe_optimizer_core::owned_rules::OWNED_RULE_PACKAGE_VERSION
+    );
 }
 #[test]
 fn native_channels_match_every_fresh_source_control_and_fixed_rebuild() {
