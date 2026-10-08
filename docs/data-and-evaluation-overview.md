@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-07, including published Arsonist/Frost Mage/Reaver topology
+Snapshot: 2026-10-08, including published Arsonist/Frost Mage/Reaver topology
 and physical inventories, stable deferred V3 attachment, Sniper count/reservation,
 reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables,
 native readiness, source-property ownership, Ice source-input fragments and
@@ -39,7 +39,15 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest data checkpoint replaces Gigantic's numeric presence with typed
+The latest joined checkpoint calculates both attribute passes from the actual
+imported class/passive sources, resolves the five inherent Boolean flags through
+checked membership, and derives inherent Life. It produces Strength 27 and
+inherent Life 54 for Original05 without supplied calculated values. All 44 joined
+checks and five-build publication preservation pass. Final Life, complete owner
+coverage and request admission remain unfinished. Current artifacts and the
+review questions are in the [implementation plan](implementation.md).
+
+The preceding data checkpoint replaces Gigantic's numeric presence with typed
 Boolean Flag/Any and joins its real selected allocation and intrinsic Life in the
 existing item-driven Sniper graph. Duplicate grants produce one pair of benefits;
 unknown membership does not become false. Actual contributor/Actor coverage stays
@@ -185,13 +193,17 @@ The preceding native checkpoint implements typed Boolean `Flag` contributions an
 unordered `Any` on the existing graph. Source membership and numeric ranks are
 separate; missing coverage remains unresolved even beside true. The current
 format is rules schema3 / operations22; no historical DTO loading path exists.
-Two real passive producers and five flag reducers are published in
-`runs/owned-boolean-publication-01/package`, with all five memberships still
-Partial. Native tests connect the actual producers to the existing Strength-Life
-receiver, and the all-five reimport preserves inputs, dispositions and 110 queries.
-Neither passive is selected in Original05; final Strength, final Life and the
-five selected input obligations remain unresolved. See the
-[flag packet](../data/owned/poe2/3887ae68/inherent-attribute-flags/README.md).
+The original [flag packet](../data/owned/poe2/3887ae68/inherent-attribute-flags/README.md)
+published two real passive producers and five reducers with Partial memberships.
+The subsequent [bounded membership packet](../data/owned/poe2/3887ae68/inherent-attribute-flag-membership/README.md)
+now authenticates those two writers and three complete-empty domains. All actual
+unlisted contributors reject, including inactive or false sources; donor owners
+and global coverage remain Partial. The joined Sniper graph calculates both
+attribute passes, resolves the five flags, and derives inherent Life 54 from
+Strength 27. Neither passive is selected in the unchanged build. No measured
+Strength or flag is a native input. Final Life delivery, full-build attributes
+and the five selected input obligations remain unresolved; all-five input and
+110-query preservation pass.
 
 The next critical-hit slice has passed an independent PoB witness: 26 cases in
 each JIT mode, byte-identical reports, and 52 measured MAIN/CALCS vectors. The

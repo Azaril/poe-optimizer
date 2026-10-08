@@ -105,8 +105,77 @@ also pass. Evidence: `runs/ci-owned-data-regression-01.log`,
 The fixes are pushed in `7cd9060`. At 03:51:53 UTC on October 8, its hosted run
 `37724617730` was pending behind the earlier live CLI/PoB jobs. No further
 completed failure was visible. Local validation is complete; hosted green is
-unproven. Original05 remains the target, with five selected input obligations
-and **0/5** complete native builds.
+unproven. At 05:08:49 UTC, current `648e7fb` run `37730656512` was pending with
+no jobs. The older `6a3aae3` run's Ubuntu PoB job had just passed after 156 minutes;
+Windows PoB and both CLI jobs still ran with no new failure annotations. The API
+does not distinguish compilation from execution, so a hang is unproven. Main's
+configured concurrency explains the pending/coalesced runs. Original05 remains
+the target, with five selected input obligations and **0/5** complete builds.
+
+## Latest native checkpoint: real Strength and checked flags reach inherent Life
+
+The five existing Boolean Any queries `3315`–`3319` now have checked bounded
+membership. Two authenticate the exact direct passive writers for doubling and
+halving inherent Life; the other three reject every actual matching contributor
+as outside their complete-empty domain. All current owner and application bodies
+are censused without evaluating guards. The five reducers and pure derived-amount
+receiver `331a` are unchanged. Donor program inventories and the global query
+registry remain Partial; this does not claim all game flag sources are supported.
+
+The existing Sniper graph now uses real second-pass Strength `1d2e`, all five
+checked flag receivers and the actual Strength-Life receiver. A fresh import of
+all 55 saved allocations proves neither flag-producing passive is selected in
+Original05. It derives **Strength 27 → inherent Life 54**, with source evidence
+used only for comparison. No measured Strength, default Boolean or test-local
+flag writer supplies that result. The receiver still emits only the inherent
+amount, not a contribution to canonical Life or a final Life pool.
+
+All **44** joined ignored checks pass: baseline **28.17s**, remaining 43 checks
+**33.85s**. The six new checks include actual halving/doubling bodies and all four
+combinations, duplicate Any sources with retained identities, missing producers,
+early stages, unknown/inactive/false sources, actual Partial inventories and
+fresh/reused/Rayon restoration. Counterfactual passive controls explicitly cover
+their flag bodies only; finite fixture closure does not establish tree legality
+or their other mechanics. The two prior authoring checks plus two new ones pass
+in the joined target; all three packet authoring checks pass.
+
+Publication passes in **21.04s** with an exact whole-input inverse and byte-identical
+rebuild. Only five membership closures and one provenance receipt change. All
+five imported drafts/origins/selections, 110 queries and issue counts
+**107/117/109/123/5** are preserved. There are no new definitions, programs,
+receivers, schema identities or evaluation bundle. Complete original builds
+remain **0/5**. The current integration package is
+`runs/owned-attribute-flags-publication-01/package`, input
+`2ad4c943b6b6d79e4421746e5318212c69245f885deb1ec2a46e293a87d1d887`, rules
+`352538bb060c1ca80704d9a8946c36514d513ecd164522e7d2563160ec3f4858`, compiled rules
+`18461019d6aeb3a54e871aa3644257cf615c5d1eb843b54ca22a10d7ad692d9c`.
+
+Evidence: `runs/owned-attribute-flags-{authoring,joined-ordinary,publication}-01.log`,
+`runs/owned-attribute-flags-native-{baseline,regressions}-01.log`, and publication
+`{validation,receipt}.json`. Strict workspace/all-feature/all-target Clippy passes
+in **2.63s**, and changed Rust formatting passes (`runs/owned-attribute-flags-{clippy,format}-01.log`).
+Independent review found no correctness issue. The source authenticator reuses the retained independent 13-case
+Strength-Life witness rather than adding another observer or copied formula.
+
+Retain the two ordinary `owned_inherent_attribute_flags` tests for now. Their
+behaviors are covered by the joined tests, but the latter require local artifacts
+and are ignored in ordinary CI. Their current value is automatic execution,
+not a second production path. Retire that finite supplied-Strength fixture after
+the current joined package is reproducibly provisioned in CI, or transfer its
+ordinary execution coverage first. Keep the independent Strength-Life witness
+and receiver tests for disabling, zero-versus-absence and lazy missingness.
+
+**Resume:** Original05 remains the closest-build target. Prepare its actual
+Life-bearing equipment and selected rewards, retaining distinct physical uses.
+Final Life query origin authority is pending in the
+[Actor/reward proposal](owned-actor-reward-contribution-queries-proposal.md);
+Offering's source scaling still needs the
+[exact Skill query decision](owned-skill-contribution-queries-proposal.md).
+Both questions were sent for owner review on October 8. Those decisions do not
+authorize unrelated support composition or Actor-to-Enemy reads. Keep `331a`
+pure and deliver its derived amount through the existing shared Player Actor
+owner. Do not bypass the candidate-wide census, revive the retired Life alias,
+or declare complete metrics before real receiving, source and owner coverage.
 
 ## Native checkpoint: bounded class/passive BASE membership
 
@@ -146,7 +215,7 @@ Publication passes in **22.76s**: exact whole-release inverse, byte-identical
 rebuild, all five imported drafts/origins/selections and all 110 queries. Only six
 memberships and provenance change; there are no new definitions, programs,
 receivers, schema identities or evaluation bundle. Selected issues remain
-**107/117/109/123/5**, with **0/5** complete originals. The current integration
+**107/117/109/123/5**, with **0/5** complete originals. This checkpoint's checked
 package is `runs/owned-attribute-base-publication-03/package`, input
 `168da7cecbdabe052e1608bd621617cc25722ca6ef5b72ccfcdc1f3aa380929d`, rules
 `2f14b8d3e91939ea4f127539b068eaa11c63322579431b4fa8cf7bfc6ff2c6ba`, compiled rules
@@ -184,11 +253,11 @@ Evidence: `runs/owned-attribute-base-publication-03/{validation,receipt}.json`,
 choice-test failure; only its focused corrected replay is green. The optional
 prepared-hand source witness is complete at the separate checkpoint below.
 
-**Resume:** bind the five inherent-attribute Boolean memberships to their actual
-current producer census and join the real second-pass Strength into the existing
-inherent-Life receiver `331a`. Preserve three guarded-empty flag domains and the
-two actual passive producers; no default false or measured Strength may replace
-their checked inputs. Final Life additionally needs real item/reward sources and
+**Follow-up completed above:** the five inherent-attribute Boolean memberships
+now bind to their current producer census, and real second-pass Strength reaches
+the existing inherent-Life receiver `331a`. Three guarded-empty flag domains and
+two actual passive producers supply the checked inputs. Final Life needs real
+item/reward sources and
 reviewed query authority for shared/generated Actors and Rewards. The current
 direct-provider-only query boundary cannot admit those sources; do not move their
 ownership or bypass membership validation merely to obtain a number.

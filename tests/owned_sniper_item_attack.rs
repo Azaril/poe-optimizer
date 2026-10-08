@@ -14,6 +14,9 @@ mod attribute_base_family;
 #[path = "support/owned_sniper_attributes_native.rs"]
 mod attribute_base_native;
 #[allow(dead_code)]
+#[path = "support/owned_attribute_flag_membership.rs"]
+mod attribute_flag_family;
+#[allow(dead_code)]
 #[path = "support/owned_buff_effect_recipients.rs"]
 mod buff_effect_family;
 #[path = "support/owned_buff_effect_recipients_native.rs"]
@@ -25,6 +28,8 @@ mod evidence;
 mod gigantic_family;
 #[path = "support/owned_sniper_gigantic_native.rs"]
 mod gigantic_native;
+#[path = "support/owned_sniper_inherent_life_native.rs"]
+mod inherent_life_native;
 #[path = "support/owned_sniper_passive_damage_evidence.rs"]
 mod passive_damage_evidence;
 #[path = "support/owned_sniper_passive_damage_native.rs"]
@@ -84,6 +89,7 @@ struct World {
     recipient_buffs: buff_effect_recipients_native::Census,
     gigantic: gigantic_native::Census,
     attributes: attribute_base_native::Census,
+    inherent_life: inherent_life_native::Census,
 }
 impl World {
     fn load() -> Self {
@@ -389,6 +395,7 @@ impl World {
         let recipient_buffs = buff_effect_recipients_native::install(&mut w, &endpoint);
         let gigantic = gigantic_native::install(&mut w, &endpoint, &path);
         let attributes = attribute_base_native::install(&mut w, &endpoint, &path);
+        let inherent_life = inherent_life_native::install(&mut w, &endpoint, &path);
         Self {
             sniper: w,
             actual_actor_coverage,
@@ -399,6 +406,7 @@ impl World {
             recipient_buffs,
             gigantic,
             attributes,
+            inherent_life,
         }
     }
     fn action(&self, index: usize) -> ActionSelection {
@@ -515,6 +523,7 @@ impl World {
             buff_effect_recipients_native::configure(stages);
             gigantic_native::configure(stages);
             attribute_base_native::configure(stages);
+            inherent_life_native::configure(stages);
             configure(stages);
         })
     }

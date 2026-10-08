@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-10-07 for the owner's aggressive retirement direction. This is a living companion to
+Updated 2026-10-08 for the owner's aggressive retirement direction. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -37,6 +37,18 @@ coverage; otherwise retire their orchestration and retain useful source witnesse
 Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
+
+**Inherent flag fixture, 2026-10-08:** the joined Sniper graph now covers all four
+real passive flag combinations and actual Partial refusals while deriving
+Strength from imported class/passive sources. Retain the two ordinary tests in
+[`owned_inherent_attribute_flags.rs`](../tests/owned_inherent_attribute_flags.rs)
+until current joined artifacts are provisioned in ordinary CI, or transfer that
+ordinary execution coverage first. The joined numerical tests remain ignored
+without those artifacts; deleting the fixture now would turn its automatic
+checks into opt-in-only coverage. It is a finite test harness, not a production
+compatibility path. Keep shared `owned_empty_support_domain.rs` and the separate
+Strength-Life source/receiver tests, which cover disabling, lazy missingness and
+zero-versus-absence beyond the joined baseline.
 
 **Offering arithmetic provenance, 2026-10-07:** retain original-call evidence
 for local multiplication/rounding and exact support delivery, rather than adding

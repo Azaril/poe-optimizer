@@ -180,6 +180,17 @@ pub fn check_authored() {
     }
     source(&a, &v, false);
 }
+/// Reuse the retained original-call proof independently of its historical
+/// publication endpoint. Observations remain comparison evidence, never inputs.
+#[allow(dead_code)] // Successor publication families share this witness directly.
+pub fn authenticate_source(full: bool) -> Value {
+    check_authored();
+    let vectors = read("source-vectors.json");
+    if full {
+        source(&read("authoring.json"), &vectors, true);
+    }
+    vectors
+}
 fn dependencies(endpoint: &StagedOwnedRelease) {
     let d: Value = read("dependencies.json");
     let defs: Vec<DefinitionDescriptor> = serde_json::from_value(d["definitions"].clone()).unwrap();
