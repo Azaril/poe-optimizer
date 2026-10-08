@@ -287,12 +287,12 @@ evidence rather than runtime behavior.
 
 The next consumer boundary is tracked in the
 [application-group query proposal](owned-application-group-contribution-queries-proposal.md),
-currently awaiting owner review. Its recommendation is a typed producer address
+accepted by the owner on 2026-10-08. It adds a typed producer address
 inside the existing checked contribution model, distinguishing ordinary program
 effects from results after application stacking. Exact recipient binding and
 complete membership must survive that distinction; individual candidates cannot
-be counted again after their group has emitted a contribution. This proposal
-does not yet change the accepted public contract.
+be counted again after their group has emitted a contribution. This is accepted
+end-state design; the current runtime member format has not yet been extended.
 
 The [passive topology contract](owned-passive-topology.md) separates implicit roots,
 physical allocations, attached choices, scope eligibility and injected legality budgets.

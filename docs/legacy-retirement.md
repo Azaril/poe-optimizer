@@ -127,9 +127,10 @@ inputs and reused/parallel execution. It uses current Core intent composition
 and accepts actual application data through the shared fixture; there is no
 new evaluator branch. Retain the separate ordinary Engine application tests
 until the joined artifact-dependent checks run automatically in CI. Do not
-replace useful independent coverage with ignored-only tests. The proposed next
+replace useful independent coverage with ignored-only tests. The next
 query extension must name application groups explicitly, not create dummy
-definition programs for synthetic graph nodes. See the
+definition programs for synthetic graph nodes. The owner accepted this extension
+on October 8; implementation remains pending. See the
 [current checkpoint](implementation.md#latest-integration-checkpoint-offering-activation-and-application)
 and [proposal](owned-application-group-contribution-queries-proposal.md).
 

@@ -1,6 +1,6 @@
 # Checked queries over stacked application contributions
 
-**Status:** Proposed; awaiting owner review. No public contract change implemented.
+**Status:** Accepted by the project owner on 2026-10-08; implementation pending.
 **Date:** 2026-10-08.
 **Decider:** Project owner.
 **Scope:** Let the existing contribution graph consume the result of an effect
@@ -36,7 +36,7 @@ Relevant code:
 - [Application group production](../crates/poe-optimizer-engine/src/owned_plan/compile/effect_applications.rs).
 - [Exact runtime membership](../crates/poe-optimizer-engine/src/owned_plan/compile/ordered.rs).
 
-## Recommended decision
+## Accepted decision
 
 Give members of the existing checked query a typed producer address:
 
@@ -103,5 +103,56 @@ and PoB object identities remain offline provenance.
    continue to the physical damage endpoint. Preserve remaining damage-domain,
    source-admission and full-build coverage obligations.
 
-This is the next numerical consumer boundary for the closest build. The separately
-accepted composed-support discovery can proceed while this decision is reviewed.
+This is the next numerical consumer boundary for the closest build. No further
+approval is required for this contract. Composed-support discovery remains
+independent accepted work; the next implementation checkpoint should connect
+stacked applications to checked queries before returning to unrelated scalar
+components.
+
+## System walkthrough and implementation handoff
+
+A contribution is a typed value attached to a concrete recipient, a Stat and a
+contribution kind. A query declares which producers belong to that channel and
+how their values reduce. It is not a request to search for all similarly named
+modifiers, and it cannot establish complete coverage from the values it happens
+to observe.
+
+Applications precede aggregation. Each selected source occurrence is paired with
+eligible recipients. Activation gates strength evaluation. Candidate effects then
+enter a group identified by recipient, family and modifier. The existing Maximum
+operation produces one contribution from that group, retaining tied source
+identities for explanation. An inactive group produces absence; an unresolved
+candidate can prevent a known result.
+
+The approved query extension consumes that one group result alongside ordinary
+program effects. It never adds the candidates again. For the selected Sniper
+components, two equal Offerings yield one 62% contribution per recipient, which
+can then combine with the applicable 68% passive component. These are retained
+validation observations, not rule literals or complete damage-domain coverage.
+
+The implementation layers remain:
+
+| Layer | Responsibility |
+| --- | --- |
+| Core | Typed producer address and declaration contract; no game-specific calculation |
+| Data | Authenticate application/effect mappings, channel, recipient capability, reduction and complete potential-declaration census under bounded validation |
+| Engine planning | Bind exact recipient groups and ordinary occurrences; verify membership and numeric positions before values, including late support expansion |
+| Engine execution | Use the existing dependency graph, reductions and per-worker scratch; no new aggregation engine |
+| Offline reference | Acquire and validate game rules against pinned PoB; no Lua state in native execution |
+
+Code inspection confirms that `compile/ordered.rs` currently indexes members by
+owner/program/effect and rejects application groups at the ordinary-provider
+origin check. `compile/effect_applications.rs` already emits a
+`RuleOrigin::EffectApplicationGroup` with exact recipient, family and modifier.
+Use that typed origin to bind the new address; the synthetic node's diagnostic
+owner/program fields are not definition-side ownership.
+
+Both initial planning in `owned_plan/compile.rs` and late binding in
+`compile/support_suffix.rs` call `Sources::validate_inventory`. Preserve that
+shared gate. Validate declarations even if a source or recipient is not selected;
+validate concrete groups even when unread, inactive or neutral. Declaration
+completeness and runtime availability are separate checks.
+
+This handoff records accepted design and inspected integration points only.
+The current canonical package still uses operations V24 and the original member
+contract; no new producer format, runtime path or consumer is claimed implemented.

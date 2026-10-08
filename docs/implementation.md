@@ -97,7 +97,7 @@ These decisions supersede older checkpoint statements below describing them as
 awaiting approval. The latest runtime checkpoint below specifies the immediate
 data-adoption step for the same closest build. Life and Skill scaling reuse the
 same membership implementation; support-domain data adoption proceeds independently
-of the pending application-group query decision. Preserve the general model and incomplete
+of the now-accepted application-group query contract. Preserve the general model and incomplete
 coverage throughout.
 Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
@@ -144,11 +144,39 @@ the final resource formula; its known component subtotal is not final Life.
 This checkpoint implements one routing law and intentionally closes no broad
 owner gap. Channel `3306`'s historical broad name means only the Talisman exclusion;
 do not treat true as proof of every item routing law. Minion receipt is separate.
-Continue the shortest evidenced Life or composed-support blocker using the
-approved contracts. Other support-source owners and provider exclusions remain
-open despite complete selected physical-Gem classifications. The application-group
-contribution-query proposal still awaits owner input before the mixed passive/
-Offering damage consumer can be implemented.
+The owner has now accepted application-group producers. Implement that existing
+query extension, then the mixed passive/Offering consumer as described in the
+accepted checkpoint below. Other support-source owners and provider exclusions
+remain open despite complete selected physical-Gem classifications.
+
+## Accepted checkpoint: application-group contribution queries
+
+On October 8 the owner explicitly approved the
+[application-group producer contract](owned-application-group-contribution-queries-proposal.md).
+This supersedes older awaiting-review statements in checkpoint history below.
+No further approval is needed for its implementation. No runtime or package
+change has shipped at this checkpoint: the canonical flat-Life-routing package,
+operations V24, four selected input obligations and **0/5 complete builds** are
+unchanged.
+
+**Next implementation:** extend the existing member contract with typed ordinary
+program-effect and application-group producers; validate every potential
+application/effect declaration; bind concrete groups by exact recipient/family/
+modifier in the common initial and late-support inventory gate. Preserve the
+existing reduction execution, application stacking, explicit numeric positions,
+Partial coverage and bounded work. Replace the current development representation
+and regenerate maintained artifacts; add no compatibility branch or fabricated
+definition owner. Verify independent families, missing/extra/duplicate members,
+inactive/unread/unknown sources, repeated recipients, ordering, stages/cycles and
+fresh/reused/Rayon execution before publishing the real mixed damage consumer.
+The observed 62 + 68 = 130 percent subtotal is a component control only.
+
+The intervening Life investigation made no code or data changes. Its full formula
+also depends on Extra, Total, conversion, override and Chaos Inoculation inputs,
+in addition to the existing BASE/INC/MORE queries. Retained rounding evidence in
+`runs/owned-player-life-rounding-source-02` does not prove all broader source
+domains or arithmetic bounds. Keep that work pending; do not replace the newly
+unblocked damage path with another supplied-scalar Life fixture.
 
 ## Preceding native data checkpoint: Gem support-source domains
 
@@ -1773,9 +1801,9 @@ Publish complete coverage only where supplier domains and numerical bounds are
 proved. V24 now provides exact Skill query/self-membership and canonical Offering
 source scaling for checked empty domains. The typed activation/application join
 now passes in the same graph. The next combined damage consumer requires the
-new [application-group query decision](owned-application-group-contribution-queries-proposal.md),
-which is awaiting review. Composed support-discovery is already accepted and is
-the independent implementation path while that decision is pending. Actor/Skill
+new [application-group query contract](owned-application-group-contribution-queries-proposal.md),
+accepted October 8 and now the next implementation step. Composed support
+discovery remains an independent accepted path. Application-group and Actor/Skill
 membership and support composition need no repeat approval; unrelated proposals
 retain their separate review gates.
 
@@ -2800,7 +2828,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Equipment ordering, global/owner coverage and the final Life consumer remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
 | Composed support discovery | Accepted October 8. The common native gate, current authored-order DTO and source-input accounting are implemented; Original05 `01de` is retired. The Gem packet publishes 937 Known and 29 Unmapped domains with all-five preservation; all 23 selected physical Gem domains are covered. Existing typed identities fixed 111 false stat-set blockers. Pinned generated export metadata classifies eight missing runtime effects as active without implementing their Command mechanics. Continue other owner domains and exact provider exclusions; keep Command action/usage gaps separate. Unsupported positive and archived source relationships remain blocking. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
-| Application-group contribution queries | Proposed October 8; owner review pending. Give the existing query members typed program-effect/application-group producer addresses, validating exact recipients and all potential sources before values. Preserve stacking, unknowns, explicit numeric order and one checked reduction path; rebuild current artifacts without compatibility branches. This is the next combined damage consumer boundary. [Proposal](owned-application-group-contribution-queries-proposal.md). |
+| Application-group contribution queries | Accepted October 8; implementation pending and next in priority. Give the existing query members typed program-effect/application-group producer addresses, validating exact recipients and all potential sources before values. Preserve stacking, unknowns, explicit numeric order and one checked reduction path; rebuild current artifacts without compatibility branches. This is the next combined damage consumer boundary. [Accepted contract](owned-application-group-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |
 | Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 21 Config-local and 23 non-Config origins after selected/generated accounting, cached-Buffs, archived responsibility and overwritten-placeholder proofs. Fourteen archived rows retain their exact existing raw-input, usage and support-origin Pending owners; they gain no provider or known value. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Typed constructor defaults now reach Player/Enemy/Environment inputs; the real Player resistance-penalty consumer is published, but no global inventory closes. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |

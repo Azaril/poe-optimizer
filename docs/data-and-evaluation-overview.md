@@ -96,7 +96,11 @@ and the published rules, without changing production behavior or closing the
 real Pending inventories. All 79 joined checks pass, including reused and Rayon
 execution. The next damage consumer needs checked membership for application
 group results; that [public-contract proposal](owned-application-group-contribution-queries-proposal.md)
-awaits owner review. Composed support discovery is already approved and remains
+was accepted on October 8; its producer-address extension is not yet implemented.
+Existing applications already resolve activation, exact recipients and stacking;
+the pending change lets the same checked query combine that result with ordinary
+contributions. It adds no separate aggregator or Lua runtime dependency.
+Composed support discovery is already approved and remains
 independent implementation work. See the current [resume point](implementation.md#latest-integration-checkpoint-offering-activation-and-application).
 
 The joined graph calculates both attribute passes from the actual
