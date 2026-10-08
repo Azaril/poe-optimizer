@@ -806,6 +806,69 @@ fn resource_bounds_cover_whole_package_including_unreachable_nodes_and_wire() {
 }
 
 #[test]
+fn compiler_wire_budget_preserves_lower_limits_and_execution_identity() {
+    let f = fixture();
+    let stored =
+        OwnedRulePackage::new(f.rules.clone(), &f.schema, RuleStorageLimits::default()).unwrap();
+    let wire_bytes = serde_json::to_vec(stored.input()).unwrap().len();
+    let maximum = RuleLimits::default().max_wire_bytes;
+    assert_eq!(maximum, RuleStorageLimits::default().max_wire_bytes);
+    let baseline = compile(&f);
+    for limit in [wire_bytes, 16 * 1024 * 1024, maximum] {
+        let compiled = CompiledRulePackage::compile_stored(
+            &stored,
+            &f.schema,
+            RuleLimits {
+                max_wire_bytes: limit,
+                ..RuleLimits::default()
+            },
+        )
+        .unwrap();
+        assert_eq!(compiled.identity(), baseline.identity());
+        assert_eq!(compiled.source_identity(), Some(*stored.identity()));
+        for case in &f.cases {
+            let inputs = facts(&case.facts);
+            assert_eq!(
+                compiled
+                    .evaluate(
+                        &case.owner,
+                        &case.program,
+                        &inputs,
+                        &f.schema,
+                        &mut compiled.new_scratch(),
+                    )
+                    .unwrap(),
+                baseline
+                    .evaluate(
+                        &case.owner,
+                        &case.program,
+                        &inputs,
+                        &f.schema,
+                        &mut baseline.new_scratch(),
+                    )
+                    .unwrap(),
+            );
+        }
+    }
+    for (limit, path) in [
+        (wire_bytes - 1, "wire"),
+        (0, "limits"),
+        (maximum + 1, "limits"),
+    ] {
+        let error = CompiledRulePackage::compile_stored(
+            &stored,
+            &f.schema,
+            RuleLimits {
+                max_wire_bytes: limit,
+                ..RuleLimits::default()
+            },
+        )
+        .unwrap_err();
+        assert_eq!(error.path, path, "{error}");
+    }
+}
+
+#[test]
 fn arithmetic_preserves_exact_units_integer_bounds_and_explicit_numerical_errors() {
     let mut f = fixture();
     let damage = id(&f, "unit.damage");

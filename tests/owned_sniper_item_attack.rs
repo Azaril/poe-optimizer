@@ -9,6 +9,11 @@ mod accuracy_family;
 #[path = "support/owned_sniper_accuracy_native.rs"]
 mod accuracy_native;
 #[allow(dead_code)]
+#[path = "support/owned_attribute_base_membership.rs"]
+mod attribute_base_family;
+#[path = "support/owned_sniper_attributes_native.rs"]
+mod attribute_base_native;
+#[allow(dead_code)]
 #[path = "support/owned_buff_effect_recipients.rs"]
 mod buff_effect_family;
 #[path = "support/owned_buff_effect_recipients_native.rs"]
@@ -78,6 +83,7 @@ struct World {
     passives: passive_damage_native::Census,
     recipient_buffs: buff_effect_recipients_native::Census,
     gigantic: gigantic_native::Census,
+    attributes: attribute_base_native::Census,
 }
 impl World {
     fn load() -> Self {
@@ -382,6 +388,7 @@ impl World {
         let passives = passive_damage_native::install(&mut w, &endpoint, &path);
         let recipient_buffs = buff_effect_recipients_native::install(&mut w, &endpoint);
         let gigantic = gigantic_native::install(&mut w, &endpoint, &path);
+        let attributes = attribute_base_native::install(&mut w, &endpoint, &path);
         Self {
             sniper: w,
             actual_actor_coverage,
@@ -391,6 +398,7 @@ impl World {
             passives,
             recipient_buffs,
             gigantic,
+            attributes,
         }
     }
     fn action(&self, index: usize) -> ActionSelection {
@@ -506,6 +514,7 @@ impl World {
             passive_damage_native::configure(stages);
             buff_effect_recipients_native::configure(stages);
             gigantic_native::configure(stages);
+            attribute_base_native::configure(stages);
             configure(stages);
         })
     }

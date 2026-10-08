@@ -4,7 +4,7 @@
 //! is validated at compilation; only demanded reads are evaluated at runtime.
 use poe_optimizer_core::{
     owned_build::ParameterValue,
-    owned_content::{OwnedContentDigest, digest_owned},
+    owned_content::{MAX_OWNED_CONTENT_BYTES, OwnedContentDigest, digest_owned},
     owned_definitions::{BoundedInteger, GameVersionNamespace, OwnedDefinitionKey},
     owned_rules::{RuleEffectKind, RulePackageInput},
     owned_schema::{
@@ -56,8 +56,10 @@ impl Default for RuleLimits {
             max_edges: 1048576,
             max_effects: 65536,
             max_work: 4194304,
-            // The full owned base/receiver catalog exceeds 8 MiB; structural guards remain separate.
-            max_wire_bytes: 16 * 1024 * 1024,
+            // Use the same bounded content envelope as rule storage. Complete
+            // catalog memberships can exceed 16 MiB without increasing program
+            // complexity; node, edge, effect and work budgets remain independent.
+            max_wire_bytes: MAX_OWNED_CONTENT_BYTES,
         }
     }
 }

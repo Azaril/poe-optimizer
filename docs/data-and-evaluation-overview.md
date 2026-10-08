@@ -288,8 +288,19 @@ The [BASE contribution audit](owned-base-contribution-audit.md) adds executable
 evidence without changing that runtime package. It retains all five builds'
 actual ordered attribute records, including post-passive equipment bonus copies,
 and exercises a signed-scaling order counterexample through current native
-programs. BASE membership remains Partial; socket-origin ordering and grouped
-bonus projection need explicit treatment before closure.
+programs. That audit snapshot keeps BASE membership Partial; socket-origin
+ordering and grouped bonus projection need explicit treatment before supporting
+those donors.
+
+The published bounded slice admits only the current class and passive BASE
+contributors, whose complete literal inventory has an exact integer sum.
+Candidate binding must reject unsupported item or dynamic contributors, including
+inactive ones. This reuses the existing membership contract; it is not a second
+attribute implementation or an Original05 runtime mode. Publication preserves all
+five inputs and joins actual Class/passive bodies to the existing native Sniper
+graph. Production rule owners and global coverage remain Partial; complete Player
+metrics and build evaluation are unfinished. Validation and the current package
+are recorded in the [living plan](implementation.md#native-checkpoint-bounded-classpassive-base-membership).
 
 Fixed Spirit recognition is now an owned import-data extension using the same
 24 inputs and five existing numerical programs. It unlocks two neighboring
@@ -387,10 +398,13 @@ Multiply queries and reject every potential incoming multiplier. The
 [increased-attribute packet](../data/owned/poe2/3887ae68/attribute-increase-membership/README.md)
 completes six INC memberships from all nine existing donor owners. Their fixed
 small integer values sum exactly under any permutation; no source traversal
-order is imported. BASE and global contributor inventories remain Partial.
-Native component tests use all five selected INC occurrences and all nine donor
-bodies, with BASE projections explicitly confined to fixtures. Conditional
-snapshots, complete original-build attributes and final Life remain unresolved.
+order is imported. The subsequent class/passive BASE packet completes six bounded
+memberships and rejects every unmatched actual contributor. The joined Sniper
+component uses the actual imported class and 22 passive allocations, with all
+current BASE/INC/MORE query bodies; earlier isolated BASE projections remain test
+fixtures only. The global inventory and Class/Actor owners remain Partial.
+Conditional snapshots, complete original-build attributes and final Life remain
+unresolved.
 Multiple-source inherent flags now use the implemented
 [Boolean aggregation contract](owned-boolean-contributions-proposal.md). Source
 coverage remains Partial despite published passive producers and reducers. The

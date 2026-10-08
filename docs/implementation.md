@@ -108,6 +108,98 @@ completed failure was visible. Local validation is complete; hosted green is
 unproven. Original05 remains the target, with five selected input obligations
 and **0/5** complete native builds.
 
+## Native checkpoint: bounded class/passive BASE membership
+
+The next numerical prerequisite is the selected Player's attribute calculation,
+which feeds final Life and other Player metrics. The current six BASE channels
+contain 48 Class and 1,924 Passive literal Add effects, plus twelve item
+effects outside this bounded domain. The class/passive literals are integers from
+3 to 25. Their complete per-channel inventory sums are 1711/1707/1743, repeated
+for the second pass. Exact membership and unique semantic positions can bound a
+successful candidate to a subset of that inventory; this is not an argument for
+reordering the signed/scaled item contributors described in the BASE audit.
+
+The 347 passive owners include one ascendancy node; the positive-literal proof
+does not depend on which point pool supplies the allocation. Original05's 22
+selected attribute allocations are ordinary passives.
+
+Six checked memberships now cover that reusable class/passive domain. Candidate
+binding rejects every actual unmatched contributor, including inactive, socket,
+copied or dynamic contributions. Class/Actor owners and the global query registry
+remain Partial. The six already-published guarded empty-MORE producers and their
+Complete empty memberships are reused unchanged. No example identifier selects
+production behavior, and no test-local factor or coverage certificate enters the
+published package.
+
+Original05's twelve retained BASE stages (MAIN/CALCS, three attributes, two
+passes) contain only Base/Tree records; none contains an Amulet-copy zero. The
+other originals still provide the item/copy contrasts. The selected class and
+actual imported attribute allocations now join the existing Sniper graph, using
+the published consumer bodies and current guarded empty-MORE producers. The
+baseline produces 27/7/105 in both passes and passes in **27.91s**. This remains a
+component prerequisite, not complete Player or build evaluation. The numerical
+fixture does not certify tree legality and explicitly retains production Class
+and global Partial refusals. Independent review found no correctness or scope
+blocker.
+
+Publication passes in **22.76s**: exact whole-release inverse, byte-identical
+rebuild, all five imported drafts/origins/selections and all 110 queries. Only six
+memberships and provenance change; there are no new definitions, programs,
+receivers, schema identities or evaluation bundle. Selected issues remain
+**107/117/109/123/5**, with **0/5** complete originals. The current integration
+package is `runs/owned-attribute-base-publication-03/package`, input
+`168da7cecbdabe052e1608bd621617cc25722ca6ef5b72ccfcdc1f3aa380929d`, rules
+`2f14b8d3e91939ea4f127539b068eaa11c63322579431b4fa8cf7bfc6ff2c6ba`, compiled rules
+`747064b9429ac1af3886f17c3b63085e7ab02869d81af1fddeea3864814f0030`.
+
+The complete membership inventory crossed the compiler's former 16 MiB default
+by 67,482 bytes. Its default now uses Core's existing 64 MiB content ceiling,
+matching owned storage/import, while caller-selected lower budgets and every
+structural/work limit remain enforced. All **25** compiler tests pass, including
+exact-size acceptance, one-byte-short/zero/over-ceiling refusal and unchanged
+compiled identity/results across sufficient budgets. No format or compatibility
+branch was introduced. Initial compile, byte-limit and historical expected-count
+failures remain in their original logs; the new publication uses the existing
+explicit-count API to check the predecessor's actual issue counts.
+
+All **38** joined ignored tests pass across the baseline, 36 regression checks
+and corrected attribute-choice control (**28.16s**). The latter initially
+searched for `AttributeOverride` directly under `Spec`; the actual saved XML
+nests it under `Overrides`. The corrected test still requires one exact
+container/record, the retained control hash, a byte-identical inverse, all 55
+imported allocations, exactly one changed choice and 22/12/105 in both passes.
+Reordered inputs, reused/Rayon scratch, duplicates, unsupported sources and real
+Partial coverage refusals pass. Two ordinary joined authoring checks and three
+packet checks also pass. Strict workspace/all-feature/all-target Clippy passes
+in **26.91s**. The joined target remains ignored in ordinary CI until reproducible
+package/source provisioning is implemented.
+
+Evidence: `runs/owned-attribute-base-publication-03/{validation,receipt}.json`,
+`runs/owned-attribute-base-publication-03.log`,
+`runs/owned-attribute-base-native-baseline-01.log`, and
+`runs/owned-attribute-base-rule-limits-01.log`,
+`runs/owned-attribute-base-native-regressions-01.log`,
+`runs/owned-attribute-base-native-choice-02.log` and
+`runs/owned-attribute-base-clippy-01.log`. The regression log preserves the initial
+choice-test failure; only its focused corrected replay is green. The optional
+prepared-hand source witness is still being completed.
+
+**Resume:** bind the five inherent-attribute Boolean memberships to their actual
+current producer census and join the real second-pass Strength into the existing
+inherent-Life receiver `331a`. Preserve three guarded-empty flag domains and the
+two actual passive producers; no default false or measured Strength may replace
+their checked inputs. Final Life additionally needs real item/reward sources and
+reviewed query authority for shared/generated Actors and Rewards. The current
+direct-provider-only query boundary cannot admit those sources; do not move their
+ownership or bypass membership validation merely to obtain a number.
+
+The separate Warrior audit found an accepted-contract path for eight archived
+origins: actual Rattling grant/raw-input data plus private reuse of the existing
+Physical singleton-minion selector and deferred-usage proof. It needs real
+structural authoring, not a role change or fabricated physical/Direct occurrence.
+Keep it behind the selected numerical prerequisite. The archived Firebolt pair
+has Complete-empty usage, so it cannot use this Pending-responsibility proof.
+
 ## Latest native checkpoint: Boolean Gigantic and intrinsic Life in the Sniper graph
 
 The [Gigantic cutover](../data/owned/poe2/3887ae68/gigantic-flags/README.md)
@@ -163,9 +255,10 @@ query registry and Sniper Actor remain Partial. Selected issues are unchanged at
 **Resume: complete Offering delivery and selected-input accounting.** Activation
 `3227` and recipient scaling `322b/322c` have real producers. Source-Skill scaling
 `3228`–`322a` still needs the pending [exact Skill query decision](owned-skill-contribution-queries-proposal.md).
-Do not infer approval from this Allocation-to-Actor Boolean cutover. Continue
-independent original-call source accounting while that authority is unresolved;
-the next executable work below names narrowly scoped controls. No observed 62%
+Do not infer approval from this Allocation-to-Actor Boolean cutover. The Offering
+and Djinn source controls below are now complete; the next independent numerical
+work is the bounded BASE slice above, now published with joined numerical
+validation in progress. No observed 62%
 Offering bonus, neutral factor or precomputed final input may substitute for its
 producer. The five selected obligations and final metric/coverage gates remain.
 Original05 stays the closest-completion target; D4 starts after the first complete
@@ -1487,7 +1580,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
-| Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation; six current INC memberships are now Complete; BASE membership and the global query inventory remain Partial. The BASE audit now proves a signed-scaling counterexample, real post-passive bonus copies and missing socket-origin ordering; resolve these concrete domain gaps. Typed Boolean flag aggregation is implemented separately and does not close final attributes. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
+| Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation. Six INC and six bounded Class/Passive BASE memberships are Complete; unlisted BASE donors reject before activation. The global query inventory and Class/Actor owners remain Partial. The BASE audit proves a signed-scaling counterexample, real post-passive bonus copies and missing socket-origin ordering; supporting those item/copy donors still needs these domain gaps resolved. Typed Boolean flag aggregation is implemented separately and does not close final attributes. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
 | CI regression, timeout and infrastructure | At 23:26 UTC on 2026-10-07, [37646478601](https://github.com/Azaril/poe-optimizer/actions/runs/37646478601) at `47f3560` had passed all fourteen jobs. [37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252) at `f93d551` had seven successful/five active matrix jobs and no failed steps; Sand checkpoint [37702132448](https://github.com/Azaril/poe-optimizer/actions/runs/37702132448) was pending. The preceding successful Windows native CLI step took 314 minutes: separately profile/shard that critical path while retaining coverage. Job logs require authenticated access, so current compilation versus test progress is unverified. Pending revisions may coalesce; duration alone does not establish a hung test. No hosted success for the latest checkpoint is claimed. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |

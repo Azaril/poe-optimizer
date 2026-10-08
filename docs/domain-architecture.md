@@ -468,6 +468,16 @@ others. The [BASE audit](owned-base-contribution-audit.md) exposes current gaps
 in socket-origin ranking and post-passive bonus projection. Their public model
 remains to be reviewed; source UI traversal is not an owned ordering law.
 
+A package may admit a smaller contribution domain through exact membership and
+fail-closed candidate binding. Every concrete contributor must still be checked,
+including inactive effects and effects discovered after support preparation.
+Excluding a contributor means rejecting a candidate that contains it, not dropping
+its value. A finite, occurrence-bounded inventory of small integer literals can
+justify deterministic native ranks through exact-sum bounds; that proof does not
+extend to signed, scaled, fractional or later-added producers. Bind the proof to
+the actual programs and membership identities. Complete membership in this
+domain neither closes Partial owners nor certifies a complete build.
+
 Source ownership and numerical consumption are separate proofs. A saved item
 range belongs to its exact item and, when conversion proves the target, to the
 actual emitted modifier occurrences. A range attached to a fixed literal does

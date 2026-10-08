@@ -1,7 +1,7 @@
 # BASE contribution audit
 
-The retained source evidence does not support publishing the six BASE memberships
-with arbitrary native ranks. The audit exposes item-copy contributions after
+The retained source evidence does not support publishing the entire current BASE
+donor domain with arbitrary native ranks. The audit exposes item-copy contributions after
 passives, unsupported equipment destinations in the current ordered binder, and
 order-sensitive values inside the declared native input domain. These are concrete
 next design obligations, not permission to omit item donors.
@@ -9,10 +9,21 @@ next design obligations, not permission to omit item donors.
 This audit changes no release, public contract or rule closure. Its numerical
 evidence is pinned to `runs/owned-attribute-increase-01/package`, input
 `29e4e9ef2b321bb6c802d9970666e8bf85afb805830ca9c2bbfc03bceaafb1ef`.
-Six INC memberships are Complete; BASE memberships, the global query inventory and
-complete build evaluation remain open. Complete original builds remain **0/5**.
+At that snapshot six INC memberships are Complete and BASE memberships remain
+Partial. The global query inventory and complete build evaluation remain open
+in the current integration package too. Complete original builds remain **0/5**.
 The living implementation plan identifies the latest integration package;
 retaining this proof snapshot does not create a separate runtime mode.
+
+The subsequent implementation publishes an explicit class/passive
+domain using the existing checked-membership contract. Its literal positive
+integer inventory has a finite exact sum, while any actual contributor outside
+that inventory must fail candidate binding. This does not extend that proof to
+item, socket, copied or dynamic donors, nor close Partial rule owners. Original05
+has only Base/Tree records in all twelve captured attribute stages, with no
+Amulet-copy zeros. See the [current checkpoint](implementation.md#native-checkpoint-bounded-classpassive-base-membership)
+for implementation and validation status; this audit's broader counterexamples
+and outstanding design obligations remain applicable.
 
 ## What the original calls establish
 
