@@ -1,8 +1,9 @@
 # Support origins belong to the composed request
 
 **Status:** Accepted 2026-10-08; common native coverage gate and admitted authored-input
-accounting implemented. Original05 `01de` is retired; native game-data adoption and
-provider exclusions remain pending. The first actual
+accounting implemented. Original05 `01de` is retired. The first Gem-domain data
+packet is published; other owner domains and provider exclusions remain pending.
+The first actual
 source-construction census and slot-sharing control pass in both JIT modes.
 The owner approved
 discovery from each composed build, preserving authored assignments and order
@@ -26,8 +27,8 @@ Missing/Unmapped coverage blocks both preparation and retained delivery.
 
 Synthetic component fixtures explicitly declare their finite source domains.
 Those assertions are not publication evidence for game definitions. Current
-game data has not adopted these declarations, and exact provider exclusions
-still need their adoption checkpoint. Preset/Draft/Build order has moved to the explicit
+game data now has 966 Gem declarations (818 Known, 148 Unmapped); other owner
+domains and exact provider exclusions still need adoption. Preset/Draft/Build order has moved to the explicit
 `authored_support_order` contract described below. No new positive origin family
 is implemented.
 

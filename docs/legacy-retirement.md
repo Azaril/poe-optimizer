@@ -59,6 +59,15 @@ always-Pending stand-in for native discovery. Unrepresented positive relations
 still use that issue until accounted for. The current data-adoption gate remains
 mandatory; see the [input checkpoint](implementation.md#current-input-checkpoint-authored-support-relationships).
 
+The first native Gem-domain packet reuses the retained complete catalog and adds
+no extraction/runtime path. It explicitly withholds absence authority for 119
+unresolved declared effect constructions, including five selected Sniper Gem
+occurrences. Review whether each missing definition is a source defect, stale
+metadata or an unimplemented game mechanic before deciding whether any behavior
+belongs in owned data. Do not reproduce Lua's silent omission as a default false
+support flag. Twenty-nine actual additional-support Gems remain separately
+Unmapped. This is a concrete follow-up for the Lua cleanup pass.
+
 The ordinary recipe-extension authoring path now accepts reviewed support-source
 domains and carries them through existing publication. Retain that shared route;
 do not add a separate support-data loader or infer declarations from rule owners.

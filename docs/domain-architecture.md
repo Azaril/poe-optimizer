@@ -959,6 +959,13 @@ providers remain input obligations. Retiring an input issue preserves spent IDs
 and all other source responsibilities. This certificate never describes the
 capabilities of future equipment/tree compositions; native discovery still runs.
 
+Capability authoring must distinguish a resolved catalog's absence of additional
+support effects from a declared effect reference that has no definition. The
+latter remains an explicit gap pending source/game-intent review; source-language
+missing-table behavior is not a native game rule. Primary and all additional
+effects need exact identity and classification evidence, independently of display
+order, current activation and numerical outcomes.
+
 The first native source domain is explicitly `AuthoredAssignmentsOnly` in
 `RulePackageInput.support_discovery`, keyed by an owned definition or slot.
 It certifies the reviewed absence of other support origins throughout that

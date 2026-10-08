@@ -45,8 +45,11 @@ groups and that generated-provider exclusions must be distinguished from the
 same manually authored Skill. PoB's `gemData`/`fromTree` fields are not native
 ownership authority. The common native gate now requires reviewed support-source
 domain declarations from injected data, including for disabled selected providers.
-It has no Lua state and cannot infer coverage from authored order. Game-data
-adoption remains pending. A separate whole-source authored-input proof now
+It has no Lua state and cannot infer coverage from authored order. The first
+game-data packet now supplies 818 known Gem domains and 148 explicit gaps:
+29 have additional support effects and 119 have unresolved declared effect
+construction. Other owner domains and exact provider exclusions remain pending.
+A separate whole-source authored-input proof now
 resolves Original05's selected support-input obligation; the source observer's
 empty buckets alone do not supply that proof. See
 the [source checkpoint](implementation.md#latest-source-checkpoint-composed-support-origins).
@@ -55,7 +58,8 @@ The existing offline recipe-extension path can now author those declarations.
 It validates exact owned subjects, preserves existing declarations, and carries
 the result through compact and complete release publication. Unmapped domains
 stay Unmapped, and omitted rows stay unknown. This is a publication facility;
-the canonical game package still needs reviewed support-domain data. Import
+the canonical package now contains the reviewed Gem domains, with all other
+provider domains still requiring evidence. Import
 retains authored-support obligations for archived generated fields whose exact
 provider or saved relationships are still unresolved.
 
@@ -69,6 +73,13 @@ unrepresented manual-slot relations and exact generated-provider correspondence.
 It retires Original05's `01de` issue and preserves all other inputs/provenance.
 Unknown generated quality remains unknown, and unsupported sharing or archived
 sources stay Pending. Neither this proof nor the DTO establishes native coverage.
+
+The broader catalog audit found declared but unconstructed additional references
+on five selected physical Gem occurrences in Original05, including Sniper. Those
+remain Unmapped rather than importing a missing-source default into the native
+model. This requires a source/game-intent review, not a build-specific exception.
+The [current checkpoint](implementation.md#current-native-data-checkpoint-gem-support-source-domains)
+records the package, exact scope and next blocker.
 
 The latest integration connects imported Offering activation, item-prepared final
 level and checked source/recipient scaling to its actual application. The finite
