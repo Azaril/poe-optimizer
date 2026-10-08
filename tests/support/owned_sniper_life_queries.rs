@@ -20,7 +20,11 @@ const QUERY_IDS: [&str; 3] = [
 fn world() -> World {
     let mut w = World::load();
     let f = &mut w.sniper.base.source.base.inner;
-    assert_eq!(f.operations, key(OWNED_RULE_OPERATIONS_V23));
+    assert!(
+        RuleOperationsVersion::parse(f.operations.as_str())
+            .unwrap()
+            .supports_actor_reward_contributions()
+    );
     let mut queries = life_query_family::queries();
     // This existing finite graph has no received-minion-Life producer. Keep
     // that one exclusion explicit rather than silently filtering by selection.

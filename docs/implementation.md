@@ -85,7 +85,8 @@ On October 8 the owner approved all three recently prompted decisions:
 Actor/reward membership is implemented in Core/Data/Engine operations V23 and
 adopted by canonical Life query data. Equipment reduction coverage and the final
 Player Life consumer remain pending. Exact Skill reads and self-contribution
-membership are implemented in operations V24; Offering data adoption and
+membership are implemented in operations V24. Offering's three source writers
+now adopt that contract for checked empty domains; their application join and
 inherited/support delivery authority remain pending. Composed support discovery
 remains **accepted, not implemented**.
 These decisions supersede older checkpoint statements below describing them as
@@ -98,7 +99,92 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Latest runtime checkpoint: exact Skill queries and self-contributions
+## Latest data checkpoint: exact Offering source scaling
+
+The [source-scaling packet](../data/owned/poe2/3887ae68/buff-effect-sources/README.md)
+adds three canonical Skill writers (`3228`–`322a`) and four checked incoming
+queries. Buff increase and MORE read their exact occurrence's query; magnitude
+combines `(1 + increased / 100) * more` with existing typed operations. The one
+literal is the formula's dimensionless identity, not a supplied resolved factor.
+No new definition, receiver, runtime formula, interpreter or source-specific
+Engine behavior is introduced. Current offline migration V5 now admits V24;
+there is no new migration format or runtime compatibility branch.
+
+All four groups have an explicitly empty supported domain. The ordinary census
+rejects any matching potential contributor before guards or values, including
+neutral and unread sources. Unknown/Partial inventory is unavailable, not zero.
+The actual Skill owner and global query registry retain their Partial closures.
+Inherited and support origins, nonempty game source admission and complete
+support discovery are not established by this packet.
+
+Evidence reuses the existing 22 case/mode vectors rather than copying their
+reports. They contain 23 source invocations: 17 empty and six nonempty controls.
+Original05's source domains are empty. CalcTools' magnitude composition is
+additionally pinned to the source manifest; Lua vararg/JIT dispatch is confined
+to offline provenance. Synthetic native members exercise the nonneutral scalar
+cases through exact supplied-Skill authority, without admitting those custom
+sources into game data.
+
+The current package is `runs/owned-buff-sources-publication-01/package` (V24).
+Publication and identical rebuild pass in **29.59s**, preserving all five
+unchanged originals, 110 query rows, and selected issue counts 107/117/109/123/5.
+There is no evaluation bundle and **0/5 complete builds**. The joined graph
+authenticates the source programs already retained by its physical-source loader,
+adds the four unchanged query groups, and uses explicit execution stages after
+the contribution freeze on two independently prepared Offering occurrences.
+
+Validation passes: **71 joined checks** (61 integration and ten ordinary) in
+**37.11s**, plus the packet's ordinary check and full publication/reimport check
+in **29.26s**, and six current migration checks in **2.04s**. All 18 files from
+the two independent publications are byte-identical. New cases exercise exact
+copies, raw-level changes, nonneutral values through explicit synthetic members,
+inactive/neutral/unknown unregistered writers, Partial inventories, missing
+values, early reads and fresh/reused A–unknown–B–A/four-worker Rayon execution.
+
+During development, source pinning initially used Windows checkout bytes rather
+than the source manifest's canonical LF bytes; this was corrected without
+changing the source. The fixture also attempted to duplicate programs already
+loaded by the existing source loader. Two refusal expectations then needed the
+actual early-readiness boundary and a Stat-owned contribution gap. All fixes
+were confined to authoring/test setup; production guards were not weakened.
+The full final run is `runs/owned-buff-sources-final-01.log`; migration evidence
+is `owned-buff-sources-migration-01.log`, and repeat evidence is
+`owned-buff-sources-independent-repeat-01.json`. Earlier failed/narrowed runs
+remain diagnostics. No new source VM was run; publication authenticates retained
+independent JIT-mode reports.
+Strict workspace/all-feature/all-target Clippy passes after replacing a duplicate
+test module declaration with a shared evidence import; see
+`runs/owned-buff-sources-clippy-02.log`. The retained evidence helper is compiled
+once per test target. Changed Rust formatting and `git diff --check` also pass.
+Both affected targets' ordinary evidence checks pass after that import cleanup
+(`runs/owned-buff-sources-shared-evidence-01.log`).
+At **19:06:07 UTC**, predecessor `744cff9` CI run `37827149055` remained pending;
+`runs/owned-buff-sources-prior-ci-01.json` records that snapshot. This is not a
+hosted-success claim for the current checkpoint.
+
+**Next delivery:** join the existing typed usage-policy activation and published
+Offering application to this same graph. Establish final level22 → application62
+per exact recipient, duplicate non-stacking, disabled/scenario controls and
+missing-input refusal. Then join the selected passive68 contribution through a
+reviewed consumer and proceed to the physical damage endpoint. The old separate
+application fixture remains useful parity evidence. Correction to earlier plan
+wording: the joined item/Sniper graph previously observed Offering's table/final
+inputs; it did not execute that application with supplied scaling factors.
+No application boundary was removed by adding these source writers.
+Reuse UsagePolicy `3259` / parameter `325a` / program `skill-effect-activation`
+for Stat `3227`; the current fixture's Scenario usage list is empty. Bind real
+preset preferences and scenario overrides through the existing Core composition
+seam. The shared test `PlanComponents` currently installs an empty application
+inventory; extend that seam explicitly rather than copying the application
+formula or supplying an activation literal. Check any additional contribution
+origin authority needed by the later combined consumer before changing its
+public contract.
+
+Composed support discovery remains accepted follow-on work. The Life equipment
+domain and final Player consumer retain their independent numerical/coverage
+obligations. These changes do not require a new owner decision.
+
+## Previous runtime checkpoint: exact Skill queries and self-contributions
 
 Operations V24 extends the existing query graph with `Current` Skill reads and
 `ContributionOrigin::Skill { authored, supplies }`. A membership can explicitly
@@ -151,14 +237,10 @@ No canonical game artifact, numerical formula or definition allocation changes
 in this runtime checkpoint; the active package remains
 `runs/owned-life-queries-publication-02/package` (V23), with 0/5 complete builds.
 
-**Next delivery:** publish the query-backed Offering source writers `3228`–`322a`
-using this boundary and the retained source evidence, then join them to the
-actual Sniper/Offering graph and remove its resolved-scaling fixture inputs.
-Prove any admitted nonempty group and inherited delivery separately; do not
-substitute the measured neutral factors as literals. Rebuild the five originals
-through the existing current-format migration/publication path. Composed support
-discovery remains approved follow-on work, with mandatory complete-request
-coverage before retiring input obligation `01de`.
+**Follow-up:** the source-scaling checkpoint above adopts this boundary and
+rebuilds the originals. The application join and nonempty/inherited delivery
+proofs remain separate work. Composed support discovery needs mandatory
+complete-request coverage before retiring input obligation `01de`.
 
 **Life investigation:** the native raw Life slot `3101` permits 0–1,000,000, but
 the corruption-factor slot `3117` independently permits 0–1,000,000. The exact
@@ -233,7 +315,7 @@ ExtraLife/Total/post-clamp conversions, overrides and Chaos Inoculation. Do not
 promote the fixture's empty or finite domains to production completeness. Exact
 Skill queries and composed support discovery remain approved follow-on work.
 
-## Latest native data checkpoint: canonical Life contribution queries
+## Previous native data checkpoint: canonical Life contribution queries
 
 The [Life query packet](../data/owned/poe2/3887ae68/life-contribution-queries/README.md)
 adopts operations V23 and adds three canonical `311a` queries with seven groups
@@ -277,7 +359,7 @@ refusal. Changed-file formatting and strict workspace/all-feature/all-target
 Clippy pass; the final Clippy run took **3.08s** after removing an unused test
 module import. No source VM ran and no new PoB numerical law was inferred.
 
-Current package: `runs/owned-life-queries-publication-02/package`. Evidence uses
+Package at this checkpoint: `runs/owned-life-queries-publication-02/package`. Evidence uses
 `runs/owned-life-queries-{ordinary-01,publication-02,joined-01}` plus the publication
 directory's receipt and validation, plus `{migration-01,format-01,clippy-02}.log`
 with the same prefix. The earlier `publication-01` output records
@@ -1158,36 +1240,36 @@ local validation is not hosted success for its eventual commit.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-life-queries-publication-02/package` and its neighboring
-`original-01` through `original-05` imports. Current sidecars remain V23;
-definition schema V6, rule schema3 and operationsV23 are independent contracts.
-The immediate predecessor is `runs/owned-selected-equipment-placement-publication-01/package`,
-input `1678aa624785a6b65a32ab8e5810acb0d1dbc98cdfd6ae342a4023e5a1c9b91a`.
+Use `runs/owned-buff-sources-publication-01/package` and its neighboring
+`original-01` through `original-05` imports. Current sidecar contracts are
+preserved; definition schema V6, rule schema3 and operationsV24 are independent
+contracts. The immediate predecessor is `runs/owned-life-queries-publication-02/package`,
+input `c37eea7e87864407494c4b42574e3cfa4521afbdddd32a87096b266acc476b71`.
 Historical endpoint paths authenticate stored evidence; retired formats require
 explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `c37eea7e87864407494c4b42574e3cfa4521afbdddd32a87096b266acc476b71` |
+| Release input | `7239b9aaf761e5a1c756785ba973e709a06233d6d3e832d8cd32a0f989c700a0` |
 | Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
-| Definitions content | `2e46fdd4e18f72662de8b9acd9bd40168194fd68bb850dfca3e5a1aa0d70345e` |
-| Rules | `c8958ebf26241a2c62608d177ecc57987bfd5eb549d6edc29d66098b945a75ae` |
-| Compiled rules | `d8e930d37777de1bc6e9a1643f550dca2e6d4fecfa4d9a7bcf2f60d1165195d2` |
-| Routing | `bd8ec64b3593de40a19d3a6d01b7e2a9c10d63ea9ac9005668e9651a0b076e81` |
-| Mapping | `403fa585d9aeb478fab2fad94c59d0c8306b65dfffdd22729b4f24ddd063b7d1` |
-| Skill roles | `72a1a3a6e09bdfcdd01419d6aef6cabcc7b9471e3314fd1eccedda0d7f306cfa` |
-| Normalization | `9dfd9515a9d252c4175a2c6b9e2470380de55d573978df375e16c2e6098a0524` |
-| Rewards | `c71520dad31b021de051df001b2d4c1b88f18f982aa5126f68d595e1b2b6ad4b` |
-| Items | `6e47aa81f7219d2e0c6b8dbcaf0ba2aa0f20b81cfd2d3dec830b47ed426e2678` |
-| Item source | `fbe9a7a6a8bbce2b299b33c974b1b978fdd7f6c46707fb35801143fae5cfafe2` |
-| Tree policy | `bcea9f71a039aa2b6f6d1b0af1ec1ad857648abe0b502790f3391b47f66faa96` |
-| Life-query authoring commitment | `e1baa20f1a0a9976a9fece244442c229fbf0d737d3f354514f7766a52e7a1fbe` |
-| Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v23` |
+| Definitions content | `a5a13af506ff524d01db2f0ed4592bf728b8ba93dade938009a7bd1753d44a7a` |
+| Rules | `fa5d62760dabaf7be911c4c530bf13d3746ed6dabfd4bce79681cfadcbed6fc4` |
+| Compiled rules | `b85c487d8d41ac90dbd52d739910eed9007b05d2e09df8718d0aeb1951453366` |
+| Routing | `2b73de7d4720263e6c2d9fc9dffae7ea48ec5889da41a674eb54353ce304be8f` |
+| Mapping | `50769317179236c4be8766a07ce570da55203c0c1c2999370006606c9c2c0736` |
+| Skill roles | `3006faf9c2938b1adc3fe483dc313896b8ab9f21cd6b193855d3172e00d89f55` |
+| Normalization | `2de39f0d9a4d12f01445f932b3754dee8f6dff262b0adbbe1771ed88fdf2e4f1` |
+| Rewards | `391f86e6edac5cf65e3e7a2cb705733b6d13eed70d793250e694edc07353e779` |
+| Items | `5b706407496bd088bda444230c5d08e348f8ac6d75d7795a58ac257c141044d5` |
+| Item source | `5bf5aab130bf55249cae1d9aa35a462b0cc02175e4059896df221d2ff8da11d7` |
+| Tree policy | `29d98d0a20978f780e77e198842972bf8225e06309f23d4b5d560c542b3afa3a` |
+| Source-scaling authoring commitment | `8efaefde19a9502dbed0ffd19361dd7b105268ad6d3c65bf6054a15abec95d20` |
+| Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v24` |
 
-The eighteen package files total **63,898,826 bytes**, with 149 provenance rows.
-Definitions and rules use `pob-3887ae68-life-contribution-queries-v1`. The registry ends at
-`3352`; the latest publication allocates no IDs and adds three contribution queries.
+The eighteen package files total **63,903,859 bytes**, with 150 provenance rows.
+Definitions and rules use `pob-3887ae68-buff-effect-source-queries-v1`. The registry ends at
+`3352`; the latest publication allocates no IDs and adds three programs/four contribution queries.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -1215,9 +1297,9 @@ witness now pass. Actor/reward membership is implemented in operations V23;
 its actual Life query data and finite reductions now pass. Prove the remaining
 equipment reduction domain, then final Player Life arithmetic using the retained source witness.
 Publish complete coverage only where supplier domains and numerical bounds are
-proved. V24 now provides the exact Skill query/self-membership extension;
-the immediate executable work is Offering's canonical scaling data and removal
-of its supplied-scalar fixture boundary, as specified in the latest checkpoint.
+proved. V24 now provides exact Skill query/self-membership and canonical Offering
+source scaling for checked empty domains. The immediate executable work is the
+typed activation/application join specified in the latest checkpoint.
 The independently accepted composed support-discovery work can proceed in
 parallel without editing the same graph files. No approval is outstanding for
 these three directions; other proposals retain their separate review gates.
@@ -1436,7 +1518,7 @@ changes the 0/5 complete-build result.
 **Player-Life dependency status:** the Strength-to-Life receiver, Count cutover,
 six ordinary attribute consumers, guarded empty-MORE producers, six BASE/INC
 memberships and five inherent-flag memberships are implemented and tested. The
-current package uses rule schema 3 and operations V23. Its six BASE query groups
+current package uses rule schema 3 and operations V24. Its six BASE query groups
 are Complete (328/328/330 members in each pass); the five flag groups are Complete
 with 0/0/0/1/1 declared sources. Global query/owner coverage remains Partial.
 The existing conservative validator still rejects an unmatched potential effect
@@ -1978,7 +2060,7 @@ numerical outputs when game intent remains unresolved.
 
    Prove complete real external/support inventories and all relevant owner
    programs before publishing receiving V3/stages V3 or claiming a working original.
-   The current operations V23 Partial release does not weaken that gate. Establish real
+   The current operations V24 Partial release does not weaken that gate. Establish real
    admission predicates and supporting mechanics for all six observed Ice support
    candidates; the finite arithmetic component's already-admitted positions are
    not that proof. Supported/final quality and broader ordinary property families
@@ -2239,7 +2321,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
 | Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Equipment ordering, global/owner coverage and the final Life consumer remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
 | Composed support discovery | Accepted October 8: presets own authored assignments/order; native cold planning derives complete origins from the composed request and injected provider capabilities. Enforce the direct/staged-request gate before moving Import `01de`; rebuild current artifacts. Implementation pending. [Contract](owned-support-origin-composition-proposal.md). |
-| Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers, inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers are already published with guarded empty query domains. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
+| Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers now use four checked empty domains; the application join, inherited Actor and support-delivery memberships remain pending. Nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |
 | Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 21 Config-local and 23 non-Config origins after selected/generated accounting, cached-Buffs, archived responsibility and overwritten-placeholder proofs. Fourteen archived rows retain their exact existing raw-input, usage and support-origin Pending owners; they gain no provider or known value. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Typed constructor defaults now reach Player/Enemy/Environment inputs; the real Player resistance-penalty consumer is published, but no global inventory closes. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |

@@ -141,6 +141,7 @@ fn check_contract(
                         | OWNED_RULE_OPERATIONS_V21
                         | OWNED_RULE_OPERATIONS_V22
                         | OWNED_RULE_OPERATIONS_V23
+                        | OWNED_RULE_OPERATIONS_V24
                 )
         }
         _ => false,
@@ -195,10 +196,11 @@ fn check_contract(
                     | OWNED_RULE_OPERATIONS_V21
                     | OWNED_RULE_OPERATIONS_V22
                     | OWNED_RULE_OPERATIONS_V23
+                    | OWNED_RULE_OPERATIONS_V24
             ))
     {
         return Err(invalid(
-            "current migration requires schema v6 and operations v20 through v23",
+            "current migration requires schema v6 and operations v20 through v24",
         ));
     }
     if version == 5

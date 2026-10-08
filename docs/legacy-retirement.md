@@ -38,6 +38,17 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Offering source queries, 2026-10-08:** the current V24 packet uses three owned
+Skill programs and four checked empty-domain queries. It adds no evaluator mode
+or source-shaped runtime value. Retain the earlier application-only fixture until
+the joined item/Sniper graph covers activation, scaling, recipient binding,
+non-stacking and missing inputs with equivalent ordinary CI coverage. That graph
+previously observed only Offering's final inputs/table; describing this change as
+removal of an existing joined supplied-scalar boundary was inaccurate. The new
+packet reuses the recipient packet's source observations. `CalcTools.lua` is a
+manifest-pinned offline formula reference only; its Lua vararg/JIT dispatch is
+unnecessary in native arithmetic. See the [current checkpoint](implementation.md#latest-data-checkpoint-exact-offering-source-scaling).
+
 **Inherent flag fixture, 2026-10-08:** the joined Sniper graph now covers all four
 real passive flag combinations and actual Partial refusals while deriving
 Strength from imported class/passive sources. Retain the two ordinary tests in

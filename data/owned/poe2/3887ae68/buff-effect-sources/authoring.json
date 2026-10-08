@@ -1,0 +1,39 @@
+{
+  "before": "c37eea7e87864407494c4b42574e3cfa4521afbdddd32a87096b266acc476b71",
+  "schema_version": 1,
+  "scope": {
+    "owner_closure_changed": false,
+    "global_registry_closure_changed": false,
+    "new_programs": 3,
+    "new_definitions": 0,
+    "nonempty_source_admission": false,
+    "complete_empty_groups": 4,
+    "new_queries": 4,
+    "complete_build_claim": false
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "kind": "buff-effect-source-empty-domains",
+  "artifacts": {
+    "queries.json": {
+      "sha256": "0618fec6eaaf6aee64e78ee5902bc93e77325edb7c77336c068890de1334ba62",
+      "bytes": 3459,
+      "path": "data/owned/poe2/3887ae68/buff-effect-sources/queries.json"
+    },
+    "migration.json": {
+      "sha256": "0f671fc51df17ac04f32e3cb71ad61626a55a927446ce270893e7485070e09bf",
+      "bytes": 552,
+      "path": "data/owned/poe2/3887ae68/buff-effect-sources/migration.json"
+    },
+    "programs.json": {
+      "sha256": "7d0e9265767ed749b383c606dcabf7b7c7158f78e145d743d89680356cf2f06a",
+      "bytes": 7249,
+      "path": "data/owned/poe2/3887ae68/buff-effect-sources/programs.json"
+    },
+    "dependencies.json": {
+      "sha256": "c90d34090dcc3a0a2d9f19c2d1152a9d5b9a538b0c154d58532f9cb3ac13dde3",
+      "bytes": 4590,
+      "path": "data/owned/poe2/3887ae68/buff-effect-sources/dependencies.json"
+    }
+  }
+}

@@ -1,0 +1,158 @@
+[
+  {
+    "groups": [
+      {
+        "reduction": "sum",
+        "members": {
+          "members": [],
+          "closure": {
+            "kind": "complete"
+          }
+        },
+        "ordering": "ordered",
+        "id": "empty",
+        "empty": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "namespace": {
+                "version": "owned-mechanics-v1",
+                "game": "poe2"
+              },
+              "key": "def.0000000000000002",
+              "kind": "unit"
+            },
+            "value": 0.0
+          }
+        }
+      }
+    ],
+    "stat": {
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "key": "def.0000000000003228",
+      "kind": "stat"
+    },
+    "id": "source-empty-buff-effect-increase-domain",
+    "contribution": "increase"
+  },
+  {
+    "groups": [
+      {
+        "reduction": "product",
+        "members": {
+          "members": [],
+          "closure": {
+            "kind": "complete"
+          }
+        },
+        "ordering": "ordered",
+        "id": "empty",
+        "empty": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "namespace": {
+                "version": "owned-mechanics-v1",
+                "game": "poe2"
+              },
+              "key": "def.0000000000000001",
+              "kind": "unit"
+            },
+            "value": 1.0
+          }
+        }
+      }
+    ],
+    "stat": {
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "key": "def.0000000000003229",
+      "kind": "stat"
+    },
+    "id": "source-empty-buff-effect-more-domain",
+    "contribution": "multiply"
+  },
+  {
+    "groups": [
+      {
+        "reduction": "sum",
+        "members": {
+          "members": [],
+          "closure": {
+            "kind": "complete"
+          }
+        },
+        "ordering": "ordered",
+        "id": "empty",
+        "empty": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "namespace": {
+                "version": "owned-mechanics-v1",
+                "game": "poe2"
+              },
+              "key": "def.0000000000000002",
+              "kind": "unit"
+            },
+            "value": 0.0
+          }
+        }
+      }
+    ],
+    "stat": {
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "key": "def.000000000000322a",
+      "kind": "stat"
+    },
+    "id": "source-empty-magnitude-increase-domain",
+    "contribution": "increase"
+  },
+  {
+    "groups": [
+      {
+        "reduction": "product",
+        "members": {
+          "members": [],
+          "closure": {
+            "kind": "complete"
+          }
+        },
+        "ordering": "ordered",
+        "id": "empty",
+        "empty": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "namespace": {
+                "version": "owned-mechanics-v1",
+                "game": "poe2"
+              },
+              "key": "def.0000000000000001",
+              "kind": "unit"
+            },
+            "value": 1.0
+          }
+        }
+      }
+    ],
+    "stat": {
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "key": "def.000000000000322a",
+      "kind": "stat"
+    },
+    "id": "source-empty-magnitude-more-domain",
+    "contribution": "multiply"
+  }
+]

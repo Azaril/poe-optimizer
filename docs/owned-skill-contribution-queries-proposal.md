@@ -1,8 +1,9 @@
 # Checked contribution queries for exact Skill occurrences
 
 **Status:** Accepted 2026-10-08. V24 implements exact Current Skill query reads
-and Skill-owned self-contribution membership. Canonical Offering data adoption,
-inherited adjustments and support delivery membership remain pending.
+and Skill-owned self-contribution membership. Canonical Offering source writers
+now adopt four guarded empty domains. Their application join, inherited
+adjustments and support delivery membership remain pending.
 **Date:** 2026-10-07.
 **Decider:** Project owner.
 **Scope:** Extend the existing contribution graph's ownership and membership
@@ -15,8 +16,8 @@ population and intrinsic attack/accuracy. Its selected ordinary minion-damage
 passives can supply the known 68% increase. Pain Offering is the next substantial
 missing numerical connection: the application and final source inputs exist,
 but at proposal time these five required scaling channels had no published
-producer. The subsequent Actor-only packet now supplies `322b/322c` through
-guarded empty queries; `3228`–`322a` still need this decision:
+producer. Subsequent packets supply `322b/322c` on recipient Actors and
+`3228`–`322a` on exact source Skills through guarded empty queries:
 
 | Stat suffix | Owner and meaning |
 | --- | --- |
@@ -59,8 +60,10 @@ generated copies, denied permissions, wrong supply/owner/context, Partial and
 complete-empty inventories, unknown values, unread/inactive/neutral members,
 late support additions, storage/raw validation, bounded work and deterministic
 fresh/reused/Rayon execution. Existing contribution and joined Sniper regressions
-also pass. This validates the structural boundary; the published package remains
-V23 until Offering data adoption and five-build reimport/rebuild are complete.
+also pass. This validates the structural boundary. The published V24
+[source packet](../data/owned/poe2/3887ae68/buff-effect-sources/README.md) now adds
+the three writers/four queries and preserves all five imports. Its empty-domain
+restriction is narrower than the runtime's positive self-membership capability.
 
 The authority audit below records the pre-V24 boundary. Its Current-Skill and
 Skill self-membership restrictions are now superseded as described above;
@@ -207,18 +210,19 @@ domain** can then be a bounded subset of that design while positive origin and
 group proofs are completed. It must use real published query-backed writers,
 not observed scalars, literal neutral producers or a hidden fallback.
 
-The next data packet should author the remaining three writers `3228`–`322a`
-and their incoming queries on the existing source Skill, reusing the already
-published recipient writers `322b`/`322c`. Its
-magnitude writer combines independently checked INC and MORE domains using
-existing operations. Query/group memberships remain Partial wherever discovery
-or semantics are unproved. A checked complete-empty group may be published only
-for its explicitly admitted domain; it does not close the global query registry,
-unconverted owners or the complete support inventory.
+The source packet authors the three writers `3228`–`322a` and four incoming
+queries on the existing Skill, alongside the published recipient writers
+`322b`/`322c`. Its magnitude writer combines independently checked INC and MORE
+domains using existing operations. All four groups initially admit a checked
+complete-empty domain; they do not close the global query registry, unconverted
+owners or complete support inventory. Nonempty synthetic test members validate
+the same arithmetic/binding without admitting production custom-source origins.
 
-Validate the packet by extending the existing actual-item Sniper/Offering graph,
-removing its supplied resolved-scaling boundary. First establish real level 22
-to Offering 62%, then combine the selected passive 68% using authored consumers.
+The packet extends the existing actual-item graph with these writers. Correction:
+that graph previously observed Offering's final inputs and table, while a separate
+application fixture supplied resolved factors. Next join the actual typed usage
+activation and application, establish level22 to Offering62%, then combine the
+selected passive68% using authored consumers.
 Add the noncritical physical endpoint consumer only once its addition,
 conversion, multiplier-group and rounding domains have explicit coverage;
 baseline endpoints alone cannot justify discarding currently zero mechanics.

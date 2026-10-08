@@ -896,9 +896,13 @@ tracked separately in the [implementation plan](implementation.md).
 Operations V23 implements Actor/reward sources; V24 implements exact Current
 Skill queries and Skill-owned self-contribution membership. One member can admit
 both direct authored uses and explicitly declared generated supplies of its
-definition, preserving each occurrence. Inherited/support delivery, game-data
-adoption, composed support discovery and the final Life consumer remain separate
-delivery work; these contracts are not complete-build claims.
+definition, preserving each occurrence. Offering source scaling now adopts V24
+through three data-defined writers and four checked empty-domain queries. Its
+actual Skill owner and global query registry remain Partial. Empty membership
+is an admitted domain, not evidence that all game contributors are absent.
+Inherited/support delivery, the application join, composed support discovery
+and the final Life consumer remain separate delivery work; these contracts are
+not complete-build claims.
 The published Life query data now adopts exact Actor/reward membership. Numeric
 groups may establish an explicit zero/one-contributor domain through semantic
 tie rejection. That does not establish a multiple-contributor order law, permit

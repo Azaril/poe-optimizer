@@ -1,0 +1,17 @@
+{
+  "schema_version": 5,
+  "before": "c37eea7e87864407494c4b42574e3cfa4521afbdddd32a87096b266acc476b71",
+  "release": "pob-3887ae68-buff-effect-source-queries-v1",
+  "reason": "checked-exact-skill-buff-source-queries",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v24",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "schema": [],
+  "tables": [],
+  "owners": [],
+  "receivers": [],
+  "query_targets": []
+}

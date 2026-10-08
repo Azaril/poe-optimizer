@@ -21,6 +21,12 @@ mod attribute_flag_family;
 mod buff_effect_family;
 #[path = "support/owned_buff_effect_recipients_native.rs"]
 mod buff_effect_recipients_native;
+#[allow(dead_code)]
+#[path = "support/owned_buff_effect_sources.rs"]
+mod buff_source_family;
+#[path = "support/owned_buff_effect_sources_native.rs"]
+mod buff_sources_native;
+use buff_effect_family::evidence as source_evidence;
 #[path = "support/owned_sniper_item_attack_evidence.rs"]
 mod evidence;
 #[allow(dead_code)]
@@ -99,6 +105,7 @@ struct World {
     block_cases: Vec<evidence::BlockCase>,
     passives: passive_damage_native::Census,
     recipient_buffs: buff_effect_recipients_native::Census,
+    source_buffs: buff_sources_native::Census,
     gigantic: gigantic_native::Census,
     attributes: attribute_base_native::Census,
     inherent_life: inherent_life_native::Census,
@@ -408,6 +415,7 @@ impl World {
             .clone();
         let passives = passive_damage_native::install(&mut w, &endpoint, &path);
         let recipient_buffs = buff_effect_recipients_native::install(&mut w, &endpoint);
+        let source_buffs = buff_sources_native::install(&mut w, &endpoint);
         let gigantic = gigantic_native::install(&mut w, &endpoint, &path);
         let attributes = attribute_base_native::install(&mut w, &endpoint, &path);
         let inherent_life = inherent_life_native::install(&mut w, &endpoint, &path);
@@ -421,6 +429,7 @@ impl World {
             block_cases,
             passives,
             recipient_buffs,
+            source_buffs,
             gigantic,
             attributes,
             inherent_life,
@@ -540,6 +549,7 @@ impl World {
             }
             passive_damage_native::configure(stages);
             buff_effect_recipients_native::configure(stages);
+            buff_sources_native::configure(stages);
             gigantic_native::configure(stages);
             attribute_base_native::configure(stages);
             inherent_life_native::configure(stages);

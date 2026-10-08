@@ -223,9 +223,10 @@ pub fn check_authored() {
 pub fn assert_component(endpoint: &StagedOwnedRelease) {
     check_authored();
     let recipe = &endpoint.input().recipe;
-    assert_eq!(
-        recipe.rules.operations_version,
-        key(OWNED_RULE_OPERATIONS_V23)
+    assert!(
+        RuleOperationsVersion::parse(recipe.rules.operations_version.as_str())
+            .unwrap()
+            .supports_actor_reward_contributions()
     );
     let deps: Dependencies = read("dependencies.json");
     for definition in deps.definitions {

@@ -196,14 +196,18 @@ responsibility, so this witness cannot retire another configuration fallback.
 Syntax guards named `inert_fields` do not establish mechanical non-applicability.
 See the [checkpoint](implementation.md#source-checkpoint-manual-djinn-admission-accounting).
 
-Next, Offering needs its three source-Skill scaling producers before its
-application can add the measured 62%. The accepted
+Offering's three source-Skill scaling producers now use four checked incoming
+queries in the active V24 package. The accepted
 [exact Skill query extension](owned-skill-contribution-queries-proposal.md) reuses
 the existing graph. V24 now admits Current Skill reads and explicitly permitted
 direct/generated Skill self-contributions using validated supply relations;
-Offering's canonical writers and inherited/support memberships remain pending.
+The writers initially admit only empty domains; nonempty potential sources
+reject, and Partial coverage remains unresolved. Joining the existing usage-policy
+activation and application to these values is the next numerical connection.
+The separate application witness's measured 62% is not yet a joined damage result.
+Inherited/support memberships remain pending.
 Actor/reward contribution membership is implemented in operations V23. The
-active game package remains V23 until data adoption is rebuilt and checked;
+active game package adopts V24 with all five imports and 110 query rows preserved;
 composed support-source discovery remains accepted but pending. See the linked proposals and implementation
 plan for their separate delivery gates. The focused
 Offering witness now observes original multiplication and local rounding in an
