@@ -111,22 +111,48 @@ function M.begin(expectedJit)
  local function hook(event,line)
   if failure then return end
   local f=debug.getinfo(2,"f").func
-  if f~=refs.life then return end
+  if f~=refs.life and f~=refs.round then return end
+  if f==refs.round and event~="call" then return end
+  local caller=debug.getinfo(3,"fSl")
+  if f==refs.round and (not caller or caller.func~=refs.life or caller.currentline~=96) then return end
   local vars,bindings={},{};for i=1,160 do local n,v=debug.getlocal(2,i);if not n then break end
    vars[n]=v;bindings[n]=true
   end
-  local caller=debug.getinfo(3,"fSl")
-  local env=event=="call" and env_for(vars.actor) or nil
+  local consumer
+  if f==refs.round then
+   -- Observe only the original final resource expression. Breakdown rounding,
+   -- other resources and unrelated callers are outside this acquisition.
+   consumer={};for i=1,160 do local n,v=debug.getlocal(3,i);if not n then break end
+    consumer[n]=v
+   end
+   if consumer.res~="Life" then return end
+  end
+  local env=f==refs.life and event=="call" and env_for(vars.actor) or nil
   local ok,problem=xpcall(function()
-   if event=="call" then
+   if f==refs.round then
+    local frame=assert(auth.frames[#auth.frames],"original Life rounding without consumer frame")
+    if frame.row then
+     assert(consumer.actor==frame.actor and consumer.modDB==frame.db and consumer.output==frame.output)
+     assert(frame.env.player==frame.actor and frame.db.actor==frame.actor)
+     assert(bindings.val and bindings.dec,"missing original round parameters")
+     assert(type(vars.val)=="number","original Life rounding operand is not numeric")
+     frame.rounding_count=frame.rounding_count+1
+     assert(frame.rounding_count==1,"repeated original Life rounding call")
+     frame.row.rounding={consumer_line=96,invoked=true,exact_consumer_frame=true,
+      argument=optional(vars.val),decimal_parameter=optional(vars.dec),result_observed=false}
+     -- No original return value is inferred from debug temporaries or from
+     -- output.Life: the latter has already passed through the resource minimum.
+    end
+   elseif event=="call" then
     local frame={}
     if env then
      assert(vars.actor==env.player and vars.actor.modDB==env.modDB and env.modDB.actor==env.player)
      assert(caller and (caller.func==refs.perform or caller.func==refs.defence),"unexpected Player Life caller")
-     frame={env=env,actor=vars.actor,db=env.modDB,output=vars.actor.output,
+     frame={env=env,actor=vars.actor,db=env.modDB,output=vars.actor.output,rounding_count=0,
       row={mode=env.mode,caller={path=caller.func==refs.perform and "Modules/CalcPerform.lua" or "Modules/CalcDefence.lua",line=caller.currentline},
        selected=selected(),exact_existing_player=true,exact_actor_store=true,skip_breakdown=optional(vars.skipBreakdown),
-       entry=stores(env.modDB),consumer_checkpoint_reached=false}}
+       entry=stores(env.modDB),consumer_checkpoint_reached=false,
+       rounding={consumer_line=96,invoked=false,result_observed=false}}}
     end
     auth.frames[#auth.frames+1]=frame
    else
@@ -134,6 +160,11 @@ function M.begin(expectedJit)
     if frame.row then
       assert(vars.actor==frame.actor and frame.actor.modDB==frame.db and frame.actor.output==frame.output)
        if event=="line" and line==97 and vars.res=="Life" then
+        -- A truthy original override bypasses the expression and round itself.
+        -- Preserve this skipped call instead of inventing an operand or zero.
+        local skipped=not not vars.override
+        assert(frame.rounding_count==(skipped and 0 or 1),"original Life rounding admission mismatch")
+        frame.row.rounding.short_circuited_by_override=skipped
         local values={}
         for _,input in ipairs(inputs) do
          assert(bindings[input[2]],"missing original consumer local "..input[2])

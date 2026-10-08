@@ -1,10 +1,76 @@
-> Historical snapshots through checked recipient buff-effect producers on 2026-10-07.
+> Historical snapshots through the first Player Life consumer witness on 2026-10-08.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-08 checkpoint: first Player Life consumer witness
+
+The optional Rust test `owned_player_life_source` now separates internal data
+acquisition from numerical reference execution. For each of six cases it uses a
+fixed protocol: two fresh observed JIT-off acquisitions, two fresh uninstrumented
+JIT-off references and two fresh uninstrumented JIT-on references. No calculation
+body or business method is wrapped or replaced. The acquisition requires the
+original Player consumer's line-97 checkpoint and preserves each observed
+precalculation/defence invocation, its original locals and returned Life. Assigned
+nil is distinct from an unobserved assignment. It captures the post-clamp
+conversion local, not the raw conversion Sum, and does not observe the rounding
+operand.
+
+The controls are the unchanged Original05, actual level 92 to 91, selected Robe
+Life 17 to 18, and three source-only custom modifiers for increased Life, more
+Life and Chaos Inoculation. Custom controls establish no obtainable game item or
+complete supplier domain. Repeat acquisitions, repeat references, cross-JIT
+references and acquisition-to-plain-off projections must agree exactly. The
+declared reference projection includes all captured Player scalar outputs,
+selected input identity, explicit Life-related buckets and scalar conditions/
+multipliers. It excludes nested outputs and unrelated stores; it proves neither
+complete Player state nor internal cross-JIT execution. Nonfinite numbers have
+distinct evidence tags; conflicting source-table keys reject. These test-only
+encodings are not owned game types or runtime defaults.
+
+**Validation complete:** all **36 fresh loads** pass in **288.50s**, with exact
+repeat, cross-JIT reference and acquisition-to-reference agreement. Five ordinary
+checks also pass, including real-encoder type fidelity and strict reference
+comparison. The acquisition retains **72 original Player invocations per load**,
+including four for each final MAIN/CALCS environment. Both modes produce these
+final consumer values:
+
+| Source case | Base | Increase | More | Final Life |
+| --- | ---: | ---: | ---: | ---: |
+| Unchanged Original05 | 1257 | 5 | 1 | 1320 |
+| Character level 91 | 1245 | 5 | 1 | 1307 |
+| Selected Robe Life 18 | 1258 | 5 | 1 | 1321 |
+| Custom increased Life | 1257 | 15 | 1 | 1446 |
+| Custom more Life | 1257 | 5 | 1.1 | 1452 |
+| Custom Chaos Inoculation | 1257 | 5 | 1 | 1 |
+
+ExtraLife, LifeTotal and the post-clamp conversion local are zero in these
+controls; override is assigned nil. Chaos Inoculation is true only in its custom
+case. These are captured values, not a claim that other suppliers are absent.
+Evidence is in `runs/owned-player-life-source-08/{comparison,summary}.json`, the
+three separately pinned acquisition/reference reports, raw per-case files and
+child logs. The parent log is `runs/owned-player-life-source-08.log`. Report
+SHA-256 identities were independently rechecked against the receipt. Strict
+workspace/all-feature/all-target Clippy passes in **0.47s**
+(`runs/owned-player-life-clippy-03.log`), and changed Rust formatting passes.
+Independent review found no remaining blocker.
+Earlier observer variants could not reliably see LuaJIT's compiled debug events;
+they are removed, not retained as fallbacks. Their failure does not establish
+varying PoB results. Run 07 was cancelled before acceptance to repair the
+nonfinite-number/string evidence collision; its partial files and cancellation
+receipt remain. Fresh-run disagreement or a missing required JIT-off checkpoint
+still fails; there is no retry-until-pass or settling protocol.
+
+After the pending query-origin decision is resolved, author final Life using
+this evidence, checked real contributors and a bounded arithmetic
+domain. Positive ExtraLife, LifeTotal, conversion and override suppliers,
+whole-float-domain rounding, complete owner/recipient coverage and full-build
+parity remain unproved. Do not infer empty supplier inventories or neutral
+constants from an unchanged build's observations. Keep the first complete
+Original05 gate and subsequent D4 optimizer integration as the delivery target.
 
 ## Archived 2026-10-07 checkpoint: checked recipient buff-effect producers
 

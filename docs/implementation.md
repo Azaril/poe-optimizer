@@ -257,69 +257,65 @@ all five originals; complete native builds remain **0/5**.
 
 ## Player Life reference checkpoint
 
-The optional Rust test `owned_player_life_source` now separates internal data
-acquisition from numerical reference execution. For each of six cases it uses a
-fixed protocol: two fresh observed JIT-off acquisitions, two fresh uninstrumented
-JIT-off references and two fresh uninstrumented JIT-on references. No calculation
-body or business method is wrapped or replaced. The acquisition requires the
-original Player consumer's line-97 checkpoint and preserves each observed
-precalculation/defence invocation, its original locals and returned Life. Assigned
-nil is distinct from an unobserved assignment. It captures the post-clamp
-conversion local, not the raw conversion Sum, and does not observe the rounding
-operand.
+The existing optional Rust witness now observes the **actual argument** passed
+to original `round` from `CalcDefence.lua:96`, bound to the same original Player
+consumer frame, Actor, store and output. The round function is not wrapped, no
+modifier query is added, and no operand formula is reconstructed. The original
+round return remains unobserved; line 97 supplies the independently observed
+result after the minimum of 1, before later Chaos Inoculation handling.
 
-The controls are the unchanged Original05, actual level 92 to 91, selected Robe
-Life 17 to 18, and three source-only custom modifiers for increased Life, more
-Life and Chaos Inoculation. Custom controls establish no obtainable game item or
-complete supplier domain. Repeat acquisitions, repeat references, cross-JIT
-references and acquisition-to-plain-off projections must agree exactly. The
-declared reference projection includes all captured Player scalar outputs,
-selected input identity, explicit Life-related buckets and scalar conditions/
-multipliers. It excludes nested outputs and unrelated stores; it proves neither
-complete Player state nor internal cross-JIT execution. Nonfinite numbers have
-distinct evidence tags; conflicting source-table keys reject. These test-only
-encodings are not owned game types or runtime defaults.
+**Validation complete:** eleven cases pass the fixed protocol of two observed
+JIT-off acquisitions and two uninstrumented references in each JIT mode:
+**66 fresh loads in 514.43s**. All acquired repeats, declared reference projections
+and acquisition-to-uninstrumented projections agree exactly. The two acquisitions
+per case retain 72 original Player invocations each: **1,584** actual operands
+replay through the production native Round and Maximum operations with matching
+checkpoint results. These scalar operations use synthetic test definitions;
+they are not a new resource formula or a replacement build request.
 
-**Validation complete:** all **36 fresh loads** pass in **288.50s**, with exact
-repeat, cross-JIT reference and acquisition-to-reference agreement. Five ordinary
-checks also pass, including real-encoder type fidelity and strict reference
-comparison. The acquisition retains **72 original Player invocations per load**,
-including four for each final MAIN/CALCS environment. Both modes produce these
-final consumer values:
+| Control | Observed operand | After rounding and minimum | Final Life |
+| --- | ---: | ---: | ---: |
+| Unchanged Original05 | 1319.8500000000001 | 1320 | 1320 |
+| Robe Life 9 | 1311.45 | 1311 | 1311 |
+| Robe Life 10 | 1312.5 | 1313 | 1313 |
+| Robe Life 11 | 1313.55 | 1314 | 1314 |
+| Custom zero base | 0 | 1 | 1 |
+| Custom negative base | -1.05 | 1 | 1 |
+| Custom Chaos Inoculation | 1319.8500000000001 | 1320 | 1 |
 
-| Source case | Base | Increase | More | Final Life |
-| --- | ---: | ---: | ---: | ---: |
-| Unchanged Original05 | 1257 | 5 | 1 | 1320 |
-| Character level 91 | 1245 | 5 | 1 | 1307 |
-| Selected Robe Life 18 | 1258 | 5 | 1 | 1321 |
-| Custom increased Life | 1257 | 15 | 1 | 1446 |
-| Custom more Life | 1257 | 5 | 1.1 | 1452 |
-| Custom Chaos Inoculation | 1257 | 5 | 1 | 1 |
+The previous character-level, Robe Life 18, increased-Life and more-Life controls
+remain. Custom controls prove no obtainable supplier. The first expanded run
+failed because tiny fractional increased/reduced text was not accepted by the
+pinned generic modifier parser, leaving the operand unchanged. Those controls
+were replaced with integer robe rolls; the failed source report is retained.
+This was a witness assumption, not nondeterministic source output. An initial
+test-helper compilation error was also fixed; failed build logs remain.
 
-ExtraLife, LifeTotal and the post-clamp conversion local are zero in these
-controls; override is assigned nil. Chaos Inoculation is true only in its custom
-case. These are captured values, not a claim that other suppliers are absent.
-Evidence is in `runs/owned-player-life-source-08/{comparison,summary}.json`, the
-three separately pinned acquisition/reference reports, raw per-case files and
-child logs. The parent log is `runs/owned-player-life-source-08.log`. Report
-SHA-256 identities were independently rechecked against the receipt. Strict
-workspace/all-feature/all-target Clippy passes in **0.47s**
-(`runs/owned-player-life-clippy-03.log`), and changed Rust formatting passes.
-Independent review found no remaining blocker.
-Earlier observer variants could not reliably see LuaJIT's compiled debug events;
-they are removed, not retained as fallbacks. Their failure does not establish
-varying PoB results. Run 07 was cancelled before acceptance to repair the
-nonfinite-number/string evidence collision; its partial files and cancellation
-receipt remain. Fresh-run disagreement or a missing required JIT-off checkpoint
-still fails; there is no retry-until-pass or settling protocol.
+A separate authenticated extraction of original `Common.lua:722–728` compares
+**198** finite scalar inputs per configured JIT mode, including adjacent floats,
+signed zero and large integers. It retains three differences masked by the
+minimum and two differences that survive it. Reverse scratch reuse and exact
+cross-JIT helper results pass. The [rounding audit](legacy-retirement.md#player-life-rounding-bound-2026-10-08)
+also derives an analytical combined-operation bound of finite x <= 2^52. This
+does not prove that game inputs stay in that domain, or change native rounding.
 
-After the pending query-origin decision is resolved, author final Life using
-this evidence, checked real contributors and a bounded arithmetic
-domain. Positive ExtraLife, LifeTotal, conversion and override suppliers,
-whole-float-domain rounding, complete owner/recipient coverage and full-build
-parity remain unproved. Do not infer empty supplier inventories or neutral
-constants from an unchanged build's observations. Keep the first complete
-Original05 gate and subsequent D4 optimizer integration as the delivery target.
+Evidence: `runs/owned-player-life-rounding-source-02/{comparison,rounding-helper-comparison,measured-cases-summary}.json`,
+separate complete acquisition/reference reports and raw per-case files. The
+parent log is `runs/owned-player-life-rounding-source-02.log`. Eight ordinary
+checks pass (`runs/owned-player-life-rounding-ordinary-03.log`); strict workspace/
+all-feature/all-target Clippy passes in 0.52s, and changed Rust formatting passes.
+The source report pins the native test helper and production executor alongside
+its source/observer/harness identities. The original six-case checkpoint is
+preserved in [history](implementation-history.md#archived-2026-10-08-checkpoint-first-player-life-consumer-witness).
+
+**Resume:** use these observed operands and the justified arithmetic domain when
+authoring final Life after the pending Actor/reward query decision. Operand
+generation, positive ExtraLife/Total/conversion/override suppliers, raw conversion
+Sum, complete owner/recipient coverage and whole-build parity remain unproved.
+No production schema, rules, import policy, evaluation bundle or original input
+changed; the current flat-Life package remains the integration baseline. Keep
+Original05 first, with five selected input obligations and **0/5 complete builds**.
+
 
 ## Native checkpoint: real Strength and checked flags reach inherent Life
 
@@ -843,22 +839,22 @@ local validation is not hosted success for its eventual commit.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-gigantic-flags-publication-01/package` and its neighboring
+Use `runs/owned-flat-life-scalability-publication-01/package` and its neighboring
 `original-01` through `original-05` imports. Current sidecars remain V23;
 definition schema V6, rule schema3 and operationsV22 are independent contracts.
-The immediate predecessor is `runs/owned-buff-effect-recipients-publication-01/package`,
-input `e1f41287d4ba9c7fb3961c9c42e9722837fbd39b13e849502148a26103fc78cd`.
+The immediate predecessor is `runs/owned-inherent-life-contribution-publication-01/package`,
+input `77647de61486b91c2de2d4e73547c6fd2e5ef40f506c947d84bf82a04836726b`.
 Historical endpoint paths authenticate stored evidence; retired formats require
 explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `e5b5bbe328cd9b1d4dd1c44c6691cb59c41657338cd6645a19f7b9e5eec8c21e` |
+| Release input | `dafd7c805646bc91dfa6c7394d1a44110fb3c26a0998ce4b154fc5c476a53784` |
 | Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
 | Definitions content | `420769f5d29c7ee28f02caceddbe01e42ecb06c2b4c3553ef5a2ef366fcee1f5` |
-| Rules | `55ea9226d9129ae36405ab59849f8542c30bc86a3c91bfed4468222e198d03f8` |
-| Compiled rules | `89e671be3ee1bb13af242fde4de9c619e4d09e7b88c14ac90ce7ab3274911d14` |
+| Rules | `69d122ac6640a5b93377b9728e1d21b8a8741961cfc1d5ba4bc32fe89899c74c` |
+| Compiled rules | `ffac0a8c5117bd02e1446cf8c0f3968a495f9e57c707392bcfe5b74bab8deaba` |
 | Routing | `be1abd42ed7edc1c75c7c12b47ba99ec5039df74972882e09e2ab4ff0e47dd69` |
 | Mapping | `35712202381f0b5d73cff66b755217f4af1fdd99def422b8167b5131a5299714` |
 | Skill roles | `f6a0648cc7be92387ecadb4c49f9178666035dcb2c4d347ca4247e4836bcbc27` |
@@ -867,12 +863,12 @@ explicit offline reauthoring and are not alternate production evaluator modes.
 | Items | `857a7fb2b36a5d9f297cad57d8d5bbfe579406756c92a4c276328f4054cd113e` |
 | Item source | `21631d7d6b08aeda1fe5fa9e1a4a147d46e240b32aeaaeabc48d6db667eca3f1` |
 | Tree policy | `bc58b3c280033e373949902a69824c43ebb2a3fa3db48574ceb6bf5745aa7d5a` |
-| Authoring commitment | `029d9ff43bb149469367dc97d46ad59aab0b57624829ca6104d272dd1bc26df1` |
+| Authoring commitment | `558a6197b06a36b0a739d6066ef4195d677b37d429900a39e4d368447959cbea` |
 | Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
 
-The eighteen package files total **63,195,387 bytes**, with 143 provenance rows.
+The eighteen package files total **63,887,238 bytes**, with 147 provenance rows.
 Definitions and rules use `pob-3887ae68-gigantic-flags-v1`. The registry ends at
-`3352`; this publication allocates no IDs and changes one existing Stat type.
+`3352`; the latest publication allocates no IDs and changes only one coverage gap.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 

@@ -508,6 +508,51 @@ initialization. These are candidates for review, not predetermined deletions.
 For example, a rounding rule may be a material game calculation while a NaN
 operand-selection quirk may be unreachable through finite owned inputs.
 
+### Player Life rounding bound (2026-10-08)
+
+Pinned `Common.lua:722–728` implements its no-decimal rounding helper with
+`floor(x + 0.5)`. The owned `NearestTiesPositive` operation instead compares the
+fractional part with one half. Its existing semantics deliberately preserve
+large integral values and do not turn a neighboring value into a false tie.
+No production operation or compatibility mode is changed by this investigation.
+
+The optional `owned_player_life_source` test now compares the verified original
+helper with the production native Round and Maximum operations. Its 198 finite
+anchor/half/adjacent-value cases preserve input and output bits, compare fresh
+configured JIT modes and reverse-order scratch reuse, and retain discrepancies.
+The source rounds the predecessor of 0.5 to 1 while native returns 0; both become
+1 after the resource minimum. At `2^52 + 1`, source returns `2^52 + 2` and native
+preserves the input; the resource minimum does not hide that difference. These
+are scalar probes, not obtainable game inputs or a claim of JIT trace coverage.
+
+There is also an analytical bound, independent of the finite regression grid.
+For every finite binary64 operand **x <= 2^52**, quantum 1 and nearest-even
+floating addition, the source helper followed by a minimum of 1 equals the
+existing native nearest-ties-positive operation followed by that minimum:
+
+- Below 1.5, both clamped results are 1. Floating addition is monotone, and the
+  greatest representable value below 1.5 plus 0.5 is the predecessor of 2.
+- For each integer N from 2 through `2^52`, the threshold N - 0.5 is exactly
+  representable. Its predecessor plus 0.5 is exactly the predecessor of N:
+  their downward spacing agrees, including at powers of two. The source crosses
+  each integer threshold at the same operand as mathematical nearest rounding.
+- In this positive domain, native subtraction of the integral part is exact
+  (Sterbenz's lemma), and the resulting integers are representable. At the upper
+  endpoint, `2^52 + 0.5` rounds to even `2^52`; the next representable operand,
+  `2^52 + 1`, is the retained counterexample outside the bound.
+
+This proves only the **combined rounding and minimum**, not the original helper's
+raw return over the entire interval. It does not cover nonfinite operands,
+decimal/other-quantum branches, earlier arithmetic or an overriding resource
+value. In particular, no bound on legal builds or currently admitted quantities
+follows from it. A future final-Life packet must justify its actual computed
+operand domain through checked inputs and arithmetic; it must not clip inputs,
+assume this bound from an observed final Life, or silently exclude mismatches.
+The [implementation checkpoint](implementation.md#player-life-reference-checkpoint)
+records the independent full-build consumer observations and their exact scope.
+
+### Other current compatibility investigations
+
 The [attribute setup witness](owned-attribute-setup-evidence.md) is a concrete
 unresolved case: synthetic configuration/item inputs expose different local MORE
 grouping between fresh and cached source setup (1.02 versus 1.0201). The finite-stage

@@ -108,13 +108,17 @@ into a producer. Origin admission does not prove the final-Life formula or the
 absence of other conversion, override or conditional families. Full owner,
 receiving, input and metric coverage remain required before declaring the build
 complete. The [Player consumer witness](implementation.md#player-life-reference-checkpoint)
-now passes six controls through 36 fresh loads. It captures original consumer
+now passes eleven controls through 66 fresh loads. It captures original consumer
 locals in fixed JIT-off acquisitions and requires exact uninstrumented reference
 agreement across both JIT modes. Original05 has base 1257, Increase 5 and final
 Life 1320; the observed ExtraLife/Total/post-clamp conversion are zero, and
 override/Chaos Inoculation are absent. That is finite source evidence, not proof
 of globally empty supplier families. Positive Extra/Total/conversion/override
-suppliers and the raw rounding operand remain unobserved. Native mathematical
-tie rounding still needs a bounded comparison to the source's `floor(x+0.5)`
-implementation. These arithmetic and coverage requirements remain separate from
-the pending origin-authority decision.
+suppliers remain unexercised. The actual rounding operand is now observed and
+replayed through production native Round and Maximum for 1,584 invocations.
+The [rounding audit](legacy-retirement.md#player-life-rounding-bound-2026-10-08)
+proves combined-operation equivalence for finite operands at or below 2^52;
+it does not prove that the actual contributor/input domain stays within that
+bound, or validate the preceding arithmetic. The raw conversion Sum remains
+unobserved. These arithmetic and coverage requirements remain separate from the
+pending origin-authority decision.

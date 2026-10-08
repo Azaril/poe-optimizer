@@ -1316,10 +1316,17 @@ explicit Life-related stores. It does not prove identical internal paths,
 complete Player state or cross-JIT consumer locals. These observer mechanics and
 evidence encoding remain inside optional PoB tests; they add no native type,
 default or rule semantics. See the current [validation checkpoint](implementation.md#player-life-reference-checkpoint).
-The six-case Player Life witness passes all 36 fresh loads with exact declared
-projection agreement, including the unchanged build and level, equipped-item,
-increase, more and Chaos Inoculation controls. This establishes source evidence;
-it does not publish a final native Life reducer or close contributor coverage.
+The expanded Player Life witness passes eleven cases through 66 fresh loads,
+including the unchanged build, exact-half and adjacent integer item rolls,
+zero/negative base and the retained level, increase, more and Chaos Inoculation
+controls. It observes the original round argument and replays 1,584 original
+Player invocations through native Round and Maximum with matching checkpoint
+results. It does not reconstruct the argument or observe round's internal return.
+An isolated 198-input comparison retains source/native rounding discrepancies;
+the [compatibility audit](legacy-retirement.md#player-life-rounding-bound-2026-10-08)
+derives a bound for the combined rounding and minimum without claiming that
+game inputs satisfy it. These are scalar-operation and source proofs, not a
+published final-Life reducer, complete contributor coverage or a working build.
 
 The ordinary authenticated Main lifecycle also loads PoB's stored modifier
 parser cache. A HeadlessWrapper comment about CI does not disable that cache in

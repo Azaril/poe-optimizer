@@ -2,6 +2,10 @@
 #![cfg(not(target_arch = "wasm32"))]
 #[path = "support/json_evidence.rs"]
 mod json_evidence;
+#[path = "support/player_life_rounding_native.rs"]
+mod native_rounding;
+#[path = "support/player_life_rounding_source.rs"]
+mod rounding_source;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
@@ -76,7 +80,7 @@ fn with_level(xml: &str, level: u16) -> String {
     result.replace_range(start..end, &replacement);
     result
 }
-fn with_robe_life(xml: &str) -> String {
+fn with_robe_life(xml: &str, life: u16) -> String {
     let doc = roxmltree::Document::parse(xml).unwrap();
     let matches: Vec<_> = doc
         .descendants()
@@ -85,7 +89,8 @@ fn with_robe_life(xml: &str) -> String {
     assert_eq!(matches.len(), 1);
     let range = matches[0].range();
     assert_eq!(xml[range.clone()].matches("+17 to maximum Life").count(), 1);
-    let changed = xml[range.clone()].replace("+17 to maximum Life", "+18 to maximum Life");
+    let changed =
+        xml[range.clone()].replace("+17 to maximum Life", &format!("+{life} to maximum Life"));
     let mut result = xml.to_owned();
     result.replace_range(range, &changed);
     result
@@ -124,10 +129,22 @@ fn cases() -> Vec<Case> {
         },
         Case {
             name: "selected-robe-life-18",
-            xml: with_robe_life(ORIGINAL),
+            xml: with_robe_life(ORIGINAL, 18),
+            custom: None,
+        },
+        Case {
+            name: "selected-robe-life-10",
+            xml: with_robe_life(ORIGINAL, 10),
             custom: None,
         },
     ];
+    for (name, life) in [("selected-robe-life-9", 9), ("selected-robe-life-11", 11)] {
+        out.push(Case {
+            name,
+            xml: with_robe_life(ORIGINAL, life),
+            custom: None,
+        });
+    }
     for (name, line) in [
         ("custom-increased-life", "10% increased maximum Life"),
         ("custom-more-life", "10% more maximum Life"),
@@ -135,6 +152,8 @@ fn cases() -> Vec<Case> {
             "custom-chaos-inoculation",
             "Maximum Life becomes 1, immune to Chaos Damage",
         ),
+        ("custom-zero-base", "-1257 to maximum Life"),
+        ("custom-negative-base", "-1258 to maximum Life"),
     ] {
         out.push(Case {
             name,
@@ -192,20 +211,20 @@ fn player_life_controls_are_distinct_and_preserve_unrelated_saved_inputs() {
     assert_eq!(hash(ORIGINAL.as_bytes()), ORIGINAL_SHA256);
     let original = roxmltree::Document::parse(ORIGINAL).unwrap();
     let cases = cases();
-    assert_eq!(cases.len(), 6);
+    assert_eq!(cases.len(), 11);
     assert_eq!(
         cases
             .iter()
             .map(|c| hash(c.xml.as_bytes()))
             .collect::<BTreeSet<_>>()
             .len(),
-        6
+        11
     );
     for case in &cases {
         let changed = roxmltree::Document::parse(&case.xml).unwrap();
         for name in ["Tree", "Skills", "Items", "Build", "Config"] {
             if (name == "Build" && case.name == "character-level-91")
-                || (name == "Items" && case.name == "selected-robe-life-18")
+                || (name == "Items" && case.name.starts_with("selected-robe-life-"))
                 || (name == "Config" && case.custom.is_some())
             {
                 continue;
@@ -297,6 +316,7 @@ fn number(row: &Json, name: &str) -> f64 {
     v["value"].as_f64().unwrap()
 }
 fn check(host: &Json, case: &Case) {
+    let mut native = native_rounding::NativeLifeRounding::new();
     let state = &host["state"];
     assert_eq!(
         state["instrumentation"]["consumer_observer_installed"],
@@ -342,8 +362,7 @@ fn check(host: &Json, case: &Case) {
             *input_value(call, "chaos_inoculation")
         );
         assert!(!rows(&c["stores"]).is_empty());
-        // This is the original post-clamp local. Neither raw conversion Sum nor
-        // the original rounding operand is independently observed or inferred.
+        // Conversion is still the post-clamp local; its raw Sum is unobserved.
         assert_eq!(number(call, "conversion"), 0.);
         assert_eq!(number(call, "extra"), 0.);
         assert_eq!(number(call, "total"), 0.);
@@ -351,6 +370,24 @@ fn check(host: &Json, case: &Case) {
             input_value(call, "override"),
             &json!({"present":false,"kind":"nil"})
         );
+        let rounding = &call["rounding"];
+        assert_eq!(rounding["consumer_line"], 96);
+        assert_eq!(rounding["invoked"], true);
+        assert_eq!(rounding["exact_consumer_frame"], true);
+        assert_eq!(rounding["short_circuited_by_override"], false);
+        assert_eq!(rounding["result_observed"], false);
+        assert_eq!(rounding["argument"]["present"], true);
+        assert_eq!(rounding["argument"]["kind"], "number");
+        assert_eq!(
+            rounding["decimal_parameter"],
+            json!({"present":false,"kind":"nil"})
+        );
+        let operand = rounding["argument"]["value"].as_f64().unwrap();
+        // Replay the independently observed operand through the native Round
+        // and Maximum primitives. This proves neither its producer arithmetic
+        // nor contribution membership, and does not observe round's return.
+        let (_, clamped) = native.evaluate(operand);
+        assert_eq!(clamped, c["life"].as_f64().unwrap());
     }
     for mode in ["MAIN", "CALCS"] {
         let selection = &state["current_modes"][mode];
@@ -372,17 +409,18 @@ fn check(host: &Json, case: &Case) {
         let expected_base = match case.name {
             "character-level-91" => 1245.,
             "selected-robe-life-18" => 1258.,
+            "selected-robe-life-10" => 1250.,
+            "selected-robe-life-9" => 1249.,
+            "selected-robe-life-11" => 1251.,
+            "custom-zero-base" => 0.,
+            "custom-negative-base" => -1.,
             _ => 1257.,
         };
         assert_eq!(number(row, "base"), expected_base);
-        assert_eq!(
-            number(row, "increase"),
-            if case.name == "custom-increased-life" {
-                15.
-            } else {
-                5.
-            }
-        );
+        match case.name {
+            "custom-increased-life" => assert_eq!(number(row, "increase"), 15.),
+            _ => assert_eq!(number(row, "increase"), 5.),
+        }
         assert_eq!(
             number(row, "more"),
             if case.name == "custom-more-life" {
@@ -411,6 +449,27 @@ fn check(host: &Json, case: &Case) {
         if case.name == "original-05" {
             assert_eq!(row["return_life"], 1320);
         }
+        let operand = row["rounding"]["argument"]["value"].as_f64().unwrap();
+        match case.name {
+            "selected-robe-life-10" => assert_eq!(operand, 1312.5),
+            "selected-robe-life-9" => {
+                assert!(operand > 1311. && operand < 1311.5);
+                assert_eq!(row["return_life"], 1311);
+            }
+            "selected-robe-life-11" => {
+                assert!(operand > 1313.5 && operand < 1314.);
+                assert_eq!(row["return_life"], 1314);
+            }
+            "custom-zero-base" => {
+                assert_eq!(operand, 0.);
+                assert_eq!(row["return_life"], 1);
+            }
+            "custom-negative-base" => {
+                assert!(operand < 0.);
+                assert_eq!(row["return_life"], 1);
+            }
+            _ => {}
+        }
     }
 }
 fn child(root: &Path, out: &Path, jit: bool) {
@@ -428,6 +487,9 @@ fn child(root: &Path, out: &Path, jit: bool) {
     let metadata = json!({"source_revision":pinned::UPSTREAM_REVISION,
         "manifest_sha256":pinned::manifest_sha256(),"observer_sha256":hash(OBSERVE.as_bytes()),
         "harness_sha256":hash(include_bytes!("owned_player_life_source.rs")),
+        "native_rounding_helper_sha256":hash(include_bytes!("support/player_life_rounding_native.rs")),
+        "rounding_source_probe_sha256":hash(include_bytes!("support/player_life_rounding_source.rs")),
+        "native_rounding_executor_sha256":hash(include_bytes!("../../poe-optimizer-engine/src/owned_rules/execute.rs")),
         "bootstrap_sha256":hash(include_bytes!("support/configuration_preparation_source.rs")),
         "files":files,"original_xml_sha256":ORIGINAL_SHA256});
     let projection = json!({"recipient":"exact existing Player","modes":["MAIN","CALCS"],
@@ -538,7 +600,9 @@ fn child(root: &Path, out: &Path, jit: bool) {
             "fixed_acquisition_jit_enabled":false,"internal_cross_jit_proof":false,
             "original_consumer_locals":true,"consumer_checkpoint_line":97,
             "original_query_return_observation":false,"raw_conversion_sum_observed":false,
-            "original_round_input_observed":false,"post_clamp_conversion_local":true,
+            "original_round_input_observed":true,"original_round_return_observed":false,
+            "post_clamp_conversion_local":true,
+            "native_round_and_minimum_replay":true,"native_resource_formula_replay":false,
             "assigned_nil_distinct_from_checkpoint_not_reached":true,
             "internal_query_debug_event_tracking":false,"raw_notification_counts_are_semantic":false,
             "fresh_repeat":true,"no_retry_fallback_or_settling":true,"warm_rebuild_law":false,
@@ -643,6 +707,9 @@ fn original_player_life_consumer_retains_inputs_branches_and_outputs() {
     }
     assert!(!out.exists(), "fresh immutable output directory required");
     fs::create_dir_all(&out).unwrap();
+    let rounding_probe = rounding_source::probe(&root.join("vendor/path-of-building-poe2"));
+    let rounding_bytes = serde_json::to_vec_pretty(&rounding_probe).unwrap();
+    fs::write(out.join("rounding-helper-comparison.json"), &rounding_bytes).unwrap();
     for mode in ["off", "on"] {
         let path = out.join(format!("source-jit-{mode}.log"));
         let log = fs::File::create(&path).unwrap();
@@ -661,7 +728,7 @@ fn original_player_life_consumer_retains_inputs_branches_and_outputs() {
                 assert!(status.success(), "source child failed: {}", path.display());
                 break;
             }
-            if start.elapsed() > Duration::from_secs(600) {
+            if start.elapsed() > Duration::from_secs(1200) {
                 process.kill().unwrap();
                 process.wait().unwrap();
                 panic!("source deadline: {}", path.display());
@@ -676,12 +743,14 @@ fn original_player_life_consumer_retains_inputs_branches_and_outputs() {
         &serde_json::from_slice(&on).unwrap(),
     );
     let acquisition = fs::read(out.join("acquisition-jit-off.json")).unwrap();
-    let receipt = json!({"schema_version":1,"case_count":6,"complete_loads":36,
+    let receipt = json!({"schema_version":1,"case_count":cases().len(),"complete_loads":cases().len()*6,
         "protocol":"two JIT-off observed acquisitions; two uninstrumented references in each JIT mode",
         "acquisition_jit_off_sha256":hash(&acquisition),
         "reference_jit_off_sha256":hash(&off),"reference_jit_on_sha256":hash(&on),
         "reference_metadata_difference":"jit_enabled only","exact_reference_projection_agreement":true,
         "exact_acquisition_repeat_agreement":true,"acquisition_vs_plain_off_projection_agreement":true,
+        "native_round_and_minimum_replay":true,"native_resource_formula_replay":false,
+        "rounding_helper_comparison_sha256":hash(&rounding_bytes),
         "internal_cross_jit_proof":false,"warm_rebuild_law":false});
     fs::write(
         out.join("comparison.json"),
