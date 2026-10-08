@@ -1,6 +1,5 @@
 //! Checked Amulet-copy fragments; publication never closes real build inventories.
-#[path = "owned_release_migration_preservation.rs"]
-mod migration_preservation;
+use crate::migration_preservation;
 use poe_optimizer_core::{
     owned_content::digest_owned,
     owned_definitions::OwnedDefinitionKey,
@@ -130,7 +129,9 @@ pub fn check_authored() {
     assert!(!paths.is_empty());
 }
 
-fn source_proof() {
+/// Authenticate the retained source evidence independently of publishing the
+/// historical release. Successor law certificates reuse this exact proof.
+pub fn source_proof() {
     // Source checkout access belongs only to the opt-in publication proof.
     // Ordinary native component tests consume checked owned artifacts alone.
     let a: Value = read("authoring.json");

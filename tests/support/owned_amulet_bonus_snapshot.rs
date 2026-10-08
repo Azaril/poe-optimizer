@@ -29,6 +29,10 @@ pub fn data(name: &str) -> PathBuf {
 pub fn read<T: DeserializeOwned>(name: &str) -> T {
     serde_json::from_slice(&fs::read(data(name)).unwrap()).unwrap()
 }
+/// Reuse the original retained-report proof without republishing its endpoint.
+pub fn check_source_evidence(full: bool) {
+    evidence::check(&read::<Value>("source-vectors.json"), full);
+}
 fn decode<T: DeserializeOwned>(value: &Value) -> T {
     serde_json::from_value(value.clone()).unwrap()
 }
@@ -377,7 +381,7 @@ fn assert_dependencies(endpoint: &StagedOwnedRelease, dependencies: &Value) {
 
 pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     check_authored();
-    evidence::check(&read("source-vectors.json"), true);
+    check_source_evidence(true);
     let a: Value = read("authoring.json");
     let d: Value = read("dependencies.json");
     let m: SnapshotAuthoring = read("snapshot-authoring.json");

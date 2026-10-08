@@ -719,6 +719,24 @@ coverage. The Crown packet also resolves five empty intrinsic declaration gaps
 from retained source evidence while preserving its nonempty socket host gap and
 all numerical/modifier/quality obligations.
 
+The early-Amulet consumer follow-up removes one obsolete coverage gap after
+proving its full local contract. It changes no numerical program or importer
+permission. Evidence reuses the prior copy/snapshot artifacts and original-call
+reports; shared publication preservation is imported once per test target.
+The Lua cleanup audit now has a concrete distinction to preserve: an item-line
+`{unscalable}` marker is not the ModStore record tag controlling copied values.
+Current canonical import remains false; no Lua marker or truthiness rule is
+introduced into native semantics. Finite-result law parity is distinct from the
+native contract's deliberate nonfinite refusal. See the
+[certificate and retained gaps](../data/owned/poe2/3887ae68/amulet-copy-consumer/README.md).
+
+The next Sniper integration must also keep the old accuracy integer-presence
+channels `3219/321e` visible as migration debt. They predate typed Boolean
+contributions; they are not game concepts and must not gain new producers or
+consumers. Reconcile their actual source semantics and replace them with the
+existing Flag/Any graph when that component is advanced; do not carry parallel
+flag systems as the intended design.
+
 The Command component's V20 integration exposed a mixed-phase owned program in
 the published Sniper data. `ordinary-population-inputs` previously bundled actor
 projection/grant creation with a character-level requirement. The

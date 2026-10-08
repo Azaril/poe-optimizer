@@ -6,16 +6,149 @@ mod native;
 use native::{Fixture, occurrence};
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;
+use poe_optimizer_engine::owned_rules::NumericalFailure;
 use rayon::prelude::*;
 
 fn assert_copy(f: &Fixture, report: &OwnedEffectsReport, modifier: u64, value: f64) {
+    assert_eq!(copy_value(f, report, modifier), &f.expected(value));
+}
+
+fn copy_value<'a>(f: &Fixture, report: &'a OwnedEffectsReport, modifier: u64) -> &'a EffectValue {
     let rows: Vec<_> = f.contributions(report, true).into_iter().filter(|e| matches!(&e.key.invocation.origin,
         RuleOrigin::Provider { provider } if provider.root == ProviderRoot::ItemModifier { equipment_use: occurrence(6), modifier: occurrence(modifier) } && provider.grant_path.is_empty())).collect();
     assert_eq!(rows.len(), 1);
-    assert_eq!(rows[0].value, f.expected(value));
     assert!(
         matches!(&rows[0].target, BoundEffectTarget::Contribution { key } if key.entity == ConcreteEntity::Actor(ActorKey::Player) && key.stat == f.bindings.minion_level && key.kind == ContributionKind::Add)
     );
+    &rows[0].value
+}
+
+/// These are admitted resolved-stat inputs, not importer or upstream item
+/// formatting claims. The original three-modifier world is reused intact.
+fn resolved_copy_fixture(percent: f64, values: &[f64]) -> Fixture {
+    let mut f = Fixture::new();
+    f.boundary_factor(percent);
+    f.resolved_effective_boundary(values);
+    f
+}
+
+#[test]
+fn resolved_copy_boundary_preserves_fractional_identity_and_signed_floor() {
+    let below = f64::from_bits(100.0_f64.to_bits() - 1);
+    let above = f64::from_bits(100.0_f64.to_bits() + 1);
+    for (percent, first, second) in [
+        (0.0, 0.0, 0.0),
+        (25.0, 0.0, -1.0),
+        (50.0, 1.0, -2.0),
+        (100.0, 2.5, -3.25),
+        (150.0, 3.0, -5.0),
+        (-25.0, -1.0, 0.0),
+        (-100.0, -3.0, 3.0),
+        (below, 2.0, -4.0),
+        (above, 2.0, -4.0),
+    ] {
+        let f = resolved_copy_fixture(percent, &[2.5, -3.25, 1.0]);
+        let plan = f.plan().unwrap();
+        let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        assert!(report.gaps.is_empty(), "{percent}: {:?}", report.gaps);
+        assert_eq!(f.effective(&report, 6, 4), &f.expected(2.5));
+        assert_eq!(f.effective(&report, 6, 5), &f.expected(-3.25));
+        assert_copy(&f, &report, 4, first);
+        assert_copy(&f, &report, 5, second);
+        assert_eq!(f.contributions(&report, true).len(), 2);
+    }
+}
+
+#[test]
+fn synthetic_unscalable_copy_bypasses_floor_only_for_its_exact_occurrence() {
+    // Native Boolean30e0 permits true, but the current source importer emits
+    // false. A PoB line-level {unscalable} marker is not copy-tag parity proof.
+    for (percent, other) in [(0.0, 0.0), (50.0, 1.0), (-50.0, -2.0), (150.0, 4.0)] {
+        let mut f = resolved_copy_fixture(percent, &[2.5, 3.25, 1.0]);
+        f.set_unscalable_boundary(true);
+        let plan = f.plan().unwrap();
+        let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        assert!(report.gaps.is_empty());
+        assert_copy(&f, &report, 4, 2.5);
+        assert_copy(&f, &report, 5, other);
+        assert_eq!(f.contributions(&report, true).len(), 2);
+    }
+}
+
+#[test]
+fn resolved_zero_and_underflow_keep_known_copy_records() {
+    for percent in [0.0, 100.0, -150.0, 150.0] {
+        let f = resolved_copy_fixture(percent, &[0.0, -0.0, 1.0]);
+        let plan = f.plan().unwrap();
+        let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        assert!(report.gaps.is_empty());
+        assert_copy(&f, &report, 4, 0.0);
+        assert_copy(&f, &report, 5, 0.0);
+        assert_eq!(f.contributions(&report, true).len(), 2);
+    }
+    // Division precedes multiplication: the minimum positive finite percentage
+    // underflows to zero at /100. This is a numerical boundary, not game data.
+    let f = resolved_copy_fixture(f64::from_bits(1), &[2.5, -3.25, 1.0]);
+    let plan = f.plan().unwrap();
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert_copy(&f, &report, 4, 0.0);
+    assert_copy(&f, &report, 5, 0.0);
+}
+
+#[test]
+fn resolved_copy_overflow_is_explicit_and_unused_scaling_does_not_poison_bypass() {
+    let mut f = resolved_copy_fixture(f64::MAX, &[256.0, 0.0, 1.0]);
+    let plan = f.plan().unwrap();
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert!(report.gaps.is_empty());
+    assert_eq!(
+        copy_value(&f, &report, 4),
+        &EffectValue::NumericalError {
+            node: "scaled".parse().unwrap(),
+            reason: NumericalFailure::NonFinite,
+        }
+    );
+    assert_copy(&f, &report, 5, 0.0);
+    f.set_unscalable_boundary(true);
+    let bypass = f.plan().unwrap();
+    let bypassed = bypass.evaluate(&mut bypass.new_scratch()).unwrap();
+    assert_copy(&f, &bypassed, 4, 256.0);
+    assert_copy(&f, &bypassed, 5, 0.0);
+    for invalid in [f64::INFINITY, f64::NEG_INFINITY, f64::NAN] {
+        assert!(FiniteQuantity::new(invalid, f.bindings.units.level.clone()).is_err());
+        assert!(FiniteQuantity::new(invalid, f.bindings.units.percent.clone()).is_err());
+    }
+}
+
+#[test]
+fn resolved_copy_missing_effective_producer_is_not_zero_or_a_previous_value() {
+    let mut f = resolved_copy_fixture(50.0, &[2.5, 3.25, 1.0]);
+    let first = f.plan().unwrap();
+    let mut scratch = first.new_scratch();
+    let known = first.evaluate(&mut scratch).unwrap();
+    assert_copy(&f, &known, 4, 1.0);
+    assert_copy(&f, &known, 5, 1.0);
+    f.family_owner_mut()
+        .programs
+        .members
+        .retain(|p| p.id.as_str() != "fixture-copy-effective-input");
+    let missing = f.plan().unwrap();
+    let unresolved = missing.evaluate(&mut scratch).unwrap();
+    assert_missing_copy_producer(
+        &f,
+        &unresolved,
+        "effective",
+        RuleEntity::Modifier,
+        ConcreteEntity::Modifier(ProviderKey {
+            root: ProviderRoot::ItemModifier {
+                equipment_use: occurrence(6),
+                modifier: occurrence(4),
+            },
+            grant_path: vec![],
+        }),
+        &f.bindings.effective,
+    );
+    assert_eq!(first.evaluate(&mut scratch).unwrap(), known);
 }
 
 fn assert_missing_copy_producer(

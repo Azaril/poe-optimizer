@@ -65,92 +65,82 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest published native checkpoint: Crown declarations and real item preparation
+## Latest published native checkpoint: early Amulet copy consumer
 
-The [Crown packet](../data/owned/poe2/3887ae68/crown-declarations/README.md)
-closes exactly five empty intrinsic declaration inventories on ItemTemplate
-`1f1c`: choices, grants, actors, skill grants and outputs. Its existing six
-parameters are unchanged. The base's **three-socket capacity remains unresolved**
-in the native declaration model; three empty saved socket groups do not justify
-an empty socket inventory. Quality/modifier memberships, all seven numerical
-programs and the rule-owner closure remain Partial. Modifier-supplied grants
-remain owned by modifiers, not certified absent for every possible item roll.
+The [consumer packet](../data/owned/poe2/3887ae68/amulet-copy-consumer/README.md)
+retires exactly `amulet-bonus-copy-unconverted` on Modifier `30ca`. Its six
+programs are unchanged and its owner remains Partial with five other obligations.
+The proof covers the local consumer: validated exact source identity, required
+eligibility, resolved effective value, pre-copy snapshot, branch/rounding law,
+zero-record retention and unavailable-input behavior. It does not certify the
+complete upstream suppliers, source admission, earlier magnitude transforms,
+ordinary item routing or later generic slot copying.
 
-The existing V5 offline migration replaces one descriptor and allocates no IDs.
-It authenticates three retained JIT report pairs, exact base/construction data,
-selected Helmet identity and observed grants. No new PoB execution or native
-format/API was needed. Two ordinary Rust checks cover the exact five-field inverse
-and reject wrong identity, erased sockets and nonempty grants. Full source
-authentication and all-five CLI publication pass in **27.64s**, including an
-identical-byte package rebuild. Inputs, local IDs, selections, dispositions,
-selected issues and all **110 queries** remain intact. No input issue or numerical
-owner is closed, no evaluation bundle is added, and complete builds remain **0/5**.
+The resolved Count and percentage stats admit any finite value, despite narrower
+raw-item ranges. Fourteen Amulet tests pass in **3.45s**, including fractional
+identity, signed/above-100/adjacent-100 factors, synthetic per-occurrence bypass,
+zero/underflow, overflow refusal, missing inputs and fresh/reused/parallel checks.
+Fractional effective-value controls explicitly replace only the upstream producer;
+actual item formatting remains independently tested. Finite-result arithmetic
+matches the pinned source law. Overflow remains native `NumericalError(NonFinite)`,
+not a claim that Lua infinity is a valid native result.
 
-The same checkpoint connects actual native Crown/Solar item rules to the shared
-Sand preparation published in `3ca9383`. It reuses the existing canonical
-modifier, applicability, Amulet snapshot and copy chain; it removes the synthetic
-ordinary-level producer from the joined fixture. Fresh Original05 import supplies
-the retained canonical rolls. This is a selected numerical projection: unrelated
-Solar `314d`, other item mechanics and real support-composition coverage are
-excluded explicitly. Exact equipment/modifier origins produce +1 Crown, +1 Solar
-and +0 copy, yielding manual level22 and tree level3. Item removal, roll changes,
-missing producers and the actual Partial modifier owner receive positive/negative
-controls. Successful A-B-A scratch reuse and four-worker Rayon results agree.
+The audit distinguishes PoB's item-line `{unscalable}` marker from its copy
+record-tag predicate. The retained line-marker control has no record tag.
+Current Import emits canonical false; true-branch controls are synthetic and
+confer no source admission authority. Existing six-template eligibility facts,
+placements, original-call reports and exact snapshot owner/staging are reused.
+The compact certificate references the exact existing owner and prior closure
+instead of duplicating their program bodies. It adds no extractor or new PoB VM.
 
-All four joined tests pass on the new Crown package in **13.34s**; the six prior
-item-routing numerical regressions pass on its Sand predecessor in **14.97s**.
-The prior Sand nine native/two source checks and four affected authoring checks
-also pass. The ignored integration tests require the current package through
-`POE_OPTIMIZER_TEST_SAND_ITEM_RELEASE` or
-`POE_OPTIMIZER_TEST_ORDINARY_ITEM_ROUTING_RELEASE`; ordinary CI does not execute
-those local-package tests. The ordinary compact-evidence/data tests need no Lua.
-Strict workspace/all-feature/all-target Clippy and formatting pass. Evidence:
-`runs/owned-crown-tests-01.log`,
-`runs/owned-crown-declarations-publication-01/validation.json`,
-`runs/owned-sand-items-crown-tests-01.log`,
-`runs/owned-ordinary-routing-item-regression-03.log`,
-`runs/owned-sand-items-crown-clippy-02.log` and
-`runs/owned-sand-items-crown-format-02.log`.
+Two new joined Sand controls prove missing eligibility/snapshot refusal, lazy
+known-false eligibility, early copy rejection, late snapshot rejection and
+snapshot self-feedback rejection. All six joined tests pass on the successor
+in **16.68s**; six ordinary routing numerical regressions pass in **15.33s**.
+Both paths still authenticate the complete retained modifier body and exact
+successor closure provenance. A shared test-module import was deduplicated;
+no compatibility reader or production execution branch was added.
 
-Fixture repairs preserve production guards: output metadata follows the actual
-Modifier/Player destination, and the operations capability check supplies an
-explicit empty query inventory only after proving every retained reader is
-query-free. Future query readers still fail that proof. Current routing checks
-authenticate the exact later offhand addition and scalability retirement rather
-than weakening whole-owner comparisons. Numerical regressions now use current
-data; no retired importer-format reader was restored. The shared publication
-helper accepts explicit expected issue counts, preserving older tests' exact
-expectations instead of deriving counts from whatever a run happens to produce.
+The all-five publication passes in **21.98s**, authenticating retained source
+reports, the exact one-gap inverse and an identical-byte package rebuild.
+All saved inputs, identities, selections, dispositions, 110 queries and selected
+issue counts **107/117/109/123/5** remain unchanged. No owner becomes Complete,
+no evaluation bundle is added and complete builds remain **0/5**. Two packet
+checks, two scalability checks, the ordinary routing authoring check, strict
+workspace/all-feature/all-target Clippy and formatting pass. Evidence:
+`runs/owned-amulet-consumer-native-tests-01.log`,
+`runs/owned-amulet-copy-consumer-publication-02/validation.json`,
+`runs/owned-amulet-consumer-sand-successor-tests-02.log`,
+`runs/owned-amulet-consumer-routing-numerical-tests-02.log` and
+`runs/owned-amulet-consumer-clippy-03.log`.
 
-The preceding [Sand implementation](implementation-history.md#archived-2026-10-07-checkpoint-sand-preparation-and-real-item-integration)
-and [Boolean contributions](implementation-history.md#archived-2026-10-07-checkpoint-typed-boolean-contributions)
-remain in this package. Sand uses one occurrence/source graph and injected tables;
-its real generated-input integration repaired Structural ancestry in the existing
-cycle proof. Boolean Flag/Any preserves duplicate sources and unresolved coverage.
-Definition schema6, rule schema3, operations22 and sidecar23 are unchanged.
+**Resume: compose the selected Sniper numerical chain next.** Connect actual
+Crown/Solar item contributions to physical Sniper source preparation, population
+and intrinsic Basic Attack in one native plan. The current Sniper final-input
+fixture strips child skill/output supply and stops at population; the existing
+intrinsic attack fixture supplies the final parent level. Remove that integration
+boundary using the published graph: Actor `3091` / slot `001f`, Basic Skill `0021`
+/ output `0022`, Actor values `320f`–`3211` and routed Action values `3212`–`3215`.
+Reuse actual provider identities and retained source vectors, including level
+changes, missing inputs, repeated occurrences and successful scratch/Rayon replay.
+No new public model is indicated. This is the next shortest evidenced step toward
+the unchanged Original05 numerical path, rather than another isolated closure.
 
-**Resume:** Original05 stays first. The two immediate public-model decisions are
-still pending: Actor-to-Enemy computed reads for the source-proven critical-hit
-consumer, and authored support assignments versus cold effective-origin composition.
-Do not bypass either boundary or treat the accepted Boolean representation as
-approval for those separate authorities. Crown sockets, `30ca`'s six remaining
-domain/routing/contributor obligations, and complete selected numerical owners
-remain open. Its raw/scalar domain is continuous nonnegative; the signed attribute
-BASE audit is a separate Strength blocker. Do not close these inventories from
-one measured item sum. D4 starts as soon as the first unchanged build passes the
-full native/reference gate.
+Keep this first join at intrinsic physical endpoints, attack rate and base
+critical chance. Ordinary hit chance `3220` can follow if its existing checked
+Enemy/action routes compose unchanged. Its integer flag channels `3219/321e`
+are explicit Boolean-migration debt; do not broaden or relabel them as Flag/Any.
+Final damage still needs added damage/conversion, INC/MORE grouping and rounding,
+critical/mitigation/timing and exact metric bindings. Gigantic/quality grouping
+remains unresolved. Do not invent a parent Action demand or erase actual support
+and owner coverage to claim a whole build.
 
-The next decision-independent numerical task is to audit `30ca`'s
-`amulet-bonus-copy-unconverted` obligation against its already-authored copy
-program. Reuse retained Amulet-copy/snapshot evidence and the exact source law;
-test identity and unscalable branches, non-unit rounding, zero-copy retention,
-independent occurrences and snapshot-before-copy staging. Include admitted
-canonical boundary cases, especially fractional values at the identity branch;
-establish factor domains and unavailable/nonfinite outcomes before asserting a
-full-domain law. Retire only that local arithmetic obligation if proved, using
-the existing owner-closure inverse. Keep actual magnitude producers, canonical
-admission, source encoding, ordinary routing and external membership separate.
-No new public model is indicated; insufficient evidence means the gap stays open.
+Actor-to-Enemy computed reads and authored support-origin composition remain
+pending public-model decisions. The accepted Boolean representation does not
+authorize those separate authorities. Crown sockets, the five retained `30ca`
+obligations and complete selected numerical owners remain open. Original05 stays
+first; D4 starts as soon as one unchanged native/reference build passes, without
+waiting for all five.
 
 ## In progress: incoming critical source proof and Actor read decision
 
@@ -200,7 +190,7 @@ producers, Partial membership, stages/cycles and unchanged write boundaries;
 then execute the seven actual authored native tests, authenticate the compact
 vectors against the full reports, and run the prepared all-five publication
 inverse. First rebase the draft's predecessor expectations from the Boolean
-package to the current Crown package; its reserved `3353`–`3364` IDs remain free.
+package to the current Amulet-consumer package; its reserved `3353`–`3364` IDs remain free.
 The draft's input policy should add two absence/value channels and
 account for exactly two overwritten placeholders per original; **these changes
 have not been published or counted as progress in input closure**. Current
@@ -260,29 +250,31 @@ source-only investigation. It retains Partial contributor/readiness coverage and
 selected input obligations. The unapproved incoming-critical packet provisionally
 uses `3353`–`3364`, after Sand's five allocations; its source evidence is unchanged.
 
-CI snapshot at 23:26 UTC: Sand checkpoint `3ca9383` run
-[37702132448](https://github.com/Azaril/poe-optimizer/actions/runs/37702132448)
-is queued behind `f93d551`; the earlier pending `7c6ac95` run was superseded.
-Local checks are not hosted success for this revision.
+CI snapshot at 00:04 UTC (2026-10-08): Crown checkpoint `93ee736` run
+[37704842721](https://github.com/Azaril/poe-optimizer/actions/runs/37704842721)
+is pending with no jobs allocated. Older `f93d551` run
+[37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252)
+has eight passed jobs, four running and no reported failures. Later pushes can
+supersede pending runs; local checks are not hosted success for this checkpoint.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-crown-declarations-publication-01/package` and its neighboring
+Use `runs/owned-amulet-copy-consumer-publication-02/package` and its neighboring
 `original-01` through `original-05` imports. Current sidecars remain V23;
 definition schema V6, rule schema3 and operationsV22 are independent contracts.
-The immediate predecessor is `runs/owned-sand-preparation-publication-03/package`,
-input `9bbb63fab97fca1b60a67ccb048103e51677a9b0668a0e9d130355b0f930cd24`.
+The immediate predecessor is `runs/owned-crown-declarations-publication-01/package`,
+input `5d8757d9046ef837509223103f06931fb16aac7a3b60aa8231b6f48b5f4225aa`.
 Historical endpoint paths authenticate stored evidence; retired formats require
 explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `5d8757d9046ef837509223103f06931fb16aac7a3b60aa8231b6f48b5f4225aa` |
+| Release input | `7b840bb204974fed6e44e686d899396987cd25f2b86a40261dccd7ab5e0d6f6e` |
 | Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
 | Definitions content | `6c339c996870dbc85c1f2dffe62b64a95134d501bc6ad7e4876a986bd8542a99` |
-| Rules | `6206a47e979b9b8a33a8c68350346f95ea9ce922af29b204fb21720a6a75c489` |
-| Compiled rules | `3f4e655b54c5e0982aff525ca115eb66874dbfd77408c068227dd2d398c10802` |
+| Rules | `054ecc2418b897484d3d77e431d994b4d07ba14cb5bcf8c163aba1efd3a55030` |
+| Compiled rules | `0efa4698c775d799e2497a75536d8b4b68c30ff0dbb6cb77ff93fcb9b977fe8a` |
 | Routing | `9c4eb5d88257fa37c5d65d637907483c32f02c5fd7ff056369786eddd2762809` |
 | Mapping | `a8aeb0e92863d49b5ae99fc580467c70a016b6e53db2d4fc9a51a5c6d074f790` |
 | Skill roles | `701ece0c17de2a42bb07e175a896ba77fa882ba582ddf288358a494fbe41002c` |
@@ -291,10 +283,10 @@ explicit offline reauthoring and are not alternate production evaluator modes.
 | Items | `1ca7459a798378a6441bfde3549899912a1da8ba70557909007c27c7552bfd6d` |
 | Item source | `d977add5dbc0b01605cc87637642c777afa1b728373069bbaef5cf67782f8b50` |
 | Tree policy | `d2b3a0fe5c87e8994710783c4b585a92c435eccc6061924a10c36873bc09664a` |
-| Authoring commitment | `5c7bc00e0b2e29072ec58e85637a0f4c27d08a158dea0aefc5c20163cbca3d06` |
+| Authoring commitment | `b993ebe7386136ba60ae2120dd4254433f64d1da9d1948b953db2942df66b555` |
 | Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
 
-The eighteen package files total **63,191,420 bytes**, with 138 provenance rows.
+The eighteen package files total **63,191,393 bytes**, with 139 provenance rows.
 Definitions and rules use `pob-3887ae68-crown-declarations-v1`. The registry ends
 at `3352`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
@@ -858,8 +850,9 @@ numerical outputs when game intent remains unresolved.
    `runs/owned-command-cooldown-native-audit-01.md`. Existing source04 and Sniper
    actor-action receipts cover these facts; no new runtime model is proposed.
 
-   The ordinary Minion-level Amulet copy and finite placement facts have authored
-   fragments.
+   The ordinary Minion-level Amulet copy consumer now has a proved local
+   contract, including finite arithmetic, exact eligibility and snapshot staging.
+   Its owner remains Partial with five separate admission/routing/producer gaps.
    Source02 now extends the historical snapshot census to all five originals
    and actual Ritualist controls. The native reducer is published and joins
    item arithmetic to source preparation in the finite component; actual

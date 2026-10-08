@@ -39,7 +39,17 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest data checkpoint closes five empty intrinsic declaration inventories
+The latest data checkpoint proves the local early-Amulet copy consumer and
+retires one of Modifier `30ca`'s six gaps, preserving all six programs and Partial
+owner coverage. The proof includes exact source identity, required eligibility,
+snapshot ordering, finite arithmetic, zero retention and unavailable inputs.
+It distinguishes the canonical copy-scaling bypass from PoB's item-line marker;
+the importer still emits false and synthetic true controls grant no admission
+authority. Nonfinite native results remain explicit errors. The all-five
+publication and joined item/Sand regressions pass without new runtime operations.
+See the [consumer packet](../data/owned/poe2/3887ae68/amulet-copy-consumer/README.md).
+
+The preceding checkpoint closes five empty intrinsic declaration inventories
 on the Iron Crown: choices, grants, actors, skill grants and outputs. Its known
 three-socket host remains Partial, as do modifier/quality and numerical owner
 coverage. The distinction between intrinsic and modifier-supplied grants remains
@@ -55,7 +65,7 @@ data-authored programs on existing owners, without skill-name dispatch in Rust.
 Their Partial source/support inventories and remaining combat/population modes
 still prevent full owner closure. All-five reimports preserve selections and
 110 queries; Original05's five obligations and the 0/5 completion count remain.
-The current package is `runs/owned-crown-declarations-publication-01/package`.
+The current package is `runs/owned-amulet-copy-consumer-publication-02/package`.
 See the [packet and coverage limits](../data/owned/poe2/3887ae68/sand-preparation/README.md).
 
 A joined finite test now supplies Sand's ordinary level from the real Crown/Solar
@@ -65,6 +75,14 @@ real support inventory remain outside that fixture. Exact donor identities,
 changed equipment/rolls, Partial and missing-producer refusals, scratch reuse and
 Rayon checks pass on the current package. This adds integration evidence without
 promoting production contributor coverage or substituting a whole-build request.
+
+The next selected-build integration joins actual item contributions, physical
+Sniper preparation/population and the existing intrinsic Basic Attack graph.
+The current component tests still supply final parent levels or stop before
+child actions. Removing that test boundary advances the real calculation path;
+complete support coverage, input finalization and final damage/metric formulas
+remain separate gates. Existing integer presence flags in the accuracy component
+are recorded migration debt, not equivalent to the new typed Flag/Any contract.
 
 The preceding native checkpoint implements typed Boolean `Flag` contributions and
 unordered `Any` on the existing graph. Source membership and numeric ranks are

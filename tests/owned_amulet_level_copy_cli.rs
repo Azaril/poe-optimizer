@@ -1,6 +1,8 @@
 //! Per-record Amulet-copy rule fragments preserve original requests and coverage gaps.
 #[path = "support/owned_amulet_level_copy.rs"]
 mod family;
+#[path = "support/owned_release_migration_preservation.rs"]
+mod migration_preservation;
 #[allow(dead_code)]
 #[path = "support/owned_physical_inventory_preservation.rs"]
 mod preservation;

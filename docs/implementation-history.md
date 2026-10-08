@@ -1,10 +1,97 @@
-> Historical snapshots through shared Sand preparation and real item integration on 2026-10-07.
+> Historical snapshots through Crown declarations and real item preparation on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: Crown declarations and real item preparation
+
+The [Crown packet](../data/owned/poe2/3887ae68/crown-declarations/README.md)
+closes exactly five empty intrinsic declaration inventories on ItemTemplate
+`1f1c`: choices, grants, actors, skill grants and outputs. Its existing six
+parameters are unchanged. The base's **three-socket capacity remains unresolved**
+in the native declaration model; three empty saved socket groups do not justify
+an empty socket inventory. Quality/modifier memberships, all seven numerical
+programs and the rule-owner closure remain Partial. Modifier-supplied grants
+remain owned by modifiers, not certified absent for every possible item roll.
+
+The existing V5 offline migration replaces one descriptor and allocates no IDs.
+It authenticates three retained JIT report pairs, exact base/construction data,
+selected Helmet identity and observed grants. No new PoB execution or native
+format/API was needed. Two ordinary Rust checks cover the exact five-field inverse
+and reject wrong identity, erased sockets and nonempty grants. Full source
+authentication and all-five CLI publication pass in **27.64s**, including an
+identical-byte package rebuild. Inputs, local IDs, selections, dispositions,
+selected issues and all **110 queries** remain intact. No input issue or numerical
+owner is closed, no evaluation bundle is added, and complete builds remain **0/5**.
+
+The same checkpoint connects actual native Crown/Solar item rules to the shared
+Sand preparation published in `3ca9383`. It reuses the existing canonical
+modifier, applicability, Amulet snapshot and copy chain; it removes the synthetic
+ordinary-level producer from the joined fixture. Fresh Original05 import supplies
+the retained canonical rolls. This is a selected numerical projection: unrelated
+Solar `314d`, other item mechanics and real support-composition coverage are
+excluded explicitly. Exact equipment/modifier origins produce +1 Crown, +1 Solar
+and +0 copy, yielding manual level22 and tree level3. Item removal, roll changes,
+missing producers and the actual Partial modifier owner receive positive/negative
+controls. Successful A-B-A scratch reuse and four-worker Rayon results agree.
+
+All four joined tests pass on the new Crown package in **13.34s**; the six prior
+item-routing numerical regressions pass on its Sand predecessor in **14.97s**.
+The prior Sand nine native/two source checks and four affected authoring checks
+also pass. The ignored integration tests require the current package through
+`POE_OPTIMIZER_TEST_SAND_ITEM_RELEASE` or
+`POE_OPTIMIZER_TEST_ORDINARY_ITEM_ROUTING_RELEASE`; ordinary CI does not execute
+those local-package tests. The ordinary compact-evidence/data tests need no Lua.
+Strict workspace/all-feature/all-target Clippy and formatting pass. Evidence:
+`runs/owned-crown-tests-01.log`,
+`runs/owned-crown-declarations-publication-01/validation.json`,
+`runs/owned-sand-items-crown-tests-01.log`,
+`runs/owned-ordinary-routing-item-regression-03.log`,
+`runs/owned-sand-items-crown-clippy-02.log` and
+`runs/owned-sand-items-crown-format-02.log`.
+
+Fixture repairs preserve production guards: output metadata follows the actual
+Modifier/Player destination, and the operations capability check supplies an
+explicit empty query inventory only after proving every retained reader is
+query-free. Future query readers still fail that proof. Current routing checks
+authenticate the exact later offhand addition and scalability retirement rather
+than weakening whole-owner comparisons. Numerical regressions now use current
+data; no retired importer-format reader was restored. The shared publication
+helper accepts explicit expected issue counts, preserving older tests' exact
+expectations instead of deriving counts from whatever a run happens to produce.
+
+The preceding [Sand implementation](implementation-history.md#archived-2026-10-07-checkpoint-sand-preparation-and-real-item-integration)
+and [Boolean contributions](implementation-history.md#archived-2026-10-07-checkpoint-typed-boolean-contributions)
+remain in this package. Sand uses one occurrence/source graph and injected tables;
+its real generated-input integration repaired Structural ancestry in the existing
+cycle proof. Boolean Flag/Any preserves duplicate sources and unresolved coverage.
+Definition schema6, rule schema3, operations22 and sidecar23 are unchanged.
+
+**Resume:** Original05 stays first. The two immediate public-model decisions are
+still pending: Actor-to-Enemy computed reads for the source-proven critical-hit
+consumer, and authored support assignments versus cold effective-origin composition.
+Do not bypass either boundary or treat the accepted Boolean representation as
+approval for those separate authorities. Crown sockets, `30ca`'s six remaining
+domain/routing/contributor obligations, and complete selected numerical owners
+remain open. Its raw/scalar domain is continuous nonnegative; the signed attribute
+BASE audit is a separate Strength blocker. Do not close these inventories from
+one measured item sum. D4 starts as soon as the first unchanged build passes the
+full native/reference gate.
+
+The next decision-independent numerical task is to audit `30ca`'s
+`amulet-bonus-copy-unconverted` obligation against its already-authored copy
+program. Reuse retained Amulet-copy/snapshot evidence and the exact source law;
+test identity and unscalable branches, non-unit rounding, zero-copy retention,
+independent occurrences and snapshot-before-copy staging. Include admitted
+canonical boundary cases, especially fractional values at the identity branch;
+establish factor domains and unavailable/nonfinite outcomes before asserting a
+full-domain law. Retire only that local arithmetic obligation if proved, using
+the existing owner-closure inverse. Keep actual magnitude producers, canonical
+admission, source encoding, ordinary routing and external membership separate.
+No new public model is indicated; insufficient evidence means the gap stays open.
 
 ## Archived 2026-10-07 checkpoint: Sand preparation and real item integration
 

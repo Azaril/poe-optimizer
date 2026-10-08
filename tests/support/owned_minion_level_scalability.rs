@@ -1,4 +1,7 @@
 //! Retire one proved obligation without changing programs or source admission.
+#[allow(dead_code)]
+#[path = "owned_amulet_copy_consumer.rs"]
+mod copy_consumer;
 use poe_optimizer_core::{
     owned_content::{OwnedContentDigest, digest_owned},
     owned_definitions::OwnedDefinitionKey,
@@ -162,8 +165,10 @@ fn expected_owner(after: bool) -> DefinitionRules {
     owner
 }
 fn dependencies(endpoint: &StagedOwnedRelease, after: bool) {
+    dependencies_with_owner(endpoint, &expected_owner(after));
+}
+fn dependencies_with_owner(endpoint: &StagedOwnedRelease, expected: &DefinitionRules) {
     let d: Value = read("dependencies.json");
-    let expected = expected_owner(after);
     assert_eq!(
         endpoint
             .input()
@@ -171,7 +176,7 @@ fn dependencies(endpoint: &StagedOwnedRelease, after: bool) {
             .rules
             .owners
             .iter()
-            .filter(|o| **o == expected)
+            .filter(|o| *o == expected)
             .count(),
         1
     );
@@ -222,8 +227,17 @@ pub fn retained_modifier_owner(endpoint: &StagedOwnedRelease) -> DefinitionRules
     assert_eq!(proofs.len(), 1);
     assert_eq!(json!(proofs[0].prior_input), a["before"]);
     assert_eq!(proofs[0].authoring_input, digest());
-    dependencies(endpoint, true);
-    expected_owner(true)
+    let mut expected = expected_owner(true);
+    if endpoint
+        .receipt()
+        .provenance
+        .iter()
+        .any(|p| p.kind.as_str() == copy_consumer::KIND)
+    {
+        expected = copy_consumer::retained_modifier_owner(endpoint, expected);
+    }
+    dependencies_with_owner(endpoint, &expected);
+    expected
 }
 pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     check_authored();

@@ -441,6 +441,134 @@ impl Fixture {
         self.native.build.items[0].modifiers.truncate(1);
         self.native.build.items[0].modifier_order.truncate(1);
     }
+    /// Arithmetic-only boundary at the copy rule's resolved Modifier stat. The
+    /// real numeric producer formats raw amounts first, so its admitted raw
+    /// inputs cannot exercise every finite value allowed by this computed stat.
+    /// This additional slot is fixture-owned and never enters imported items.
+    #[allow(dead_code)]
+    pub fn resolved_effective_boundary(&mut self, values: &[f64]) {
+        let unit = self.bindings.units.level.clone();
+        let effective = self.bindings.effective.clone();
+        let declaration = SlotOwnerDefId::Modifier(self.bindings.modifier.clone());
+        let slot = DeclaredSlot {
+            declaration,
+            slot: DefId::parse(unit.namespace().clone(), "fixture.copy-effective-input").unwrap(),
+        };
+        let actual_stat = self
+            .recipe
+            .schema
+            .definitions
+            .iter()
+            .find(|d| d.address() == effective.address())
+            .unwrap();
+        assert_eq!(
+            actual_stat,
+            &DefinitionDescriptor::Stat(DefinitionEntry {
+                id: effective.clone(),
+                schema: SchemaState::Known(StatSchema {
+                    value: ComputedValueType::Quantity { unit: unit.clone() },
+                    targets: vec![RuleEntityKind::Modifier],
+                }),
+            })
+        );
+        let modifier = self.bindings.modifier.clone();
+        let DefinitionDescriptor::Modifier(DefinitionEntry {
+            schema: SchemaState::Known(schema),
+            ..
+        }) = self
+            .recipe
+            .schema
+            .definitions
+            .iter_mut()
+            .find(|d| d.address() == modifier.address())
+            .unwrap()
+        else {
+            panic!()
+        };
+        assert!(!schema.declarations.parameters.members.contains(&slot));
+        schema.declarations.parameters.members.push(slot.clone());
+        self.recipe
+            .schema
+            .slots
+            .push(SlotDescriptor::Parameter(DefinitionEntry {
+                id: slot.clone(),
+                schema: SchemaState::Known(ParameterSlotSchema {
+                    value: ValueSchema::Quantity(QuantityRange {
+                        minimum: FiniteQuantity::new(-f64::MAX, unit.clone()).unwrap(),
+                        maximum: FiniteQuantity::new(f64::MAX, unit.clone()).unwrap(),
+                    }),
+                    presence: SlotPresence::RequiredOnce,
+                    sites: vec![ParameterSite::ModifierRoll],
+                    skill_input: None,
+                }),
+            }));
+        let modifiers: Vec<_> = self
+            .native
+            .build
+            .items
+            .iter_mut()
+            .flat_map(|item| &mut item.modifiers)
+            .collect();
+        assert_eq!(modifiers.len(), values.len());
+        for (modifier, value) in modifiers.into_iter().zip(values) {
+            modifier.rolls.push(ParameterAssignment {
+                slot: slot.clone(),
+                value: quantity(*value, &unit),
+            });
+        }
+        let copy = self.authored_copy.clone();
+        let programs = &mut self.native.family_owner_mut().programs.members;
+        let producer = programs
+            .iter_mut()
+            .find(|p| p.id == key("effective-amount"))
+            .unwrap();
+        assert_eq!(producer.context, RuleEntityKind::EquipmentUse);
+        assert_eq!(producer.effects.len(), 1);
+        assert!(
+            matches!(&producer.effects[0].effect, RuleEffectKind::Derive { entity: RuleEntity::Modifier, stat, .. } if stat == &effective)
+        );
+        *producer = RuleProgram {
+            id: key("fixture-copy-effective-input"),
+            context: RuleEntityKind::EquipmentUse,
+            reads: vec![RuleRead {
+                id: key("input"),
+                value_type: ComputedValueType::Quantity { unit },
+                source: RuleReadSource::Parameter { slot },
+            }],
+            nodes: vec![RuleNode {
+                id: key("input"),
+                expression: RuleExpression::Read {
+                    input: key("input"),
+                },
+            }],
+            effects: vec![RuleEffect {
+                id: key("resolved-input"),
+                when: None,
+                effect: RuleEffectKind::Derive {
+                    entity: RuleEntity::Modifier,
+                    stat: effective,
+                    value: key("input"),
+                },
+            }],
+        };
+        assert_eq!(programs.iter().filter(|p| **p == copy).count(), 1);
+        // Also authenticate against the currently retained routing body. The
+        // boundary changes only the producer, never the operation under test.
+        let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("data/owned/poe2/3887ae68/ordinary-item-routing/routing-authoring.json");
+        let routing: serde_json::Value = serde_json::from_slice(&fs::read(path).unwrap()).unwrap();
+        let owner: DefinitionRules = serde_json::from_value(routing["owner"].clone()).unwrap();
+        assert_eq!(
+            owner
+                .programs
+                .members
+                .iter()
+                .filter(|p| **p == copy)
+                .count(),
+            1
+        );
+        self.native.complete_domain();
+    }
     pub fn restore_actual_family_gap(&mut self) {
         self.native.family_owner_mut().programs.closure = self.partial_family.clone();
     }

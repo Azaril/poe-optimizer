@@ -1,0 +1,38 @@
+{
+  "before": "5d8757d9046ef837509223103f06931fb16aac7a3b60aa8231b6f48b5f4225aa",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-crown-declarations-v1",
+    "schema_version": 6,
+    "content_sha256": "6c339c996870dbc85c1f2dffe62b64a95134d501bc6ad7e4876a986bd8542a99",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea",
+  "rules": "6206a47e979b9b8a33a8c68350346f95ea9ce922af29b204fb21720a6a75c489",
+  "mapping": "a8aeb0e92863d49b5ae99fc580467c70a016b6e53db2d4fc9a51a5c6d074f790",
+  "roles": "701ece0c17de2a42bb07e175a896ba77fa882ba582ddf288358a494fbe41002c",
+  "normalization": "9f3ebfa318ce77bbccc88c7975621a07148cc7795da4f0bdc555ffbc64e41191",
+  "scope": {
+    "retired_obligations": 1,
+    "retained_obligations": 5,
+    "closed_existing_rule_owners": 0,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "numerical_program_changes": 0,
+    "import_guard_changes": 0,
+    "source_admission_widened": false,
+    "whole_build_parity": false,
+    "external_membership_completed": false
+  },
+  "schema_version": 1,
+  "registry_last_issued_before": 13138,
+  "registry_last_issued_after": 13138,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "artifact_sha256": {
+    "bindings": "ec4b5742aaa35ff540ff99c618439b639493f320b69b3153152a667bc6c65e34",
+    "coverage": "ce4cd2b4adea6ad2faf780625750139e3a2019eb8c42397582315ac364fa8211",
+    "dependencies": "5be96ab3166f4dba6925fe042c4059b6258d20a1f9ab671543d4be1a93d14a32",
+    "source-vectors": "726581b4ff8b26283e7b1db275b842a7c24d46cef32c913b602c0886b90d4343"
+  }
+}

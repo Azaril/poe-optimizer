@@ -1,0 +1,27 @@
+{
+  "source": {
+    "input": "5d8757d9046ef837509223103f06931fb16aac7a3b60aa8231b6f48b5f4225aa",
+    "definitions": {
+      "game": "poe2",
+      "release": "pob-3887ae68-crown-declarations-v1",
+      "schema_version": 6,
+      "content_sha256": "6c339c996870dbc85c1f2dffe62b64a95134d501bc6ad7e4876a986bd8542a99",
+      "semantics_version": "owned-mechanics-skill-inputs-v1"
+    },
+    "registry": "8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea",
+    "rules": "6206a47e979b9b8a33a8c68350346f95ea9ce922af29b204fb21720a6a75c489",
+    "mapping": "a8aeb0e92863d49b5ae99fc580467c70a016b6e53db2d4fc9a51a5c6d074f790",
+    "roles": "701ece0c17de2a42bb07e175a896ba77fa882ba582ddf288358a494fbe41002c",
+    "normalization": "9f3ebfa318ce77bbccc88c7975621a07148cc7795da4f0bdc555ffbc64e41191"
+  },
+  "owner_artifact": {
+    "path": "data/owned/poe2/3887ae68/ordinary-item-routing/routing-authoring.json",
+    "sha256": "29b2cd8be25f424a34f5b3c954682454d26f16058890f6ddaf77d5fbab98d354",
+    "field": "owner"
+  },
+  "closure_artifact": {
+    "path": "data/owned/poe2/3887ae68/minion-level-scalability/coverage.json",
+    "sha256": "9c3300586fe384a69a7129556c8bb7bb11bd87d2aee820f5957914ab83883ba0",
+    "field": "after"
+  }
+}

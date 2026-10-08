@@ -1,5 +1,5 @@
-//! One retired obligation; unchanged six production programs and import guards.
-#[path = "support/owned_minion_level_scalability.rs"]
+//! Local copy coverage refinement; complete build and import coverage stay open.
+#[path = "support/owned_amulet_copy_consumer.rs"]
 mod family;
 #[allow(dead_code)]
 #[path = "support/owned_release_migration_preservation.rs"]
@@ -22,18 +22,16 @@ use serde_json::{Value, json};
 use std::path::PathBuf;
 
 #[test]
-fn minion_level_scalability_retires_only_the_proved_obligation() {
+fn amulet_copy_consumer_retires_only_its_local_contract_obligation() {
     family::check_authored();
 }
 
 #[test]
-fn both_actual_partial_closures_still_refuse_the_existing_finite_fixture() {
-    family::check_authored();
+fn both_real_partial_closures_continue_to_refuse_total_evaluation() {
     let coverage: Value = family::read("coverage.json");
     for field in ["before", "after"] {
-        // Reuse the historical numerical fixture only to exercise refusal.
-        // Its finite synthetic contributors do not prove the current six-program
-        // release or its unfinished copy/routing/magnitude producers complete.
+        // This finite fixture exercises refusal only. It does not substitute
+        // synthetic contributors for the selected build's production coverage.
         let mut fixture = native::Fixture::new();
         fixture.complete_domain();
         let programs = fixture.family_owner_mut().programs.members.clone();
@@ -58,25 +56,22 @@ fn both_actual_partial_closures_still_refuse_the_existing_finite_fixture() {
 }
 
 #[test]
-#[ignore = "requires checked MINION_LEVEL_SCALABILITY_PRIOR and fresh OUTPUT"]
-fn publish_minion_level_scalability_preserving_all_five_originals() {
-    publication::run_with_scope(
+#[ignore = "requires checked AMULET_COPY_CONSUMER_PRIOR, retained source evidence and fresh OUTPUT"]
+fn publish_amulet_copy_consumer_preserving_all_five_originals() {
+    publication::run_with_expected_selected_counts(
         PathBuf::from(
-            std::env::var_os("POE_OPTIMIZER_TEST_MINION_LEVEL_SCALABILITY_PRIOR")
+            std::env::var_os("POE_OPTIMIZER_TEST_AMULET_COPY_CONSUMER_PRIOR")
                 .expect("checked predecessor"),
         ),
         PathBuf::from(
-            std::env::var_os("POE_OPTIMIZER_TEST_MINION_LEVEL_SCALABILITY_OUTPUT")
+            std::env::var_os("POE_OPTIMIZER_TEST_AMULET_COPY_CONSUMER_OUTPUT")
                 .expect("fresh output"),
         ),
         &family::data(),
         &[],
         &["coverage.json", "source-vectors.json"],
         family::stage,
-        publication::PublicationScope {
-            closed_existing_rule_owners: 0,
-            passive_refinement: false,
-            extra: json!({"retired_obligations":1,"retained_obligations":6,"new_definitions":0,"new_programs":0,"numerical_program_changes":0,"import_guard_changes":0,"schema_identity_changed":false,"expected_retired_item_text_diagnostics":0,"expected_retired_selected_input_issues":0}),
-        },
+        json!({"retired_obligations":1,"retained_obligations":5,"new_definitions":0,"new_programs":0,"numerical_program_changes":0,"import_guard_changes":0,"finite_result_arithmetic_parity":true,"nonfinite_refused":true,"source_admission_widened":false}),
+        [107, 117, 109, 123, 5],
     );
 }

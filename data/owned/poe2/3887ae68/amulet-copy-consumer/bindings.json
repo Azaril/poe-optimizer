@@ -1,0 +1,45 @@
+{
+  "before": "5d8757d9046ef837509223103f06931fb16aac7a3b60aa8231b6f48b5f4225aa",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-crown-declarations-v1",
+    "schema_version": 6,
+    "content_sha256": "6c339c996870dbc85c1f2dffe62b64a95134d501bc6ad7e4876a986bd8542a99",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea",
+  "rules": "6206a47e979b9b8a33a8c68350346f95ea9ce922af29b204fb21720a6a75c489",
+  "mapping": "a8aeb0e92863d49b5ae99fc580467c70a016b6e53db2d4fc9a51a5c6d074f790",
+  "roles": "701ece0c17de2a42bb07e175a896ba77fa882ba582ddf288358a494fbe41002c",
+  "normalization": "9f3ebfa318ce77bbccc88c7975621a07148cc7795da4f0bdc555ffbc64e41191",
+  "modifier": {
+    "kind": "modifier",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000030ca"
+  },
+  "retired_code": "amulet-bonus-copy-unconverted",
+  "registry_last_issued": 13138,
+  "scope": {
+    "retired_obligations": 1,
+    "retained_obligations": 5,
+    "closed_existing_rule_owners": 0,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "numerical_program_changes": 0,
+    "import_guard_changes": 0,
+    "source_admission_widened": false,
+    "whole_build_parity": false,
+    "external_membership_completed": false
+  },
+  "consumer_scope": "exact early Amulet copy consumer; canonical operands, eligibility and pre-copy snapshot required",
+  "remaining_obligations": {
+    "source-encoding-and-corrupted-range-unproved": "Source spellings, corrupted ranges and scaling tags.",
+    "remaining-ordered-magnitude-transforms-unconverted": "Earlier ordered effective-magnitude producers.",
+    "canonical-input-admission-unproved": "Import authority, including mapping to the copy record-tag predicate.",
+    "ordinary-item-routing-unconverted": "Original item delivery and later generic slot copying.",
+    "external-contributor-membership-unconverted": "Complete upstream percentage/effective-value suppliers and external memberships."
+  }
+}

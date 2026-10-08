@@ -162,6 +162,17 @@ fn plan(
     OwnedSupportEffectPlan<poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage>,
     String,
 > {
+    configured_plan(w, donors, |_| {})
+}
+
+fn configured_plan(
+    w: &sand::World,
+    donors: &native::ItemDonors,
+    configure: impl FnOnce(&mut EvaluationStagesInput),
+) -> std::result::Result<
+    OwnedSupportEffectPlan<poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage>,
+    String,
+> {
     w.compile_configured(|stages| {
         donors.configure_stages(
             stages,
@@ -187,6 +198,7 @@ fn plan(
             },
             stage: key("item-delivery"),
         });
+        configure(stages);
     })
 }
 
@@ -230,6 +242,33 @@ fn check(report: &SupportEffectsReport, levels: [i64; 2]) {
                 value: ParameterValue::Integer(sand::integer(level * 2))
             })
         );
+    }
+}
+
+fn missing_final_levels(report: &SupportEffectsReport) {
+    match &report.outcome {
+        SupportEffectsOutcome::Unavailable { cause, .. } => assert!(
+            matches!(
+                cause,
+                EffectValue::Unresolved {
+                    reason: PlanGapReason::MissingProducer,
+                    ..
+                }
+            ),
+            "{cause:?}"
+        ),
+        SupportEffectsOutcome::Evaluated { effects } => {
+            for target in [sand::manual(), sand::tree()] {
+                assert!(matches!(
+                    value(effects, &sand::stat_key(target, 0x334e)),
+                    Some(EffectValue::Unresolved {
+                        reason: PlanGapReason::MissingProducer,
+                        ..
+                    })
+                ));
+            }
+        }
+        other => panic!("{other:?}"),
     }
 }
 
@@ -369,30 +408,7 @@ fn sand_items_refuse_missing_template_producer_and_partial_actual_modifier() {
             .retain(|p| p.id != key("ordinary-item-direct-applicability"));
     }
     let report = evaluate(&missing, &donors);
-    match &report.outcome {
-        SupportEffectsOutcome::Unavailable { cause, .. } => assert!(
-            matches!(
-                cause,
-                EffectValue::Unresolved {
-                    reason: PlanGapReason::MissingProducer,
-                    ..
-                }
-            ),
-            "{cause:?}"
-        ),
-        SupportEffectsOutcome::Evaluated { effects } => {
-            for target in [sand::manual(), sand::tree()] {
-                assert!(matches!(
-                    value(effects, &sand::stat_key(target, 0x334e)),
-                    Some(EffectValue::Unresolved {
-                        reason: PlanGapReason::MissingProducer,
-                        ..
-                    })
-                ));
-            }
-        }
-        other => panic!("{other:?}"),
-    }
+    missing_final_levels(&report);
     let mut partial = world(&donors);
     *partial
         .recipe
@@ -405,6 +421,169 @@ fn sand_items_refuse_missing_template_producer_and_partial_actual_modifier() {
         .err()
         .expect("production modifier owner remains Partial");
     assert!(error.contains("complete owner programs"), "{error}");
+}
+
+#[test]
+#[ignore = "requires checked SAND_ITEM_RELEASE; finite selected item and preparation component"]
+fn sand_items_require_copy_eligibility_and_snapshot_without_assuming_zero() {
+    let donors = donors();
+    let mut missing_eligibility = world(&donors);
+    let template = missing_eligibility
+        .recipe
+        .rules
+        .owners
+        .iter_mut()
+        .find(|o| o.owner == subject(def::<ItemTemplateDefinition>(0x2343)))
+        .unwrap();
+    let count = template.programs.members.len();
+    template
+        .programs
+        .members
+        .retain(|p| p.id != key("amulet-copy-eligibility"));
+    assert_eq!(template.programs.members.len() + 1, count);
+    missing_final_levels(&evaluate(&missing_eligibility, &donors));
+
+    // The actual reducer remains in the package, but without its explicit Player
+    // receiver it cannot invent a scalar snapshot or a zero-valued copy.
+    let mut missing_snapshot = world(&donors);
+    let receivers = &mut missing_snapshot.recipe.rules.receivers.members;
+    let count = receivers.len();
+    receivers.retain(|r| r.stat != def::<StatDefinition>(0x32e4));
+    assert_eq!(receivers.len() + 1, count);
+    missing_final_levels(&evaluate(&missing_snapshot, &donors));
+
+    // A proved ineligible Crown does not require the irrelevant Amulet input.
+    // Unequipping the Amulet leaves only the Crown's direct +1 contribution.
+    let amulet = missing_snapshot
+        .build
+        .items
+        .iter()
+        .find(|i| i.template == def::<ItemTemplateDefinition>(0x2343))
+        .unwrap()
+        .id;
+    missing_snapshot
+        .build
+        .equipment
+        .retain(|e| e.item != amulet);
+    check(&evaluate(&missing_snapshot, &donors), [21, 2]);
+}
+
+#[test]
+#[ignore = "requires checked SAND_ITEM_RELEASE; finite selected item and preparation component"]
+fn sand_items_reject_copy_before_snapshot_late_snapshot_and_feedback() {
+    use poe_optimizer_core::owned_readiness::{ReadinessPhase, ReadinessProgramRole};
+    let donors = donors();
+    let w = world(&donors);
+    check(&evaluate(&w, &donors), [22, 3]);
+    for (owner, program, stage, expected) in [
+        (
+            subject(def::<ModifierDefinition>(0x30ca)),
+            "amulet-copy-minion-gem-level",
+            "routing-contributors",
+            "frozen channel read occurs before or outside frozen stage",
+        ),
+        (
+            subject(def::<StatDefinition>(0x32e4)),
+            "pre-amulet-bonus-snapshot",
+            "item-delivery",
+            "potential writer occurs after or outside frozen stage",
+        ),
+    ] {
+        let error = configured_plan(&w, &donors, |stages| {
+            let matches: Vec<_> = stages
+                .programs
+                .members
+                .iter_mut()
+                .filter(|row| row.owner == owner && row.program == key(program))
+                .collect();
+            assert_eq!(matches.len(), 1);
+            for row in matches {
+                row.stage = key(stage);
+            }
+        })
+        .err()
+        .expect("actual copy chain must preserve its snapshot boundary");
+        assert!(error.contains(expected), "{program}: {error}");
+    }
+
+    // Deliberately illegal test-only edge: feed the published snapshot scalar
+    // into its own incoming stream. Early and late placements must be refused;
+    // this is not an admitted item or a replacement for the actual copy program.
+    let mut feedback = world(&donors);
+    let owner = subject(def::<ClassDefinition>(0xf1001));
+    let program = key("finite-snapshot-feedback");
+    feedback
+        .recipe
+        .rules
+        .owners
+        .iter_mut()
+        .find(|o| o.owner == owner)
+        .unwrap()
+        .programs
+        .members
+        .push(RuleProgram {
+            id: program.clone(),
+            context: RuleEntityKind::Actor,
+            reads: vec![RuleRead {
+                id: key("snapshot"),
+                value_type: ComputedValueType::Quantity { unit: def(2) },
+                source: RuleReadSource::Stat {
+                    entity: RuleEntity::Player,
+                    stat: def(0x32e4),
+                },
+            }],
+            nodes: vec![RuleNode {
+                id: key("snapshot"),
+                expression: RuleExpression::Read {
+                    input: key("snapshot"),
+                },
+            }],
+            effects: vec![RuleEffect {
+                id: key("feedback"),
+                when: None,
+                effect: RuleEffectKind::Contribute {
+                    entity: RuleEntity::Player,
+                    stat: def(0x32e4),
+                    contribution: ContributionKind::Add,
+                    value: key("snapshot"),
+                },
+            }],
+        });
+    for (stage, expected) in [
+        (
+            "routing-contributors",
+            "frozen channel read occurs before or outside frozen stage",
+        ),
+        (
+            "item-delivery",
+            "potential writer occurs after or outside frozen stage",
+        ),
+    ] {
+        let error = configured_plan(&feedback, &donors, |stages| {
+            let row = stages
+                .programs
+                .members
+                .iter_mut()
+                .find(|row| row.owner == owner && row.program == program)
+                .unwrap();
+            row.stage = key(stage);
+            let row = stages
+                .readiness
+                .as_mut()
+                .unwrap()
+                .programs
+                .members
+                .iter_mut()
+                .find(|row| row.owner == owner && row.program == program)
+                .unwrap();
+            row.phase = ReadinessPhase::Structural;
+            row.role = ReadinessProgramRole::PreparationFacts;
+        })
+        .err()
+        .expect("the snapshot cannot feed its own pre-copy stream");
+        assert!(error.contains(expected), "feedback at {stage}: {error}");
+    }
+    check(&evaluate(&w, &donors), [22, 3]);
 }
 
 #[test]
