@@ -12,7 +12,9 @@ The selected Original05 chain now connects actual item preparation, the Sniper
 population and intrinsic attack/accuracy. Its selected ordinary minion-damage
 passives can supply the known 68% increase. Pain Offering is the next substantial
 missing numerical connection: the application and final source inputs exist,
-but these five required scaling channels still have no published producer:
+but at proposal time these five required scaling channels had no published
+producer. The subsequent Actor-only packet now supplies `322b/322c` through
+guarded empty queries; `3228`–`322a` still need this decision:
 
 | Stat suffix | Owner and meaning |
 | --- | --- |

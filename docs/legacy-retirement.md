@@ -794,6 +794,23 @@ but remain ignored in ordinary CI until artifacts are provisioned. Retire the
 older fixture only when those useful ordinary checks have a maintained current
 replacement; do not retain it solely for the old final-level boundary.
 
+### Recipient scaling joins the current graph (2026-10-07)
+
+The two recipient buff-effect producers use the existing checked query contract
+and the same item-driven Sniper fixture. There is no alternate buff pipeline,
+supplied neutral producer or Lua execution in the native test. Their Complete
+empty groups are admission guards; actual Actor/global coverage stays Partial.
+The five new checks share the existing World and retain its other twenty tests.
+
+Retained full-source observations were produced by an older observer/harness.
+The new compact packet records those exact historical identities and authenticates
+its projection against both report hashes. Ordinary checks need no Git history;
+full replay reads existing reports without running a historical interpreter or
+copying an old Lua observer into a new runtime lane. Use the recorded source
+revision to regenerate that witness, or author a new witness explicitly. These
+historical pins are evidence provenance, not runtime compatibility requirements.
+The independent complete-PoB witness remains useful for future updates.
+
 ### Population and activation partition cleanup
 
 The Command component's V20 integration exposed a mixed-phase owned program in

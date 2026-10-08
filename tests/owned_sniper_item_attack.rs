@@ -1,6 +1,6 @@
 //! One finite native graph: imported Crown/Solar rolls -> physical Sniper
 //! preparation -> population -> intrinsic Basic Attack and checked hit chance,
-//! alongside the selected unconditional passive Minion Damage subtotal. Other
+//! alongside selected passive Minion Damage and checked recipient buff inputs. Other
 //! item, support, Actor and action behavior remains outside this component. Nothing
 //! here completes a real request or supplies final level/weapon-value literals.
 #[allow(dead_code)]
@@ -8,6 +8,11 @@
 mod accuracy_family;
 #[path = "support/owned_sniper_accuracy_native.rs"]
 mod accuracy_native;
+#[allow(dead_code)]
+#[path = "support/owned_buff_effect_recipients.rs"]
+mod buff_effect_family;
+#[path = "support/owned_buff_effect_recipients_native.rs"]
+mod buff_effect_recipients_native;
 #[path = "support/owned_sniper_item_attack_evidence.rs"]
 mod evidence;
 #[path = "support/owned_sniper_passive_damage_evidence.rs"]
@@ -66,6 +71,7 @@ struct World {
     block: evidence::BlockCase,
     block_cases: Vec<evidence::BlockCase>,
     passives: passive_damage_native::Census,
+    recipient_buffs: buff_effect_recipients_native::Census,
 }
 impl World {
     fn load() -> Self {
@@ -368,6 +374,7 @@ impl World {
             .unwrap()
             .clone();
         let passives = passive_damage_native::install(&mut w, &endpoint, &path);
+        let recipient_buffs = buff_effect_recipients_native::install(&mut w, &endpoint);
         Self {
             sniper: w,
             actual_actor_coverage,
@@ -375,6 +382,7 @@ impl World {
             block,
             block_cases,
             passives,
+            recipient_buffs,
         }
     }
     fn action(&self, index: usize) -> ActionSelection {
@@ -480,6 +488,7 @@ impl World {
                 parameter.phase = ReadinessPhase::Execution;
             }
             passive_damage_native::configure(stages);
+            buff_effect_recipients_native::configure(stages);
             configure(stages);
         })
     }

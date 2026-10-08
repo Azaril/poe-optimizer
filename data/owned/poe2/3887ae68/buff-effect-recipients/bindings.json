@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "owner": {
+    "kind": "slot",
+    "value": {
+      "kind": "actor",
+      "value": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000012"
+          }
+        },
+        "slot": {
+          "kind": "actor_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000001f"
+        }
+      }
+    }
+  },
+  "channels": [
+    {
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000322b"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "contribution": "increase",
+      "reduction": "sum",
+      "empty": {
+        "kind": "quantity",
+        "value": {
+          "value": 0.0,
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          }
+        }
+      },
+      "program": "recipient-empty-buff-effect-increase",
+      "query": "recipient-empty-buff-effect-increase-domain",
+      "group": "empty"
+    },
+    {
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000322c"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000001"
+      },
+      "contribution": "multiply",
+      "reduction": "product",
+      "empty": {
+        "kind": "quantity",
+        "value": {
+          "value": 1.0,
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000001"
+          }
+        }
+      },
+      "program": "recipient-empty-buff-effect-more",
+      "query": "recipient-empty-buff-effect-more-domain",
+      "group": "empty"
+    }
+  ]
+}

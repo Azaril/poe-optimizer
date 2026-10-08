@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "kind": "buff-effect-recipient-empty-domains",
+  "release": "pob-3887ae68-buff-effect-recipient-empty-v1",
+  "prior_input": "949598559007abfc850ee4122616616bfae484f1d30d12b2df26ec2255c23ef3",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    }
+  ],
+  "new_definitions": 0,
+  "new_programs": 2,
+  "new_queries": 2,
+  "supported_empty_domains": 2,
+  "new_stat_receivers": 0,
+  "closed_existing_rule_owners": 0,
+  "global_registry_closure_changed": false,
+  "real_producer_absence_claim": false,
+  "nonempty_increase_law_claim": false,
+  "nonempty_more_law_claim": false,
+  "complete_build_claim": false,
+  "artifacts": [
+    {
+      "file": "bindings.json",
+      "bytes": 2489,
+      "sha256": "9d5d5fcf4ddd340490ee8f3d337c6c993fbb515f3c256d7b74984dc3c274c7a3"
+    },
+    {
+      "file": "programs.json",
+      "bytes": 4177,
+      "sha256": "9a0b1e0e8dc756c135f76a74d59560eaf0b26d39dc6d274b470805d1668a353f"
+    },
+    {
+      "file": "queries.json",
+      "bytes": 1739,
+      "sha256": "edb9c761d11f47c3bb3ad7f5f215f94f454ad9091b2aab8b1fdaa6210022836b"
+    },
+    {
+      "file": "dependencies.json",
+      "bytes": 7075,
+      "sha256": "bff3cb0c5ce2f059636d6ff6a2a6ad21b248ea81874467b6303ebcd1b6d3bf7a"
+    },
+    {
+      "file": "source-vectors.json",
+      "bytes": 259244,
+      "sha256": "8ba943043ada520205492671fb22a7865425ed03403163bf68dd4a8a10cb5696"
+    }
+  ]
+}

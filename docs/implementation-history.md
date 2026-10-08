@@ -1,10 +1,96 @@
-> Historical snapshots through joined Sniper accuracy on 2026-10-07.
+> Historical snapshots through joined Sniper passive damage on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: selected passive damage joins the Sniper graph
+
+The existing item → source preparation → Sniper population → Basic Attack graph
+now also evaluates the ten actual selected ordinary Minion Damage passives. Their
+complete current owners and descriptors are authenticated against the later
+closure packets; paired Life and Command-cooldown effects remain present and
+execute once per allocation. The existing Player `1d33` reducer runs once after
+contribution delivery, then the exact Sniper Actor `1d34` receiver supplies each
+independent population. No formula, ID, production model or release artifact
+changes in this checkpoint.
+
+Fresh imports select the actual Original05 preset and preserve its ten known
+family allocations, node identities, pools, Shared scope, access and choices.
+The finite test graph explicitly remaps their instance IDs into its own lineage
+with a checked correspondence. It uses the real Crown/Solar and preparation
+chain, without supplied final levels or weapon values. The ten contributions
+sum to **68%** and reach both exact Sniper actors without multiplying by actor
+count. The retained physical-damage source witness authenticates every selected
+contributor; its two 37-case JIT reports are identical, SHA256
+`030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935`.
+
+**Saved allocation and active membership differ in the removal control.** Its
+exact source XML removes only node 95. PoB also prunes disconnected node 8737, leaving
+eight active family contributions / 48%. Current native Import faithfully keeps
+nine saved family rows / 58%, with node 8737's access Pending
+`allocation-access-not-converted`; `AllocationDraft::to_resolved` refuses that
+row. No implicit pruning or ordinary access is invented. A separately explicit
+second removal leaves eight known imported rows and reproduces the measured48%
+subtotal. This is finite numeric evidence, not complete tree-legality or parity
+for the one-node saved edit. Post-mutation native connectivity remains a D4 gate
+before passive-tree candidates are admitted.
+
+All **20 joined tests pass**: the new baseline in **23.08s**, then the other
+nineteen in **26.51s**. Four new tests cover exact allocation origins, preserved
+paired effects, two recipients, the saved Pending control, explicit repair,
+empty census, missing/Partial owners, missing receivers, stage refusals,
+per-actor inputs, container permutation, A→B→A scratch reuse and four-worker
+Rayon. All sixteen preceding preparation/intrinsic/accuracy checks still pass
+on the expanded graph. The six independent passive family tests pass in0.38s,
+and the ordinary authoring check passes. Strict workspace/all-feature/all-target
+Clippy and changed-file formatting pass. The joined target still needs its
+published package and retained reports, so ordinary CI does not run it yet.
+
+The test's selected adjacency and contributor universe are deliberately finite.
+Ten Complete owners do not close the other 31 family definitions, seven other
+passive-view contributors, item transforms, Offering, full Actor behavior or
+final damage. Keep the independent ordinary family tests: they still exercise
+all 41 definitions, allocation scopes and the separate ascendancy pool. Their
+historical extension is source-law evidence, not a current full owner snapshot.
+
+The current package remains
+`runs/owned-minion-accuracy-flags-publication-01/package`; the checked input is
+unchanged. No evaluation bundle or input-disposition claim is added. The last
+all-five publication remains **107/117/109/123/5** selected issues and 110 queries;
+complete original builds remain **0/5**.
+
+**Resume: replace Offering's missing scaling boundary with real producers.**
+`3227` has a real activation writer, but `3228`–`322c` have none. The existing
+application can supply the measured 62% only after source buff effect, magnitude
+and recipient buff effect are independently resolved. Join that contribution
+with the passive 68% through the same graph, then author final physical consumers;
+do not inject 62, neutral factors or observed damage as input.
+
+The [exact Skill contribution-query proposal](owned-skill-contribution-queries-proposal.md)
+was sent for owner review. Data currently rejects a query on Current Skill;
+member binding only admits reviewed direct origins and rejects generated paths.
+The recommendation extends the existing graph's exact occurrence, destination
+and order authority. Arithmetic needs no new interpreter. Actor recipient reads
+already fit the contract, but source Skill reads/membership need the decision.
+No extension is approved or implemented yet. While it is pending, prepare real
+recipient producer data and incoming-domain evidence using existing authority.
+
+Nonempty multiplier groups need stronger evidence: the retained Offering scalar
+observations flatten their source stores. Named queries and rounding can express
+a proved owned partition, but source-store depth is not a runtime model. Keep
+unknown memberships explicit; do not flatten all MORE into Product or promote an
+empty observed list into global completeness. The separate support-origin and
+Actor-to-Enemy decisions, five input obligations, sockets and final metrics stay
+open. Original05 remains the nearest complete-build target.
+
+Evidence: `runs/owned-sniper-passive-baseline-tests-01.log`,
+`runs/owned-sniper-passive-join-tests-01.log`,
+`runs/owned-sniper-passive-regression-tests-01.log`,
+`runs/owned-sniper-passive-authoring-regression-01.log` and
+`runs/owned-sniper-passive-clippy-02.log`.
 
 ## Archived 2026-10-07 checkpoint: typed accuracy flags and joined hit chance
 

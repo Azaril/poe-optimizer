@@ -65,91 +65,78 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest native checkpoint: selected passive damage joins the Sniper graph
+## Latest native checkpoint: checked recipient buff-effect producers
 
-The existing item → source preparation → Sniper population → Basic Attack graph
-now also evaluates the ten actual selected ordinary Minion Damage passives. Their
-complete current owners and descriptors are authenticated against the later
-closure packets; paired Life and Command-cooldown effects remain present and
-execute once per allocation. The existing Player `1d33` reducer runs once after
-contribution delivery, then the exact Sniper Actor `1d34` receiver supplies each
-independent population. No formula, ID, production model or release artifact
-changes in this checkpoint.
+The [recipient packet](../data/owned/poe2/3887ae68/buff-effect-recipients/README.md)
+adds two real data-defined producers for existing Actor channels `322b` and
+`322c`. They resolve buff-effect increase and multiplier through checked
+contribution queries on each exact recipient. No new IDs, public operations,
+source-runtime types or numeric literals in producer programs are added.
 
-Fresh imports select the actual Original05 preset and preserve its ten known
-family allocations, node identities, pools, Shared scope, access and choices.
-The finite test graph explicitly remaps their instance IDs into its own lineage
-with a checked correspondence. It uses the real Crown/Solar and preparation
-chain, without supplied final levels or weapon values. The ten contributions
-sum to **68%** and reach both exact Sniper actors without multiplying by actor
-count. The retained physical-damage source witness authenticates every selected
-contributor; its two 37-case JIT reports are identical, SHA256
+Each query declares a **Complete, empty supported domain**, using the existing
+guarded-domain contract. Every potential matching contribution must be accounted
+for before activation or value evaluation: disabled, unknown, zero, identity and
+unread-recipient effects all invalidate this empty domain. Its reduction returns
+0 or 1 only inside a complete checked candidate. This is not a claim that all
+real modifiers have been acquired. The actual Sniper Actor owner and global query
+registry remain Partial; replacing either finite test closure with the published
+one makes evaluation unavailable. Nonempty increase/order and multiplier grouping
+remain unsupported.
+
+The same item → source preparation → Sniper population → Basic Attack graph now
+executes these producers beside the selected passive 68% subtotal and accuracy.
+It preserves the actual published query groups and checks two independent Actor
+occurrences, exact provider routes, missing writers, frozen-stage dependencies,
+unknown coverage, A→unknown→B→A scratch reuse and four-worker Rayon. No second
+build fixture or precomputed source-level/weapon/scaling input is introduced.
+All **25 joined tests pass**: the new baseline in **22.84s**, followed by the
+other 24 in **28.65s**. Two ordinary authoring checks and the retained-source
+authentication pass; strict workspace/all-feature/all-target Clippy and changed
+Rust formatting pass. The joined target remains explicitly ignored in ordinary
+CI until its reproducible package/source-artifact provisioning is implemented.
+
+The source packet authenticates **22 observations / 23 actual application
+invocations** against both retained 19,612,949-byte reports, with identical SHA256
 `030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935`.
+Five nonempty controls remain unsupported-domain evidence. Original05's saved
+MAIN selection is Sniper but CALCS selects Arsonist; that CALCS row is diagnostic,
+not Sniper parity. Explicit Sniper CALCS and two-recipient controls prove the
+relevant identity separation. The reports name an authenticated historical
+observer/harness; replay checks require neither Git history nor Lua and do not
+claim the newer observer generated the older bytes. Fresh source regeneration
+must use the recorded harness or produce a separately reviewed witness.
 
-**Saved allocation and active membership differ in the removal control.** Its
-exact source XML removes only node 95. PoB also prunes disconnected node 8737, leaving
-eight active family contributions / 48%. Current native Import faithfully keeps
-nine saved family rows / 58%, with node 8737's access Pending
-`allocation-access-not-converted`; `AllocationDraft::to_resolved` refuses that
-row. No implicit pruning or ordinary access is invented. A separately explicit
-second removal leaves eight known imported rows and reproduces the measured48%
-subtotal. This is finite numeric evidence, not complete tree-legality or parity
-for the one-node saved edit. Post-mutation native connectivity remains a D4 gate
-before passive-tree candidates are admitted.
+Publication passes in **24.13s**, including a byte-identical rebuild, exact
+whole-release inverse, all-five reimports and all 110 query identities. The
+current package is `runs/owned-buff-effect-recipients-publication-01/package`.
+It adds two programs and two queries, closes no owner/input inventory and adds
+no evaluation bundle. Selected issues remain **107/117/109/123/5**; complete
+original builds remain **0/5**. Original05 remains the closest-completion target.
 
-All **20 joined tests pass**: the new baseline in **23.08s**, then the other
-nineteen in **26.51s**. Four new tests cover exact allocation origins, preserved
-paired effects, two recipients, the saved Pending control, explicit repair,
-empty census, missing/Partial owners, missing receivers, stage refusals,
-per-actor inputs, container permutation, A→B→A scratch reuse and four-worker
-Rayon. All sixteen preceding preparation/intrinsic/accuracy checks still pass
-on the expanded graph. The six independent passive family tests pass in0.38s,
-and the ordinary authoring check passes. Strict workspace/all-feature/all-target
-Clippy and changed-file formatting pass. The joined target still needs its
-published package and retained reports, so ordinary CI does not run it yet.
+**Resume: the three source-Skill scaling writers and complete Offering delivery.**
+Activation `3227` and recipient channels `322b`/`322c` now have producers;
+source buff-effect increase/multiplier and magnitude `3228`–`322a` still do not.
+The [exact Skill query proposal](owned-skill-contribution-queries-proposal.md)
+remains awaiting owner review: Current Skill query reads and generated member
+paths are rejected today. Do not infer approval from this Actor-only packet.
+After that decision, use the same graph to resolve source scaling and deliver
+the measured 62% application alongside the passive 68%; never supply those
+observations as inputs. Nonempty source grouping needs stronger evidence than
+the retained flattened records.
 
-The test's selected adjacency and contributor universe are deliberately finite.
-Ten Complete owners do not close the other 31 family definitions, seven other
-passive-view contributors, item transforms, Offering, full Actor behavior or
-final damage. Keep the independent ordinary family tests: they still exercise
-all 41 definitions, allocation scopes and the separate ascendancy pool. Their
-historical extension is source-law evidence, not a current full owner snapshot.
+The five selected input obligations, support-origin and Actor-to-Enemy decisions,
+socket integration and final metrics remain open. Keep the saved/effective tree
+distinction from the previous checkpoint: Import refuses Pending node 8737 after
+the saved removal of node 95; explicit repair evidence is not automatic pruning
+or post-mutation topology validation. D4 still begins after the first complete
+unchanged build, without waiting for the other four.
 
-The current package remains
-`runs/owned-minion-accuracy-flags-publication-01/package`; the checked input is
-unchanged. No evaluation bundle or input-disposition claim is added. The last
-all-five publication remains **107/117/109/123/5** selected issues and 110 queries;
-complete original builds remain **0/5**.
-
-**Resume: replace Offering's missing scaling boundary with real producers.**
-`3227` has a real activation writer, but `3228`–`322c` have none. The existing
-application can supply the measured 62% only after source buff effect, magnitude
-and recipient buff effect are independently resolved. Join that contribution
-with the passive 68% through the same graph, then author final physical consumers;
-do not inject 62, neutral factors or observed damage as input.
-
-The [exact Skill contribution-query proposal](owned-skill-contribution-queries-proposal.md)
-was sent for owner review. Data currently rejects a query on Current Skill;
-member binding only admits reviewed direct origins and rejects generated paths.
-The recommendation extends the existing graph's exact occurrence, destination
-and order authority. Arithmetic needs no new interpreter. Actor recipient reads
-already fit the contract, but source Skill reads/membership need the decision.
-No extension is approved or implemented yet. While it is pending, prepare real
-recipient producer data and incoming-domain evidence using existing authority.
-
-Nonempty multiplier groups need stronger evidence: the retained Offering scalar
-observations flatten their source stores. Named queries and rounding can express
-a proved owned partition, but source-store depth is not a runtime model. Keep
-unknown memberships explicit; do not flatten all MORE into Product or promote an
-empty observed list into global completeness. The separate support-origin and
-Actor-to-Enemy decisions, five input obligations, sockets and final metrics stay
-open. Original05 remains the nearest complete-build target.
-
-Evidence: `runs/owned-sniper-passive-baseline-tests-01.log`,
-`runs/owned-sniper-passive-join-tests-01.log`,
-`runs/owned-sniper-passive-regression-tests-01.log`,
-`runs/owned-sniper-passive-authoring-regression-01.log` and
-`runs/owned-sniper-passive-clippy-02.log`.
+Evidence: `runs/owned-buff-effect-recipients-authoring-01.log`,
+`runs/owned-buff-effect-recipients-source-01.log`,
+`runs/owned-buff-effect-recipients-publication-01.log`,
+`runs/owned-buff-effect-recipients-baseline-01.log`,
+`runs/owned-buff-effect-recipients-joined-01.log` and
+`runs/owned-buff-effect-recipients-clippy-01.log`.
 
 ## In progress: incoming critical source proof and Actor read decision
 
@@ -269,22 +256,22 @@ supersede pending runs; local checks are not hosted success for this checkpoint.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-minion-accuracy-flags-publication-01/package` and its neighboring
+Use `runs/owned-buff-effect-recipients-publication-01/package` and its neighboring
 `original-01` through `original-05` imports. Current sidecars remain V23;
 definition schema V6, rule schema3 and operationsV22 are independent contracts.
-The immediate predecessor is `runs/owned-sniper-activation-readiness-publication-01/package`,
-input `7473da9a5220e6e8ddb453cab1caf13f42d8d2f3565d5c0d3d6f27e223defe42`.
+The immediate predecessor is `runs/owned-minion-accuracy-flags-publication-01/package`,
+input `949598559007abfc850ee4122616616bfae484f1d30d12b2df26ec2255c23ef3`.
 Historical endpoint paths authenticate stored evidence; retired formats require
 explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `949598559007abfc850ee4122616616bfae484f1d30d12b2df26ec2255c23ef3` |
+| Release input | `e1f41287d4ba9c7fb3961c9c42e9722837fbd39b13e849502148a26103fc78cd` |
 | Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
 | Definitions content | `b6fa4166e3e511ee1c66c58e5a3e63f2400a9a20d2b20e8d71a40523e00d6434` |
-| Rules | `d8a1b4c76916ca74442bd71396ae1a8301e28a0378a7d170a017f494b29bd498` |
-| Compiled rules | `52ce1addd77e04dab1eed002b9ab9e1bbced20f66b1d8577603e41f345e63f96` |
+| Rules | `3a5467c9db10b824c1ef0811a3251c88f4896a0f3f4af06d00b8e81f0718b307` |
+| Compiled rules | `0c01ae382aa9531ce61baa21f2c964b06b8f747b024c8aeee2dbe522d2c673ad` |
 | Routing | `5a2b4275de5febebe5cb36247ad42233477c5ba2e1f38bea3dd10251953cf46c` |
 | Mapping | `ea20f42a725e345df4c37f6dcaab5f113c36e88b7512aa4d829594a745345f92` |
 | Skill roles | `a32ec329bdae3da995903bea7e509fdc9ebc889644cbbd3953de2e5e7a61c5ea` |
@@ -293,12 +280,13 @@ explicit offline reauthoring and are not alternate production evaluator modes.
 | Items | `209d2e7c3b3b08a147f511fdd64121efcd4328a49b4d3fe86b38dc57bde658d3` |
 | Item source | `99a8aae92d73df090d5e067cbfc1cdcd59bbc550399e9397498876deaea7992d` |
 | Tree policy | `4cca240cce123dd472b7bc44c9d41513b72241c2a8894e875f5f172c3e633d72` |
-| Authoring commitment | `8b56ca15f211929f7ab9a09c246f2c8215191307df7158bd7226a18e0427f669` |
+| Authoring commitment | `44fec667d850818e580756fcdbac2a1d9a3a6f262c9ca3ae03e7c764cc6f013d` |
 | Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
 
-The eighteen package files total **63,192,328 bytes**, with 141 provenance rows.
-Definitions and rules use `pob-3887ae68-minion-accuracy-flags-v1`. The registry ends
-at `3352`; this cutover allocates no IDs.
+The eighteen package files total **63,194,837 bytes**, with 142 provenance rows.
+Definitions remain `pob-3887ae68-minion-accuracy-flags-v1`; rules now use
+`pob-3887ae68-buff-effect-recipient-empty-v1`. The registry ends at `3352`; this
+publication allocates no IDs and leaves the definition artifact unchanged.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -320,11 +308,26 @@ reproducible evidence, not distributed game data.
 
 ## Next executable work
 
-The selected-passive damage join above passes. The next numerical dependency is
-Offering's real scaling producers and application delivery. Exact Skill query
-authority is awaiting review; prepare recipient-side data and source membership/
-grouping evidence under existing contracts while that answer is pending. Do not
-let a pending model decision stall independent approved work or assume approval.
+The selected-passive and recipient-buff joins above pass. The next numerical
+dependency is Offering's three source-Skill scaling producers and application
+delivery. Exact Skill query authority is awaiting review; inspect source
+membership/grouping evidence and selected-input obligations under existing
+contracts while that answer is pending. Do not let a pending model decision
+stall independent approved work or assume approval.
+
+The checkpoint's input audit found no existing-authority shortcut to close the
+other four obligations. `0503` retains twenty Skill/Gem source rows despite 23
+known preferences; global switches, action selection and FullDPS responsibilities
+remain. `01f2` retains 44 origins (21 Config, 23 elsewhere), including 19
+Placeholders and ten unaccounted generated Warrior/Firebolt rows. `0207`'s 17
+known assumptions do not prove the constructor/default catalogue complete;
+`0208`'s empty saved usage does not account for seven default child-effect enables.
+Known scalar values cannot certify these inventories. Configuration-disposition
+and reporting-ownership proposals remain decisions, not implemented authority.
+In particular, encounter identity alone cannot authorize ignoring
+`enemyDamageRollRange`. Continue numerical dependencies and source accounting
+without inventing completion or adding scalar-only patches that leave every
+selected obligation unchanged.
 
 **Original05 completion path.** The public finalizer returns Pending while any
 selected input obligation remains, before constructing an owned request. The CLI
@@ -1285,7 +1288,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. All five production flag memberships and unrelated passive mechanics remain Partial; no false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
-| Exact Skill contribution queries | Proposed for Offering scaling: extend the existing checked graph to exact Skill recipients and reviewed occurrence-qualified member origins/order. Current Skill reads and generated paths are rejected today. Existing Actor recipient queries and scalar operations can be reused; nonempty group ownership still needs independent proof. Owner review pending; no runtime authority changed. [Proposal](owned-skill-contribution-queries-proposal.md). |
+| Exact Skill contribution queries | Proposed for Offering scaling: extend the existing checked graph to exact Skill recipients and reviewed occurrence-qualified member origins/order. Current Skill reads and generated paths are rejected today. Actor recipient producers are now published with guarded empty query domains; nonempty group ownership still needs independent proof. Owner review pending; no runtime authority changed. [Proposal](owned-skill-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |
 | Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 21 Config-local and 23 non-Config origins after selected/generated accounting, cached-Buffs, archived responsibility and overwritten-placeholder proofs. Fourteen archived rows retain their exact existing raw-input, usage and support-origin Pending owners; they gain no provider or known value. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Typed constructor defaults now reach Player/Enemy/Environment inputs; the real Player resistance-penalty consumer is published, but no global inventory closes. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |

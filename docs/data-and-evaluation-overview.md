@@ -39,7 +39,14 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest data checkpoint replaces accuracy's integer flag channels `3219/321e`
+The latest data checkpoint adds checked recipient buff-effect producers for
+existing Actor channels `322b/322c`. Their empty query domains reject any potential
+matching contributor before guards or values; identities are query results, not
+literal producer values. Actual Actor and global registry coverage stay Partial.
+No public API or runtime model changes. See the
+[recipient packet](../data/owned/poe2/3887ae68/buff-effect-recipients/README.md).
+
+The preceding data checkpoint replaces accuracy's integer flag channels `3219/321e`
 with checked Boolean Flag/Any queries at the same stat identities. Existing
 programs consume the resolved query values directly, with no intermediary Stat or
 new runtime model. Actual memberships remain Partial; incomplete coverage and
@@ -81,7 +88,7 @@ data-authored programs on existing owners, without skill-name dispatch in Rust.
 Their Partial source/support inventories and remaining combat/population modes
 still prevent full owner closure. All-five reimports preserve selections and
 110 queries; Original05's five obligations and the 0/5 completion count remain.
-The current package is `runs/owned-minion-accuracy-flags-publication-01/package`.
+The current package is `runs/owned-buff-effect-recipients-publication-01/package`.
 See the [packet and coverage limits](../data/owned/poe2/3887ae68/sand-preparation/README.md).
 
 A joined finite test now supplies Sand's ordinary level from the real Crown/Solar
@@ -122,9 +129,15 @@ prunes that node from its active set. Import does not silently repair it. An
 explicit second removal reproduces eight sources / 48% in the numeric component.
 Native post-mutation topology validation is still needed for passive optimization.
 
-Next, Offering needs five real scaling producers before its application can add
-the measured 62%. Checked queries already support the recipient Actor, but reject
-Current Skill reads and generated member paths. The proposed
+The same graph now executes two published recipient scaling producers on both
+exact Sniper Actors, with guarded empty input domains. All 25 joined tests pass,
+including missing/Partial coverage, nonempty refusal, staging and scratch/Rayon
+checks. The source witness distinguishes the original saved CALCS Arsonist view
+from explicit Sniper CALCS controls; these are different selected recipients.
+
+Next, Offering needs its three source-Skill scaling producers before its
+application can add the measured 62%. Checked queries reject Current Skill reads
+and generated member paths. The proposed
 [exact Skill query extension](owned-skill-contribution-queries-proposal.md) reuses
 the existing graph and requires owner review; it is not implemented. Nonempty
 multiplier grouping also needs evidence beyond flattened source records.
