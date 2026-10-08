@@ -252,7 +252,7 @@ pub fn check_authored() {
     check_source(false);
 }
 
-fn check_source(full: bool) {
+pub fn check_source(full: bool) {
     let a: Value = read("authoring.json");
     let v: Value = read("source-vectors.json");
     assert_eq!(v["scope"], a["scope"]);

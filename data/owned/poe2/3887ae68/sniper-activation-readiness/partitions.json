@@ -1,0 +1,1247 @@
+{
+  "schema_version": 1,
+  "partitions": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "skill",
+          "value": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000012"
+          }
+        }
+      },
+      "original": {
+        "id": "ordinary-population-inputs",
+        "context": "actor",
+        "reads": [
+          {
+            "id": "level",
+            "value_type": {
+              "kind": "integer"
+            },
+            "source": {
+              "kind": "parameter",
+              "value": {
+                "slot": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000012"
+                    }
+                  },
+                  "slot": {
+                    "kind": "parameter_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000013"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "quality",
+            "value_type": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            },
+            "source": {
+              "kind": "parameter",
+              "value": {
+                "slot": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000012"
+                    }
+                  },
+                  "slot": {
+                    "kind": "parameter_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000014"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "level",
+            "expression": {
+              "kind": "read",
+              "input": "level"
+            }
+          },
+          {
+            "id": "quality",
+            "expression": {
+              "kind": "read",
+              "input": "quality"
+            }
+          },
+          {
+            "id": "actor-level",
+            "expression": {
+              "kind": "lookup_integer_table",
+              "table": "sniper.actor-level",
+              "key": "level"
+            }
+          },
+          {
+            "id": "quality-more",
+            "expression": {
+              "kind": "percent_as_factor",
+              "percent": "quality-rounded",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          },
+          {
+            "id": "one",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "value": 1.0,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "quality-factor",
+            "expression": {
+              "kind": "add",
+              "left": "one",
+              "right": "quality-more"
+            }
+          },
+          {
+            "id": "active",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "boolean",
+                "value": true
+              }
+            }
+          },
+          {
+            "id": "quality-coefficient",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "value": 1.0,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "quality-bonus",
+            "expression": {
+              "kind": "scale",
+              "value": "quality",
+              "factor": "quality-coefficient"
+            }
+          },
+          {
+            "id": "quality-rounded",
+            "expression": {
+              "kind": "round",
+              "value": "quality-bonus",
+              "quantum": {
+                "value": 1.0,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              },
+              "mode": "truncate"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "project-actor-level",
+            "when": null,
+            "effect": {
+              "kind": "project_actor_stat",
+              "actor": {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000012"
+                  }
+                },
+                "slot": {
+                  "kind": "actor_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000001f"
+                }
+              },
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000001c"
+              },
+              "value": "actor-level"
+            }
+          },
+          {
+            "id": "project-quality-factor",
+            "when": null,
+            "effect": {
+              "kind": "project_actor_stat",
+              "actor": {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000012"
+                  }
+                },
+                "slot": {
+                  "kind": "actor_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000001f"
+                }
+              },
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000001d"
+              },
+              "value": "quality-factor"
+            }
+          },
+          {
+            "id": "activate-population",
+            "when": null,
+            "effect": {
+              "kind": "activate_grant",
+              "slot": {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000012"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000020"
+                }
+              },
+              "enabled": "active"
+            }
+          }
+        ]
+      },
+      "numerical": {
+        "program": {
+          "id": "ordinary-population-inputs",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "level",
+              "value_type": {
+                "kind": "integer"
+              },
+              "source": {
+                "kind": "parameter",
+                "value": {
+                  "slot": {
+                    "declaration": {
+                      "kind": "skill",
+                      "definition": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000012"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000013"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "quality",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "source": {
+                "kind": "parameter",
+                "value": {
+                  "slot": {
+                    "declaration": {
+                      "kind": "skill",
+                      "definition": {
+                        "kind": "skill",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000012"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000014"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "level",
+              "expression": {
+                "kind": "read",
+                "input": "level"
+              }
+            },
+            {
+              "id": "quality",
+              "expression": {
+                "kind": "read",
+                "input": "quality"
+              }
+            },
+            {
+              "id": "actor-level",
+              "expression": {
+                "kind": "lookup_integer_table",
+                "table": "sniper.actor-level",
+                "key": "level"
+              }
+            },
+            {
+              "id": "quality-more",
+              "expression": {
+                "kind": "percent_as_factor",
+                "percent": "quality-rounded",
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000001"
+                }
+              }
+            },
+            {
+              "id": "one",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 1.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "quality-factor",
+              "expression": {
+                "kind": "add",
+                "left": "one",
+                "right": "quality-more"
+              }
+            },
+            {
+              "id": "quality-coefficient",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 1.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "quality-bonus",
+              "expression": {
+                "kind": "scale",
+                "value": "quality",
+                "factor": "quality-coefficient"
+              }
+            },
+            {
+              "id": "quality-rounded",
+              "expression": {
+                "kind": "round",
+                "value": "quality-bonus",
+                "quantum": {
+                  "value": 1.0,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                },
+                "mode": "truncate"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "project-actor-level",
+              "when": null,
+              "effect": {
+                "kind": "project_actor_stat",
+                "actor": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000012"
+                    }
+                  },
+                  "slot": {
+                    "kind": "actor_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000001f"
+                  }
+                },
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000001c"
+                },
+                "value": "actor-level"
+              }
+            },
+            {
+              "id": "project-quality-factor",
+              "when": null,
+              "effect": {
+                "kind": "project_actor_stat",
+                "actor": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000012"
+                    }
+                  },
+                  "slot": {
+                    "kind": "actor_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000001f"
+                  }
+                },
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000001d"
+                },
+                "value": "quality-factor"
+              }
+            }
+          ]
+        },
+        "indices": {
+          "reads": [
+            0,
+            1
+          ],
+          "nodes": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            8,
+            9
+          ],
+          "effects": [
+            0,
+            1
+          ]
+        }
+      },
+      "activation": {
+        "program": {
+          "id": "ordinary-population-activation",
+          "context": "actor",
+          "reads": [],
+          "nodes": [
+            {
+              "id": "active",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "boolean",
+                  "value": true
+                }
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "activate-population",
+              "when": null,
+              "effect": {
+                "kind": "activate_grant",
+                "slot": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000012"
+                    }
+                  },
+                  "slot": {
+                    "kind": "grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000020"
+                  }
+                },
+                "enabled": "active"
+              }
+            }
+          ]
+        },
+        "indices": {
+          "reads": [],
+          "nodes": [
+            6
+          ],
+          "effects": [
+            2
+          ]
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "actor",
+          "value": {
+            "kind": "actor",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003091"
+          }
+        }
+      },
+      "original": {
+        "id": "basic-attack-supply",
+        "context": "actor",
+        "reads": [
+          {
+            "id": "actor-level",
+            "value_type": {
+              "kind": "integer"
+            },
+            "source": {
+              "kind": "stat",
+              "value": {
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000001c"
+                }
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "actor-level",
+            "expression": {
+              "kind": "read",
+              "input": "actor-level"
+            }
+          },
+          {
+            "id": "ability-level",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "integer",
+                "value": 1
+              }
+            }
+          },
+          {
+            "id": "ability-quality",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "value": 0.0,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "enabled",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "boolean",
+                "value": true
+              }
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "activate",
+            "when": null,
+            "effect": {
+              "kind": "activate_grant",
+              "slot": {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003091"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003093"
+                }
+              },
+              "enabled": "enabled"
+            }
+          },
+          {
+            "id": "project-ability-level",
+            "when": null,
+            "effect": {
+              "kind": "project_skill_parameter",
+              "skill": {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003091"
+                  }
+                },
+                "slot": {
+                  "kind": "skill_grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003092"
+                }
+              },
+              "parameter": {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000021"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003096"
+                }
+              },
+              "value": "ability-level"
+            }
+          },
+          {
+            "id": "project-ability-quality",
+            "when": null,
+            "effect": {
+              "kind": "project_skill_parameter",
+              "skill": {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003091"
+                  }
+                },
+                "slot": {
+                  "kind": "skill_grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003092"
+                }
+              },
+              "parameter": {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000021"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003097"
+                }
+              },
+              "value": "ability-quality"
+            }
+          },
+          {
+            "id": "project-actor-level",
+            "when": null,
+            "effect": {
+              "kind": "project_skill_parameter",
+              "skill": {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003091"
+                  }
+                },
+                "slot": {
+                  "kind": "skill_grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003092"
+                }
+              },
+              "parameter": {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000021"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003098"
+                }
+              },
+              "value": "actor-level"
+            }
+          }
+        ]
+      },
+      "numerical": {
+        "program": {
+          "id": "basic-attack-supply",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "actor-level",
+              "value_type": {
+                "kind": "integer"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000001c"
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "actor-level",
+              "expression": {
+                "kind": "read",
+                "input": "actor-level"
+              }
+            },
+            {
+              "id": "ability-level",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "integer",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "id": "ability-quality",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "project-ability-level",
+              "when": null,
+              "effect": {
+                "kind": "project_skill_parameter",
+                "skill": {
+                  "declaration": {
+                    "kind": "actor",
+                    "definition": {
+                      "kind": "actor",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003091"
+                    }
+                  },
+                  "slot": {
+                    "kind": "skill_grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003092"
+                  }
+                },
+                "parameter": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000021"
+                    }
+                  },
+                  "slot": {
+                    "kind": "parameter_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003096"
+                  }
+                },
+                "value": "ability-level"
+              }
+            },
+            {
+              "id": "project-ability-quality",
+              "when": null,
+              "effect": {
+                "kind": "project_skill_parameter",
+                "skill": {
+                  "declaration": {
+                    "kind": "actor",
+                    "definition": {
+                      "kind": "actor",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003091"
+                    }
+                  },
+                  "slot": {
+                    "kind": "skill_grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003092"
+                  }
+                },
+                "parameter": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000021"
+                    }
+                  },
+                  "slot": {
+                    "kind": "parameter_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003097"
+                  }
+                },
+                "value": "ability-quality"
+              }
+            },
+            {
+              "id": "project-actor-level",
+              "when": null,
+              "effect": {
+                "kind": "project_skill_parameter",
+                "skill": {
+                  "declaration": {
+                    "kind": "actor",
+                    "definition": {
+                      "kind": "actor",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003091"
+                    }
+                  },
+                  "slot": {
+                    "kind": "skill_grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003092"
+                  }
+                },
+                "parameter": {
+                  "declaration": {
+                    "kind": "skill",
+                    "definition": {
+                      "kind": "skill",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000021"
+                    }
+                  },
+                  "slot": {
+                    "kind": "parameter_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003098"
+                  }
+                },
+                "value": "actor-level"
+              }
+            }
+          ]
+        },
+        "indices": {
+          "reads": [
+            0
+          ],
+          "nodes": [
+            0,
+            1,
+            2
+          ],
+          "effects": [
+            1,
+            2,
+            3
+          ]
+        }
+      },
+      "activation": {
+        "program": {
+          "id": "basic-attack-activation",
+          "context": "actor",
+          "reads": [],
+          "nodes": [
+            {
+              "id": "enabled",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "boolean",
+                  "value": true
+                }
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "activate",
+              "when": null,
+              "effect": {
+                "kind": "activate_grant",
+                "slot": {
+                  "declaration": {
+                    "kind": "actor",
+                    "definition": {
+                      "kind": "actor",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003091"
+                    }
+                  },
+                  "slot": {
+                    "kind": "grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003093"
+                  }
+                },
+                "enabled": "enabled"
+              }
+            }
+          ]
+        },
+        "indices": {
+          "reads": [],
+          "nodes": [
+            3
+          ],
+          "effects": [
+            0
+          ]
+        }
+      }
+    }
+  ]
+}

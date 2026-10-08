@@ -1,0 +1,809 @@
+//! One finite native graph: imported Crown/Solar rolls -> physical Sniper
+//! preparation -> population -> published intrinsic Basic Attack. Other item,
+//! support, Actor and action behavior remains outside this component. Nothing
+//! here completes a real request or supplies final level/weapon-value literals.
+#[path = "support/owned_sniper_item_attack_evidence.rs"]
+mod evidence;
+#[allow(dead_code)]
+#[path = "support/owned_release_migration_preservation.rs"]
+mod migration_preservation;
+#[allow(dead_code)]
+#[path = "support/owned_release_fixture.rs"]
+mod release;
+#[allow(dead_code)]
+#[path = "support/owned_sniper_final_inputs_fixture.rs"]
+mod sniper;
+#[allow(dead_code)]
+#[path = "support/owned_sniper_final_inputs.rs"]
+mod sniper_family;
+use sniper_family as family;
+
+use poe_optimizer_core::{
+    owned_build::*, owned_definitions::*, owned_readiness::*, owned_routing::*, owned_rules::*,
+    owned_schema::*, owned_stages::EvaluationStagesInput,
+};
+use poe_optimizer_engine::owned_plan::*;
+use rayon::prelude::*;
+use serde_json::Value;
+use sniper::activation_family;
+use sniper::{decode, def, id, key, quantity, shared, stat, subject};
+use std::{path::PathBuf, sync::OnceLock};
+
+fn d<K: DefinitionDomain>(n: u64) -> DefId<K> {
+    def(&format!("def.{n:016x}"))
+}
+fn slot<K: DefinitionDomain>(owner: SlotOwnerDefId, n: u64) -> DeclaredSlot<DefId<K>> {
+    DeclaredSlot {
+        declaration: owner,
+        slot: d(n),
+    }
+}
+fn basic_output() -> DeclaredSlot<ActionOutputDefId> {
+    slot(SlotOwnerDefId::Skill(d(0x21)), 0x22)
+}
+fn actor_slot() -> DeclaredSlot<ActorSlotDefId> {
+    slot(SlotOwnerDefId::Skill(d(0x12)), 0x1f)
+}
+fn path() -> PathBuf {
+    PathBuf::from(
+        std::env::var_os("POE_OPTIMIZER_TEST_SNIPER_ITEM_ATTACK_RELEASE")
+            .expect("checked current release containing item routing and Sniper preparation"),
+    )
+}
+#[derive(Clone)]
+struct World {
+    sniper: sniper::World,
+    actual_actor_coverage: SchemaClosure,
+}
+impl World {
+    fn load() -> Self {
+        static WORLD: OnceLock<World> = OnceLock::new();
+        WORLD.get_or_init(Self::load_once).clone()
+    }
+    fn load_once() -> Self {
+        let path = path();
+        let before = release::inventory(&path);
+        let endpoint = release::load(&path);
+        activation_family::assert_component(&endpoint);
+        evidence::assert_current(&endpoint);
+        let recipe = &endpoint.input().recipe;
+        // This loader already performs a fresh canonical Original05 item import,
+        // retains all 24 roll slots and uses actual applicability/copy/snapshot.
+        let mut w = sniper::World::load_release(&path);
+        let historical: Value = serde_json::from_str(include_str!(
+            "../crates/poe-optimizer-engine/tests/support/minion_attack_source_snapshot.json"
+        ))
+        .unwrap();
+        let extension: poe_optimizer_import::owned_recipe_extension::OwnedRecipeExtension =
+            shared::read(
+                PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                    .join("data/owned/poe2/3887ae68/minion-attack-source/extension.json"),
+            );
+        let original_actor = recipe
+            .rules
+            .owners
+            .iter()
+            .find(|o| o.owner == SchemaSubject::Slot(SlotAddress::Actor(actor_slot())))
+            .unwrap();
+        assert!(!original_actor.programs.is_complete());
+        let actual_actor_coverage = original_actor.programs.closure.clone();
+
+        // The retained authored reference identifies this finite dependency set;
+        // every descriptor/program/table is read from the current checked release.
+        // Gas Arrow, reservation, support effects and final offence are excluded.
+        let mut addresses: Vec<DefinitionAddress> =
+            decode::<Vec<DefinitionDescriptor>>(&historical["schema_definitions"])
+                .into_iter()
+                .filter(|definition| match definition {
+                    DefinitionDescriptor::Gem(_) => false,
+                    DefinitionDescriptor::Skill(e) => e.id == d(0x21),
+                    _ => true,
+                })
+                .map(|definition| definition.address())
+                .collect();
+        for entry in &extension.schema {
+            let poe_optimizer_import::owned_recipe_extension::SchemaExtensionEntry::Definition(
+                value,
+            ) = entry
+            else {
+                panic!("intrinsic extension adds definitions only")
+            };
+            addresses.push(value.address());
+        }
+        let inner = &mut w.base.source.base.inner;
+        for address in addresses {
+            let actual = recipe
+                .schema
+                .definitions
+                .iter()
+                .find(|d| d.address() == address)
+                .unwrap();
+            let mut finite: DefinitionDescriptor = sniper::offering::prolonged::finite(actual);
+            if let DefinitionDescriptor::Actor(DefinitionEntry {
+                schema: SchemaState::Known(schema),
+                ..
+            }) = &mut finite
+            {
+                schema
+                    .declarations
+                    .grants
+                    .members
+                    .retain(|g| g.slot == d(0x3093));
+                schema
+                    .declarations
+                    .skill_grants
+                    .members
+                    .retain(|g| g.slot == d(0x3092));
+                assert_eq!(schema.declarations.grants.members.len(), 1);
+                assert_eq!(schema.declarations.skill_grants.members.len(), 1);
+            }
+            if let Some(existing) = inner
+                .schema
+                .definitions
+                .iter_mut()
+                .find(|d| d.address() == address)
+            {
+                // Existing non-Actor dependencies remain exactly as admitted by
+                // the source preparation fixture, including its narrower worlds.
+                if matches!(finite, DefinitionDescriptor::Actor(_)) {
+                    *existing = finite;
+                }
+            } else {
+                inner.schema.definitions.push(finite);
+            }
+            inner.owner_mut(SchemaSubject::Definition(address));
+        }
+        for original in &recipe.schema.slots {
+            let wanted = match original {
+                SlotDescriptor::Actor(e) => e.id == actor_slot(),
+                SlotDescriptor::Parameter(e) => {
+                    [0x3096, 0x3097, 0x3098].iter().any(|n| e.id.slot == d(*n))
+                }
+                SlotDescriptor::SkillGrant(e) => e.id.slot == d(0x3092),
+                SlotDescriptor::Grant(e) => e.id.slot == d(0x3093),
+                SlotDescriptor::ActionOutput(e) => e.id == basic_output(),
+                _ => false,
+            };
+            if !wanted {
+                continue;
+            }
+            let mut finite: SlotDescriptor = sniper::offering::prolonged::finite(original);
+            if let SlotDescriptor::Actor(DefinitionEntry {
+                schema: SchemaState::Known(schema),
+                ..
+            }) = &mut finite
+            {
+                schema.skills.members.retain(|s| *s == d(0x21));
+                schema.outputs.members.retain(|o| *o == basic_output());
+                assert_eq!(schema.skills.members.len(), 1);
+                assert_eq!(schema.outputs.members.len(), 1);
+            }
+            let address = finite.address();
+            if let Some(existing) = inner
+                .schema
+                .slots
+                .iter_mut()
+                .find(|s| s.address() == address)
+            {
+                *existing = finite;
+            } else {
+                inner.schema.slots.push(finite);
+            }
+            inner.owner_mut(SchemaSubject::Slot(address));
+        }
+        let selections = [
+            (
+                subject(d::<ActorDefinition>(0x3091)),
+                vec!["basic-attack-supply", "basic-attack-activation"],
+            ),
+            (
+                SchemaSubject::Slot(SlotAddress::Actor(actor_slot())),
+                vec!["finite-actor-baseline", "intrinsic-minion-attack-source"],
+            ),
+            (
+                SchemaSubject::Slot(SlotAddress::ActionOutput(basic_output())),
+                vec!["actor-level-input"],
+            ),
+        ];
+        for (owner, names) in selections {
+            let actual = recipe
+                .rules
+                .owners
+                .iter()
+                .find(|o| o.owner == owner)
+                .unwrap();
+            let programs: Vec<_> = names
+                .iter()
+                .map(|name| {
+                    let program = actual
+                        .programs
+                        .members
+                        .iter()
+                        .find(|p| p.id == key(name))
+                        .unwrap();
+                    program.clone()
+                })
+                .collect();
+            inner.owner_mut(owner).programs = DeclaredSet::complete(programs);
+        }
+        // Its hit chance and other action calculations are deliberately not part
+        // of this component; no Action-scoped summoning program is introduced.
+        assert!(
+            inner
+                .owner_mut(subject(d::<SkillDefinition>(0x21)))
+                .programs
+                .members
+                .is_empty()
+        );
+        let table = recipe
+            .rules
+            .tables
+            .iter()
+            .find(|t| t.id == key("actor.allied-damage-by-level"))
+            .unwrap();
+        let old_tables: Vec<IntegerRuleTable> = decode(&historical["tables"]);
+        assert_eq!(Some(table), old_tables.iter().find(|t| t.id == table.id));
+        w.base.tables.push(table.clone());
+        let authored: Vec<ActionOutputRoutes> = shared::read(
+            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("data/owned/poe2/3887ae68/minion-attack-source/routes.json"),
+        );
+        assert_eq!(authored.len(), 1);
+        let actual = recipe
+            .routing
+            .outputs
+            .iter()
+            .find(|r| r.output == basic_output())
+            .unwrap();
+        for route in &authored[0].routes.members {
+            assert_eq!(
+                actual.routes.members.iter().filter(|r| *r == route).count(),
+                1
+            );
+        }
+        w.base.action_routes = vec![ActionOutputRoutes {
+            output: basic_output(),
+            routes: DeclaredSet::complete(authored[0].routes.members.clone()),
+            source_selectors: Some(DeclaredSet::complete(vec![])),
+        }];
+        for descriptor in &mut inner.schema.definitions {
+            if let DefinitionDescriptor::Metric(DefinitionEntry {
+                schema: SchemaState::Known(schema),
+                ..
+            }) = descriptor
+                && !schema.actor_roles.contains(&MetricActorRole::Owned)
+            {
+                schema.actor_roles.push(MetricActorRole::Owned);
+            }
+        }
+        assert!(
+            !inner
+                .owners
+                .iter()
+                .flat_map(|o| &o.programs.members)
+                .any(|p| p.id == key("fixture-explicit-final-level")
+                    || p.id == key("intrinsic-reservation-coefficients"))
+        );
+        assert_eq!(before, release::inventory(&path));
+        Self {
+            sniper: w,
+            actual_actor_coverage,
+        }
+    }
+    fn action(&self, index: usize) -> ActionSelection {
+        ActionSelection {
+            action: ActionKey {
+                actor: self.sniper.actor(index),
+                provider: ProviderKey {
+                    root: ProviderRoot::SkillUse(id(7200 + index as u64)),
+                    grant_path: vec![
+                        slot(SlotOwnerDefId::Gem(d(0x11)), 0x17),
+                        slot(SlotOwnerDefId::Skill(d(0x12)), 0x20),
+                        slot(SlotOwnerDefId::Actor(d(0x3091)), 0x3093),
+                    ],
+                },
+                output: basic_output(),
+            },
+            part: d(7),
+            mode: d(8),
+            stat_set: d(9),
+        }
+    }
+    fn checked_plan(&self) -> std::result::Result<shared::Plan, String> {
+        self.checked_plan_configured(|_| {})
+    }
+    fn checked_plan_configured(
+        &self,
+        configure: impl FnOnce(&mut EvaluationStagesInput),
+    ) -> std::result::Result<shared::Plan, String> {
+        let original = self.sniper.base.source.request();
+        let mut queries = original.queries().input().clone();
+        queries.requests.extend((0..2).map(|index| MetricRequest {
+            id: QueryId::new(format!("joined-sniper-attack-{index}")).unwrap(),
+            metric: def("fixture.observe"),
+            target: MetricTarget::Action(Box::new(self.action(index))),
+        }));
+        assert!(
+            !queries
+                .requests
+                .iter()
+                .any(|q| matches!(&q.target, MetricTarget::Action(a)
+            if a.action.output == slot(SlotOwnerDefId::Skill(d(0x12)), 0x15)))
+        );
+        let request = OwnedEvaluationRequest::new(
+            original.build().clone(),
+            original.scenario().clone(),
+            QuerySpec::new(queries, Default::default()).unwrap(),
+            Default::default(),
+        )
+        .unwrap();
+        self.sniper.checked_plan_with_request(request, |stages| {
+            for row in &mut stages.programs.members {
+                if row.program == key("basic-attack-activation") {
+                    row.stage = key("source-prepare");
+                }
+            }
+            let ready = stages.readiness.as_mut().unwrap();
+            for row in &mut ready.programs.members {
+                if row.program == key("basic-attack-activation") {
+                    let program = self
+                        .sniper
+                        .base
+                        .source
+                        .base
+                        .inner
+                        .owners
+                        .iter()
+                        .find(|o| o.owner == row.owner)
+                        .unwrap()
+                        .programs
+                        .members
+                        .iter()
+                        .find(|p| p.id == row.program)
+                        .unwrap();
+                    assert!(program.reads.is_empty());
+                    row.phase = ReadinessPhase::Structural;
+                    row.role = ReadinessProgramRole::PreparationFacts;
+                    row.outputs = program
+                        .effects
+                        .iter()
+                        .map(|e| sniper::offering::channel(program.context, &e.effect))
+                        .collect();
+                }
+            }
+            let basic = ready
+                .skills
+                .iter_mut()
+                .find(|s| s.skill == d(0x21))
+                .unwrap();
+            // These exact inputs are projected after the real parent population;
+            // they cannot become early support-preparation requirements.
+            for parameter in &mut basic.parameters.members {
+                parameter.phase = ReadinessPhase::Execution;
+            }
+            configure(stages);
+        })
+    }
+    fn plan(&self) -> shared::Plan {
+        self.checked_plan().unwrap()
+    }
+    fn evaluate(&self) -> SupportEffectsReport {
+        let p = self.plan();
+        assert!(p.gaps().is_empty(), "{:?}", p.gaps());
+        p.evaluate(&mut p.new_scratch()).unwrap()
+    }
+    fn value<'a>(
+        &self,
+        report: &'a OwnedEffectsReport,
+        index: usize,
+        action: bool,
+        n: u64,
+    ) -> &'a EffectValue {
+        let entity = if action {
+            ConcreteEntity::Action(Box::new(self.action(index)))
+        } else {
+            ConcreteEntity::Actor(self.sniper.actor(index))
+        };
+        &report
+            .values
+            .iter()
+            .find(|v| {
+                v.key
+                    == PlanValueKey::Stat {
+                        entity: entity.clone(),
+                        stat: stat(n),
+                    }
+            })
+            .unwrap_or_else(|| panic!("missing {entity:?} stat {n:x}"))
+            .value
+    }
+    fn check(&self, report: &SupportEffectsReport, rows: [&Value; 2]) {
+        let qualities = rows.map(|r| r["physical_quality"].as_f64().unwrap());
+        self.check_with_quality(report, rows, qualities);
+    }
+    fn check_with_quality(
+        &self,
+        report: &SupportEffectsReport,
+        rows: [&Value; 2],
+        qualities: [f64; 2],
+    ) {
+        let levels = rows.map(|r| r["effective_level"].as_i64().unwrap());
+        self.sniper.check(report, levels, qualities);
+        let effects = sniper::offering::effects(report);
+        assert!(effects.gaps.is_empty(), "{:?}", effects.gaps);
+        self.check_item_origins(effects);
+        for (index, row) in rows.into_iter().enumerate() {
+            assert_eq!(row["summon_effect_id"], "SummonSkeletalSnipersPlayer");
+            assert_eq!(row["actor_profile"], "RaisedSkeletonSniper");
+            assert_eq!(row["children"][0]["effect_id"], "MinionMeleeBow");
+            let child = GeneratedSkillKey {
+                provider: ProviderKey {
+                    root: ProviderRoot::SkillUse(id(7200 + index as u64)),
+                    grant_path: vec![
+                        slot(SlotOwnerDefId::Gem(d(0x11)), 0x17),
+                        slot(SlotOwnerDefId::Skill(d(0x12)), 0x20),
+                    ],
+                },
+                slot: slot(SlotOwnerDefId::Actor(d(0x3091)), 0x3092),
+            };
+            for (parameter, expected) in [
+                (
+                    0x3096,
+                    ParameterValue::Integer(BoundedInteger::new(1).unwrap()),
+                ),
+                (0x3097, quantity(0., &d(2))),
+                (
+                    0x3098,
+                    ParameterValue::Integer(
+                        BoundedInteger::new(row["actor_level"].as_i64().unwrap()).unwrap(),
+                    ),
+                ),
+            ] {
+                let target = PlanValueKey::SkillParameter {
+                    skill: Box::new(child.clone()),
+                    parameter: slot(SlotOwnerDefId::Skill(d(0x21)), parameter),
+                };
+                let writes: Vec<_> = effects
+                    .effects
+                    .iter()
+                    .filter(
+                        |e| matches!(&e.target, BoundEffectTarget::Value { key } if *key == target),
+                    )
+                    .collect();
+                assert_eq!(writes.len(), 1, "one exact child parameter writer");
+                assert_eq!(writes[0].key.invocation.program, key("basic-attack-supply"));
+                assert_eq!(
+                    writes[0].key.invocation.origin,
+                    RuleOrigin::Provider {
+                        provider: child.provider.clone()
+                    }
+                );
+                assert_eq!(writes[0].value, EffectValue::Known { value: expected });
+            }
+            for (name, source, target, unit) in [
+                ("PhysicalMin", 0x320f, 0x3212, 0x1d3a),
+                ("PhysicalMax", 0x3210, 0x3213, 0x1d3a),
+                ("AttackRate", 0x3211, 0x3214, 0x1d39),
+                ("CritChance", 0x2539, 0x3215, 2),
+            ] {
+                let expected = row["weapon1"][name].as_f64().unwrap();
+                assert_eq!(
+                    row["children"][0]["consumer"]["passes"][0]["source"][name],
+                    row["weapon1"][name]
+                );
+                let expected = EffectValue::Known {
+                    value: quantity(expected, &d(unit)),
+                };
+                assert_eq!(self.value(effects, index, false, source), &expected);
+                assert_eq!(self.value(effects, index, true, target), &expected);
+            }
+        }
+    }
+    fn check_item_origins(&self, effects: &OwnedEffectsReport) {
+        let build = &self.sniper.base.source.base.inner.build;
+        let origins: Vec<_> = build
+            .equipment
+            .iter()
+            .map(|equipment| {
+                let item = build.items.iter().find(|i| i.id == equipment.item).unwrap();
+                assert_eq!(item.modifiers.len(), 1);
+                assert_eq!(item.modifiers[0].definition, d(0x30ca));
+                (
+                    item.template.clone(),
+                    RuleOrigin::Provider {
+                        provider: ProviderKey {
+                            root: ProviderRoot::ItemModifier {
+                                equipment_use: equipment.id,
+                                modifier: item.modifiers[0].id,
+                            },
+                            grant_path: vec![],
+                        },
+                    },
+                )
+            })
+            .collect();
+        assert_eq!(origins.len(), 2);
+        for (program, templates, amount) in [
+            (
+                "contribute-player-minion-gem-level",
+                vec![0x1f1c, 0x2343],
+                1.,
+            ),
+            ("amulet-copy-minion-gem-level", vec![0x2343], 0.),
+        ] {
+            let found: Vec<_> = effects
+                .effects
+                .iter()
+                .filter(|e| {
+                    e.key.invocation.program == key(program) && e.value != EffectValue::Inactive
+                })
+                .collect();
+            assert_eq!(found.len(), templates.len());
+            for template in templates {
+                let matching: Vec<_> = origins
+                    .iter()
+                    .filter(|(id, _)| *id == d::<ItemTemplateDefinition>(template))
+                    .collect();
+                assert_eq!(matching.len(), 1);
+                let rows: Vec<_> = found
+                    .iter()
+                    .filter(|e| e.key.invocation.origin == matching[0].1)
+                    .collect();
+                assert_eq!(rows.len(), 1, "exact item/modifier origin {template:x}");
+                assert_eq!(
+                    rows[0].value,
+                    EffectValue::Known {
+                        value: quantity(amount, &d(0x295a))
+                    }
+                );
+            }
+        }
+    }
+}
+
+#[test]
+#[ignore = "requires POE_OPTIMIZER_TEST_SNIPER_ITEM_ATTACK_RELEASE; finite native integration"]
+fn sniper_items_reach_intrinsic_basic_attack_with_measured_raw_level_controls() {
+    let w = World::load();
+    let rows = evidence::checked_cases();
+    assert_eq!(rows.len(), 4);
+    for row in &rows {
+        let mut changed = w.clone();
+        for index in 0..2 {
+            changed.sniper.raw(
+                index,
+                row["physical_level"].as_u64().unwrap() as u16,
+                row["physical_quality"].as_f64().unwrap(),
+                0.,
+            );
+        }
+        changed.check(&changed.evaluate(), [row, row]);
+    }
+}
+
+#[test]
+#[ignore = "requires POE_OPTIMIZER_TEST_SNIPER_ITEM_ATTACK_RELEASE; finite native integration"]
+fn sniper_items_preserve_occurrences_and_restore_reused_parallel_scratch() {
+    let a = World::load();
+    let rows = evidence::checked_cases();
+    let original = rows.iter().find(|r| r["physical_level"] == 20).unwrap();
+    let low = rows.iter().find(|r| r["physical_level"] == 1).unwrap();
+    let mut b = a.clone();
+    // A native ownership control, not an additional measured source vector:
+    // parent raw quality differs, but the child retains its authored quality0.
+    b.sniper.raw(0, 1, 13., 0.);
+    let pa = a.plan();
+    let pb = b.plan();
+    let mut scratch = pa.new_scratch();
+    let first = pa.evaluate(&mut scratch).unwrap();
+    a.check(&first, [original, original]);
+    let changed = pb.evaluate(&mut scratch).unwrap();
+    b.check_with_quality(&changed, [low, original], [13., 0.]);
+    assert_eq!(first, pa.evaluate(&mut scratch).unwrap());
+    let pool = rayon::ThreadPoolBuilder::new()
+        .num_threads(4)
+        .build()
+        .unwrap();
+    let reports: Vec<_> = pool.install(|| {
+        (0..12)
+            .into_par_iter()
+            .map(|i| {
+                let p = if i % 2 == 0 { &pa } else { &pb };
+                p.evaluate(&mut p.new_scratch()).unwrap()
+            })
+            .collect()
+    });
+    for (i, report) in reports.iter().enumerate() {
+        assert_eq!(report, if i % 2 == 0 { &first } else { &changed });
+    }
+}
+
+#[test]
+#[ignore = "requires POE_OPTIMIZER_TEST_SNIPER_ITEM_ATTACK_RELEASE; finite native integration"]
+fn sniper_items_keep_partial_coverage_missing_assembly_and_unknown_support_refusals() {
+    let mut w = World::load();
+    w.sniper
+        .base
+        .source
+        .base
+        .inner
+        .owner_mut(SchemaSubject::Slot(SlotAddress::Actor(actor_slot())))
+        .programs
+        .closure = w.actual_actor_coverage.clone();
+    let result = w.checked_plan();
+    assert!(
+        result.is_err() || !result.unwrap().gaps().is_empty(),
+        "actual Actor coverage must remain incomplete"
+    );
+    let mut w = World::load();
+    w.sniper
+        .base
+        .source
+        .base
+        .inner
+        .owner_mut(subject(sniper::gem()))
+        .programs
+        .members
+        .retain(|p| p.id != key(sniper::ASSEMBLY));
+    assert!(
+        w.checked_plan()
+            .err()
+            .expect("required assembly removed")
+            .contains("unknown source property program")
+    );
+    let mut w = World::load();
+    w.sniper.base.source.base.inner.build.support_origins = None;
+    assert!(matches!(
+        w.evaluate().outcome,
+        SupportEffectsOutcome::PreparationUnresolved {
+            reason: poe_optimizer_engine::owned_supports::SupportPreparationGap::OriginOrder,
+            origin_index: None,
+            ..
+        }
+    ));
+}
+
+#[test]
+#[ignore = "requires POE_OPTIMIZER_TEST_SNIPER_ITEM_ATTACK_RELEASE; finite native integration"]
+fn sniper_items_missing_copy_input_and_out_of_domain_final_level_cannot_produce_damage() {
+    for high_raw in [false, true] {
+        let mut w = World::load();
+        if high_raw {
+            for index in 0..2 {
+                w.sniper.raw(index, 40, 0., 0.);
+            }
+        } else {
+            w.sniper
+                .receivers
+                .members
+                .retain(|r| r.stat != stat(0x32e4));
+        }
+        let report = w.evaluate();
+        match report.outcome {
+            SupportEffectsOutcome::Unavailable { cause, input } => {
+                let expected = if high_raw {
+                    matches!(
+                        cause,
+                        EffectValue::Inactive
+                            | EffectValue::Unresolved {
+                                reason: PlanGapReason::MissingInput,
+                                ..
+                            }
+                    )
+                } else {
+                    matches!(
+                        cause,
+                        EffectValue::Unresolved {
+                            reason: PlanGapReason::MissingProducer,
+                            ..
+                        }
+                    )
+                };
+                assert!(expected, "unexpected cause {cause:?} at {input:?}");
+            }
+            SupportEffectsOutcome::Evaluated { effects } => {
+                for index in 0..2 {
+                    assert!(!matches!(
+                        w.value(&effects, index, true, 0x3212),
+                        EffectValue::Known { .. }
+                    ));
+                    assert!(!matches!(
+                        w.value(&effects, index, true, 0x3213),
+                        EffectValue::Known { .. }
+                    ));
+                }
+            }
+            other => panic!("unexpected refusal {other:?}"),
+        }
+    }
+}
+
+#[test]
+#[ignore = "requires retained source reports; authenticates evidence without a source VM"]
+fn sniper_items_authenticate_retained_full_source_reports() {
+    evidence::check_retained_reports();
+}
+
+#[test]
+#[ignore = "requires POE_OPTIMIZER_TEST_SNIPER_ITEM_ATTACK_RELEASE; authenticated activation successor"]
+fn sniper_items_reject_activation_moved_after_preparation() {
+    let w = World::load();
+    for name in ["ordinary-population-activation", "basic-attack-activation"] {
+        let error = w
+            .checked_plan_configured(|stages| {
+                let rows: Vec<_> = stages
+                    .readiness
+                    .as_mut()
+                    .unwrap()
+                    .programs
+                    .members
+                    .iter_mut()
+                    .filter(|r| r.program == key(name))
+                    .collect();
+                assert_eq!(rows.len(), 1, "one authenticated activation program");
+                for row in rows {
+                    row.phase = ReadinessPhase::Execution;
+                    row.role = ReadinessProgramRole::Execution;
+                    row.outputs.clear();
+                }
+            })
+            .err()
+            .expect("generated skill activation cannot be deferred past preparation");
+        assert!(
+            error.contains("early readiness depends on a later input or producer"),
+            "{error}"
+        );
+    }
+}
+
+#[test]
+#[ignore = "requires POE_OPTIMIZER_TEST_SNIPER_ITEM_ATTACK_RELEASE; finite native integration"]
+fn sniper_items_disabled_authored_root_retains_unavailable_query_and_restores_scratch() {
+    let active = World::load();
+    let rows = evidence::checked_cases();
+    let original = rows.iter().find(|r| r["physical_level"] == 20).unwrap();
+    let mut disabled = active.clone();
+    disabled
+        .sniper
+        .base
+        .source
+        .base
+        .inner
+        .build
+        .skills
+        .iter_mut()
+        .find(|s| s.id == id(7200))
+        .unwrap()
+        .enabled = false;
+    let pa = active.plan();
+    let pd = disabled.plan();
+    assert_eq!(pa.request().queries(), pd.request().queries());
+    let expected_gap = PlanGap {
+        provider: Some(disabled.action(0).action.provider),
+        subject: Some(SchemaSubject::Slot(SlotAddress::ActionOutput(
+            basic_output(),
+        ))),
+        reason: PlanGapReason::UnresolvedTopology,
+    };
+    assert_eq!(pd.gaps(), std::slice::from_ref(&expected_gap));
+    let mut scratch = pa.new_scratch();
+    let baseline = pa.evaluate(&mut scratch).unwrap();
+    active.check(&baseline, [original, original]);
+    let stopped = pd.evaluate(&mut scratch).unwrap();
+    // This changes authored SkillUse.enabled, not typed requested participation.
+    // The retained child query resolves unavailable. action_programs records its
+    // exact unresolved-topology gap, so support preflight refuses the whole
+    // request before execution. No evaluated descendant-gating claim is made.
+    assert_eq!(stopped.gaps, vec![expected_gap]);
+    assert_eq!(
+        stopped.outcome,
+        SupportEffectsOutcome::Unavailable {
+            cause: EffectValue::Unresolved {
+                reason: PlanGapReason::IncompleteContributors,
+                read: None
+            },
+            input: None,
+        }
+    );
+    assert_eq!(baseline, pa.evaluate(&mut scratch).unwrap());
+}

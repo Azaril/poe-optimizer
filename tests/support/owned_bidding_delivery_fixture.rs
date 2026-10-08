@@ -40,6 +40,7 @@ pub struct PlanComponents {
     pub tables: Vec<IntegerRuleTable>,
     pub receivers: DeclaredSet<StatReceiver>,
     pub source_properties: Option<SourcePropertyPreparationInput>,
+    pub action_routes: Vec<ActionOutputRoutes>,
 }
 impl Default for PlanComponents {
     fn default() -> Self {
@@ -47,6 +48,7 @@ impl Default for PlanComponents {
             tables: vec![],
             receivers: DeclaredSet::complete(vec![]),
             source_properties: None,
+            action_routes: vec![],
         }
     }
 }
@@ -1123,6 +1125,31 @@ impl World {
             CompiledRulePackage::compile_stored(&stored, definitions.as_ref(), Default::default())
                 .map_err(|e| e.to_string())?,
         );
+        let mut outputs: Vec<_> = self
+            .schema
+            .slots
+            .iter()
+            .filter_map(|s| match s {
+                SlotDescriptor::ActionOutput(e) => Some(ActionOutputRoutes {
+                    output: e.id.clone(),
+                    routes: empty(),
+                    source_selectors: Some(empty()),
+                }),
+                _ => None,
+            })
+            .collect();
+        // Joined fixtures may retain actual routes for declared outputs. Do not
+        // silently discard a route or resolve duplicate inputs by overwrite.
+        let mut supplied = BTreeSet::new();
+        for row in components.action_routes {
+            if !supplied.insert(row.output.clone()) {
+                return Err("duplicate joined fixture action routing".into());
+            }
+            let Some(output) = outputs.iter_mut().find(|o| o.output == row.output) else {
+                return Err("joined fixture routing has no declared output".into());
+            };
+            *output = row;
+        }
         let routing = Arc::new(
             OwnedActionRouting::new(
                 ActionRoutingInput {
@@ -1130,19 +1157,7 @@ impl World {
                     namespace: ns(),
                     release: key("fixture.routing"),
                     definitions: definitions.identity().clone(),
-                    outputs: self
-                        .schema
-                        .slots
-                        .iter()
-                        .filter_map(|s| match s {
-                            SlotDescriptor::ActionOutput(e) => Some(ActionOutputRoutes {
-                                output: e.id.clone(),
-                                routes: empty(),
-                                source_selectors: Some(empty()),
-                            }),
-                            _ => None,
-                        })
-                        .collect(),
+                    outputs,
                 },
                 definitions.as_ref(),
                 Default::default(),

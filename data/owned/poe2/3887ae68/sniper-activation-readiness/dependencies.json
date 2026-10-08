@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "prior_input": "7b840bb204974fed6e44e686d899396987cd25f2b86a40261dccd7ab5e0d6f6e",
+  "prior_rules_release": "pob-3887ae68-inherent-attribute-flags-v1",
+  "original_programs": [
+    {
+      "path": "data/owned/poe2/3887ae68/sniper-population-readiness/partition.json",
+      "sha256": "18652ee1052e3b20d2f5fa5b145c8086af34b85cb667610cd78dab91830c0101",
+      "pointer": "/facts/program"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/actor-ability-supply/migration.json",
+      "sha256": "5a704b269325f88a5765c2bb7d6ecab0727f49254efaa2e84195302c803bfb21",
+      "pointer": "/owners/0/programs/members/0"
+    }
+  ]
+}

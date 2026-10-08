@@ -39,7 +39,16 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest data checkpoint proves the local early-Amulet copy consumer and
+The latest data checkpoint splits constant mechanical grant activation from
+level-dependent projection in Sniper's population and Basic Attack supply.
+The exact dependency-closed fragments preserve every original effect; only the
+activation runs during structural preparation. Final inputs and descendant
+execution remain subject to their existing requirements. This is owned-data
+normalization, without a new Lua behavior or Engine readiness exception. Its
+full-input inverse and all-five publication pass without closing any inventory.
+See the [activation packet](../data/owned/poe2/3887ae68/sniper-activation-readiness/README.md).
+
+The preceding data checkpoint proves the local early-Amulet copy consumer and
 retires one of Modifier `30ca`'s six gaps, preserving all six programs and Partial
 owner coverage. The proof includes exact source identity, required eligibility,
 snapshot ordering, finite arithmetic, zero retention and unavailable inputs.
@@ -65,7 +74,7 @@ data-authored programs on existing owners, without skill-name dispatch in Rust.
 Their Partial source/support inventories and remaining combat/population modes
 still prevent full owner closure. All-five reimports preserve selections and
 110 queries; Original05's five obligations and the 0/5 completion count remain.
-The current package is `runs/owned-amulet-copy-consumer-publication-02/package`.
+The current package is `runs/owned-sniper-activation-readiness-publication-01/package`.
 See the [packet and coverage limits](../data/owned/poe2/3887ae68/sand-preparation/README.md).
 
 A joined finite test now supplies Sand's ordinary level from the real Crown/Solar
@@ -76,13 +85,17 @@ changed equipment/rolls, Partial and missing-producer refusals, scratch reuse an
 Rayon checks pass on the current package. This adds integration evidence without
 promoting production contributor coverage or substituting a whole-build request.
 
-The next selected-build integration joins actual item contributions, physical
-Sniper preparation/population and the existing intrinsic Basic Attack graph.
-The current component tests still supply final parent levels or stop before
-child actions. Removing that test boundary advances the real calculation path;
-complete support coverage, input finalization and final damage/metric formulas
-remain separate gates. Existing integer presence flags in the accuracy component
-are recorded migration debt, not equivalent to the new typed Flag/Any contract.
+A finite joined test now carries actual item contributions through physical
+Sniper source preparation, population and intrinsic Basic Attack, with no
+precomputed final-level or weapon-value producer. Four retained source controls
+and fresh/reused/parallel replay agree. Its selected numerical projection leaves
+production owners and contributor inventories Partial: full support coverage,
+input finalization and final damage/metric formulas remain separate gates.
+The next join is ordinary hit chance, after replacing its integer flag channels
+`3219/321e` with the accepted typed Boolean Flag/Any model. Existing block inputs
+and Actor-to-Action routes already support this path; no new public model is
+needed. The authored-root disable control is separate from typed requested
+participation and does not establish that later integration's coverage.
 
 The preceding native checkpoint implements typed Boolean `Flag` contributions and
 unordered `Any` on the existing graph. Source membership and numeric ranks are

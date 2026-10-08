@@ -65,82 +65,79 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest published native checkpoint: early Amulet copy consumer
+## Latest published native checkpoint: item-driven Sniper intrinsic attack
 
-The [consumer packet](../data/owned/poe2/3887ae68/amulet-copy-consumer/README.md)
-retires exactly `amulet-bonus-copy-unconverted` on Modifier `30ca`. Its six
-programs are unchanged and its owner remains Partial with five other obligations.
-The proof covers the local consumer: validated exact source identity, required
-eligibility, resolved effective value, pre-copy snapshot, branch/rounding law,
-zero-record retention and unavailable-input behavior. It does not certify the
-complete upstream suppliers, source admission, earlier magnitude transforms,
-ordinary item routing or later generic slot copying.
+The [activation packet](../data/owned/poe2/3887ae68/sniper-activation-readiness/README.md)
+separates two existing constant grant activations from numerical projections:
+Sniper `ordinary-population-inputs` and Actor `basic-attack-supply`. Only the new
+activation fragments run as Structural PreparationFacts. Parent and child final
+inputs, numerical projections and descendant execution remain Execution work.
+This fixes the measured early-readiness conflict by changing owned data, without
+changing the Engine's preparation policy or adding a runtime exception.
 
-The resolved Count and percentage stats admit any finite value, despite narrower
-raw-item ranges. Fourteen Amulet tests pass in **3.45s**, including fractional
-identity, signed/above-100/adjacent-100 factors, synthetic per-occurrence bypass,
-zero/underflow, overflow refusal, missing inputs and fresh/reused/parallel checks.
-Fractional effective-value controls explicitly replace only the upstream producer;
-actual item formatting remains independently tested. Finite-result arithmetic
-matches the pinned source law. Overflow remains native `NumericalError(NonFinite)`,
-not a claim that Lua infinity is a valid native result.
+The shared partition proof checks exact reachable dependencies, original row
+order and single ownership of every effect. Its inverse reconstructs the complete
+predecessor input. No definition, table, effect, route, input policy or closure
+changes; two program IDs and one provenance row are added. Two new authoring
+checks and three existing population-partition checks pass. The all-five
+publication passes in **24.96s**, including an identical-byte rebuild and all
+110 queries. Selected input issues remain **107/117/109/123/5**. No owner becomes
+Complete and no evaluation bundle is added; complete builds remain **0/5**.
 
-The audit distinguishes PoB's item-line `{unscalable}` marker from its copy
-record-tag predicate. The retained line-marker control has no record tag.
-Current Import emits canonical false; true-branch controls are synthetic and
-confer no source admission authority. Existing six-template eligibility facts,
-placements, original-call reports and exact snapshot owner/staging are reused.
-The compact certificate references the exact existing owner and prior closure
-instead of duplicating their program bodies. It adds no extractor or new PoB VM.
+The new finite native integration connects fresh imported Crown/Solar rolls,
+actual modifier applicability and Amulet snapshot/copy, physical Sniper source
+preparation, population, Actor supply and intrinsic Basic Attack in one plan.
+It uses current published programs and exact occurrence identities; no producer
+supplies a precomputed final level or weapon value. Four retained measured cases
+cover raw levels 1/7/20/30, prepared levels 3/9/22/32 and Actor levels 6/18/44/64.
+The physical min/max values are 8/14, 33/62, 208/387 and 632/1175; rate is 2/3 and
+base critical chance is 5. Existing full source reports are authenticated, not
+reacquired in a new PoB VM. Raw40 plus the two bonuses remains a native domain
+refusal; the source's recovery/clamp at40 is diagnostic, not successful parity.
 
-Two new joined Sand controls prove missing eligibility/snapshot refusal, lazy
-known-false eligibility, early copy rejection, late snapshot rejection and
-snapshot self-feedback rejection. All six joined tests pass on the successor
-in **16.68s**; six ordinary routing numerical regressions pass in **15.33s**.
-Both paths still authenticate the complete retained modifier body and exact
-successor closure provenance. A shared test-module import was deduplicated;
-no compatibility reader or production execution branch was added.
+Repeated occurrences, independent parent quality with child quality0, restored
+scratch and four-worker Rayon replay pass. Missing copy inputs, source assembly,
+support ordering and actual Partial owner coverage remain refused, as does moving
+either activation after preparation. Disabling an authored root while retaining
+its child query produces exactly one `UnresolvedTopology` gap at that provider
+and output; preflight then returns `IncompleteContributors`. The test checks that
+exact refusal and successful scratch restoration. It changes `SkillUse.enabled`,
+not the separate typed requested-participation input, and does not claim to
+exercise evaluated descendant participation. All **seven joined tests pass in
+14.58s**, including retained full source-report authentication.
+The five existing Sniper final-input regressions pass in **15.27s**, and seven
+Offering regressions pass in **10.01s** on the successor. Strict workspace,
+all-feature, all-target Clippy and changed-file formatting pass. This integration
+does not prove complete support membership, final damage, DPS or a real request.
 
-The all-five publication passes in **21.98s**, authenticating retained source
-reports, the exact one-gap inverse and an identical-byte package rebuild.
-All saved inputs, identities, selections, dispositions, 110 queries and selected
-issue counts **107/117/109/123/5** remain unchanged. No owner becomes Complete,
-no evaluation bundle is added and complete builds remain **0/5**. Two packet
-checks, two scalability checks, the ordinary routing authoring check, strict
-workspace/all-feature/all-target Clippy and formatting pass. Evidence:
-`runs/owned-amulet-consumer-native-tests-01.log`,
-`runs/owned-amulet-copy-consumer-publication-02/validation.json`,
-`runs/owned-amulet-consumer-sand-successor-tests-02.log`,
-`runs/owned-amulet-consumer-routing-numerical-tests-02.log` and
-`runs/owned-amulet-consumer-clippy-03.log`.
+**Resume: join ordinary hit chance after replacing its two legacy integer flags.**
+Replace `3219` (Player minion-accuracy inheritance) and `321e` (Enemy cannot-block)
+with typed Boolean Flag/Any through checked contribution queries and resolved
+Boolean Stats. Keep one current representation and preserve Partial memberships;
+`321a` is already a legitimate singular Boolean. Then retain Actor `321b`, the
+exact `321b`→`321c` Basic route and Action `321f`/`3220` in this same item-driven
+graph. Use saved configuration through the existing block policy (`3216/3217`),
+Encounter block `3218` and Action reduction `321d`. The retained 13 accuracy
+vectors include original hit chance100 and block37 hit chance63. Verify duplicate
+and unknown flags, exact recipients, missing-input refusal, block clamp/reduction
+order and fresh/reused/parallel determinism. This uses the approved Boolean model;
+Action-context Enemy reads do not need the pending shared-Actor read extension.
 
-**Resume: compose the selected Sniper numerical chain next.** Connect actual
-Crown/Solar item contributions to physical Sniper source preparation, population
-and intrinsic Basic Attack in one native plan. The current Sniper final-input
-fixture strips child skill/output supply and stops at population; the existing
-intrinsic attack fixture supplies the final parent level. Remove that integration
-boundary using the published graph: Actor `3091` / slot `001f`, Basic Skill `0021`
-/ output `0022`, Actor values `320f`–`3211` and routed Action values `3212`–`3215`.
-Reuse actual provider identities and retained source vectors, including level
-changes, missing inputs, repeated occurrences and successful scratch/Rayon replay.
-No new public model is indicated. This is the next shortest evidenced step toward
-the unchanged Original05 numerical path, rather than another isolated closure.
-
-Keep this first join at intrinsic physical endpoints, attack rate and base
-critical chance. Ordinary hit chance `3220` can follow if its existing checked
-Enemy/action routes compose unchanged. Its integer flag channels `3219/321e`
-are explicit Boolean-migration debt; do not broaden or relabel them as Flag/Any.
 Final damage still needs added damage/conversion, INC/MORE grouping and rounding,
 critical/mitigation/timing and exact metric bindings. Gigantic/quality grouping
 remains unresolved. Do not invent a parent Action demand or erase actual support
-and owner coverage to claim a whole build.
+and owner coverage to claim a whole build. The five input obligations, Crown
+sockets, the five retained `30ca` obligations and complete numerical owners remain
+open. Original05 stays first; D4 starts when one unchanged native/reference build
+passes, without waiting for all five.
 
-Actor-to-Enemy computed reads and authored support-origin composition remain
-pending public-model decisions. The accepted Boolean representation does not
-authorize those separate authorities. Crown sockets, the five retained `30ca`
-obligations and complete selected numerical owners remain open. Original05 stays
-first; D4 starts as soon as one unchanged native/reference build passes, without
-waiting for all five.
+Evidence: `runs/owned-sniper-activation-readiness-publication-01/validation.json`,
+`runs/owned-sniper-activation-tests-01.log`,
+`runs/owned-sniper-activation-old-partition-tests-01.log`,
+`runs/owned-sniper-item-attack-tests-03.log`,
+`runs/owned-sniper-activation-final-inputs-regression-02.log`,
+`runs/owned-sniper-activation-offering-regression-01.log` and
+`runs/owned-sniper-activation-clippy-01.log`.
 
 ## In progress: incoming critical source proof and Actor read decision
 
@@ -190,7 +187,7 @@ producers, Partial membership, stages/cycles and unchanged write boundaries;
 then execute the seven actual authored native tests, authenticate the compact
 vectors against the full reports, and run the prepared all-five publication
 inverse. First rebase the draft's predecessor expectations from the Boolean
-package to the current Amulet-consumer package; its reserved `3353`–`3364` IDs remain free.
+package to the current checked baseline; its reserved `3353`–`3364` IDs remain free.
 The draft's input policy should add two absence/value channels and
 account for exactly two overwritten placeholders per original; **these changes
 have not been published or counted as progress in input closure**. Current
@@ -250,31 +247,32 @@ source-only investigation. It retains Partial contributor/readiness coverage and
 selected input obligations. The unapproved incoming-critical packet provisionally
 uses `3353`–`3364`, after Sand's five allocations; its source evidence is unchanged.
 
-CI snapshot at 00:04 UTC (2026-10-08): Crown checkpoint `93ee736` run
-[37704842721](https://github.com/Azaril/poe-optimizer/actions/runs/37704842721)
-is pending with no jobs allocated. Older `f93d551` run
+CI snapshot at 00:42 UTC (2026-10-08): Amulet checkpoint `8e04b25` run
+[37706887647](https://github.com/Azaril/poe-optimizer/actions/runs/37706887647)
+is pending. The intervening `93ee736`/`3ca9383` pending runs were superseded
+and cancelled. Older `f93d551` run
 [37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252)
-has eight passed jobs, four running and no reported failures. Later pushes can
+has ten passed jobs, two running and no reported failures. Later pushes can
 supersede pending runs; local checks are not hosted success for this checkpoint.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-amulet-copy-consumer-publication-02/package` and its neighboring
+Use `runs/owned-sniper-activation-readiness-publication-01/package` and its neighboring
 `original-01` through `original-05` imports. Current sidecars remain V23;
 definition schema V6, rule schema3 and operationsV22 are independent contracts.
-The immediate predecessor is `runs/owned-crown-declarations-publication-01/package`,
-input `5d8757d9046ef837509223103f06931fb16aac7a3b60aa8231b6f48b5f4225aa`.
+The immediate predecessor is `runs/owned-amulet-copy-consumer-publication-02/package`,
+input `7b840bb204974fed6e44e686d899396987cd25f2b86a40261dccd7ab5e0d6f6e`.
 Historical endpoint paths authenticate stored evidence; retired formats require
 explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `7b840bb204974fed6e44e686d899396987cd25f2b86a40261dccd7ab5e0d6f6e` |
+| Release input | `7473da9a5220e6e8ddb453cab1caf13f42d8d2f3565d5c0d3d6f27e223defe42` |
 | Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
 | Definitions content | `6c339c996870dbc85c1f2dffe62b64a95134d501bc6ad7e4876a986bd8542a99` |
-| Rules | `054ecc2418b897484d3d77e431d994b4d07ba14cb5bcf8c163aba1efd3a55030` |
-| Compiled rules | `0efa4698c775d799e2497a75536d8b4b68c30ff0dbb6cb77ff93fcb9b977fe8a` |
+| Rules | `290a9ca1de215253fcc8137c5cc50cb691fe0443c12cbe43a190d9db8d7b1d85` |
+| Compiled rules | `14105ee1e34a8d5aede9e04c837be109946a2e8b10d8cc62fb35b93deedb6492` |
 | Routing | `9c4eb5d88257fa37c5d65d637907483c32f02c5fd7ff056369786eddd2762809` |
 | Mapping | `a8aeb0e92863d49b5ae99fc580467c70a016b6e53db2d4fc9a51a5c6d074f790` |
 | Skill roles | `701ece0c17de2a42bb07e175a896ba77fa882ba582ddf288358a494fbe41002c` |
@@ -283,12 +281,12 @@ explicit offline reauthoring and are not alternate production evaluator modes.
 | Items | `1ca7459a798378a6441bfde3549899912a1da8ba70557909007c27c7552bfd6d` |
 | Item source | `d977add5dbc0b01605cc87637642c777afa1b728373069bbaef5cf67782f8b50` |
 | Tree policy | `d2b3a0fe5c87e8994710783c4b585a92c435eccc6061924a10c36873bc09664a` |
-| Authoring commitment | `b993ebe7386136ba60ae2120dd4254433f64d1da9d1948b953db2942df66b555` |
+| Authoring commitment | `e418a01d30b88541d4238758fed9456b3df5828bae79a579fdc0a7f40045ac72` |
 | Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
 
-The eighteen package files total **63,191,393 bytes**, with 139 provenance rows.
-Definitions and rules use `pob-3887ae68-crown-declarations-v1`. The registry ends
-at `3352`.
+The eighteen package files total **63,191,779 bytes**, with 140 provenance rows.
+Definitions retain `pob-3887ae68-crown-declarations-v1`; rules use
+`pob-3887ae68-sniper-activation-readiness-v1`. The registry ends at `3352`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -309,6 +307,10 @@ and all 110 query identities remain unchanged. Local `runs/` files are
 reproducible evidence, not distributed game data.
 
 ## Next executable work
+
+The immediate numerical checkpoint is the typed-flag/hit-chance join above.
+Continue it while support-origin and Actor-to-Enemy decisions remain pending;
+those questions must not stall an independent approved numerical consumer.
 
 **Original05 completion path.** The public finalizer returns Pending while any
 selected input obligation remains, before constructing an owned request. The CLI
@@ -471,14 +473,15 @@ its data-only extension boundary. Preserve the five original requests and their
 110 query rows at every publication. Neither this review nor producer coverage
 changes the 0/5 complete-build result.
 
-**Numerical resume:** the Strength-to-Life receiver, Count cutover, six ordinary
+**Deferred Player-Life dependency:** the Strength-to-Life receiver, Count cutover, six ordinary
 attribute consumers and guarded empty-MORE producers are implemented and tested.
 Use the explicit query producers instead of fixture factor literals. V21 rejects
 an unmatched potential effect as `PlanError::Invalid`, even if inactive; retain
 this conservative admitted domain. The six current INC memberships are now
 Complete. BASE/global inventories, Class coverage and original builds remain open.
 
-Next establish real BASE contributor closure and semantic ordering, including
+When this dependency becomes the closest-build blocker, establish real BASE
+contributor closure and semantic ordering, including
 all current item donors and inactive alternatives. Reuse the importer's explicit
 modifier-order proof; raw saved line order is not source modifier-list order.
 The executable BASE audit now proves a declared-domain signed-cancellation
@@ -905,8 +908,10 @@ numerical outputs when game intent remains unresolved.
 
    The current six-template modifier membership is not complete equipment
    admission: only Crown/Solar are in the equipment-membership policy. Four
-   Helmet/Amulet placements are Complete; Sceptre/Focus placements and all six
-   skill-grant inventories remain Partial. Energy Blade's weapon-data fallback
+   Helmet/Amulet placements are Complete; Sceptre/Focus placements remain Partial.
+   Crown and Solar intrinsic skill-grant inventories are now Complete; this does
+   not close modifier-supplied grants or other templates' Partial inventories.
+   Energy Blade's weapon-data fallback
    retains these non-weapon Sceptre/Focus lists; exact base suffixes cannot match
    Iron Mass, whose branch also keeps Player delivery. The existing constructed
    skill catalogue executes original data loading and contains 1,436 Skills and

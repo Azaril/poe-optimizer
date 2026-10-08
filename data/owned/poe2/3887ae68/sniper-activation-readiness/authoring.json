@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "sniper-activation-readiness-v1",
+  "before": "7b840bb204974fed6e44e686d899396987cd25f2b86a40261dccd7ab5e0d6f6e",
+  "release": "pob-3887ae68-sniper-activation-readiness-v1",
+  "scope": {
+    "owned_rule_partition_only": true,
+    "partitioned_programs": 2,
+    "new_programs": 2,
+    "new_definitions": 0,
+    "new_stats": 0,
+    "new_effects": 0,
+    "removed_effects": 0,
+    "closed_rule_owners": 0,
+    "evaluation_bundle_added": false,
+    "native_complete_builds": 0,
+    "new_source_parity_claim": false
+  },
+  "artifacts": [
+    {
+      "file": "partitions.json",
+      "bytes": 36627,
+      "sha256": "b535a11004a083fb0ed73d3a36367b1382bafddb7b6876c0842d7605bd5ce12a"
+    },
+    {
+      "file": "dependencies.json",
+      "bytes": 648,
+      "sha256": "4992416a2a6606cd4abcdc99dceecb0af66d268e26f61abc9f2b411a7c8a3284"
+    }
+  ],
+  "proof": "Exact typed reachable dependency subsequences and reversible original-index reconstruction. Full publication inverse reconstructs the entire authenticated predecessor input. Existing numerical program IDs, numerical rows, effect targets, owner closures, definitions and imports remain unchanged.",
+  "recommended_phases": {
+    "ordinary-population-activation": "Structural/PreparationFacts",
+    "basic-attack-activation": "Structural/PreparationFacts",
+    "ordinary-population-inputs": "Execution",
+    "basic-attack-supply": "Execution"
+  },
+  "phase_scope": "Authoring guidance only. Actual consumers must bind exact grants to checked stages and preserve final input and participation execution requirements; no evaluation bundle or production readiness closure is added."
+}

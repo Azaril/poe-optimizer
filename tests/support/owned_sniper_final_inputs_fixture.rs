@@ -2,6 +2,9 @@
 //! The two-occurrence inventory is a finite test fixture. It does not complete
 //! real support-origin discovery, Actor mechanics or incoming contributors.
 #[allow(dead_code)]
+#[path = "owned_sniper_activation_readiness.rs"]
+pub mod activation_family;
+#[allow(dead_code)]
 #[path = "owned_offering_final_inputs_fixture.rs"]
 pub mod offering;
 pub use offering::{decode, def, id, key, quantity, shared, subject};
@@ -55,6 +58,14 @@ impl World {
         let before = crate::release::inventory(path);
         let endpoint = crate::release::load(path);
         crate::sniper_family::assert_component(&endpoint);
+        let activation_partition = endpoint
+            .input()
+            .provenance
+            .iter()
+            .any(|p| p.kind == key(activation_family::KIND));
+        if activation_partition {
+            activation_family::assert_component(&endpoint);
+        }
         let modifier = endpoint
             .input()
             .recipe
@@ -130,6 +141,7 @@ impl World {
             }).collect();
             for row in &mut stages.programs.members {
                 row.stage = match row.program.as_str() {
+                    "ordinary-population-activation" => key("source-prepare"),
                     SNAPSHOT | RETENTION => key("routing-resolve"),
                     APPLICABILITY => key("routing-applicability"),
                     "contribute-player-minion-gem-level" | "amulet-copy-minion-gem-level" => key("item-delivery"),
@@ -149,6 +161,16 @@ impl World {
                 *ready.skills.iter_mut().find(|s| s.skill == authored.skill).unwrap() = authored.clone();
             }
             for row in &mut ready.programs.members {
+                if row.program == key("ordinary-population-activation") {
+                    let program = self.base.source.base.inner.owners.iter().find(|o| o.owner == row.owner).unwrap()
+                        .programs.members.iter().find(|p| p.id == row.program).unwrap();
+                    // The authenticated partition contains only the original
+                    // constant activation. Final population inputs stay Execution.
+                    assert!(program.reads.is_empty());
+                    row.phase = ReadinessPhase::Structural;
+                    row.role = ReadinessProgramRole::PreparationFacts;
+                    row.outputs = program.effects.iter().map(|e|offering::channel(program.context, &e.effect)).collect();
+                }
                 if self.early.contains(&(row.owner.clone(),row.program.clone())) {
                     let program = self.base.source.base.inner.owners.iter().find(|o| o.owner==row.owner).unwrap()
                         .programs.members.iter().find(|p| p.id==row.program).unwrap();
@@ -502,10 +524,26 @@ fn install_sniper(
     *base.source.base.inner.owner_mut(actual_gem.owner.clone()) =
         offering::prolonged::finite(&actual_gem);
     let mut population: DefinitionRules = offering::prolonged::finite(&actual_skill);
+    let has_partition = endpoint
+        .input()
+        .provenance
+        .iter()
+        .any(|p| p.kind == key(activation_family::KIND));
+    assert_eq!(
+        actual_skill
+            .programs
+            .members
+            .iter()
+            .filter(|p| p.id == key("ordinary-population-activation"))
+            .count(),
+        usize::from(has_partition)
+    );
     population.programs.members.retain(|p| {
         matches!(
             p.id.as_str(),
-            "ordinary-population-inputs" | "ordinary-population-requirements"
+            "ordinary-population-inputs"
+                | "ordinary-population-requirements"
+                | "ordinary-population-activation"
         )
     });
     *base.source.base.inner.owner_mut(actual_skill.owner.clone()) = population;

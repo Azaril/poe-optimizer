@@ -107,7 +107,8 @@ fn exact_reachable(program: &RuleProgram) {
     for effect in &program.effects {
         pending.extend(effect.when.iter().cloned());
         pending.push(match &effect.effect {
-            RuleEffectKind::ProjectActorStat { value, .. } => value.clone(),
+            RuleEffectKind::ProjectActorStat { value, .. }
+            | RuleEffectKind::ProjectSkillParameter { value, .. } => value.clone(),
             RuleEffectKind::ActivateGrant { enabled, .. } => enabled.clone(),
             RuleEffectKind::Requirement { satisfied, .. } => satisfied.clone(),
             _ => panic!("unexpected partition effect"),
@@ -178,10 +179,17 @@ pub fn check_partition(p: &Partition) {
         p.requirements.program.effects[0].effect,
         RuleEffectKind::Requirement { .. }
     ));
-    let a = &p.facts;
-    let b = &p.requirements;
+    check_exact_partition(&p.original, &p.facts, &p.requirements);
+}
+
+/// Shared offline proof: both fragments are exact dependency-closed original
+/// subsequences, together retaining each effect once and every original row.
+/// Program names and role-specific restrictions remain each packet's concern.
+pub fn check_exact_partition(original: &RuleProgram, a: &Fragment, b: &Fragment) {
+    assert_eq!(a.program.context, original.context);
+    assert_eq!(b.program.context, original.context);
     reconstructed(
-        &p.original.reads,
+        &original.reads,
         &a.program.reads,
         &a.indices.reads,
         &b.program.reads,
@@ -189,7 +197,7 @@ pub fn check_partition(p: &Partition) {
         true,
     );
     reconstructed(
-        &p.original.nodes,
+        &original.nodes,
         &a.program.nodes,
         &a.indices.nodes,
         &b.program.nodes,
@@ -197,16 +205,16 @@ pub fn check_partition(p: &Partition) {
         true,
     );
     reconstructed(
-        &p.original.effects,
+        &original.effects,
         &a.program.effects,
         &a.indices.effects,
         &b.program.effects,
         &b.indices.effects,
         false,
     );
-    exact_reachable(&p.original);
-    exact_reachable(&p.facts.program);
-    exact_reachable(&p.requirements.program);
+    exact_reachable(original);
+    exact_reachable(&a.program);
+    exact_reachable(&b.program);
 }
 
 pub fn check_authored() {

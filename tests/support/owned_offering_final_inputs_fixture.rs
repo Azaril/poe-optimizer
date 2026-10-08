@@ -16,7 +16,8 @@ pub mod prolonged;
 use crate::release;
 use poe_optimizer_core::{
     build_identity::BuildLineage, owned_build::*, owned_definitions::*, owned_readiness::*,
-    owned_rules::*, owned_schema::*, owned_source_properties::*, owned_stages::*,
+    owned_routing::ActionOutputRoutes, owned_rules::*, owned_schema::*, owned_source_properties::*,
+    owned_stages::*,
 };
 use poe_optimizer_engine::owned_plan::*;
 use poe_optimizer_import::{
@@ -42,6 +43,7 @@ pub struct World {
     pub reference: Value,
     pub item_programs: Vec<(SchemaSubject, OwnedDefinitionKey)>,
     pub tables: Vec<IntegerRuleTable>,
+    pub action_routes: Vec<ActionOutputRoutes>,
     pub actual_modifier: DefinitionRules,
 }
 impl World {
@@ -127,6 +129,7 @@ impl World {
             reference,
             item_programs,
             tables: vec![table],
+            action_routes: vec![],
             actual_modifier,
         }
     }
@@ -371,6 +374,7 @@ impl World {
                 tables: self.tables.clone(),
                 receivers,
                 source_properties: Some(self.relation.clone()),
+                action_routes: self.action_routes.clone(),
             },
             |stages| {
                 // Explicit V4 local preparation authority. The same declaration is
@@ -466,6 +470,7 @@ pub fn channel(context: RuleEntityKind, effect: &RuleEffectKind) -> StageChannel
         _ => panic!("unreviewed finite early destination"),
     };
     match effect {
+        RuleEffectKind::ActivateGrant { slot, .. } => StageChannel::Grant { slot: slot.clone() },
         RuleEffectKind::Derive { entity, stat, .. } => StageChannel::Stat {
             scope: scope(*entity),
             stat: stat.clone(),
@@ -480,7 +485,7 @@ pub fn channel(context: RuleEntityKind, effect: &RuleEffectKind) -> StageChannel
             stat: stat.clone(),
             contribution: *contribution,
         },
-        _ => panic!("unreviewed item effect"),
+        _ => panic!("unreviewed early effect"),
     }
 }
 pub fn add_definition(w: &mut prolonged::World, value: DefinitionDescriptor) {

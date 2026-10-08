@@ -730,12 +730,13 @@ introduced into native semantics. Finite-result law parity is distinct from the
 native contract's deliberate nonfinite refusal. See the
 [certificate and retained gaps](../data/owned/poe2/3887ae68/amulet-copy-consumer/README.md).
 
-The next Sniper integration must also keep the old accuracy integer-presence
-channels `3219/321e` visible as migration debt. They predate typed Boolean
-contributions; they are not game concepts and must not gain new producers or
-consumers. Reconcile their actual source semantics and replace them with the
-existing Flag/Any graph when that component is advanced; do not carry parallel
-flag systems as the intended design.
+The old accuracy integer-presence channels `3219/321e` remain migration debt.
+They predate typed Boolean contributions; they are not game concepts and must
+not gain new producers or consumers. Before integrating their next numerical
+consumer, reconcile their source semantics and replace their producers and
+consumers together with the existing typed Boolean Flag/Any graph. Preserve
+incomplete coverage as unknown, and retire the integer lane rather than carrying
+two flag systems.
 
 The Command component's V20 integration exposed a mixed-phase owned program in
 the published Sniper data. `ordinary-population-inputs` previously bundled actor
@@ -748,6 +749,18 @@ and receipt reconstruction protect the predecessor; its historical artifacts and
 useful component tests remain replayable. Actual owner/incoming coverage remains
 open. Apply this phase audit to the next selected real program that blocks
 integration, without treating a data partition as new game-mechanic authority.
+
+The subsequent
+[activation partition](../data/owned/poe2/3887ae68/sniper-activation-readiness/README.md)
+separates the exact literal population and Basic Attack activations from their
+numerical projections. This is normalization of owned data: mechanical supply
+can be structural while final numerical inputs retain execution requirements.
+It adds no Lua or readiness compatibility branch. Historical inverse helpers
+authenticate offline publication proofs only; they are not alternate runtime
+behavior. The joined fixture's authored `SkillUse.enabled = false` control tests
+mechanical source availability. It does not prove typed requested participation:
+that separate usage contract must still gate execution and descendants without
+silently enabling a disabled source. Neither partition closes coverage gaps.
 
 The item-property routing audit supplies another concrete boundary. Focus's
 temporary scaled LIST is discarded by the source merge operation, and generic

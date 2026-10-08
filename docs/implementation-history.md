@@ -1,10 +1,87 @@
-> Historical snapshots through Crown declarations and real item preparation on 2026-10-07.
+> Historical snapshots through the early Amulet copy consumer on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: early Amulet copy consumer
+
+The [consumer packet](../data/owned/poe2/3887ae68/amulet-copy-consumer/README.md)
+retires exactly `amulet-bonus-copy-unconverted` on Modifier `30ca`. Its six
+programs are unchanged and its owner remains Partial with five other obligations.
+The proof covers the local consumer: validated exact source identity, required
+eligibility, resolved effective value, pre-copy snapshot, branch/rounding law,
+zero-record retention and unavailable-input behavior. It does not certify the
+complete upstream suppliers, source admission, earlier magnitude transforms,
+ordinary item routing or later generic slot copying.
+
+The resolved Count and percentage stats admit any finite value, despite narrower
+raw-item ranges. Fourteen Amulet tests pass in **3.45s**, including fractional
+identity, signed/above-100/adjacent-100 factors, synthetic per-occurrence bypass,
+zero/underflow, overflow refusal, missing inputs and fresh/reused/parallel checks.
+Fractional effective-value controls explicitly replace only the upstream producer;
+actual item formatting remains independently tested. Finite-result arithmetic
+matches the pinned source law. Overflow remains native `NumericalError(NonFinite)`,
+not a claim that Lua infinity is a valid native result.
+
+The audit distinguishes PoB's item-line `{unscalable}` marker from its copy
+record-tag predicate. The retained line-marker control has no record tag.
+Current Import emits canonical false; true-branch controls are synthetic and
+confer no source admission authority. Existing six-template eligibility facts,
+placements, original-call reports and exact snapshot owner/staging are reused.
+The compact certificate references the exact existing owner and prior closure
+instead of duplicating their program bodies. It adds no extractor or new PoB VM.
+
+Two new joined Sand controls prove missing eligibility/snapshot refusal, lazy
+known-false eligibility, early copy rejection, late snapshot rejection and
+snapshot self-feedback rejection. All six joined tests pass on the successor
+in **16.68s**; six ordinary routing numerical regressions pass in **15.33s**.
+Both paths still authenticate the complete retained modifier body and exact
+successor closure provenance. A shared test-module import was deduplicated;
+no compatibility reader or production execution branch was added.
+
+The all-five publication passes in **21.98s**, authenticating retained source
+reports, the exact one-gap inverse and an identical-byte package rebuild.
+All saved inputs, identities, selections, dispositions, 110 queries and selected
+issue counts **107/117/109/123/5** remain unchanged. No owner becomes Complete,
+no evaluation bundle is added and complete builds remain **0/5**. Two packet
+checks, two scalability checks, the ordinary routing authoring check, strict
+workspace/all-feature/all-target Clippy and formatting pass. Evidence:
+`runs/owned-amulet-consumer-native-tests-01.log`,
+`runs/owned-amulet-copy-consumer-publication-02/validation.json`,
+`runs/owned-amulet-consumer-sand-successor-tests-02.log`,
+`runs/owned-amulet-consumer-routing-numerical-tests-02.log` and
+`runs/owned-amulet-consumer-clippy-03.log`.
+
+**Resume: compose the selected Sniper numerical chain next.** Connect actual
+Crown/Solar item contributions to physical Sniper source preparation, population
+and intrinsic Basic Attack in one native plan. The current Sniper final-input
+fixture strips child skill/output supply and stops at population; the existing
+intrinsic attack fixture supplies the final parent level. Remove that integration
+boundary using the published graph: Actor `3091` / slot `001f`, Basic Skill `0021`
+/ output `0022`, Actor values `320f`–`3211` and routed Action values `3212`–`3215`.
+Reuse actual provider identities and retained source vectors, including level
+changes, missing inputs, repeated occurrences and successful scratch/Rayon replay.
+No new public model is indicated. This is the next shortest evidenced step toward
+the unchanged Original05 numerical path, rather than another isolated closure.
+
+Keep this first join at intrinsic physical endpoints, attack rate and base
+critical chance. Ordinary hit chance `3220` can follow if its existing checked
+Enemy/action routes compose unchanged. Its integer flag channels `3219/321e`
+are explicit Boolean-migration debt; do not broaden or relabel them as Flag/Any.
+Final damage still needs added damage/conversion, INC/MORE grouping and rounding,
+critical/mitigation/timing and exact metric bindings. Gigantic/quality grouping
+remains unresolved. Do not invent a parent Action demand or erase actual support
+and owner coverage to claim a whole build.
+
+Actor-to-Enemy computed reads and authored support-origin composition remain
+pending public-model decisions. The accepted Boolean representation does not
+authorize those separate authorities. Crown sockets, the five retained `30ca`
+obligations and complete selected numerical owners remain open. Original05 stays
+first; D4 starts as soon as one unchanged native/reference build passes, without
+waiting for all five.
 
 ## Archived 2026-10-07 checkpoint: Crown declarations and real item preparation
 
