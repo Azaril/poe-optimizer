@@ -163,7 +163,7 @@ pub fn check_authored() {
         assert_eq!(value, &program.nodes[0].id);
     }
 }
-fn source_proof(authoring: &Value) {
+pub fn source_proof(authoring: &Value) -> Value {
     let proof = &authoring["source_validation"];
     assert_eq!(proof["status"], "passed");
     assert_eq!(proof["evidence_bytes"], 19_612_949_u64);
@@ -263,6 +263,7 @@ fn source_proof(authoring: &Value) {
     );
     assert_eq!(actual.len(), 10);
     assert_eq!(actual.values().sum::<f64>(), 68.0);
+    evidence
 }
 pub fn selected_values() -> BTreeMap<String, f64> {
     read::<Vec<Value>>("source-records.json")

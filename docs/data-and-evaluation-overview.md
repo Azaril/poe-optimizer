@@ -110,12 +110,26 @@ execute the current accuracy rule laws in CI. The joined graph still needs its
 published package provisioned for explicit CI execution; it is currently an
 ignored integration target, not an automatically enforced build-completion gate.
 
-The next integration joins the ten actual selected passive Minion Damage donors
-to the existing Player `1d33` reducer and Sniper Actor `1d34` receiver. Their 68%
-subtotal is already source-measured, including the connected-removal control at
-48%; it is not global contributor completeness or final damage. No new public
-model is required. The authored-root disable control remains distinct from typed
-requested participation and does not establish that later integration's coverage.
+The same graph now joins ten freshly imported passive Minion Damage sources to
+the existing Player `1d33` reducer and exact Sniper Actor `1d34` receiver. Complete
+current owner bodies preserve paired Life/cooldown effects. Their measured 68%
+subtotal reaches both independent populations; twenty joined tests pass. This is
+a finite contributor universe, not global completeness or final damage.
+
+The removal control exposes a saved/effective distinction: removing node95 leaves
+nine imported family rows, including disconnected8737 with Pending access; PoB
+prunes that node from its active set. Import does not silently repair it. An
+explicit second removal reproduces eight sources / 48% in the numeric component.
+Native post-mutation topology validation is still needed for passive optimization.
+
+Next, Offering needs five real scaling producers before its application can add
+the measured 62%. Checked queries already support the recipient Actor, but reject
+Current Skill reads and generated member paths. The proposed
+[exact Skill query extension](owned-skill-contribution-queries-proposal.md) reuses
+the existing graph and requires owner review; it is not implemented. Nonempty
+multiplier grouping also needs evidence beyond flattened source records.
+The authored-root disable control remains distinct from typed requested
+participation and does not establish that later integration's coverage.
 
 The preceding native checkpoint implements typed Boolean `Flag` contributions and
 unordered `Any` on the existing graph. Source membership and numeric ranks are

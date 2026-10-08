@@ -1,6 +1,7 @@
 //! One finite native graph: imported Crown/Solar rolls -> physical Sniper
-//! preparation -> population -> intrinsic Basic Attack and checked hit chance. Other item,
-//! support, Actor and action behavior remains outside this component. Nothing
+//! preparation -> population -> intrinsic Basic Attack and checked hit chance,
+//! alongside the selected unconditional passive Minion Damage subtotal. Other
+//! item, support, Actor and action behavior remains outside this component. Nothing
 //! here completes a real request or supplies final level/weapon-value literals.
 #[allow(dead_code)]
 #[path = "support/owned_minion_accuracy_flags.rs"]
@@ -9,6 +10,10 @@ mod accuracy_family;
 mod accuracy_native;
 #[path = "support/owned_sniper_item_attack_evidence.rs"]
 mod evidence;
+#[path = "support/owned_sniper_passive_damage_evidence.rs"]
+mod passive_damage_evidence;
+#[path = "support/owned_sniper_passive_damage_native.rs"]
+mod passive_damage_native;
 use accuracy_family::preservation as migration_preservation;
 #[allow(dead_code)]
 #[path = "support/owned_release_fixture.rs"]
@@ -60,6 +65,7 @@ struct World {
     actual_accuracy_queries: DeclaredSet<ContributionQuery>,
     block: evidence::BlockCase,
     block_cases: Vec<evidence::BlockCase>,
+    passives: passive_damage_native::Census,
 }
 impl World {
     fn load() -> Self {
@@ -361,12 +367,14 @@ impl World {
             .find(|c| c.case_name == "original-05")
             .unwrap()
             .clone();
+        let passives = passive_damage_native::install(&mut w, &endpoint, &path);
         Self {
             sniper: w,
             actual_actor_coverage,
             actual_accuracy_queries,
             block,
             block_cases,
+            passives,
         }
     }
     fn action(&self, index: usize) -> ActionSelection {
@@ -471,6 +479,7 @@ impl World {
             for parameter in &mut basic.parameters.members {
                 parameter.phase = ReadinessPhase::Execution;
             }
+            passive_damage_native::configure(stages);
             configure(stages);
         })
     }

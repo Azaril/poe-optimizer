@@ -778,6 +778,22 @@ claims. Do not keep a runtime branch to replay them. The optional
 oracle for updates; deleting the obsolete Engine fixture does not retire that
 witness, its calibration, or the unrelated intrinsic-attack component.
 
+### Selected passive fixture consolidation (2026-10-07)
+
+The selected passive-damage integration now uses the same item-driven Sniper
+graph as intrinsic attack and accuracy. It loads complete current passive owners
+and preserves paired effects rather than replaying only the historical
+damage-only extension. The shared old source-report authenticator returns its
+parsed report for reuse; no second oracle or source parser was added.
+
+Keep `owned_plain_minion_damage`'s ordinary Engine tests for their independent
+all41-definition, loadout-scope and ascendancy-pool coverage. They use a bounded
+historical family fixture and are not the current full-owner integration. The
+new joined tests authenticate all ten current owners and source/import controls,
+but remain ignored in ordinary CI until artifacts are provisioned. Retire the
+older fixture only when those useful ordinary checks have a maintained current
+replacement; do not retain it solely for the old final-level boundary.
+
 ### Population and activation partition cleanup
 
 The Command component's V20 integration exposed a mixed-phase owned program in

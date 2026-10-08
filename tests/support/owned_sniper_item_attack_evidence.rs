@@ -2,7 +2,7 @@
 //! Attack component. No new source run, copied oracle or coverage claim.
 #[allow(dead_code)]
 #[path = "owned_selected_request.rs"]
-mod selected;
+pub(super) mod selected;
 #[allow(dead_code)]
 #[path = "minion_attack_source_vectors.rs"]
 mod vectors;

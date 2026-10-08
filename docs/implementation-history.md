@@ -1,10 +1,104 @@
-> Historical snapshots through item-driven Sniper intrinsic attack on 2026-10-07.
+> Historical snapshots through joined Sniper accuracy on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: typed accuracy flags and joined hit chance
+
+The [accuracy flag packet](../data/owned/poe2/3887ae68/minion-accuracy-flags/README.md)
+replaces `3219/321e`'s integer-presence representation with Boolean values at the
+same identities. The existing consumers now read two checked contribution queries:
+`Flag`, unordered `Any`, false identity. Their resolved query values are already
+Boolean; no intermediary Stat, new ID, receiver or public runtime model is needed.
+The real query memberships remain Partial and unknown remains distinct from false,
+including beside a true source. The inherited-Player-accuracy branch stays
+unsupported; this does not introduce the pending shared-Actor-to-Enemy authority.
+
+The offline revision replaces exactly two Stat schemas and two programs, adds two
+queries, and rebinds affected content identities. Its checked intermediate is never
+published. Exact inverse checks preserve every other schema, rule, route and import
+fact except required dependency commitments. Two authoring checks pass. Retained
+JIT source authentication and all-five publication pass together in **35.31s**,
+including an identical-byte rebuild, unchanged 110 queries and selected issues
+**107/117/109/123/5**. No actual producer, owner or query membership becomes Complete;
+no evaluation bundle is added. Complete unchanged builds remain **0/5**.
+
+The existing item-driven Sniper graph now includes intrinsic accuracy, exact
+Actor `321b`→Action `321c` routing, configured Enemy block `3218`, Action reduction
+`321d`, effective block `321f` and hit chance `3220`. Numerical source ordering is
+unchanged: clamp the aggregate block at100, subtract reduction, clamp below at0,
+then apply the Boolean cannot-block bypass and accuracy multiplier. The fixture
+selects only that Encounter consumer and its two declared inputs; this is not
+complete Encounter/configuration coverage.
+
+Baseline plus seven measured XML controls are freshly imported through the
+**current V3 policy**, with exact source hashes and selected-scenario identities.
+The original yields `3216=false` and no `3217`; explicit Input0 overrides
+Placeholder37. No observed output is fed back as an input. Eleven ordinary source
+rows pass on the joined graph, including raw1 and both retained CALCS controls.
+Original hit chance is100 and Placeholder37 gives63. The single custom cannot-block
+row is replayed using an explicitly synthetic typed contributor, not a claim of
+custom-text import support. Raw40 plus item bonuses remains a native domain refusal;
+the source's clamp/recovery remains diagnostic, not joined parity.
+
+All **16 joined tests pass in 24.15s**. They preserve the prior item/preparation/
+intrinsic checks and cover Boolean false and duplicate sources, exact recipients,
+unknown/inactive distinctions, unsupported inheritance, numeric/direct-read and
+unlisted-source rejection, real Partial membership refusal, missing inputs,
+block/reduction ordering, independent actions, scratch restoration and Rayon.
+The five Sniper preparation and seven Offering regressions pass in **15.93s** and
+**10.31s**. The two ordinary Engine `owned_minion_accuracy_rules` tests compile
+the current authored programs and pass all thirteen measured controls plus
+missing facts, Boolean typing, inherited-accuracy refusal and scratch restoration
+in **0.01s**. These preserve ordinary CI rule-law coverage using explicit resolved
+facts; they do not replace the joined graph's membership, routing or import checks.
+The sixteen joined tests require the local published package and are currently
+ignored by ordinary CI. Provisioning their reproducible integration subset remains
+tracked below. Strict workspace/all-feature/all-target Clippy and changed-file
+formatting pass.
+
+Removed the old Engine accuracy test target and its exclusive fixture after its
+useful assertions moved to this graph. That path supplied final parent levels and
+would otherwise need a second staged evaluator fixture. Retain the independent
+intrinsic-attack tests, original source witness, calibration/projector and offline
+accuracy acquisition/inverse artifacts. Historical integer bodies authenticate
+the cutover only; no alternate current integer evaluator lane remains.
+
+**Resume: join actual selected passive Minion Damage contributions.** Reuse the
+existing Player `1d33` reducer and exact Sniper Actor `1d34` receiver. All ten
+Original05 unconditional passive owners are now Complete; retain their complete
+bodies, including paired Life/cooldown effects. Bring their actual selected
+occurrences into this same item→Sniper→Basic graph using the established passive
+assembly pattern. The retained source census proves ten contributions totalling
+68%; removing source node95 also disconnects8737 and yields eight totalling48%.
+Use the existing `plain-minion-damage-passives` bindings, dependency rules,
+receivers and source records, plus the current published owner bodies.
+
+Do not equate these ten owners with complete global `1d33` membership: the current
+package contains 41 ordinary producers and seven other passive-view contributors,
+and item/external transformations remain separate. Prove exact origins and
+recipients, the connected removal control, missing/Partial refusals and scratch/
+Rayon replay. This is a 68% passive subtotal, not the full 130% Increase or final
+damage. It needs no new public model or pending support decision. Offering has a
+real activation supplier but still lacks five scaling producers; do not substitute
+synthetic defaults to join its 62% contribution. Bidding's Djinn delivery and
+Gigantic's unresolved MORE grouping are separate dependencies.
+
+After that join, reassess the nearest remaining unchanged-build blocker. Final
+damage, support composition, the five input obligations, Crown sockets and the
+retained Amulet obligations remain open. Original05 stays first; D4 begins when
+one complete unchanged native/reference build passes, without waiting for all five.
+
+Evidence: `runs/owned-minion-accuracy-flags-tests-01.log`,
+`runs/owned-minion-accuracy-flags-publication-01/validation.json`,
+`runs/owned-sniper-accuracy-join-tests-02.log`,
+`runs/owned-sniper-accuracy-preparation-regression-01.log`,
+`runs/owned-sniper-accuracy-offering-regression-01.log` and
+`runs/owned-minion-accuracy-rules-tests-01.log` and
+`runs/owned-sniper-accuracy-clippy-03.log`.
 
 ## Archived 2026-10-07 checkpoint: item-driven Sniper intrinsic attack
 
