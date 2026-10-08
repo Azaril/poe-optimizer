@@ -363,6 +363,15 @@ impl Fixture {
         let checked =
             OwnedDefinitionSchemaPackage::new(schema.clone(), Default::default()).unwrap();
         let rules = RulePackageInput {
+            support_discovery: Some(SupportDiscoveryInput {
+                providers: owners
+                    .iter()
+                    .map(|row| SupportSourceDomainDeclaration {
+                        owner: row.owner.clone(),
+                        domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+                    })
+                    .collect(),
+            }),
             existing_actor_rules: None,
             contribution_queries: None,
             schema_version: recipe.rules.schema_version,

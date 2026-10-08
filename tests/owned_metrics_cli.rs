@@ -31,6 +31,16 @@ fn save(dir: &Path, f: &Fixture) {
     )
     .unwrap();
     let rules = RulePackageInput {
+        support_discovery: Some(SupportDiscoveryInput {
+            providers: f
+                .owners
+                .iter()
+                .map(|row| SupportSourceDomainDeclaration {
+                    owner: row.owner.clone(),
+                    domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+                })
+                .collect(),
+        }),
         existing_actor_rules: None,
         contribution_queries: None,
         effect_applications: None,

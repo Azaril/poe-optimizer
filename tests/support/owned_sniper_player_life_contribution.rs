@@ -368,6 +368,7 @@ fn component() -> (OwnedDefinitionSchemaPackage, CompiledRulePackage) {
     )
     .unwrap();
     let input = RulePackageInput {
+        support_discovery: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: schema.input().namespace.clone(),
         release: key("finite-inherent-life-bridge"),

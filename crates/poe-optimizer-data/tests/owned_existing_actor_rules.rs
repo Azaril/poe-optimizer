@@ -57,6 +57,7 @@ fn schema(declarations: DeclaredSlots) -> OwnedDefinitionSchemaPackage {
 }
 fn input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
     RulePackageInput {
+        support_discovery: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("rules"),

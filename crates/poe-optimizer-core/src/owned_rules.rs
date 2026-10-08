@@ -241,6 +241,36 @@ pub struct RulePackageInput {
         deserialize_with = "crate::owned_build::non_null_extension"
     )]
     pub existing_actor_rules: Option<DeclaredSet<ExistingActorRuleApplication>>,
+    /// Reviewed support-source domains, checked against the composed provider
+    /// graph. Omission is unknown coverage, never an empty origin inventory.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub support_discovery: Option<SupportDiscoveryInput>,
+}
+
+/// Definition-side evidence only. Engine binds each selected occurrence before
+/// treating authored assignment sequences as complete runtime support origins.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SupportDiscoveryInput {
+    pub providers: Vec<SupportSourceDomainDeclaration>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SupportSourceDomainDeclaration {
+    pub owner: SchemaSubject,
+    pub domain: crate::owned_schema::SchemaState<SupportSourceDomain>,
+}
+
+/// Supported source domains, independent of activation and support admission.
+/// A positive additional/linked source needs its own future origin authority;
+/// today its declaration must remain Unmapped rather than be silently dropped.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SupportSourceDomain {
+    /// This owner introduces no support origins beyond authored assignments
+    /// throughout its admitted input domain. It does not permit every recipient.
+    AuthoredAssignmentsOnly,
 }
 
 /// Explicit applicability of one Actor definition's complete program inventory.

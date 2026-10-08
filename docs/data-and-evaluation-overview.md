@@ -43,8 +43,11 @@ Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across
 groups and that generated-provider exclusions must be distinguished from the
 same manually authored Skill. PoB's `gemData`/`fromTree` fields are not native
-ownership authority. The accepted native discovery gate is still unimplemented;
-the census does not resolve the selected support-origin input obligation. See
+ownership authority. The common native gate now requires reviewed support-source
+domain declarations from injected data, including for disabled selected providers.
+It has no Lua state and cannot infer coverage from authored order. Game-data
+adoption and input accounting remain pending; the census does not resolve the
+selected support-origin input obligation. See
 the [source checkpoint](implementation.md#latest-source-checkpoint-composed-support-origins).
 
 The latest integration connects imported Offering activation, item-prepared final
@@ -227,7 +230,8 @@ The separate application witness's measured 62% is not yet a joined damage resul
 Inherited/support memberships remain pending.
 Actor/reward contribution membership is implemented in operations V23. The
 active game package adopts V24 with all five imports and 110 query rows preserved;
-composed support-source discovery remains accepted but pending. See the linked proposals and implementation
+composed support-source discovery has a common native coverage gate, with game-data
+adoption and Import accounting pending. See the linked proposals and implementation
 plan for their separate delivery gates. The focused
 Offering witness now observes original multiplication and local rounding in an
 inherited source store, plus exact Danse assignment and duplicate non-stacking.

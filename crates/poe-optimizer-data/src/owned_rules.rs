@@ -18,6 +18,19 @@ use std::collections::BTreeSet;
 mod applications;
 mod existing_actors;
 mod ordered;
+mod support_discovery;
+
+/// Shared storage/raw-compiler validation of injected support-source coverage.
+pub fn validate_support_discovery<I: DefinitionSchemaIndex>(
+    input: &RulePackageInput,
+    index: &I,
+    limits: RuleStorageLimits,
+) -> Result<RuleStorageUse, RuleStorageError> {
+    limits.validate()?;
+    let mut usage = RuleStorageUse::default();
+    support_discovery::validate(input, index, limits, &mut usage)?;
+    Ok(usage)
+}
 
 /// Validate current existing-actor applicability for storage or raw compilation.
 pub fn validate_existing_actor_rules<I: DefinitionSchemaIndex>(
@@ -198,6 +211,10 @@ pub enum RuleStorageError {
 #[derive(Clone, Copy, Debug, Default, Serialize)]
 pub struct RuleStorageUse {
     #[serde(skip_serializing_if = "is_zero")]
+    pub support_source_domains: usize,
+    #[serde(skip_serializing_if = "is_zero")]
+    pub support_discovery_work: usize,
+    #[serde(skip_serializing_if = "is_zero")]
     pub existing_actor_applications: usize,
     #[serde(skip_serializing_if = "is_zero")]
     pub existing_actor_targets: usize,
@@ -242,6 +259,16 @@ fn is_zero(value: &usize) -> bool {
 impl RuleStorageUse {
     fn check(self, l: RuleStorageLimits) -> Result<(), RuleStorageError> {
         for (name, n, max) in [
+            (
+                "support source domains",
+                self.support_source_domains,
+                l.max_owners,
+            ),
+            (
+                "support discovery work",
+                self.support_discovery_work,
+                l.max_edges,
+            ),
             (
                 "existing actor applications",
                 self.existing_actor_applications,
@@ -345,6 +372,11 @@ impl OwnedRulePackage {
         // Size bound before secondary indexes or serialization buffers.
         digest_owned("owned-rule-package-v3", &input, limits.max_wire_bytes)?;
         let resources = validate_structure(&input, index, limits)?;
+        if let Some(discovery) = &mut input.support_discovery {
+            discovery
+                .providers
+                .sort_by(|a, b| owner_key(&a.owner).cmp(&owner_key(&b.owner)));
+        }
         input.receivers.members.sort_by(|a, b| a.id.cmp(&b.id));
         for receiver in &mut input.receivers.members {
             receiver.targets.sort();
@@ -507,6 +539,7 @@ fn validate_structure<I: DefinitionSchemaIndex>(
     validate_receivers(input, index, l, &mut use_)?;
     applications::validate(input, index, l, &mut use_, &tables)?;
     ordered::validate(input, index, l, &mut use_)?;
+    support_discovery::validate(input, index, l, &mut use_)?;
     Ok(use_)
 }
 type TransformSteps<'a> = BTreeSet<(

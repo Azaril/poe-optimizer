@@ -1,6 +1,7 @@
 # Support origins belong to the composed request
 
-**Status:** Accepted 2026-10-08; native implementation pending. The first actual
+**Status:** Accepted 2026-10-08; common native coverage gate implemented, validation
+and game-data adoption tracked in the implementation plan. The first actual
 source-construction census and slot-sharing control pass in both JIT modes.
 The owner approved
 discovery from each composed build, preserving authored assignments and order
@@ -9,6 +10,24 @@ on the skill preset.
 **Decider:** Project owner.
 **Scope:** The next input/composition decision needed for the first complete
 Original05 evaluation. Optimizer work follows the first working build.
+
+## First native domain
+
+`RulePackageInput.support_discovery` carries sparse, reviewed per-owner domains.
+The admitted value `AuthoredAssignmentsOnly` excludes positive extra/linked or
+additional-effect origins throughout that owner's admitted inputs. Unmapped
+rows retain exact GameRules gaps; omission remains unknown. Data validates
+identities, uniqueness and storage budgets; the raw compiler uses the same check.
+The common cold planner checks selected occurrence paths, shared Actors,
+Encounter, usage and action owners. Disabled providers use the ordinary
+structural resolver for coverage only; no effects or participation are enabled.
+Missing/Unmapped coverage blocks both preparation and retained delivery.
+
+Synthetic component fixtures explicitly declare their finite source domains.
+Those assertions are not publication evidence for game definitions. Current
+game data has not adopted these declarations, Import `01de` is still pending,
+and authored-order naming/accounting and exact provider exclusions still need
+their adoption checkpoint. No new positive origin family is implemented.
 
 ## Context
 

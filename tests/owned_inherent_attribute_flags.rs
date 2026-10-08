@@ -226,6 +226,17 @@ impl World {
             },
             schema,
             rules: RulePackageInput {
+                support_discovery: Some(SupportDiscoveryInput {
+                    providers: owners
+                        .iter()
+                        .map(|row| SupportSourceDomainDeclaration {
+                            owner: row.owner.clone(),
+                            domain: SchemaState::Known(
+                                SupportSourceDomain::AuthoredAssignmentsOnly,
+                            ),
+                        })
+                        .collect(),
+                }),
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: ns(),
                 release: key("finite-inherent-flags"),

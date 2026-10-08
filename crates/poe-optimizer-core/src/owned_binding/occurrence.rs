@@ -384,13 +384,28 @@ impl<'a, I: DefinitionSchemaIndex> OwnedOccurrenceResolver<'a, I> {
         &self,
         key: &ProviderKey,
     ) -> Result<OccurrenceResolution<ProviderOccurrence<'a>>> {
+        self.resolve_provider(key, Purpose::Query)
+    }
+    /// Inspect mechanical declarations, including disabled roots, without
+    /// proving participation or authorizing execution of any effect.
+    pub fn structural_provider(
+        &self,
+        key: &ProviderKey,
+    ) -> Result<OccurrenceResolution<ProviderOccurrence<'a>>> {
+        self.resolve_provider(key, Purpose::Authored)
+    }
+    fn resolve_provider(
+        &self,
+        key: &ProviderKey,
+        purpose: Purpose,
+    ) -> Result<OccurrenceResolution<ProviderOccurrence<'a>>> {
         let (mut checker, mut structure) = self.start()?;
         structure.with_query_references(|s| s.provider("selector", key))?;
         let value = checker
             .bind_provider(
                 key,
                 &BindingSite::new(BindingLocation::Occurrence, BindingFacet::Provider),
-                Purpose::Query,
+                purpose,
             )?
             .map(|c| c.occurrence(key.clone()));
         Ok(self.finish(checker, value, SelectorBindingStatus::PendingResolution))

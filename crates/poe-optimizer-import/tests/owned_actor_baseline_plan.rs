@@ -239,6 +239,7 @@ fn world() -> World {
             registry,
             schema: schema.input().clone(),
             rules: RulePackageInput {
+                support_discovery: None,
                 existing_actor_rules: None,
                 contribution_queries: None,
                 effect_applications: None,

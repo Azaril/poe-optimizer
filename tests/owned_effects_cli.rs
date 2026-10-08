@@ -152,6 +152,18 @@ fn fixture(offset: i64) -> Fixture {
     .unwrap();
     let request = OwnedEvaluationRequest::new(build, scenario, queries, limits).unwrap();
     let rules = RulePackageInput {
+        support_discovery: Some(SupportDiscoveryInput {
+            providers: [
+                SchemaSubject::Definition(id::<ClassDefinition>("class").address()),
+                SchemaSubject::Definition(id::<EncounterDefinition>("encounter").address()),
+            ]
+            .into_iter()
+            .map(|owner| SupportSourceDomainDeclaration {
+                owner,
+                domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+            })
+            .collect(),
+        }),
         existing_actor_rules: None,
         contribution_queries: None,
         effect_applications: None,

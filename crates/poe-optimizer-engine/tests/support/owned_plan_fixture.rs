@@ -34,6 +34,19 @@ pub fn integer(n: i64) -> ParameterValue {
 pub fn subject<I: SchemaDefinitionId>(id: I) -> SchemaSubject {
     SchemaSubject::Definition(id.address())
 }
+/// This synthetic world has only assignment sources. This assertion is test
+/// data, not an inference available to production package loading.
+pub fn assignment_only_domains(owners: &[DefinitionRules]) -> SupportDiscoveryInput {
+    SupportDiscoveryInput {
+        providers: owners
+            .iter()
+            .map(|row| SupportSourceDomainDeclaration {
+                owner: row.owner.clone(),
+                domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+            })
+            .collect(),
+    }
+}
 pub fn item_owner() -> SchemaSubject {
     subject(def::<ItemTemplateDefinition>("item"))
 }
@@ -498,6 +511,7 @@ impl Fixture {
                 .unwrap(),
         );
         let rules = RulePackageInput {
+            support_discovery: Some(assignment_only_domains(&self.owners)),
             existing_actor_rules: None,
             contribution_queries: None,
             effect_applications: None,

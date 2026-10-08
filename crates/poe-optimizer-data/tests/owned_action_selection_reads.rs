@@ -78,6 +78,7 @@ fn fixture() -> (OwnedDefinitionSchemaPackage, RulePackageInput) {
         },
     });
     let input = RulePackageInput {
+        support_discovery: None,
         existing_actor_rules: None,
         contribution_queries: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,

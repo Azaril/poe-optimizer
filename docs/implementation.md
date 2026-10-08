@@ -89,16 +89,73 @@ membership are implemented in operations V24. Offering's three source writers
 adopt that contract for checked empty domains; the joined graph now executes
 its activation and non-stacking application with those inputs. Inherited/support
 delivery authority and the final damage consumer remain pending. Composed support discovery
-remains **accepted, not implemented**.
+now has a **common native coverage gate**; reviewed game-data adoption and authored
+input accounting remain pending.
 These decisions supersede older checkpoint statements below describing them as
 awaiting approval. The latest runtime checkpoint below specifies the immediate
 data-adoption step for the same closest build. Life and Skill scaling reuse the
-same membership implementation; support discovery can proceed independently
-once its contract is concrete. Preserve the general model and incomplete
+same membership implementation; support-domain data adoption proceeds independently
+of the pending application-group query decision. Preserve the general model and incomplete
 coverage throughout.
 Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
+
+## Current native checkpoint: composed support coverage
+
+The current rule format carries optional `support_discovery` declarations. Each
+exact owned definition/slot has either reviewed `AuthoredAssignmentsOnly` scope
+or explicit Unmapped GameRules gaps; missing metadata is unknown. Storage and the
+standalone compiler share validation of identity, duplicate rows, gap ownership
+and bounds. The compiled rule package canonicalizes and indexes this immutable
+data once, sharing it across candidate plans and workers.
+
+The common cold planner checks provider occurrences, shared Actor applications,
+selected Encounter/usage and Action owners. Disabled roots and descendants reuse
+Core's structural provider resolver solely for coverage; this does not run their
+programs or enable participation. Off-loadout equipment is checked when selected.
+Repeated providers retain separate diagnostics, even when their programs or
+authored support lists are empty. Missing/Unmapped coverage blocks preparation,
+retained support delivery and final metric authority. All operation subsets use
+the same gate and new semantic plan identity; no compatibility bypass was added.
+
+Synthetic fixtures declare their own finite assignment domains. This is not a
+game-data absence proof, an implementation of positive extra/linked origins, or
+permission to publish Complete real owners. The canonical package remains
+unchanged and intentionally lacks these declarations. Original05 still has five
+selected input obligations, and the five-build MVP remains **0/5 complete**.
+
+Validation: **76 joined Sniper checks pass in 38.02s**, **50 focused native
+checks pass**, **six owner-order/bounds regressions pass**, and **8 rule-storage
+checks pass**. The eleven affected CLI targets
+have **29 passing checks and 25 existing opt-in checks ignored**. Evidence:
+`runs/owned-support-discovery-sniper-01.log`, `focused-04.log`, `final-01.log`,
+`data-01.log` and `cli-01.log` under the same `owned-support-discovery-` prefix.
+The final owner-order and new-test Clippy replays are `deferred-final-01.log`
+and `clippy-final-01.log` under that prefix.
+The wider native run exercised 69 targets (527 passes, two failures); canonical
+row ordering and inactive Actor-slot coverage caused those failures. Both are
+fixed and their complete targets pass in the focused replay. The initial broad
+Engine run was interrupted after finding obsolete private-fixture assumptions;
+it is not a full-workspace success claim.
+
+Strict Clippy passes for all library targets/features and the binary plus all
+**194 tracked CLI integration targets**, with lists/logs in
+`runs/owned-support-discovery-tracked-cli-targets.txt` and
+`runs/owned-support-discovery-clippy-{libraries,cli}-01.log`. The unrestricted
+all-target command also discovers the pre-existing untracked
+`tests/support/owned_incoming_critical_native.rs`, whose separate draft needs the
+new constructor field; it remains untouched. Windows optional reference links
+retain the known `LNK4098` warning. At 20:50:54 UTC, predecessor `1b63704`'s hosted
+run `37836701038` remained pending (`runs/owned-support-discovery-prior-ci-01.json`);
+hosted success is unverified.
+
+**Resume:** author reviewed
+Original05 support-domain data and exact provider exclusions, reconcile the
+persisted sequences as authored order, and move Import `01de` only after that
+accounting is proved. Do not infer absence from the PoB census alone. The
+application-group contribution-query proposal remains awaiting owner review;
+do not implement its dependent damage consumer without that decision.
 
 ## Latest source checkpoint: composed support origins
 
@@ -138,8 +195,8 @@ that link as warning-free. Clippy evidence is `runs/owned-support-origin-clippy-
 At **19:55:51 UTC**, predecessor `e8b55db` CI run `37834636120` remained pending
 (`runs/owned-support-origin-prior-ci-02.json`); hosted success is unverified.
 
-**Next implementation:** retain authored assignment/order on the preset and
-enforce complete provider-capability discovery in the common cold planner before
+**Follow-up (common native gate now implemented above):** retain authored assignment/order on the preset and
+adopt reviewed provider-capability data in the common cold planner before
 support selection/source-property collection. Bind exclusions to exact supplying
 occurrences, not shared Skill metadata. Complete declaration lists or the empty
 source queries alone cannot establish this support inventory. Direct/staged
@@ -148,7 +205,8 @@ accounting is proved. Positive extra/linked and additional-support families stay
 unsupported until reviewed. Detailed evidence and integration points are in the
 [accepted support contract](owned-support-origin-composition-proposal.md#source-census-and-implementation-implications-2026-10-08).
 
-Native discovery remains **accepted, not implemented**. The application-group
+Native discovery has the common coverage gate above; game-data adoption remains
+pending. The application-group
 query proposal is still awaiting owner review; no approval is inferred from
 elapsed time. Current package, all-five issue counts, selected Original05's five
 input obligations and **0/5 complete builds** are unchanged.

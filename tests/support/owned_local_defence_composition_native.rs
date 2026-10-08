@@ -356,6 +356,17 @@ impl World {
             OwnedDefinitionSchemaPackage::new(self.f.schema.clone(), Default::default()).unwrap(),
         );
         let rules = RulePackageInput {
+            support_discovery: Some(SupportDiscoveryInput {
+                providers: self
+                    .f
+                    .owners
+                    .iter()
+                    .map(|row| SupportSourceDomainDeclaration {
+                        owner: row.owner.clone(),
+                        domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+                    })
+                    .collect(),
+            }),
             existing_actor_rules: None,
             contribution_queries: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,

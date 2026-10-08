@@ -141,6 +141,7 @@ fn package(definitions: Vec<(&str, SupportPreparationDefinition)>) -> OwnedSuppo
     .unwrap();
     let rules = OwnedRulePackage::new(
         RulePackageInput {
+            support_discovery: None,
             existing_actor_rules: None,
             contribution_queries: None,
             effect_applications: None,

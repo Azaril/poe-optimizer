@@ -82,6 +82,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         charge(&mut self.work, selections.len())?;
         for (index, selection) in selections.iter().enumerate() {
             let subject = SchemaSubject::Definition(selection.policy.address());
+            self.check_support_domain(&subject, None)?;
             charge(&mut self.work, self.rules.input().owners.len() + 1)?;
             let Some(owner) = self
                 .rules

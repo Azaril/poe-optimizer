@@ -98,6 +98,7 @@ impl Rules {
         }
         let schema = OwnedDefinitionSchemaPackage::new(schema, Default::default()).unwrap();
         let rules = RulePackageInput {
+            support_discovery: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace,
             release: key("ordinary-accuracy-rule-test"),

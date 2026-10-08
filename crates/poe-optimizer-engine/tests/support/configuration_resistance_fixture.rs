@@ -263,6 +263,17 @@ impl Fixture {
             .map_err(|e| e.to_string())?,
         );
         let rules = RulePackageInput {
+            support_discovery: Some(SupportDiscoveryInput {
+                providers: self
+                    .base
+                    .owners
+                    .iter()
+                    .map(|row| SupportSourceDomainDeclaration {
+                        owner: row.owner.clone(),
+                        domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+                    })
+                    .collect(),
+            }),
             existing_actor_rules: None,
             contribution_queries: None,
             effect_applications: None,

@@ -467,6 +467,7 @@ pub fn fixture() -> Fixture {
     let weapon_owner = owner("weapon");
     let staff_owner = owner("staff");
     let rules = RulePackageInput {
+        support_discovery: None,
         existing_actor_rules: None,
         contribution_queries: None,
         effect_applications: None,

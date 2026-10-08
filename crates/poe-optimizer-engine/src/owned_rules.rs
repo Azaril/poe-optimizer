@@ -296,6 +296,7 @@ pub struct CompiledRulePackage {
     source_identity: Option<OwnedContentDigest>,
     programs: BTreeMap<(SubjectKey, OwnedDefinitionKey), Arc<CompiledProgram>>,
     applications: BTreeMap<OwnedDefinitionKey, Arc<CompiledProgram>>,
+    support_domains: BTreeMap<SubjectKey, bool>,
     limits: RuleLimits,
 }
 impl CompiledRulePackage {
@@ -322,6 +323,10 @@ impl CompiledRulePackage {
     }
     pub fn input(&self) -> &RulePackageInput {
         &self.input
+    }
+    /// Shared immutable definition index; candidate plans do not rebuild it.
+    pub(crate) fn support_source_domain(&self, owner: &SchemaSubject) -> Option<bool> {
+        self.support_domains.get(&SubjectKey::from(owner)).copied()
     }
     pub fn identity(&self) -> OwnedContentDigest {
         self.identity

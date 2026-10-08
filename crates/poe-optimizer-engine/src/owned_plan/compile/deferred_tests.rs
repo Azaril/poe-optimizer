@@ -184,6 +184,19 @@ impl Fixture {
         .unwrap();
         let rules = CompiledRulePackage::compile(
             &RulePackageInput {
+                support_discovery: Some(SupportDiscoveryInput {
+                    providers: [
+                        SchemaSubject::Definition(def::<ClassDefinition>("class").address()),
+                        subject(false),
+                        subject(true),
+                    ]
+                    .into_iter()
+                    .map(|owner| SupportSourceDomainDeclaration {
+                        owner,
+                        domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+                    })
+                    .collect(),
+                }),
                 existing_actor_rules: None,
                 contribution_queries: None,
                 effect_applications: None,
@@ -418,6 +431,11 @@ fn deferred_diagnostics_preserve_historical_first_occurrence_order() {
                 provider: None,
                 subject: None,
                 reason: PlanGapReason::SchemaUnresolved
+            },
+            PlanGap {
+                provider: Some(provider.clone()),
+                subject: Some(missing_owner.clone()),
+                reason: PlanGapReason::MissingSupportSources
             },
             PlanGap {
                 provider: Some(provider.clone()),

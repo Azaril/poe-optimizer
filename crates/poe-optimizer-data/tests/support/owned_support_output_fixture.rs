@@ -246,6 +246,7 @@ impl Fixture {
         )
         .unwrap();
         let mut rules = RulePackageInput {
+            support_discovery: None,
             existing_actor_rules: None,
             contribution_queries: None,
             effect_applications: None,

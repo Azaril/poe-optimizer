@@ -675,6 +675,7 @@ fn operations_recipe(version: &str) -> StagedOwnedRecipe {
             registry: registry.input().clone(),
             schema: schema.input().clone(),
             rules: RulePackageInput {
+                support_discovery: None,
                 existing_actor_rules: None,
                 contribution_queries: None,
                 // The synthetic package has only a unit, stat and literal

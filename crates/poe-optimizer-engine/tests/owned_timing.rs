@@ -328,6 +328,16 @@ fn preparation_checks_exact_units_integer_repeats_and_bounded_precision() {
 }
 fn package(f: &Fixture, schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
     RulePackageInput {
+        support_discovery: Some(SupportDiscoveryInput {
+            providers: f
+                .owners
+                .iter()
+                .map(|row| SupportSourceDomainDeclaration {
+                    owner: row.owner.clone(),
+                    domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+                })
+                .collect(),
+        }),
         existing_actor_rules: None,
         contribution_queries: None,
         effect_applications: None,

@@ -630,6 +630,7 @@ pub fn compile_effective_gem_recipe(
             .push(row.program.clone());
     }
     let package = RulePackageInput {
+        support_discovery: None,
         existing_actor_rules: None,
         contribution_queries: None,
         effect_applications: None,

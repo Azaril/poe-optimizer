@@ -301,6 +301,8 @@ pub struct PlanGap {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum PlanGapReason {
+    MissingSupportSources,
+    UnmappedSupportSources,
     PartialExistingActorRules,
     PartialEffectApplications,
     SchemaUnresolved,

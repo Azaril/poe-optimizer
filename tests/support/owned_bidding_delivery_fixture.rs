@@ -1105,6 +1105,20 @@ impl World {
         };
         let stored = OwnedRulePackage::new(
             RulePackageInput {
+                // This finite component world has assignment sources only.
+                // Published game data must supply its own reviewed declarations.
+                support_discovery: Some(SupportDiscoveryInput {
+                    providers: self
+                        .owners
+                        .iter()
+                        .map(|row| SupportSourceDomainDeclaration {
+                            owner: row.owner.clone(),
+                            domain: SchemaState::Known(
+                                SupportSourceDomain::AuthoredAssignmentsOnly,
+                            ),
+                        })
+                        .collect(),
+                }),
                 existing_actor_rules: self.existing_actor_rules.clone(),
                 // The caller declares the finite query inventory. Stored and
                 // compiled rule checks still bind every read and contributor.

@@ -384,6 +384,7 @@ pub fn raw_rules(
     operations: &str,
 ) -> RulePackageInput {
     RulePackageInput {
+        support_discovery: Some(assignment_only_domains(&f.owners)),
         existing_actor_rules: None,
         contribution_queries: None,
         effect_applications: None,
@@ -556,10 +557,18 @@ pub fn compile_inputs(
     f: &Fixture,
     target: SkillTarget,
 ) -> SupportPreparationPlanInputs<OwnedDefinitionSchemaPackage> {
+    compile_inputs_with_domains(f, target, Some(assignment_only_domains(&f.owners)))
+}
+pub fn compile_inputs_with_domains(
+    f: &Fixture,
+    target: SkillTarget,
+    domains: Option<SupportDiscoveryInput>,
+) -> SupportPreparationPlanInputs<OwnedDefinitionSchemaPackage> {
     let definitions = Arc::new(
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap(),
     );
-    let rule_input = raw_rules(f, &definitions, OWNED_RULE_OPERATIONS_V12);
+    let mut rule_input = raw_rules(f, &definitions, OWNED_RULE_OPERATIONS_V12);
+    rule_input.support_discovery = domains;
     let stored_rules = OwnedRulePackage::new(
         rule_input.clone(),
         definitions.as_ref(),

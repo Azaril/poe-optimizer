@@ -12,6 +12,16 @@ fn rules_rejected(f: &Fixture, expected: &str) {
     let schema =
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap();
     let input = RulePackageInput {
+        support_discovery: Some(SupportDiscoveryInput {
+            providers: f
+                .owners
+                .iter()
+                .map(|row| SupportSourceDomainDeclaration {
+                    owner: row.owner.clone(),
+                    domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+                })
+                .collect(),
+        }),
         existing_actor_rules: None,
         contribution_queries: None,
         effect_applications: None,

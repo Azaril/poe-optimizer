@@ -16,6 +16,7 @@ mod receiving;
 mod source_properties;
 mod source_property_cycles;
 mod sources;
+mod support_discovery;
 #[cfg(test)]
 #[allow(dead_code)]
 #[path = "../../tests/support/owned_computed_support_fixture.rs"]
@@ -119,6 +120,7 @@ struct Builder<'a, I> {
     index: &'a I,
     rules: &'a CompiledRulePackage,
     operations: RuleOperationsVersion,
+    inactive_support_providers: BTreeSet<ProviderKey>,
     preparation: bool,
     receiving: Option<&'a poe_optimizer_data::owned_support_receiving::OwnedSupportReceiving>,
     stages: Option<&'a OwnedEvaluationStages>,
@@ -433,6 +435,11 @@ fn compile_inner<I: DefinitionSchemaIndex>(
             limits.max_wire_bytes,
         )?;
     }
+    identity = digest_owned(
+        "owned-support-discovery-plan-v1",
+        &identity,
+        limits.max_wire_bytes,
+    )?;
     let resolver = OwnedOccurrenceResolver::new(definitions.as_ref(), &request, limits.binding)?;
     let mut b = Builder::new(
         &request,
@@ -799,6 +806,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             index,
             rules,
             operations,
+            inactive_support_providers: BTreeSet::new(),
             preparation: false,
             receiving: None,
             stages: None,
@@ -921,12 +929,21 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             if self.providers.contains(&key) {
                 continue;
             }
-            if self.providers.len() >= self.limits.max_providers {
+            if self.providers.len() + self.inactive_support_providers.len()
+                >= self.limits.max_providers
+            {
                 return Err(PlanError::Limit("providers"));
             }
             let resolution = self.resolver.provider(&key)?;
             charge(&mut self.work, resolution.work_used())?;
             if resolution.status() == SelectorBindingStatus::Unavailable {
+                if resolution
+                    .issues()
+                    .iter()
+                    .any(|issue| issue.code == BindingIssueCode::DisabledProvider)
+                {
+                    self.check_inactive_support_sources(&key)?;
+                }
                 if !key.grant_path.is_empty() && self.operations.supports_actor_supply() {
                     // Discovery follows explicitly declared grants from an available
                     // parent. A rejected child is contradictory potential topology,
@@ -1184,6 +1201,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 + skill.map_or(0, |skill| skill.provider.grant_path.len())
                 + 1,
         )?;
+        self.check_support_domain(&subject, Some(provider))?;
         owners.push(DeferredOwner {
             subject,
             provider: provider.clone(),
@@ -1742,6 +1760,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         for application in &registry.members {
             charge(&mut self.work, application.targets.len())?;
             let subject = SchemaSubject::Definition(application.owner.address());
+            self.check_support_domain(&subject, None)?;
             let owner = owners.get(&application.owner).ok_or_else(|| {
                 PlanError::Invalid("validated existing actor owner is missing".into())
             })?;
@@ -2133,6 +2152,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
     fn encounter_and_usage(&mut self) -> Result<()> {
         let scenario = self.request.scenario().input();
         let subject = SchemaSubject::Definition(scenario.enemy.encounter.address());
+        self.check_support_domain(&subject, None)?;
         charge(&mut self.work, self.rules.input().owners.len() + 1)?;
         if let Some(row) = self
             .rules
@@ -2193,6 +2213,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 continue;
             };
             let subject = resolved.subject();
+            self.check_support_domain(&subject, Some(&action.action.provider))?;
             let skill = match resolved.provider().exposure() {
                 ProviderExposure::Skill { key, .. } => Some(key.clone()),
                 _ => None,

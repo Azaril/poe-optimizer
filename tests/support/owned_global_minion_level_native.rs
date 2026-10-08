@@ -776,6 +776,17 @@ impl Fixture {
             registry: registry(schema.input()),
             schema: schema.input().clone(),
             rules: RulePackageInput {
+                support_discovery: Some(SupportDiscoveryInput {
+                    providers: owners
+                        .iter()
+                        .map(|row| SupportSourceDomainDeclaration {
+                            owner: row.owner.clone(),
+                            domain: SchemaState::Known(
+                                SupportSourceDomain::AuthoredAssignmentsOnly,
+                            ),
+                        })
+                        .collect(),
+                }),
                 existing_actor_rules: None,
                 contribution_queries: None,
                 // The compiled-only V20 component has no application rules. Keep

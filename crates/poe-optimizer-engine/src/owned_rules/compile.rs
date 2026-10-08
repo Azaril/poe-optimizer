@@ -1761,6 +1761,19 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     )?;
     // Shared storage and standalone compiler use the same bounded membership
     // validation; workers never consult or interpret this registry.
+    poe_optimizer_data::owned_rules::validate_support_discovery(
+        input,
+        index,
+        poe_optimizer_data::owned_rules::RuleStorageLimits {
+            max_owners: l.max_owners,
+            max_edges: l
+                .max_work
+                .min(poe_optimizer_data::owned_rules::RuleStorageLimits::default().max_edges),
+            max_gaps: l.max_gaps,
+            ..Default::default()
+        },
+    )
+    .map_err(|e| RuleError::new("support_discovery", e.to_string()))?;
     poe_optimizer_data::owned_rules::validate_existing_actor_rules(
         input,
         index,
@@ -2038,6 +2051,27 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         }
     }
     let applications = applications::compile(&mut input, &tables, index, l, &mut b)?;
+    let mut support_domains = BTreeMap::new();
+    if let Some(discovery) = &mut input.support_discovery {
+        let count = discovery.providers.len();
+        b.work(
+            count.saturating_mul(count.checked_ilog2().unwrap_or(0) as usize + 1),
+            l,
+            "support_discovery",
+        )?;
+        discovery
+            .providers
+            .sort_by_key(|row| SubjectKey::from(&row.owner));
+        for row in &discovery.providers {
+            support_domains.insert(
+                SubjectKey::from(&row.owner),
+                matches!(
+                    row.domain,
+                    SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly)
+                ),
+            );
+        }
+    }
     let identity = digest_owned("owned-rule-programs-v3", &input, l.max_wire_bytes)
         .map_err(|e| RuleError::new("wire", e.to_string()))?;
     Ok(CompiledRulePackage {
@@ -2046,6 +2080,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         source_identity: None,
         programs,
         applications,
+        support_domains,
         limits: l,
     })
 }

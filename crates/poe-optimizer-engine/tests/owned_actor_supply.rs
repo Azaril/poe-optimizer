@@ -415,6 +415,7 @@ fn ability_input_projection_type_mismatch_is_invalid_before_evaluation() {
     let schema =
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap();
     let rules = RulePackageInput {
+        support_discovery: None,
         existing_actor_rules: None,
         contribution_queries: None,
         effect_applications: None,
@@ -1091,14 +1092,14 @@ fn actor_potential_members_include_abilities_supplied_by_another_current_actor_a
 }
 
 #[test]
-fn old_operation_plan_identity_and_legacy_actor_execution_remain_reproducible() {
+fn operation_subsets_share_discovery_cutover_and_preserve_actor_results() {
     let mut f = Fixture::new();
     f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V2;
     f.add_generated_actors();
     let new = f
         .compile_with_operations(PlanLimits::default(), OWNED_RULE_OPERATIONS_V11)
         .unwrap();
-    assert_eq!(
+    assert_ne!(
         new.identity(),
         poe_optimizer_core::owned_content::digest_owned(
             "owned-effect-plan-v8",
@@ -1118,7 +1119,7 @@ fn old_operation_plan_identity_and_legacy_actor_execution_remain_reproducible() 
         let old = f
             .compile_with_operations(PlanLimits::default(), version)
             .unwrap();
-        assert_eq!(
+        assert_ne!(
             old.identity(),
             poe_optimizer_core::owned_content::digest_owned(
                 domain,
@@ -1140,6 +1141,7 @@ fn actor_rules_cannot_be_labeled_as_legacy_operations() {
     let schema =
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap();
     let mut rules = RulePackageInput {
+        support_discovery: None,
         existing_actor_rules: None,
         contribution_queries: None,
         effect_applications: None,
@@ -1206,6 +1208,7 @@ fn equal_dimension_does_not_allow_wrong_unit_ability_projection() {
     let schema =
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap();
     let rules = RulePackageInput {
+        support_discovery: None,
         existing_actor_rules: None,
         contribution_queries: None,
         effect_applications: None,

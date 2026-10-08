@@ -780,6 +780,17 @@ fn receiver_fixture(
     let rules = Arc::new(
         CompiledRulePackage::compile(
             &RulePackageInput {
+                support_discovery: Some(SupportDiscoveryInput {
+                    providers: owners
+                        .iter()
+                        .map(|row| SupportSourceDomainDeclaration {
+                            owner: row.owner.clone(),
+                            domain: SchemaState::Known(
+                                SupportSourceDomain::AuthoredAssignmentsOnly,
+                            ),
+                        })
+                        .collect(),
+                }),
                 existing_actor_rules: None,
                 contribution_queries: None,
                 effect_applications: None,

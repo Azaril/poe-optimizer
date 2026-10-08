@@ -349,6 +349,16 @@ fn compile(world: &World) -> Plan {
         Arc::new(OwnedDefinitionSchemaPackage::new(schema_input, Default::default()).unwrap());
     let m: OwnedReleaseMigrationInput = family::read("migration.json");
     let rules = RulePackageInput {
+        support_discovery: Some(SupportDiscoveryInput {
+            providers: f
+                .owners
+                .iter()
+                .map(|row| SupportSourceDomainDeclaration {
+                    owner: row.owner.clone(),
+                    domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+                })
+                .collect(),
+        }),
         existing_actor_rules: None,
         contribution_queries: None,
         // V20 requires an explicit inventory. This finite contribution-only

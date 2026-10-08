@@ -38,6 +38,15 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Composed support coverage cutover, 2026-10-08:** the common native planner now
+requires explicit support-source domains from injected rules. All operation
+subsets receive the same gate and new plan identity; older packages receive
+coverage gaps, not a compatibility execution path. Test-only assignment-domain
+assertions describe finite synthetic worlds and must never become a production
+default. Structural provider inspection reuses Core's existing resolver and
+does not enable disabled providers. Preset authored-order naming/accounting,
+game-data publication and relocation of Import `01de` remain follow-up work.
+
 **Support-origin source census, 2026-10-08:** the new optional observer reuses
 the existing Rust source runner and records actual original constructor/query
 calls. It adds no runtime Lua, source evaluator or native group model. Retain it

@@ -137,6 +137,7 @@ impl NativeLifeRounding {
                 .collect(),
         };
         let input = RulePackageInput {
+            support_discovery: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: namespace(),
             release: key("native-rounding-test"),

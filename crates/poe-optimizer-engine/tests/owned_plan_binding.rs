@@ -65,9 +65,9 @@ fn exact_report_is_shared_read_only_and_preserves_plan_identity_and_evaluation()
             .map(|q| &q.id)
             .collect::<Vec<_>>()
     );
-    // Retaining diagnostics adds no digest input and does not change the existing
-    // operations-v14 effect domain or metric-plan domain.
-    assert_eq!(
+    // Composed support discovery invalidates the previous bare effect identity,
+    // including old operation subsets. Retaining diagnostics adds no other input.
+    assert_ne!(
         effects.identity(),
         digest_owned(
             "owned-effect-plan-v11",

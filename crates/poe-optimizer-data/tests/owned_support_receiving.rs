@@ -335,6 +335,7 @@ impl Fixture {
         edit_schema(&mut schema);
         let schema = OwnedDefinitionSchemaPackage::new(schema, Default::default()).unwrap();
         let mut rule_input = RulePackageInput {
+            support_discovery: None,
             existing_actor_rules: None,
             contribution_queries: None,
             effect_applications: None,

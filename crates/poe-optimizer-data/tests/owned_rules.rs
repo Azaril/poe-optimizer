@@ -39,6 +39,7 @@ fn input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
         unreachable!()
     };
     RulePackageInput {
+        support_discovery: None,
         existing_actor_rules: None,
         contribution_queries: None,
         effect_applications: None,
@@ -74,6 +75,56 @@ fn input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
             }]),
         }],
     }
+}
+#[test]
+fn support_domains_preserve_unknown_coverage_and_charge_gap_payloads() {
+    let s = schema();
+    let limits = RuleStorageLimits::default();
+    let original = OwnedRulePackage::new(input(&s), &s, limits).unwrap();
+    let mut i = input(&s);
+    i.support_discovery = Some(SupportDiscoveryInput {
+        providers: vec![SupportSourceDomainDeclaration {
+            owner: owner(),
+            domain: SchemaState::Unmapped {
+                gaps: ["first", "second"]
+                    .into_iter()
+                    .map(|code| SchemaGap {
+                        subject: owner(),
+                        facet: SchemaFacet::GameRules,
+                        code: key(code),
+                    })
+                    .collect(),
+            },
+        }],
+    });
+    let unknown = OwnedRulePackage::new(i.clone(), &s, limits).unwrap();
+    assert_ne!(original.identity(), unknown.identity());
+    assert_eq!(unknown.resources().support_source_domains, 1);
+    assert_eq!(unknown.resources().support_discovery_work, 3);
+    assert_eq!(unknown.resources().gaps, 2);
+    let bytes = encode_rule_package(&unknown, limits).unwrap();
+    assert_eq!(
+        decode_rule_package(&bytes, &s, limits).unwrap().input(),
+        unknown.input()
+    );
+    for tight in [
+        RuleStorageLimits {
+            max_gaps: 1,
+            ..limits
+        },
+        RuleStorageLimits {
+            max_edges: 2,
+            ..limits
+        },
+    ] {
+        assert!(OwnedRulePackage::new(i.clone(), &s, tight).is_err());
+        assert!(decode_rule_package(&bytes, &s, tight).is_err());
+        assert!(encode_rule_package(&unknown, tight).is_err());
+    }
+    i.support_discovery.as_mut().unwrap().providers[0].domain =
+        SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly);
+    let known = OwnedRulePackage::new(i, &s, limits).unwrap();
+    assert_ne!(known.identity(), unknown.identity());
 }
 #[test]
 fn strict_bound_package_roundtrip_and_data_only_identity_change() {

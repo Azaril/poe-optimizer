@@ -11,6 +11,24 @@ use rayon::prelude::*;
 use std::collections::BTreeSet;
 use std::sync::Arc;
 #[test]
+fn missing_composed_source_coverage_blocks_retained_delivery_before_selection() {
+    let f = source_fixture();
+    let args = inputs_with_rules(&f, |rules| rules.support_discovery = None, |_| {});
+    let plan =
+        OwnedSupportEffectPlan::compile(args, Default::default(), Default::default()).unwrap();
+    let result = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert!(matches!(
+        result.outcome,
+        SupportEffectsOutcome::Unavailable { .. }
+    ));
+    assert!(
+        result
+            .gaps
+            .iter()
+            .any(|gap| gap.reason == PlanGapReason::MissingSupportSources)
+    );
+}
+#[test]
 fn retained_applications_feed_exact_action_and_actor_final_reductions() {
     let plan = compile(&source_fixture());
     let report = plan.evaluate(&mut plan.new_scratch()).unwrap();

@@ -5,6 +5,8 @@ use std::cmp::Ordering;
 
 fn gap(reason: PlanGapReason) -> u8 {
     match reason {
+        PlanGapReason::MissingSupportSources => 20,
+        PlanGapReason::UnmappedSupportSources => 21,
         PlanGapReason::PartialExistingActorRules => 0,
         PlanGapReason::PartialEffectApplications => 1,
         PlanGapReason::SchemaUnresolved => 2,

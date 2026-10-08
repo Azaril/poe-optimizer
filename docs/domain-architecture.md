@@ -941,6 +941,17 @@ Import obligation only after authored input accounting and the mandatory native
 gate exist. Rebuild current artifacts without a compatibility branch. See
 [support composition](owned-support-origin-composition-proposal.md).
 
+The first native source domain is explicitly `AuthoredAssignmentsOnly` in
+`RulePackageInput.support_discovery`, keyed by an owned definition or slot.
+It certifies the reviewed absence of other support origins throughout that
+owner's admitted input domain; it does not authorize a recipient. Missing rows
+and Unmapped declarations remain unknown. The cold planner binds declarations
+to exact composed occurrences before support preparation or delivery, including
+disabled providers through structural inspection without execution. Dormant
+off-loadout equipment is reconsidered when its loadout is selected. Program-list
+completeness is not support-source completeness. This changes the common plan
+identity for every operation subset, without a compatibility bypass.
+
 Support admission can depend on the exact supplying occurrence even when two
 occurrences share one Skill definition. Provider-specific exclusions must not
 disable a manually authored occurrence or suppress independent external
