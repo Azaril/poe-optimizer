@@ -39,7 +39,16 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
-The latest data checkpoint adds checked recipient buff-effect producers for
+The latest data checkpoint replaces Gigantic's numeric presence with typed
+Boolean Flag/Any and joins its real selected allocation and intrinsic Life in the
+existing item-driven Sniper graph. Duplicate grants produce one pair of benefits;
+unknown membership does not become false. Actual contributor/Actor coverage stays
+Partial. Two obsolete Gigantic helpers are removed; five independent Life tests
+now load current artifacts, without an old-format parser. No new public contract
+or runtime operation is introduced. See the
+[Gigantic packet](../data/owned/poe2/3887ae68/gigantic-flags/README.md).
+
+The preceding data checkpoint adds checked recipient buff-effect producers for
 existing Actor channels `322b/322c`. Their empty query domains reject any potential
 matching contributor before guards or values; identities are query results, not
 literal producer values. Actual Actor and global registry coverage stay Partial.
@@ -88,7 +97,7 @@ data-authored programs on existing owners, without skill-name dispatch in Rust.
 Their Partial source/support inventories and remaining combat/population modes
 still prevent full owner closure. All-five reimports preserve selections and
 110 queries; Original05's five obligations and the 0/5 completion count remain.
-The current package is `runs/owned-buff-effect-recipients-publication-01/package`.
+The current package is `runs/owned-gigantic-flags-publication-01/package`.
 See the [packet and coverage limits](../data/owned/poe2/3887ae68/sand-preparation/README.md).
 
 A joined finite test now supplies Sand's ordinary level from the real Crown/Solar
@@ -130,10 +139,19 @@ explicit second removal reproduces eight sources / 48% in the numeric component.
 Native post-mutation topology validation is still needed for passive optimization.
 
 The same graph now executes two published recipient scaling producers on both
-exact Sniper Actors, with guarded empty input domains. All 25 joined tests pass,
-including missing/Partial coverage, nonempty refusal, staging and scratch/Rayon
-checks. The source witness distinguishes the original saved CALCS Arsonist view
+exact Sniper Actors, with guarded empty input domains. All 25 joined tests passed
+at that checkpoint, including missing/Partial coverage, nonempty refusal, staging
+and scratch/Rayon checks. The source witness distinguishes the original saved CALCS Arsonist view
 from explicit Sniper CALCS controls; these are different selected recipients.
+
+The Gigantic join extends this same graph to its actual selected allocation and
+intrinsic Life lookup, preserving paired effects and two independent populations.
+All 32 joined tests pass across the regression and focused runs; the five retained
+independent Life numerical tests also pass against the current artifact.
+Removal and duplicate controls preserve calculated base Life while changing the
+separate Gigantic factors. Missing/Partial or unlisted sources remain refusals.
+This is finite numerical integration: final Life/Damage aggregation, reservation
+delivery and post-mutation tree legality remain separate gates.
 
 Next, Offering needs its three source-Skill scaling producers before its
 application can add the measured 62%. Checked queries reject Current Skill reads
@@ -1125,12 +1143,13 @@ separate optional PoB witness observes original preparation and calculation call
 to check the results. Adding this family requires neither a new interpreter nor
 PoB UI objects in the production model.
 
-The [Gigantic status packet](../data/owned/poe2/3887ae68/gigantic-following/README.md)
-illustrates a non-stacking status in this same native model. Injected rules emit
-one integer contribution per active granting source; a recipient rule sums those
-contributions and derives a Boolean. Two grants therefore retain two origins but
-produce one active status. The first reviewed recipient is the Sniper Actor;
-missing source or recipient coverage remains unresolved. The
+The [Gigantic Boolean packet](../data/owned/poe2/3887ae68/gigantic-flags/README.md)
+illustrates a non-stacking status in this same native model. Each granting source
+emits a typed Boolean Flag; a recipient rule uses a checked unordered Any query.
+Two true grants retain two origins but produce one active status. Complete empty
+membership returns false; unknown/Partial membership remains unresolved. The old
+integer sum and positive-count conversion survive only as offline inverse-proof
+data. The first reviewed recipient is the Sniper Actor. The
 [benefits packet](../data/owned/poe2/3887ae68/gigantic-benefits/README.md) consumes that
 Boolean in one Actor program and emits one 1.2 Life factor and one 1.2 Damage
 factor. These are injected ordinary contribution rules, not engine special cases.

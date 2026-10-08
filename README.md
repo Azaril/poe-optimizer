@@ -33,6 +33,12 @@ five supplied real builds yet completes natively. See the [controlling design](d
 and [migration plan](docs/architecture-migration.md). The capabilities below describe the
 current experimental implementation, not the target architecture.
 
+The current Sniper integration joins actual item preparation, selected passive
+damage, accuracy, recipient buff scaling and Boolean Gigantic/Life components.
+It still has incomplete coverage and input obligations; no complete native build
+is claimed. Current evidence and the next completion blocker are recorded in the
+[implementation checkpoint](docs/implementation.md#latest-native-checkpoint-boolean-gigantic-and-intrinsic-life-in-the-sniper-graph).
+
 For current development, use the **owned model and evaluator**. Generated data
 artifacts feed immutable Rust indexes; SQLite and an ORM are outside the plan.
 

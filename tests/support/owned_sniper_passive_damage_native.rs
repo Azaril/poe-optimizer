@@ -193,6 +193,10 @@ pub(super) fn install(
 }
 
 impl Census {
+    fn contains(&self, allocation: &Allocation) -> bool {
+        self.original.iter().any(|a| a.node == allocation.node)
+    }
+
     fn rehome(&self, allocations: &[Allocation]) -> Vec<Allocation> {
         let mut seen = BTreeSet::new();
         allocations
@@ -261,7 +265,17 @@ fn check(w: &World, report: &SupportEffectsReport, total: f64, count: usize) {
     assert!(report.gaps.is_empty(), "{:?}", report.gaps);
     let r = sniper::offering::effects(report);
     assert!(r.gaps.is_empty(), "{:?}", r.gaps);
-    let allocations = &w.sniper.base.source.base.inner.build.allocations;
+    let allocations: Vec<_> = w
+        .sniper
+        .base
+        .source
+        .base
+        .inner
+        .build
+        .allocations
+        .iter()
+        .filter(|a| w.passives.contains(a))
+        .collect();
     assert_eq!(allocations.len(), count);
     let contributors: Vec<_> = r
         .effects
@@ -428,7 +442,24 @@ fn repaired(w: &World) -> World {
         case.observed_active_nodes.iter().cloned().collect()
     );
     let mut changed = w.clone();
-    changed.sniper.base.source.base.inner.build.allocations = w.passives.rehome(&candidate);
+    changed
+        .sniper
+        .base
+        .source
+        .base
+        .inner
+        .build
+        .allocations
+        .retain(|a| !w.passives.contains(a));
+    changed
+        .sniper
+        .base
+        .source
+        .base
+        .inner
+        .build
+        .allocations
+        .extend(w.passives.rehome(&candidate));
     changed
 }
 
@@ -494,7 +525,7 @@ fn passive_damage_actual_ten_sources_and_explicit_repair_reach_both_item_driven_
         .inner
         .build
         .allocations
-        .clear();
+        .retain(|a| !w.passives.contains(a));
     check(&empty, &empty.evaluate(), 0., 0);
     assert_eq!(w.evaluate(), report);
 }

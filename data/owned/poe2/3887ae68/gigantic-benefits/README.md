@@ -2,8 +2,11 @@
 
 Historical packet: the [intrinsic Life successor](../minion-life-source/README.md)
 retired the live Life-More destination `330a` in favor of canonical Life `311a`.
-This packet and its receipt remain replayable; current releases have no live
-`330a` alias or duplicate contribution. Damage `330b` remains unchanged.
+This packet and its receipt remain historical inverse/source evidence; retired
+artifact formats need offline rebuilding, not a compatibility parser. Current
+releases have no live `330a` alias or duplicate contribution. Damage `330b` remains
+unchanged. The [Boolean successor](../gigantic-flags/README.md) and joined Sniper
+graph provide current validation; the publication figures below are historical.
 
 This packet extends `pob-3887ae68-gigantic-following-v1` without closing any
 additional owner or contributor inventory. It adds two reusable Actor channels:
@@ -25,8 +28,9 @@ modifiers when Gigantic applies. The source evidence gate includes actual Life
 consumer execution and Damage-store controls. Reference CALCS display scopes
 are diagnostics; they do not introduce a native game "in combat" condition.
 The packet establishes the individual factors, not parity of a complete pool or
-of PoB's composed More aggregation and rounding. Native tests use an explicitly
-finite test-only consumer when checking multiplication with other sources.
+of PoB's composed More aggregation and rounding. The old finite Product fixture
+has been removed. Useful individual-factor checks now run in the joined Sniper
+graph; generic Product tests do not establish game-specific final grouping.
 
 The ordinary V5 migration appends the program while preserving its existing
 owner's coverage. Publication authenticates the exact predecessor and source

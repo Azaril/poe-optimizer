@@ -1,10 +1,83 @@
-> Historical snapshots through joined Sniper passive damage on 2026-10-07.
+> Historical snapshots through checked recipient buff-effect producers on 2026-10-07.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-07 checkpoint: checked recipient buff-effect producers
+
+The [recipient packet](../data/owned/poe2/3887ae68/buff-effect-recipients/README.md)
+adds two real data-defined producers for existing Actor channels `322b` and
+`322c`. They resolve buff-effect increase and multiplier through checked
+contribution queries on each exact recipient. No new IDs, public operations,
+source-runtime types or numeric literals in producer programs are added.
+
+Each query declares a **Complete, empty supported domain**, using the existing
+guarded-domain contract. Every potential matching contribution must be accounted
+for before activation or value evaluation: disabled, unknown, zero, identity and
+unread-recipient effects all invalidate this empty domain. Its reduction returns
+0 or 1 only inside a complete checked candidate. This is not a claim that all
+real modifiers have been acquired. The actual Sniper Actor owner and global query
+registry remain Partial; replacing either finite test closure with the published
+one makes evaluation unavailable. Nonempty increase/order and multiplier grouping
+remain unsupported.
+
+The same item → source preparation → Sniper population → Basic Attack graph now
+executes these producers beside the selected passive 68% subtotal and accuracy.
+It preserves the actual published query groups and checks two independent Actor
+occurrences, exact provider routes, missing writers, frozen-stage dependencies,
+unknown coverage, A→unknown→B→A scratch reuse and four-worker Rayon. No second
+build fixture or precomputed source-level/weapon/scaling input is introduced.
+All **25 joined tests pass**: the new baseline in **22.84s**, followed by the
+other 24 in **28.65s**. Two ordinary authoring checks and the retained-source
+authentication pass; strict workspace/all-feature/all-target Clippy and changed
+Rust formatting pass. The joined target remains explicitly ignored in ordinary
+CI until its reproducible package/source-artifact provisioning is implemented.
+
+The source packet authenticates **22 observations / 23 actual application
+invocations** against both retained 19,612,949-byte reports, with identical SHA256
+`030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935`.
+Five nonempty controls remain unsupported-domain evidence. Original05's saved
+MAIN selection is Sniper but CALCS selects Arsonist; that CALCS row is diagnostic,
+not Sniper parity. Explicit Sniper CALCS and two-recipient controls prove the
+relevant identity separation. The reports name an authenticated historical
+observer/harness; replay checks require neither Git history nor Lua and do not
+claim the newer observer generated the older bytes. Fresh source regeneration
+must use the recorded harness or produce a separately reviewed witness.
+
+Publication passes in **24.13s**, including a byte-identical rebuild, exact
+whole-release inverse, all-five reimports and all 110 query identities. The
+current package is `runs/owned-buff-effect-recipients-publication-01/package`.
+It adds two programs and two queries, closes no owner/input inventory and adds
+no evaluation bundle. Selected issues remain **107/117/109/123/5**; complete
+original builds remain **0/5**. Original05 remains the closest-completion target.
+
+**Resume: the three source-Skill scaling writers and complete Offering delivery.**
+Activation `3227` and recipient channels `322b`/`322c` now have producers;
+source buff-effect increase/multiplier and magnitude `3228`–`322a` still do not.
+The [exact Skill query proposal](owned-skill-contribution-queries-proposal.md)
+remains awaiting owner review: Current Skill query reads and generated member
+paths are rejected today. Do not infer approval from this Actor-only packet.
+After that decision, use the same graph to resolve source scaling and deliver
+the measured 62% application alongside the passive 68%; never supply those
+observations as inputs. Nonempty source grouping needs stronger evidence than
+the retained flattened records.
+
+The five selected input obligations, support-origin and Actor-to-Enemy decisions,
+socket integration and final metrics remain open. Keep the saved/effective tree
+distinction from the previous checkpoint: Import refuses Pending node 8737 after
+the saved removal of node 95; explicit repair evidence is not automatic pruning
+or post-mutation topology validation. D4 still begins after the first complete
+unchanged build, without waiting for the other four.
+
+Evidence: `runs/owned-buff-effect-recipients-authoring-01.log`,
+`runs/owned-buff-effect-recipients-source-01.log`,
+`runs/owned-buff-effect-recipients-publication-01.log`,
+`runs/owned-buff-effect-recipients-baseline-01.log`,
+`runs/owned-buff-effect-recipients-joined-01.log` and
+`runs/owned-buff-effect-recipients-clippy-01.log`.
 
 ## Archived 2026-10-07 checkpoint: selected passive damage joins the Sniper graph
 

@@ -4,7 +4,10 @@ Status: accepted by the owner on 2026-10-07: typed Boolean contributions with an
 unordered `Any` reduction on the existing occurrence/effect graph. Core/Data/Engine
 implementation and current-format migration are complete; the first two passive
 producers and five reducers are published, with all production flag inventories
-still Partial. This changes a public data contract; use
+still Partial. Accuracy and Gigantic have since migrated their existing numeric
+presence channels to this same contract; no compatibility branch was retained.
+The Gigantic migration also joins its actual selected allocation in the current
+item-driven Sniper graph. This changes a public data contract; use
 the current implementation plan for execution state. The proposal was drafted
 against baseline `runs/owned-player-offhand-01/package` at commit `7b7fb1b`.
 

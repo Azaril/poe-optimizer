@@ -1,15 +1,9 @@
-//! Actual published Gigantic factor bodies; finite products are kernel checks,
-//! not final source More-bucket, Life-pool or action-Damage parity claims.
+//! Historical Gigantic benefit packet authoring and publication provenance.
+//! Current paired contributions are exercised by the joined Sniper component.
 #[path = "support/owned_gigantic_benefits.rs"]
 mod family;
-#[path = "support/owned_gigantic_following_fixture.rs"]
-mod gigantic;
 #[path = "support/owned_release_migration_preservation.rs"]
 mod migration_preservation;
-#[path = "support/owned_gigantic_benefits_native.rs"]
-mod native;
-#[path = "support/owned_passive_refinement_publication.rs"]
-mod passive_publication;
 #[allow(dead_code)]
 #[path = "support/owned_physical_inventory_preservation.rs"]
 mod preservation;
@@ -19,9 +13,6 @@ mod publication;
 mod release;
 #[path = "support/owned_selected_request.rs"]
 mod selected;
-#[allow(dead_code)]
-#[path = "support/owned_gigantic_following.rs"]
-mod status_family;
 use serde_json::json;
 use std::path::PathBuf;
 

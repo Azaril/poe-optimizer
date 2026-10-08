@@ -1,0 +1,76 @@
+[
+  {
+    "id": "minion-gigantic-grants",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003307"
+    },
+    "contribution": "flag",
+    "groups": [
+      {
+        "id": "sources",
+        "reduction": "any",
+        "empty": {
+          "kind": "boolean",
+          "value": false
+        },
+        "members": {
+          "members": [
+            {
+              "owner": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001532"
+                  }
+                }
+              },
+              "program": "ordinary-minion-gigantic",
+              "effect": "grant",
+              "origin": {
+                "kind": "allocation"
+              },
+              "order": null
+            }
+          ],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "stat",
+                      "value": {
+                        "kind": "stat",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003307"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "gigantic-flag-producer-domain-unproved"
+                }
+              ]
+            }
+          }
+        },
+        "ordering": "unordered"
+      }
+    ]
+  }
+]

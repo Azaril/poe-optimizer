@@ -65,78 +65,78 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest native checkpoint: checked recipient buff-effect producers
+## Latest native checkpoint: Boolean Gigantic and intrinsic Life in the Sniper graph
 
-The [recipient packet](../data/owned/poe2/3887ae68/buff-effect-recipients/README.md)
-adds two real data-defined producers for existing Actor channels `322b` and
-`322c`. They resolve buff-effect increase and multiplier through checked
-contribution queries on each exact recipient. No new IDs, public operations,
-source-runtime types or numeric literals in producer programs are added.
+The [Gigantic cutover](../data/owned/poe2/3887ae68/gigantic-flags/README.md)
+replaces integer-presence Stat `3307` with a Boolean Flag at the same identity.
+Actual passive `1532` (source node `46365`) contributes true; the existing recipient
+resolves status `3308` with a checked, unordered Any query. Duplicate sources keep
+their identities and produce one status and one pair of Life/Damage factors.
+Complete empty membership yields false; unknown or Partial coverage does not.
+This uses the accepted Boolean graph without new definitions or runtime authority.
 
-Each query declares a **Complete, empty supported domain**, using the existing
-guarded-domain contract. Every potential matching contribution must be accounted
-for before activation or value evaluation: disabled, unknown, zero, identity and
-unread-recipient effects all invalidate this empty domain. Its reduction returns
-0 or 1 only inside a complete checked candidate. This is not a claim that all
-real modifiers have been acquired. The actual Sniper Actor owner and global query
-registry remain Partial; replacing either finite test closure with the published
-one makes evaluation unavailable. Nonempty increase/order and multiplier grouping
-remain unsupported.
+The same item-driven Sniper graph now joins that freshly imported selected
+allocation, its paired reservation-efficiency contribution, the actual intrinsic
+Life table/program and the existing Gigantic benefit program. Exact source hashes
+authenticate original and removal controls. Only test occurrence IDs are remapped;
+the finite numerical graph deliberately does not certify whole-tree connectivity.
+Intrinsic Life is calculated through item inputs, source preparation and Actor
+level projection, never supplied as a measured value. Canonical Life `311a`
+receives both intrinsic Add and the separate Gigantic Multiply; retired `330a`
+has no live reference. Final Life, damage aggregation and reservation delivery
+remain unfinished.
 
-The same item → source preparation → Sniper population → Basic Attack graph now
-executes these producers beside the selected passive 68% subtotal and accuracy.
-It preserves the actual published query groups and checks two independent Actor
-occurrences, exact provider routes, missing writers, frozen-stage dependencies,
-unknown coverage, A→unknown→B→A scratch reuse and four-worker Rayon. No second
-build fixture or precomputed source-level/weapon/scaling input is introduced.
-All **25 joined tests pass**: the new baseline in **22.84s**, followed by the
-other 24 in **28.65s**. Two ordinary authoring checks and the retained-source
-authentication pass; strict workspace/all-feature/all-target Clippy and changed
-Rust formatting pass. The joined target remains explicitly ignored in ordinary
-CI until its reproducible package/source-artifact provisioning is implemented.
+Validation covers the baseline and removal, duplicate/false/unknown flags,
+missing producers, Partial owners/receivers/membership, stage order, unrelated
+Actors, disabled roots, independent inputs and fresh/reused/four-worker Rayon.
+All **32 joined tests pass across the regression and focused runs**: baseline
+**24.72s**, thirty regressions **34.05s**, and corrected refusal checks. The
+missing-owner case correctly fails structural validation before execution; its
+focused replay passes. Tightening the numeric-Flag diagnostic first expected a
+generic type error; the actual Boolean-Flag diagnostic is now asserted and passes
+in **24.84s**. Neither correction changed production validation. Strict workspace,
+all-feature/all-target Clippy and changed Rust formatting pass. The joined target
+remains ignored in ordinary CI until reproducible package/source provisioning is
+implemented. Independent review found no lost meaningful assertion or injected
+calculated output.
 
-The source packet authenticates **22 observations / 23 actual application
-invocations** against both retained 19,612,949-byte reports, with identical SHA256
-`030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935`.
-Five nonempty controls remain unsupported-domain evidence. Original05's saved
-MAIN selection is Sniper but CALCS selects Arsonist; that CALCS row is diagnostic,
-not Sniper parity. Explicit Sniper CALCS and two-recipient controls prove the
-relevant identity separation. The reports name an authenticated historical
-observer/harness; replay checks require neither Git history nor Lua and do not
-claim the newer observer generated the older bytes. Fresh source regeneration
-must use the recorded harness or produce a separately reviewed witness.
+Two obsolete Gigantic native helpers and their redundant test entry points are
+removed. Useful canonical-Life checks now run in the joined graph. The five
+independent Life numerical tests remain, rebased onto authenticated current
+population/activation fragments; they pass in **40.39s**. The first attempted
+regression exposed a retired normalization artifact (`gems` field); no old-format
+parser or compatibility branch was added. Historical publication/source packets
+remain evidence, not alternate production execution paths.
 
-Publication passes in **24.13s**, including a byte-identical rebuild, exact
-whole-release inverse, all-five reimports and all 110 query identities. The
-current package is `runs/owned-buff-effect-recipients-publication-01/package`.
-It adds two programs and two queries, closes no owner/input inventory and adds
-no evaluation bundle. Selected issues remain **107/117/109/123/5**; complete
-original builds remain **0/5**. Original05 remains the closest-completion target.
+Two ordinary cutover authoring checks, retained-source authentication and the
+three retained family authoring checks pass. Publication passes in **37.04s**:
+exact whole-release inverse, byte-identical rebuild, all-five reimports and all
+110 query identities. It replaces one descriptor and two programs, adds one
+query and closes no input/owner inventory. The current package is
+`runs/owned-gigantic-flags-publication-01/package`. Actual flag membership, global
+query registry and Sniper Actor remain Partial. Selected issues are unchanged at
+**107/117/109/123/5**; complete native originals remain **0/5**.
 
-**Resume: the three source-Skill scaling writers and complete Offering delivery.**
-Activation `3227` and recipient channels `322b`/`322c` now have producers;
-source buff-effect increase/multiplier and magnitude `3228`–`322a` still do not.
-The [exact Skill query proposal](owned-skill-contribution-queries-proposal.md)
-remains awaiting owner review: Current Skill query reads and generated member
-paths are rejected today. Do not infer approval from this Actor-only packet.
-After that decision, use the same graph to resolve source scaling and deliver
-the measured 62% application alongside the passive 68%; never supply those
-observations as inputs. Nonempty source grouping needs stronger evidence than
-the retained flattened records.
+**Resume: complete Offering delivery and selected-input accounting.** Activation
+`3227` and recipient scaling `322b/322c` have real producers. Source-Skill scaling
+`3228`–`322a` still needs the pending [exact Skill query decision](owned-skill-contribution-queries-proposal.md).
+Do not infer approval from this Allocation-to-Actor Boolean cutover. Continue
+independent original-call source accounting while that authority is unresolved;
+the next executable work below names narrowly scoped controls. No observed 62%
+Offering bonus, neutral factor or precomputed final input may substitute for its
+producer. The five selected obligations and final metric/coverage gates remain.
+Original05 stays the closest-completion target; D4 starts after the first complete
+unchanged build, without waiting for all five.
 
-The five selected input obligations, support-origin and Actor-to-Enemy decisions,
-socket integration and final metrics remain open. Keep the saved/effective tree
-distinction from the previous checkpoint: Import refuses Pending node 8737 after
-the saved removal of node 95; explicit repair evidence is not automatic pruning
-or post-mutation topology validation. D4 still begins after the first complete
-unchanged build, without waiting for the other four.
-
-Evidence: `runs/owned-buff-effect-recipients-authoring-01.log`,
-`runs/owned-buff-effect-recipients-source-01.log`,
-`runs/owned-buff-effect-recipients-publication-01.log`,
-`runs/owned-buff-effect-recipients-baseline-01.log`,
-`runs/owned-buff-effect-recipients-joined-01.log` and
-`runs/owned-buff-effect-recipients-clippy-01.log`.
+Evidence: `runs/owned-gigantic-flags-{authoring,source,publication}-01.log`,
+`runs/owned-gigantic-join-baseline-01.log`,
+`runs/owned-gigantic-join-regression-01.log`,
+`runs/owned-gigantic-join-refusals-{02,03}.log`,
+`runs/owned-gigantic-life-retirement-regression-02.log`,
+`runs/owned-gigantic-flags-format-02.log` and
+`runs/owned-gigantic-flags-clippy-03.log`. The `-01` regression and `-02` refusal
+logs retain initial failures; their named corrected cases pass in the later
+focused runs. There is no claim that those initial invocations were all green.
 
 ## In progress: incoming critical source proof and Actor read decision
 
@@ -246,47 +246,45 @@ source-only investigation. It retains Partial contributor/readiness coverage and
 selected input obligations. The unapproved incoming-critical packet provisionally
 uses `3353`–`3364`, after Sand's five allocations; its source evidence is unchanged.
 
-CI snapshot at 01:39 UTC (2026-10-08): accuracy checkpoint `a021e79` run
-[37712213216](https://github.com/Azaril/poe-optimizer/actions/runs/37712213216)
-is pending. The intervening `ca570dc`/`8e04b25`/`93ee736` pending runs were
-superseded and cancelled. Older `f93d551` run
+CI snapshot during this checkpoint: `f93d551` run
 [37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252)
-has ten passed jobs, two running and no reported failures. Later pushes can
-supersede pending runs; local checks are not hosted success for this checkpoint.
+completed successfully with all fourteen jobs passing. Recipient checkpoint
+`6a3aae3` run [37715752732](https://github.com/Azaril/poe-optimizer/actions/runs/37715752732)
+is now in progress. Earlier queued revisions were coalesced. This checkpoint's
+local validation is not hosted success for its eventual commit.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-buff-effect-recipients-publication-01/package` and its neighboring
+Use `runs/owned-gigantic-flags-publication-01/package` and its neighboring
 `original-01` through `original-05` imports. Current sidecars remain V23;
 definition schema V6, rule schema3 and operationsV22 are independent contracts.
-The immediate predecessor is `runs/owned-minion-accuracy-flags-publication-01/package`,
-input `949598559007abfc850ee4122616616bfae484f1d30d12b2df26ec2255c23ef3`.
+The immediate predecessor is `runs/owned-buff-effect-recipients-publication-01/package`,
+input `e1f41287d4ba9c7fb3961c9c42e9722837fbd39b13e849502148a26103fc78cd`.
 Historical endpoint paths authenticate stored evidence; retired formats require
 explicit offline reauthoring and are not alternate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `e1f41287d4ba9c7fb3961c9c42e9722837fbd39b13e849502148a26103fc78cd` |
+| Release input | `e5b5bbe328cd9b1d4dd1c44c6691cb59c41657338cd6645a19f7b9e5eec8c21e` |
 | Registry | `8a38b9fa386105c5cefb3f045763f9e46b214c1a11533c5100fd97f643e1adea` |
-| Definitions content | `b6fa4166e3e511ee1c66c58e5a3e63f2400a9a20d2b20e8d71a40523e00d6434` |
-| Rules | `3a5467c9db10b824c1ef0811a3251c88f4896a0f3f4af06d00b8e81f0718b307` |
-| Compiled rules | `0c01ae382aa9531ce61baa21f2c964b06b8f747b024c8aeee2dbe522d2c673ad` |
-| Routing | `5a2b4275de5febebe5cb36247ad42233477c5ba2e1f38bea3dd10251953cf46c` |
-| Mapping | `ea20f42a725e345df4c37f6dcaab5f113c36e88b7512aa4d829594a745345f92` |
-| Skill roles | `a32ec329bdae3da995903bea7e509fdc9ebc889644cbbd3953de2e5e7a61c5ea` |
-| Normalization | `e88cb710fce6489943032d7b326c8d583279c59879bd60df69c6baa6b0b56a98` |
-| Rewards | `c530582ca36c0888d5eb423d8ea73f359816592bc42efee28603882cc4ea2823` |
-| Items | `209d2e7c3b3b08a147f511fdd64121efcd4328a49b4d3fe86b38dc57bde658d3` |
-| Item source | `99a8aae92d73df090d5e067cbfc1cdcd59bbc550399e9397498876deaea7992d` |
-| Tree policy | `4cca240cce123dd472b7bc44c9d41513b72241c2a8894e875f5f172c3e633d72` |
-| Authoring commitment | `44fec667d850818e580756fcdbac2a1d9a3a6f262c9ca3ae03e7c764cc6f013d` |
+| Definitions content | `420769f5d29c7ee28f02caceddbe01e42ecb06c2b4c3553ef5a2ef366fcee1f5` |
+| Rules | `55ea9226d9129ae36405ab59849f8542c30bc86a3c91bfed4468222e198d03f8` |
+| Compiled rules | `89e671be3ee1bb13af242fde4de9c619e4d09e7b88c14ac90ce7ab3274911d14` |
+| Routing | `be1abd42ed7edc1c75c7c12b47ba99ec5039df74972882e09e2ab4ff0e47dd69` |
+| Mapping | `35712202381f0b5d73cff66b755217f4af1fdd99def422b8167b5131a5299714` |
+| Skill roles | `f6a0648cc7be92387ecadb4c49f9178666035dcb2c4d347ca4247e4836bcbc27` |
+| Normalization | `01b61ed3793da8a7eb9135aaaae6c7b1d0ea94cf5138f4ed06afa26b87c78f5b` |
+| Rewards | `edfb7ad84d395d53daaf2955ed2d59237a49c78e3d9629f381508a7b78fb2971` |
+| Items | `857a7fb2b36a5d9f297cad57d8d5bbfe579406756c92a4c276328f4054cd113e` |
+| Item source | `21631d7d6b08aeda1fe5fa9e1a4a147d46e240b32aeaaeabc48d6db667eca3f1` |
+| Tree policy | `bc58b3c280033e373949902a69824c43ebb2a3fa3db48574ceb6bf5745aa7d5a` |
+| Authoring commitment | `029d9ff43bb149469367dc97d46ad59aab0b57624829ca6104d272dd1bc26df1` |
 | Definitions / rules / operations | V6 / V3 / `owned-domain-operations-v22` |
 
-The eighteen package files total **63,194,837 bytes**, with 142 provenance rows.
-Definitions remain `pob-3887ae68-minion-accuracy-flags-v1`; rules now use
-`pob-3887ae68-buff-effect-recipient-empty-v1`. The registry ends at `3352`; this
-publication allocates no IDs and leaves the definition artifact unchanged.
+The eighteen package files total **63,195,387 bytes**, with 143 provenance rows.
+Definitions and rules use `pob-3887ae68-gigantic-flags-v1`. The registry ends at
+`3352`; this publication allocates no IDs and changes one existing Stat type.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -308,7 +306,7 @@ reproducible evidence, not distributed game data.
 
 ## Next executable work
 
-The selected-passive and recipient-buff joins above pass. The next numerical
+The selected-passive, recipient-buff and Gigantic/Life joins above pass. The next numerical
 dependency is Offering's three source-Skill scaling producers and application
 delivery. Exact Skill query authority is awaiting review; inspect source
 membership/grouping evidence and selected-input obligations under existing
@@ -328,6 +326,28 @@ In particular, encounter identity alone cannot authorize ignoring
 `enemyDamageRollRange`. Continue numerical dependencies and source accounting
 without inventing completion or adding scalar-only patches that leave every
 selected obligation unchanged.
+
+**Narrow source follow-ups under existing authority:**
+
+- Offering's retained Source02 proves empty domains and separates source from
+  recipient scaling, but its flattened records do not prove nonempty grouping
+  or positive support-origin delivery. Observe the original MORE consumer with
+  two 1% custom BuffEffect lines, reversed order and zero/negative controls to
+  distinguish grouped 1.02 from 1.0201. These are arithmetic probes, not evidence
+  that a matching legal game producer exists. Independently use duplicate
+  Offerings with real Danse Macabre on one, move/disable that support and swap
+  occurrence order. Danse supplies Increase30, not MORE: record exact supplier
+  and recipient identities and pre-round consumer results without treating
+  cross-domain 25%/50% controls as intradomain grouping proof. Do not widen the
+  native Skill or support-origin contract before the pending decisions.
+- Existing occurrence-input tests already toggle global1/global2. For `0503`
+  and `01f2`, extend the existing generated ExtraSkillStat observer to the actual
+  Original05 manual Sand/Water global2 suppliers, using the fixed MAIN/CALCS
+  lifecycle. Retain exact filter/supplier identity before transport and after
+  original consumer admission (`CalcActiveSkill.lua`'s ExtraSkillStat call).
+  Existing other-SkillName and Purifying controls need not be duplicated.
+  A skipped/nonqueried consumer or unchanged Sniper/Player number is not an
+  inertness proof and cannot close the inventory.
 
 **Original05 completion path.** The public finalizer returns Pending while any
 selected input obligation remains, before constructing an owned request. The CLI
@@ -940,6 +960,9 @@ numerical outputs when game intent remains unresolved.
 
    **Published minion Life components:** intrinsic base and passive Increase now use
    canonical Life `311a`; Gigantic contributes its Multiply to the same stat.
+   Its grant `3307` now uses typed Flag/Any instead of numeric presence, and both
+   contributions execute in the current item-driven Sniper graph. Actual producer
+   membership remains Partial; individual factors do not settle final grouping.
    Historical `330a` has no live references, while Damage uses `330b`. The exact
    injected 100-row allied table and 0.55 profile scale produce base1615 at Actor
    level44, and original delivery validates the six-passive Increase44 stream.

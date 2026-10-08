@@ -634,7 +634,8 @@ factors produce a reference More result of 1.21, while ordinary multiplication
 is 1.212. `ModDB.lua:214-295` and `ModList.lua:164-227` round a local named-stat
 product before multiplying its ancestors; store placement can therefore affect
 the numerical result. The individual Gigantic contribution is independently
-supported. Its native Product tests do not certify this composed source result.
+supported. Generic Product tests do not certify this composed source result;
+the redundant Gigantic-specific Product probes have been removed.
 Before a final damage consumer claims parity, classify the precision and
 grouping law on valid inputs, then express any justified grouping in domain
 terms. Do not reproduce Lua store ancestry or change the generic Product
@@ -810,6 +811,30 @@ copying an old Lua observer into a new runtime lane. Use the recorded source
 revision to regenerate that witness, or author a new witness explicitly. These
 historical pins are evidence provenance, not runtime compatibility requirements.
 The independent complete-PoB witness remains useful for future updates.
+
+### Gigantic Boolean migration and fixture retirement (2026-10-07)
+
+Stat `3307` changes in place from integer presence to Boolean Flag/Any. Its old
+counting producer and positive-count receiver are removed from the current
+package; historical source/migration fragments remain exact inverse evidence.
+No numeric compatibility route or new native model is retained. Real producer
+membership and Actor coverage remain Partial.
+
+The current joined Sniper graph uses the freshly imported selected allocation,
+real item-driven source preparation and intrinsic Life curve. It carries the
+useful status, duplicate/removal, paired-factor, recipient, canonical-Life and
+parallel checks from `owned_gigantic_following_fixture.rs` and
+`owned_gigantic_benefits_native.rs`; both obsolete helpers and their redundant
+entry points are deleted. A synthetic Product1.44 probe is not retained as a
+game aggregation assertion: generic Product arithmetic already has independent
+coverage, while Gigantic/quality grouping remains unresolved.
+
+The five independent intrinsic-Life numerical tests stay in Rust. They now
+authenticate the component in the current artifact and install its current
+population/activation fragments. The old artifact's retired `gems` normalization
+field is not supported by a compatibility parser. Exact historical endpoint
+checks remain confined to offline publication proofs. No removed check ran in
+ordinary CI; the joined integration still needs reproducible CI provisioning.
 
 ### Population and activation partition cleanup
 

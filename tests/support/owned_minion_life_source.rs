@@ -1,4 +1,7 @@
 //! Injected intrinsic allied Life and one exact historical channel correction.
+#[allow(dead_code)]
+#[path = "owned_sniper_activation_readiness.rs"]
+pub mod activation_family;
 use super::migration_preservation;
 use poe_optimizer_core::{
     owned_content::digest_owned,
@@ -558,6 +561,113 @@ fn retired_references(value: &Value, retired: &Value) -> usize {
             Value::Array(a) => a.iter().map(|v| retired_references(v, retired)).sum(),
             _ => 0,
         }
+}
+/// Authenticate this component in a current successor without loading an old
+/// release or requiring unrelated Actor programs to remain frozen.
+pub fn assert_component(endpoint: &StagedOwnedRelease) {
+    check_authored();
+    activation_family::assert_component(endpoint);
+    activation_family::population_partition::check_authored();
+    let a: Value = read("authoring.json");
+    let b: Value = read("bindings.json");
+    let d: Value = read("dependencies.json");
+    let c: Value = read("replacement.json");
+    let m: OwnedReleaseMigrationInput = read("migration.json");
+    let proofs: Vec<_> = endpoint
+        .input()
+        .provenance
+        .iter()
+        .filter(|p| p.kind.as_str() == KIND)
+        .collect();
+    assert_eq!(proofs.len(), 1);
+    assert_eq!(json!(proofs[0].prior_input), a["before"]);
+    assert_eq!(proofs[0].authoring_input, digest());
+    let recipe = &endpoint.input().recipe;
+    let owners: Vec<_> = recipe
+        .rules
+        .owners
+        .iter()
+        .filter(|o| o.owner == m.owners[0].owner)
+        .collect();
+    assert_eq!(owners.len(), 1);
+    assert!(!owners[0].programs.is_complete());
+    let benefit: RuleProgram = serde_json::from_value(c["after"].clone()).unwrap();
+    for program in m.owners[0].programs.members.iter().chain([&benefit]) {
+        assert_eq!(
+            owners[0]
+                .programs
+                .members
+                .iter()
+                .filter(|p| p.id == program.id)
+                .collect::<Vec<_>>(),
+            [program]
+        );
+    }
+    for row in
+        serde_json::from_value::<Vec<DefinitionDescriptor>>(d["supporting_definitions"].clone())
+            .unwrap()
+    {
+        assert_eq!(
+            recipe
+                .schema
+                .definitions
+                .iter()
+                .filter(|actual| actual.address() == row.address())
+                .collect::<Vec<_>>(),
+            [&row]
+        );
+    }
+    for row in serde_json::from_value::<Vec<SlotDescriptor>>(d["slots"].clone()).unwrap() {
+        assert_eq!(
+            recipe
+                .schema
+                .slots
+                .iter()
+                .filter(|actual| actual.address() == row.address())
+                .collect::<Vec<_>>(),
+            [&row]
+        );
+    }
+    for expected in
+        serde_json::from_value::<Vec<DefinitionRules>>(d["prerequisite_owners"].clone()).unwrap()
+    {
+        let restored = activation_family::restored_owner(endpoint, &expected.owner)
+            .expect("the current population partition is required");
+        assert_eq!(restored.programs.closure, expected.programs.closure);
+        for program in &expected.programs.members {
+            assert_eq!(
+                restored
+                    .programs
+                    .members
+                    .iter()
+                    .filter(|actual| actual.id == program.id)
+                    .collect::<Vec<_>>(),
+                [program]
+            );
+        }
+    }
+    for expected in m
+        .tables
+        .iter()
+        .map(|t| json!(t))
+        .chain(d["prerequisite_tables"].as_array().unwrap().iter().cloned())
+    {
+        assert_eq!(
+            recipe
+                .rules
+                .tables
+                .iter()
+                .filter(|t| json!(t.id) == expected["id"])
+                .map(|t| json!(t))
+                .collect::<Vec<_>>(),
+            [expected]
+        );
+    }
+    assert_eq!(
+        retired_references(&json!(recipe.rules), &b["channels"]["retired_life_more"]),
+        0,
+        "the retained historical identity is not an executable Life alias"
+    );
 }
 pub fn assert_endpoint(endpoint: &StagedOwnedRelease) {
     check_authored();

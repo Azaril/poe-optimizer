@@ -1,5 +1,12 @@
 # Gigantic Following: default grants and Sniper status
 
+Historical acquisition/publication packet. The current
+[Boolean successor](../gigantic-flags/README.md) replaces integer presence with
+typed Flag/Any at the same identities. The table and publication figures below
+describe this earlier checkpoint, not a retained runtime compatibility path.
+Current numerical checks use the joined Sniper graph; see the
+[implementation plan](../../../../../docs/implementation.md).
+
 This packet extends the exact `pob-3887ae68-minion-life-passives-v1` predecessor
 (`ee4cc6c44202f2174129e12e782a02cd65c5a993c6ccffc87e779460fb7be09f`). It
 publishes the complete default body of passive `46365` / owned `1532`, preserving
@@ -35,8 +42,9 @@ manifest/files and exact projections before applying the ordinary V5 migration
 and passive refinement. These source graphs are offline test evidence, not the
 native runtime format.
 
-Life/damage numerical factors and delivery of reservation efficiency to the
-parent minion-summoning occurrence remain subsequent work. The current reservation
+At this historical checkpoint, Life/damage numerical factors and delivery of
+reservation efficiency remained subsequent work. Individual factors are now
+published and joined; final reservation delivery remains open. The reservation
 consumer is Action-owned; the [ownership proposal](../../../../../docs/owned-resource-obligations-proposal.md)
 is pending. The source MAIN and CALCS
 combat frames include Gigantic's numerical benefits, while CALCS buffed and
@@ -46,8 +54,9 @@ calculation/display-scope distinction, not evidence for adding a native game
 make a consumer reachable. No whole-build parity is claimed.
 
 `tests/support/owned_gigantic_following.rs` provides the bounded publication and
-evidence gate. `tests/owned_gigantic_following.rs` exercises the authored programs
-with the native evaluator and exposes the opt-in publication check. Generated
+evidence gate. `tests/owned_gigantic_following.rs` retains authored-data and
+historical publication checks. Its old native entry points and helper were
+removed after useful checks moved to `tests/owned_sniper_item_attack.rs`. Generated
 packages and full source reports remain ignored under `runs/`; publication/test
 results are recorded at the implementation checkpoint.
 

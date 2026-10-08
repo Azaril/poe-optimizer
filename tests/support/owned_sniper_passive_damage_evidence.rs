@@ -11,7 +11,7 @@ use poe_optimizer_core::{
     build_identity::BuildLineage,
     owned_build::{Allocation, LoadoutScope},
     owned_definitions::PassiveNodeDefId,
-    owned_draft::{AllocationDraft, DraftAllocationAccess},
+    owned_draft::{AllocationDraft, DraftAllocationAccess, DraftListCompletion},
     owned_rules::{DefinitionRules, StatReceiver},
     owned_schema::{DefinitionDescriptor, SchemaDefinitionId, SchemaSubject},
 };
@@ -298,7 +298,7 @@ pub struct PassiveCase {
     pub source_xml_sha256: String,
 }
 
-fn remove_saved_node(xml: &str, remove: &str) -> String {
+pub fn remove_saved_node(xml: &str, remove: &str) -> String {
     // The retained source test's exact byte-preserving mutation protocol.
     let source = ImportedBuildInstance::from_decoded(
         decode_build(xml.as_bytes()).unwrap(),
@@ -351,6 +351,39 @@ fn remove_saved_node(xml: &str, remove: &str) -> String {
     out
 }
 
+/// Import an exact Original05/control XML and retain every saved selection,
+/// including unresolved allocation records. Callers choose their finite family
+/// only after this shared import; this does not establish active connectivity.
+pub fn normalized_selected_allocations(package: &Path, xml: &str) -> Vec<AllocationDraft> {
+    let directory = tempfile::tempdir().unwrap();
+    let path = directory.path().join("candidate.xml");
+    fs::write(&path, xml).unwrap();
+    let output = directory.path().join("imported");
+    crate::release::normalize(package, &path, 5, &output);
+    let selection = selected::selection(xml.as_bytes(), &output);
+    let draft: Value = read(output.join("draft.json"));
+    let sidecar: Value = read(output.join("sidecar.json"));
+    assert_eq!(sidecar["source_sha256"], hash(xml.as_bytes()));
+    let preset = one(
+        draft["draft"]["allocation_presets"]["members"]
+            .as_array()
+            .unwrap(),
+        "id",
+        &selection["build"]["allocations"],
+    );
+    assert_eq!(preset["allocations"]["completion"]["kind"], "complete");
+    let ids = preset["allocations"]["members"].as_array().unwrap();
+    let all = draft["draft"]["allocations"]["members"].as_array().unwrap();
+    let mut seen = BTreeSet::new();
+    ids.iter()
+        .map(|id| {
+            let allocation: AllocationDraft = decode(one(all, "id", id));
+            assert!(seen.insert(allocation.id), "distinct selected occurrences");
+            allocation
+        })
+        .collect()
+}
+
 /// Fresh actual import of the two hash-matched source inputs. No observed output
 /// is a native input; source-active sets remain separate expected observations.
 pub fn normalized_allocations(package: &Path) -> Vec<PassiveCase> {
@@ -358,7 +391,6 @@ pub fn normalized_allocations(package: &Path) -> Vec<PassiveCase> {
     let bindings: family::Bindings = family::read("bindings.json");
     let selected_values = family::selected_values();
     let original = fs::read_to_string(root().join(ORIGINAL)).unwrap();
-    let directory = tempfile::tempdir().unwrap();
     sources
         .iter()
         .map(|source| {
@@ -372,50 +404,30 @@ pub fn normalized_allocations(package: &Path) -> Vec<PassiveCase> {
                 source.xml_sha256,
                 "exact retained source mutation"
             );
-            let path = directory.path().join(format!("{}.xml", source.name));
-            fs::write(&path, &xml).unwrap();
-            let output = directory.path().join(&source.name);
-            crate::release::normalize(package, &path, 5, &output);
-            let selection = selected::selection(xml.as_bytes(), &output);
-            let draft: Value =
-                serde_json::from_slice(&fs::read(output.join("draft.json")).unwrap()).unwrap();
-            let sidecar: Value =
-                serde_json::from_slice(&fs::read(output.join("sidecar.json")).unwrap()).unwrap();
-            assert_eq!(sidecar["source_sha256"], source.xml_sha256);
-            let preset = one(
-                draft["draft"]["allocation_presets"]["members"]
-                    .as_array()
-                    .unwrap(),
-                "id",
-                &selection["build"]["allocations"],
-            );
-            let ids = preset["allocations"]["members"].as_array().unwrap();
+            let imported = normalized_selected_allocations(package, &xml);
             assert_eq!(
-                ids.len(),
+                imported.len(),
                 if source.name == "original-05" { 55 } else { 54 }
             );
-            let all = draft["draft"]["allocations"]["members"].as_array().unwrap();
             let mut saved_allocations = Vec::new();
             let mut pending_nodes = Vec::new();
             let mut seen = BTreeSet::new();
             let mut subtotal = 0.0;
-            for id in ids {
-                let raw = one(all, "id", id);
+            for allocation in imported {
                 let Some(binding) = bindings
                     .nodes
                     .iter()
-                    .find(|b| raw["node"]["value"] == json!(b.node))
+                    .find(|b| allocation.node.to_resolved().as_ref() == Some(&b.node))
                 else {
                     continue;
                 };
                 assert!(selected_values.contains_key(&binding.source_id));
                 assert!(seen.insert(binding.source_id.clone()));
-                let allocation: AllocationDraft = decode(raw);
                 assert_eq!(allocation.node.to_resolved().as_ref(), Some(&binding.node));
                 assert_eq!(allocation.pool.to_resolved().as_ref(), Some(&binding.pool));
                 assert_eq!(allocation.scope.to_resolved(), Some(LoadoutScope::Shared));
                 assert!(allocation.choices.members.is_empty());
-                assert_eq!(raw["choices"]["completion"]["kind"], "complete");
+                assert_eq!(allocation.choices.completion, DraftListCompletion::Complete);
                 match &allocation.access {
                     DraftAllocationAccess::Ordinary => assert!(allocation.to_resolved().is_some()),
                     DraftAllocationAccess::Pending(pending) => {

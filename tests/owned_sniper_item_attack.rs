@@ -15,6 +15,11 @@ mod buff_effect_family;
 mod buff_effect_recipients_native;
 #[path = "support/owned_sniper_item_attack_evidence.rs"]
 mod evidence;
+#[allow(dead_code)]
+#[path = "support/owned_gigantic_flags.rs"]
+mod gigantic_family;
+#[path = "support/owned_sniper_gigantic_native.rs"]
+mod gigantic_native;
 #[path = "support/owned_sniper_passive_damage_evidence.rs"]
 mod passive_damage_evidence;
 #[path = "support/owned_sniper_passive_damage_native.rs"]
@@ -72,6 +77,7 @@ struct World {
     block_cases: Vec<evidence::BlockCase>,
     passives: passive_damage_native::Census,
     recipient_buffs: buff_effect_recipients_native::Census,
+    gigantic: gigantic_native::Census,
 }
 impl World {
     fn load() -> Self {
@@ -375,6 +381,7 @@ impl World {
             .clone();
         let passives = passive_damage_native::install(&mut w, &endpoint, &path);
         let recipient_buffs = buff_effect_recipients_native::install(&mut w, &endpoint);
+        let gigantic = gigantic_native::install(&mut w, &endpoint, &path);
         Self {
             sniper: w,
             actual_actor_coverage,
@@ -383,6 +390,7 @@ impl World {
             block_cases,
             passives,
             recipient_buffs,
+            gigantic,
         }
     }
     fn action(&self, index: usize) -> ActionSelection {
@@ -411,6 +419,13 @@ impl World {
         &self,
         configure: impl FnOnce(&mut EvaluationStagesInput),
     ) -> std::result::Result<shared::Plan, String> {
+        self.checked_plan_selecting(configure, |_| {})
+    }
+    fn checked_plan_selecting(
+        &self,
+        configure: impl FnOnce(&mut EvaluationStagesInput),
+        select: impl FnOnce(&mut Vec<MetricRequest>),
+    ) -> std::result::Result<shared::Plan, String> {
         let original = self.sniper.base.source.request();
         let mut queries = original.queries().input().clone();
         queries.requests.extend((0..2).map(|index| MetricRequest {
@@ -418,6 +433,7 @@ impl World {
             metric: def("fixture.observe"),
             target: MetricTarget::Action(Box::new(self.action(index))),
         }));
+        select(&mut queries.requests);
         assert!(
             !queries
                 .requests
@@ -489,6 +505,7 @@ impl World {
             }
             passive_damage_native::configure(stages);
             buff_effect_recipients_native::configure(stages);
+            gigantic_native::configure(stages);
             configure(stages);
         })
     }

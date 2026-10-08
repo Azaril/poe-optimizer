@@ -1,6 +1,6 @@
 //! Reuse the existing intrinsic fixture; its explicit final-parent producer is
 //! a component boundary, never an admitted real-build default or scalar Life pool.
-use super::{family, gigantic, intrinsic, release};
+use super::{family, intrinsic, release};
 use intrinsic::{World, actor, actor_slot, def, known, quantity};
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;
@@ -21,41 +21,41 @@ fn endpoint() -> StagedOwnedRelease {
             .expect("actual published intrinsic Life package"),
     );
     let endpoint = release::load(&path);
-    family::assert_endpoint(&endpoint);
+    family::assert_component(&endpoint);
     endpoint
 }
 fn install(world: &mut World, endpoint: &StagedOwnedRelease) {
     let recipe = &endpoint.input().recipe;
-    // Install the current published population programs. The historical
-    // intrinsic fixture predates their facts/requirements split; retaining its
-    // combined body would exercise a retired producer in this new component.
-    let parent = SchemaSubject::Definition(def::<SkillDefinition>(0x12).address());
-    let actual_parent = recipe
-        .rules
-        .owners
-        .iter()
-        .find(|o| o.owner == parent)
-        .unwrap();
-    let actual_level = actual_parent
-        .programs
-        .members
-        .iter()
-        .find(|p| p.id.as_str() == "ordinary-population-inputs")
-        .unwrap();
-    let actual_requirements = actual_parent
-        .programs
-        .members
-        .iter()
-        .find(|p| p.id.as_str() == "ordinary-population-requirements")
-        .unwrap();
-    let population = &mut world.f.owner_mut(&parent).programs.members;
-    let previous = population
-        .iter_mut()
-        .find(|p| p.id == actual_level.id)
-        .unwrap();
-    *previous = actual_level.clone();
-    assert!(!population.iter().any(|p| p.id == actual_requirements.id));
-    population.push(actual_requirements.clone());
+    // This shared fixture predates both offline partitions. Replace its exact
+    // combined bodies with the authenticated current fragments; it still owns
+    // the explicit final-parent input and finite unrelated inventories.
+    let population: family::activation_family::population_partition::Partition =
+        family::activation_family::population_partition::read("partition.json");
+    for partition in family::activation_family::partitions() {
+        let expected = if partition.owner == population.owner {
+            assert_eq!(partition.original, population.facts.program);
+            &population.original
+        } else {
+            &partition.original
+        };
+        let programs = &mut world.f.owner_mut(&partition.owner).programs.members;
+        let index = programs.iter().position(|p| p.id == expected.id).unwrap();
+        assert_eq!(&programs[index], expected);
+        assert!(
+            !programs
+                .iter()
+                .any(|p| p.id == partition.activation.program.id)
+        );
+        programs[index] = partition.numerical.program;
+        programs.insert(index + 1, partition.activation.program);
+    }
+    let programs = &mut world.f.owner_mut(&population.owner).programs.members;
+    assert!(
+        !programs
+            .iter()
+            .any(|p| p.id == population.requirements.program.id)
+    );
+    programs.push(population.requirements.program);
     for name in ["sniper.actor-level", "sniper.required-character-level"] {
         let table = recipe
             .rules
@@ -338,92 +338,4 @@ fn independent_roots_and_reused_parallel_scratch_preserve_life_sources() {
             .collect()
     });
     assert!(reports.iter().all(|r| r == &first));
-}
-#[test]
-#[ignore = "requires the actual published intrinsic Life endpoint"]
-fn migrated_gigantic_uses_the_shared_life_stat_without_an_alias_or_duplicate() {
-    let endpoint = endpoint();
-    let mut world = gigantic::from_endpoint(&endpoint);
-    install(&mut world.intrinsic, &endpoint);
-    let replacement: Value = family::read("replacement.json");
-    let migrated: RuleProgram = serde_json::from_value(replacement["after"].clone()).unwrap();
-    assert_eq!(migrated.id.as_str(), "gigantic-life-and-damage");
-    let actual = endpoint
-        .input()
-        .recipe
-        .rules
-        .owners
-        .iter()
-        .find(|o| o.owner == actor_owner())
-        .unwrap();
-    assert!(actual.programs.members.contains(&migrated));
-    world
-        .intrinsic
-        .f
-        .owner_mut(&actor_owner())
-        .programs
-        .members
-        .push(migrated);
-    let first = world.evaluate();
-    assert!(first.gaps.is_empty());
-    let before = [life(&first, 0).clone(), life(&first, 1).clone()];
-    let check_more = |report: &OwnedEffectsReport, active: bool| {
-        for (index, base) in before.iter().enumerate() {
-            let rows:Vec<_>=report.effects.iter().filter(|e|matches!(&e.target,BoundEffectTarget::Contribution{key} if key.stat==def(0x311a) && key.kind==ContributionKind::Multiply && key.entity==ConcreteEntity::Actor(actor(index)))).collect();
-            assert_eq!(rows.len(), 1);
-            assert_eq!(
-                rows[0].value,
-                if active {
-                    EffectValue::Known {
-                        value: quantity(1.2, 1),
-                    }
-                } else {
-                    EffectValue::Inactive
-                }
-            );
-            assert_eq!(life(report, index), base);
-        }
-        assert!(!report.effects.iter().any(
-            |e| matches!(&e.target,BoundEffectTarget::Contribution{key} if key.stat==def(0x330a))
-        ));
-    };
-    check_more(&first, true);
-    let allocations = world.intrinsic.f.build.allocations.clone();
-    world.intrinsic.f.build.allocations.clear();
-    check_more(&world.evaluate(), false);
-    world.intrinsic.f.build.allocations = allocations;
-    let grant = world
-        .intrinsic
-        .f
-        .owner_mut(&gigantic::passive())
-        .programs
-        .members
-        .iter()
-        .find(|p| p.id.as_str() == "ordinary-minion-gigantic")
-        .unwrap()
-        .clone();
-    let class = SchemaSubject::Definition(world.intrinsic.f.build.character.class.address());
-    world
-        .intrinsic
-        .f
-        .owner_mut(&class)
-        .programs
-        .members
-        .push(grant);
-    check_more(&world.evaluate(), true);
-    assert!(
-        !serde_json::to_string(&endpoint.input().recipe.rules)
-            .unwrap()
-            .contains("def.000000000000330a")
-    );
-    // Historical identity persists, but there is no live alias or second writer.
-    assert!(
-        endpoint
-            .input()
-            .recipe
-            .schema
-            .definitions
-            .iter()
-            .any(|d| d.address() == def::<StatDefinition>(0x330a).address())
-    );
 }

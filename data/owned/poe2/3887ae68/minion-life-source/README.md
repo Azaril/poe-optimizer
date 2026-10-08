@@ -12,8 +12,10 @@ Actor definition `3091` / `RaisedSkeletonSniper`. The source's complete profile,
 original profile/table selection, and original initializer prove its allied
 branch. Hostile or replacement profiles are not admitted by this packet; no Lua
 absent-or-false behavior or arbitrary hostility input is added to native rules.
-The existing `ordinary-population-inputs` program, its `sniper.actor-level`
-table and required slots are authenticated unchanged.
+This historical publication authenticated the then-current
+`ordinary-population-inputs` body, `sniper.actor-level` table and required slots.
+Current tests authenticate its later population/activation partitions, preserving
+the same numerical data and requirements without loading an obsolete artifact.
 
 The same publication removes a redundant live Life channel: Gigantic's existing
 program now writes its `Multiply 1.2` contribution to `311a`, alongside intrinsic
@@ -47,11 +49,14 @@ preserves all five originals. Native tests exercise the published program,
 counterexamples for scaling/floor order and table boundaries, missing inputs,
 independent occurrences and reused parallel scratch. Source and native results
 are recorded in the [implementation checkpoint](../../../../../docs/implementation.md).
-Publication01 passes in 28.37 seconds; all six native tests pass in 23.41 seconds.
-The native fixture installs the exact current population facts and requirements,
-authenticating both underlying tables. Its explicit final-parent input is a
-component boundary; real physical source assembly is checked separately by the
-[Sniper input packet](../sniper-final-inputs/README.md).
+Historical publication01 passed in 28.37 seconds and six native tests passed in
+23.41 seconds. The current five independent Life tests pass in 40.39 seconds on
+the [Gigantic Boolean successor](../gigantic-flags/README.md). Its canonical-Life
+coexistence check moved to the shared item-driven Sniper graph. The retained
+numerical fixture installs exact current population facts, activation and
+requirements, authenticating both underlying tables. Its explicit final-parent
+input remains a component boundary; the joined graph calculates those inputs
+from actual item and source-preparation programs.
 
 This is one intrinsic Life contribution. Final Life equations, recipient delivery
 of other modifiers, contributor completeness and full-build coverage remain open.

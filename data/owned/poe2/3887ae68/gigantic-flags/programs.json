@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "programs": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001532"
+          }
+        }
+      },
+      "program": {
+        "id": "ordinary-minion-gigantic",
+        "context": "actor",
+        "reads": [],
+        "nodes": [
+          {
+            "id": "amount",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "boolean",
+                "value": true
+              }
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "grant",
+            "when": null,
+            "effect": {
+              "kind": "contribute",
+              "entity": "player",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003307"
+              },
+              "contribution": "flag",
+              "value": "amount"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003308"
+          }
+        }
+      },
+      "program": {
+        "id": "received-minion-gigantic",
+        "context": "actor",
+        "reads": [
+          {
+            "id": "grants",
+            "value_type": {
+              "kind": "boolean"
+            },
+            "source": {
+              "kind": "contribution_query",
+              "value": {
+                "entity": "player",
+                "query": "minion-gigantic-grants",
+                "group": "sources"
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "grants",
+            "expression": {
+              "kind": "read",
+              "input": "grants"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "active",
+            "when": null,
+            "effect": {
+              "kind": "derive",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003308"
+              },
+              "value": "grants"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

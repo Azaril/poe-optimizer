@@ -1,14 +1,12 @@
 //! Published intrinsic Life contributions, with finite input boundaries explicit.
 #[path = "support/owned_minion_life_source.rs"]
 mod family;
-#[path = "support/owned_gigantic_following_fixture.rs"]
-mod gigantic;
+#[path = "../crates/poe-optimizer-engine/tests/support/minion_attack_source_fixture.rs"]
+mod intrinsic;
 #[path = "support/owned_release_migration_preservation.rs"]
 mod migration_preservation;
 #[path = "support/owned_minion_life_source_native.rs"]
 mod native;
-#[path = "support/owned_passive_refinement_publication.rs"]
-mod passive_publication;
 #[allow(dead_code)]
 #[path = "support/owned_physical_inventory_preservation.rs"]
 mod preservation;
@@ -18,10 +16,6 @@ mod publication;
 mod release;
 #[path = "support/owned_selected_request.rs"]
 mod selected;
-#[allow(dead_code)]
-#[path = "support/owned_gigantic_following.rs"]
-mod status_family;
-use gigantic::fixture::intrinsic;
 use serde_json::json;
 use std::path::PathBuf;
 
