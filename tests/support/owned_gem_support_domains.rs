@@ -51,10 +51,66 @@ pub fn identities() -> SkillIdentityCatalog {
     .unwrap()
 }
 
-/// This proves catalog construction only: the primary may be an authored
+/// Review the finite missing-effect classifications against the existing
+/// catalog. Exact generated blocks preserve IsSupport independently of whether
+/// the runtime skill has been implemented. This does not construct that skill.
+pub fn export_classes(
+    proof: &Value,
+    catalog: &SkillIdentityCatalog,
+) -> Option<BTreeMap<String, bool>> {
+    if proof["schema_version"] != 1
+        || proof["source_revision"] != catalog.data().source.upstream_revision
+    {
+        return None;
+    }
+    let missing: BTreeSet<_> = catalog
+        .data()
+        .missing_references
+        .iter()
+        .map(|r| r.effect_id.as_str())
+        .collect();
+    let mut classes = BTreeMap::new();
+    let mut positions = BTreeSet::new();
+    let mut control_classes = BTreeSet::new();
+    for (field, is_control) in [("records", false), ("controls", true)] {
+        for row in proof[field].as_array()? {
+            let id = row["effect_id"].as_str()?;
+            let support = row["support"].as_bool()?;
+            if is_control {
+                if support != (catalog.skill_by_id(id)?.support == Some(true)) {
+                    return None;
+                }
+                control_classes.insert(support);
+            } else if !missing.contains(id) || classes.insert(id.to_owned(), support).is_some() {
+                return None;
+            }
+            let flags = if support { "" } else { "#flags\n" };
+            let expected = format!("#skill {id}\n#set {id}\n{flags}#mods\n#skillEnd\n");
+            let blocks = row["blocks"].as_array()?;
+            if blocks.is_empty() {
+                return None;
+            }
+            for block in blocks {
+                let line = block["line"].as_u64()?;
+                if line == 0 || !positions.insert(line) || block["text"] != expected {
+                    return None;
+                }
+            }
+        }
+    }
+    (classes.keys().map(String::as_str).collect::<BTreeSet<_>>() == missing
+        && control_classes == BTreeSet::from([false, true]))
+    .then_some(classes)
+}
+
+/// This proves support-source classification only: the primary may be an authored
 /// support; any additional support needs unimplemented origin authority.
 /// Display order, active level/quality, source groups and final DPS are irrelevant.
-pub fn assignment_only(record: &Value, catalog: &SkillIdentityCatalog) -> Option<bool> {
+pub fn assignment_only(
+    record: &Value,
+    catalog: &SkillIdentityCatalog,
+    exported: &BTreeMap<String, bool>,
+) -> Option<bool> {
     let gem = catalog.gem_by_key(record["gem_id"].as_str()?)?;
     let primary = record["primary_effect"].as_str()?;
     if !record["selector_resolves_same"].as_bool()?
@@ -130,8 +186,20 @@ pub fn assignment_only(record: &Value, catalog: &SkillIdentityCatalog) -> Option
         .iter()
         .map(|reference| reference.id.as_str())
         .collect();
-    (constructed.len() == gem.constructed_additional_effects.len() && constructed == additional)
-        .then_some(only)
+    if constructed.len() != gem.constructed_additional_effects.len()
+        || !additional.is_subset(&constructed)
+    {
+        return None;
+    }
+    for id in constructed.difference(&additional) {
+        // A loaded effect omitted from construction is a different discrepancy.
+        // Only the exact reviewed missing-runtime classification is admitted.
+        if catalog.skill_by_id(id).is_some() {
+            return None;
+        }
+        only &= !*exported.get(*id)?;
+    }
+    Some(only)
 }
 
 pub fn check_authored() {
@@ -154,9 +222,17 @@ pub fn check_authored() {
     for pin in authoring["source_files"].as_array().unwrap() {
         assert!(manifest["files"].as_array().unwrap().contains(pin));
     }
+    assert!(
+        authoring["source_files"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|p| p["path"] == "src/Export/Scripts/skillGemList.lua")
+    );
     let records: Vec<Value> = super::catalog_evidence::read("source-records.json");
     let bindings: Vec<Value> = super::catalog_evidence::read("bindings.json");
     let catalog = identities();
+    let exported = export_classes(&read("export-classifications.json"), &catalog).unwrap();
     assert!(
         authoring["evidence"]
             .as_array()
@@ -184,7 +260,7 @@ pub fn check_authored() {
         assert_eq!(record["gem_id"], binding["source_gem"]);
         let gem: GemDefId = serde_json::from_value(binding["gem"].clone()).unwrap();
         let owner = SchemaSubject::Definition(gem.address());
-        let domain = match assignment_only(record, &catalog) {
+        let domain = match assignment_only(record, &catalog, &exported) {
             Some(true) => {
                 known += 1;
                 SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly)
@@ -193,7 +269,7 @@ pub fn check_authored() {
                 unmapped += 1;
                 let code = if decision.is_none() {
                     unresolved += 1;
-                    "gem-effect-construction-unresolved"
+                    "gem-effect-classification-unresolved"
                 } else {
                     GAP
                 };
@@ -215,13 +291,81 @@ pub fn check_authored() {
     assert_eq!(extension.support_source_domains, expected);
     assert_eq!(
         authoring["domains"],
-        json!({"total":966,"known":known,"unmapped":unmapped,"unresolved_construction":unresolved})
+        json!({"total":966,"known":known,"unmapped":unmapped,"unresolved_classification":unresolved,
+            "missing_runtime_effects":exported.len()})
     );
     assert_eq!(known + unmapped, 966);
-    assert_eq!((known, unmapped, unresolved), (929, 37, 8));
+    assert_eq!((known, unmapped, unresolved), (937, 29, 0));
+}
+
+fn authenticate_exports() {
+    use std::process::Command;
+    let proof: Value = read("export-classifications.json");
+    export_classes(&proof, &identities()).unwrap();
+    // This tracked .txt file is outside the Lua source manifest. Authenticate
+    // its exact Git blob at the same upstream revision instead of extending the
+    // runtime manifest or blessing whichever checkout happens to be present.
+    let selector = format!(
+        "{}:{}",
+        proof["source_revision"].as_str().unwrap(),
+        proof["template"]["path"].as_str().unwrap()
+    );
+    let git = |args: &[&str]| {
+        let out = Command::new("git")
+            .args(["-C", "vendor/path-of-building-poe2"])
+            .args(args)
+            .current_dir(root())
+            .output()
+            .unwrap();
+        assert!(
+            out.status.success(),
+            "{}",
+            String::from_utf8_lossy(&out.stderr)
+        );
+        out.stdout
+    };
+    let blob = git(&["rev-parse", &selector]);
+    assert_eq!(
+        String::from_utf8(blob).unwrap().trim(),
+        proof["template"]["git_blob"].as_str().unwrap()
+    );
+    let bytes = git(&["show", &selector]);
+    assert_eq!(proof["template"]["bytes"], bytes.len());
+    assert_eq!(proof["template"]["sha256"], hash(&bytes));
+    let text = String::from_utf8(bytes).unwrap();
+    let lines: Vec<_> = text.lines().collect();
+    for field in ["records", "controls"] {
+        for row in proof[field].as_array().unwrap() {
+            let header = format!("#skill {}", row["effect_id"].as_str().unwrap());
+            let actual: Vec<_> = lines
+                .iter()
+                .enumerate()
+                .filter(|(_, line)| **line == header)
+                .map(|(i, _)| i + 1)
+                .collect();
+            let blocks = row["blocks"].as_array().unwrap();
+            assert_eq!(
+                actual,
+                blocks
+                    .iter()
+                    .map(|b| b["line"].as_u64().unwrap() as usize)
+                    .collect::<Vec<_>>(),
+                "every duplicate export occurrence"
+            );
+            for block in blocks {
+                let start = block["line"].as_u64().unwrap() as usize - 1;
+                let expected = block["text"].as_str().unwrap();
+                assert_eq!(
+                    lines[start..start + expected.lines().count()].join("\n") + "\n",
+                    expected
+                );
+            }
+        }
+    }
 }
 
 fn authenticate_source() {
+    authenticate_exports();
     let authoring: Value = super::catalog_evidence::read("authoring.json");
     let proof = &authoring["source_validation"];
     let off = fs::read(root().join(proof["evidence_json"].as_str().unwrap())).unwrap();

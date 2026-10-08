@@ -106,8 +106,7 @@ these answers. Ask when one becomes the next necessary design boundary.
 ## Current native data checkpoint: Gem support-source domains
 
 The existing offline extension/assembler now publishes **966 Gem declarations**:
-929 `AuthoredAssignmentsOnly`, 29 Unmapped for actual additional support effects,
-and eight Unmapped for unresolved declared effect construction. The
+937 `AuthoredAssignmentsOnly` and 29 Unmapped for actual additional support effects. The
 [packet](../data/owned/poe2/3887ae68/gem-support-domains/README.md) reuses the
 authenticated complete Gem catalog rather than adding another extractor. Every
 source-to-owned binding is checked against the current release. No runtime code,
@@ -121,46 +120,56 @@ Ice Nova loses this false blocker. This was our authoring error, not a PoB bug.
 The current format was corrected and rebuilt from the same predecessor; no
 runtime compatibility or extension-overwrite path was added.
 
-The remaining blocker is narrower: the pinned catalog declares additional
-effects that do not resolve or appear in its constructed lists, including
-`CommandSkeletalSniperPlayer`. Do not infer that the game has no such mechanic
-from missing source definitions or copy Lua's missing-table behavior. Review the
-source discrepancies and the relevant game intent before refining these domains.
-The selected Sniper preset has **19 Known and four Unmapped physical Gem
-occurrences**; the four are Arsonist, Sniper, Frost Mage and Reaver.
-Generated/manual Djinn have separate Skill/provider coverage requirements.
+The follow-up traced all eight missing runtime effects to the pinned generated
+`SkillGemsExport.txt` inventory. Nine exact export blocks, including duplicate
+Sniper rows, retain the generator's non-support branch. The generator reads each
+effect's `IsSupport`, independently of its Gem category. Three loaded active/
+support controls agree with the typed catalog. Publication authenticates the
+template's exact Git blob and all block occurrences, plus the manifest-pinned
+generator. This establishes classification without inventing the missing Skills.
+
+All **23 selected Sniper physical Gem occurrences now have Known support-source
+domains**. The eight missing runtime identities and their Command mechanics
+remain unresolved; Player Commands are not aliases for existing minion-side
+actions. Four bounded PoE2DB lookups corroborate that distinction but supply no
+pinned numerical data. This is neither a PoB-bug parity waiver nor missing-table
+emulation. Generated/manual Djinn and other providers have separate coverage
+requirements. The retained proof and lookup references are in the packet README.
 
 The canonical package is now
-`runs/owned-gem-support-domains-publication-02/package`, input
-`bc83850de85d593d86a78d8fc680b23f1282d566e7efcf1f68324e5c694883f0`, rules
-`5447cd5b9a7a119560b158b6ff3ba2feef1059c723bf202c653241812889d8fd`, compiled rules
-`5902ccd3c8a10f92770c520873f7f2e13e9c43129f99e1fbbd6271ffa37d1ba2`.
+`runs/owned-gem-support-domains-publication-03/package`, input
+`f3d994ac40afb840606c84a10df7e84fb60bcc216ac5700f2cb07e9a5a955c68`, rules
+`5cd23f3e3c3c70e96d131608e9f14a58e346c551b6ef2c0aac93e1a06379b128`, compiled rules
+`746863d0d48dad809ad44256fbd7ff6cda4c9223fb8b4b0c0a15f1e29ec65014`.
 The schema identity remains unchanged. Publication proves an exact whole-input
 inverse allowing only these declarations and one provenance row, plus byte-identical
 rebuilding and unchanged fresh imports of all five originals. Selected input
 counts remain **107/117/109/123/4**, with 110 queries and **0/5 complete builds**.
 
-Five ordinary catalog/refusal checks pass, including the full stat-set census,
-category/identity corruption and genuine missing-effect controls. Publication
-passes in **21.07s**; logs are
-`runs/owned-gem-support-domains-{ordinary-03,publication-02}.log`.
+Seven ordinary catalog/refusal checks pass, including the full stat-set census,
+category/identity corruption, missing export proof, positive-support controls,
+and unchanged missing runtime identities. Publication passes in **21.08s**; logs
+are `runs/owned-gem-support-domains-{ordinary-04,publication-03}.log`.
 The initial `ordinary-01` failure combined genuine missing effects with our
 incorrect stat-set classification; it is retained as historical diagnostic evidence.
 The publication's `selected-gem-domains-05.json` records the selected occurrence
-census. **All 76 joined Sniper checks pass in 38.77s** against the corrected successor.
+census. **All 76 joined Sniper checks pass in 37.83s** against the current successor.
 All seven common native discovery-gate checks passed at the preceding checkpoint,
 including disabled sources,
 changed providers, direct/staged entry and reused/Rayon results. Strict Clippy
 passes for the new CLI integration target with all features. Evidence:
-`runs/owned-gem-support-domains-{sniper-02,native-gate-01,clippy-02}.log`.
+`runs/owned-gem-support-domains-{sniper-03,native-gate-01,clippy-03}.log`.
 
-**Resume:** review the four selected unresolved Gem constructions, then continue
-exact support-source domains for the remaining owners and provider-specific
+**Resume:** the selected physical Gem support-source domain is now covered.
+Continue exact support-source domains for the remaining owners and provider-specific
 exclusions. Known Gem domains alone cannot bypass the common native gate, close
 usage/configuration inputs or establish whole numerical coverage. The separate
 application-group contribution-query proposal still awaits owner input; do not
 implement that public change while waiting. Prioritize the shortest evidenced
 path to unchanged Original05 through the accepted support and Actor/Life seams.
+Keep distinct Command input/action/usage obligations when reviewing the selected
+mechanics; support classification does not remove them. Do not repeatedly reopen
+the resolved Gem identity/classification census as an immediate blocker.
 
 ## Current input checkpoint: authored support relationships
 
@@ -1767,9 +1776,10 @@ evaluation bundle, absent from the current package. Work in this order:
 
 1. The authored-support input issue (`01de`) is resolved and the common native
    discovery gate is implemented. Finish reviewed source domains and exact
-   provider exclusions through that cold-composition seam. The corrected Gem
-   packet leaves four selected unresolved constructions to review; do not infer
-   absence from missing source definitions or from a preset-only certificate.
+   provider exclusions through that cold-composition seam. All 23 selected physical
+   Gems now have reviewed support domains; other owner domains remain unknown.
+   Missing Command mechanics are independent of their now-proved classification;
+   do not invent missing source definitions or use preset-only certificates.
 2. In parallel, account for selected preset usage (`0503`), configuration (`01f2`),
    external assumptions (`0207`) and scenario usage (`0208`) through reviewed
    consumers, preserved responsibilities or justified non-applicability. Reuse
@@ -2741,7 +2751,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
 | Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Equipment ordering, global/owner coverage and the final Life consumer remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
-| Composed support discovery | Accepted October 8. The common direct/staged native gate, current authored-order DTO and source-input accounting are implemented; Original05 `01de` is retired after full saved-relationship proof. The corrected Gem packet publishes 929 Known and 37 Unmapped domains with all-five preservation. The prior 111 stat-set blockers were our offline classifier error, fixed using existing typed identities. Review four selected unresolved Gem constructions, other owner domains and exact provider exclusions next. Twelve cold source loads establish constructor and sharing/exclusion evidence, not native ownership or legal sharing authority. Unsupported positive and archived source relationships remain blocking. [Contract](owned-support-origin-composition-proposal.md). |
+| Composed support discovery | Accepted October 8. The common native gate, current authored-order DTO and source-input accounting are implemented; Original05 `01de` is retired. The Gem packet publishes 937 Known and 29 Unmapped domains with all-five preservation; all 23 selected physical Gem domains are covered. Existing typed identities fixed 111 false stat-set blockers. Pinned generated export metadata classifies eight missing runtime effects as active without implementing their Command mechanics. Continue other owner domains and exact provider exclusions; keep Command action/usage gaps separate. Unsupported positive and archived source relationships remain blocking. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Application-group contribution queries | Proposed October 8; owner review pending. Give the existing query members typed program-effect/application-group producer addresses, validating exact recipients and all potential sources before values. Preserve stacking, unknowns, explicit numeric order and one checked reduction path; rebuild current artifacts without compatibility branches. This is the next combined damage consumer boundary. [Proposal](owned-application-group-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |

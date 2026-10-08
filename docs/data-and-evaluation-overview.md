@@ -46,9 +46,11 @@ same manually authored Skill. PoB's `gemData`/`fromTree` fields are not native
 ownership authority. The common native gate now requires reviewed support-source
 domain declarations from injected data, including for disabled selected providers.
 It has no Lua state and cannot infer coverage from authored order. The first
-game-data packet now supplies 929 known Gem domains and 37 explicit gaps:
-29 have additional support effects and eight have unresolved declared effect
-construction. Other owner domains and exact provider exclusions remain pending.
+game-data packet now supplies 937 known Gem domains and 29 explicit gaps for
+additional support effects. Eight missing runtime effects have independently
+reviewed active-effect classification from the pinned generated export inventory;
+their construction and mechanics remain unresolved. Other owner domains and
+exact provider exclusions remain pending.
 The corrected offline proof reuses typed catalog identities to keep stat-set
 metadata separate from effect origins; the initial packet had conflated them.
 A separate whole-source authored-input proof now
@@ -77,9 +79,10 @@ Unknown generated quality remains unknown, and unsupported sharing or archived
 sources stay Pending. Neither this proof nor the DTO establishes native coverage.
 
 The broader catalog audit found declared but unconstructed additional references
-on four selected physical Gem occurrences in Original05, including Sniper. Those
-remain Unmapped rather than importing a missing-source default into the native
-model. This requires a source/game-intent review, not a build-specific exception.
+on four selected physical Gem occurrences in Original05, including Sniper.
+The export review closes their support classification, so all 23 selected
+physical Gems now have Known source domains. It does not close Command
+mechanics or alias Player Commands to existing minion-side actions.
 Ice Nova's stat-set references are now correctly classified as metadata and do
 not create another support origin. That false blocker was our authoring defect.
 The [current checkpoint](implementation.md#current-native-data-checkpoint-gem-support-source-domains)

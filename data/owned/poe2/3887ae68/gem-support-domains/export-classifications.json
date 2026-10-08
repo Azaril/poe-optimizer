@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "template": {
+    "path": "src/Export/Skills/SkillGemsExport.txt",
+    "bytes": 109442,
+    "sha256": "5aa4cf3055ed80696c227e8fda28332afddc935ee9f6dc31caedede9833c73f2",
+    "git_blob": "11782d377e29b384ac5b1f8669450d9195295e8f"
+  },
+  "records": [
+    {
+      "effect_id": "CommandDeathFromAbovePlayer",
+      "support": false,
+      "blocks": [
+        {
+          "line": 6821,
+          "text": "#skill CommandDeathFromAbovePlayer\n#set CommandDeathFromAbovePlayer\n#flags\n#mods\n#skillEnd\n"
+        }
+      ]
+    },
+    {
+      "effect_id": "CommandSkeletalArsonistPlayer",
+      "support": false,
+      "blocks": [
+        {
+          "line": 4377,
+          "text": "#skill CommandSkeletalArsonistPlayer\n#set CommandSkeletalArsonistPlayer\n#flags\n#mods\n#skillEnd\n"
+        }
+      ]
+    },
+    {
+      "effect_id": "CommandSkeletalBrutesPlayer",
+      "support": false,
+      "blocks": [
+        {
+          "line": 4389,
+          "text": "#skill CommandSkeletalBrutesPlayer\n#set CommandSkeletalBrutesPlayer\n#flags\n#mods\n#skillEnd\n"
+        }
+      ]
+    },
+    {
+      "effect_id": "CommandSkeletalFrostMagePlayer",
+      "support": false,
+      "blocks": [
+        {
+          "line": 4407,
+          "text": "#skill CommandSkeletalFrostMagePlayer\n#set CommandSkeletalFrostMagePlayer\n#flags\n#mods\n#skillEnd\n"
+        }
+      ]
+    },
+    {
+      "effect_id": "CommandSkeletalReaversPlayer",
+      "support": false,
+      "blocks": [
+        {
+          "line": 4419,
+          "text": "#skill CommandSkeletalReaversPlayer\n#set CommandSkeletalReaversPlayer\n#flags\n#mods\n#skillEnd\n"
+        }
+      ]
+    },
+    {
+      "effect_id": "CommandSkeletalSniperPlayer",
+      "support": false,
+      "blocks": [
+        {
+          "line": 4431,
+          "text": "#skill CommandSkeletalSniperPlayer\n#set CommandSkeletalSniperPlayer\n#flags\n#mods\n#skillEnd\n"
+        },
+        {
+          "line": 4443,
+          "text": "#skill CommandSkeletalSniperPlayer\n#set CommandSkeletalSniperPlayer\n#flags\n#mods\n#skillEnd\n"
+        }
+      ]
+    },
+    {
+      "effect_id": "CommandSkeletalStormMagePlayer",
+      "support": false,
+      "blocks": [
+        {
+          "line": 4455,
+          "text": "#skill CommandSkeletalStormMagePlayer\n#set CommandSkeletalStormMagePlayer\n#flags\n#mods\n#skillEnd\n"
+        }
+      ]
+    },
+    {
+      "effect_id": "ConcussiveRunesPlayer",
+      "support": false,
+      "blocks": [
+        {
+          "line": 7003,
+          "text": "#skill ConcussiveRunesPlayer\n#set ConcussiveRunesPlayer\n#flags\n#mods\n#skillEnd\n"
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "effect_id": "AncestralCryShockwavePlayer",
+      "support": false,
+      "blocks": [
+        {
+          "line": 11,
+          "text": "#skill AncestralCryShockwavePlayer\n#set AncestralCryShockwavePlayer\n#flags\n#mods\n#skillEnd\n"
+        }
+      ]
+    },
+    {
+      "effect_id": "SupportAncestralWarriorTotemPlayer",
+      "support": true,
+      "blocks": [
+        {
+          "line": 29,
+          "text": "#skill SupportAncestralWarriorTotemPlayer\n#set SupportAncestralWarriorTotemPlayer\n#mods\n#skillEnd\n"
+        }
+      ]
+    },
+    {
+      "effect_id": "SupportConcussiveRunesPlayer",
+      "support": true,
+      "blocks": [
+        {
+          "line": 6998,
+          "text": "#skill SupportConcussiveRunesPlayer\n#set SupportConcussiveRunesPlayer\n#mods\n#skillEnd\n"
+        }
+      ]
+    }
+  ],
+  "authority": "Only GrantedEffects.IsSupport classification from pinned generated export blocks and skillGemList.lua. No runtime effect, action, mechanics, inputs or completeness are supplied."
+}

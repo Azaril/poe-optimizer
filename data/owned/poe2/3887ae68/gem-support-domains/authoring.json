@@ -6,15 +6,21 @@
   "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
   "domains": {
     "total": 966,
-    "known": 929,
-    "unmapped": 37,
-    "unresolved_construction": 8
+    "known": 937,
+    "unmapped": 29,
+    "unresolved_classification": 0,
+    "missing_runtime_effects": 8
   },
   "artifacts": [
     {
       "path": "data/owned/poe2/3887ae68/gem-support-domains/extension.json",
-      "bytes": 446292,
-      "sha256": "2fafca6b9bd997fb8afa014e61f329bf3a726663d5827511d9058592c2a31ccd"
+      "bytes": 441596,
+      "sha256": "cacf894d27cbdda96bc4a3e409ab84c5b83b806e08d91f0c7e2edc0f697b34aa"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/gem-support-domains/export-classifications.json",
+      "bytes": 3749,
+      "sha256": "50c94b4c8db9a1e1a406d8cfbaeb815ee0f9c72982955c1356992d33d8cad2bd"
     }
   ],
   "evidence": [
@@ -40,6 +46,11 @@
     }
   ],
   "source_files": [
+    {
+      "path": "src/Export/Scripts/skillGemList.lua",
+      "bytes": 6777,
+      "sha256": "80cff75a0646b363d5d1cec2c916f497715eb2d6665b950bf58bf55e8f60cd05"
+    },
     {
       "path": "src/Modules/CalcSetup.lua",
       "bytes": 100609,

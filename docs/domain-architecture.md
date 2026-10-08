@@ -960,9 +960,13 @@ and all other source responsibilities. This certificate never describes the
 capabilities of future equipment/tree compositions; native discovery still runs.
 
 Capability authoring must distinguish a resolved catalog's absence of additional
-support effects from a declared effect reference that has no definition. The
-latter remains an explicit gap pending source/game-intent review; source-language
-missing-table behavior is not a native game rule. Primary and all additional
+support effects from a declared effect reference that has no definition. Never
+infer a non-support classification from the missing definition. Independently
+authenticated export metadata may establish that classification while the
+missing construction, inputs and mechanics remain explicit gaps. This is a
+fact-specific evidence boundary, not a parity waiver or permission to alias
+Player Commands to minion actions. Source-language missing-table behavior is
+not a native game rule. Primary and all additional
 effects need exact identity and classification evidence, independently of display
 order, current activation and numerical outcomes.
 Preserve typed reference categories during offline proof: additional stat-set

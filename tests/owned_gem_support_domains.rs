@@ -14,7 +14,7 @@ mod release;
 #[path = "support/owned_selected_request.rs"]
 mod selected;
 use serde_json::{Value, json};
-use std::path::PathBuf;
+use std::{collections::BTreeMap, path::PathBuf};
 
 #[test]
 fn entire_catalog_has_explicit_known_or_unmapped_gem_source_domains() {
@@ -28,7 +28,7 @@ fn additional_supports_and_missing_effect_evidence_cannot_claim_absence() {
     assert!(
         records
             .iter()
-            .any(|r| family::assignment_only(r, &catalog) == Some(false))
+            .any(|r| family::assignment_only(r, &catalog, &BTreeMap::new()) == Some(false))
     );
     let record = records
         .iter()
@@ -36,7 +36,7 @@ fn additional_supports_and_missing_effect_evidence_cannot_claim_absence() {
             r["additional_effects"]
                 .as_array()
                 .is_some_and(|v| !v.is_empty())
-                && family::assignment_only(r, &catalog) == Some(true)
+                && family::assignment_only(r, &catalog, &BTreeMap::new()) == Some(true)
         })
         .unwrap();
     let mut control = record.clone();
@@ -49,7 +49,7 @@ fn additional_supports_and_missing_effect_evidence_cannot_claim_absence() {
         .unwrap();
     additional["support"] = json!(true);
     assert_eq!(
-        family::assignment_only(&control, &catalog),
+        family::assignment_only(&control, &catalog, &BTreeMap::new()),
         None,
         "classification must match authenticated identities"
     );
@@ -63,7 +63,7 @@ fn additional_supports_and_missing_effect_evidence_cannot_claim_absence() {
         let mut broken = record.clone();
         *broken.pointer_mut(pointer).unwrap() = Value::Null;
         assert_eq!(
-            family::assignment_only(&broken, &catalog),
+            family::assignment_only(&broken, &catalog, &BTreeMap::new()),
             None,
             "{pointer}"
         );
@@ -71,12 +71,18 @@ fn additional_supports_and_missing_effect_evidence_cannot_claim_absence() {
     for field in ["resolves_as_effect", "present_in_constructed_effect_list"] {
         let mut broken = record.clone();
         broken["declared_references"][0][field] = json!(false);
-        assert_eq!(family::assignment_only(&broken, &catalog), None);
+        assert_eq!(
+            family::assignment_only(&broken, &catalog, &BTreeMap::new()),
+            None
+        );
     }
     let mut duplicated = record.clone();
     let extra = duplicated["effects"][0].clone();
     duplicated["effects"].as_array_mut().unwrap().push(extra);
-    assert_eq!(family::assignment_only(&duplicated, &catalog), None);
+    assert_eq!(
+        family::assignment_only(&duplicated, &catalog, &BTreeMap::new()),
+        None
+    );
 }
 
 #[test]
@@ -88,7 +94,10 @@ fn stat_set_metadata_is_not_an_additional_effect_origin() {
         .find(|r| r["primary_effect"] == "IceNovaPlayer")
         .unwrap();
     assert_eq!(ice["declared_references"].as_array().unwrap().len(), 2);
-    assert_eq!(family::assignment_only(ice, &catalog), Some(true));
+    assert_eq!(
+        family::assignment_only(ice, &catalog, &BTreeMap::new()),
+        Some(true)
+    );
 
     // The distinction applies across the catalog, not only to the selected build.
     let mut stat_set_gems = 0;
@@ -99,7 +108,7 @@ fn stat_set_metadata_is_not_an_additional_effect_origin() {
         if !gem.declared_additional_stat_sets.is_empty() {
             stat_set_gems += 1;
             assert!(
-                family::assignment_only(record, &catalog).is_some(),
+                family::assignment_only(record, &catalog, &BTreeMap::new()).is_some(),
                 "{}",
                 gem.key
             );
@@ -116,17 +125,26 @@ fn stat_set_metadata_is_not_an_additional_effect_origin() {
     ] {
         let mut broken = ice.clone();
         broken["declared_references"][0][field] = value;
-        assert_eq!(family::assignment_only(&broken, &catalog), None);
+        assert_eq!(
+            family::assignment_only(&broken, &catalog, &BTreeMap::new()),
+            None
+        );
     }
     let mut incomplete = ice.clone();
     incomplete["declared_references"]
         .as_array_mut()
         .unwrap()
         .pop();
-    assert_eq!(family::assignment_only(&incomplete, &catalog), None);
+    assert_eq!(
+        family::assignment_only(&incomplete, &catalog, &BTreeMap::new()),
+        None
+    );
     let mut duplicate = ice.clone();
     duplicate["declared_references"][1] = duplicate["declared_references"][0].clone();
-    assert_eq!(family::assignment_only(&duplicate, &catalog), None);
+    assert_eq!(
+        family::assignment_only(&duplicate, &catalog, &BTreeMap::new()),
+        None
+    );
 }
 
 #[test]
@@ -144,13 +162,85 @@ fn absent_additional_effects_do_not_inherit_stat_set_treatment() {
             .any(|r| catalog.skill_by_id(&r.id).is_none())
         {
             unresolved += 1;
-            assert_eq!(family::assignment_only(&record, &catalog), None);
+            assert_eq!(
+                family::assignment_only(&record, &catalog, &BTreeMap::new()),
+                None
+            );
             let mut omitted = record;
             omitted["declared_references"] = json!([]);
-            assert_eq!(family::assignment_only(&omitted, &catalog), None);
+            assert_eq!(
+                family::assignment_only(&omitted, &catalog, &BTreeMap::new()),
+                None
+            );
         }
     }
     assert_eq!(unresolved, 8);
+}
+
+#[test]
+fn reviewed_export_classification_does_not_invent_runtime_effects() {
+    let catalog = family::identities();
+    let proof: Value = family::read("export-classifications.json");
+    let exported = family::export_classes(&proof, &catalog).unwrap();
+    assert_eq!(exported.len(), 8);
+    let records: Vec<Value> = catalog_evidence::read("source-records.json");
+    let before = serde_json::to_value(catalog.data()).unwrap();
+    let mut admitted = 0;
+    for record in &records {
+        if family::assignment_only(record, &catalog, &BTreeMap::new()).is_none() {
+            admitted += 1;
+            assert_eq!(
+                family::assignment_only(record, &catalog, &exported),
+                Some(true)
+            );
+            let gem = catalog
+                .gem_by_key(record["gem_id"].as_str().unwrap())
+                .unwrap();
+            let id = &gem.constructed_additional_effects[0].id;
+            assert!(catalog.skill_by_id(id).is_none());
+            assert!(!gem.effect_list.contains(id));
+            let mut unreviewed = exported.clone();
+            unreviewed.remove(id);
+            assert_eq!(family::assignment_only(record, &catalog, &unreviewed), None);
+            let mut support = exported.clone();
+            support.insert(id.clone(), true);
+            assert_eq!(
+                family::assignment_only(record, &catalog, &support),
+                Some(false),
+                "a classified additional support still requires origin authority"
+            );
+        }
+    }
+    assert_eq!(admitted, 8);
+    assert_eq!(serde_json::to_value(catalog.data()).unwrap(), before);
+}
+
+#[test]
+fn export_proof_requires_exact_categories_identities_and_occurrences() {
+    let catalog = family::identities();
+    let proof: Value = family::read("export-classifications.json");
+    for (pointer, value) in [
+        ("/source_revision", json!("unreviewed-revision")),
+        ("/records/0/support", json!(true)),
+        ("/records/0/effect_id", json!("unreviewed-effect")),
+        ("/records/0/blocks/0/text", json!("#flags\n")),
+        ("/records/0/blocks/0/line", json!(0)),
+        ("/records/0/blocks", json!([])),
+        ("/controls", json!([])),
+    ] {
+        let mut broken = proof.clone();
+        *broken.pointer_mut(pointer).unwrap() = value;
+        assert!(
+            family::export_classes(&broken, &catalog).is_none(),
+            "{pointer}"
+        );
+    }
+    let mut omitted = proof.clone();
+    omitted["records"].as_array_mut().unwrap().pop();
+    assert!(family::export_classes(&omitted, &catalog).is_none());
+    let mut duplicate = proof;
+    duplicate["records"][1] = duplicate["records"][0].clone();
+    assert!(family::export_classes(&duplicate, &catalog).is_none());
 }
 
 #[test]
@@ -158,9 +248,12 @@ fn display_order_does_not_supply_support_capability_or_drop_additional_effects()
     let records: Vec<Value> = catalog_evidence::read("source-records.json");
     let catalog = family::identities();
     for mut record in records {
-        let expected = family::assignment_only(&record, &catalog);
+        let expected = family::assignment_only(&record, &catalog, &BTreeMap::new());
         record["effects"].as_array_mut().unwrap().reverse();
-        assert_eq!(family::assignment_only(&record, &catalog), expected);
+        assert_eq!(
+            family::assignment_only(&record, &catalog, &BTreeMap::new()),
+            expected
+        );
     }
 }
 
@@ -178,10 +271,10 @@ fn publish_gem_domains_preserving_all_five_originals() {
         ),
         &family::data(),
         &[],
-        &["authoring.json"],
+        &["authoring.json", "export-classifications.json"],
         family::stage,
-        json!({"gem_source_domains":966,"known_gem_source_domains":929,"unmapped_gem_source_domains":37,
-            "unresolved_gem_effect_construction":8,
+        json!({"gem_source_domains":966,"known_gem_source_domains":937,"unmapped_gem_source_domains":29,
+            "unresolved_gem_effect_classification":0,"missing_runtime_effects":8,
             "whole_build_parity":false,"expected_retired_item_text_diagnostics":0,"expected_retired_selected_input_issues":0}),
         [107, 117, 109, 123, 4],
     );

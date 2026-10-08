@@ -67,13 +67,17 @@ Do not add another identity model or preserve the bad classification for
 compatibility. Rebuilding from the same predecessor retains the old evidence
 while replacing the current development endpoint and its result identities.
 
-The corrected packet explicitly withholds absence authority for eight unresolved
-additional-effect constructions, including four selected Sniper Gem occurrences.
-Review whether each missing definition is a source defect, stale
-metadata or an unimplemented game mechanic before deciding whether any behavior
-belongs in owned data. Do not reproduce Lua's silent omission as a default false
-support flag. Twenty-nine actual additional-support Gems remain separately
-Unmapped. This is a concrete follow-up for the Lua cleanup pass.
+The next review found all eight missing effects in pinned generated
+`SkillGemsExport.txt`. The generator's exact `IsSupport` branch independently
+classifies them as active, without reproducing Lua's silent omission as a false
+flag. The ordinary runtime export templates omit the Command records; existing
+minion-side actions are separate. All 23 selected Sniper physical Gems now have
+Known support domains, while the missing Command identities, inputs, usage and
+mechanics remain unimplemented. Twenty-nine actual additional-support Gems
+remain Unmapped. Keep the classification proof offline; do not add an export
+template parser, source string or missing-effect fallback to native runtime.
+Follow up on the distinct Command behavior when closing action/usage coverage;
+neither treating the references as stale aliases nor a parity waiver is justified.
 
 The ordinary recipe-extension authoring path now accepts reviewed support-source
 domains and carries them through existing publication. Retain that shared route;
