@@ -6,15 +6,15 @@
   "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
   "domains": {
     "total": 966,
-    "known": 818,
-    "unmapped": 148,
-    "unresolved_construction": 119
+    "known": 929,
+    "unmapped": 37,
+    "unresolved_construction": 8
   },
   "artifacts": [
     {
       "path": "data/owned/poe2/3887ae68/gem-support-domains/extension.json",
-      "bytes": 511449,
-      "sha256": "52d1e2dbfd7adb5e228da8644ad2d225ec7047bc932fca7aab950eb0c8630dac"
+      "bytes": 446292,
+      "sha256": "2fafca6b9bd997fb8afa014e61f329bf3a726663d5827511d9058592c2a31ccd"
     }
   ],
   "evidence": [
@@ -32,6 +32,11 @@
       "path": "data/owned/poe2/3887ae68/empty-payload-inventory/authoring.json",
       "bytes": 5379,
       "sha256": "798ef73c1b58d4d3cd4d5edc1b2337749625260b5e41e9a6866773fde16251db"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+      "bytes": 2247063,
+      "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e"
     }
   ],
   "source_files": [

@@ -1266,29 +1266,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000649"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -1307,29 +1286,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000064a"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -1368,29 +1326,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000064c"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -1509,29 +1446,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000652"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -1650,29 +1566,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000658"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -1891,29 +1786,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000663"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -2333,29 +2207,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000677"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -2655,29 +2508,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000685"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -2836,29 +2668,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000068d"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -2877,29 +2688,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000068e"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -4369,29 +4159,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000006cc"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -4410,29 +4179,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000006cd"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -4591,29 +4339,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000006d5"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -4833,29 +4560,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000006df"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -5034,29 +4740,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000006e8"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -5195,29 +4880,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000006ef"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -5376,29 +5040,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000006f7"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -6097,29 +5740,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000071a"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -6158,29 +5780,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000071c"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -6279,29 +5880,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000721"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -6460,29 +6040,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000729"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -6501,29 +6060,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000072a"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -6843,29 +6381,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000739"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -6904,29 +6421,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000073b"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -7185,29 +6681,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000748"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -7326,29 +6801,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000074e"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -7707,29 +7161,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000760"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -7848,29 +7281,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000766"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -7929,29 +7341,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000769"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -8272,29 +7663,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000777"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -8313,29 +7683,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000778"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -8354,29 +7703,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000779"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -8495,29 +7823,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000077f"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -8716,29 +8023,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000789"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -8997,29 +8283,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000796"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9058,29 +8323,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000798"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9099,29 +8343,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000799"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9160,29 +8383,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000079b"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9201,29 +8403,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000079c"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9282,29 +8463,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000079f"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9343,29 +8503,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007a1"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9444,29 +8583,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007a5"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9485,29 +8603,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007a6"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9526,29 +8623,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007a7"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9567,29 +8643,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007a8"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9648,29 +8703,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007ab"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9689,29 +8723,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007ac"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -9790,29 +8803,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007b0"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -10252,29 +9244,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007c5"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -10293,29 +9264,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007c6"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -10334,29 +9284,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007c7"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -10395,29 +9324,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007c9"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -10596,29 +9504,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007d2"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -10858,29 +9745,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007dd"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -10919,29 +9785,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007df"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -10960,29 +9805,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007e0"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -11021,29 +9845,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007e2"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -11322,29 +10125,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000007f0"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -12083,29 +10865,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000815"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -12244,29 +11005,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000081c"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -12525,29 +11265,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000829"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -13108,29 +11827,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000843"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -13411,29 +12109,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000084f"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -13452,29 +12129,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000850"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -13814,29 +12470,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000860"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -13855,29 +12490,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000861"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -14156,29 +12770,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000086f"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -14317,29 +12910,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000876"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -14778,29 +13350,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000088c"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -14819,29 +13370,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000088d"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -15120,29 +13650,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000089b"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -15781,29 +14290,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000008bb"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -16503,29 +14991,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000008dd"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -16644,29 +15111,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000008e3"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -17005,29 +15451,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000008f4"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -17286,29 +15711,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000901"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -17447,29 +15851,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000908"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -17688,29 +16071,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000913"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -18014,29 +16376,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000091d"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -18115,29 +16456,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000921"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -18156,29 +16476,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000922"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -18217,29 +16516,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000924"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -18298,29 +16576,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000927"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -18359,29 +16616,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000929"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -18400,29 +16636,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000092a"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -18441,29 +16656,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000092b"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -18744,29 +16938,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000937"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -18785,29 +16958,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000938"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -18946,29 +17098,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000093f"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -19027,29 +17158,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000942"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -19288,29 +17398,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000094e"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -19329,29 +17418,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000094f"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -19651,29 +17719,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000095d"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -19692,29 +17739,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000095e"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -20093,29 +18119,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000971"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -20134,29 +18139,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000972"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -20175,29 +18159,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000973"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -20216,29 +18179,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000974"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -20557,29 +18499,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000984"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -20858,29 +18779,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000992"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -20959,29 +18859,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000000996"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -21080,29 +18959,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.000000000000099b"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -21201,29 +19059,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000009a0"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -21302,29 +19139,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000009a4"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -21643,29 +19459,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000009b4"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -21684,29 +19479,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000009b5"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -21865,29 +19639,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000009bd"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -21946,29 +19699,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000009c0"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -22067,29 +19799,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000009c5"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -22189,29 +19900,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000009c9"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {
@@ -22270,29 +19960,8 @@
         }
       },
       "domain": {
-        "kind": "unmapped",
-        "value": {
-          "gaps": [
-            {
-              "subject": {
-                "kind": "definition",
-                "value": {
-                  "kind": "gem",
-                  "value": {
-                    "kind": "gem",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.00000000000009cc"
-                  }
-                }
-              },
-              "facet": "game_rules",
-              "code": "gem-effect-construction-unresolved"
-            }
-          ]
-        }
+        "kind": "known",
+        "value": "authored_assignments_only"
       }
     },
     {

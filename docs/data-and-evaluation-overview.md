@@ -46,9 +46,11 @@ same manually authored Skill. PoB's `gemData`/`fromTree` fields are not native
 ownership authority. The common native gate now requires reviewed support-source
 domain declarations from injected data, including for disabled selected providers.
 It has no Lua state and cannot infer coverage from authored order. The first
-game-data packet now supplies 818 known Gem domains and 148 explicit gaps:
-29 have additional support effects and 119 have unresolved declared effect
+game-data packet now supplies 929 known Gem domains and 37 explicit gaps:
+29 have additional support effects and eight have unresolved declared effect
 construction. Other owner domains and exact provider exclusions remain pending.
+The corrected offline proof reuses typed catalog identities to keep stat-set
+metadata separate from effect origins; the initial packet had conflated them.
 A separate whole-source authored-input proof now
 resolves Original05's selected support-input obligation; the source observer's
 empty buckets alone do not supply that proof. See
@@ -75,9 +77,11 @@ Unknown generated quality remains unknown, and unsupported sharing or archived
 sources stay Pending. Neither this proof nor the DTO establishes native coverage.
 
 The broader catalog audit found declared but unconstructed additional references
-on five selected physical Gem occurrences in Original05, including Sniper. Those
+on four selected physical Gem occurrences in Original05, including Sniper. Those
 remain Unmapped rather than importing a missing-source default into the native
 model. This requires a source/game-intent review, not a build-specific exception.
+Ice Nova's stat-set references are now correctly classified as metadata and do
+not create another support origin. That false blocker was our authoring defect.
 The [current checkpoint](implementation.md#current-native-data-checkpoint-gem-support-source-domains)
 records the package, exact scope and next blocker.
 

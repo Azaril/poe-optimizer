@@ -27,10 +27,12 @@ Missing/Unmapped coverage blocks both preparation and retained delivery.
 
 Synthetic component fixtures explicitly declare their finite source domains.
 Those assertions are not publication evidence for game definitions. Current
-game data now has 966 Gem declarations (818 Known, 148 Unmapped); other owner
+game data now has 966 Gem declarations (929 Known, 37 Unmapped); other owner
 domains and exact provider exclusions still need adoption. Preset/Draft/Build order has moved to the explicit
 `authored_support_order` contract described below. No new positive origin family
 is implemented.
+The offline proof now reconciles the existing typed effect/stat-set identities;
+the initial publication's 111 false stat-set blockers are corrected in place.
 
 The authored-input proof now closes Original05 `01de` after complete physical
 membership, exact assignment targets/order and all saved relationships are

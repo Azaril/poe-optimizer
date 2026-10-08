@@ -59,10 +59,17 @@ always-Pending stand-in for native discovery. Unrepresented positive relations
 still use that issue until accounted for. The current data-adoption gate remains
 mandatory; see the [input checkpoint](implementation.md#current-input-checkpoint-authored-support-relationships).
 
-The first native Gem-domain packet reuses the retained complete catalog and adds
-no extraction/runtime path. It explicitly withholds absence authority for 119
-unresolved declared effect constructions, including five selected Sniper Gem
-occurrences. Review whether each missing definition is a source defect, stale
+The native Gem-domain packet reuses the retained complete catalog and adds
+no extraction/runtime path. Its initial proof incorrectly treated 111 Gems'
+stat-set metadata as effect references. This was our authoring defect, corrected
+by reconciling the existing typed catalog; Ice Nova loses that false blocker.
+Do not add another identity model or preserve the bad classification for
+compatibility. Rebuilding from the same predecessor retains the old evidence
+while replacing the current development endpoint and its result identities.
+
+The corrected packet explicitly withholds absence authority for eight unresolved
+additional-effect constructions, including four selected Sniper Gem occurrences.
+Review whether each missing definition is a source defect, stale
 metadata or an unimplemented game mechanic before deciding whether any behavior
 belongs in owned data. Do not reproduce Lua's silent omission as a default false
 support flag. Twenty-nine actual additional-support Gems remain separately

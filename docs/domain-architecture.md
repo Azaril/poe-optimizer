@@ -965,6 +965,12 @@ latter remains an explicit gap pending source/game-intent review; source-languag
 missing-table behavior is not a native game rule. Primary and all additional
 effects need exact identity and classification evidence, independently of display
 order, current activation and numerical outcomes.
+Preserve typed reference categories during offline proof: additional stat-set
+metadata is not an additional Skill or support origin. Reuse the existing typed
+catalog and reconcile every observed field; neither blanket effect lookup nor
+silently dropping unrecognized fields establishes completeness. Correct a bad
+development packet by rebuilding the current endpoint, not by introducing a
+format compatibility branch or weakening checked extension ownership.
 
 The first native source domain is explicitly `AuthoredAssignmentsOnly` in
 `RulePackageInput.support_discovery`, keyed by an owned definition or slot.

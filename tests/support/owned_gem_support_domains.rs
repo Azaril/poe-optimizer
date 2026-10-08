@@ -2,6 +2,7 @@
 use poe_optimizer_core::{
     owned_content::digest_owned, owned_definitions::*, owned_rules::*, owned_schema::*,
 };
+use poe_optimizer_data::skill_identities::SkillIdentityCatalog;
 use poe_optimizer_import::{
     owned_mapping::{
         ExternalOwnerSelector, ExternalSelector, MappingBasis, MappingOutcome, SourceComponent,
@@ -12,10 +13,15 @@ use poe_optimizer_import::{
 use serde::de::DeserializeOwned;
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
-use std::{collections::BTreeSet, fs, path::PathBuf};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    fs,
+    path::PathBuf,
+};
 
 const KIND: &str = "gem-support-source-domains";
 const GAP: &str = "additional-gem-support-origins-not-converted";
+const IDENTITIES: &str = "data/owned/poe2/3887ae68/import/skill-identities.json";
 pub fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
@@ -38,12 +44,24 @@ fn rows(value: &Value) -> Option<&[Value]> {
         .or_else(|| value.as_object().filter(|o| o.is_empty()).map(|_| &[][..]))
 }
 
+pub fn identities() -> SkillIdentityCatalog {
+    SkillIdentityCatalog::new(
+        serde_json::from_slice(&fs::read(root().join(IDENTITIES)).unwrap()).unwrap(),
+    )
+    .unwrap()
+}
+
 /// This proves catalog construction only: the primary may be an authored
 /// support; any additional support needs unimplemented origin authority.
 /// Display order, active level/quality, source groups and final DPS are irrelevant.
-pub fn assignment_only(record: &Value) -> Option<bool> {
+pub fn assignment_only(record: &Value, catalog: &SkillIdentityCatalog) -> Option<bool> {
+    let gem = catalog.gem_by_key(record["gem_id"].as_str()?)?;
     let primary = record["primary_effect"].as_str()?;
-    if !record["selector_resolves_same"].as_bool()? {
+    if !record["selector_resolves_same"].as_bool()?
+        || primary != gem.primary_effect_id
+        || record["game_id"] != gem.game_id
+        || record["variant_id"] != gem.variant_id
+    {
         return None;
     }
     let effects = rows(&record["effects"])?;
@@ -57,6 +75,9 @@ pub fn assignment_only(record: &Value) -> Option<bool> {
             return None;
         }
         let support = effect["support"].as_bool()?;
+        if support != (catalog.skill_by_id(id)?.support == Some(true)) {
+            return None;
+        }
         if id == primary {
             found_primary = support == record["primary_support"].as_bool()?;
         } else {
@@ -64,27 +85,53 @@ pub fn assignment_only(record: &Value) -> Option<bool> {
             only &= !support;
         }
     }
-    if !found_primary {
+    if !found_primary || ids != gem.effect_list.iter().map(String::as_str).collect() {
         return None;
     }
     let supplied = rows(&record["additional_effects"])?;
     let actual: BTreeSet<_> = supplied.iter().map(Value::as_str).collect::<Option<_>>()?;
-    if actual.len() != supplied.len() || actual != additional {
+    if actual.len() != supplied.len()
+        || actual != additional
+        || actual != gem.additional_effects.iter().map(String::as_str).collect()
+    {
         return None;
     }
     let references = rows(&record["declared_references"])?;
-    let mut fields = BTreeSet::new();
-    let mut declared = BTreeSet::new();
+    // The older observer flattens reference kinds. Reconcile every field against
+    // the existing typed catalog; stat-set metadata is not an effect origin.
+    // Use constructed fields so setup-generated additions are also accounted for.
+    let mut expected = BTreeMap::new();
+    for (prefix, entries) in [
+        (
+            "additionalGrantedEffectId",
+            &gem.constructed_additional_effects,
+        ),
+        ("additionalStatSet", &gem.declared_additional_stat_sets),
+    ] {
+        for entry in entries {
+            expected.insert(format!("{prefix}{}", entry.index), entry.id.as_str());
+        }
+    }
+    if references.len() != expected.len() {
+        return None;
+    }
     for reference in references {
-        if reference["present_in_constructed_effect_list"] != true
-            || reference["resolves_as_effect"] != true
-            || !fields.insert(reference["field"].as_str()?)
-            || !declared.insert(reference["id"].as_str()?)
+        let field = reference["field"].as_str()?;
+        let id = reference["id"].as_str()?;
+        if expected.remove(field)? != id
+            || reference["present_in_constructed_effect_list"].as_bool()? != ids.contains(id)
+            || reference["resolves_as_effect"].as_bool()? != catalog.skill_by_id(id).is_some()
         {
             return None;
         }
     }
-    (declared == additional).then_some(only)
+    let constructed: BTreeSet<_> = gem
+        .constructed_additional_effects
+        .iter()
+        .map(|reference| reference.id.as_str())
+        .collect();
+    (constructed.len() == gem.constructed_additional_effects.len() && constructed == additional)
+        .then_some(only)
 }
 
 pub fn check_authored() {
@@ -109,6 +156,14 @@ pub fn check_authored() {
     }
     let records: Vec<Value> = super::catalog_evidence::read("source-records.json");
     let bindings: Vec<Value> = super::catalog_evidence::read("bindings.json");
+    let catalog = identities();
+    assert!(
+        authoring["evidence"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|pin| pin["path"] == IDENTITIES)
+    );
     let extension: OwnedRecipeExtension = read("extension.json");
     assert_eq!(extension.schema_version, 1);
     assert!(
@@ -120,6 +175,7 @@ pub fn check_authored() {
     );
     assert_eq!(extension.support_source_domains.len(), records.len());
     assert_eq!(records.len(), bindings.len());
+    assert_eq!(records.len(), catalog.data().gems.len());
     let mut expected = Vec::new();
     let mut known = 0;
     let mut unmapped = 0;
@@ -128,7 +184,7 @@ pub fn check_authored() {
         assert_eq!(record["gem_id"], binding["source_gem"]);
         let gem: GemDefId = serde_json::from_value(binding["gem"].clone()).unwrap();
         let owner = SchemaSubject::Definition(gem.address());
-        let domain = match assignment_only(record) {
+        let domain = match assignment_only(record, &catalog) {
             Some(true) => {
                 known += 1;
                 SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly)
@@ -162,7 +218,7 @@ pub fn check_authored() {
         json!({"total":966,"known":known,"unmapped":unmapped,"unresolved_construction":unresolved})
     );
     assert_eq!(known + unmapped, 966);
-    assert_eq!((known, unmapped, unresolved), (818, 148, 119));
+    assert_eq!((known, unmapped, unresolved), (929, 37, 8));
 }
 
 fn authenticate_source() {
