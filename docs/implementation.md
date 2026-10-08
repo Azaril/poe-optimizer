@@ -103,7 +103,54 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Current native data checkpoint: Gem support-source domains
+## Current native data checkpoint: shared Life routing
+
+The [flat-Life routing packet](../data/owned/poe2/3887ae68/flat-life-routing/README.md)
+adds the existing Talisman exclusion to ordinary Player Life delivery. It reuses
+the EquipmentUse predicate and its allocated-Passive/Player retention chain,
+with four additional non-Amulet template predicates from the authenticated
+catalog. Numeric preparation, exact Life effect identity, all query memberships,
+import admission and every owner gap remain unchanged. There is no new runtime
+operation, source parser, definition or format branch.
+
+The pinned routing branch handles all Amulet modifiers, independently of stat
+name. Publication reuses its original-call routing evidence and the existing
+type catalog rather than making another source observer. The numeric native
+control adds a Life roll to the selected Amulet and uses the actual published
+Talisman program in a finite passive component. Only that ordinary Life effect
+becomes inactive; the five other equipment uses retain their values and identities.
+Removal, reusable scratch and four-worker Rayon replay agree. A missing predicate
+stays unresolved, and an early read is rejected.
+
+**All 79 joined Sniper checks pass in 39.03s**, including the three new routing
+controls. Authoring and all-five publication pass in **20.63s**, including current
+exact base-to-template mappings. Logs are `runs/owned-flat-life-routing-
+publication-02.log` and `runs/owned-flat-life-routing-sniper-01.log`.
+Strict Clippy with all features passes for both changed CLI integration targets;
+changed Rust formatting and whitespace checks pass. Evidence:
+`runs/owned-flat-life-routing-clippy-01.log`. The successor package is
+`runs/owned-flat-life-routing-publication-02/package`, input
+`06905cc38c8ceadfe27019a843b507bb6d71b210ada9738a45aa1173884f62f9`, rules
+`72bbf63447cd6d1260baea5f35cb90f2eaf61a336b1f2322ed94d191395bed5e`, compiled rules
+`59c4642a7a3653ea7d4d5815e9169be8c44f8c91b817b2548b71e92813f5c061`.
+Schema identity is unchanged. All 18 artifact hashes also agree with the first
+publication used by the native checks. Rebuilding is byte-identical; all five imports,
+110 queries and selected input counts **107/117/109/123/4** are preserved.
+Complete native builds remain **0/5**.
+
+**Resume:** keep Original05 first. Player Life still needs complete item delivery
+(including independent copied records), equipment contribution/order coverage and
+the final resource formula; its known component subtotal is not final Life.
+This checkpoint implements one routing law and intentionally closes no broad
+owner gap. Channel `3306`'s historical broad name means only the Talisman exclusion;
+do not treat true as proof of every item routing law. Minion receipt is separate.
+Continue the shortest evidenced Life or composed-support blocker using the
+approved contracts. Other support-source owners and provider exclusions remain
+open despite complete selected physical-Gem classifications. The application-group
+contribution-query proposal still awaits owner input before the mixed passive/
+Offering damage consumer can be implemented.
+
+## Preceding native data checkpoint: Gem support-source domains
 
 The existing offline extension/assembler now publishes **966 Gem declarations**:
 937 `AuthoredAssignmentsOnly` and 29 Unmapped for actual additional support effects. The
@@ -136,7 +183,7 @@ pinned numerical data. This is neither a PoB-bug parity waiver nor missing-table
 emulation. Generated/manual Djinn and other providers have separate coverage
 requirements. The retained proof and lookup references are in the packet README.
 
-The canonical package is now
+The predecessor package at that checkpoint was
 `runs/owned-gem-support-domains-publication-03/package`, input
 `f3d994ac40afb840606c84a10df7e84fb60bcc216ac5700f2cb07e9a5a955c68`, rules
 `5cd23f3e3c3c70e96d131608e9f14a58e346c551b6ef2c0aac93e1a06379b128`, compiled rules

@@ -221,6 +221,27 @@ pub fn check_authored() {
     ));
 }
 pub fn assert_component(endpoint: &StagedOwnedRelease) {
+    assert_component_owners(endpoint, &endpoint.input().recipe.rules.owners);
+}
+/// A later data packet must authenticate its exact donor rewrite before using
+/// this comparison. Only that reviewed body is restored for the historical
+/// membership proof; the actual successor is what the native fixture executes.
+#[allow(dead_code)]
+pub fn assert_component_with_reviewed_donor(
+    endpoint: &StagedOwnedRelease,
+    before: &DefinitionRules,
+    after: &DefinitionRules,
+) {
+    let deps: Dependencies = read("dependencies.json");
+    assert!(deps.owners.contains(before));
+    assert_eq!(before.owner, after.owner);
+    let mut owners = endpoint.input().recipe.rules.owners.clone();
+    let current = owners.iter_mut().find(|o| o.owner == before.owner).unwrap();
+    assert_eq!(current, after);
+    *current = before.clone();
+    assert_component_owners(endpoint, &owners);
+}
+fn assert_component_owners(endpoint: &StagedOwnedRelease, owners: &[DefinitionRules]) {
     check_authored();
     let recipe = &endpoint.input().recipe;
     assert!(
@@ -245,7 +266,7 @@ pub fn assert_component(endpoint: &StagedOwnedRelease) {
         assert_eq!(registry.members.iter().filter(|q| **q == query).count(), 1);
     }
     census(
-        &recipe.rules.owners,
+        owners,
         &recipe.rules.effect_applications.as_ref().unwrap().members,
         &queries(),
     );

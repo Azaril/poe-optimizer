@@ -1,6 +1,6 @@
 //! Real selected Life rolls and quest selections enter the existing joined graph.
 //! This is finite component coverage: template programs unrelated to catalyst
-//! inputs and non-Life modifiers remain outside the fixture. The actual Partial
+//! inputs or ordinary applicability and non-Life modifiers remain outside the fixture. The actual Partial
 //! owners are retained for refusal controls. No Life pool/reduction is supplied.
 use super::*;
 use poe_optimizer_core::{
@@ -325,11 +325,17 @@ pub(super) fn install(
             .programs
             .members
             .iter()
-            .filter(|p| p.id == key("catalyst-inputs"))
+            .filter(|p| {
+                p.id == key("catalyst-inputs") || p.id == key(life_routing_family::APPLICABILITY)
+            })
             .cloned()
             .collect();
-        assert_eq!(programs.len(), 1);
-        let slots: BTreeSet<_> = programs[0]
+        assert_eq!(programs.len(), 2);
+        let catalyst = programs
+            .iter()
+            .find(|p| p.id == key("catalyst-inputs"))
+            .unwrap();
+        let slots: BTreeSet<_> = catalyst
             .reads
             .iter()
             .map(|r| match &r.source {
@@ -340,7 +346,11 @@ pub(super) fn install(
         assert_eq!(slots.len(), 2);
         source.item.parameters.retain(|p| slots.contains(&p.slot));
         assert_eq!(source.item.parameters.len(), 2);
-        early.push((actual.owner.clone(), programs[0].id.clone()));
+        early.extend(
+            programs
+                .iter()
+                .map(|p| (actual.owner.clone(), p.id.clone())),
+        );
         owners.push(DefinitionRules {
             owner: actual.owner.clone(),
             programs: DeclaredSet::complete(programs),
@@ -756,4 +766,263 @@ fn life_item_partial_owners_remain_unavailable_in_the_same_graph() {
             "invalid evaluation stages: early readiness needs an early phase and complete owner programs"
         );
     }
+}
+
+// Reuse the exact production passive in an isolated numerical component. This
+// fixture does not certify its full adjacency or grant late item-granted nodes
+// the ordinary allocated node's early authority.
+fn routing_control(w: &mut World) -> Allocation {
+    let endpoint = release::load(&path());
+    let recipe = &endpoint.input().recipe;
+    let node: PassiveNodeDefId = d(0x1338);
+    let actual = recipe
+        .rules
+        .owners
+        .iter()
+        .find(|o| o.owner == subject(node.clone()))
+        .unwrap();
+    assert!(!actual.programs.is_complete());
+    assert_eq!(actual.programs.members.len(), 1);
+    assert_eq!(
+        actual.programs.members[0].id,
+        key("talisman-ordinary-amulet-retention")
+    );
+    let mut descriptor = sniper::offering::prolonged::finite(
+        recipe
+            .schema
+            .definitions
+            .iter()
+            .find(|d| d.address() == node.address())
+            .unwrap(),
+    );
+    let DefinitionDescriptor::PassiveNode(DefinitionEntry {
+        schema: SchemaState::Known(schema),
+        ..
+    }) = &mut descriptor
+    else {
+        panic!()
+    };
+    let pool = schema.pools.members[0].clone();
+    schema.adjacent = DeclaredSet::complete(vec![]);
+    let f = inner(w);
+    assert!(
+        !f.schema
+            .definitions
+            .iter()
+            .any(|d| d.address() == node.address())
+    );
+    f.schema.definitions.push(descriptor);
+    if !f
+        .schema
+        .definitions
+        .iter()
+        .any(|d| d.address() == pool.address())
+    {
+        f.schema.definitions.push(
+            recipe
+                .schema
+                .definitions
+                .iter()
+                .find(|d| d.address() == pool.address())
+                .unwrap()
+                .clone(),
+        );
+    }
+    f.owner_mut(subject(pool.clone()));
+    *f.owner_mut(actual.owner.clone()) = sniper::offering::prolonged::finite(actual);
+    w.sniper
+        .early
+        .push((actual.owner.clone(), actual.programs.members[0].id.clone()));
+    Allocation {
+        id: id(7930),
+        node,
+        pool,
+        scope: LoadoutScope::Shared,
+        access: AllocationAccess::Ordinary,
+        choices: vec![],
+    }
+}
+fn routing_plan(w: &World) -> shared::Plan {
+    w.checked_plan_configured(|stages| {
+        for row in &mut stages.programs.members {
+            if row.program == key("talisman-ordinary-amulet-retention") {
+                row.stage = key("routing-contributors");
+            }
+        }
+    })
+    .unwrap()
+}
+fn add_amulet_life(w: &mut World, amount: f64) {
+    let mut modifier = w.life_inputs.items[0].item.modifiers[0].clone();
+    modifier.id = id(7931);
+    modifier
+        .rolls
+        .iter_mut()
+        .find(|p| p.slot.slot == d(0x3101))
+        .unwrap()
+        .value = quantity(amount, &d(0x295a));
+    let f = inner(w);
+    let amulet = f
+        .build
+        .items
+        .iter_mut()
+        .find(|i| i.template == d(0x2343))
+        .unwrap();
+    amulet.modifier_order.push(modifier.id);
+    amulet.modifiers.push(modifier);
+    let DefinitionDescriptor::ItemTemplate(DefinitionEntry {
+        schema: SchemaState::Known(schema),
+        ..
+    }) = f
+        .schema
+        .definitions
+        .iter_mut()
+        .find(|d| d.address() == amulet.template.address())
+        .unwrap()
+    else {
+        panic!()
+    };
+    schema.modifiers.members.push(d(0x3100));
+}
+fn life_rows(report: &SupportEffectsReport) -> Vec<&BoundEffectResult> {
+    sniper::offering::effects(report)
+        .effects
+        .iter()
+        .filter(|e| {
+            e.key.invocation.owner == subject(d::<ModifierDefinition>(0x3100))
+                && e.key.invocation.program == key(DELIVERY)
+        })
+        .collect()
+}
+
+#[test]
+#[ignore = "requires current joined Sniper release"]
+fn talisman_suppresses_amulet_life_but_keeps_every_other_physical_use() {
+    let mut a = World::load();
+    let allocation = routing_control(&mut a);
+    add_amulet_life(&mut a, 13.);
+    let pa = routing_plan(&a);
+    let ra = pa.evaluate(&mut pa.new_scratch()).unwrap();
+    let baseline = life_rows(&ra);
+    assert_eq!(baseline.len(), 6);
+    assert!(
+        baseline
+            .iter()
+            .all(|e| matches!(e.value, EffectValue::Known { .. }))
+    );
+    let mut b = a.clone();
+    inner(&mut b).build.allocations.push(allocation.clone());
+    let pb = routing_plan(&b);
+    let rb = pb.evaluate(&mut pb.new_scratch()).unwrap();
+    let diverted = life_rows(&rb);
+    assert_eq!(
+        diverted.len(),
+        6,
+        "inactive sources retain exact identities"
+    );
+    let inactive: Vec<_> = diverted
+        .iter()
+        .filter(|e| e.value == EffectValue::Inactive)
+        .collect();
+    assert_eq!(inactive.len(), 1);
+    let prior = baseline.iter().find(|e| e.key == inactive[0].key).unwrap();
+    assert_eq!(
+        prior.value,
+        EffectValue::Known {
+            value: quantity(13., &d(0x3119))
+        }
+    );
+    for unchanged in diverted.iter().filter(|e| e.value != EffectValue::Inactive) {
+        assert_eq!(
+            baseline
+                .iter()
+                .find(|e| e.key == unchanged.key)
+                .unwrap()
+                .value,
+            unchanged.value
+        );
+    }
+    inner(&mut b)
+        .build
+        .allocations
+        .retain(|r| r.id != allocation.id);
+    let again = routing_plan(&b);
+    assert_eq!(again.identity(), pa.identity());
+    let mut scratch = pa.new_scratch();
+    for (p, expected) in [(&pa, &ra), (&pb, &rb), (&again, &ra)] {
+        assert_eq!(p.evaluate(&mut scratch).unwrap(), *expected);
+    }
+    let pool = rayon::ThreadPoolBuilder::new()
+        .num_threads(4)
+        .build()
+        .unwrap();
+    pool.install(|| {
+        (0..12).into_par_iter().for_each_init(
+            || pa.new_scratch(),
+            |scratch, i| {
+                let (p, expected) = if i % 2 == 0 { (&pa, &ra) } else { (&pb, &rb) };
+                assert_eq!(p.evaluate(scratch).unwrap(), *expected);
+            },
+        )
+    });
+}
+
+#[test]
+#[ignore = "requires current joined Sniper release"]
+fn missing_life_applicability_never_defaults_to_delivery() {
+    let mut w = World::load();
+    let owner = subject(d::<ItemTemplateDefinition>(0x238c));
+    inner(&mut w)
+        .owner_mut(owner.clone())
+        .programs
+        .members
+        .retain(|p| p.id != key(life_routing_family::APPLICABILITY));
+    w.sniper
+        .base
+        .item_programs
+        .retain(|(o, p)| *o != owner || *p != key(life_routing_family::APPLICABILITY));
+    let p = w.plan();
+    let r = p.evaluate(&mut p.new_scratch()).unwrap();
+    let rows = life_rows(&r);
+    assert_eq!(rows.len(), 5);
+    assert_eq!(
+        rows.iter()
+            .filter(|e| matches!(
+                e.value,
+                EffectValue::Unresolved {
+                    reason: PlanGapReason::MissingProducer,
+                    ..
+                }
+            ))
+            .count(),
+        1
+    );
+    assert_eq!(
+        rows.iter()
+            .filter(|e| matches!(e.value, EffectValue::Known { .. }))
+            .count(),
+        4
+    );
+}
+
+#[test]
+#[ignore = "requires current joined Sniper release"]
+fn life_delivery_cannot_read_applicability_before_its_frozen_stage() {
+    let w = World::load();
+    let error = w
+        .checked_plan_configured(|stages| {
+            stages
+                .programs
+                .members
+                .iter_mut()
+                .find(|p| p.program == key(DELIVERY))
+                .unwrap()
+                .stage = key("prepare");
+        })
+        .err()
+        .expect("early delivery must be rejected");
+    assert!(
+        error.contains("frozen channel read occurs before or outside frozen stage"),
+        "{error}"
+    );
 }

@@ -1,0 +1,92 @@
+{
+  "scope": {
+    "talisman_direct_guard": true,
+    "retired_owner_gaps": 0,
+    "minion_delivery": false,
+    "copy_delivery": false,
+    "new_templates": 4,
+    "whole_build_parity": false,
+    "replaced_programs": 1,
+    "new_definitions": 0
+  },
+  "kind": "flat-life-ordinary-routing",
+  "before": "f3d994ac40afb840606c84a10df7e84fb60bcc216ac5700f2cb07e9a5a955c68",
+  "templates": [
+    {
+      "source_base": "Sapphire Ring",
+      "item_type": "Ring",
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000009dc"
+      }
+    },
+    {
+      "source_base": "Fine Belt",
+      "item_type": "Belt",
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001e84"
+      }
+    },
+    {
+      "source_base": "Rope Cuffs",
+      "item_type": "Gloves",
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002007"
+      }
+    },
+    {
+      "source_base": "Tattered Robe",
+      "item_type": "Body Armour",
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000238c"
+      }
+    }
+  ],
+  "source_packets": [
+    {
+      "bytes": 959498,
+      "sha256": "33cae05bb57e834291bbd08ee564f4cb9ee597cb3dd2927c5ddd8a554e3150ca",
+      "path": "data/owned/poe2/3887ae68/ordinary-item-routing/source-vectors.json"
+    },
+    {
+      "bytes": 4686,
+      "sha256": "186d9d6f767d6b7c69e285f8bfe5880d6d2d04bba2a9257882b968be7d859228",
+      "path": "data/owned/poe2/3887ae68/ordinary-item-routing/bindings.json"
+    },
+    {
+      "bytes": 158507,
+      "sha256": "29b2cd8be25f424a34f5b3c954682454d26f16058890f6ddaf77d5fbab98d354",
+      "path": "data/owned/poe2/3887ae68/ordinary-item-routing/routing-authoring.json"
+    },
+    {
+      "bytes": 325706,
+      "sha256": "551dba83451856e8b3d70d43a7034f2f77f745c49880f59b92aca053d339837c",
+      "path": "data/owned/poe2/3887ae68/player-offhand-facts/bindings.json"
+    },
+    {
+      "bytes": 374281,
+      "sha256": "8f2c857c925cf61e8fd5dc7fd3b81fa51ad1d68799a9e4797c18dae69236ba3e",
+      "path": "data/owned/poe2/3887ae68/player-offhand-facts/source-vectors.json"
+    }
+  ],
+  "schema_version": 1
+}

@@ -42,6 +42,9 @@ mod life_queries_native;
 #[allow(dead_code)]
 #[path = "support/owned_life_contribution_queries.rs"]
 mod life_query_family;
+#[allow(dead_code)]
+#[path = "support/owned_flat_life_routing.rs"]
+mod life_routing_family;
 #[path = "support/owned_sniper_offering_application.rs"]
 mod offering_application_native;
 #[path = "support/owned_sniper_passive_damage_evidence.rs"]
@@ -153,7 +156,13 @@ impl World {
         activation_family::assert_component(&endpoint);
         accuracy_family::assert_component(&endpoint);
         evidence::assert_current(&endpoint);
-        life_query_family::assert_component(&endpoint);
+        life_routing_family::assert_component(&endpoint);
+        let life_donor = life_routing_family::replacements().remove(0);
+        life_query_family::assert_component_with_reviewed_donor(
+            &endpoint,
+            &life_donor.before,
+            &life_donor.after,
+        );
         let recipe = &endpoint.input().recipe;
         // This loader already performs a fresh canonical Original05 item import,
         // retains all 24 roll slots and uses actual applicability/copy/snapshot.

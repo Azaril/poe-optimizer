@@ -38,6 +38,16 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Shared Life routing, 2026-10-08:** flat Life now consumes the same injected
+Talisman exclusion as ordinary Minion-level delivery. Retain one predicate and
+one source certificate; no new runtime item-name dispatcher or Lua compatibility
+behavior is needed. The historical `ordinary-item-direct-applicability` name
+currently certifies only that one law. Do not widen its meaning when clearing
+coverage; the packet closes no broad owner gap. Independent copies, other item
+routing and minion delivery remain unfinished. The Life membership fixture
+authenticates the exact changed donor without adding an old-format execution
+path. See the [packet](../data/owned/poe2/3887ae68/flat-life-routing/README.md).
+
 **Composed support coverage cutover, 2026-10-08:** the common native planner now
 requires explicit support-source domains from injected rules. All operation
 subsets receive the same gate and new plan identity; older packages receive

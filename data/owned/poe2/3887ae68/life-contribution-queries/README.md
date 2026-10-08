@@ -60,3 +60,9 @@ program not yet installed in that finite graph and closes equipment only for its
 tested integral domain. It still derives diagnostic subtotals, not final Life.
 The [implementation plan](../../../../../docs/implementation.md) records the
 remaining gate and validation results.
+
+The subsequent [Life routing packet](../flat-life-routing/README.md) adds the
+existing Talisman exclusion to the same flat-Life effect. Its authenticated
+before/after donor comparison preserves this membership census, recipients and
+all closure obligations; the joined graph executes the actual guarded successor.
+No historical format or unguarded runtime alternative is installed.

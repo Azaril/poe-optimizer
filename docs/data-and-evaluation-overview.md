@@ -85,7 +85,7 @@ physical Gems now have Known source domains. It does not close Command
 mechanics or alias Player Commands to existing minion-side actions.
 Ice Nova's stat-set references are now correctly classified as metadata and do
 not create another support origin. That false blocker was our authoring defect.
-The [current checkpoint](implementation.md#current-native-data-checkpoint-gem-support-source-domains)
+The [Gem checkpoint](implementation.md#preceding-native-data-checkpoint-gem-support-source-domains)
 records the package, exact scope and next blocker.
 
 The latest integration connects imported Offering activation, item-prepared final
@@ -93,7 +93,7 @@ level and checked source/recipient scaling to its actual application. The finite
 joined graph produces 62% increased damage per Sniper recipient at level22;
 duplicate copies do not stack. It uses current Core preset/scenario composition
 and the published rules, without changing production behavior or closing the
-real Pending inventories. All 76 joined checks pass, including reused and Rayon
+real Pending inventories. All 79 joined checks pass, including reused and Rayon
 execution. The next damage consumer needs checked membership for application
 group results; that [public-contract proposal](owned-application-group-contribution-queries-proposal.md)
 awaits owner review. Composed support discovery is already approved and remains
@@ -119,6 +119,15 @@ Source component classification is distinct from the unscalable input and from
 complete numerical/routing coverage. Five-build publication preservation and
 all 60 joined checks pass on the new package. This is coverage reconciliation,
 not a new final-Life calculation or additional complete build.
+
+The current [Life routing packet](../data/owned/poe2/3887ae68/flat-life-routing/README.md)
+reuses the same injected Talisman predicate as ordinary Minion-level delivery.
+An Amulet's ordinary Player Life becomes inactive under the allocated passive;
+other Life-bearing equipment uses stay distinct. Missing applicability is
+unresolved. This adds no runtime branch and closes no broad owner inventory:
+other routing laws, copied records, minion receipt and final Life remain open.
+The [current checkpoint](implementation.md#current-native-data-checkpoint-shared-life-routing)
+records the package and native controls.
 
 The current [placement packet](../data/owned/poe2/3887ae68/selected-equipment-placement/README.md)
 closes five selected item destination inventories, including Ring and Staff.

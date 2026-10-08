@@ -74,6 +74,12 @@ coefficients do not authorize fabricated identity contributions. An exact
 source-store parent chain may authenticate reference evidence, but is not a
 native ownership or inheritance model. Native routing follows owned occurrences,
 declared recipients and proven applicability.
+Applicability can be reused across modifier families only for the exact routing
+law it proves. A predicate excluding ordinary Amulet delivery is not complete
+item routing, nor does suppressing Player receipt implement delivery to a minion.
+Keep copy paths independent and distinguish inactive contributions from missing
+eligibility. Add further laws through injected data and the existing occurrence
+graph, retaining unresolved coverage until the full selected path is accounted for.
 Contribution production and reduction have separate numerical contracts. Proving
 individual factors does not establish aggregate rounding, final resource cost or
 reservation. An oracle's shared numeric-precision table must be classified by
