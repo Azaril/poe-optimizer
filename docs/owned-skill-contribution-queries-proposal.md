@@ -2,8 +2,11 @@
 
 **Status:** Accepted 2026-10-08. V24 implements exact Current Skill query reads
 and Skill-owned self-contribution membership. Canonical Offering source writers
-now adopt four guarded empty domains. Their application join, inherited
-adjustments and support delivery membership remain pending.
+now adopt four guarded empty domains. Their activation/application join passes
+in the finite Sniper graph. Inherited adjustments, support delivery membership
+and the final combined damage consumer remain pending; the latter's new
+[application-group query boundary](owned-application-group-contribution-queries-proposal.md)
+is proposed separately for owner review.
 **Date:** 2026-10-07.
 **Decider:** Project owner.
 **Scope:** Extend the existing contribution graph's ownership and membership

@@ -279,6 +279,15 @@ maximum is the first supported stacking policy. Discovery, activation and
 completeness remain distinct, and the optional PoB adapter supplies reference
 evidence rather than runtime behavior.
 
+The next consumer boundary is tracked in the
+[application-group query proposal](owned-application-group-contribution-queries-proposal.md),
+currently awaiting owner review. Its recommendation is a typed producer address
+inside the existing checked contribution model, distinguishing ordinary program
+effects from results after application stacking. Exact recipient binding and
+complete membership must survive that distinction; individual candidates cannot
+be counted again after their group has emitted a contribution. This proposal
+does not yet change the accepted public contract.
+
 The [passive topology contract](owned-passive-topology.md) separates implicit roots,
 physical allocations, attached choices, scope eligibility and injected legality budgets.
 It prevents source node lists or UI point totals from becoming native game semantics.
@@ -900,7 +909,8 @@ definition, preserving each occurrence. Offering source scaling now adopts V24
 through three data-defined writers and four checked empty-domain queries. Its
 actual Skill owner and global query registry remain Partial. Empty membership
 is an admitted domain, not evidence that all game contributors are absent.
-Inherited/support delivery, the application join, composed support discovery
+The finite activation/application join now passes. Inherited/support delivery,
+checked consumption of application-group results, composed support discovery
 and the final Life consumer remain separate delivery work; these contracts are
 not complete-build claims.
 The published Life query data now adopts exact Actor/reward membership. Numeric

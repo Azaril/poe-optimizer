@@ -42,6 +42,7 @@ pub struct PlanComponents {
     pub source_properties: Option<SourcePropertyPreparationInput>,
     pub action_routes: Vec<ActionOutputRoutes>,
     pub contribution_queries: DeclaredSet<ContributionQuery>,
+    pub effect_applications: DeclaredSet<EffectApplicationRule>,
 }
 impl Default for PlanComponents {
     fn default() -> Self {
@@ -51,6 +52,7 @@ impl Default for PlanComponents {
             source_properties: None,
             action_routes: vec![],
             contribution_queries: DeclaredSet::complete(vec![]),
+            effect_applications: DeclaredSet::complete(vec![]),
         }
     }
 }
@@ -1116,7 +1118,7 @@ impl World {
                 tables: components.tables,
                 owners: self.owners.clone(),
                 receivers: components.receivers,
-                effect_applications: Some(empty()),
+                effect_applications: Some(components.effect_applications),
             },
             definitions.as_ref(),
             Default::default(),

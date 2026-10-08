@@ -41,6 +41,8 @@ mod life_queries_native;
 #[allow(dead_code)]
 #[path = "support/owned_life_contribution_queries.rs"]
 mod life_query_family;
+#[path = "support/owned_sniper_offering_application.rs"]
+mod offering_application_native;
 #[path = "support/owned_sniper_passive_damage_evidence.rs"]
 mod passive_damage_evidence;
 #[path = "support/owned_sniper_passive_damage_native.rs"]
@@ -111,6 +113,7 @@ struct World {
     inherent_life: inherent_life_native::Census,
     player_life: player_life_contribution_native::Census,
     life_inputs: player_life_inputs_native::Census,
+    offering: offering_application_native::Census,
 }
 impl World {
     fn load() -> Self {
@@ -421,6 +424,7 @@ impl World {
         let inherent_life = inherent_life_native::install(&mut w, &endpoint, &path);
         let player_life = player_life_contribution_native::install(&mut w, &endpoint);
         let life_inputs = player_life_inputs_native::install(&mut w, &endpoint, &path);
+        let offering = offering_application_native::install(&mut w, &endpoint, &path);
         Self {
             sniper: w,
             actual_actor_coverage,
@@ -435,6 +439,7 @@ impl World {
             inherent_life,
             player_life,
             life_inputs,
+            offering,
         }
     }
     fn action(&self, index: usize) -> ActionSelection {
@@ -488,13 +493,12 @@ impl World {
         let mut scenario = original.scenario().input().clone();
         scenario.enemy = self.block.enemy.clone();
         scenario.assumptions.extend(self.block.assumptions.clone());
-        let request = OwnedEvaluationRequest::new(
+        let request = offering_application_native::compose(
+            self,
             original.build().clone(),
             ScenarioSpec::new(scenario, Default::default()).unwrap(),
             QuerySpec::new(queries, Default::default()).unwrap(),
-            Default::default(),
-        )
-        .unwrap();
+        )?;
         self.sniper.checked_plan_with_request(request, |stages| {
             for row in &mut stages.programs.members {
                 if row.program == key("basic-attack-activation") {
@@ -554,6 +558,7 @@ impl World {
             attribute_base_native::configure(stages);
             inherent_life_native::configure(stages);
             player_life_contribution_native::configure(stages);
+            offering_application_native::configure(stages);
             configure(stages);
         })
     }

@@ -45,6 +45,7 @@ pub struct World {
     pub tables: Vec<IntegerRuleTable>,
     pub action_routes: Vec<ActionOutputRoutes>,
     pub contribution_queries: DeclaredSet<ContributionQuery>,
+    pub effect_applications: DeclaredSet<EffectApplicationRule>,
     pub actual_modifier: DefinitionRules,
 }
 impl World {
@@ -132,6 +133,7 @@ impl World {
             tables: vec![table],
             action_routes: vec![],
             contribution_queries: DeclaredSet::complete(vec![]),
+            effect_applications: DeclaredSet::complete(vec![]),
             actual_modifier,
         }
     }
@@ -378,6 +380,7 @@ impl World {
                 source_properties: Some(self.relation.clone()),
                 action_routes: self.action_routes.clone(),
                 contribution_queries: self.contribution_queries.clone(),
+                effect_applications: self.effect_applications.clone(),
             },
             |stages| {
                 // Explicit V4 local preparation authority. The same declaration is

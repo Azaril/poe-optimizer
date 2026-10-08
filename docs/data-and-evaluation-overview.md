@@ -39,6 +39,17 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
+The latest integration connects imported Offering activation, item-prepared final
+level and checked source/recipient scaling to its actual application. The finite
+joined graph produces 62% increased damage per Sniper recipient at level22;
+duplicate copies do not stack. It uses current Core preset/scenario composition
+and the published rules, without changing production behavior or closing the
+real Pending inventories. All 76 joined checks pass, including reused and Rayon
+execution. The next damage consumer needs checked membership for application
+group results; that [public-contract proposal](owned-application-group-contribution-queries-proposal.md)
+awaits owner review. Composed support discovery is already approved and remains
+independent implementation work. See the current [resume point](implementation.md#latest-integration-checkpoint-offering-activation-and-application).
+
 The joined graph calculates both attribute passes from the actual
 imported class/passive sources, resolves the five inherent Boolean flags through
 checked membership, and derives inherent Life. It produces Strength 27 and

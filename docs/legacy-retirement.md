@@ -38,6 +38,18 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Offering application join, 2026-10-08:** the finite joined graph now covers
+imported activation, computed scaling, exact recipients, non-stacking, missing
+inputs and reused/parallel execution. It uses current Core intent composition
+and accepts actual application data through the shared fixture; there is no
+new evaluator branch. Retain the separate ordinary Engine application tests
+until the joined artifact-dependent checks run automatically in CI. Do not
+replace useful independent coverage with ignored-only tests. The proposed next
+query extension must name application groups explicitly, not create dummy
+definition programs for synthetic graph nodes. See the
+[current checkpoint](implementation.md#latest-integration-checkpoint-offering-activation-and-application)
+and [proposal](owned-application-group-contribution-queries-proposal.md).
+
 **Offering source queries, 2026-10-08:** the current V24 packet uses three owned
 Skill programs and four checked empty-domain queries. It adds no evaluator mode
 or source-shaped runtime value. Retain the earlier application-only fixture until
@@ -47,7 +59,7 @@ previously observed only Offering's final inputs/table; describing this change a
 removal of an existing joined supplied-scalar boundary was inaccurate. The new
 packet reuses the recipient packet's source observations. `CalcTools.lua` is a
 manifest-pinned offline formula reference only; its Lua vararg/JIT dispatch is
-unnecessary in native arithmetic. See the [current checkpoint](implementation.md#latest-data-checkpoint-exact-offering-source-scaling).
+unnecessary in native arithmetic. See the [source-query checkpoint](implementation.md#previous-data-checkpoint-exact-offering-source-scaling).
 
 **Inherent flag fixture, 2026-10-08:** the joined Sniper graph now covers all four
 real passive flag combinations and actual Partial refusals while deriving
