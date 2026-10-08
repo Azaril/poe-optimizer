@@ -38,6 +38,17 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Support-origin source census, 2026-10-08:** the new optional observer reuses
+the existing Rust source runner and records actual original constructor/query
+calls. It adds no runtime Lua, source evaluator or native group model. Retain it
+as reference evidence for source updates and the forthcoming cold-discovery
+gate. Its `gemData`, `fromTree`, group indices, source slot names and bucket
+records are source provenance only. Manual Djinn can carry the same definition
+metadata as generated Djinn, and the slot-sharing control is not a legal-game
+admission proof. Translate only reviewed capabilities/relations; unsupported
+positive source families remain blocking. No legacy native path is retained
+solely for this observer. See the [source census](owned-support-origin-composition-proposal.md#source-census-and-implementation-implications-2026-10-08).
+
 **Offering application join, 2026-10-08:** the finite joined graph now covers
 imported activation, computed scaling, exact recipients, non-stacking, missing
 inputs and reused/parallel execution. It uses current Core intent composition

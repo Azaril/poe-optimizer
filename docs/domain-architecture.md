@@ -941,6 +941,14 @@ Import obligation only after authored input accounting and the mandatory native
 gate exist. Rebuild current artifacts without a compatibility branch. See
 [support composition](owned-support-origin-composition-proposal.md).
 
+Support admission can depend on the exact supplying occurrence even when two
+occurrences share one Skill definition. Provider-specific exclusions must not
+disable a manually authored occurrence or suppress independent external
+level/quality properties. Source metadata such as PoB's `gemData` and `fromTree`
+cannot establish native ownership. Likewise, a source slot-sharing control proves
+reference behavior, not legal game capability; translate only reviewed relations
+into owned data and keep unsupported positive families explicit.
+
 ## Options and consequences
 
 | Approach | Benefit | Cost / decision |

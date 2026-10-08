@@ -27,6 +27,8 @@ mod rapid_casting;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
+#[path = "support/support_origin_source.rs"]
+mod support_origin;
 #[path = "support/talisman_property_source.rs"]
 mod talisman_property;
 

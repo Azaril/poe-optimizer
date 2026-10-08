@@ -100,6 +100,59 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
+## Latest source checkpoint: composed support origins
+
+The accepted support-composition work now has an actual source-construction
+census. A scoped optional observer records original `CalcSetup` calls, raw
+ExtraSupport/LinkedSupport buckets and returns, primary/additional Gem effects,
+exact source occurrences and incoming constructor candidates. It reuses the
+existing complete PoB bootstrap, JIT runner and XML control helpers; native
+Core/Data/Engine and published packages are unchanged.
+
+Original05 has twelve selected source groups and sixteen constructed effects.
+The 28 primary-effect calls include sixteen supports; four additional calls are
+non-support Djinn Commands. Nine ExtraSupport queries and one LinkedSupport
+query have empty buckets and results in both MAIN/CALCS. Four tree-Djinn
+constructors exclude supports, while manual Sand receives three candidates.
+Its disabled Magnified control receives two. A source-slot control makes
+item-generated Firebolt receive three supports from the distinct manual Sand
+group; the unchanged original receives none. The control proves source behavior,
+not legal game admission or permission to add PoB slot groups to native data.
+
+The census also disproves an observer assumption: PoB attaches `gemData` even
+to manual Djinn rows and shares `fromTree` definition metadata. Neither is native
+physical-Gem or provider-origin authority. The corrected observer records those
+fields literally. The first failed run remains diagnostic; a subsequent XML
+control setup error was corrected without changing source methods or fixtures.
+
+**Twelve complete cold loads pass**: baseline, independent repeat, uninstrumented
+baseline, disabled support, slot sharing and uninstrumented slot sharing in
+each JIT mode. Raw reports are byte-identical at 607,968 bytes, SHA-256
+`e34ebf95d61c2ebbddd1300b59582149700468d67e24d6cd059008070407eba8`.
+The final driver passes in **48.75s**:
+`runs/owned-support-origin-acquisition-03.log`; reports are in
+`runs/owned-support-origin-source-03`. Strict workspace/all-feature/all-target
+Clippy and changed Rust formatting pass. The optional Windows source-test link
+emits `LNK4098` (CRT library conflict); the executable succeeds. Do not describe
+that link as warning-free. Clippy evidence is `runs/owned-support-origin-clippy-01.log`.
+At **19:55:51 UTC**, predecessor `e8b55db` CI run `37834636120` remained pending
+(`runs/owned-support-origin-prior-ci-02.json`); hosted success is unverified.
+
+**Next implementation:** retain authored assignment/order on the preset and
+enforce complete provider-capability discovery in the common cold planner before
+support selection/source-property collection. Bind exclusions to exact supplying
+occurrences, not shared Skill metadata. Complete declaration lists or the empty
+source queries alone cannot establish this support inventory. Direct/staged
+requests must share the gate; then move Import `01de` after its authored-source
+accounting is proved. Positive extra/linked and additional-support families stay
+unsupported until reviewed. Detailed evidence and integration points are in the
+[accepted support contract](owned-support-origin-composition-proposal.md#source-census-and-implementation-implications-2026-10-08).
+
+Native discovery remains **accepted, not implemented**. The application-group
+query proposal is still awaiting owner review; no approval is inferred from
+elapsed time. Current package, all-five issue counts, selected Original05's five
+input obligations and **0/5 complete builds** are unchanged.
+
 ## Latest integration checkpoint: Offering activation and application
 
 The same finite Sniper graph now binds the imported selected preset's known
@@ -2381,7 +2434,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
 | Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Equipment ordering, global/owner coverage and the final Life consumer remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
-| Composed support discovery | Accepted October 8: presets own authored assignments/order; native cold planning derives complete origins from the composed request and injected provider capabilities. Enforce the direct/staged-request gate before moving Import `01de`; rebuild current artifacts. Implementation pending. [Contract](owned-support-origin-composition-proposal.md). |
+| Composed support discovery | Accepted October 8: presets own authored assignments/order; native cold planning derives complete origins from the composed request and injected provider capabilities. Twelve cold source loads now prove the baseline constructor census, provider-specific exclusion, disabled assignment and cross-group slot-sharing control in both JIT modes. Source metadata does not identify native ownership or grant legal sharing authority. Enforce the direct/staged-request gate before moving Import `01de`; rebuild current artifacts. Native implementation pending. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Application-group contribution queries | Proposed October 8; owner review pending. Give the existing query members typed program-effect/application-group producer addresses, validating exact recipients and all potential sources before values. Preserve stacking, unknowns, explicit numeric order and one checked reduction path; rebuild current artifacts without compatibility branches. This is the next combined damage consumer boundary. [Proposal](owned-application-group-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |

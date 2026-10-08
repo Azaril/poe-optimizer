@@ -1,6 +1,8 @@
 # Support origins belong to the composed request
 
-**Status:** Accepted 2026-10-08; implementation pending. The owner approved
+**Status:** Accepted 2026-10-08; native implementation pending. The first actual
+source-construction census and slot-sharing control pass in both JIT modes.
+The owner approved
 discovery from each composed build, preserving authored assignments and order
 on the skill preset.
 **Date:** 2026-10-07.
@@ -165,6 +167,72 @@ ownership models. More numerical components alone cannot clear these input gates
    metrics is not the first working-build milestone.
 
 ## Existing integration points
+
+### Source census and implementation implications (2026-10-08)
+
+The optional [Rust witness](../crates/poe-optimizer-pob/tests/support/support_origin_source.rs)
+uses the existing complete source bootstrap and supervised JIT-mode runner.
+Its [observer](../crates/poe-optimizer-pob/tests/support/support_origin_source.lua)
+captures calls to original `processGrantedEffect`, `createActiveSkill`, `List`
+and `Tabulate` from pinned `CalcSetup.initEnv`. It preserves raw modifier buckets,
+returned query values, exact source Gem/group object joins and constructor
+candidate positions. It does not call a replacement discovery algorithm or
+infer query absence from final damage.
+
+Original05's selected preset produces the following cold-load census in both
+MAIN and CALCS:
+
+| Boundary | Observed result |
+| --- | --- |
+| Selected source groups / root constructors | 12 groups / 16 constructed effects |
+| Primary effect processing | 28 calls, including 16 support effects |
+| Additional effect processing | Four calls; Sand/Water Commands, none classified as supports |
+| ExtraSupport | Nine original queries; every raw source bucket and returned list empty |
+| LinkedSupport | One original query; raw source bucket and returned list empty |
+| Tree-provider exclusions | Four Djinn summon/Command constructors have `noSupports` and empty candidate lists |
+| Manual Sand | Three support candidates; disabling its Magnified Gem reduces this to two |
+| Item-generated Firebolt | Empty candidate list in the unchanged original |
+
+One source-format control changes only the manual Sand group's slot to
+`Weapon 1`. Firebolt then receives all three supports from that **different
+source group**, without changing physical support definitions or assignment
+counts. This confirms a real source dependency outside the preset's simple
+assignment sequence. It is a diagnostic of PoB's behavior, **not** evidence that
+this slot arrangement is legal PoE2 gameplay, nor authority to add PoB socket
+groups or automatic slot sharing to native data. Positive extra/linked sources
+and additional support effects still need their own admission evidence.
+
+The source also attaches `gemData` to manual Djinn rows and shares `fromTree`
+metadata with their definitions. Neither field identifies a native physical
+Gem or exact grant source. Preserve physical versus manual input identity from
+the existing import proof and bind generated exclusions to their exact supply
+occurrence. Do not put a global cannot-be-supported flag on the shared Skill
+definition; that would incorrectly remove the manual occurrence's supports.
+
+Six fresh loads per JIT mode cover baseline, independent repeat, uninstrumented
+baseline, disabled support, slot sharing and uninstrumented slot sharing. The
+two complete reports agree byte-for-byte: 607,968 bytes each, SHA-256
+`e34ebf95d61c2ebbddd1300b59582149700468d67e24d6cd059008070407eba8`.
+Reports are `runs/owned-support-origin-source-03/source-jit-{off,on}.json`;
+the successful driver log is `runs/owned-support-origin-acquisition-03.log`.
+This is source behavior at a fixed cold lifecycle, not native discovery proof.
+
+The next native implementation must therefore:
+
+1. Preserve the persisted sequence as authored assignment order only. Reuse
+   exact existing target/provider relations, not the observer's group indices.
+2. Check a complete capability inventory for every selected provider and
+   relevant descendant before support selection or source-property collection.
+   A complete skill-grant list or empty original source query alone does not
+   certify all support-source capabilities. Unreviewed positive families block.
+3. Keep provider-specific exclusion separate from shared Skill identity and
+   from external supported level/quality contributions. Both manual and
+   generated occurrences of the same Skill must be covered by tests.
+4. Store discovery evidence on the immutable composed plan, enforce it for
+   direct and staged entry points, and invalidate it with provider/data changes.
+   Move Import `01de` only after this gate and authored-input accounting exist.
+
+### Code boundaries
 
 - [Core preset and composition](../crates/poe-optimizer-core/src/owned_project.rs):
   `SkillPreset`, `compose_validated`.

@@ -39,6 +39,14 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
+Support discovery now has an offline constructor census for Original05 and
+contrasting controls. It confirms that the source can share supports across
+groups and that generated-provider exclusions must be distinguished from the
+same manually authored Skill. PoB's `gemData`/`fromTree` fields are not native
+ownership authority. The accepted native discovery gate is still unimplemented;
+the census does not resolve the selected support-origin input obligation. See
+the [source checkpoint](implementation.md#latest-source-checkpoint-composed-support-origins).
+
 The latest integration connects imported Offering activation, item-prepared final
 level and checked source/recipient scaling to its actual application. The finite
 joined graph produces 62% increased damage per Sniper recipient at level22;
