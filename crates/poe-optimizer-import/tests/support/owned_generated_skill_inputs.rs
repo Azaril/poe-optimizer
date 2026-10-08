@@ -337,6 +337,114 @@ fn bindings(
         .generated_inputs
 }
 
+fn support_input_fixture() -> Fixture {
+    let mut f = generated_fixture();
+    f.policy.support_origin_order = Some(
+        SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 {
+            mapping_source: *f.artifacts.mapping.source_identity(),
+            roles: *f.artifacts.roles.identity(),
+        },
+    );
+    f
+}
+
+#[test]
+fn authored_support_inputs_reuse_exact_generated_sources_but_not_archived_syntax() {
+    let f = support_input_fixture();
+    let result = run(&document(), &f);
+    let presets = &result.draft().input().skill_presets.members;
+    assert!(matches!(
+        presets[0]
+            .authored_support_order
+            .as_ref()
+            .unwrap()
+            .completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    for preset in &presets[1..] {
+        let order = preset
+            .authored_support_order
+            .as_ref()
+            .unwrap()
+            .to_resolved()
+            .unwrap();
+        assert!(order.is_empty());
+        assert!(preset.supports.to_resolved().unwrap().is_empty());
+    }
+    let mut absent = f.policy.clone();
+    absent.generated_skill_inputs = None;
+    let unsupported = normalize(&document(), &f, &absent, Default::default()).unwrap();
+    assert!(matches!(
+        unsupported.draft().input().skill_presets.members[1]
+            .authored_support_order
+            .as_ref()
+            .unwrap()
+            .completion,
+        DraftListCompletion::Pending { .. }
+    ));
+}
+
+#[test]
+fn generated_support_correspondence_does_not_borrow_raw_quality_or_activation_readiness() {
+    let f = support_input_fixture();
+    for replacement in ["", "quality=\"bad\"", "quality=\"201\""] {
+        let text = document().replace("quality=\"12.5\"", replacement).replace(
+            "<Skill source=\"Tree:7\">",
+            "<Skill source=\"Tree:7\" enabled=\"false\">",
+        );
+        let result = run(&text, &f);
+        let preset = &result.draft().input().skill_presets.members[1];
+        assert_eq!(
+            preset.authored_support_order.as_ref().unwrap().completion,
+            DraftListCompletion::Complete
+        );
+        assert!(
+            bindings(&result, 1)
+                .members
+                .iter()
+                .any(|r| r.parameters.to_resolved().is_none())
+        );
+    }
+}
+
+#[test]
+fn generated_support_inputs_refuse_sharing_stale_providers_and_ambiguous_sources() {
+    let f = support_input_fixture();
+    let text = document();
+    for changed in [
+        text.replace("Item:1:Test Title", "Item:9:Test Title"),
+        text.replace("slot=\"coat\"", "slot=\"coat Swap\""),
+        text.replace("Tree:7", "Tree:07"),
+        text.replace("level=\"7\"", "level=\"8\""),
+        text.replace(
+            "<SkillSet id=\"2\">",
+            &format!("<SkillSet id=\"2\">{}", groups("18")),
+        ),
+        text.replace(
+            "<SkillSet id=\"2\">",
+            &format!(
+                "<SkillSet id=\"2\"><Skill enabled=\"false\" slot=\"coat\">{}</Skill>",
+                ACTIVE.replace("gemId=\"active\"", "gemId=\"sibling\"")
+            ),
+        ),
+    ] {
+        let result = run(&changed, &f);
+        let preset = &result.draft().input().skill_presets.members[1];
+        assert_eq!(
+            preset.supports.completion,
+            DraftListCompletion::Complete,
+            "{changed}"
+        );
+        assert!(
+            matches!(
+                preset.authored_support_order.as_ref().unwrap().completion,
+                DraftListCompletion::Pending { .. }
+            ),
+            "{changed}"
+        );
+    }
+}
+
 #[test]
 fn exact_selected_axes_join_repeated_tree_and_item_providers_without_new_roots() {
     let f = generated_fixture();

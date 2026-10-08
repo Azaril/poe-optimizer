@@ -182,7 +182,7 @@ fn normalize_queries(
         queries,
         limits,
     )?;
-    let retired = result
+    let mut retired = result
         .draft()
         .input()
         .equipment_presets
@@ -190,6 +190,18 @@ fn normalize_queries(
         .iter()
         .filter(|preset| matches!(preset.equipment.completion, DraftListCompletion::Complete))
         .count();
+    for preset in &result.draft().input().skill_presets.members {
+        retired += usize::from(matches!(
+            preset.supports.completion,
+            DraftListCompletion::Complete
+        ));
+        retired += usize::from(
+            preset
+                .authored_support_order
+                .as_ref()
+                .is_some_and(|order| matches!(order.completion, DraftListCompletion::Complete)),
+        );
+    }
     origin_integrity_with_retired(&source, &result, retired);
     Ok(result)
 }

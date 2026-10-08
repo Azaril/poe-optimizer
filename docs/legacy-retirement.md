@@ -46,8 +46,18 @@ assertions describe finite synthetic worlds and must never become a production
 default. Structural provider inspection reuses Core's existing resolver and
 does not enable disabled providers. Preset authored order now uses physical
 assignment IDs in `authored_support_order`, with no old-field or runtime-origin
-payload alias. Game-data publication, source-input accounting and relocation of
-Import `01de` remain follow-up work.
+payload alias. At that checkpoint, game-data publication, source-input accounting
+and relocation of Import `01de` remained follow-up work.
+
+The subsequent authored-input check now retires Original05 `01de` using the
+shared source census and exact generated resolver, without inferring runtime
+support capabilities. It retains that resolver's private result independently of
+quality readiness and adds no second parser or persisted group model. Archived
+sources retain their existing three obligations; their unresolved source/slot
+relationships cannot be discarded. The old mixed-scope issue is no longer an
+always-Pending stand-in for native discovery. Unrepresented positive relations
+still use that issue until accounted for. The current data-adoption gate remains
+mandatory; see the [input checkpoint](implementation.md#current-input-checkpoint-authored-support-relationships).
 
 The ordinary recipe-extension authoring path now accepts reviewed support-source
 domains and carries them through existing publication. Retain that shared route;

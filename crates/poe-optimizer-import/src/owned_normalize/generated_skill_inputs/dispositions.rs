@@ -1,6 +1,6 @@
 //! Complete source-field accounting after independent raw/count materialization.
 //! Materialized receipts prove output correspondence. Archived syntax retains
-//! separate Pending raw-input, usage and support-origin owners and proves no
+//! separate Pending raw-input, usage and authored-support owners and proves no
 //! generated target or output. No draft values or IDs are changed.
 use super::*;
 use crate::owned_normalize::skill_input_disposition::{

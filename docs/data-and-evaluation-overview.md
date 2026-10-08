@@ -32,7 +32,7 @@ are not needed; generated owned artifacts and loaded Rust indexes remain the pla
 [implementation](implementation.md) records the latest evidence and blockers.
 
 Delivery now explicitly prioritizes the closest complete unchanged build,
-currently Original05 (Skeletal Sniper). Its five selected input obligations
+currently Original05 (Skeletal Sniper). Its four selected input obligations
 still block request finalization, and complete native builds remain 0/5.
 The first complete native/reference result unlocks owned optimizer integration;
 we do not wait for all five. Subsequent candidate changes need their own coverage
@@ -46,8 +46,9 @@ same manually authored Skill. PoB's `gemData`/`fromTree` fields are not native
 ownership authority. The common native gate now requires reviewed support-source
 domain declarations from injected data, including for disabled selected providers.
 It has no Lua state and cannot infer coverage from authored order. Game-data
-adoption and input accounting remain pending; the census does not resolve the
-selected support-origin input obligation. See
+adoption remains pending. A separate whole-source authored-input proof now
+resolves Original05's selected support-input obligation; the source observer's
+empty buckets alone do not supply that proof. See
 the [source checkpoint](implementation.md#latest-source-checkpoint-composed-support-origins).
 
 The existing offline recipe-extension path can now author those declarations.
@@ -55,16 +56,19 @@ It validates exact owned subjects, preserves existing declarations, and carries
 the result through compact and complete release publication. Unmapped domains
 stay Unmapped, and omitted rows stay unknown. This is a publication facility;
 the canonical game package still needs reviewed support-domain data. Import
-also uses the pending origin inventory to account for some archived generated
-fields, so moving its responsibility requires reconciling those saved relations.
+retains authored-support obligations for archived generated fields whose exact
+provider or saved relationships are still unresolved.
 
 Presets and composed builds now persist `authored_support_order`: exact targets
 and ordered physical assignment IDs. They no longer store runtime origin
 variants. Core retains membership/target/order validation; Engine constructs
 runtime provenance for preparation and delivery. This current-format change
-requires fresh imports of saved build documents. The mixed-scope Import issue
-still remains Pending until source relationships are fully accounted for;
-changing the DTO does not close it or establish native coverage.
+requires fresh imports of saved build documents. Import now completes this
+inventory only with checked physical membership, exact targets/order, absent
+unrepresented manual-slot relations and exact generated-provider correspondence.
+It retires Original05's `01de` issue and preserves all other inputs/provenance.
+Unknown generated quality remains unknown, and unsupported sharing or archived
+sources stay Pending. Neither this proof nor the DTO establishes native coverage.
 
 The latest integration connects imported Offering activation, item-prepared final
 level and checked source/recipient scaling to its actual application. The finite
@@ -104,7 +108,7 @@ All nine selected equipment uses (eight templates) then have complete
 character-slot placement. Public binding controls cover 21 saved uses, including
 the two Ring uses and Staff loadout scopes. The older three-item packet and
 remaining fixture placement closure are retired; numerical coverage and the
-five selected input obligations remain unfinished. Validation and current
+remaining selected input obligations remain unfinished. Validation and current
 package identities are recorded in the implementation plan.
 
 The preceding data checkpoint replaces Gigantic's numeric presence with typed
@@ -164,7 +168,7 @@ the declared Actor slot receives an injected level-table lookup. These are
 data-authored programs on existing owners, without skill-name dispatch in Rust.
 Their Partial source/support inventories and remaining combat/population modes
 still prevent full owner closure. All-five reimports preserve selections and
-110 queries; Original05's five obligations and the 0/5 completion count remain.
+110 queries; Original05's remaining obligations and the 0/5 completion count remain.
 The current package is `runs/owned-gigantic-flags-publication-01/package`.
 See the [packet and coverage limits](../data/owned/poe2/3887ae68/sand-preparation/README.md).
 
@@ -277,7 +281,7 @@ Strength or flag is a native input. The
 adds a guarded read-to-contribution program on the shared Player Actor without
 changing the pure amount receiver. Disabled bonuses emit no record; enabled zero
 Strength emits one zero record. Final Life aggregation, full-build attributes
-and the five selected input obligations remain unresolved; all-five input and
+and the remaining selected input obligations remain unresolved; all-five input and
 110-query preservation pass.
 
 The V23 runtime adds checked shared Actor, supplied Actor and selected reward
@@ -340,7 +344,7 @@ Original05 has 17 external assumptions, but their full inventory remains Pending
 The preceding participation publication supplied all twelve active roots' enabled
 preferences in Original05's selected preset, which retains 23 usage preferences.
 Import also accounts for the strictly framed Build/Buffs leaf as cached output,
-not a configured buff. Original05 retains five selected input obligations and
+not a configured buff. Original05 retains selected input obligations and
 44 configuration-linked source origins after archived and placeholder accounting. The penalty
 consumer does not close usage, readiness, resistance contributors/caps or complete
 native evaluation.
@@ -366,7 +370,7 @@ none. Draft values, IDs, allocator state, selections and all 110 query rows rema
 exact. That publication reduced Original05's configuration issue `01f2` to 73 linked
 origins from 79; cached-output accounting reduced it to 72 and archived
 responsibility accounting to 58; raw-placeholder accounting now leaves 44.
-All five selected input issues remain.
+This component does not resolve the remaining selected input issues.
 Complete native builds remain **0/5**. The [participation contract](owned-skill-participation-proposal.md)
 now has a native consumer on the existing graph and a published Sniper policy
 combining independent required group/occurrence values. Other skills still need
@@ -1007,7 +1011,7 @@ programs, while incoming-property/support coverage remains Partial. Firebolt's
 preparation is still unauthored. Saved participation transport
 adds nine exact preferences across Originals01/05, with all-five inverses and
 18 import controls passing. This publishes no readiness and closes none of
-Original05's five selected obligations.
+Original05's remaining selected input obligations.
 
 Sand integration also exercises generated preset inputs together with source
 assembly. These inputs are Structural request producers, not authored programs

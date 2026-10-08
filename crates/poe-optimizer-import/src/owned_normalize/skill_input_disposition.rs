@@ -430,7 +430,8 @@ fn pending_preset_issue(
 }
 
 /// Archived generated syntax belongs to three independent, still-open
-/// inventories. A singleton saved group does not prove runtime support sources.
+/// inventories. A singleton does not resolve its saved source/slot relationship;
+/// the authored-order check must retain this responsibility until it does.
 pub(super) fn pending_generated_responsibilities(
     b: &mut Builder<'_, '_>,
     set: SourceOccurrenceId,

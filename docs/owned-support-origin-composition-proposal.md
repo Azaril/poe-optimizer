@@ -1,7 +1,8 @@
 # Support origins belong to the composed request
 
-**Status:** Accepted 2026-10-08; common native coverage gate implemented, validation
-and game-data adoption tracked in the implementation plan. The first actual
+**Status:** Accepted 2026-10-08; common native coverage gate and admitted authored-input
+accounting implemented. Original05 `01de` is retired; native game-data adoption and
+provider exclusions remain pending. The first actual
 source-construction census and slot-sharing control pass in both JIT modes.
 The owner approved
 discovery from each composed build, preserving authored assignments and order
@@ -25,11 +26,19 @@ Missing/Unmapped coverage blocks both preparation and retained delivery.
 
 Synthetic component fixtures explicitly declare their finite source domains.
 Those assertions are not publication evidence for game definitions. Current
-game data has not adopted these declarations, Import `01de` is still pending,
-and authored-input accounting and exact provider exclusions still need their
-adoption checkpoint. Preset/Draft/Build order has now moved to the explicit
+game data has not adopted these declarations, and exact provider exclusions
+still need their adoption checkpoint. Preset/Draft/Build order has moved to the explicit
 `authored_support_order` contract described below. No new positive origin family
 is implemented.
+
+The authored-input proof now closes Original05 `01de` after complete physical
+membership, exact assignment targets/order and all saved relationships are
+accounted for. Manual slot bindings remain unsupported. Generated source groups
+reuse the exact item/tree resolver; its correspondence is independent of raw
+quality and activation readiness. Archived, stale and ambiguous sources remain
+Pending. The issue can retire only with its one exact preset provenance link;
+no other input or source link is removed. Native composed capability checks
+remain separate and mandatory, including after equipment/tree changes.
 
 The existing `OwnedRecipeExtension` now accepts `support_source_domains`, with
 an appended-row count in its receipt. Only new or identical declarations are
@@ -39,10 +48,9 @@ Both compact succession and complete release assembly preserve the field and
 charge its rows/gaps against their outer publication budgets. This supplies the
 data-authoring route, not game-specific absence evidence or Import completion.
 
-During input migration, also reconcile
-`skill_input_disposition::pending_generated_responsibilities`: archived generated
-syntax currently requires the origin-discovery issue alongside generated-input
-and usage obligations. Do not remove that responsibility without accounting for
+`skill_input_disposition::pending_generated_responsibilities` retains archived
+generated syntax on the authored-support issue alongside generated-input and
+usage obligations. Do not remove that responsibility without accounting for
 every saved relationship. The strict source frame permits a `slot` attribute;
 the source sharing control shows why merely recognizing its syntax is not proof
 that its support relation was converted.
@@ -50,8 +58,8 @@ that its support relation was converted.
 ## Context
 
 Original05's selected skill preset contains sixteen physical support assignments
-in eight saved sequences. Their membership and local order are known, but issue
-`01de` still represents incomplete support-origin discovery. The source also
+in eight saved sequences. At proposal time, issue `01de` combined their unresolved
+saved relationships with runtime support-origin discovery. The source also
 considers additional effects of a Gem, item-provided supports, linked supports,
 supports shared with item-generated skills, and provider-specific exclusion.
 
@@ -69,8 +77,9 @@ Runtime `SupportOrigin` values are derived by Engine. The former `support_origin
 field and its wrapped-origin payload have no compatibility aliases. Import's
 `support_inventory::Census/complete` certifies the physical assignment list,
 while `support_order::OrderIndex` preserves local order. Neither certifies
-complete runtime origins; the existing mixed-scope issue remains open until the
-remaining saved relationships are accounted for.
+complete runtime origins. `support_order::complete` now retires the authored
+issue only after the saved relationships are accounted for; native capability
+coverage stays with the composed plan.
 
 The current whole-request gates must remain. `DraftSession::finalize_with`
 returns Pending before constructing a request if selected input obligations
@@ -197,7 +206,7 @@ ownership models. More numerical components alone cannot clear these input gates
    scratch reuse and bounded-work exhaustion. Unsupported changes must remain
    blocked rather than silently retaining the prior Assignment-only result.
 5. Reimport Original05 unchanged and finalize it through
-   `finalize_selection_checked` after all five selected input obligations have
+   `finalize_selection_checked` after all remaining selected input obligations have
    genuinely resolved. Retain its independent preset selections and all 22
    query identities; no fixture-only request or edited completion flags.
 6. Publish an actual evaluation bundle and run the resulting request through

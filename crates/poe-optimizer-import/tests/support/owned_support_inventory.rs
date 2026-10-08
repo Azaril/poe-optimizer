@@ -63,7 +63,7 @@ fn pending(result: &NormalizedImport) {
 }
 
 #[test]
-fn exact_physical_inventory_retires_only_its_issue_and_retains_spent_identity() {
+fn exact_physical_inventory_and_authored_order_retain_spent_identities() {
     let artifacts = artifacts(true);
     let source = source(
         &xml(&format!(
@@ -89,6 +89,17 @@ fn exact_physical_inventory_retires_only_its_issue_and_retains_spent_identity() 
         panic!("prior obligation")
     };
     expected.skill_presets.members[0].supports.completion = DraftListCompletion::Complete;
+    let order = expected.skill_presets.members[0]
+        .authored_support_order
+        .as_mut()
+        .unwrap();
+    let DraftListCompletion::Pending {
+        id: order_issue, ..
+    } = order.completion
+    else {
+        panic!("prior authored-order obligation")
+    };
+    order.completion = DraftListCompletion::Complete;
     assert_eq!(&expected, after.draft().input());
     assert_eq!(before.allocator_after(), after.allocator_after());
     let mut sidecar = before.into_parts().1;
@@ -97,7 +108,8 @@ fn exact_physical_inventory_retires_only_its_issue_and_retains_spent_identity() 
     let mut removed = 0;
     for origin in &mut sidecar.origins {
         origin.links.retain(|link| {
-            if matches!(link, OwnedOriginTarget::Issue(id) if *id == retired) {
+            if matches!(link, OwnedOriginTarget::Issue(id) if *id == retired || *id == order_issue)
+            {
                 removed += 1;
                 false
             } else {
@@ -105,7 +117,7 @@ fn exact_physical_inventory_retires_only_its_issue_and_retains_spent_identity() 
             }
         });
     }
-    assert_eq!(removed, 1);
+    assert_eq!(removed, 2);
     assert_eq!(
         serde_json::to_value(sidecar).unwrap(),
         serde_json::to_value(after.sidecar()).unwrap()
@@ -125,7 +137,7 @@ fn exact_physical_inventory_retires_only_its_issue_and_retains_spent_identity() 
     assert_eq!(input.supports.members[1].enabled.to_resolved(), Some(true));
     assert!(matches!(
         preset.authored_support_order.as_ref().unwrap().completion,
-        DraftListCompletion::Pending { .. }
+        DraftListCompletion::Complete
     ));
     assert!(matches!(
         preset.skills.completion,
@@ -135,7 +147,7 @@ fn exact_physical_inventory_retires_only_its_issue_and_retains_spent_identity() 
         preset.payload_links.completion,
         DraftListCompletion::Pending { .. }
     ));
-    origin_integrity_with_retired(&source, &after, 1);
+    origin_integrity_with_retired(&source, &after, 2);
 }
 
 #[test]
@@ -220,7 +232,129 @@ fn inventories_are_ordered_per_saved_set_and_allow_reviewed_empty_inventory() {
             .map(|s| s.id)
             .collect::<Vec<_>>()
     );
-    origin_integrity_with_retired(&source, &result, 3);
+    assert!(matches!(
+        input.skill_presets.members[0]
+            .authored_support_order
+            .as_ref()
+            .unwrap()
+            .completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    for preset in &input.skill_presets.members[1..] {
+        assert_eq!(
+            preset.authored_support_order.as_ref().unwrap().completion,
+            DraftListCompletion::Complete
+        );
+    }
+    origin_integrity_with_retired(&source, &result, 5);
+}
+
+#[test]
+fn authored_order_refuses_unrepresented_slot_relations_even_without_enabled_supports() {
+    let artifacts = artifacts(true);
+    for slot in ["", "nil", "Weapon 1", "future-slot"] {
+        for contents in [format!("{ACTIVE}{SUPPORT}"), ACTIVE.into(), String::new()] {
+            let text = xml(&contents).replace(
+                "<Skill enabled=\"true\">",
+                &format!("<Skill enabled=\"false\" slot=\"{slot}\">"),
+            );
+            let imported = source(&text, 0xd1);
+            let result = normalize(
+                &imported,
+                &artifacts,
+                &reviewed(&artifacts),
+                Default::default(),
+            )
+            .unwrap();
+            let preset = &result.draft().input().skill_presets.members[0];
+            assert_eq!(preset.supports.completion, DraftListCompletion::Complete);
+            assert!(
+                matches!(
+                    preset.authored_support_order.as_ref().unwrap().completion,
+                    DraftListCompletion::Pending { .. }
+                ),
+                "slot={slot:?}"
+            );
+            origin_integrity_with_retired(&imported, &result, 1);
+        }
+    }
+}
+
+#[test]
+fn authored_relationships_are_proved_per_preset_without_erasing_unresolved_siblings() {
+    let artifacts = artifacts(true);
+    let text = format!(
+        r#"<PathOfBuilding2><Skills activeSkillSet="1"><SkillSet id="1"><Skill enabled="false">{ACTIVE}{SUPPORT}{SUPPORT}</Skill></SkillSet><SkillSet id="2"><Skill slot="Weapon 1">{ACTIVE}{SUPPORT}</Skill></SkillSet></Skills></PathOfBuilding2>"#
+    );
+    let imported = source(&text, 0xd2);
+    let result = normalize(
+        &imported,
+        &artifacts,
+        &reviewed(&artifacts),
+        Default::default(),
+    )
+    .unwrap();
+    let presets = &result.draft().input().skill_presets.members;
+    let first = presets[0]
+        .authored_support_order
+        .as_ref()
+        .unwrap()
+        .to_resolved()
+        .unwrap();
+    assert_eq!(first.len(), 1);
+    assert_eq!(first[0].assignments, presets[0].supports.members);
+    assert!(matches!(
+        presets[1]
+            .authored_support_order
+            .as_ref()
+            .unwrap()
+            .completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    origin_integrity_with_retired(&imported, &result, 3);
+}
+
+#[test]
+fn authored_empty_order_needs_a_complete_source_and_physical_census() {
+    let artifacts = artifacts(true);
+    for (text, known) in [
+        (xml(""), true),
+        (xml(ACTIVE), true),
+        (xml("<Gem gemId=\"unknown\"/>"), false),
+        (xml(ACTIVE).replace("</Skill>", "<Unknown/></Skill>"), false),
+        (
+            xml(ACTIVE).replace(
+                "<Skill enabled=\"true\">",
+                "<Skill enabled=\"true\" source=\"\">",
+            ),
+            false,
+        ),
+        (
+            xml(ACTIVE).replace(
+                "<Skill enabled=\"true\">",
+                "<Skill enabled=\"true\" source=\"nil\">",
+            ),
+            false,
+        ),
+    ] {
+        let result = normalize(
+            &source(&text, 0xd3),
+            &artifacts,
+            &reviewed(&artifacts),
+            Default::default(),
+        )
+        .unwrap();
+        let order = result.draft().input().skill_presets.members[0]
+            .authored_support_order
+            .as_ref()
+            .unwrap();
+        assert_eq!(
+            matches!(order.completion, DraftListCompletion::Complete),
+            known,
+            "{text}"
+        );
+        assert!(order.members.is_empty());
+    }
 }
 
 #[test]

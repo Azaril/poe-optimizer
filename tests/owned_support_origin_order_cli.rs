@@ -166,12 +166,22 @@ fn check_order(xml: &[u8], out: &Path, selected: Option<&str>) -> Value {
         }
     }
     let mut actual = BTreeMap::new();
+    let mut complete_presets = Vec::new();
+    let mut pending_presets = Vec::new();
     for p in &d.skill_presets.members {
         let order = p.authored_support_order.as_ref().unwrap();
-        assert!(
-            matches!(&order.completion,DraftListCompletion::Pending{code,..} if code.as_str()=="support-origin-discovery-not-converted")
-        );
-        assert!(order.to_resolved().is_none());
+        match &order.completion {
+            DraftListCompletion::Complete => {
+                assert!(order.to_resolved().is_some());
+                assert_eq!(p.supports.completion, DraftListCompletion::Complete);
+                complete_presets.push(p.id);
+            }
+            DraftListCompletion::Pending { code, .. } => {
+                assert_eq!(code.as_str(), "support-origin-discovery-not-converted");
+                assert!(order.to_resolved().is_none());
+                pending_presets.push(p.id);
+            }
+        }
         for row in &order.members {
             let DraftSkillTarget::Authored(DraftField::Known { value: target }) = &row.target
             else {
@@ -188,7 +198,7 @@ fn check_order(xml: &[u8], out: &Path, selected: Option<&str>) -> Value {
         "exact source encounter order including disabled and repeated definitions"
     );
     assert_eq!(source_rows.len(), d.supports.members.len());
-    let mut report = json!({"supports":d.supports.members.len(),"ordered":actual.values().map(Vec::len).sum::<usize>(),"sequences":actual.len(),"queries":d.query_presets.members.iter().map(|p|p.queries.requests.members.len()).sum::<usize>(),"unresolved_targets":supports.values().filter(|s|s.target.to_resolved().is_none()).count(),"outer_order_pending":true});
+    let mut report = json!({"supports":d.supports.members.len(),"ordered":actual.values().map(Vec::len).sum::<usize>(),"sequences":actual.len(),"queries":d.query_presets.members.iter().map(|p|p.queries.requests.members.len()).sum::<usize>(),"unresolved_targets":supports.values().filter(|s|s.target.to_resolved().is_none()).count(),"authored_complete_presets":complete_presets,"authored_pending_presets":pending_presets});
     if let Some(label) = selected {
         let (set, group) = selected_group(&e);
         let preset = linked::<SkillPresetId>(&sidecar, set.occurrence().id(), "skill_preset");
@@ -357,6 +367,32 @@ fn current_release_reimports_all_five_with_exact_authored_assignment_order() {
             &out.join(format!("selected-{case:02}.json")),
             &package.join("schema.json"),
         );
+        if case == 5 {
+            let saved: Value = read(out.join("selected-05.json"));
+            assert!(
+                order["authored_complete_presets"]
+                    .as_array()
+                    .unwrap()
+                    .contains(&saved["build"]["skills"])
+            );
+            let codes: std::collections::BTreeSet<_> = selection["finalization"]["issues"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|issue| issue["code"].as_str().unwrap())
+                .collect();
+            assert_eq!(
+                codes,
+                [
+                    "usage-preferences-not-converted",
+                    "configuration-roles-not-converted",
+                    "external-assumptions-not-converted",
+                    "usage-not-converted"
+                ]
+                .into_iter()
+                .collect()
+            );
+        }
         reports.push(json!({"case":case,"authored_order":order,"selection":selection}));
     }
     assert_eq!(release::inventory(&package), before);

@@ -2277,6 +2277,17 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         &generated_input_receipts,
         &usage_receipts,
     )?;
+    // Run after generated correspondence and field dispositions. An unresolved
+    // archived responsibility or saved sharing relation cannot be discarded.
+    if support_inventory_census.enabled() {
+        support_order::complete(
+            &mut b,
+            &mut draft,
+            &skill_sets,
+            skill_source_sets.as_deref(),
+            &generated_input_receipts,
+        )?;
+    }
     let occurrence_usage = matches!(
         policy.usage_inputs,
         Some(UsageInputPolicy::PobOccurrenceUsageV3 { .. })

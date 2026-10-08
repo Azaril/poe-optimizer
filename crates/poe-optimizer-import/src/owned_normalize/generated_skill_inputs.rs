@@ -306,6 +306,9 @@ pub(super) struct MaterializedInput {
 pub(super) struct InputAccounting {
     materialized: Vec<MaterializedInput>,
     archived: Vec<ArchivedInput>,
+    // Retain the shared source resolver's correspondence independently of raw
+    // quality readiness. Other inventories must not infer it from scalar values.
+    pub(super) resolved: Vec<generated_skill_sources::ResolvedPreset>,
 }
 struct ArchivedInput {
     source: SourceOccurrenceId,
@@ -327,14 +330,10 @@ pub(super) fn materialize(
     let mut receipts = InputAccounting::default();
     let plans =
         generated_skill_sources::resolve_with_archived(b, draft, &compiled.sources, context)?;
-    for generated_skill_sources::ResolvedPreset {
-        source: set,
-        preset_index: index,
-        complete: proven,
-        sources: rows,
-        archived,
-    } in plans
-    {
+    for plan in &plans {
+        let set = plan.source;
+        let index = plan.preset_index;
+        let proven = plan.complete;
         let preset = &mut draft.skill_presets.members[index];
         if preset.intent.is_some() {
             return invalid("normalization generated intent already exists");
@@ -362,7 +361,7 @@ pub(super) fn materialize(
             None => complete(vec![]),
         };
         let mut members = Vec::new();
-        for row in rows {
+        for row in &plan.sources {
             let bound = &compiled.rows[row.index];
             let gem = &b.evidence.rows()[row.source.ordinal() as usize];
             let quality = generated_skill_sources::scalar(b, gem, &bound.quality)?
@@ -397,11 +396,12 @@ pub(super) fn materialize(
             members.push(binding);
             let link = OwnedOriginTarget::GeneratedSkillInput {
                 skill_preset: preset.id,
-                target: row.target,
+                target: row.target.clone(),
             };
             let sources: BTreeSet<_> = row
                 .provider_sources
-                .into_iter()
+                .iter()
+                .copied()
                 .chain([set, row.group, row.source])
                 .collect();
             b.charge(sources.len())?;
@@ -419,10 +419,10 @@ pub(super) fn materialize(
             usage,
             generated_inputs,
         });
-        b.charge(archived.len())?;
+        b.charge(plan.archived.len())?;
         receipts
             .archived
-            .extend(archived.into_iter().map(|row| ArchivedInput {
+            .extend(plan.archived.iter().map(|row| ArchivedInput {
                 source: row.source,
                 group: row.group,
                 set,
@@ -430,6 +430,7 @@ pub(super) fn materialize(
                 row: row.index,
             }));
     }
+    receipts.resolved = plans;
     Ok(receipts)
 }
 

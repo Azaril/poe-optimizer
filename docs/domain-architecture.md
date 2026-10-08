@@ -951,6 +951,14 @@ Neither an authored Complete inventory nor an empty assignment list certifies
 composed support-source coverage. Earlier development field/payload shapes are
 rejected and affected build documents are reimported, without aliases.
 
+Import may certify authored completion only after a whole-source census proves
+physical membership, exact targets/order and every saved support relationship.
+Reuse exact generated-provider correspondence independently of raw scalar
+readiness. Unrepresented manual slot sharing, archived syntax and ambiguous
+providers remain input obligations. Retiring an input issue preserves spent IDs
+and all other source responsibilities. This certificate never describes the
+capabilities of future equipment/tree compositions; native discovery still runs.
+
 The first native source domain is explicitly `AuthoredAssignmentsOnly` in
 `RulePackageInput.support_discovery`, keyed by an owned definition or slot.
 It certifies the reviewed absence of other support origins throughout that

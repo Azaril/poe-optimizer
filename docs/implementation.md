@@ -16,7 +16,7 @@ and deleted code are not substitutes for this gate.
 
 **Delivery priority, confirmed 2026-10-07: finish the closest complete build
 first.** Original05 (Skeletal Sniper / Basic Attack, skill set 4) is the current
-target: it has five selected input obligations and the most developed relevant
+target: it has four selected input obligations and the most developed relevant
 native components. This is a prioritization judgment, not a completion estimate;
 input counts do not measure remaining numerical work. At each checkpoint choose
 the shortest evidenced path to one complete unchanged build, accounting for
@@ -89,8 +89,9 @@ membership are implemented in operations V24. Offering's three source writers
 adopt that contract for checked empty domains; the joined graph now executes
 its activation and non-stacking application with those inputs. Inherited/support
 delivery authority and the final damage consumer remain pending. Composed support discovery
-now has a **common native coverage gate**; reviewed game-data adoption and authored
-input accounting remain pending.
+now has a **common native coverage gate**. Authored-input accounting is implemented
+for the admitted source relationships and closes Original05's `01de` obligation;
+reviewed game-data adoption and provider exclusions remain pending.
 These decisions supersede older checkpoint statements below describing them as
 awaiting approval. The latest runtime checkpoint below specifies the immediate
 data-adoption step for the same closest build. Life and Skill scaling reuse the
@@ -101,7 +102,77 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Current contract checkpoint: authored support order
+## Current input checkpoint: authored support relationships
+
+Original05 now has **four selected input obligations, down from five**. Import
+retires only `01de` after proving the saved physical assignment census, exact
+targets and encounter order, and all saved support relationships. Manual groups
+must have no unrepresented slot binding. Generated groups must match the existing
+exact source resolver's item/tree correspondence; archived syntax, stale or
+ambiguous providers, and unsupported sharing remain Pending. The proof runs
+after generated input/field accounting and requires that the retired issue has
+exactly its one owning preset link, preserving unresolved archived responsibilities.
+
+The generated-source resolver's existing result is retained for this independent
+inventory check. Unknown quality or disabled activation does not erase a known
+source relationship or become a default. This adds no source parser, saved group
+model, native origin variant or evaluator branch. Current physical-inventory
+policies gain the authored completion check; simple order-only policies still
+lack census authority. Successful completion changes the draft and sidecar
+commitments without allocating, renumbering or refunding an issue ID.
+
+All five originals were reimported with the unchanged checked package. Selected
+input counts are **107/117/109/123/4**, with 22 queries each. Exact baseline
+comparison against the prior authored-order checkpoint proves that only
+Original05's selected `01de` completion and its one provenance link change,
+apart from the explicitly bijective fresh import-lineage relabel. All assignment
+values/order, other inputs, issue IDs, allocator watermarks and remaining sidecar
+data are identical. Other Sniper presets and the other four originals stay
+unresolved where the same proof cannot establish their source relationships.
+Reports: `runs/owned-support-input-accounting-reimport-01/validation.json` and
+its adjacent `migration-comparison.json`.
+
+Validation: **317 Import normalizer checks and three breadth checks pass**, including
+six new completion/refusal tests and updated exact retirement assertions
+(`runs/owned-support-input-accounting-import-05.log`). All seven common native
+discovery-gate checks still pass (`runs/owned-support-input-accounting-native-gate-01.log`).
+Strict Clippy passes across all Import targets/features
+(`runs/owned-support-input-accounting-clippy-import-01.log`). Real-build CLI and
+joined Sniper verification also pass: **76 joined checks in 38.66s**, the shipped
+policy check and a second fresh all-five reimport in 7.54s
+(`runs/owned-support-input-accounting-cli-native-01.log`). The reimport now
+explicitly asserts that Sniper's selected authored inventory is Complete and
+that exactly the four remaining input codes below survive. Its independent
+report is `runs/owned-support-input-accounting-reimport-02/validation.json`.
+The second run's adjacent `migration-comparison.json` independently confirms the
+same exact retirement and preservation. Strict Clippy also passes for both
+affected CLI integration targets with all features
+(`runs/owned-support-input-accounting-clippy-cli-01.log`). In total, the final
+targeted suites contain **405 passing checks**; repeated reimports supplement
+that count rather than increasing it.
+
+**Resume:** native support-domain game data and exact generated-provider
+exclusions are still required. A Complete authored inventory is not permission
+to bypass the common cold-planning gate or infer empty extra/linked capabilities.
+The package remains byte-identical and has no newly declared support domains;
+complete native evaluations remain **0/5**. Continue the shortest verified path
+for Original05, reconciling the remaining input owners and numerical coverage:
+
+| Selected issue | Remaining responsibility |
+| --- | --- |
+| `0503` | Complete skill-preset usage preferences and saved usage fields |
+| `01f2` | Configuration roles and their source accounting |
+| `0207` | External assumptions, including effective defaults |
+| `0208` | Scenario usage inventory |
+
+The application-group contribution-query decision still awaits owner input;
+independent support/usage work may continue under already accepted contracts.
+
+Checkpoint reports below preserve historical evidence. Their earlier counts and
+resume statements are superseded by this current input checkpoint and the live
+follow-up register.
+
+## Previous contract checkpoint: authored support order
 
 Preset, Draft and composed Build records now use `authored_support_order` and
 `AuthoredSupportOrder { target, assignments }`. The assignments are physical
@@ -152,7 +223,7 @@ it does not produce a complete original-build evaluation.
 Strict Clippy also passes after the joined-fixture correction
 (`runs/owned-authored-support-order-clippy-sniper-02.log`).
 
-**Resume:** finish authored-input accounting using the shared whole-source
+**Prior resume (superseded by the input checkpoint above):** finish authored-input accounting using the shared whole-source
 census and exact generated-provider bindings, while preserving unresolved saved
 relations and their provenance. The former mixed-scope completion issue still
 exists at the new authored-order field and remains Pending. It must not be
@@ -2598,7 +2669,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated selector/supply separation | [Proposal](owned-source-action-root-separation-proposal.md) pending. Archived item-only Warrior exposes physical/manual root coupling in the source-selector adapter. Separate selector interpretation from checked supply, reuse existing child topology, and preserve all unresolved owners. No 44-to-36 source-link reduction or native authority is published. |
 | Immutable normalization preparation | Compile existing checked policies once per exact release; separate construction/traversal budgets and prove identical outputs. Implementation pending; no storage-layer change. |
 | Scoped numerical coverage | [Proposal](owned-coverage.md) pending concrete reviewed proof contract. Unknown effect reach remains blocking; no known-edge-only pruning or relaxation of original-build acceptance. |
-| Closest complete build and native optimization | Original05 is the current first-completion target. Close its five input obligations, publish its real evaluation bundle and complete its selected mechanics/metrics through the public CLI. D4 begins after this first complete build, without waiting for all five: bind objectives to owned actor/action/stat-set requests and verify one legal locked candidate mutation before expanding search. Reassess the shortest complete path at every checkpoint. |
+| Closest complete build and native optimization | Original05 is the current first-completion target. Close its four remaining input obligations, publish its real evaluation bundle and complete its selected mechanics/metrics through the public CLI. D4 begins after this first complete build, without waiting for all five: bind objectives to owned actor/action/stat-set requests and verify one legal locked candidate mutation before expanding search. Reassess the shortest complete path at every checkpoint. |
 | Saved allocations and effective connectivity | The retained Sniper removal95 control keeps8737 in the saved tree, while PoB prunes8737 from its active set. Current Import preserves that occurrence with Pending allocation access; it does not silently repair the build. Preserve this refusal and test explicit candidate repairs separately. Before admitting passive-tree optimizer mutations, validate connectivity against injected roots, pools, scopes and exceptional access after each mutation; import-time path proof and legacy candidate checks are not a native post-mutation legality gate. |
 | Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases. Ordinary CI now executes the current accuracy rule laws, but the joined Sniper graph and its import/membership/staging checks are ignored without their published package. Provision the exact current package and retained source controls reproducibly in CI, run that joined subset explicitly, and fail on missing artifacts; do not treat component tests as an equivalent gate. |
 | Historical replay retirement | Reimport with the one current implementation and retain useful stored source evidence. Seventeen older ignored publication harnesses need consumer review: rebase useful assertions to current semantics or remove obsolete scaffolding, rather than add compatibility paths. Declaration integrity and source parity remain required. [Retirement/migration inventory](legacy-retirement.md#historical-publication-replay-migration-2026-10-05). |
@@ -2609,7 +2680,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
 | Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Equipment ordering, global/owner coverage and the final Life consumer remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
-| Composed support discovery | Accepted October 8: presets own authored assignments/order; native cold planning derives complete origins from the composed request and injected provider capabilities. Twelve cold source loads now prove the baseline constructor census, provider-specific exclusion, disabled assignment and cross-group slot-sharing control in both JIT modes. Source metadata does not identify native ownership or grant legal sharing authority. Enforce the direct/staged-request gate before moving Import `01de`; rebuild current artifacts. Native implementation pending. [Contract](owned-support-origin-composition-proposal.md). |
+| Composed support discovery | Accepted October 8. The common direct/staged native gate, current authored-order DTO and source-input accounting are implemented; Original05 `01de` is retired after full saved-relationship proof. All five are reimported; native game-data domains and exact provider exclusions remain pending. Twelve cold source loads establish constructor and sharing/exclusion evidence, not native ownership or legal sharing authority. Unsupported positive and archived source relationships remain blocking. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Application-group contribution queries | Proposed October 8; owner review pending. Give the existing query members typed program-effect/application-group producer addresses, validating exact recipients and all potential sources before values. Preserve stacking, unknowns, explicit numeric order and one checked reduction path; rebuild current artifacts without compatibility branches. This is the next combined damage consumer boundary. [Proposal](owned-application-group-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |
