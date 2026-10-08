@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-07 (EDT).
+Updated: 2026-10-08 (EDT).
 
 This is the active delivery plan. The [design](domain-architecture.md) defines
 the end state; the [execution overview](data-and-evaluation-overview.md) explains
@@ -92,14 +92,21 @@ Evidence: `runs/ci-support-outputs-{reproduction,repair}-01.log`,
 `runs/ci-owned-allocations-repair-{tests,check}-01.log` and regenerated review
 files in `runs/ci-owned-allocations-refresh-01`.
 
-**Validation in progress:** the broader command
-`cargo test -p poe-optimizer-data --all-features --locked --no-fail-fast` is running
-under execution session `19524`, with output in
-`runs/ci-owned-data-regression-01.log`. Revalidate that handle before waiting or
-starting a replacement; a partial log is not a terminal outcome. Complete this
-run and then perform the final Clippy check. No hosted-green or complete-build
-claim is made from the focused fixes. Original05 remains the target, with five
-selected input obligations and 0/5 complete native builds.
+**Validation complete:**
+`cargo test -p poe-optimizer-data --all-features --locked --no-fail-fast` exits
+successfully: **587 tests pass, none fail or are ignored**. Its 60 result blocks
+include an empty doctest target; the tests report 612.22s plus 58.26s compilation.
+Execution session `19524` is terminal and must not be restarted as unfinished
+work. Strict workspace/all-feature/all-target Clippy and changed Rust formatting
+also pass. Evidence: `runs/ci-owned-data-regression-01.log`,
+`runs/ci-owned-data-regression-summary-01.json` and
+`runs/ci-owned-cutover-{clippy,format}-01.log`.
+
+The fixes are pushed in `7cd9060`. At 03:51:53 UTC on October 8, its hosted run
+`37724617730` was pending behind the earlier live CLI/PoB jobs. No further
+completed failure was visible. Local validation is complete; hosted green is
+unproven. Original05 remains the target, with five selected input obligations
+and **0/5** complete native builds.
 
 ## Latest native checkpoint: Boolean Gigantic and intrinsic Life in the Sniper graph
 
