@@ -1,0 +1,28 @@
+{
+  "before": "17f95e89e08a9fca9eb18fe15eada5f89fbf3015b9e82e5d5c3e658f0c673af2",
+  "new_definitions": 2,
+  "new_programs": 3,
+  "new_receivers": 2,
+  "new_queries": 2,
+  "closed_existing_owners": 0,
+  "final_mana": false,
+  "whole_build": false,
+  "artifacts": {
+    "migration.json": {
+      "bytes": 1708,
+      "sha256": "e67e38a151ead33d1ae889c11bf93d0c0064eda46699cfba90ec886492c1fe9f"
+    },
+    "consumer.json": {
+      "bytes": 13874,
+      "sha256": "f4e6205cab9e6452f0f9139e017b4585927f6ec219e3b8d5284ea759da221700"
+    },
+    "dependencies.json": {
+      "bytes": 7901,
+      "sha256": "311e0166192bebe455f9d5a42d5da231ae5ca3eba9021e6ade4ab60b29289272"
+    },
+    "source-vectors.json": {
+      "bytes": 11602,
+      "sha256": "eccd50c9aadbe598b7fa6fbd5827944cb5ce1ae39e37d8831ae679df21eae9f3"
+    }
+  }
+}

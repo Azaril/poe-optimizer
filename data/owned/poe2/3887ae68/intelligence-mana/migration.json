@@ -1,0 +1,72 @@
+{
+  "schema_version": 5,
+  "before": "17f95e89e08a9fca9eb18fe15eada5f89fbf3015b9e82e5d5c3e658f0c673af2",
+  "release": "pob-3887ae68-intelligence-mana-v1",
+  "reason": "shared-player-inherent-intelligence-mana",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v25",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "schema": [
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "id": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003355"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "value": {
+                "kind": "boolean"
+              },
+              "targets": [
+                "actor"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "id": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003356"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "value": {
+                "kind": "boolean"
+              },
+              "targets": [
+                "actor"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "tables": [],
+  "owners": [],
+  "receivers": [],
+  "query_targets": []
+}

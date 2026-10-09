@@ -52,9 +52,19 @@ Player Mana now has a shared intrinsic contribution in
 the existing Mana channel, independently of class. No native game-specific code,
 new channel or source-language behavior was added. Full PoB observations across
 the five builds and level/fresh/warm controls agree with JIT on/off; ordinary
-native tests cover ownership, Partial refusal and worker reuse. Intelligence,
-other modifiers, checked contributor coverage and final-pool calculation remain
-separate dependencies. This contribution does not make a complete build available.
+native tests cover ownership, Partial refusal and worker reuse.
+
+The [Intelligence-to-Mana packet](../data/owned/poe2/3887ae68/intelligence-mana/README.md)
+now adds the inherent contribution through that same shared Actor. It reads
+calculated final Intelligence, global suppression/doubling and two new checked
+Intelligence-specific Boolean flags. Disabled absence and enabled zero remain
+distinct; unknown values and incomplete membership remain unavailable. Its native
+baseline calculates Intelligence 105 and contributes 210 Mana without supplying
+either number as a runtime constant. Source-only controls remain finite tests.
+Both Mana source tests share one full-source loading/supervision helper; the
+refactor reproduces the previous intrinsic report byte for byte. The other
+modifiers, checked resource aggregation and final-pool arithmetic remain separate
+dependencies. These contributions do not make a complete build available.
 
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across

@@ -106,6 +106,70 @@ pub struct ReplayInput {
     pub queries: QueryInput,
 }
 impl ReplayInput {
+    /// Explicit test authoring after changing public inputs. Normal `compile`
+    /// never repairs stale identities. Every new dependency is validated here
+    /// before its identity is assigned to a dependent artifact.
+    pub fn rebind_test_edit(&mut self) -> std::result::Result<(), String> {
+        let definitions =
+            OwnedDefinitionSchemaPackage::new(self.schema.clone(), Default::default())
+                .map_err(|e| e.to_string())?;
+        self.rules.definitions = definitions.identity().clone();
+        let rules = OwnedRulePackage::new(self.rules.clone(), &definitions, Default::default())
+            .map_err(|e| e.to_string())?;
+        self.routing.definitions = definitions.identity().clone();
+        let routing =
+            OwnedActionRouting::new(self.routing.clone(), &definitions, Default::default())
+                .map_err(|e| e.to_string())?;
+        self.stages.definitions = definitions.identity().clone();
+        self.stages.rules = *rules.identity();
+        self.stages.routing = *routing.identity();
+        let stages = OwnedEvaluationStages::new(
+            self.stages.clone(),
+            &definitions,
+            &rules,
+            &routing,
+            Default::default(),
+        )
+        .map_err(|e| e.to_string())?;
+        self.preparation.definitions = definitions.identity().clone();
+        self.preparation.rules = *rules.identity();
+        let preparation = OwnedSupportPreparation::new(
+            self.preparation.clone(),
+            &definitions,
+            &rules,
+            Default::default(),
+        )
+        .map_err(|e| e.to_string())?;
+        self.inputs.definitions = definitions.identity().clone();
+        self.inputs.rules = *rules.identity();
+        self.inputs.preparation = *preparation.identity();
+        self.inputs.stages = *stages.identity();
+        let inputs = OwnedSupportInputBindings::new(
+            self.inputs.clone(),
+            &definitions,
+            &rules,
+            &preparation,
+            &stages,
+            Default::default(),
+        )
+        .map_err(|e| e.to_string())?;
+        self.receiving.definitions = definitions.identity().clone();
+        self.receiving.rules = *rules.identity();
+        self.receiving.preparation = *preparation.identity();
+        self.receiving.inputs = *inputs.identity();
+        self.receiving.stages = *stages.identity();
+        OwnedSupportReceiving::new(
+            self.receiving.clone(),
+            &definitions,
+            &rules,
+            &preparation,
+            &inputs,
+            &stages,
+            Default::default(),
+        )
+        .map_err(|e| e.to_string())?;
+        Ok(())
+    }
     pub fn encode(&self) -> Vec<u8> {
         let mut output = flate2::GzBuilder::new()
             .mtime(0)

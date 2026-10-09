@@ -103,7 +103,79 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Latest data checkpoint: shared Player intrinsic Mana
+## Latest data checkpoint: Intelligence-derived Player Mana
+
+The [new packet](../data/owned/poe2/3887ae68/intelligence-mana/README.md) adds
+`contribute-inherent-intelligence-mana` to the existing shared Player Actor. It
+reads final Intelligence `1d30`, contributes two Mana per point to existing
+channel `29f9`, applies existing doubling `3318`, and preserves suppression as
+absence rather than zero. New Boolean Stats **3355/3356** represent the two
+Intelligence-specific suppressions; existing global suppression `3315` is reused.
+Two checked Any reducers/Player receivers guard the currently admitted empty
+source domains. A full potential-writer census and normal membership validation
+reject unlisted sources, including false/inactive sources. Existing owner/global
+Partial coverage remains intact. There is no new Core/Data/Engine contract,
+intermediate bonus Stat, Lua behavior or game-specific Rust calculation.
+
+The optional source witness composes the unchanged intrinsic-Mana observer with
+an Intelligence/flag observer after the complete original build. All five builds,
+each suppression, suppression plus doubling, enabled/doubled zero, ordinary and
+duplicate doubling, fresh replay and warm restoration pass: **17 cases and 20
+complete loads per JIT mode**, plus the independent warm comparison. Both
+390,703-byte reports have SHA-256
+`df8fdf5d7c5082096023295f9170679ba9bdc3cc22d0c54d2ec853af462bc6e2`.
+The source test passes in **65.50s**. These parsed controls establish mechanical
+behavior, not obtainability or complete game flag-source coverage.
+
+Complete-source loading, fixture authentication and bounded subprocess supervision
+now share `tests/support/player_resource_source.rs` within the optional PoB crate.
+The intrinsic-Mana driver loses its duplicate implementation. Its rerun passes in
+**41.84s** and reproduces the preceding report byte for byte; neither old observer
+nor retained independent evidence changed. Source evidence:
+`runs/owned-intelligence-mana-source-01.log`,
+`runs/owned-intelligence-mana-source-01/source-jit-{off,on}.json`, and
+`runs/owned-player-intrinsic-mana-source-03/source-jit-{off,on}.json`.
+
+The ordinary joined native replay retains the actual attribute calculation:
+Original05's final Intelligence is **105**, emitting **210 Mana** alongside
+**398 intrinsic Mana** at level 92. All source vectors pass separately in an
+explicit finite input/control domain. Tests cover zero versus absence, missing
+Intelligence, missing doubling with zero Intelligence, partial empty queries,
+unlisted false writers and fresh/reused A–unknown–B–A/four-worker equality.
+An explicit test-edit helper rebinds dependencies through validating constructors;
+ordinary compilation still rejects stale identities. Four existing Engine replay
+checks pass in **0.72s**, including stale-rule refusal. No production identity
+repair or alternate execution path was added.
+
+Publication and all-five preservation pass with **five tests in 29.48s**. The final
+ordinary run passes **four Intelligence tests in 4.27s** and **three intrinsic
+tests in 0.04s**. All 18 publication artifacts reconstruct identically; 110 queries,
+selected input counts **107/117/109/123/4** and **0/5 complete builds** remain.
+Evidence: `runs/owned-intelligence-mana-native-publication-02.log`,
+`runs/owned-intelligence-mana-native-final-01.log`,
+`runs/owned-intelligence-mana-replay-regression-01.log` and publication02's
+`validation.json`. Strict all-feature Clippy for both native resource targets
+and both optional PoB resource targets passes; evidence:
+`runs/owned-intelligence-mana-clippy-02.log`. The canonical successor is
+`runs/owned-intelligence-mana-publication-02/package`:
+
+- Input: `ef3f45bb8aa6b755f21d79aeac6740bb469cc6406e8cce8ce4f11ce5147b7c56`.
+- Schema: `c188fccd39144f5ebd1cb2e8430325234042d4ac37974013e02b95192d78cb8b`.
+- Rules: `6f344dae312af2b11e311e317856370d65ddadfcf1ae1a499252f056126f7181`.
+- Compiled: `11174c14640cd8cc8ec0c4d96927ece5b835ca8f3e5b8848d1aed19d3907a80e`.
+- Operations remain V25; next free definition is **3357**. Unrelated provisional
+  incoming-critical files remain untouched and require rebasing if adopted.
+
+**Resume:** Original05 remains first. The Action query decision is still pending.
+Once approved, return to Command and the physical damage consumer. Independent
+Mana work can now move to checked resource aggregation: census the existing
+potential Mana producers, preserve exact shared-Actor/reward origins and numeric
+ordering, then validate the final formula/rounding against original PoB. The
+observed 5% quest increase and final pool 638 are comparison evidence, never
+constants. Do not infer complete domains from one build. Player Life's equipment
+domain/rounding proof and the four selected usage/configuration obligations remain.
+
+## Preceding data checkpoint: shared Player intrinsic Mana
 
 While the Action query decision remains pending, Original05's requested Mana
 metric now has its intrinsic Player contribution. The

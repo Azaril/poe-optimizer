@@ -1,57 +1,17 @@
 //! Full-source observations of intrinsic Mana, without modifying source methods.
 #![cfg(not(target_arch = "wasm32"))]
-#[allow(dead_code)]
-#[path = "support/configuration_preparation_source.rs"]
-mod source;
-use mlua::{Lua, LuaSerdeExt, Table, Value};
-use poe_optimizer_pob::{runtime::RuntimeError, source as pinned};
+#[path = "support/player_resource_source.rs"]
+mod resource;
+use poe_optimizer_pob::source as pinned;
+use resource::hash;
 use serde_json::{Value as Json, json};
-use sha2::{Digest, Sha256};
-use std::{
-    fs,
-    path::{Path, PathBuf},
-    process::{Command, Stdio},
-    time::{Duration, Instant},
-};
+use std::{fs, path::Path};
 const OBSERVER: &str = include_str!("support/player_intrinsic_mana_source.lua");
 const OUTPUT: &str = "POE_OPTIMIZER_TEST_PLAYER_INTRINSIC_MANA_SOURCE_OUT";
 const CHILD: &str = "POE_PLAYER_INTRINSIC_MANA_SOURCE_CHILD";
 const TEST: &str = "original_intrinsic_mana_is_stable_across_builds_levels_and_jit";
-fn hash(bytes: &[u8]) -> String {
-    format!("{:x}", Sha256::digest(bytes))
-}
 fn observe(root: &Path, xml: &str, warm: Option<&str>, jit: bool) -> Json {
-    let before = |lua: &Lua| {
-        lua.load(if jit {
-            "jit.on()"
-        } else {
-            "jit.off();jit.flush()"
-        })
-        .exec()?;
-        Ok(())
-    };
-    let after = |lua: &Lua| -> Result<Json, RuntimeError> {
-        let t: Table = lua
-            .load(OBSERVER)
-            .set_name("@player_intrinsic_mana_source.lua")
-            .eval()?;
-        Ok(lua.from_value(Value::Table(t))?)
-    };
-    let scratch = tempfile::tempdir().unwrap();
-    let report = source::observe_with_build_hook_unwrapped(
-        &root.join("vendor/path-of-building-poe2"),
-        scratch.path(),
-        xml,
-        warm,
-        false,
-        Some(&before),
-        None,
-        Some(&after),
-    )
-    .unwrap();
-    assert_eq!(report["configuration_method_wrappers"], false);
-    assert_eq!(report["original_build_output_available"], true);
-    json!({"source_hash":report["source_hash"],"selected":report["selected"],"state":report["additional_observation"]})
+    resource::observe(root, xml, warm, jit, OBSERVER)
 }
 fn at_level(xml: &str, level: u64) -> String {
     let doc = roxmltree::Document::parse(xml).unwrap();
@@ -115,21 +75,7 @@ fn check(report: &Json, level: u64, expected: u64) {
     assert_eq!(state["contributor_closure"], false);
 }
 fn child(root: &Path, output: &Path, jit: bool) {
-    let dir = root.join("tests/fixtures/builds/breadth-20260908");
-    let index: Json = serde_json::from_slice(&fs::read(dir.join("index.json")).unwrap()).unwrap();
-    let originals: Vec<_> = (1..=5)
-        .map(|i| fs::read_to_string(dir.join(format!("build-{i:02}.xml"))).unwrap())
-        .collect();
-    for (i, xml) in originals.iter().enumerate() {
-        let name = format!("build-{:02}.xml", i + 1);
-        let pin = index["builds"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .find(|r| r["xml"] == name)
-            .unwrap();
-        assert_eq!(pin["xml_sha256"], hash(xml.as_bytes()));
-    }
+    let originals = resource::originals(root);
     let mut cases: Vec<_> = originals
         .iter()
         .enumerate()
@@ -198,50 +144,5 @@ fn child(root: &Path, output: &Path, jit: bool) {
 #[test]
 #[ignore = "requires pinned PoB; supervised fresh/warm complete-source comparison"]
 fn original_intrinsic_mana_is_stable_across_builds_levels_and_jit() {
-    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../..")
-        .canonicalize()
-        .unwrap();
-    let output = PathBuf::from(std::env::var_os(OUTPUT).expect("fresh source output"));
-    let output = if output.is_absolute() {
-        output
-    } else {
-        root.join(output)
-    };
-    if let Some(mode) = std::env::var_os(CHILD) {
-        assert!(mode == "on" || mode == "off");
-        child(&root, &output, mode == "on");
-        return;
-    }
-    assert!(!output.exists());
-    fs::create_dir_all(&output).unwrap();
-    for mode in ["off", "on"] {
-        let log = fs::File::create(output.join(format!("source-jit-{mode}.log"))).unwrap();
-        let mut process = Command::new(std::env::current_exe().unwrap())
-            .args(["--ignored", "--exact", TEST, "--nocapture"])
-            .env(CHILD, mode)
-            .env(OUTPUT, &output)
-            .current_dir(root.join("vendor/path-of-building-poe2/src"))
-            .stdout(Stdio::from(log.try_clone().unwrap()))
-            .stderr(Stdio::from(log))
-            .spawn()
-            .unwrap();
-        let start = Instant::now();
-        loop {
-            if let Some(status) = process.try_wait().unwrap() {
-                assert!(status.success(), "see source-jit-{mode}.log");
-                break;
-            }
-            if start.elapsed() > Duration::from_secs(600) {
-                process.kill().unwrap();
-                process.wait().unwrap();
-                panic!("source deadline");
-            }
-            std::thread::sleep(Duration::from_millis(100));
-        }
-    }
-    assert_eq!(
-        fs::read(output.join("source-jit-off.json")).unwrap(),
-        fs::read(output.join("source-jit-on.json")).unwrap()
-    );
+    resource::supervise(TEST, CHILD, OUTPUT, child);
 }
