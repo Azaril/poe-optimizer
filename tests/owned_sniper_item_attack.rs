@@ -61,6 +61,11 @@ mod life_query_family;
 #[path = "support/owned_flat_life_routing.rs"]
 mod life_routing_family;
 #[allow(dead_code)]
+#[path = "support/owned_minion_inherent_life.rs"]
+mod minion_inherent_family;
+#[path = "support/owned_sniper_minion_inherent_life.rs"]
+mod minion_inherent_native;
+#[allow(dead_code)]
 #[path = "support/owned_mixed_minion_damage.rs"]
 mod mixed_damage_family;
 #[path = "support/owned_sniper_mixed_damage.rs"]
@@ -511,6 +516,7 @@ impl World {
             attribute_base_native::install(&mut w, &endpoint, &path, &draft, &selection);
         let inherent_life = inherent_life_native::install(&mut w, &endpoint, &path);
         let player_life = player_life_contribution_native::install(&mut w, &endpoint);
+        minion_inherent_native::install(&mut w, &endpoint);
         let life_inputs = player_life_inputs_native::install(&mut w, &endpoint, &path);
         let offering = offering_application_native::install(&mut w, &endpoint, &draft, &selection);
         mixed_damage_native::install(&mut w, &endpoint);
@@ -666,6 +672,7 @@ impl World {
             attribute_base_native::configure(stages);
             inherent_life_native::configure(stages);
             player_life_contribution_native::configure(stages);
+            minion_inherent_native::configure(stages);
             offering_application_native::configure(stages);
             mixed_damage_native::configure(stages);
             action_damage_native::configure(stages);

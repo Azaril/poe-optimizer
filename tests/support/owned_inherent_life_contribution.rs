@@ -198,7 +198,7 @@ pub fn check_authored() {
     ));
     source(false);
 }
-fn dependencies(endpoint: &StagedOwnedRelease, after: bool) {
+fn dependencies(endpoint: &StagedOwnedRelease, after: bool, receivers: &[StatReceiver]) {
     let d: Dependencies = read("dependencies.json");
     let rules = &endpoint.input().recipe.rules;
     let owner = if after { owner_after() } else { d.owner_before };
@@ -219,15 +219,7 @@ fn dependencies(endpoint: &StagedOwnedRelease, after: bool) {
         assert_eq!(actual, &owner, "exact offline predecessor");
     }
     assert_eq!(rules.owners.iter().filter(|o| **o == d.consumer).count(), 1);
-    assert_eq!(
-        rules
-            .receivers
-            .members
-            .iter()
-            .filter(|r| **r == d.receiver)
-            .count(),
-        1
-    );
+    assert_eq!(receivers.iter().filter(|r| **r == d.receiver).count(), 1);
     assert_eq!(rules.existing_actor_rules, Some(d.existing_actor_rules));
     assert_eq!(
         rules.contribution_queries.as_ref().unwrap().closure,
@@ -246,11 +238,26 @@ fn dependencies(endpoint: &StagedOwnedRelease, after: bool) {
             1
         );
     }
-    attribute_flag_family::assert_component(endpoint);
 }
 pub fn assert_component(endpoint: &StagedOwnedRelease) {
+    attribute_flag_family::assert_component(endpoint);
+    assert_component_receivers(endpoint, &endpoint.input().recipe.rules.receivers.members);
+}
+
+#[allow(dead_code)]
+pub fn assert_component_with_reviewed_receivers(
+    endpoint: &StagedOwnedRelease,
+    before: &[StatReceiver],
+    after: &[StatReceiver],
+) {
+    attribute_flag_family::assert_component_with_reviewed_receivers(endpoint, before, after);
+    let restored = attribute_flag_family::reviewed_receiver_inverse(endpoint, before, after);
+    assert_component_receivers(endpoint, &restored);
+}
+
+fn assert_component_receivers(endpoint: &StagedOwnedRelease, receivers: &[StatReceiver]) {
     check_authored();
-    dependencies(endpoint, true);
+    dependencies(endpoint, true, receivers);
     assert!(
         endpoint
             .receipt()
@@ -262,7 +269,8 @@ pub fn assert_component(endpoint: &StagedOwnedRelease) {
 pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     check_authored();
     source(true);
-    dependencies(prior, false);
+    attribute_flag_family::assert_component(prior);
+    dependencies(prior, false, &prior.input().recipe.rules.receivers.members);
     let b: Value = read("bindings.json");
     let receipt = json!(prior.receipt());
     for field in [

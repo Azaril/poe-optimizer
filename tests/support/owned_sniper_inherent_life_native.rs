@@ -38,7 +38,12 @@ pub(super) fn install(
     endpoint: &StagedOwnedRelease,
     package: &Path,
 ) -> Census {
-    attribute_flag_family::assert_component(endpoint);
+    minion_inherent_family::assert_component(endpoint);
+    attribute_flag_family::assert_component_with_reviewed_receivers(
+        endpoint,
+        &minion_inherent_family::dependencies().receiver_before,
+        &minion_inherent_family::receivers(),
+    );
     let source = attribute_flag_family::checked_source();
     let original = source["native_cases"]
         .as_array()
@@ -150,12 +155,15 @@ pub(super) fn install(
         .receivers
         .members
         .iter()
-        .filter(|r| (0..6).any(|i| r.stat == d(0x3315 + i)))
+        .filter(|r| {
+            (0..6).any(|i| r.stat == d(0x3315 + i))
+                && r.targets.contains(&StatReceiverTarget::Player)
+        })
         .cloned()
         .collect();
     assert_eq!(receivers.len(), 6);
     for receiver in receivers {
-        assert_eq!(receiver.targets, vec![StatReceiverTarget::Player]);
+        assert!(receiver.targets.contains(&StatReceiverTarget::Player));
         assert!(!sniper.receivers.members.iter().any(|r| r.id == receiver.id));
         sniper.receivers.members.push(receiver);
     }
@@ -269,7 +277,10 @@ fn check(report: &SupportEffectsReport, amount: f64, halved: bool, doubled: bool
     let rows: Vec<_> = effects
         .effects
         .iter()
-        .filter(|r| r.key.invocation.program == key(LIFE))
+        .filter(|r| {
+            r.key.invocation.program == key(LIFE)
+                && r.key.invocation.entity == ConcreteEntity::Actor(ActorKey::Player)
+        })
         .collect();
     assert_eq!(rows.len(), 1);
     assert_eq!(rows[0].key.invocation.owner, owner(0x331a));
@@ -300,8 +311,33 @@ fn check(report: &SupportEffectsReport, amount: f64, halved: bool, doubled: bool
             .any(|r| matches!(&r.key,PlanValueKey::Stat {stat,..} if *stat==d(0x311a))),
         "inherent amount is not final Player/minion Life"
     );
-    assert!(effects.values.iter().filter(|r| matches!(&r.key,PlanValueKey::Stat {stat,..} if (0..6).any(|i| *stat==d(0x3315+i))))
-        .all(|r| matches!(&r.key,PlanValueKey::Stat {entity:ConcreteEntity::Actor(ActorKey::Player),..})),"Player-only receivers do not leak into Sniper Actors");
+    let player_receivers: Vec<_> = World::load()
+        .sniper
+        .receivers
+        .members
+        .into_iter()
+        .filter(|r| {
+            (0..6).any(|i| r.stat == d(0x3315 + i))
+                && r.targets.contains(&StatReceiverTarget::Player)
+        })
+        .map(|r| r.id)
+        .collect();
+    assert_eq!(player_receivers.len(), 6);
+    let player_effects: Vec<_> = effects
+        .effects
+        .iter()
+        .filter(|r| {
+            matches!(&r.key.invocation.origin, RuleOrigin::Receiver {receiver, actor}
+            if player_receivers.contains(receiver) && *actor == ActorKey::Player)
+        })
+        .collect();
+    assert_eq!(player_effects.len(), 6);
+    assert!(
+        player_effects
+            .iter()
+            .all(|r| r.key.invocation.entity == ConcreteEntity::Actor(ActorKey::Player)),
+        "Player receiver bindings remain distinct from the new minion bindings"
+    );
 }
 fn select(w: &mut World, halved: bool, doubled: bool) {
     inner(w)

@@ -160,7 +160,7 @@ pub(super) fn install(
         .receivers
         .members
         .iter()
-        .filter(|r| output_ids.contains(&r.stat))
+        .filter(|r| output_ids.contains(&r.stat) && r.targets.contains(&StatReceiverTarget::Player))
         .cloned()
         .collect();
     assert_eq!(receivers.len(), 12);
@@ -231,7 +231,20 @@ pub(super) fn install(
     let mut keys = BTreeSet::new();
     referenced(&serde_json::json!(owners), &mut keys);
     referenced(&serde_json::json!(queries), &mut keys);
-    referenced(&serde_json::json!(receivers), &mut keys);
+    // Discover this component's unchanged Player dependencies through the exact
+    // authenticated receiver inverse. The parent already supplies the finite
+    // minion graph; following the new target here would reintroduce its excluded
+    // parent output. Install the actual combined receiver rows below unchanged.
+    let dependency_receivers: Vec<_> = attribute_flag_family::reviewed_receiver_inverse(
+        endpoint,
+        &minion_inherent_family::dependencies().receiver_before,
+        &minion_inherent_family::receivers(),
+    )
+    .into_iter()
+    .filter(|r| receivers.iter().any(|actual| actual.id == r.id))
+    .collect();
+    assert_eq!(dependency_receivers.len(), receivers.len());
+    referenced(&serde_json::json!(dependency_receivers), &mut keys);
     referenced(&serde_json::json!(original), &mut keys);
     // Include exact current schema dependencies for every declared query member,
     // including unselected classes/passives. This does not trim membership to
@@ -454,7 +467,32 @@ fn check(w: &World, report: &SupportEffectsReport) {
         .cloned()
         .collect();
     check_records(w, report, &stages);
-    assert!(r.values.iter().filter(|v|matches!(&v.key,PlanValueKey::Stat {stat,..} if (0..3).any(|i| *stat==d(0x1d2e+i)))).all(|v|matches!(&v.key,PlanValueKey::Stat {entity:ConcreteEntity::Actor(ActorKey::Player),..})));
+    let player_receivers: Vec<_> = w
+        .sniper
+        .receivers
+        .members
+        .iter()
+        .filter(|receiver| {
+            (0..3).any(|i| receiver.stat == d(0x1d2e + i))
+                && receiver.targets.contains(&StatReceiverTarget::Player)
+        })
+        .map(|receiver| &receiver.id)
+        .collect();
+    assert_eq!(player_receivers.len(), 3);
+    let final_player: Vec<_> = r
+        .effects
+        .iter()
+        .filter(|row| {
+            matches!(&row.key.invocation.origin, RuleOrigin::Receiver {receiver, actor}
+            if player_receivers.contains(&receiver) && *actor == ActorKey::Player)
+        })
+        .collect();
+    assert_eq!(final_player.len(), 3);
+    assert!(
+        final_player
+            .iter()
+            .all(|row| row.key.invocation.entity == ConcreteEntity::Actor(ActorKey::Player))
+    );
 }
 fn check_records(w: &World, report: &SupportEffectsReport, stages: &[Value]) {
     let r = sniper::offering::effects(report);
@@ -465,6 +503,12 @@ fn check_records(w: &World, report: &SupportEffectsReport, stages: &[Value]) {
             rows.len(),
             69,
             "three class and 22 three-way passive effects per pass"
+        );
+        assert!(
+            rows.iter().all(|row| matches!(&row.target,
+            BoundEffectTarget::Contribution {key}
+                if key.entity == ConcreteEntity::Actor(ActorKey::Player))),
+            "class and allocated attribute sources remain Player-directed"
         );
         assert_eq!(
             rows.iter()

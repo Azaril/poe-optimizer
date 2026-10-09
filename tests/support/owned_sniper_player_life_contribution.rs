@@ -28,7 +28,12 @@ fn inner(w: &mut World) -> &mut shared::World {
     &mut w.sniper.base.source.base.inner
 }
 pub(super) fn install(sniper: &mut sniper::World, endpoint: &StagedOwnedRelease) -> Census {
-    player_life_family::assert_component(endpoint);
+    minion_inherent_family::assert_component(endpoint);
+    player_life_family::assert_component_with_reviewed_receivers(
+        endpoint,
+        &minion_inherent_family::dependencies().receiver_before,
+        &minion_inherent_family::receivers(),
+    );
     let recipe = &endpoint.input().recipe;
     let actual_owner = recipe
         .rules

@@ -340,6 +340,15 @@ conversion and override producers all need an explicit inventory, even when a
 selected producer happens to emit zero. Numerical domain and rounding guarantees
 are separate from that source-coverage proof.
 
+An existing Stat/program receiver has one identity with explicit recipient
+targets. When the same Actor-relative rule applies to Player and an admitted
+supplied Actor, extend that receiver's target list instead of duplicating its
+row or numerical body. Every invocation still binds its exact Actor. The
+minion inherent-Life packet adopts this structure; checked empty attribute
+inputs follow the existing lazy rule, while unsupported inputs remain
+unavailable. Reusing a calculation does not prove a new recipient's full
+modifier domain or justify inheriting Player contributions.
+
 Source evidence must also identify the evaluation stage. The original minion
 Life census includes a Strength contribution of zero at all three calls, then
 generated ExtraLife and LifeTotal zero records only at the final call. A filtered

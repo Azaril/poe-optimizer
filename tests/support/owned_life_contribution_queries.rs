@@ -260,15 +260,54 @@ pub fn assert_component_with_reviewed_donor(
     before_query: &ContributionQuery,
     after_query: &ContributionQuery,
 ) {
+    assert_component_with_reviewed_donors(endpoint, &[(before, after, before_query, after_query)]);
+}
+
+/// Exact authenticated changes, ordered from the current successor back to the
+/// original packet. Every intermediate endpoint must match before its inverse
+/// is applied; only the historical comparison uses the restored copies.
+pub type ReviewedLifeDonor<'a> = (
+    &'a DefinitionRules,
+    &'a DefinitionRules,
+    &'a ContributionQuery,
+    &'a ContributionQuery,
+);
+
+fn invert_reviewed_donors(
+    owners: &mut [DefinitionRules],
+    registry: &mut [ContributionQuery],
+    reviewed: &[ReviewedLifeDonor<'_>],
+) {
     let deps: Dependencies = read("dependencies.json");
-    assert!(deps.owners.contains(before));
-    assert_eq!(before.owner, after.owner);
+    let (oldest_owner, _, oldest_query, _) = reviewed.last().expect("reviewed Life change");
+    // Preserve the original donor/query boundary, rather than accepting an
+    // arbitrary caller-supplied endpoint as the historical proof.
+    assert!(deps.owners.contains(oldest_owner));
+    let frozen_queries = queries();
+    assert!(frozen_queries.contains(oldest_query));
+    for (before, after, before_query, after_query) in reviewed {
+        assert!(deps.owners.iter().any(|o| o.owner == before.owner));
+        assert_eq!(before.owner, after.owner);
+        let current = owners.iter_mut().find(|o| o.owner == before.owner).unwrap();
+        assert_eq!(current, *after, "reviewed Life successor donor changed");
+        *current = (*before).clone();
+        assert_eq!(before_query.id, after_query.id);
+        assert!(frozen_queries.iter().any(|q| q.id == before_query.id));
+        let query = registry
+            .iter_mut()
+            .find(|q| q.id == after_query.id)
+            .unwrap();
+        assert_eq!(query, *after_query, "reviewed Life successor query changed");
+        *query = (*before_query).clone();
+    }
+}
+
+#[allow(dead_code)]
+pub fn assert_component_with_reviewed_donors(
+    endpoint: &StagedOwnedRelease,
+    reviewed: &[ReviewedLifeDonor<'_>],
+) {
     let mut owners = endpoint.input().recipe.rules.owners.clone();
-    let current = owners.iter_mut().find(|o| o.owner == before.owner).unwrap();
-    assert_eq!(current, after);
-    *current = before.clone();
-    assert!(queries().contains(before_query));
-    assert_eq!(before_query.id, after_query.id);
     let mut registry = endpoint
         .input()
         .recipe
@@ -278,12 +317,7 @@ pub fn assert_component_with_reviewed_donor(
         .unwrap()
         .members
         .clone();
-    let query = registry
-        .iter_mut()
-        .find(|q| q.id == after_query.id)
-        .unwrap();
-    assert_eq!(query, after_query);
-    *query = before_query.clone();
+    invert_reviewed_donors(&mut owners, &mut registry, reviewed);
     assert_component_owners(endpoint, &owners, &registry);
 }
 fn assert_component_owners(
@@ -407,4 +441,133 @@ fn missing_inactive_changed_and_unreviewed_life_members_cannot_hide_in_a_partial
     let mut q = queries();
     q[0].groups[2].members.closure = SchemaClosure::Complete;
     assert!(std::panic::catch_unwind(|| check_queries(&q)).is_err());
+}
+
+#[test]
+fn reviewed_minion_append_requires_exact_donor_and_query_before_the_full_census() {
+    let deps: Dependencies = read("dependencies.json");
+    let before_query = queries().remove(0);
+    let inherent = before_query
+        .groups
+        .iter()
+        .find(|g| g.id == key("inherent"))
+        .unwrap();
+    let original_member = inherent.members.members[0].clone();
+    let existing = original_member.producer.as_program_effect().unwrap();
+    let bridge = deps
+        .owners
+        .iter()
+        .find(|o| o.owner == existing.owner)
+        .unwrap()
+        .programs
+        .members
+        .iter()
+        .find(|p| p.id == existing.program)
+        .unwrap()
+        .clone();
+    let intrinsic = before_query
+        .groups
+        .iter()
+        .find(|g| g.id == key("intrinsic"))
+        .unwrap();
+    let supplied = intrinsic
+        .members
+        .members
+        .iter()
+        .map(|m| m.producer.as_program_effect().unwrap())
+        .find(|p| matches!(p.origin, ContributionOrigin::SuppliedActor { .. }))
+        .unwrap();
+    let before = deps
+        .owners
+        .iter()
+        .find(|o| o.owner == supplied.owner)
+        .unwrap()
+        .clone();
+    let mut after = before.clone();
+    after.programs.members.push(bridge);
+    let mut after_query = before_query.clone();
+    let mut member = original_member.clone();
+    let producer = member.producer.as_program_effect_mut().unwrap();
+    producer.owner = supplied.owner.clone();
+    producer.origin = supplied.origin.clone();
+    after_query
+        .groups
+        .iter_mut()
+        .find(|g| g.id == key("inherent"))
+        .unwrap()
+        .members
+        .members
+        .push(member);
+    let selected_owners = || {
+        let mut owners = deps.owners.clone();
+        *owners.iter_mut().find(|o| o.owner == before.owner).unwrap() = after.clone();
+        owners
+    };
+    let selected_queries = || {
+        let mut registry = queries();
+        registry[0] = after_query.clone();
+        registry
+    };
+    let reviewed = [(&before, &after, &before_query, &after_query)];
+    let mut owners = selected_owners();
+    let mut registry = selected_queries();
+    invert_reviewed_donors(&mut owners, &mut registry, &reviewed);
+    assert_eq!(owners, deps.owners);
+    assert_eq!(registry, queries());
+    census(&owners, &[], &registry);
+
+    // A modified recipient/guard or missing supplied-Actor member cannot be
+    // removed under an authentic packet's expected inverse.
+    for operation in 0..3 {
+        let mut owners = selected_owners();
+        let mut registry = selected_queries();
+        if operation == 2 {
+            registry[0]
+                .groups
+                .iter_mut()
+                .find(|g| g.id == key("inherent"))
+                .unwrap()
+                .members
+                .members
+                .pop();
+        } else {
+            let donor = owners.iter_mut().find(|o| o.owner == before.owner).unwrap();
+            let effect = &mut donor.programs.members.last_mut().unwrap().effects[0];
+            if operation == 0 {
+                let RuleEffectKind::Contribute { entity, .. } = &mut effect.effect else {
+                    panic!()
+                };
+                *entity = RuleEntity::Player;
+            } else {
+                effect.when = Some(key("unreviewed-disabled-guard"));
+            }
+        }
+        assert!(
+            std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                invert_reviewed_donors(&mut owners, &mut registry, &reviewed);
+            }))
+            .is_err()
+        );
+    }
+
+    // An unrelated unreviewed writer survives the exact inverse and is still
+    // rejected by the complete historical census, even with an inactive guard.
+    let mut owners = selected_owners();
+    let mut registry = selected_queries();
+    let owner = owners
+        .iter_mut()
+        .find(|o| o.owner == existing.owner)
+        .unwrap();
+    let mut extra = owner
+        .programs
+        .members
+        .iter()
+        .find(|p| p.id == existing.program)
+        .unwrap()
+        .clone();
+    extra.id = key("unreviewed-life-writer");
+    extra.effects[0].when = Some(key("inactive"));
+    owner.programs.members.push(extra);
+    invert_reviewed_donors(&mut owners, &mut registry, &reviewed);
+    assert!(std::panic::catch_unwind(|| census(&owners, &[], &registry)).is_err());
 }

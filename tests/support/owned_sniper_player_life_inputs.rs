@@ -22,6 +22,10 @@ const DELIVERY: &str = "contribute-player-flat-life";
 pub(super) fn check_current_packet(endpoint: &StagedOwnedRelease) {
     life_routing_family::check_authored();
     amulet_life_family::check_authored();
+    minion_inherent_family::assert_component(endpoint);
+    let minion = minion_inherent_family::dependencies();
+    let minion_after = minion_inherent_family::owner_after();
+    let minion_query = minion_inherent_family::query();
     let deps: amulet_life_family::Dependencies = amulet_life_family::read("dependencies.json");
     let copy = amulet_life_family::consumer();
     let replacements = life_routing_family::replacements();
@@ -67,12 +71,18 @@ pub(super) fn check_current_packet(endpoint: &StagedOwnedRelease) {
             &expected
         );
     }
-    life_query_family::assert_component_with_reviewed_donor(
+    assert_eq!(minion.query_before, copy.query);
+    life_query_family::assert_component_with_reviewed_donors(
         endpoint,
-        &replacements[0].before,
-        &expected,
-        &deps.query,
-        &copy.query,
+        &[
+            (
+                &minion.owner_before,
+                &minion_after,
+                &minion.query_before,
+                &minion_query,
+            ),
+            (&replacements[0].before, &expected, &deps.query, &copy.query),
+        ],
     );
 }
 #[derive(Clone)]

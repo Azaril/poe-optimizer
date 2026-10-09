@@ -4,6 +4,8 @@
 mod added_damage;
 #[path = "support/owned_sniper_life_increase.rs"]
 mod life_increase;
+#[path = "support/owned_sniper_minion_inherent_life.rs"]
+mod minion_inherent_life;
 #[allow(dead_code)]
 #[path = "../../../tests/support/owned_plan_replay.rs"]
 mod replay;

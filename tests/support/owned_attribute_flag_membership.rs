@@ -314,7 +314,7 @@ pub fn check_authored() {
     census(&d.owners, &[]);
     authenticate_source(false);
 }
-fn dependencies(endpoint: &StagedOwnedRelease) {
+fn dependencies(endpoint: &StagedOwnedRelease, receivers: &[StatReceiver]) {
     let d: Dependencies = read("dependencies.json");
     for owner in &d.owners {
         assert_eq!(
@@ -343,18 +343,7 @@ fn dependencies(endpoint: &StagedOwnedRelease) {
         );
     }
     for receiver in &d.receivers {
-        assert_eq!(
-            endpoint
-                .input()
-                .recipe
-                .rules
-                .receivers
-                .members
-                .iter()
-                .filter(|row| *row == receiver)
-                .count(),
-            1
-        );
+        assert_eq!(receivers.iter().filter(|row| *row == receiver).count(), 1);
     }
     assert_eq!(
         endpoint
@@ -380,8 +369,49 @@ fn dependencies(endpoint: &StagedOwnedRelease) {
     );
 }
 pub fn assert_component(endpoint: &StagedOwnedRelease) {
+    assert_component_receivers(endpoint, &endpoint.input().recipe.rules.receivers.members);
+}
+
+/// Restore only reviewed target extensions for a historical data assertion.
+/// The caller authenticates the successor packet; every complete actual row
+/// must still equal its reviewed successor before it can be inverted here.
+pub fn reviewed_receiver_inverse(
+    endpoint: &StagedOwnedRelease,
+    before: &[StatReceiver],
+    after: &[StatReceiver],
+) -> Vec<StatReceiver> {
+    assert!(!before.is_empty());
+    assert_eq!(before.len(), after.len());
+    let mut restored = endpoint.input().recipe.rules.receivers.members.clone();
+    let mut ids = std::collections::BTreeSet::new();
+    for (before, after) in before.iter().zip(after) {
+        assert!(ids.insert(before.id.clone()));
+        let mut expected = before.clone();
+        expected.targets = after.targets.clone();
+        assert_eq!(after, &expected, "only receiver targets may extend");
+        assert!(after.targets.len() > before.targets.len());
+        assert!(before.targets.iter().all(|t| after.targets.contains(t)));
+        assert_eq!(restored.iter().filter(|r| r.id == before.id).count(), 1);
+        let actual = restored.iter_mut().find(|r| r.id == before.id).unwrap();
+        assert_eq!(actual, after, "reviewed successor receiver changed");
+        *actual = before.clone();
+    }
+    restored
+}
+
+#[allow(dead_code)]
+pub fn assert_component_with_reviewed_receivers(
+    endpoint: &StagedOwnedRelease,
+    before: &[StatReceiver],
+    after: &[StatReceiver],
+) {
+    let restored = reviewed_receiver_inverse(endpoint, before, after);
+    assert_component_receivers(endpoint, &restored);
+}
+
+fn assert_component_receivers(endpoint: &StagedOwnedRelease, receivers: &[StatReceiver]) {
     check_authored();
-    dependencies(endpoint);
+    dependencies(endpoint, receivers);
     let registry = endpoint
         .input()
         .recipe
@@ -404,7 +434,7 @@ pub fn assert_component(endpoint: &StagedOwnedRelease) {
 pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     check_authored();
     authenticate_source(true);
-    dependencies(prior);
+    dependencies(prior, &prior.input().recipe.rules.receivers.members);
     let b: Value = read("bindings.json");
     let receipt = json!(prior.receipt());
     for field in [

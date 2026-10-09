@@ -978,8 +978,13 @@ uninstrumented controls run with JIT both off and on. The complete reports must
 agree, and the compact retained projection authenticates its source and observer.
 
 This packet is offline evidence, not new runtime rules or a coverage closure.
-The next bounded adoption reuses Actor-relative Strength, inherent flags and
-Life contribution programs for the exact supplied Actor. Later adjustment
+The [minion inherent-Life packet](../data/owned/poe2/3887ae68/minion-inherent-life/README.md)
+now extends eight existing receiver target lists with the exact supplied Actor.
+It reuses the Actor-relative Strength, inherent flag and Life amount programs,
+then attaches the unchanged guarded contribution bridge to that Actor slot.
+The canonical Life query gains its exact supplier membership; receiver IDs,
+Player targets, numerical bodies and Partial coverage stay unchanged. No neutral
+MORE receiver or observed-zero input is added. Later adjustment
 admission needs incoming conversion/gain channels from all five other resources
 and the original pre-transform LifeTotal inventory; observed generated zeros
 cannot replace those inputs. Positive resource transformation and final Life

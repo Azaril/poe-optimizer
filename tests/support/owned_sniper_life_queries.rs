@@ -26,11 +26,11 @@ fn world() -> World {
             .supports_actor_reward_contributions()
     );
     let mut queries = life_query_family::queries();
-    // The current canonical Life query also accounts for numeric amulet copy.
-    // Its exact donor/query changes are authenticated by World::load.
-    let copy = amulet_life_family::consumer();
-    let target = queries.iter_mut().find(|q| q.id == copy.query.id).unwrap();
-    *target = copy.query;
+    // The current canonical query accounts for numeric Amulet copy and the
+    // supplied Actor's inherent Life. World::load authenticates both inverses.
+    let current = minion_inherent_family::query();
+    let target = queries.iter_mut().find(|q| q.id == current.id).unwrap();
+    *target = current;
     // Retain the exact published minion receiver membership now that the six
     // actual selected Life sources and that receiver share this graph.
     assert_eq!(queries[1].groups[1].members.members.len(), 1);
@@ -147,6 +147,7 @@ fn configure(stages: &mut EvaluationStagesInput) {
             id: key(READY),
             predecessors: vec![
                 key("player-inherent-life-contribution"),
+                key(minion_inherent_native::STAGE),
                 key("gigantic-benefits"),
                 key(life_increase_native::RECEIVE_STAGE),
             ],
@@ -224,6 +225,7 @@ fn actual_life_sources_reduce_on_exact_player_and_minion_recipients() {
     player_life_contribution_native::check(&w, &r, 1120., 54.);
     player_life_inputs_native::check(&w, &r);
     life_increase_native::check(&w, &r);
+    minion_inherent_native::check(&w, &r);
     player(&r, 1257., 5.);
     let effects = sniper::offering::effects(&r);
     for index in 0..2 {
@@ -237,8 +239,29 @@ fn actual_life_sources_reduce_on_exact_player_and_minion_recipients() {
                     && key.entity == ConcreteEntity::Actor(w.sniper.actor(index)))
                 })
                 .collect();
-            assert_eq!(rows.len(), 1);
-            assert_eq!(value(&r, w.sniper.actor(index), name), &rows[0].value);
+            if kind == ContributionKind::Add {
+                assert_eq!(rows.len(), 2, "intrinsic plus enabled inherent zero");
+                let intrinsic = rows
+                    .iter()
+                    .find(|row| row.key.invocation.program == key("intrinsic-allied-minion-life"))
+                    .unwrap();
+                let inherent = rows
+                    .iter()
+                    .find(|row| {
+                        row.key.invocation.program == key("contribute-inherent-strength-life")
+                    })
+                    .unwrap();
+                assert_eq!(
+                    inherent.value,
+                    EffectValue::Known {
+                        value: quantity(0., &d(0x3119))
+                    }
+                );
+                assert_eq!(value(&r, w.sniper.actor(index), name), &intrinsic.value);
+            } else {
+                assert_eq!(rows.len(), 1);
+                assert_eq!(value(&r, w.sniper.actor(index), name), &rows[0].value);
+            }
         }
         assert_eq!(
             value(&r, w.sniper.actor(index), CHANNELS[1].0),
@@ -330,6 +353,7 @@ fn ring_copies_rewards_and_character_changes_flow_through_checked_life_queries()
 fn unread_minion_membership_and_partial_life_queries_cannot_be_skipped() {
     for (query, group, program) in [
         (QUERY_IDS[0], 0, "intrinsic-allied-minion-life"),
+        (QUERY_IDS[0], 1, "contribute-inherent-strength-life"),
         (QUERY_IDS[1], 1, "received-minion-life-increase"),
     ] {
         let mut w = world();
@@ -346,10 +370,11 @@ fn unread_minion_membership_and_partial_life_queries_cannot_be_skipped() {
             .find(|q| q.id == key(query))
             .unwrap();
         let before = q.groups[group].members.members.len();
-        q.groups[group]
-            .members
-            .members
-            .retain(|m| m.producer.as_program_effect().unwrap().program != key(program));
+        q.groups[group].members.members.retain(|m| {
+            let producer = m.producer.as_program_effect().unwrap();
+            producer.program != key(program)
+                || producer.owner != SchemaSubject::Slot(SlotAddress::Actor(actor_slot()))
+        });
         assert_eq!(q.groups[group].members.members.len(), before - 1);
         assert!(
             w.checked_plan_configured(configure)

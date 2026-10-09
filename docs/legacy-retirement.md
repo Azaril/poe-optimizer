@@ -38,6 +38,17 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Minion inherent Life, 2026-10-09:** extend the target lists of eight existing
+Stat/program receivers; preserve one receiver identity and one numerical body.
+The guarded Player bridge is reusable typed rule data on the supplied Actor
+slot, not a new minion-specific calculation. Preserve exact recipient and
+coverage checks, including unused potential contributors in lazy branches.
+Historical Player packet assertions authenticate the target extensions and
+invert only those exact rows before their original source checks. Life-query
+evidence likewise reverses the admitted minion append and Amulet change before
+the complete historical donor census. These are test-evidence adapters, not
+runtime compatibility paths or permission to ignore new suppliers.
+
 **Joined minion Life, 2026-10-09:** remove the shared fixture's deliberate
 exclusion of the already-published received Life producer. Reuse all six actual
 passive bodies and the existing Actor-slot program through one staged native

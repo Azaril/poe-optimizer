@@ -2,7 +2,7 @@
 
 `owned-sniper-replay.json.gz` contains the public typed inputs of the existing
 joined Sniper test graph, exported from
-`runs/owned-intrinsic-added-attack-publication-02/package`. It is test data, not a
+`runs/owned-minion-inherent-life-publication-03/package`. It is test data, not a
 production release or an admitted complete build. Original05 still has four
 selected input obligations and incomplete mechanics coverage.
 
@@ -58,14 +58,14 @@ backend with fixed timestamp and OS header. Decoding is bounded to 8 MiB; the CI
 test requires deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
-The current October 9 V27 fixture has 927 definitions, 620 owners and 34 stages.
-It is 138,584 compressed bytes and 5,412,816 JSON bytes, with SHA-256
-`b54d4468cb28560b32a22d87aac4135f36ec176c9aa5cf7d4a64c8e3244e2dca`.
+The current October 9 V27 fixture has 927 definitions, 620 owners and 35 stages.
+It is 138,860 compressed bytes and 5,417,997 JSON bytes, with SHA-256
+`e4ca40a3833deb613f391109611d54fca8e9e9c659df4994ba48b5c58809b220`.
 The exporter verifies full-report equality before writing; the ordinary native
 test checks deterministic re-encoding.
 
 The prior intrinsic added-attack source contributes three Stats, two programs,
-one exact Basic route and its stage dependencies. The current refresh joins the
+one exact Basic route and its stage dependencies. The preceding refresh joined the
 published minion Life Increase receiver and the two remaining actual selected
 Life passives, preserving the four existing paired Life/Damage sources. Six
 carrier records total 44, then one received contribution reaches each exact
@@ -73,21 +73,30 @@ Sniper. Source delivery precedes the frozen-channel read. The separate joined
 Life-query fixture retains the canonical member and runs its diagnostic probes
 afterward; it derives no canonical final Life pool.
 
-All fourteen ordinary replay tests pass. Four Life tests cover exact published
-sources/recipient lineage, the seven retained 44/38/34/0 source cases, missing
-and actual Partial authority, early reads, quality changes, reordered inputs
-and fresh/reused/four-worker equality. Removal controls compare the Increase
-channel only: the original tree removal of 229 also removes Gigantic 46365, and
-removal of 1218 also removes cooldown 14945. These finite projections do not prove
-legal optimizer mutations or final Life/MORE parity. The preceding ten damage,
-Command and Offering checks remain intact.
+The current refresh extends eight existing Stat/program receiver target lists
+with exact slot `Skill0012/001f`, preserving Player targets and IDs. The unchanged
+inherent Life bridge then emits one explicit zero per exact Sniper, after checked
+empty attribute inputs and resolved inherent flags. Player remains Strength 27
+and inherent Life 54. Missing minion targets stay unknown without affecting
+Player; no neutral MORE receiver is added. A synthetic positive-BASE control
+cannot silently obtain Player MORE or establish nonempty minion attribute parity.
 
-Regeneration: `runs/owned-sniper-replay-life-increase-01.log` (30.23s), from
-input `c4c38e18383f708bc36d4a571bb260d0afadf0e69c1e7a6881ef80b8a0098ba3`.
-An independent inverse comparison verifies the two added passive definitions,
-owners, allocations and support-discovery rows; the received program and stage
-metadata; and dependent digest changes. Every previous program and unrelated
-field is unchanged. Scenario, queries, routes and source-property content are
-identical. No production artifact changed.
+All 21 ordinary replay tests pass. Seven new tests cover exact targets and source
+identity, zero versus missing, potential zero/inactive/nonzero donors, unsupported
+positive inputs, actual Partial authority, frozen prerequisites and four-worker
+reuse. All fourteen preceding damage, Command, Offering and Life Increase tests
+remain intact. The retained 44/38/34/0 removals compare only Increase: original
+tree removal of 229 also removes Gigantic 46365, and removal of 1218 also removes
+cooldown 14945. These projections do not prove legal optimizer mutations or
+final Life/MORE parity.
+
+Regeneration: `runs/owned-sniper-replay-minion-inherent-01.log` (30.36s), from
+input `bdfb1811f1707b493a2d2277b6ac714cc7a5b91df1a5b4b0ce07518c78948a73`.
+An independent raw-JSON inverse verifies exactly eight target additions, one
+Actor-slot bridge, one stage, program/readiness rows and nine dependent identity
+fields. It reproduces every prior byte and authenticates the changed hashes.
+Schema, routing, build, scenario and queries remain byte-identical. The native
+data publication carries the target extensions, bridge and canonical query member;
+all production owner and global coverage gaps remain unchanged.
 The canonical publication is broader than this finite graph. Earlier refreshes
 are recorded in the implementation history; no old-format decoder is retained.
