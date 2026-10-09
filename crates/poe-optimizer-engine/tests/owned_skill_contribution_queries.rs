@@ -110,7 +110,7 @@ impl World {
                     id: key("self"),
                     reduction: ContributionReduction::Sum,
                     ordering: ContributionOrdering::Ordered,
-                    empty: base::integer(0),
+                    empty: Some(base::integer(0)),
                     members: DeclaredSet::complete(vec![member("level", 0), member("bonus", 1)]),
                 }],
             }]),
@@ -762,7 +762,7 @@ fn boolean_any_keeps_skill_identity_and_does_not_turn_unknown_into_false() {
     let group = w.group();
     group.reduction = ContributionReduction::Any;
     group.ordering = ContributionOrdering::Unordered;
-    group.empty = ParameterValue::Boolean(false);
+    group.empty = Some(ParameterValue::Boolean(false));
     for member in &mut group.members.members {
         member.order = None;
     }

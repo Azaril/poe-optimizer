@@ -194,7 +194,7 @@ fn input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
             id: key("base"),
             reduction: ContributionReduction::Sum,
             ordering: ContributionOrdering::Ordered,
-            empty: value(0.0),
+            empty: Some(value(0.0)),
             members: DeclaredSet::complete(members),
         }],
     }]));
@@ -436,11 +436,11 @@ fn numeric_identities_units_and_relative_recipient_authority_are_explicit() {
         let mut raw = input(&schema);
         let expected = match mutation {
             0 => {
-                group(&mut raw).empty = ParameterValue::Boolean(false);
+                group(&mut raw).empty = Some(ParameterValue::Boolean(false));
                 "ordered group needs a numeric identity"
             }
             1 => {
-                group(&mut raw).empty = value(1.0);
+                group(&mut raw).empty = Some(value(1.0));
                 "ordered group reduction or identity differs from its contribution kind"
             }
             2 => {
@@ -448,8 +448,9 @@ fn numeric_identities_units_and_relative_recipient_authority_are_explicit() {
                 "ordered group reduction or identity differs from its contribution kind"
             }
             3 => {
-                group(&mut raw).empty =
-                    ParameterValue::Quantity(FiniteQuantity::new(0.0, id("factor")).unwrap());
+                group(&mut raw).empty = Some(ParameterValue::Quantity(
+                    FiniteQuantity::new(0.0, id("factor")).unwrap(),
+                ));
                 "ordered group identity has the wrong numeric type or unit"
             }
             4 => {
@@ -545,7 +546,7 @@ fn bounded_registry_counts_are_checked_independently_and_replay_exactly() {
         id: key("empty"),
         reduction: ContributionReduction::Sum,
         ordering: ContributionOrdering::Ordered,
-        empty: value(0.0),
+        empty: Some(value(0.0)),
         members: DeclaredSet::complete(vec![]),
     });
     raw.contribution_queries.as_mut().unwrap().members.push(q);
@@ -694,7 +695,7 @@ fn boolean_input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
     let group = group(&mut raw);
     group.reduction = ContributionReduction::Any;
     group.ordering = ContributionOrdering::Unordered;
-    group.empty = ParameterValue::Boolean(false);
+    group.empty = Some(ParameterValue::Boolean(false));
     for member in &mut group.members.members {
         member.order = None;
     }
@@ -743,8 +744,8 @@ fn boolean_type_identity_reduction_and_order_are_a_single_contract() {
     for mutation in 0..4 {
         let mut raw = boolean_input(&schema);
         match mutation {
-            0 => group(&mut raw).empty = ParameterValue::Boolean(true),
-            1 => group(&mut raw).empty = value(0.0),
+            0 => group(&mut raw).empty = Some(ParameterValue::Boolean(true)),
+            1 => group(&mut raw).empty = Some(value(0.0)),
             2 => group(&mut raw).reduction = ContributionReduction::Sum,
             _ => group(&mut raw).ordering = ContributionOrdering::Ordered,
         }

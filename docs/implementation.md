@@ -103,8 +103,8 @@ coverage throughout.
 On October 9 the owner also explicitly approved
 [exact Action queries](owned-action-contribution-queries-proposal.md) and
 [coherent optional numeric selection](owned-numeric-selection-proposal.md).
-Implement Action ownership/membership first, adopt the real Command channel,
-then implement require-agreement numeric selection for resource overrides.
+Action ownership/membership, real Command adoption and generic require-agreement
+numeric selection are now implemented. Actual Mana override adoption is next.
 Both extend the existing graph; they authorize neither unrelated delivery
 origins nor arbitrary override precedence. Later references below to these two
 decisions as pending are historical.
@@ -113,7 +113,72 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Latest native checkpoint: Command joins the Action damage consumer
+## Latest native checkpoint: coherent optional numeric selection
+
+The approved [selection contract](owned-numeric-selection-proposal.md) now runs
+through the existing Core/Data/Engine graph in operations V27. `Override`
+contributions feed an unordered `RequireAgreement` group. A complete empty or
+inactive domain is absent; agreeing values are present, including zero and
+negative values admitted by their schema. Conflicts, unknown potentially active
+sources and incomplete membership remain unavailable. Numeric units are exact;
+signed zero normalizes to positive zero. Folds retain explicit identities, while
+selection requires no numeric empty identity. There is no Mana-specific engine
+branch, Lua order law, sentinel value or parallel collector.
+
+Cold planning interns one result per exact recipient/channel/query/group.
+All programs and both typed projections read the same worker-cached node by
+index. Original contributor occurrences remain distinct in diagnostics.
+The staged path requires an explicit frozen contribution channel and preserves
+potential-writer, readiness, cycle and executed-prefix checks. Retained support
+programs can introduce their selection queries into the same execution suffix.
+The current release assembler accepts V27; its effect-plan identity domain is
+`owned-effect-plan-v24`. No historical reader was added.
+
+The final focused native run passes **27 tests**, including all five ordinary
+Sniper replay checks (`runs/numeric-selection-native-final-02.log`). New cases
+cover integer/quantity domains, signed zero, repeated equipment occurrences,
+24 exact Action selections, queries introduced by retained supports, lazy
+fallback, partial/unread membership, invalid units, stages/cycles and
+fresh/reused/four-worker equality. The preceding broader regression passed
+**234 tests**, including 185 Engine unit tests and adjacent contribution suites
+(`runs/numeric-selection-regression-01.log`). All test targets in Core, Data,
+Engine and Import compile with all features
+(`runs/numeric-selection-compile-all-01.log`). All **97** selected Core/Data/Import
+contract, stage, storage and migration checks pass
+(`runs/numeric-selection-data-migration-01.log`). The added private worker test
+proves deterministic failure priority, candidate work bounds and constant-work
+cached projections (`runs/numeric-selection-worker-budget-01.log`). The final
+selection/support rerun passes **12** checks, including a result frozen during
+preparation and reused unchanged by the suffix
+(`runs/numeric-selection-prefix-final-01.log`). Strict all-feature Clippy passes
+for all Core/Data/Engine/Import test targets
+(`runs/numeric-selection-clippy-02.log`). Final strict all-feature lint also
+passes for the CLI binary, the selection suites and affected attribute, Offering,
+Boolean-publication and joined Sniper targets
+(`runs/numeric-selection-cli-clippy-02.log`). Existing fold fixtures now explicitly
+assert their present identity under the current Rust contract; no production
+defaults or source evidence were changed.
+The owned Engine/Data libraries also compile for `wasm32-unknown-unknown` with
+default features disabled (`runs/numeric-selection-wasm-01.log`). Selective
+formatting and whitespace checks pass.
+
+**Resume:** adopt Mana's actual override domain with the retained original
+source census and controls. Use the V27 graph rather than an empty observed-build
+assumption. Then finish conversion/extra/total production and resource arithmetic
+proofs before publishing final Mana. Rebuild the canonical data release through
+the existing assembler when that domain is admitted, reimport all five originals,
+and refresh the ordinary native replay. Do not merely raise its operations string.
+
+The canonical real-data release is still the V26 package recorded below;
+selected obligations remain **107/117/109/123/4**, and complete native builds
+remain **0/5**. Original05 is still the closest target. Final damage, Life/Mana,
+four selected input obligations and global mechanics coverage remain open.
+Begin D4 once one unchanged original genuinely completes. Unrelated
+incoming-critical drafts remain untouched. No new design approval is required
+for the immediate Mana adoption step. GitHub run `37895955400` for predecessor
+`5e918b2` was still pending when inspected; no CI completion is claimed.
+
+## Canonical data checkpoint: Command joins the Action damage consumer
 
 The accepted V26 contract now has its first real data adoption in
 [action-minion-damage](../data/owned/poe2/3887ae68/action-minion-damage/README.md).
@@ -174,15 +239,9 @@ single-output expectation for disabled Snipers; the repaired tests retain both
 Basic and Gas refusal diagnostics. The checked-in replay now contains current
 public typed inputs, with deterministic re-encoding, not a cached evaluation.
 
-**Resume:** implement the already accepted
-[optional numeric selection](owned-numeric-selection-proposal.md) through the
-same Core/Data/Engine graph. Require agreement, coherent presence/value,
-unknown/conflict refusal and scratch isolation before adopting Mana overrides.
-Continue Original05 as the closest build. Final damage, final Life/Mana, four
-selected input obligations and global mechanics coverage remain open;
-**0/5 complete native builds**. Do not wait for all five before starting D4 once
-one unchanged original is genuinely complete. Unrelated incoming-critical drafts
-remain untouched. No additional design approval is needed for this next step.
+The generic numeric-selection follow-up is completed in the latest checkpoint
+above; actual Mana domain adoption is now the next task. This section remains
+the canonical real-data release receipt.
 
 ## Previous native checkpoint: exact Action contribution queries
 
@@ -246,8 +305,8 @@ Evidence and reproduction are linked above. Canonical package, four owner gaps,
 110 queries and selected counts **107/117/109/123/4** remain unchanged; native
 builds remain **0/5**. Predecessor `95f9e83` CI was pending at inspection.
 
-**Follow-up:** the generic exact Action contract is implemented above; actual
-Command consumption and optional numeric selection remain the next steps.
+**Follow-up:** exact Action queries, Command consumption and generic numeric
+selection are completed above. Actual Mana override adoption is next.
 For independent Life work, implement real ordered-magnitude
 producers using existing `ProjectModifierTransform` and establish their reachable
 bounds; do not close numeric coverage using only fixed-integer imports or spend
@@ -449,19 +508,14 @@ Canonical successor: `runs/owned-mana-adjustments-publication-01/package`:
 - Operations V25; next free ID **335c**. Protected incoming-critical drafts are
   untouched and still need rebasing if adopted.
 
-**Required design decision:** [numeric selection](owned-numeric-selection-proposal.md)
-is proposed and has been prompted, not implemented or accepted. The recommendation
-adds one coherent optional numeric selection to the existing graph, with typed
-presence/value projections and an initial require-agreement policy. Empty is
-absent, duplicate agreeing sources retain provenance, and conflicts/unknowns
-remain unavailable. This avoids a zero sentinel and avoids promoting PoB database
-insertion order into a game law. Implement only after the owner answers. The
-existing exact-Action query decision remains independently pending.
+**Decision resolved:** [numeric selection](owned-numeric-selection-proposal.md)
+was accepted on October 9 and is now implemented generically in V27, as recorded
+above. Exact Action queries are also implemented and adopted by Command.
+Actual Mana override membership and resource coverage remain unfinished.
 
-**Resume:** keep Original05 first. After the numeric-selection decision is
-approved, implement it and adopt the actual Mana override domain, then finish the final resource
-arithmetic and its admitted rounding/magnitude proof. Return to Command/damage
-when the Action scope decision is approved. Independent conversion work must
+**Follow-up:** keep Original05 first. Adopt the actual Mana override domain,
+then finish final resource arithmetic and its admitted rounding/magnitude proof.
+Command inputs are now joined; final damage remains open. Independent conversion work must
 establish donor/recipient production, coverage and ordering before replacing
 guarded empty domains. A newly noted source normalization loop is an unverified
 [cleanup investigation](legacy-retirement.md#resource-conversion-normalization-investigation-2026-10-09),

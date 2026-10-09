@@ -25,6 +25,8 @@ fn gap(reason: PlanGapReason) -> u8 {
         PlanGapReason::IncompleteContributors => 15,
         PlanGapReason::UpstreamUnavailable => 16,
         PlanGapReason::UnresolvedActivation => 17,
+        PlanGapReason::ConflictingContributors => 18,
+        PlanGapReason::AbsentSelection => 19,
     }
 }
 fn numerical(reason: NumericalFailure) -> u8 {

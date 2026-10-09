@@ -38,6 +38,17 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Numeric selection, 2026-10-09:** operations V27 extends the existing typed
+contribution graph. One cached result per exact recipient/channel/query/group
+serves presence and value; no parallel collector, Mana flag, optional raw-input
+domain or Lua insertion-order emulation was added. Fold identities are explicit
+`Some` values in Rust; selection uses `None`, serialized as null. Existing valid
+fold data retains its current representation. There is one current authoring
+contract and no historical-format reader. Agreement uses exact numeric units
+and canonical positive zero. Unknown/conflicting candidates cannot become false
+or select a traversal-order winner. Actual Mana data adoption remains separate
+from this reusable contract and supplies no new complete-build certificate.
+
 **Exact Action queries, 2026-10-09:** the accepted V26 extension uses the existing
 checked contribution graph and worker reductions. Keep one native membership
 implementation, with explicit Skill-definition/output ownership and exact supply

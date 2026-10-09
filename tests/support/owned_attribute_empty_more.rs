@@ -195,7 +195,9 @@ pub fn check_authored() {
                     ordering: ContributionOrdering::Ordered,
                     id: key("empty"),
                     reduction: ContributionReduction::Product,
-                    empty: ParameterValue::Quantity(FiniteQuantity::new(1., unit.clone()).unwrap()),
+                    empty: Some(ParameterValue::Quantity(
+                        FiniteQuantity::new(1., unit.clone()).unwrap()
+                    )),
                     members: DeclaredSet::complete(vec![]),
                 }],
             }

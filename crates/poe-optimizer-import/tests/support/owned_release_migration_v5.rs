@@ -107,6 +107,7 @@ fn contribution_contracts_preserve_membership_and_reject_downgrades() {
         (OWNED_RULE_OPERATIONS_V22, OWNED_RULE_OPERATIONS_V23),
         (OWNED_RULE_OPERATIONS_V23, OWNED_RULE_OPERATIONS_V24),
         (OWNED_RULE_OPERATIONS_V25, OWNED_RULE_OPERATIONS_V26),
+        (OWNED_RULE_OPERATIONS_V26, OWNED_RULE_OPERATIONS_V27),
     ] {
         let mut input = prior().input().clone();
         input.recipe.rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
@@ -188,7 +189,7 @@ fn v5_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
         assert!(matches!(
             compile_owned_release_migration(&prior, bad, Default::default()),
             Err(OwnedReleaseError::Invalid(
-                "current migration requires schema v6 and operations v20 through v26"
+                "current migration requires schema v6 and operations v20 through v27"
             ))
         ));
     }
@@ -315,7 +316,7 @@ fn current_v21_schema_append_preserves_ordered_queries_and_actor_applicability()
                 ordering: ContributionOrdering::Ordered,
                 id: key("empty-test-domain"),
                 reduction: ContributionReduction::Sum,
-                empty,
+                empty: Some(empty),
                 members: DeclaredSet::complete(vec![]),
             }],
         }]));

@@ -199,7 +199,7 @@ fn group_type<I: DefinitionSchemaIndex>(
     let invalid = RuleStorageError::Structure;
     if query.contribution == ContributionKind::Flag {
         if *stat != ComputedValueType::Boolean
-            || group.empty != ParameterValue::Boolean(false)
+            || group.empty != Some(ParameterValue::Boolean(false))
             || group.reduction != ContributionReduction::Any
             || group.ordering != ContributionOrdering::Unordered
         {
@@ -209,15 +209,34 @@ fn group_type<I: DefinitionSchemaIndex>(
         }
         return Ok(ComputedValueType::Boolean);
     }
+    if query.contribution == ContributionKind::Override {
+        if group.empty.is_some()
+            || group.reduction != ContributionReduction::RequireAgreement
+            || group.ordering != ContributionOrdering::Unordered
+            || !matches!(
+                stat,
+                ComputedValueType::Integer | ComputedValueType::Quantity { .. }
+            )
+        {
+            return Err(invalid(
+                "numeric selection requires unordered agreement and no empty identity",
+            ));
+        }
+        return Ok(stat.clone());
+    }
     if group.ordering != ContributionOrdering::Ordered {
         return Err(invalid(
             "numeric contribution group requires semantic ordering",
         ));
     }
-    let ty = value_type(&group.empty).ok_or(invalid("ordered group needs a numeric identity"))?;
+    let empty = group
+        .empty
+        .as_ref()
+        .ok_or(invalid("fold requires an empty identity"))?;
+    let ty = value_type(empty).ok_or(invalid("ordered group needs a numeric identity"))?;
     let product = query.contribution == ContributionKind::Multiply;
     let expected = if product { 1.0 } else { 0.0 };
-    let actual = match &group.empty {
+    let actual = match empty {
         ParameterValue::Integer(v) => v.get() as f64,
         ParameterValue::Quantity(v) => v.value(),
         _ => unreachable!(),
@@ -243,7 +262,7 @@ fn group_type<I: DefinitionSchemaIndex>(
         None
     };
     let valid = match query.contribution {
-        ContributionKind::Flag => unreachable!("flag handled above"),
+        ContributionKind::Flag | ContributionKind::Override => unreachable!("handled above"),
         ContributionKind::Add => ty == *stat,
         ContributionKind::Increase => dimension == Some(UnitDimension::PercentagePoints),
         ContributionKind::Multiply => dimension == Some(UnitDimension::DimensionlessFactor),
@@ -637,13 +656,19 @@ fn read<I: DefinitionSchemaIndex>(
     usage: &mut RuleStorageUse,
     limits: RuleStorageLimits,
 ) -> Result<(), RuleStorageError> {
-    let RuleReadSource::ContributionQuery {
-        entity,
-        query,
-        group,
-    } = &r.source
-    else {
-        return Ok(());
+    let (entity, query, group, projection) = match &r.source {
+        RuleReadSource::ContributionQuery {
+            entity,
+            query,
+            group,
+        } => (entity, query, group, None),
+        RuleReadSource::ContributionSelection {
+            entity,
+            query,
+            group,
+            projection,
+        } => (entity, query, group, Some(*projection)),
+        _ => return Ok(()),
     };
     work(usage, limits, 1)?;
     let invalid = RuleStorageError::Structure;
@@ -654,11 +679,28 @@ fn read<I: DefinitionSchemaIndex>(
             "ordered contributions require owned-domain-operations-v21",
         ));
     }
-    if !catalog.queries.contains_key(query)
-        || catalog.group_types.get(&(query, group)) != Some(&r.value_type)
-    {
+    let selected_type = catalog.group_types.get(&(query, group));
+    let expected = if projection == Some(ContributionSelectionProjection::Present) {
+        Some(&ComputedValueType::Boolean)
+    } else {
+        selected_type
+    };
+    if selected_type.is_none() || expected != Some(&r.value_type) {
         return Err(invalid(
             "ordered read has an unknown query/group or mismatched type",
+        ));
+    }
+    if (catalog.queries[query].contribution == ContributionKind::Override) != projection.is_some() {
+        return Err(invalid(
+            "selection groups require explicit presence or value projection",
+        ));
+    }
+    if projection.is_some()
+        && !RuleOperationsVersion::parse(input.operations_version.as_str())
+            .is_some_and(RuleOperationsVersion::supports_numeric_selection)
+    {
+        return Err(invalid(
+            "numeric selection requires owned-domain-operations-v27",
         ));
     }
     // Skill reads address the exact current occurrence; source-property and
@@ -714,6 +756,8 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
 ) -> Result<(), RuleStorageError> {
     let boolean_enabled = RuleOperationsVersion::parse(input.operations_version.as_str())
         .is_some_and(RuleOperationsVersion::supports_boolean_contributions);
+    let selection_enabled = RuleOperationsVersion::parse(input.operations_version.as_str())
+        .is_some_and(RuleOperationsVersion::supports_numeric_selection);
     // Bound the public raw-input entry point before any program traversal. This
     // is traversal work, independent of the package's ordinary object counts.
     work(usage, limits, input.owners.len())?;
@@ -738,14 +782,40 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                 reduction,
                 ..
             } = &read.source
-                && (*contribution == ContributionKind::Flag
-                    || *reduction == ContributionReduction::Any
-                    || read.value_type == ComputedValueType::Boolean)
+                && (matches!(
+                    contribution,
+                    ContributionKind::Flag | ContributionKind::Override
+                ) || matches!(
+                    reduction,
+                    ContributionReduction::Any | ContributionReduction::RequireAgreement
+                ) || read.value_type == ComputedValueType::Boolean)
             {
+                if *contribution == ContributionKind::Override
+                    || *reduction == ContributionReduction::RequireAgreement
+                {
+                    return Err(RuleStorageError::Structure(
+                        "numeric selection requires checked query membership and a projection",
+                    ));
+                }
                 return Err(RuleStorageError::Structure(
                     "Boolean contributions require checked query membership",
                 ));
             }
+        }
+        if !selection_enabled
+            && p.effects.iter().any(|e| {
+                matches!(
+                    e.effect,
+                    RuleEffectKind::Contribute {
+                        contribution: ContributionKind::Override,
+                        ..
+                    }
+                )
+            })
+        {
+            return Err(RuleStorageError::Structure(
+                "numeric selection requires owned-domain-operations-v27",
+            ));
         }
         if !boolean_enabled
             && p.effects.iter().any(|e| {
@@ -775,9 +845,13 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
         // schema and work receipt apply to every operation subset, including
         // unused programs and effect applications.
         let forbidden = |p: &RuleProgram| {
-            p.reads
-                .iter()
-                .any(|r| matches!(r.source, RuleReadSource::ContributionQuery { .. }))
+            p.reads.iter().any(|r| {
+                matches!(
+                    r.source,
+                    RuleReadSource::ContributionQuery { .. }
+                        | RuleReadSource::ContributionSelection { .. }
+                )
+            })
         };
         if input
             .owners
@@ -838,6 +912,11 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
         if query.contribution == ContributionKind::Flag && !boolean_enabled {
             return Err(RuleStorageError::Structure(
                 "Boolean contributions require owned-domain-operations-v22",
+            ));
+        }
+        if query.contribution == ContributionKind::Override && !selection_enabled {
+            return Err(RuleStorageError::Structure(
+                "numeric selection requires owned-domain-operations-v27",
             ));
         }
         if !matches!(

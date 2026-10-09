@@ -14,6 +14,8 @@ pub const OWNED_RULE_PACKAGE_VERSION: u32 = 3;
 /// Baseline operation subset used when authors do not opt into newer capabilities.
 /// Package schema and content identity domains always use the current format.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+/// Coherent optional numeric selection through checked contribution queries.
+pub const OWNED_RULE_OPERATIONS_V27: &str = "owned-domain-operations-v27";
 /// Exact Action self-contributions and checked current-Action query reads.
 pub const OWNED_RULE_OPERATIONS_V26: &str = "owned-domain-operations-v26";
 /// Checked membership of contributions after exact-recipient application stacking.
@@ -82,6 +84,7 @@ pub enum RuleOperationsVersion {
     V24,
     V25,
     V26,
+    V27,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -107,6 +110,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V24 => Self::V24,
             OWNED_RULE_OPERATIONS_V25 => Self::V25,
             OWNED_RULE_OPERATIONS_V26 => Self::V26,
+            OWNED_RULE_OPERATIONS_V27 => Self::V27,
             _ => return None,
         })
     }
@@ -133,6 +137,7 @@ impl RuleOperationsVersion {
             Self::V24 => 24,
             Self::V25 => 25,
             Self::V26 => 26,
+            Self::V27 => 27,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -195,6 +200,9 @@ impl RuleOperationsVersion {
     pub const fn supports_action_contribution_queries(self) -> bool {
         self.revision() >= 26
     }
+    pub const fn supports_numeric_selection(self) -> bool {
+        self.revision() >= 27
+    }
     /// Current explicit Skill participation in V4 readiness metadata.
     pub const fn supports_skill_participation(self) -> bool {
         self.revision() >= 21
@@ -224,6 +232,7 @@ impl RuleOperationsVersion {
             Self::V24 => "owned-effect-plan-v21",
             Self::V25 => "owned-effect-plan-v22",
             Self::V26 => "owned-effect-plan-v23",
+            Self::V27 => "owned-effect-plan-v24",
         }
     }
 }
@@ -322,9 +331,10 @@ pub struct ContributionQuery {
 pub struct ContributionGroup {
     pub id: OwnedDefinitionKey,
     pub reduction: ContributionReduction,
-    /// Numeric folds require explicit semantic order; Boolean Any forbids ranks.
+    /// Numeric folds require semantic order; Any and RequireAgreement forbid ranks.
     pub ordering: ContributionOrdering,
-    pub empty: ParameterValue,
+    /// Fold identity. Selection requires None: absence is not a numeric sentinel.
+    pub empty: Option<ParameterValue>,
     pub members: DeclaredSet<ContributionMember>,
 }
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -594,6 +604,9 @@ impl RuleProgram {
                 } | RuleReadSource::ContributionQuery {
                     entity: RuleEntity::PropertyOwner,
                     ..
+                } | RuleReadSource::ContributionSelection {
+                    entity: RuleEntity::PropertyOwner,
+                    ..
                 }
             )
         }) || self.effects.iter().any(|effect| {
@@ -621,7 +634,8 @@ impl RuleProgram {
             | RuleReadSource::Capability { entity, .. }
             | RuleReadSource::External { entity, .. }
             | RuleReadSource::Contributions { entity, .. }
-            | RuleReadSource::ContributionQuery { entity, .. } => {
+            | RuleReadSource::ContributionQuery { entity, .. }
+            | RuleReadSource::ContributionSelection { entity, .. } => {
                 *entity == RuleEntity::EffectSource
             }
             _ => false,
@@ -649,7 +663,8 @@ impl RuleProgram {
             | RuleReadSource::Capability { entity, .. }
             | RuleReadSource::External { entity, .. }
             | RuleReadSource::Contributions { entity, .. }
-            | RuleReadSource::ContributionQuery { entity, .. } => preparation_entity(entity),
+            | RuleReadSource::ContributionQuery { entity, .. }
+            | RuleReadSource::ContributionSelection { entity, .. } => preparation_entity(entity),
             _ => false,
         }) || self.effects.iter().any(|effect| match &effect.effect {
             RuleEffectKind::Contribute { entity, .. }
@@ -693,6 +708,8 @@ pub enum RuleEntity {
 pub enum ContributionKind {
     /// Idempotent Boolean fact; never a numeric stand-in.
     Flag,
+    /// Optional numeric replacement; only checked RequireAgreement selects it.
+    Override,
     Add,
     Increase,
     Multiply,
@@ -717,8 +734,17 @@ pub struct ModifierTransformTarget {
 pub enum ContributionReduction {
     /// Complete unordered Boolean domain. Every unresolved active member blocks.
     Any,
+    /// Complete unordered numeric domain. Absence differs from selected zero.
+    RequireAgreement,
     Sum,
     Product,
+}
+/// Projections of one cached checked selection, sharing coverage and failure.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ContributionSelectionProjection {
+    Present,
+    Value,
 }
 /// A selected occurrence's computed outputs, never its raw item parameters.
 /// Empty slots have occupancy false and no Stat/Capability value.
@@ -825,8 +851,9 @@ pub enum RuleReadSource {
         entity: RuleEntity,
         input: ExternalInputDefId,
     },
-    /// Numeric direct reduction. Boolean channels require ContributionQuery for
-    /// explicit complete membership. Empty identity is never a missing-stat default.
+    /// Numeric direct fold. Flags and overrides require checked query membership;
+    /// overrides also require an explicit selection projection. An empty fold
+    /// identity is never a missing-stat default.
     Contributions {
         entity: RuleEntity,
         stat: StatDefId,
@@ -840,6 +867,12 @@ pub enum RuleReadSource {
         entity: RuleEntity,
         query: OwnedDefinitionKey,
         group: OwnedDefinitionKey,
+    },
+    ContributionSelection {
+        entity: RuleEntity,
+        query: OwnedDefinitionKey,
+        group: OwnedDefinitionKey,
+        projection: ContributionSelectionProjection,
     },
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

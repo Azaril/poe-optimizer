@@ -154,6 +154,11 @@ pub enum ConcreteEntity {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum RuleOrigin {
+    ContributionSelection {
+        query: OwnedDefinitionKey,
+        group: OwnedDefinitionKey,
+        recipient: ConcreteEntity,
+    },
     /// One explicitly admitted Actor owner on an already-existing actor.
     ExistingActor {
         application: OwnedDefinitionKey,
@@ -264,9 +269,18 @@ pub struct ContributionKey {
     pub stat: StatDefId,
     pub kind: ContributionKind,
 }
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize)]
+pub struct ContributionSelectionKey {
+    pub channel: ContributionKey,
+    pub query: OwnedDefinitionKey,
+    pub group: OwnedDefinitionKey,
+}
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum BoundEffectTarget {
+    ContributionSelection {
+        key: ContributionSelectionKey,
+    },
     ApplicationCandidate {
         family: OwnedDefinitionKey,
         modifier: OwnedDefinitionKey,
@@ -321,6 +335,8 @@ pub enum PlanGapReason {
     IncompleteContributors,
     UpstreamUnavailable,
     UnresolvedActivation,
+    ConflictingContributors,
+    AbsentSelection,
 }
 #[derive(Clone, Debug, PartialEq, Serialize)]
 #[serde(tag = "status", rename_all = "snake_case")]
@@ -399,6 +415,10 @@ pub struct PlanIdentity {
 
 #[derive(Clone, Debug, PartialEq)]
 enum ReadBinding {
+    SelectionProjection {
+        effect: usize,
+        projection: ContributionSelectionProjection,
+    },
     Constant(Option<ParameterValue>),
     Inactive,
     Select {
@@ -440,6 +460,12 @@ struct Invocation {
 }
 #[derive(Clone, PartialEq)]
 enum EffectOperation {
+    /// Known is present; Inactive is proven absence for this synthetic result.
+    /// Both public projections depend on this one worker-cached effect.
+    NumericSelection {
+        candidates: Vec<usize>,
+        complete: bool,
+    },
     /// A checked immutable request value on an existing generated parameter key.
     GeneratedInput {
         value: ParameterValue,

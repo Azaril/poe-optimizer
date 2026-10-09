@@ -698,7 +698,8 @@ impl Access<'_> {
                     stage,
                     false,
                 )?,
-                RuleReadSource::ContributionQuery { entity, query, .. } => {
+                RuleReadSource::ContributionQuery { entity, query, .. }
+                | RuleReadSource::ContributionSelection { entity, query, .. } => {
                     let Some((stat, contribution)) = self.ordered.get(query) else {
                         return Err(StageStorageError::Invalid(
                             "unknown ordered contribution query",

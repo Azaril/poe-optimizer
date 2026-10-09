@@ -122,7 +122,7 @@ fn install(raw: &mut RulePackageInput) {
             id: key("all"),
             reduction: ContributionReduction::Sum,
             ordering: ContributionOrdering::Ordered,
-            empty: integer(0),
+            empty: Some(integer(0)),
             members: DeclaredSet::complete(members),
         }],
     }]));

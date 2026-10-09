@@ -13,6 +13,7 @@ mod preparation;
 mod readiness;
 mod reads;
 mod receiving;
+mod selection;
 mod source_properties;
 mod source_property_cycles;
 mod sources;
@@ -43,6 +44,24 @@ pub(super) fn effect_stage<'a>(
         // Request inputs are structural graph producers, not authored programs.
         // Preparation scheduling includes them through their actual dependencies.
         EffectOperation::GeneratedInput { .. } => None,
+        EffectOperation::NumericSelection { .. } => {
+            let BoundEffectTarget::ContributionSelection { key } = &node.target else {
+                return Err(PlanError::Invalid(
+                    "selection has no exact query identity".into(),
+                ));
+            };
+            let scope = match key.channel.entity {
+                ConcreteEntity::Actor(_) => RuleEntityKind::Actor,
+                ConcreteEntity::Action(_) => RuleEntityKind::Action,
+                ConcreteEntity::Skill(_) => RuleEntityKind::Skill,
+                ConcreteEntity::EquipmentUse(_) => RuleEntityKind::EquipmentUse,
+                _ => return Err(PlanError::Invalid("unsupported selection recipient".into())),
+            };
+            charge(work, 1)?;
+            Some(stages.frozen_at(&poe_optimizer_core::owned_stages::StageChannel::Contributions {
+                scope, stat: key.channel.stat.clone(), contribution: key.channel.kind,
+            }).ok_or_else(|| PlanError::Invalid("numeric selection requires a declared frozen channel in staged evaluation".into()))?)
+        }
         EffectOperation::ApplicationMaximum { applications, .. } => {
             charge(work, applications.len() + 1)?;
             let Some(first) = applications
@@ -74,6 +93,7 @@ struct FinalReadSources<'a> {
     contributions: &'a BTreeMap<ContributionKey, Vec<usize>>,
     transforms: &'a ModifierTransforms,
     ordered: ordered::Sources<'a>,
+    selections: &'a BTreeMap<ContributionSelectionKey, usize>,
 }
 
 #[derive(Clone, Debug)]
@@ -87,7 +107,12 @@ pub(super) enum PendingRead {
     Required(Box<PendingRead>),
     Value(PlanValueKey),
     Contributions(ContributionKey, ContributionReduction, ParameterValue),
-    ContributionQuery(ContributionKey, OwnedDefinitionKey, OwnedDefinitionKey),
+    ContributionQuery(
+        ContributionKey,
+        OwnedDefinitionKey,
+        OwnedDefinitionKey,
+        Option<ContributionSelectionProjection>,
+    ),
     ModifierTransforms {
         key: PlanValueKey,
         initial: Box<PlanValueKey>,
@@ -564,6 +589,18 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     let pending_preparation = symbolic
         .as_ref()
         .map_or(&preparation_gates, |s| &s.preparation_gates);
+    let selections = selection::register(
+        &[],
+        &mut b.effects,
+        pending_invocations
+            .iter()
+            .flatten()
+            .chain(pending_gates.iter().flatten())
+            .chain(pending_queries.iter().flatten())
+            .chain(pending_preparation.values().flatten()),
+        limits,
+        &mut b.work,
+    )?;
     let ordered_effects: Vec<_> = if rules.input().contribution_queries.is_some() {
         charge(&mut b.work, b.effects.len())?;
         b.effects.iter().map(|node| node.key.clone()).collect()
@@ -579,6 +616,20 @@ fn compile_inner<I: DefinitionSchemaIndex>(
         appended: &[],
     };
     ordered_sources.validate_inventory(contributions, complete, &mut b.work)?;
+    for (key, index) in &selections {
+        b.effects[*index].operation = selection::bind(
+            key,
+            FinalReadSources {
+                values: &b.values,
+                contributions,
+                transforms,
+                ordered: ordered_sources,
+                selections: &selections,
+            },
+            complete,
+            &mut b.work,
+        )?;
+    }
     for (inv, reads) in b.invocations.iter_mut().zip(pending_invocations) {
         inv.reads = reads
             .iter()
@@ -590,6 +641,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
                         contributions,
                         transforms,
                         ordered: ordered_sources,
+                        selections: &selections,
                     },
                     complete,
                     &mut b.work,
@@ -610,6 +662,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
                         contributions,
                         transforms,
                         ordered: ordered_sources,
+                        selections: &selections,
                     },
                     complete,
                     &mut b.work,
@@ -627,6 +680,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
                 bind_completeness(source, complete, &mut b.work)?;
             }
             EffectOperation::Program { .. }
+            | EffectOperation::NumericSelection { .. }
             | EffectOperation::SupportApplicability { .. }
             | EffectOperation::PreparedSupportType { .. }
             | EffectOperation::SourcePropertyCount { .. }
@@ -646,6 +700,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
                             contributions,
                             transforms,
                             ordered: ordered_sources,
+                            selections: &selections,
                         },
                         complete,
                         &mut b.work,
@@ -670,6 +725,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
                             contributions,
                             transforms,
                             ordered: ordered_sources,
+                            selections: &selections,
                         },
                         complete,
                         &mut b.work,
@@ -721,12 +777,14 @@ fn resolve_ref(
         contributions,
         transforms,
         ordered,
+        selections,
     } = sources;
     let expansion = match &read {
         PendingRead::Ready(_) => 0,
         PendingRead::Select { .. } => 3,
         PendingRead::Required(_) => 1,
         PendingRead::Value(_) => 1,
+        PendingRead::ContributionQuery(_, _, _, Some(_)) => 1,
         PendingRead::Contributions(key, ..) | PendingRead::ContributionQuery(key, ..) => {
             contributions.get(key).map_or(0, Vec::len)
         }
@@ -776,14 +834,30 @@ fn resolve_ref(
                 .unwrap_or_default(),
             complete,
         },
-        PendingRead::ContributionQuery(key, query, group) => ordered.bind(
-            key,
-            query,
-            group,
-            contributions.get(key).map_or(&[], Vec::as_slice),
-            complete,
-            work,
-        )?,
+        PendingRead::ContributionQuery(key, query, group, None) => ordered
+            .bind(
+                key,
+                query,
+                group,
+                contributions.get(key).map_or(&[], Vec::as_slice),
+                complete,
+                work,
+            )?
+            .fold()?,
+        PendingRead::ContributionQuery(key, query, group, Some(projection)) => {
+            ReadBinding::SelectionProjection {
+                effect: *selections
+                    .get(&ContributionSelectionKey {
+                        channel: key.clone(),
+                        query: query.clone(),
+                        group: group.clone(),
+                    })
+                    .ok_or_else(|| {
+                        PlanError::Invalid("selection result was not registered".into())
+                    })?,
+                projection: *projection,
+            }
+        }
         PendingRead::Contributions(key, reduction, empty) => ReadBinding::Reduction {
             effects: contributions.get(key).cloned().unwrap_or_default(),
             reduction: *reduction,
@@ -2409,6 +2483,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     values: &self.values,
                     contributions: &self.contributions,
                     transforms: &self.transforms,
+                    selections: &BTreeMap::new(),
                     ordered: ordered::Sources {
                         rules: self.rules.input(),
                         build: self.request.build().input(),
@@ -2485,7 +2560,8 @@ pub(super) fn read_dependencies(
         ReadBinding::Present { source } => read_dependencies(source, out, work)?,
         ReadBinding::Final {
             effect: Some(i), ..
-        } => {
+        }
+        | ReadBinding::SelectionProjection { effect: i, .. } => {
             charge(work, 1)?;
             out.insert(*i);
         }
@@ -2516,7 +2592,8 @@ fn dependency_order(
             read_dependencies(gate, &mut dependencies, work)?;
         }
         match &node.operation {
-            EffectOperation::ApplicationMaximum { candidates, .. } => {
+            EffectOperation::ApplicationMaximum { candidates, .. }
+            | EffectOperation::NumericSelection { candidates, .. } => {
                 charge(work, candidates.len())?;
                 dependencies.extend(candidates);
             }

@@ -539,7 +539,7 @@ fn contribution<I: DefinitionSchemaIndex>(
         "numeric contribution requires numeric stat",
     )?;
     match kind {
-        ContributionKind::Add => check(
+        ContributionKind::Add | ContributionKind::Override => check(
             stat == value,
             path,
             "Add requires exact stat value type/unit",
@@ -840,7 +840,7 @@ fn read<I: DefinitionSchemaIndex>(
             constraint = Some(s.value.clone());
             schema_type(&s.value, index, path, l, b)?
         }
-        RuleReadSource::ContributionQuery { .. } => {
+        RuleReadSource::ContributionQuery { .. } | RuleReadSource::ContributionSelection { .. } => {
             return Err(fail(
                 path,
                 "contribution query read requires checked package query context",
@@ -855,8 +855,11 @@ fn read<I: DefinitionSchemaIndex>(
         } => {
             check(
                 authority == ContributionReadAuthority::CheckedQuery
-                    || (*kind != ContributionKind::Flag
-                        && *reduction != ContributionReduction::Any),
+                    || (!matches!(kind, ContributionKind::Flag | ContributionKind::Override)
+                        && !matches!(
+                            reduction,
+                            ContributionReduction::Any | ContributionReduction::RequireAgreement
+                        )),
                 path,
                 "Boolean contributions require a checked contribution query",
             )?;
@@ -1208,6 +1211,56 @@ fn program<I: DefinitionSchemaIndex>(
         )?;
         // Resolve package-owned query metadata only for type validation. The
         // immutable published program retains its exact query and membership.
+        if let RuleReadSource::ContributionSelection {
+            entity,
+            query,
+            group,
+            projection,
+        } = &r.source
+        {
+            check(
+                operations.supports_numeric_selection(),
+                path,
+                "numeric selection requires owned-domain-operations-v27",
+            )?;
+            let registry = queries.ok_or_else(|| fail(path, "contribution registry is absent"))?;
+            b.work(registry.members.len(), l, path)?;
+            let query = registry
+                .members
+                .iter()
+                .find(|row| &row.id == query)
+                .ok_or_else(|| fail(path, "contribution query is absent"))?;
+            b.work(query.groups.len(), l, path)?;
+            let group = query
+                .groups
+                .iter()
+                .find(|row| &row.id == group)
+                .ok_or_else(|| fail(path, "contribution group is absent"))?;
+            check(
+                query.contribution == ContributionKind::Override
+                    && group.reduction == ContributionReduction::RequireAgreement
+                    && group.empty.is_none(),
+                path,
+                "selection requires checked numeric agreement",
+            )?;
+            let value = stat(&query.stat, *entity, p.context, &owner.owner, index, path)?;
+            check(numeric(value), path, "selection requires numeric stat")?;
+            let ty = match projection {
+                ContributionSelectionProjection::Present => ComputedValueType::Boolean,
+                ContributionSelectionProjection::Value => value.clone(),
+            };
+            check(
+                ty == r.value_type,
+                path,
+                "selection projection type differs from stat",
+            )?;
+            reads.push(CompiledRead {
+                id: r.id.clone(),
+                ty,
+                schema: None,
+            });
+            continue;
+        }
         let mapped;
         let mut authority = ContributionReadAuthority::Direct;
         let typed_read = if let RuleReadSource::ContributionQuery {
@@ -1245,7 +1298,10 @@ fn program<I: DefinitionSchemaIndex>(
                     stat: query.stat.clone(),
                     contribution: query.contribution,
                     reduction: group.reduction,
-                    empty: group.empty.clone(),
+                    empty: group
+                        .empty
+                        .clone()
+                        .ok_or_else(|| fail(path, "fold requires an empty identity"))?,
                 },
             };
             &mapped

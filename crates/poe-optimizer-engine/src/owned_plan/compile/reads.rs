@@ -576,6 +576,12 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 entity: relative,
                 query,
                 group,
+            }
+            | RuleReadSource::ContributionSelection {
+                entity: relative,
+                query,
+                group,
+                ..
             } => {
                 let registry = self
                     .rules
@@ -599,6 +605,12 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     },
                     query.clone(),
                     group.clone(),
+                    match source {
+                        RuleReadSource::ContributionSelection { projection, .. } => {
+                            Some(*projection)
+                        }
+                        _ => None,
+                    },
                 )
             }
             RuleReadSource::Contributions {

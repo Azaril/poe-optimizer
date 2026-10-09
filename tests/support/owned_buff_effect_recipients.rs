@@ -155,7 +155,7 @@ pub fn check_queries(queries: &[ContributionQuery]) {
                     id: channel.group.clone(),
                     reduction: channel.reduction,
                     ordering: ContributionOrdering::Ordered,
-                    empty: channel.empty.clone(),
+                    empty: Some(channel.empty.clone()),
                     members: DeclaredSet::complete(vec![]),
                 }],
             }

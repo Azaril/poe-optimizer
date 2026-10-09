@@ -183,7 +183,8 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                         node.ready.push(source);
                     }
                 }
-                EffectOperation::ApplicationMaximum { candidates, .. } => node.direct = candidates,
+                EffectOperation::ApplicationMaximum { candidates, .. }
+                | EffectOperation::NumericSelection { candidates, .. } => node.direct = candidates,
                 EffectOperation::PreparedSupportType { .. }
                 | EffectOperation::SourcePropertyCount { .. }
                 | EffectOperation::GeneratedInput { .. } => {}

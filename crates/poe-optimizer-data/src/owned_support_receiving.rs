@@ -226,6 +226,9 @@ impl<'a, I: DefinitionSchemaIndex> Check<'a, I> {
                     } | RuleReadSource::Contributions {
                         entity: RuleEntity::Skill,
                         ..
+                    } | RuleReadSource::ContributionSelection {
+                        entity: RuleEntity::Skill,
+                        ..
                     } | RuleReadSource::ContributionQuery {
                         entity: RuleEntity::Skill,
                         ..

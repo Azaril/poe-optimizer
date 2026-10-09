@@ -45,7 +45,8 @@ pub fn checked_plan_with_stages(
         [
             OWNED_RULE_OPERATIONS_V22,
             OWNED_RULE_OPERATIONS_V23,
-            OWNED_RULE_OPERATIONS_V25
+            OWNED_RULE_OPERATIONS_V25,
+            OWNED_RULE_OPERATIONS_V27
         ]
         .contains(&rules_input.operations_version.as_str())
     );

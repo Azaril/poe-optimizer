@@ -258,7 +258,7 @@ fn actor_applications_cannot_impersonate_character_origins_in_ordered_queries() 
             id: key("base"),
             reduction: ContributionReduction::Sum,
             ordering: ContributionOrdering::Ordered,
-            empty: ParameterValue::Integer(BoundedInteger::new(0).unwrap()),
+            empty: Some(ParameterValue::Integer(BoundedInteger::new(0).unwrap())),
             members: DeclaredSet::complete(vec![ContributionMember {
                 producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
                     owner: subject(),

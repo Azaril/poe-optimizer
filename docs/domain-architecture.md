@@ -317,11 +317,16 @@ their containing mechanics coverage remains Partial. A checked partition of Gas
 supply separates structural activation from numerical input projection through
 the existing readiness phases, without introducing another occurrence model.
 
-The owner also approved [checked optional numeric selection](owned-numeric-selection-proposal.md).
-Its planned require-agreement result distinguishes absent, present (including
-zero), and unavailable. Presence/value projections share one checked candidate
-set; conflicting or unknown candidates cannot choose an arbitrary winner. This
-remains unimplemented and imports no Lua database-order precedence.
+The approved [checked optional numeric selection](owned-numeric-selection-proposal.md)
+now runs in Core/Data/Engine operations V27. Its require-agreement result
+distinguishes absent, present (including zero), and unavailable. Presence/value
+projections share one cached graph node per exact recipient/channel/query/group;
+conflicting or unknown candidates cannot choose an arbitrary winner. Numeric
+units are exact and signed zero is normalized to positive zero. Selection has
+no numeric empty identity. Staged evaluation binds the shared result to the
+channel's explicit freeze and rejects late writers or premature consumers.
+Retained support queries use the same graph and frozen-prefix checks. Real Mana
+adoption remains pending; no Lua database-order precedence is imported.
 
 The [passive topology contract](owned-passive-topology.md) separates implicit roots,
 physical allocations, attached choices, scope eligibility and injected legality budgets.

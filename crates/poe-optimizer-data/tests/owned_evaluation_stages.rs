@@ -643,7 +643,7 @@ fn ordered_group_reads_obey_the_same_frozen_contribution_channel() {
                 id: key("group"),
                 reduction: ContributionReduction::Sum,
                 ordering: ContributionOrdering::Ordered,
-                empty: ParameterValue::Integer(BoundedInteger::new(0).unwrap()),
+                empty: Some(ParameterValue::Integer(BoundedInteger::new(0).unwrap())),
                 members: empty(),
             }],
         }]));
@@ -727,7 +727,7 @@ fn boolean_query_reads_obey_frozen_flag_channels_and_refuse_numeric_channel_type
                 id: key("any"),
                 reduction: ContributionReduction::Any,
                 ordering: ContributionOrdering::Unordered,
-                empty: ParameterValue::Boolean(false),
+                empty: Some(ParameterValue::Boolean(false)),
                 members: empty(),
             }],
         }]));

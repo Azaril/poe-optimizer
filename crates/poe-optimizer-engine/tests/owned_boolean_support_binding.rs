@@ -31,7 +31,7 @@ fn add_flag(rules: &mut RulePackageInput, active: bool) {
             id: key("all"),
             reduction: ContributionReduction::Any,
             ordering: ContributionOrdering::Unordered,
-            empty: ParameterValue::Boolean(false),
+            empty: Some(ParameterValue::Boolean(false)),
             members: DeclaredSet::complete(vec![]),
         }],
     }]));

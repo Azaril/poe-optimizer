@@ -162,7 +162,7 @@ fn boolean_read_requires_query_proof_and_preserves_the_public_query() {
             id: key("all"),
             reduction: ContributionReduction::Any,
             ordering: ContributionOrdering::Unordered,
-            empty: ParameterValue::Boolean(false),
+            empty: Some(ParameterValue::Boolean(false)),
             members: DeclaredSet::complete(vec![]),
         }],
     }]));

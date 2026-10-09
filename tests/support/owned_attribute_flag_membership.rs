@@ -257,7 +257,7 @@ pub fn check_authored() {
         let group = &q.after.groups[0];
         assert_eq!(group.ordering, ContributionOrdering::Unordered);
         assert_eq!(group.reduction, ContributionReduction::Any);
-        assert_eq!(group.empty, ParameterValue::Boolean(false));
+        assert_eq!(group.empty, Some(ParameterValue::Boolean(false)));
         assert!(group.members.is_complete());
         assert_eq!(group.members.members.len(), [0, 0, 0, 1, 1][i]);
         assert!(!q.before.groups[0].members.is_complete());

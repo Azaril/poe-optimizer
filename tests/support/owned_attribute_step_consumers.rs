@@ -425,7 +425,9 @@ pub fn check_authored() {
             assert_eq!(g.reduction, ContributionReduction::Sum);
             assert_eq!(
                 g.empty,
-                ParameterValue::Quantity(FiniteQuantity::new(0., decode(unit)).unwrap())
+                Some(ParameterValue::Quantity(
+                    FiniteQuantity::new(0., decode(unit)).unwrap()
+                ))
             );
             assert!(
                 !g.members.is_complete() && g.members.members.is_empty(),

@@ -66,7 +66,9 @@ fn authored_passive_flags_are_source_bound_and_do_not_complete_missing_domains()
         assert_eq!(g.reduction, ContributionReduction::Any);
         assert_eq!(
             g.empty,
-            poe_optimizer_core::owned_build::ParameterValue::Boolean(false)
+            Some(poe_optimizer_core::owned_build::ParameterValue::Boolean(
+                false
+            ))
         );
         assert!(!g.members.is_complete());
         assert!(g.members.members.iter().all(|m| m.order.is_none()

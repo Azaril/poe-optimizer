@@ -642,6 +642,11 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     entity: RuleEntity::PropertyOwner,
                     query,
                     ..
+                }
+                | RuleReadSource::ContributionSelection {
+                    entity: RuleEntity::PropertyOwner,
+                    query,
+                    ..
                 } => {
                     let registry = self
                         .rules

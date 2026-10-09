@@ -141,6 +141,14 @@ impl SymbolicBindings {
         let routes: BTreeMap<_, _> = self.routes.iter().map(|(i, read)| (*i, read)).collect();
         for index in prefix {
             let node = &plan.effects[*index];
+            if let BoundEffectTarget::ContributionSelection { key } = &node.target {
+                if contributions.contains(&key.channel) {
+                    return Err(invalid(
+                        "preparation prefix depends on a potential support delivery channel",
+                    ));
+                }
+                continue;
+            }
             charge(work, self.gates[*index].len())?;
             let mut reads: Vec<&PendingRead> = self.gates[*index].iter().collect();
             if let EffectOperation::Program { invocation, effect } = &node.operation {
@@ -479,6 +487,19 @@ impl SymbolicBindings {
         // Even empty query gate rows require bounded iteration and allocation.
         charge(work, self.query_gates.len())?;
         let mut edges = 0;
+        let selections = selection::register(
+            &plan.effects,
+            &mut suffix.effects,
+            self.invocations
+                .iter()
+                .flatten()
+                .chain(pending_invocations.iter().flat_map(|reads| reads.iter()))
+                .chain(self.gates.iter().flatten())
+                .chain(pending_gates.iter().flat_map(|(gates, _)| gates.iter()))
+                .chain(self.query_gates.iter().flatten()),
+            limits,
+            work,
+        )?;
         let ordered_base: Vec<_> = if plan.rules.input().contribution_queries.is_some() {
             charge(work, plan.effects.len())?;
             plan.effects.iter().map(|node| node.key.clone()).collect()
@@ -492,6 +513,7 @@ impl SymbolicBindings {
             vec![]
         };
         let sources = FinalReadSources {
+            selections: &selections,
             values: &suffix.values,
             contributions: &contributions,
             transforms: &self.transforms,
@@ -507,6 +529,20 @@ impl SymbolicBindings {
         sources
             .ordered
             .validate_inventory(&contributions, plan.complete, work)?;
+        for (key, index) in &selections {
+            let operation = selection::bind(key, sources, plan.complete, work)?;
+            if *index < plan.effects.len() {
+                if operation != plan.effects[*index].operation {
+                    suffix
+                        .effect_overrides
+                        .entry(*index)
+                        .or_insert_with(|| plan.effects[*index].clone())
+                        .operation = operation;
+                }
+            } else {
+                suffix.effects[*index - plan.effects.len()].operation = operation;
+            }
+        }
         let mut resolve_reads = |reads: &[PendingRead]| -> Result<Vec<ReadBinding>> {
             reads
                 .iter()
@@ -652,7 +688,8 @@ impl<I> SupportSuffix<'_, I> {
                 read_dependencies(gate, &mut dependencies, work)?;
             }
             match &node.operation {
-                EffectOperation::ApplicationMaximum { candidates, .. } => {
+                EffectOperation::ApplicationMaximum { candidates, .. }
+                | EffectOperation::NumericSelection { candidates, .. } => {
                     charge(work, candidates.len())?;
                     dependencies.extend(candidates);
                 }

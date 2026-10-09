@@ -28,7 +28,7 @@ fn combine(
             let result = match reduction {
                 ContributionReduction::Sum => a.get().checked_add(b.get()),
                 ContributionReduction::Product => a.get().checked_mul(b.get()),
-                ContributionReduction::Any => {
+                ContributionReduction::Any | ContributionReduction::RequireAgreement => {
                     return Err(invalid("Any requires Boolean contributions"));
                 }
             }
@@ -45,7 +45,7 @@ fn combine(
             let value = match reduction {
                 ContributionReduction::Sum => a.value() + b.value(),
                 ContributionReduction::Product => a.value() * b.value(),
-                ContributionReduction::Any => {
+                ContributionReduction::Any | ContributionReduction::RequireAgreement => {
                     return Err(invalid("Any requires Boolean contributions"));
                 }
             };
@@ -74,6 +74,23 @@ pub(super) fn read(
 ) -> Result<EffectValue> {
     charge(work, 1)?;
     match binding {
+        ReadBinding::SelectionProjection { effect, projection } => {
+            Ok(match (value_at(values, *effect)?, projection) {
+                (EffectValue::Known { .. }, ContributionSelectionProjection::Present) => {
+                    known(ParameterValue::Boolean(true))
+                }
+                (value @ EffectValue::Known { .. }, ContributionSelectionProjection::Value) => {
+                    value.clone()
+                }
+                (EffectValue::Inactive, ContributionSelectionProjection::Present) => {
+                    known(ParameterValue::Boolean(false))
+                }
+                (EffectValue::Inactive, ContributionSelectionProjection::Value) => {
+                    EffectValue::unresolved(PlanGapReason::AbsentSelection)
+                }
+                (failure, _) => failure.clone(),
+            })
+        }
         ReadBinding::Constant(Some(value)) => Ok(known(value.clone())),
         ReadBinding::Inactive => Ok(EffectValue::Inactive),
         ReadBinding::Select {
@@ -574,6 +591,10 @@ fn execute_graph<G: ExecutionGraphView + ?Sized>(
             } else {
                 match &effect.operation {
                     EffectOperation::GeneratedInput { value } => known(value.clone()),
+                    EffectOperation::NumericSelection {
+                        candidates,
+                        complete,
+                    } => numeric_selection(candidates, *complete, &scratch.values, work)?,
                     EffectOperation::ApplicationMaximum {
                         candidates,
                         complete,
@@ -724,6 +745,54 @@ pub(super) fn evaluate<I: DefinitionSchemaIndex>(
         clear_attempt(scratch);
     }
     result
+}
+
+fn numeric_selection(
+    candidates: &[usize],
+    complete: bool,
+    values: &[Option<EffectValue>],
+    work: &mut usize,
+) -> Result<EffectValue> {
+    if !complete {
+        return Ok(EffectValue::unresolved(
+            PlanGapReason::IncompleteContributors,
+        ));
+    }
+    let mut selected: Option<ParameterValue> = None;
+    let mut failure: Option<EffectValue> = None;
+    for index in candidates {
+        charge(work, 1)?;
+        let blocked = match value_at(values, *index)? {
+            EffectValue::Inactive => continue,
+            EffectValue::Known { value } => {
+                let value = match value {
+                    ParameterValue::Integer(_) => value.clone(),
+                    ParameterValue::Quantity(q) => ParameterValue::Quantity(
+                        FiniteQuantity::new(
+                            if q.value() == 0.0 { 0.0 } else { q.value() },
+                            q.unit().clone(),
+                        )
+                        .map_err(|_| invalid("selection candidate is nonfinite"))?,
+                    ),
+                    _ => return Err(invalid("selection candidate is not numeric")),
+                };
+                if selected.as_ref().is_some_and(|previous| previous != &value) {
+                    EffectValue::unresolved(PlanGapReason::ConflictingContributors)
+                } else {
+                    selected = Some(value);
+                    continue;
+                }
+            }
+            blocked => blocked.clone(),
+        };
+        if failure
+            .as_ref()
+            .is_none_or(|previous| diagnostic_order::compare(&blocked, previous).is_lt())
+        {
+            failure = Some(blocked);
+        }
+    }
+    Ok(failure.unwrap_or_else(|| selected.map_or(EffectValue::Inactive, known)))
 }
 
 fn application_maximum(

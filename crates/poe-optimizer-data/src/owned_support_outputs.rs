@@ -207,7 +207,8 @@ impl Check<'_> {
                         RuleReadSource::Contributions { stat, .. } => {
                             self.forbid(stat, "final type output cannot be a contribution channel")?
                         }
-                        RuleReadSource::ContributionQuery { query, .. } => {
+                        RuleReadSource::ContributionQuery { query, .. }
+                        | RuleReadSource::ContributionSelection { query, .. } => {
                             let registry = rules.input().contribution_queries.as_ref().ok_or(
                                 SupportOutputStorageError::Invalid(
                                     "missing ordered contribution inventory",

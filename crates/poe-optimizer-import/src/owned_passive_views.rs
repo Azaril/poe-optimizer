@@ -219,7 +219,7 @@ impl Budget {
                         "passive view recipe requires numeric contributions",
                     ));
                 }
-                ContributionKind::Add if stat.value != ty => {
+                ContributionKind::Add | ContributionKind::Override if stat.value != ty => {
                     return Err(ViewRecipeError::Invalid("Add contribution type differs"));
                 }
                 ContributionKind::Increase | ContributionKind::Multiply => {
@@ -242,7 +242,7 @@ impl Budget {
                         ));
                     }
                 }
-                ContributionKind::Add => {}
+                ContributionKind::Add | ContributionKind::Override => {}
             }
         }
         Ok(())

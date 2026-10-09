@@ -186,7 +186,7 @@ impl World {
                     id: key("self"),
                     reduction: ContributionReduction::Sum,
                     ordering: ContributionOrdering::Ordered,
-                    empty: base::integer(0),
+                    empty: Some(base::integer(0)),
                     members: DeclaredSet::complete(members),
                 }],
             }]),
@@ -204,6 +204,18 @@ impl World {
             },
             |s| {
                 s.schema_version = 3;
+                if self.queries.members[0].contribution == ContributionKind::Override {
+                    s.frozen_channels
+                        .push(poe_optimizer_core::owned_stages::FrozenStageChannel {
+                            channel:
+                                poe_optimizer_core::owned_stages::StageChannel::Contributions {
+                                    scope: RuleEntityKind::Action,
+                                    stat: def("action-channel"),
+                                    contribution: ContributionKind::Override,
+                                },
+                            stage: key("execute"),
+                        });
+                }
                 for row in &mut s.readiness.as_mut().unwrap().programs.members {
                     if row.program == key("authored-supply") {
                         row.phase = ReadinessPhase::Structural;
@@ -355,6 +367,60 @@ fn fresh_reused_unknown_changed_restored_and_four_workers_agree() {
     assert_eq!(
         projection(&p.evaluate(&mut p.new_scratch()).unwrap()),
         projection(&expected)
+    );
+}
+
+#[test]
+fn numeric_selection_is_cached_per_exact_action_not_actor_or_skill() {
+    let mut w = World::new();
+    w.producer().effects.retain(|e| e.id == key("mode"));
+    let RuleEffectKind::Contribute { contribution, .. } = &mut w.producer().effects[0].effect
+    else {
+        panic!()
+    };
+    *contribution = ContributionKind::Override;
+    program_mut(&mut w.f, child_owner(), "definition-producer")
+        .effects
+        .clear();
+    w.queries.members[0].contribution = ContributionKind::Override;
+    let group = w.group();
+    group.reduction = ContributionReduction::RequireAgreement;
+    group.ordering = ContributionOrdering::Unordered;
+    group.empty = None;
+    group
+        .members
+        .members
+        .retain(|m| m.producer.as_program_effect().unwrap().effect == key("mode"));
+    group.members.members[0].order = None;
+    w.consumer().reads[0].source = RuleReadSource::ContributionSelection {
+        entity: RuleEntity::Current,
+        query: key("action-query"),
+        group: key("self"),
+        projection: ContributionSelectionProjection::Value,
+    };
+    let p = compile_inputs(
+        w.inputs(|r| r.operations_version = key(OWNED_RULE_OPERATIONS_V27))
+            .unwrap(),
+    )
+    .unwrap();
+    let report = p.evaluate(&mut p.new_scratch()).unwrap();
+    let values = projection(&report);
+    assert_eq!(values.len(), 24);
+    for (action, value) in &values {
+        assert_eq!(
+            *value,
+            EffectValue::Known {
+                value: base::integer(if action.mode == def("mode") { 100 } else { 0 })
+            }
+        );
+    }
+    assert_eq!(
+        delivery::evaluated(&report)
+            .effects
+            .iter()
+            .filter(|e| matches!(e.target, BoundEffectTarget::ContributionSelection { .. }))
+            .count(),
+        values.len()
     );
 }
 

@@ -1,6 +1,6 @@
 # Checked optional numeric selection in the contribution graph
 
-**Status:** Accepted by the owner on 2026-10-09; implementation follows exact Action queries.
+**Status:** Accepted by the owner on 2026-10-09; generic native contract implemented in operations V27. Real Mana adoption remains pending.
 **Date:** 2026-10-08.
 **Decider:** Project owner.
 
@@ -82,3 +82,38 @@ graph, with explicit semantic priority rather than implicit traversal order.
 The exact-Action query proposal is a separate scope/authority extension. The
 owner explicitly approved both decisions on 2026-10-09; neither grants unrelated
 producer origins or an override precedence law beyond require agreement.
+
+## Implemented contract
+
+Operations V27 adds `Override`, unordered `RequireAgreement`, and explicit
+`ContributionSelection` reads with `Present` or `Value` projections. Fold groups
+still require an explicit identity; selection groups require `empty: null`.
+This changes the current Rust authoring contract without a historical reader.
+Integer selections retain exact integers; quantities require the stat's exact
+unit. Agreement is exact numeric equality, with both signed zeros normalized
+to positive zero. No tolerance or implicit precedence is introduced.
+
+Cold planning authenticates the existing query membership and interns one
+effect node per exact recipient/channel/query/group. That node evaluates its
+candidates once per worker attempt. All programs and both projections read its
+cached result by index. The result's diagnostic effect uses `Known` for present,
+`Inactive` for proved absence, and the ordinary unavailable variants for failure.
+Presence maps only proved absence to false; an absent value read reports
+`AbsentSelection`. Conflicts report `ConflictingContributors`. Consumer read
+identifiers can annotate the same underlying failure without changing it.
+Every original contribution occurrence remains in the report.
+
+Staged evaluation requires an explicit frozen contribution channel for this
+shared result. Producers cannot write after its freeze, and consumers cannot
+read before it. Existing readiness and potential-writer proofs still apply.
+Retained support programs can add selection consumers to the execution suffix;
+the suffix rebinds existing result candidates, and the frozen-prefix check rejects
+changes to any selection already executed. No second collector or worker cache
+is introduced. The V27 effect-plan identity domain is `owned-effect-plan-v24`.
+
+Acceptance tests use generic integer/quantity sources, duplicate equipment
+occurrences, exact Action selections, empty and inactive domains, unknown values
+and activation, conflicts, partial/unread membership, invalid units, cycles,
+stages, storage round trips, work bounds and reused/four-worker execution.
+Real Mana source census and data publication remain separate work; this contract
+does not establish final resource coverage or close any original build.

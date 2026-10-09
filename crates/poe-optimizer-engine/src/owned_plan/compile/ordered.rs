@@ -418,7 +418,7 @@ impl Sources<'_> {
         indices: &[usize],
         complete: bool,
         work: &mut usize,
-    ) -> Result<ReadBinding> {
+    ) -> Result<BoundGroup> {
         let registry = self
             .rules
             .contribution_queries
@@ -574,13 +574,35 @@ impl Sources<'_> {
                 .into_values()
                 .collect(),
         };
-        Ok(ReadBinding::Reduction {
+        Ok(BoundGroup {
             effects,
             reduction: selected.reduction,
             empty: selected.empty.clone(),
             complete: complete
                 && registry.is_complete()
                 && query.groups.iter().all(|row| row.members.is_complete()),
+        })
+    }
+}
+
+pub(super) struct BoundGroup {
+    pub effects: Vec<usize>,
+    pub reduction: ContributionReduction,
+    pub empty: Option<ParameterValue>,
+    pub complete: bool,
+}
+impl BoundGroup {
+    pub fn fold(self) -> Result<ReadBinding> {
+        if self.reduction == ContributionReduction::RequireAgreement {
+            return Err(invalid("numeric selection requires an explicit projection"));
+        }
+        Ok(ReadBinding::Reduction {
+            effects: self.effects,
+            reduction: self.reduction,
+            empty: self
+                .empty
+                .ok_or_else(|| invalid("fold requires an empty identity"))?,
+            complete: self.complete,
         })
     }
 }

@@ -25,6 +25,7 @@ fn explicit_operation_versions_preserve_capabilities_and_plan_domains() {
         ("owned-domain-operations-v24", 24, "owned-effect-plan-v21"),
         ("owned-domain-operations-v25", 25, "owned-effect-plan-v22"),
         ("owned-domain-operations-v26", 26, "owned-effect-plan-v23"),
+        ("owned-domain-operations-v27", 27, "owned-effect-plan-v24"),
     ] {
         let version = RuleOperationsVersion::parse(text).unwrap();
         assert_eq!(version.revision(), revision);
@@ -64,6 +65,7 @@ fn explicit_operation_versions_preserve_capabilities_and_plan_domains() {
             version.supports_action_contribution_queries(),
             revision >= 26
         );
+        assert_eq!(version.supports_numeric_selection(), revision >= 27);
     }
     assert_eq!(OWNED_RULE_OPERATIONS_V11, "owned-domain-operations-v11");
     assert_eq!(OWNED_RULE_OPERATIONS_V12, "owned-domain-operations-v12");

@@ -15,6 +15,79 @@ fn quantity(value: f64) -> ParameterValue {
         FiniteQuantity::new(value, UnitDefId::parse(namespace(), "unit").unwrap()).unwrap(),
     )
 }
+
+#[test]
+fn numeric_selection_is_unordered_bounded_and_projections_only_read_the_cached_result() {
+    let missing = EffectValue::Unresolved {
+        reason: PlanGapReason::MissingProducer,
+        read: Some(key("missing")),
+    };
+    let values = vec![
+        Some(known(integer(0))),
+        Some(known(integer(7))),
+        Some(missing.clone()),
+        Some(EffectValue::Inactive),
+    ];
+    for order in [[0, 1, 2, 3], [3, 2, 1, 0], [1, 3, 0, 2]] {
+        assert_eq!(
+            numeric_selection(&order, true, &values, &mut 4).unwrap(),
+            missing
+        );
+        assert!(matches!(
+            numeric_selection(&order, true, &values, &mut 3),
+            Err(PlanError::Limit("work"))
+        ));
+    }
+    assert_eq!(
+        numeric_selection(&[], false, &[], &mut 0).unwrap(),
+        EffectValue::unresolved(PlanGapReason::IncompleteContributors)
+    );
+    for result in [
+        known(integer(0)),
+        known(integer(-3)),
+        EffectValue::Inactive,
+        missing,
+    ] {
+        let values = vec![Some(result.clone())];
+        let present = read(
+            &ReadBinding::SelectionProjection {
+                effect: 0,
+                projection: ContributionSelectionProjection::Present,
+            },
+            &values,
+            &key("present"),
+            &mut 1,
+        )
+        .unwrap();
+        let value = read(
+            &ReadBinding::SelectionProjection {
+                effect: 0,
+                projection: ContributionSelectionProjection::Value,
+            },
+            &values,
+            &key("value"),
+            &mut 1,
+        )
+        .unwrap();
+        match result {
+            EffectValue::Known { .. } => {
+                assert_eq!(present, known(ParameterValue::Boolean(true)));
+                assert_eq!(value, result);
+            }
+            EffectValue::Inactive => {
+                assert_eq!(present, known(ParameterValue::Boolean(false)));
+                assert_eq!(
+                    value,
+                    EffectValue::unresolved(PlanGapReason::AbsentSelection)
+                );
+            }
+            unavailable => {
+                assert_eq!(present, unavailable);
+                assert_eq!(value, unavailable);
+            }
+        }
+    }
+}
 fn literal(value: ParameterValue) -> ReadBinding {
     ReadBinding::Constant(Some(value))
 }

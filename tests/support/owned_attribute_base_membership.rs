@@ -311,7 +311,7 @@ pub fn check_authored() {
         let mut inverse = q.after.clone();
         inverse.groups[0].members = q.before.groups[0].members.clone();
         assert_eq!(inverse, q.before, "only membership changes");
-        let ParameterValue::Quantity(empty) = &group.empty else {
+        let Some(ParameterValue::Quantity(empty)) = &group.empty else {
             panic!("Count identity")
         };
         assert_eq!(empty.value(), 0.);
@@ -543,7 +543,10 @@ fn inactive_application_source_is_not_hidden_by_the_domain_census() {
         RuleNode {
             id: "unsupported-zero".parse().unwrap(),
             expression: RuleExpression::Literal {
-                value: replacements()[0].after.groups[0].empty.clone(),
+                value: replacements()[0].after.groups[0]
+                    .empty
+                    .clone()
+                    .expect("fold identity"),
             },
         },
         RuleNode {

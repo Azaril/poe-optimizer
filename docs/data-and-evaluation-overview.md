@@ -84,10 +84,16 @@ typed collectors. Their admitted source domains are guarded empty groups;
 unconverted mechanics remain blocking. The independent source controls include
 a real nonzero fractional conversion input and its interaction with a zero
 override. Native conversion production and final Mana are still unfinished.
-The [optional numeric selection proposal](owned-numeric-selection-proposal.md)
-will keep override presence/value coherent in the existing graph; the owner
-approved it on October 9, but it is not yet a current API. No Lua insertion-order behavior
-has been adopted as a selection law.
+The approved [optional numeric selection](owned-numeric-selection-proposal.md)
+is now a current Core/Data/Engine API in operations V27. `Override` contributions
+feed an unordered `RequireAgreement` group with no numeric empty identity.
+Presence/value read one cached native result: absent, present including zero,
+or unavailable. Conflicts and unknown sources block both projections. Exact
+units, occurrence membership, stages and worker isolation are checked; signed
+zero is normalized to positive zero. The staged result uses the channel's
+explicit freeze. No Lua insertion-order behavior is a selection law. The current
+canonical data package remains V26 until the actual Mana domain is reviewed
+and published; the generic contract does not finish Mana.
 
 The [Life-copy source witness](owned-amulet-life-copy-evidence.md) now establishes
 that numeric Life copies need their own injected arithmetic branches; the
@@ -125,7 +131,7 @@ supplies retain distinct authority; each Action retains its exact output, part,
 mode and stat set. The canonical V26
 [Action damage packet](../data/owned/poe2/3887ae68/action-minion-damage/README.md)
 now consumes Command alongside the shared increase. Optional numeric selection
-is approved and follows that work.
+is implemented generically in V27; actual Mana override adoption follows it.
 
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across

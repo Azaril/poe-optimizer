@@ -197,7 +197,7 @@ impl World {
                 id: key("base"),
                 reduction: ContributionReduction::Sum,
                 ordering: ContributionOrdering::Ordered,
-                empty: integer(0),
+                empty: Some(integer(0)),
                 members: DeclaredSet::complete(members),
             }],
         }]);
@@ -379,7 +379,7 @@ fn boolean_world() -> World {
     query.contribution = ContributionKind::Flag;
     query.groups[0].reduction = ContributionReduction::Any;
     query.groups[0].ordering = ContributionOrdering::Unordered;
-    query.groups[0].empty = ParameterValue::Boolean(false);
+    query.groups[0].empty = Some(ParameterValue::Boolean(false));
     for m in &mut query.groups[0].members.members {
         m.order = None;
     }

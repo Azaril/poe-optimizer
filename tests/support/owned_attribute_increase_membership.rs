@@ -148,7 +148,10 @@ fn application_census_rejects_zero_inactive_increase_before_selection() {
         RuleNode {
             id: zero.clone(),
             expression: RuleExpression::Literal {
-                value: queries[0].after.groups[0].empty.clone(),
+                value: queries[0].after.groups[0]
+                    .empty
+                    .clone()
+                    .expect("fold identity"),
             },
         },
         RuleNode {
@@ -240,7 +243,7 @@ pub fn check_authored() {
         assert!(group.members.is_complete());
         assert_eq!(group.id.as_str(), "ordinary");
         assert_eq!(group.reduction, ContributionReduction::Sum);
-        let ParameterValue::Quantity(empty) = &group.empty else {
+        let Some(ParameterValue::Quantity(empty)) = &group.empty else {
             panic!("percentage-point identity")
         };
         assert_eq!(empty.value(), 0.);

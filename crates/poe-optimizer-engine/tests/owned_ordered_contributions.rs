@@ -215,7 +215,7 @@ impl World {
                     id: key("main"),
                     reduction: ContributionReduction::Sum,
                     ordering: ContributionOrdering::Ordered,
-                    empty: q(0.),
+                    empty: Some(q(0.)),
                     members: DeclaredSet::complete(vec![
                         member(class_owner(), "class", 10, ContributionOrigin::Character),
                         member(passive(), "passive", 20, ContributionOrigin::Allocation),
@@ -241,7 +241,7 @@ impl World {
                     id: key("empty"),
                     reduction: ContributionReduction::Sum,
                     ordering: ContributionOrdering::Ordered,
-                    empty: q(0.),
+                    empty: Some(q(0.)),
                     members: DeclaredSet::complete(vec![]),
                 },
             ],
@@ -675,7 +675,7 @@ fn finite_stage_conditional_contribution_rebinds_without_mutable_snapshots() {
             id: key("main"),
             reduction: ContributionReduction::Sum,
             ordering: ContributionOrdering::Ordered,
-            empty: q(0.),
+            empty: Some(q(0.)),
             members: DeclaredSet::complete(vec![member(
                 class_owner(),
                 "stage-two-producer",
@@ -755,7 +755,7 @@ fn boolean_world() -> World {
     for group in &mut w.registry.members[0].groups {
         group.reduction = ContributionReduction::Any;
         group.ordering = ContributionOrdering::Unordered;
-        group.empty = ParameterValue::Boolean(false);
+        group.empty = Some(ParameterValue::Boolean(false));
         for member in &mut group.members.members {
             member.order = None;
         }

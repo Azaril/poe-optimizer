@@ -98,7 +98,8 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                     RuleReadSource::Stat { entity, .. }
                     | RuleReadSource::Capability { entity, .. }
                     | RuleReadSource::Contributions { entity, .. }
-                    | RuleReadSource::ContributionQuery { entity, .. } => actor_entity(*entity),
+                    | RuleReadSource::ContributionQuery { entity, .. }
+                    | RuleReadSource::ContributionSelection { entity, .. } => actor_entity(*entity),
                     RuleReadSource::External { entity, .. } => {
                         actor_entity(*entity)
                             || matches!(entity, RuleEntity::Enemy | RuleEntity::Environment)
