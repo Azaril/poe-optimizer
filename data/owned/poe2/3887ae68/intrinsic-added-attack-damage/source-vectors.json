@@ -1,0 +1,3264 @@
+{"schema_version":1,"status":"passed","source_revision":"3887ae68a6a6b8bb7b41d1b61998f1aa184201e4","source_manifest_sha256":"8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675","reports":[{"path":"runs/owned-minion-physical-damage-source-02/source-jit-off.json","bytes":19612949,"sha256":"030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935"},{"path":"runs/owned-minion-physical-damage-source-02/source-jit-on.json","bytes":19612949,"sha256":"030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935"}],"observer":{"path":"crates/poe-optimizer-pob/tests/support/owned_minion_physical_damage_source.lua","git_commit":"b99c7f1a7692c7eaaae5ccd076d0beaaa16d08ca","git_blob":"e44717d81fb401b13a3b6b60445f1df098c82f65","bytes":28314,"sha256":"73ff0ee76552730818460ab93f5b3940bc612165c54e6bac6ab02faa7c54dcd8","verification":"Local Git blob authenticated during authoring; consumers authenticate the retained report and its declared observer identity, without requiring Git history."},"case_names":["original-05","sniper-calcs-effective","repeat-original-05","warm-calcs-to-original","sniper-quality-1","sniper-quality-20","flat-physical","flat-physical-quality-20","two-recipients-original-main-clone-calcs","two-recipients-clone-main-original-calcs"],"vectors":[{"case":"original-05","mode":"main","xml_sha256":"442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 0,
+                      "added_min": 0,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 387,
+                      "base_min": 208,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"original-05","mode":"calcs","xml_sha256":"442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":false},{"case":"sniper-calcs-effective","mode":"main","xml_sha256":"80e0ee544d67e61938b65c93d9adf6a7432b41f7e946cffa794dd9015a9d6f81","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 0,
+                      "added_min": 0,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 387,
+                      "base_min": 208,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"sniper-calcs-effective","mode":"calcs","xml_sha256":"80e0ee544d67e61938b65c93d9adf6a7432b41f7e946cffa794dd9015a9d6f81","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 0,
+                      "added_min": 0,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 387,
+                      "base_min": 208,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"repeat-original-05","mode":"main","xml_sha256":"442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 0,
+                      "added_min": 0,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 387,
+                      "base_min": 208,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"repeat-original-05","mode":"calcs","xml_sha256":"442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":false},{"case":"warm-calcs-to-original","mode":"main","xml_sha256":"442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089","warm_xml_sha256":"80e0ee544d67e61938b65c93d9adf6a7432b41f7e946cffa794dd9015a9d6f81","actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 0,
+                      "added_min": 0,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 387,
+                      "base_min": 208,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"warm-calcs-to-original","mode":"calcs","xml_sha256":"442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089","warm_xml_sha256":"80e0ee544d67e61938b65c93d9adf6a7432b41f7e946cffa794dd9015a9d6f81","actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":false},{"case":"sniper-quality-1","mode":"main","xml_sha256":"9af02bb7b916155c0297a6d36da4049fdd0db469cce1bc08f0694d0392b22a3b","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 1,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 1,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 0,
+                      "added_min": 0,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 387,
+                      "base_min": 208,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"sniper-quality-1","mode":"calcs","xml_sha256":"9af02bb7b916155c0297a6d36da4049fdd0db469cce1bc08f0694d0392b22a3b","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 1,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 1,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":false},{"case":"sniper-quality-20","mode":"main","xml_sha256":"4a63ec0927fa88755938cd330c5f9d06491098fc59441c750577eadc46be387e","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 20,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 20,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 0,
+                      "added_min": 0,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 387,
+                      "base_min": 208,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"sniper-quality-20","mode":"calcs","xml_sha256":"4a63ec0927fa88755938cd330c5f9d06491098fc59441c750577eadc46be387e","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 20,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 20,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":false},{"case":"flat-physical","mode":"main","xml_sha256":"44986c59243d4d7facc0641d0a97e444e5b0d9655574d3828562b628fa0baeec","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 7,
+                      "added_min": 3,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 395.05,
+                      "base_min": 211.45,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 0,
+                              "keyword_flags": 0,
+                              "name": "PhysicalMax",
+                              "source": "Custom:Physical damage source control",
+                              "tags": {},
+                              "type": "BASE",
+                              "value": 7
+                            },
+                            "value": 7
+                          }
+                        ],
+                        "value": 7
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 0,
+                              "keyword_flags": 0,
+                              "name": "PhysicalMin",
+                              "source": "Custom:Physical damage source control",
+                              "tags": {},
+                              "type": "BASE",
+                              "value": 3
+                            },
+                            "value": 3
+                          }
+                        ],
+                        "value": 3
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"flat-physical","mode":"calcs","xml_sha256":"44986c59243d4d7facc0641d0a97e444e5b0d9655574d3828562b628fa0baeec","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":false},{"case":"flat-physical-quality-20","mode":"main","xml_sha256":"7b7ef01a98676d75912697e4ca2ff603f51f54e745fbe66a52d699f63ecbe6a9","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 20,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 20,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 7,
+                      "added_min": 3,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 395.05,
+                      "base_min": 211.45,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 0,
+                              "keyword_flags": 0,
+                              "name": "PhysicalMax",
+                              "source": "Custom:Physical damage source control",
+                              "tags": {},
+                              "type": "BASE",
+                              "value": 7
+                            },
+                            "value": 7
+                          }
+                        ],
+                        "value": 7
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 0,
+                              "keyword_flags": 0,
+                              "name": "PhysicalMin",
+                              "source": "Custom:Physical damage source control",
+                              "tags": {},
+                              "type": "BASE",
+                              "value": 3
+                            },
+                            "value": 3
+                          }
+                        ],
+                        "value": 3
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"flat-physical-quality-20","mode":"calcs","xml_sha256":"7b7ef01a98676d75912697e4ca2ff603f51f54e745fbe66a52d699f63ecbe6a9","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 20,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 20,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":false},{"case":"two-recipients-original-main-clone-calcs","mode":"main","xml_sha256":"e3bdf3a392f94c754dff79b54855915635af800c648b44ec1ee4ae0de76fe055","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 0,
+                      "added_min": 0,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 387,
+                      "base_min": 208,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"two-recipients-original-main-clone-calcs","mode":"main","xml_sha256":"e3bdf3a392f94c754dff79b54855915635af800c648b44ec1ee4ae0de76fe055","warm_xml_sha256":null,"actor_ordinal":17,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 13,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 20,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 13,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 20,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":false},{"case":"two-recipients-original-main-clone-calcs","mode":"calcs","xml_sha256":"e3bdf3a392f94c754dff79b54855915635af800c648b44ec1ee4ae0de76fe055","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":false},{"case":"two-recipients-original-main-clone-calcs","mode":"calcs","xml_sha256":"e3bdf3a392f94c754dff79b54855915635af800c648b44ec1ee4ae0de76fe055","warm_xml_sha256":null,"actor_ordinal":17,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 13,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 20,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 13,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 20,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 0,
+                      "added_min": 0,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 387,
+                      "base_min": 208,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"two-recipients-clone-main-original-calcs","mode":"main","xml_sha256":"9a8576e12e52d8c4d7cbd5bf1b9f0374af33b90c1a3f193ac9c385aa915a5cd3","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":false},{"case":"two-recipients-clone-main-original-calcs","mode":"main","xml_sha256":"9a8576e12e52d8c4d7cbd5bf1b9f0374af33b90c1a3f193ac9c385aa915a5cd3","warm_xml_sha256":null,"actor_ordinal":17,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 13,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 20,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 13,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 20,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 0,
+                      "added_min": 0,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 387,
+                      "base_min": 208,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"two-recipients-clone-main-original-calcs","mode":"calcs","xml_sha256":"9a8576e12e52d8c4d7cbd5bf1b9f0374af33b90c1a3f193ac9c385aa915a5cd3","warm_xml_sha256":null,"actor_ordinal":4,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 3,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 0,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 3,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 0,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":true,"cfg":{
+                          "flags": 42949813253,
+                          "keywordFlags": 330752,
+                          "skillDist": 20,
+                          "skillName": "Basic Attack",
+                          "summonSkillName": "Skeletal Sniper Minion"
+                        },"added_more":{
+                              "names": [
+                                "AddedPhysicalDamage",
+                                "AddedDamage"
+                              ],
+                              "records": [
+                                {
+                                  "mod": {
+                                    "flags": 1,
+                                    "keyword_flags": 0,
+                                    "name": "AddedDamage",
+                                    "source": "Skeletal Sniper Damage Multiplier",
+                                    "tags": [
+                                      {
+                                        "neg": true,
+                                        "partialMatch": true,
+                                        "skillNameList": [
+                                          "Spectre",
+                                          "Companion"
+                                        ],
+                                        "summonSkill": true,
+                                        "type": "SkillName"
+                                      }
+                                    ],
+                                    "type": "MORE",
+                                    "value": 14.999999999999991
+                                  },
+                                  "value": 14.999999999999991
+                                }
+                              ],
+                              "value": 1.15
+                            },"query_state_preserved":true,"base_call":{
+                      "added_increased": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "added_max": 0,
+                      "added_min": 0,
+                      "added_more": {
+                        "names": [
+                          "AddedPhysicalDamage",
+                          "AddedDamage"
+                        ],
+                        "records": [
+                          {
+                            "mod": {
+                              "flags": 1,
+                              "keyword_flags": 0,
+                              "name": "AddedDamage",
+                              "source": "Skeletal Sniper Damage Multiplier",
+                              "tags": [
+                                {
+                                  "neg": true,
+                                  "partialMatch": true,
+                                  "skillNameList": [
+                                    "Spectre",
+                                    "Companion"
+                                  ],
+                                  "summonSkill": true,
+                                  "type": "SkillName"
+                                }
+                              ],
+                              "type": "MORE",
+                              "value": 14.999999999999991
+                            },
+                            "value": 14.999999999999991
+                          }
+                        ],
+                        "value": 1.15
+                      },
+                      "added_multiplier": 1.15,
+                      "base_max": 387,
+                      "base_min": 208,
+                      "base_multiplier": 1,
+                      "cfg": {
+                        "flags": 42949813253,
+                        "keywordFlags": 330752,
+                        "skillDist": 20,
+                        "skillName": "Basic Attack",
+                        "summonSkillName": "Skeletal Sniper Minion"
+                      },
+                      "damage_type": "Physical",
+                      "enemy_maximum": {
+                        "names": [
+                          "SelfPhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "enemy_minimum": {
+                        "names": [
+                          "SelfPhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "maximum": {
+                        "names": [
+                          "PhysicalMax"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "minimum": {
+                        "names": [
+                          "PhysicalMin"
+                        ],
+                        "records": {},
+                        "value": 0
+                      },
+                      "observed_at": 4137,
+                      "query_state_preserved": true,
+                      "skill_conditions": {
+                        "MainHandAttack": true
+                      },
+                      "source": {
+                        "AttackRate": 0.6666666666666666,
+                        "CritChance": 5,
+                        "PhysicalMax": 387,
+                        "PhysicalMin": 208,
+                        "range": 80,
+                        "type": "Bow"
+                      }
+                    }},{"case":"two-recipients-clone-main-original-calcs","mode":"calcs","xml_sha256":"9a8576e12e52d8c4d7cbd5bf1b9f0374af33b90c1a3f193ac9c385aa915a5cd3","warm_xml_sha256":null,"actor_ordinal":17,"actor_profile":"RaisedSkeletonSniper","summon_effect_id":"SummonSkeletalSnipersPlayer","actor_level":44,"source_occurrence":{
+                "matches": [
+                  {
+                    "enable_global_1": true,
+                    "enable_global_2": true,
+                    "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "gem_index": 1,
+                    "group_enabled": true,
+                    "group_index": 13,
+                    "group_is_active_socket_group": true,
+                    "group_label": "",
+                    "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                    "raw_level": 20,
+                    "raw_quality": 20,
+                    "source_enabled": true
+                  }
+                ],
+                "source_present": true
+              },"profile":{
+                "accuracy": 1,
+                "attackRange": 80,
+                "attackTime": 1.5,
+                "baseDamageIgnoresAttackSpeed": true,
+                "baseMovementSpeed": 37,
+                "chaosResist": 0,
+                "coldResist": 0,
+                "companionChaosResist": 0,
+                "companionColdResist": 0,
+                "companionFireResist": 0,
+                "companionLightningResist": 0,
+                "companionReservation": 30,
+                "critChance": 5,
+                "damage": 1.15,
+                "damageSpread": 0.3,
+                "fireResist": 0,
+                "life": 0.55,
+                "lightningResist": 0,
+                "limit": "ActiveSkeletonLimit",
+                "monsterCategory": "Undead",
+                "name": "Skeletal Sniper",
+                "spectreReservation": 50,
+                "weaponType1": "Bow"
+              },"hostile":false,"child_effect":"MinionMeleeBow","summoner_owns_actor":true,"summoner_source":{
+                    "matches": [
+                      {
+                        "enable_global_1": true,
+                        "enable_global_2": true,
+                        "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "gem_index": 1,
+                        "group_enabled": true,
+                        "group_index": 13,
+                        "group_is_active_socket_group": true,
+                        "group_label": "",
+                        "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                        "raw_level": 20,
+                        "raw_quality": 20,
+                        "source_enabled": true
+                      }
+                    ],
+                    "source_present": true
+                  },"observed":false}],"full_profile":{
+      "accuracy": 1,
+      "attackRange": 80,
+      "attackTime": 1.5,
+      "baseDamageIgnoresAttackSpeed": true,
+      "baseMovementSpeed": 37,
+      "chaosResist": 0,
+      "coldResist": 0,
+      "companionChaosResist": 0,
+      "companionColdResist": 0,
+      "companionFireResist": 0,
+      "companionLightningResist": 0,
+      "companionReservation": 30,
+      "critChance": 5,
+      "damage": 1.15,
+      "damageSpread": 0.3,
+      "fireResist": 0,
+      "life": 0.55,
+      "lightningResist": 0,
+      "limit": "ActiveSkeletonLimit",
+      "modList": {},
+      "monsterCategory": "Undead",
+      "monsterTags": [
+        "bone_armour",
+        "bones",
+        "has_bow",
+        "medium_movement",
+        "physical_affinity",
+        "puncturing_weapon",
+        "ranged",
+        "skeleton",
+        "Stab_onhit_audio",
+        "undead"
+      ],
+      "name": "Skeletal Sniper",
+      "skillList": [
+        "MinionMeleeBow",
+        "GasShotSkeletonSniperMinion"
+      ],
+      "spawnLocation": {},
+      "spectreReservation": 50,
+      "weaponType1": "Bow"
+    },"profile_identity":{"profile_id":"RaisedSkeletonSniper","global_profile_identity":true,"profile_hostile":{"present":false}},"profile_packet":{"path":"data/owned/poe2/3887ae68/minion-life-source/source-vectors.json","bytes":3130500,"sha256":"31780b42511dce71ec82b5a637308b1f5db345098c2c1bac0aa8c4f8f082549d"},"profile_reports":[{"path":"runs/owned-minion-intrinsic-life-source-02/source-jit-off.json","bytes":4028670,"sha256":"b535580839c82e27f9f286fbb531b9e9cc29abaed8805efcc3b5e775ea58acc9"},{"path":"runs/owned-minion-intrinsic-life-source-02/source-jit-on.json","bytes":4028670,"sha256":"b535580839c82e27f9f286fbb531b9e9cc29abaed8805efcc3b5e775ea58acc9"}],"profile_report_metadata":{"business_method_wrappers":false,"capture":{"copied_formula_as_evidence":false,"original_base_initializer":true,"original_life_consumer":true,"original_table_selection":true,"unhooked_controls":true},"case_count":9,"complete_load_attempts_per_jit":20,"files":[{"path":"runtime/lua/xml.lua","sha256":"832b6bb31f1f0e79e3ed6346113691b36ace29ed964e332530eef8b3b63af0e2"},{"path":"src/Classes/CalcsTab.lua","sha256":"ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"},{"path":"src/Classes/ConfigTab.lua","sha256":"0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"},{"path":"src/Classes/ItemsTab.lua","sha256":"d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"},{"path":"src/Classes/ModDB.lua","sha256":"1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"},{"path":"src/Classes/ModList.lua","sha256":"9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"},{"path":"src/Classes/ModStore.lua","sha256":"432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"},{"path":"src/Classes/PassiveSpec.lua","sha256":"fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"},{"path":"src/Classes/SkillsTab.lua","sha256":"ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"},{"path":"src/Data/Gems.lua","sha256":"1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"},{"path":"src/Data/Minions.lua","sha256":"a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"},{"path":"src/Data/Misc.lua","sha256":"21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"},{"path":"src/Data/SkillStatMap.lua","sha256":"8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"},{"path":"src/Data/Skills/act_int.lua","sha256":"4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"},{"path":"src/Data/Skills/minion.lua","sha256":"6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"},{"path":"src/GameVersions.lua","sha256":"7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e"},{"path":"src/Launch.lua","sha256":"0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"},{"path":"src/Modules/Build.lua","sha256":"5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"},{"path":"src/Modules/CalcActiveSkill.lua","sha256":"c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"},{"path":"src/Modules/CalcDefence.lua","sha256":"b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"},{"path":"src/Modules/CalcOffence.lua","sha256":"90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"},{"path":"src/Modules/CalcPerform.lua","sha256":"d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"},{"path":"src/Modules/CalcSetup.lua","sha256":"5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"},{"path":"src/Modules/CalcTools.lua","sha256":"83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"},{"path":"src/Modules/Calcs.lua","sha256":"bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"},{"path":"src/Modules/Common.lua","sha256":"bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"},{"path":"src/Modules/ConfigOptions.lua","sha256":"0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"},{"path":"src/Modules/Data.lua","sha256":"2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"},{"path":"src/Modules/Main.lua","sha256":"e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"},{"path":"src/Modules/ModParser.lua","sha256":"6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"},{"path":"src/Modules/ModTools.lua","sha256":"1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"},{"path":"src/TreeData/0_1/tree.lua","sha256":"0a2c0689d85c719144d3ac9f5ab075e19b934ad7cde2a61104636af8237d8ad5"},{"path":"src/TreeData/0_4/tree.lua","sha256":"e766a5be1e1b7ee1c133c01ffee98d234449c2bc2b1052d0056a8f2d7d0d0303"},{"path":"src/TreeData/0_5/tree.lua","sha256":"e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"}],"manifest_sha256":"8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675","observer_sha256":"141c0351135efb2f947f510dd2a7474f1f56c25566028673a1dd999a33136df9","original_xml_sha256":"442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089","schema_version":1,"scope":{"actor_level_mutation":false,"final_life_formula_parity":false,"hostile_profile_admitted":false,"native_coverage":false,"physical_level_40_obtainable_claimed":false,"receiver_profiles":["RaisedSkeletonSniper"],"whole_build_parity":false},"source_revision":"3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"},"source_excerpts":[{"path":"src/Modules/CalcActiveSkill.lua","first_line":702,"last_line":711,"text":"\t-- The damage fixup stat applies x% less base Attack Damage and x% more base Attack Speed as confirmed by Openarl Jan 4th 2024\n\t-- Implemented in this manner as the stat exists on the minion not the skills\n\tif activeSkill.actor and activeSkill.actor.minionData then\n\t\tif activeSkill.actor.minionData.damageFixup then\n\t\t\tskillModList:NewMod(\"Damage\", \"MORE\", -100 * activeSkill.actor.minionData.damageFixup, \"Damage Fixup\", ModFlag.Attack)\n\t\t\tskillModList:NewMod(\"Speed\", \"MORE\", 100 * activeSkill.actor.minionData.damageFixup, \"Damage Fixup\", ModFlag.Attack)\n\t\telseif activeSkill.actor.minionData.damage ~= 1 then\n\t\t\tskillModList:NewMod(\"AddedDamage\", \"MORE\", (activeSkill.actor.minionData.damage - 1) * 100, activeSkill.actor.minionData.name ..\" Damage Multiplier\", ModFlag.Attack, { type = \"SkillName\", skillNameList = { \"Spectre\", \"Companion\" }, partialMatch = true, summonSkill = true, neg = true })\n\t\tend\n\tend\n"},{"path":"src/Modules/CalcOffence.lua","first_line":4127,"last_line":4137,"text":"\t\t-- Calculate base hit damage\n\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\tlocal damageTypeMin = damageType..\"Min\"\n\t\t\tlocal damageTypeMax = damageType..\"Max\"\n\t\t\tlocal baseMultiplier = activeSkill.activeEffect.grantedEffectLevel.baseMultiplier or skillData.baseMultiplier or 1\n\t\t\tlocal addedMin = skillModList:Sum(\"BASE\", cfg, damageTypeMin) + enemyDB:Sum(\"BASE\", cfg, \"Self\"..damageTypeMin)\n\t\t\tlocal addedMax = skillModList:Sum(\"BASE\", cfg, damageTypeMax) + enemyDB:Sum(\"BASE\", cfg, \"Self\"..damageTypeMax)\n\t\t\tlocal addedMult = calcLib.mod(skillModList, cfg, \"Added\"..damageType..\"Damage\", \"AddedDamage\")\n\t\t\tlocal baseMin = ((source[damageTypeMin] or 0) + (source[damageType..\"BonusMin\"] or 0) + (addedMin * addedMult)) * baseMultiplier\n\t\t\tlocal baseMax = ((source[damageTypeMax] or 0) + (source[damageType..\"BonusMax\"] or 0) + (addedMax * addedMult)) * baseMultiplier\n\t\t\toutput[damageTypeMin..\"Base\"] = baseMin\n"},{"path":"src/Classes/ModList.lua","first_line":160,"last_line":182,"text":"\tend\n\treturn result\nend\n\nfunction ModListClass:MoreInternal(context, cfg, flags, keywordFlags, source, modName)\n\tlocal result = 1\n\tlocal modPrecision = nil\n\tlocal modResult = 1\n\tfor i = 1, #self do\n\t\tlocal mod = self[i]\n\t\tif mod.name == modName and mod.type == \"MORE\" and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\tif mod[1] then\n\t\t\t\tmodResult = modResult * (1 + (context:EvalMod(mod, cfg) or 0) / 100)\n\t\t\telse\n\t\t\t\tmodResult = modResult * (1 + mod.value / 100)\n\t\t\tend\n\t\t\tif modPrecision then\n\t\t\t\tmodPrecision = m_max(modPrecision, (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or modPrecision)\n\t\t\telse\n\t\t\t\tmodPrecision = (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or nil\n\t\t\tend\n\t\tend\n\tend\n"},{"path":"src/Classes/ModDB.lua","first_line":217,"last_line":251,"text":"\tlocal globalLimits\n\tlocal modList = self.mods[modName]\n\tlocal modResult = 1\n\tif modList then\n\t\tfor i = 1, #modList do\n\t\t\tlocal mod = modList[i]\n\t\t\tif mod.type == \"MORE\" and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\t\tlocal value\n\t\t\t\tif mod[1] then\n\t\t\t\t\tif not globalLimits then\n\t\t\t\t\t\tglobalLimits = {}\n\t\t\t\t\tend\n\t\t\t\t\tvalue = context:EvalMod(mod, cfg, globalLimits) or 0\n\t\t\t\telse\n\t\t\t\t\tvalue = mod.value or 0\n\t\t\t\tend\n\t\t\t\tmodResult = modResult * (1 + value / 100)\n\t\t\t\tif modPrecision then\n\t\t\t\t\tmodPrecision = m_max(modPrecision, (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or modPrecision)\n\t\t\t\telse\n\t\t\t\t\tmodPrecision = (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or nil\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif modPrecision then\n\t\tlocal power = 10 ^ modPrecision\n\t\tresult = math.floor(result * modResult * power) / power\n\telse\n\t\tresult = result * round(modResult, 2)\n\tend\n\tif self.parent then\n\t\tresult = result * self.parent:MoreInternal(context, cfg, flags, keywordFlags, source, modName)\n\tend\n\treturn result\n"}]}

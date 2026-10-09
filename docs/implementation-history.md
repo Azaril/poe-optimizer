@@ -23589,3 +23589,70 @@ disposition permissions or a relaxed ownership contract require discussion.
 Broader configuration closure still depends on the pending configuration design;
 these two rows alone would not retire a selected issue. The existing numeric-domain
 and configuration proposals are not approved by the Action/selection answers.
+
+## 2026-10-09 checkpoint: intrinsic Ascendancy inventory
+
+The [Ascendancy packet](../data/owned/poe2/3887ae68/ascendancy-owner-closure/README.md)
+completes one selected intrinsic owner: Disciple of Varashta `0a36`. Its seven
+empty declaration inventories and empty program inventory are now Complete.
+The exact Class/root relation is unchanged. Class `0a23`, shared Player `332a`
+and all thirteen selected Partial passive owners remain Partial; both already
+Complete implicit roots remain Complete. This removes a real selected coverage
+blocker without claiming that its descendant mechanics or resources are finished.
+
+The existing offline declaration-refinement API now accepts an exact typed
+Ascendancy owner. It checks the same immutable predecessor/successor boundaries
+as Class and Passive refinement, using the shared compact publisher. Class/root
+membership, slot members, unrelated descriptors, rules and import policies cannot
+change under that declaration permission. The data packet independently proves
+the empty intrinsic rule inventory. No Core/Data/Engine contract, expression,
+profile model, Lua runtime path or compatibility version was introduced.
+
+Evidence reuses the unchanged loaded-class and implicit-root source reports.
+The full raw and constructed field inventories, exact selected root and bounded
+reader census are authenticated; even an unexpected empty/null field refuses
+closure. The background renderer has a separate source pin. The loaded-class
+report did not embed its Rust-driver hash: the unchanged capture-commit bytes are
+bound separately and described honestly. Existing report-embedded observer and
+bootstrap hashes remain exact. No new PoB VM or numerical reference run was needed.
+
+Validation:
+
+- Ten declaration-refinement and eight compact-publication contract tests pass,
+  including class/root mutation, all seven Partial facets, identity/endpoints,
+  ordinary-path refusal and exact repeated artifacts. Strict all-feature Import
+  Clippy passes.
+- Three ordinary packet/refusal tests pass. Both retained-evidence and publication
+  checks pass in 26.62s; all five original drafts, source links, local identities,
+  selections and 110 queries are preserved. All eighteen artifacts rebuild
+  byte-for-byte. Independent review found no blocking issue.
+- All nine ordinary tests across the new packet and existing root target pass
+  against the final helpers. Retained-source authentication passes again in
+  0.04s. The historical Ascendancy-root publication passes in 25.96s and reproduces
+  all eighteen files of its previous canonical package exactly.
+- The joined Sniper replay refresh passes in 29.16s and reproduces the existing
+  138,049-byte fixture exactly (SHA-256 `5ae76529f235385e2af8611972cccf4ce9553c708e139e87fc5ab43f513796e0`).
+  No numerical fixture changes or further unchanged numerical reruns are needed.
+  Strict all-feature Clippy passes for both affected CLI publication targets;
+  selective formatting and whitespace checks pass.
+
+Logs: `runs/owned-ascendancy-refinement-contract-02.log`,
+`runs/owned-ascendancy-refinement-clippy-01.log`,
+`runs/owned-ascendancy-owner-regressions-01.log`,
+`runs/owned-ascendancy-owner-source-final-01.log`,
+`runs/owned-ascendancy-owner-publication-01.log`,
+`runs/owned-ascendancy-root-regression-01.log`,
+`runs/owned-sniper-replay-ascendancy-01.log` and
+`runs/owned-ascendancy-owner-clippy-final-01.log`.
+
+The canonical package is **`runs/owned-ascendancy-owner-publication-01/package`**:
+
+- Input: `37e12592a376ea2d79a190678a3691760f701cf9d0fb3ab270b8024579b141fa`
+- Definitions: `7d3afd559372e2ad7c11eb95715c1a3248f71cfa3c0b7d9058c146bcc04229bc`
+- Rules: `c1d1e436873a29d7304756cdc28c13357d95cb9062ca6bea966f70dd7bf2259e`
+- Compiled rules: `9a5927bd2de2ef30538703ec3c89dbaab3bd79d2ae8bab31c09f02dc75175d93`
+
+Operations remain V27; no IDs were allocated and the next free key is **336b**.
+It has eighteen artifacts, 167 provenance rows and no evaluation bundle. Complete
+native builds remain **0/5** and selected input obligations **106/117/109/123/4**.
+The full census is `runs/owned-ascendancy-owner-publication-01/validation.json`.

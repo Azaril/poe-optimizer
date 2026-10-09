@@ -2088,6 +2088,27 @@ factor bounds alongside real `ProjectModifierTransform` producers and revisit
 this boundary only with that evidence. All four Life owner gaps remain; no
 production path was added or removed by the audit.
 
+## Intrinsic added-damage representation (2026-10-09)
+
+The intrinsic attack source uses existing owned expressions and exact Actor to
+Action routing. Its percentage intermediate preserves source arithmetic; its
+Multiply contribution is the existing dimensionless factor type. Neither is a
+Lua value or a source modifier-store record. The source's `damageFixup` branch
+depends on presence (including present zero), and its exclusions inspect summon
+names. Offline evidence must prove eligibility from the complete admitted
+profile/creating-skill relation. Do not introduce those language or name-based
+tests into native evaluation.
+
+Retain the unrounded individual contribution separately from final aggregation.
+PoB rounds products at modifier-name/store boundaries; a single observed factor
+does not authorize a universal rounding/grouping rule. Likewise baseline empty
+filtered lists do not prove that untranslated conditional sources are absent.
+The next incoming damage census must include raw Intimidated/Debilitated sources
+and Faerie Fire's random gain before expansion. The current physical-damage
+observer's raw name filter omits `DamageGainAsRandom`; its final zero gain table
+cannot close that upstream domain. These are evidence/coverage obligations, not
+permission to copy source database traversal or truthiness into owned rules.
+
 ## Implicit-root witness consolidation (2026-10-09)
 
 The optional original-constructor witness now handles the ordinary shared class

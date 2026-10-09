@@ -317,6 +317,18 @@ their containing mechanics coverage remains Partial. A checked partition of Gas
 supply separates structural activation from numerical input projection through
 the existing readiness phases, without introducing another occurrence model.
 
+Intrinsic attack modifiers use this same graph. Profile data alone does not
+establish eligibility: a reviewed creating-skill/Actor relation produces the
+intrinsic amount, and an exact Action route carries it to the eligible output.
+The [added attack damage packet](../data/owned/poe2/3887ae68/intrinsic-added-attack-damage/README.md)
+retains its raw percentage and emits an individual dimensionless Multiply
+contribution. Missing source authority stays unavailable even when generic
+profile data exists. Neither this individual factor nor an observed zero flat
+addition establishes complete incoming membership or final damage. Later
+aggregation must account for the admitted modifier groups, numerical order and
+rounding boundaries explicitly. Source names, Lua truthiness and modifier-store
+objects remain offline evidence, not runtime dispatch.
+
 The approved [checked optional numeric selection](owned-numeric-selection-proposal.md)
 now runs in Core/Data/Engine operations V27. Its require-agreement result
 distinguishes absent, present (including zero), and unavailable. Presence/value

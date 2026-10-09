@@ -14,6 +14,11 @@ mod action_damage_family;
 #[path = "support/owned_sniper_action_damage.rs"]
 mod action_damage_native;
 #[allow(dead_code)]
+#[path = "support/owned_intrinsic_added_attack_damage.rs"]
+mod added_damage_family;
+#[path = "support/owned_sniper_added_damage.rs"]
+mod added_damage_native;
+#[allow(dead_code)]
 #[path = "support/owned_amulet_life_copy.rs"]
 mod amulet_life_family;
 #[allow(dead_code)]
@@ -506,6 +511,7 @@ impl World {
         let offering = offering_application_native::install(&mut w, &endpoint, &draft, &selection);
         mixed_damage_native::install(&mut w, &endpoint);
         let command = action_damage_native::install(&mut w, &endpoint, &path);
+        added_damage_native::install(&mut w, &endpoint);
         assert_eq!(before, release::inventory(&path));
         Self {
             sniper: w,
@@ -657,6 +663,7 @@ impl World {
             offering_application_native::configure(stages);
             mixed_damage_native::configure(stages);
             action_damage_native::configure(stages);
+            added_damage_native::configure(stages);
             configure(stages);
         })
     }

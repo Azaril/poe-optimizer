@@ -917,6 +917,17 @@ Basic contributes zero and the reviewed Gas stat sets receive 55 percentage poin
 This closes three default passive bodies, not incoming coverage or final damage.
 No game-specific Rust branch or Lua runtime dependency is added.
 
+The [intrinsic added attack damage packet](../data/owned/poe2/3887ae68/intrinsic-added-attack-damage/README.md)
+reads the existing injected Actor profile scale and computes a raw percentage
+on the exact admitted Actor relation. An exact Basic Action route and ordinary
+typed program produce one unrounded multiplicative contribution. Scale one
+means an inactive contribution; missing profile or source authority stays
+unavailable. The joined Sniper replay uses these published bodies through the
+normal native planner. This is an individual source, not the final added-damage
+factor, flat-damage census, conversion/gain calculation or final hit/DPS. The
+offline evidence authenticates the complete source profile and its eligibility;
+the evaluator never checks PoB skill names or Lua field-presence conventions.
+
 Integrating that component under current readiness checks exposed an older owned
 program that combined actor preparation with an execution-only level requirement.
 The [population partition](../data/owned/poe2/3887ae68/sniper-population-readiness/README.md)

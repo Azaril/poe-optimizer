@@ -133,83 +133,88 @@ the current extractor while retaining exact source/content/catalog comparisons.
 No production coverage gate, old-format reader or runtime fallback was added.
 
 The repairs are pushed as `73d7e99`. These are local results, not a hosted-CI
-success claim. At the latest read-only snapshot (10:37 UTC), `7b44d92` run
-`37918400901` was pending without jobs, `73d7e99` run `37915896956` had been
-cancelled while pending without jobs, and preceding `37900429666` remained
-active. No new unique completed failure appeared. Its completed Windows shard0
-repeated only the repaired Crown failures. Compilation dominates much of the
-recorded time: that shard spent 68m19s and 67m00s compiling its two feature
-profiles. No run was cancelled by this task. Follow the next pushed revision's
-results and fix new failures. Track
-compilation and repeated historical-publication costs in tooling cleanup without
-removing independent coverage or displacing the first complete native build.
+success claim. At the read-only snapshot of **11:25 UTC**, `7b50c6e` run
+`37921878787` had started all eighteen jobs, with none completed. The older
+`10d37f0` run `37900429666` finished with failure at 11:24 UTC; its final
+Windows CLI failures match already-addressed exporter receipts, reward support
+and duplicate Mana definitions. Current HEAD verifies existing Mana definitions
+instead of reinserting them. Windows PoB passed. No new actionable failure or
+task-initiated cancellation was found.
 
-## Current implementation checkpoint: intrinsic Ascendancy inventory
+Compilation dominates much of the recorded time: an older Windows shard spent
+68m19s and 67m00s compiling its two feature profiles. Follow the next pushed
+revision; track compilation and repeated historical-publication costs in tooling
+cleanup without removing independent coverage or displacing the first complete
+native build.
 
-The [Ascendancy packet](../data/owned/poe2/3887ae68/ascendancy-owner-closure/README.md)
-completes one selected intrinsic owner: Disciple of Varashta `0a36`. Its seven
-empty declaration inventories and empty program inventory are now Complete.
-The exact Class/root relation is unchanged. Class `0a23`, shared Player `332a`
-and all thirteen selected Partial passive owners remain Partial; both already
-Complete implicit roots remain Complete. This removes a real selected coverage
-blocker without claiming that its descendant mechanics or resources are finished.
+## Current implementation checkpoint: intrinsic added attack damage
 
-The existing offline declaration-refinement API now accepts an exact typed
-Ascendancy owner. It checks the same immutable predecessor/successor boundaries
-as Class and Passive refinement, using the shared compact publisher. Class/root
-membership, slot members, unrelated descriptors, rules and import policies cannot
-change under that declaration permission. The data packet independently proves
-the empty intrinsic rule inventory. No Core/Data/Engine contract, expression,
-profile model, Lua runtime path or compatibility version was introduced.
+The [intrinsic added attack damage packet](../data/owned/poe2/3887ae68/intrinsic-added-attack-damage/README.md)
+adds a missing numerical dependency to Original05 through existing owned rules.
+The admitted Actor-slot program reads injected profile scale `2537` and derives
+raw percentage `336b`. One exact Basic Action route carries it to `336c`; its
+Action program emits the individual unrounded Multiply contribution `336d`.
+The source percentage remains `14.999999999999991`, with factor 1.15. Scale one
+is inactive; zero is a real factor; missing profile/producer/route is unavailable.
+No skill-name dispatch, Lua truthiness, new evaluator API, profile DTO, table,
+query, receiver or compatibility branch was added. No owner coverage was closed.
 
-Evidence reuses the unchanged loaded-class and implicit-root source reports.
-The full raw and constructed field inventories, exact selected root and bounded
-reader census are authenticated; even an unexpected empty/null field refuses
-closure. The background renderer has a separate source pin. The loaded-class
-report did not embed its Rust-driver hash: the unchanged capture-commit bytes are
-bound separately and described honestly. Existing report-embedded observer and
-bootstrap hashes remain exact. No new PoB VM or numerical reference run was needed.
+Evidence reuses the unchanged physical-damage source02 reports and complete
+intrinsic-Life profile evidence. It authenticates 24 occurrence/mode rows,
+including thirteen actual Basic calls and explicitly unobserved contexts.
+The complete profile proves `damageFixup` absence; present zero/false are rejected
+as evidence of absence. The source Attack and summon filters remain offline.
+No new source VM was needed. Broader profile eligibility and final grouped
+rounding remain separate work; tests do not construct a foreign Actor.
 
-Validation:
+The joined graph now executes these exact programs with actual item preparation
+and population. Its ordering is explicit: profile facts → intrinsic percentage
+→ shared Action routing → individual contribution. The fixture reuses already
+loaded definitions after checking exact equality. The publication preserves all
+existing owners, route/query closures and unrelated programs through an exact
+inverse to the checked three-Stat migration.
 
-- Ten declaration-refinement and eight compact-publication contract tests pass,
-  including class/root mutation, all seven Partial facets, identity/endpoints,
-  ordinary-path refusal and exact repeated artifacts. Strict all-feature Import
-  Clippy passes.
-- Three ordinary packet/refusal tests pass. Both retained-evidence and publication
-  checks pass in 26.62s; all five original drafts, source links, local identities,
-  selections and 110 queries are preserved. All eighteen artifacts rebuild
-  byte-for-byte. Independent review found no blocking issue.
-- All nine ordinary tests across the new packet and existing root target pass
-  against the final helpers. Retained-source authentication passes again in
-  0.04s. The historical Ascendancy-root publication passes in 25.96s and reproduces
-  all eighteen files of its previous canonical package exactly.
-- The joined Sniper replay refresh passes in 29.16s and reproduces the existing
-  138,049-byte fixture exactly (SHA-256 `5ae76529f235385e2af8611972cccf4ce9553c708e139e87fc5ab43f513796e0`).
-  No numerical fixture changes or further unchanged numerical reruns are needed.
-  Strict all-feature Clippy passes for both affected CLI publication targets;
-  selective formatting and whitespace checks pass.
+Validation completed:
 
-Logs: `runs/owned-ascendancy-refinement-contract-02.log`,
-`runs/owned-ascendancy-refinement-clippy-01.log`,
-`runs/owned-ascendancy-owner-regressions-01.log`,
-`runs/owned-ascendancy-owner-source-final-01.log`,
-`runs/owned-ascendancy-owner-publication-01.log`,
-`runs/owned-ascendancy-root-regression-01.log`,
-`runs/owned-sniper-replay-ascendancy-01.log` and
-`runs/owned-ascendancy-owner-clippy-final-01.log`.
+- Five packet/refusal, retained-source and publication tests pass (28.56s).
+  All eighteen artifacts rebuild byte-for-byte; all five fresh imports retain
+  their local identities, original selections, 110 queries and input obligations.
+- The joined numerical check passes (29.18s), and replay export passes (29.17s).
+  Every previous definition, slot and program survives unchanged. Build,
+  scenario and queries are identical; support artifacts change dependency
+  identities only. The fixture now has 925 definitions and 618 owners.
+- All ten ordinary Engine replay tests pass (2.33s), including exact recipient
+  binding, missing profile/authorized producer/route, zero/neutral/changed input,
+  Partial refusal, early profile and route-read rejection, occurrence reordering
+  and fresh/reused/four-worker equality. No missing value becomes a neutral factor.
+- All 38 ordinary tests across the six existing replay consumers pass: Life copy,
+  Life admission/numeric transport, Intelligence/Mana, intrinsic Mana and reward
+  support. Their eight unchanged historical publication tests remain opt-in.
+- Strict Engine and all-feature CLI Clippy pass. Independent final review and
+  selective formatting/whitespace checks cover the new data and integration.
 
-The canonical package is **`runs/owned-ascendancy-owner-publication-01/package`**:
+This is **55 passing selected test functions**, including publication and export.
+Logs: `runs/owned-intrinsic-added-attack-publication-02.log`,
+`runs/owned-intrinsic-added-joined-03.log`,
+`runs/owned-sniper-replay-added-attack-01.log`,
+`runs/owned-intrinsic-added-native-02.log`,
+`runs/owned-added-replay-consumers-01.log`,
+`runs/owned-intrinsic-added-engine-clippy-01.log` and
+`runs/owned-intrinsic-added-cli-clippy-01.log`.
 
-- Input: `37e12592a376ea2d79a190678a3691760f701cf9d0fb3ab270b8024579b141fa`
-- Definitions: `7d3afd559372e2ad7c11eb95715c1a3248f71cfa3c0b7d9058c146bcc04229bc`
-- Rules: `c1d1e436873a29d7304756cdc28c13357d95cb9062ca6bea966f70dd7bf2259e`
-- Compiled rules: `9a5927bd2de2ef30538703ec3c89dbaab3bd79d2ae8bab31c09f02dc75175d93`
+The canonical package is **`runs/owned-intrinsic-added-attack-publication-02/package`**:
 
-Operations remain V27; no IDs were allocated and the next free key is **336b**.
-It has eighteen artifacts, 167 provenance rows and no evaluation bundle. Complete
-native builds remain **0/5** and selected input obligations **106/117/109/123/4**.
-The full census is `runs/owned-ascendancy-owner-publication-01/validation.json`.
+- Input: `c4c38e18383f708bc36d4a571bb260d0afadf0e69c1e7a6881ef80b8a0098ba3`
+- Definitions: `2224be8704cc7813df061c6d675e56209a6e55cb24aa98e5cb3ccd1854cfacc9`
+- Rules: `0d61c45a3a92cce31798a1d051caa7a13e8c413d6d419cc61a0c789f8e6eb77a`
+- Compiled rules: `1a8c87bd847b2a039919dddb08a1cc8df0ecbb9900528de065f1f2dd8d4a3b33`
+
+Operations remain V27; the next free key is **336e**. There are eighteen artifacts,
+168 provenance rows and no evaluation bundle. Complete native builds remain
+**0/5**, with selected input obligations **106/117/109/123/4**. The complete
+preservation report is `runs/owned-intrinsic-added-attack-publication-02/validation.json`.
+The current 138,407-byte replay has SHA-256
+`c0aa1c70b4b5e42eba0c780d98a7b9d48acfa862825ff862644843dbe5c63614`.
 
 **Resume:** keep Original05 first. Final Mana still awaits the numeric-domain
 decision and complete conversion/addition source coverage. The review found no
@@ -219,25 +224,40 @@ owners. The thirteen remaining Partial passives comprise seven Puppet/Archon
 nodes, four separate granted-effect sources, one jewel socket and the distinct
 active-minion-type Command mechanic. Preserve their independent gaps.
 
-This review did not establish another complete selected-input closure under the
-accepted contracts. While the resource/configuration decisions remain pending,
-the next bounded numerical slice is the intrinsic
-**added attack damage contribution** from the existing Actor profile stat `2537`.
-Pinned `CalcActiveSkill.lua:704–709` applies this only to eligible minion attacks,
-with separate Spectre/Companion and `damageFixup` branches. Reuse the exact Sniper
-Actor `3091`, slot `001f`, Basic Skill/output `0021`/`0022` and existing Action
-ownership. Do not supply an unconditional factor to other actors or add a second
-profile DTO. The existing physical-damage source02 reports already retain the
-profile, flags, modifier, original calls and flat-added controls. Publish the
-intrinsic contribution first; a final combined factor still needs explicit
-membership and rounding evidence. Unchanged Original05 has no flat-added damage,
-so this advances a missing dependency rather than changing its baseline numbers.
+**Next implementation:** join the already-published minion Life increase into
+the shared replay as described below. It retires a deliberate fixture exclusion
+without a new public model, while the resource/configuration decisions remain
+pending. The intrinsic added-attack source above is now published and joined;
+Retained Original05 source observations have no flat-added damage, so this
+fills a dependency without supplying a new final-damage result.
+
+The following damage boundary is the pre-conversion physical base at pinned
+`CalcOffence.lua:4132–4136`: account for flat Actor/Action and Enemy additions,
+added-damage increased/MORE membership, source endpoint bonuses and the skill
+coefficient before calculating it. Source02's filtered baseline zero/empty
+records cannot close untranslated owners. Its raw filter also omits
+`DamageGainAsRandom`: `CalcSetup.lua:82` installs Faerie Fire's conditional random
+gain before later expansion. Lines 77–81 install conditional Intimidated and
+Debilitated damage sources despite their baseline inactivity. Trace these raw
+inventories and conditions in the next damage census; do not infer conversion,
+gain or complete damage coverage from final zero tables. The pending Actor-to-
+Enemy, configuration and scoped-coverage decisions remain distinct boundaries.
 
 The shared Sniper Life fixture also still excludes the already-published
 `received-minion-life-increase` producer (six sources, 44 percentage points).
-Join it through the existing graph when working on final minion Life, then update
+Join it next through the existing graph, then update
 the ordinary replay and preserve actual Partial refusal. This is integration
-work, not authority to declare final Life complete. A smaller item follow-up is
+work, not authority to declare final Life complete. Four selected Life/Damage
+sources already contribute 24 in the replay; add the actual selected `1218`/
+`0aef` and `40894`/`1372` allocations and their existing 10-point producers
+without duplicating those four. Install the canonical Actor-slot program,
+freeze Player `32e5` Increase after delivery, then schedule it before
+`life-contributions-ready`. Remove the explicit query-member exclusion in
+`tests/support/owned_sniper_life_queries.rs` and check 44 on both exact minions,
+preserving Player 1257 Add/5 Increase. Existing source controls prove 44/38/34/0;
+their tree removals have connectivity side effects and are not isolated legal
+optimizer mutations. Final Life still needs complete equipment, transformation,
+override and arithmetic coverage. A smaller item follow-up is
 Cryptic Leggings `1e0e`'s five empty intrinsic declaration facets using retained
 Crown/Leggings evidence; its real sockets and numerical gaps must remain open.
 

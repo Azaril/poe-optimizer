@@ -2,7 +2,7 @@
 
 `owned-sniper-replay.json.gz` contains the public typed inputs of the existing
 joined Sniper test graph, exported from
-`runs/owned-mana-override-publication-01/package`. It is test data, not a
+`runs/owned-intrinsic-added-attack-publication-02/package`. It is test data, not a
 production release or an admitted complete build. Original05 still has four
 selected input obligations and incomplete mechanics coverage.
 
@@ -58,30 +58,26 @@ backend with fixed timestamp and OS header. Decoding is bounded to 8 MiB; the CI
 test requires deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
-The October 9 V27 fixture is 138,049 compressed bytes and 5,397,012 JSON bytes.
-The exporter compares the decoded replay's full report against the original
-graph, and the ordinary native test checks deterministic re-encoding. Its gzip
-SHA-256 is `5ae76529f235385e2af8611972cccf4ce9553c708e139e87fc5ab43f513796e0`.
-The latest refresh changes only the operations capability and its dependent
-identities; the finite graph's 922 definitions and 615 owners retain their
-contents. Actual Mana override component checks extend these public inputs in
-the existing CLI `owned_intelligence_mana` test, without adding Blood Magic's
-unfinished mechanics to this fixture's claimed coverage.
+The current October 9 V27 fixture has 925 definitions and 618 owners. It is
+138,407 compressed bytes and 5,405,368 JSON bytes, with SHA-256
+`c0aa1c70b4b5e42eba0c780d98a7b9d48acfa862825ff862644843dbe5c63614`.
+The exporter verifies full-report equality before writing; the ordinary native
+test checks deterministic re-encoding.
 
-Revalidation after the Ascendancy-root and generated-Warrior publications
-reproduces this exact fixture (30.03s; `runs/owned-sniper-replay-warrior-01.log`).
-It used input `d8a030ae8dd7f98b237511e010f654a89c87a9bf4d55fe52dfebff8d0857a8c0`.
-The final `runs/owned-warrior-correspondence-publication-07/package` reproduces
-seventeen artifact files from that provisional Publication03 package byte-for-byte.
-Only `release.json` differs: its input and final evidence-authoring digests
-reflect the reproduced Source04 witness after parent-harness formatting. All
-other receipt fields match, including definitions, rules and compiled identities.
-No fixture bytes changed.
-The current package is broader than this deliberately finite numerical graph.
+The intrinsic added-attack source adds three Stats, two programs, one exact
+Basic route and their stage dependencies. Every pre-existing definition, slot
+and program is retained exactly. Build, scenario and queries are unchanged;
+support preparation/input/receiving content changes only its dependency
+identities. The snapshot retains explicit Actor-producer → routing → Action
+ordering and frozen channels.
 
-Revalidation after intrinsic Ascendancy-owner closure also reproduces this exact
-fixture (29.16s; `runs/owned-sniper-replay-ascendancy-01.log`). It uses canonical
-`runs/owned-ascendancy-owner-publication-01/package`, input
-`37e12592a376ea2d79a190678a3691760f701cf9d0fb3ab270b8024579b141fa`.
-The owner refinement supplies no additional numerical program to this finite
-graph; its 138,049 compressed bytes and SHA-256 above remain unchanged.
+Five new ordinary checks cover exact source/route preservation, identity
+inactivity, zero and changed injected scales, missing profile/authorized
+producer/route, Partial refusal, premature reads, reordered occurrences and
+fresh/reused/four-worker equality. They do not construct a foreign Actor or
+claim a final added-damage aggregate. All ten replay tests pass.
+
+Regeneration: `runs/owned-sniper-replay-added-attack-01.log` (29.17s), from
+input `c4c38e18383f708bc36d4a571bb260d0afadf0e69c1e7a6881ef80b8a0098ba3`.
+The canonical publication is broader than this finite graph. Earlier refreshes
+are recorded in the implementation history; no old-format decoder is retained.
