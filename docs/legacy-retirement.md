@@ -1970,3 +1970,20 @@ obligation. Next identify whether each part of that obligation belongs to offlin
 acquisition or still requires native magnitude semantics. Do not erase a global
 mechanics gap merely because the current imported controls exclude its cases.
 The separate Lua-cleanup, order and resource-arithmetic investigations remain.
+
+## Life numeric versus source text transport (2026-10-09)
+
+The [canonical numeric audit](owned-flat-life-numeric-audit.md) confirms that
+the broad encoding gap cannot be deleted solely from the admitted fixed inputs.
+The released canonical schema also admits fractional amounts and non-identity
+initial factors. Original source formatting loses one unit at an extreme
+diagnostic value through `tostring`; its numeric rounding still agrees with
+native arithmetic. The regression records the exact difference in all loaded
+contexts/JIT modes and does not relabel it as parity.
+
+Keep source decimal representation outside native Core/Data/Engine. Do not add a
+compatibility formatter, tolerance or narrowed domain to conceal the difference.
+No source bug exception or obtainable-item claim is made. Establish reachable
+factor bounds alongside real `ProjectModifierTransform` producers and revisit
+this boundary only with that evidence. All four Life owner gaps remain; no
+production path was added or removed by the audit.

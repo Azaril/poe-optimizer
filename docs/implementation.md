@@ -100,9 +100,47 @@ data-adoption step for the same closest build. Life and Skill scaling reuse the
 same membership implementation; support-domain data adoption proceeds independently
 of the now-accepted application-group query contract. Preserve the general model and incomplete
 coverage throughout.
+On October 9 the owner also explicitly approved
+[exact Action queries](owned-action-contribution-queries-proposal.md) and
+[coherent optional numeric selection](owned-numeric-selection-proposal.md).
+Implement Action ownership/membership first, adopt the real Command channel,
+then implement require-agreement numeric selection for resource overrides.
+Both extend the existing graph; they authorize neither unrelated delivery
+origins nor arbitrary override precedence. Later references below to these two
+decisions as pending are historical.
+
 Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
+
+## Latest evidence checkpoint: canonical Life numeric boundary
+
+The [numeric audit](owned-flat-life-numeric-audit.md) finds 16 matching controls
+and one repeatable large-value source decimal-transport discrepancy. The actual
+released native program retains `1000997998001001`; PoB's `tostring` path returns
+text that parses as `1000997998001000`. Original numeric rounding retains the
+first value. This diagnostic is not an obtainable item, a supplied-build failure
+or an accepted PoB defect exception. The broad owner gap remains open; no
+production arithmetic, import admission, schema or package changes are made.
+
+Source regression passes in **26.79s**, across all five originals, fresh replay,
+warm restoration and both JIT modes. Two ordinary native tests pass in **0.22s**
+with the released program hash, all captured controls, missing facts, fresh/reused
+scratch and a four-thread Rayon pool. Strict all-feature Clippy passes in **0.37s**.
+Evidence and reproduction are linked above. Canonical package, four owner gaps,
+110 queries and selected counts **107/117/109/123/4** remain unchanged; native
+builds remain **0/5**. Predecessor `95f9e83` CI was pending at inspection.
+
+**Resume:** The newly accepted exact Action query contract is now the immediate
+implementation boundary. Add generic Core/Data/Engine ownership and membership
+through the shared query path, then consume actual Command contributions with
+positive Gas Arrow and zero Basic Attack controls. Optional numeric selection
+follows for Mana. For independent Life work, implement real ordered-magnitude
+producers using existing `ProjectModifierTransform` and establish their reachable
+bounds; do not close numeric coverage using only fixed-integer imports or spend
+the next checkpoint recreating source string formatting. Existing routing,
+external membership/order, resource arithmetic and four imported-input obligations
+remain separate dependencies toward the closest complete build.
 
 ## Latest data checkpoint: fixed-Life canonical input admission
 
@@ -141,16 +179,15 @@ Canonical successor: `runs/owned-flat-life-admission-publication-01/package`:
   **107/117/109/123/4**, with 110 queries, no evaluation bundle and **0/5 complete
   native builds**. Protected incoming-critical drafts remain untouched.
 
-**Resume:** Original05 remains the closest build. Next audit the source
+The subsequent audit above followed this checkpoint's next step: inspect the source
 encoding/corrupted-range gap against the now-proved canonical input boundary:
 identify exactly which source work precedes those inputs and which magnitude
 work still executes after them. Use the existing original-call witness and
 numeric compiler before adding a new mechanism. This audit must distinguish a
 redundant acquisition obligation from an unimplemented native mechanic; it must
 not close global coverage merely because imported controls exclude that case.
-Then address the evidenced remaining ordered transform/routing dependency.
 External membership/order and final resource arithmetic remain open. Exact-Action
-and optional numeric-selection decisions are still pending for damage/Mana;
+and optional numeric-selection decisions have since been approved for damage/Mana;
 four usage/configuration obligations independently block request finalization.
 
 ## Preceding data checkpoint: native Amulet Life copying

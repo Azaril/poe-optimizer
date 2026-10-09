@@ -1,6 +1,6 @@
 # Checked optional numeric selection in the contribution graph
 
-**Status:** Proposed; public-contract implementation awaits the owner's decision.
+**Status:** Accepted by the owner on 2026-10-09; implementation follows exact Action queries.
 **Date:** 2026-10-08.
 **Decider:** Project owner.
 
@@ -79,5 +79,6 @@ graph, with explicit semantic priority rather than implicit traversal order.
    publishing final Mana. This proposal approves neither new precedence laws,
    complete resource coverage nor a rounding compatibility mode.
 
-The pending exact-Action query proposal is a separate scope/authority extension;
-this decision does not implicitly approve it.
+The exact-Action query proposal is a separate scope/authority extension. The
+owner explicitly approved both decisions on 2026-10-09; neither grants unrelated
+producer origins or an override precedence law beyond require agreement.

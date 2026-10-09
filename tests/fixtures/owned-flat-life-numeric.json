@@ -1,0 +1,191 @@
+{
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "witness_sha256": "09c6f10d94eb878fa9070e143be01e6f316fcfdc2faf061126131de2c9ac159c",
+  "driver_sha256": "9a4d5bb93bc9c60da9959194c41219a7f12f1a66d95d06d912db8ced60751445",
+  "observer_sha256": "f90252651282bc74b3f60d3a5d0e89bcc829bfaf00a9eddf7b66470a3813d5cd",
+  "files": [
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    }
+  ],
+  "release_input": "26c0a5022e550ae9f2d2488c27b761a58917f2153aeda4b402f465a7d7c0bf76",
+  "program_sha256": "4c848d04ff6033f8bd8030352000fec1ba1514e3095075949e51dd0a959d5638",
+  "report": {
+    "path": "runs/owned-flat-life-numeric-source-03/source-jit-off.json",
+    "bytes": 32910,
+    "sha256": "7ce49ac31129402864671b9f80d20049793ef437f276e191bfe690423f43d064"
+  },
+  "cases": [
+    {
+      "corruption": 1,
+      "magnitude": 1,
+      "name": "zero",
+      "raw": 0,
+      "text": "0",
+      "value": 0,
+      "expected_native": 0
+    },
+    {
+      "corruption": 1,
+      "magnitude": 1,
+      "name": "identity",
+      "raw": 17,
+      "text": "17",
+      "value": 17,
+      "expected_native": 17
+    },
+    {
+      "corruption": 1,
+      "magnitude": 1,
+      "name": "raw-upper",
+      "raw": 1000000,
+      "text": "1000000",
+      "value": 1000000,
+      "expected_native": 1000000
+    },
+    {
+      "corruption": 1,
+      "magnitude": 1,
+      "name": "fraction",
+      "raw": 17.5,
+      "text": "18",
+      "value": 18,
+      "expected_native": 18
+    },
+    {
+      "corruption": 1,
+      "magnitude": 1,
+      "name": "below-half",
+      "raw": 0.49999999999999994,
+      "text": "1",
+      "value": 1,
+      "expected_native": 1
+    },
+    {
+      "corruption": 1,
+      "magnitude": 1,
+      "name": "half",
+      "raw": 0.5,
+      "text": "1",
+      "value": 1,
+      "expected_native": 1
+    },
+    {
+      "corruption": 1,
+      "magnitude": 1,
+      "name": "above-half",
+      "raw": 0.5000000000000001,
+      "text": "1",
+      "value": 1,
+      "expected_native": 1
+    },
+    {
+      "corruption": 1.25,
+      "magnitude": 1,
+      "name": "corruption",
+      "raw": 10,
+      "text": "13",
+      "value": 13,
+      "expected_native": 13
+    },
+    {
+      "corruption": 0,
+      "magnitude": 1,
+      "name": "corruption-zero",
+      "raw": 10,
+      "text": "0",
+      "value": 0,
+      "expected_native": 0
+    },
+    {
+      "corruption": 1.5,
+      "magnitude": 1,
+      "name": "fraction-and-corruption",
+      "raw": 25.5,
+      "text": "39",
+      "value": 39,
+      "expected_native": 39
+    },
+    {
+      "corruption": 1.5,
+      "magnitude": 1.2,
+      "name": "ordered-factors",
+      "raw": 25.5,
+      "text": "46",
+      "value": 46,
+      "expected_native": 46
+    },
+    {
+      "corruption": 1.5,
+      "magnitude": -1.2,
+      "name": "negative-magnitude",
+      "raw": 25.5,
+      "text": "-46",
+      "value": -46,
+      "expected_native": -46
+    },
+    {
+      "corruption": 1,
+      "magnitude": 0,
+      "name": "magnitude-zero",
+      "raw": 17,
+      "text": "0",
+      "value": 0,
+      "expected_native": 0
+    },
+    {
+      "corruption": 1e-7,
+      "magnitude": 1,
+      "name": "small-factor",
+      "raw": 1,
+      "text": "0",
+      "value": 0,
+      "expected_native": 0
+    },
+    {
+      "corruption": 1000000,
+      "magnitude": 1,
+      "name": "corruption-upper",
+      "raw": 999999,
+      "text": "999999000000",
+      "value": 999999000000,
+      "expected_native": 999999000000
+    },
+    {
+      "corruption": 1000000,
+      "magnitude": 1,
+      "name": "both-upper",
+      "raw": 1000000,
+      "text": "1000000000000",
+      "value": 1000000000000,
+      "expected_native": 1000000000000
+    },
+    {
+      "corruption": 999999,
+      "magnitude": 1001,
+      "name": "large-magnitude",
+      "raw": 999999,
+      "text": "1.000997998001e+15",
+      "value": 1000997998001000,
+      "expected_native": 1000997998001001
+    }
+  ],
+  "transport": {
+    "before": 1000997998001001,
+    "full": "1000997998001001",
+    "rounded": 1000997998001001,
+    "short": "1.000997998001e+15"
+  },
+  "numeric_domain_closed": false,
+  "whole_build_parity": false
+}

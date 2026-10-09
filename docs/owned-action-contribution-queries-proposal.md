@@ -1,6 +1,6 @@
 # Checked contribution queries on exact Actions
 
-**Status:** Proposed; implementation requires the owner's design decision.
+**Status:** Accepted by the owner on 2026-10-09; implementation is next.
 **Date:** 2026-10-08.
 **Decider:** Project owner.
 

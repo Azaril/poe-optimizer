@@ -85,8 +85,8 @@ unconverted mechanics remain blocking. The independent source controls include
 a real nonzero fractional conversion input and its interaction with a zero
 override. Native conversion production and final Mana are still unfinished.
 The [optional numeric selection proposal](owned-numeric-selection-proposal.md)
-would keep override presence/value coherent in the existing graph; it is pending
-the owner's decision and is not a current API. No Lua insertion-order behavior
+will keep override presence/value coherent in the existing graph; the owner
+approved it on October 9, but it is not yet a current API. No Lua insertion-order behavior
 has been adopted as a selection law.
 
 The [Life-copy source witness](owned-amulet-life-copy-evidence.md) now establishes
@@ -113,6 +113,14 @@ Boundary controls run through both the real full policies and a checked finite
 projection; only one coverage gap and evidence provenance change. Source text,
 Lua field shapes and captured outputs remain offline evidence. No second parser,
 native compatibility layer or broader range/corruption support is introduced.
+
+The subsequent [numeric audit](owned-flat-life-numeric-audit.md) executes the
+actual released rule on broader canonical inputs. Sixteen controls match the
+original formatter; one extreme result differs only after PoB's number-to-text
+conversion. This is retained diagnostic evidence, not a native formatting rule,
+an accepted bug exception or complete numeric coverage. Four Life owner gaps
+remain. Exact Action queries and optional numeric selection are now approved
+extensions of the same native contribution graph, with Action authority first.
 
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across
