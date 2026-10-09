@@ -1,0 +1,23 @@
+{
+  "status": "reviewed-intrinsic-contribution",
+  "before": "6a365378322411f6c4864a382941bb438a90d53edcd196114b565188a515016c",
+  "new_definitions": 0,
+  "new_programs": 1,
+  "closed_owners": 0,
+  "final_pool": false,
+  "whole_build": false,
+  "artifacts": {
+    "migration.json": {
+      "bytes": 4658,
+      "sha256": "24bc31444901345d9550f59285ad5f831e41a5fc15aef0dbc13df59dce010e0b"
+    },
+    "dependencies.json": {
+      "bytes": 39389,
+      "sha256": "cf2f0cfa52b4ad3d3690580fbe64bbf92d09684a60ffbac70e3ab08b0c500b78"
+    },
+    "source-vectors.json": {
+      "bytes": 8731,
+      "sha256": "8ea1bba17047048300f6617e210335cf2c77ae859c439f88fd5ef741632ffe12"
+    }
+  }
+}

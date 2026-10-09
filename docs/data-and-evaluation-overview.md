@@ -46,6 +46,16 @@ execution; no private plan, scratch or PoB state is persisted. The compressed
 coverage boundaries and is not a production release or a complete build. Source
 acquisition, all-five import and broader artifact-backed tests remain separate.
 
+Player Mana now has a shared intrinsic contribution in
+[owned data](../data/owned/poe2/3887ae68/player-intrinsic-mana/README.md):
+`4 × character level + 30`. The existing shared Player Actor emits it once into
+the existing Mana channel, independently of class. No native game-specific code,
+new channel or source-language behavior was added. Full PoB observations across
+the five builds and level/fresh/warm controls agree with JIT on/off; ordinary
+native tests cover ownership, Partial refusal and worker reuse. Intelligence,
+other modifiers, checked contributor coverage and final-pool calculation remain
+separate dependencies. This contribution does not make a complete build available.
+
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across
 groups and that generated-provider exclusions must be distinguished from the

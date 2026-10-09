@@ -1,0 +1,163 @@
+{
+  "schema_version": 5,
+  "before": "6a365378322411f6c4864a382941bb438a90d53edcd196114b565188a515016c",
+  "release": "pob-3887ae68-player-intrinsic-mana-v1",
+  "reason": "shared-player-intrinsic-mana",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v25",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "schema": [],
+  "tables": [],
+  "owners": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "actor",
+          "value": {
+            "kind": "actor",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000332a"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "intrinsic-player-mana",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "level",
+                "value_type": {
+                  "kind": "integer"
+                },
+                "source": {
+                  "kind": "character_level"
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "level",
+                "expression": {
+                  "kind": "read",
+                  "input": "level"
+                }
+              },
+              {
+                "id": "per-level",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 4,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000003"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "offset",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 30,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000003"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "leveled",
+                "expression": {
+                  "kind": "scale_integer",
+                  "value": "per-level",
+                  "count": "level"
+                }
+              },
+              {
+                "id": "mana",
+                "expression": {
+                  "kind": "add",
+                  "left": "leveled",
+                  "right": "offset"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "intrinsic-mana",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000029f9"
+                  },
+                  "contribution": "add",
+                  "value": "mana"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "actor",
+                    "value": {
+                      "kind": "actor",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000332a"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "shared-player-initialization-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "receivers": [],
+  "query_targets": []
+}

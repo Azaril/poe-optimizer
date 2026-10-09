@@ -1,0 +1,360 @@
+{
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "observer_sha256": "c9c15df2bc841f37f7d7d2ed92b06a674c9af4a487a0cb3eb0bea0de5536d48e",
+  "bootstrap_sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9",
+  "files": [
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    }
+  ],
+  "reports": [
+    {
+      "path": "runs/owned-player-intrinsic-mana-source-02/source-jit-off.json",
+      "bytes": 62034,
+      "sha256": "441c1e547e5db98a292d32f5f1a6bf5def004c10e34657588f708786ff5ac839"
+    },
+    {
+      "path": "runs/owned-player-intrinsic-mana-source-02/source-jit-on.json",
+      "bytes": 62034,
+      "sha256": "441c1e547e5db98a292d32f5f1a6bf5def004c10e34657588f708786ff5ac839"
+    }
+  ],
+  "vectors": [
+    {
+      "name": "original-01",
+      "xml_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+      "warm_xml_sha256": null,
+      "amount": 414,
+      "base_source_sum": 414,
+      "class_id": 7,
+      "class_name": "Sorceress",
+      "level": 96,
+      "multiplier": {
+        "effective": 96,
+        "extra": 0,
+        "override": {
+          "present": false
+        }
+      },
+      "record": {
+        "flags": 0,
+        "keyword_flags": 0,
+        "name": "Mana",
+        "source": "Base",
+        "tags": [
+          {
+            "base": 30,
+            "type": "Multiplier",
+            "var": "Level"
+          }
+        ],
+        "type": "BASE",
+        "value": 4
+      }
+    },
+    {
+      "name": "original-02",
+      "xml_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+      "warm_xml_sha256": null,
+      "amount": 382,
+      "base_source_sum": 382,
+      "class_id": 9,
+      "class_name": "Mercenary",
+      "level": 88,
+      "multiplier": {
+        "effective": 88,
+        "extra": 0,
+        "override": {
+          "present": false
+        }
+      },
+      "record": {
+        "flags": 0,
+        "keyword_flags": 0,
+        "name": "Mana",
+        "source": "Base",
+        "tags": [
+          {
+            "base": 30,
+            "type": "Multiplier",
+            "var": "Level"
+          }
+        ],
+        "type": "BASE",
+        "value": 4
+      }
+    },
+    {
+      "name": "original-03",
+      "xml_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490",
+      "warm_xml_sha256": null,
+      "amount": 402,
+      "base_source_sum": 402,
+      "class_id": 10,
+      "class_name": "Monk",
+      "level": 93,
+      "multiplier": {
+        "effective": 93,
+        "extra": 0,
+        "override": {
+          "present": false
+        }
+      },
+      "record": {
+        "flags": 0,
+        "keyword_flags": 0,
+        "name": "Mana",
+        "source": "Base",
+        "tags": [
+          {
+            "base": 30,
+            "type": "Multiplier",
+            "var": "Level"
+          }
+        ],
+        "type": "BASE",
+        "value": 4
+      }
+    },
+    {
+      "name": "original-04",
+      "xml_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711",
+      "warm_xml_sha256": null,
+      "amount": 414,
+      "base_source_sum": 414,
+      "class_id": 9,
+      "class_name": "Mercenary",
+      "level": 96,
+      "multiplier": {
+        "effective": 96,
+        "extra": 0,
+        "override": {
+          "present": false
+        }
+      },
+      "record": {
+        "flags": 0,
+        "keyword_flags": 0,
+        "name": "Mana",
+        "source": "Base",
+        "tags": [
+          {
+            "base": 30,
+            "type": "Multiplier",
+            "var": "Level"
+          }
+        ],
+        "type": "BASE",
+        "value": 4
+      }
+    },
+    {
+      "name": "original-05",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "warm_xml_sha256": null,
+      "amount": 398,
+      "base_source_sum": 398,
+      "class_id": 7,
+      "class_name": "Sorceress",
+      "level": 92,
+      "multiplier": {
+        "effective": 92,
+        "extra": 0,
+        "override": {
+          "present": false
+        }
+      },
+      "record": {
+        "flags": 0,
+        "keyword_flags": 0,
+        "name": "Mana",
+        "source": "Base",
+        "tags": [
+          {
+            "base": 30,
+            "type": "Multiplier",
+            "var": "Level"
+          }
+        ],
+        "type": "BASE",
+        "value": 4
+      }
+    },
+    {
+      "name": "original-05-level-1",
+      "xml_sha256": "3b438022591d0ff146f4c18f1437f6ac9edc629277689dcc168cc89859295375",
+      "warm_xml_sha256": null,
+      "amount": 34,
+      "base_source_sum": 34,
+      "class_id": 7,
+      "class_name": "Sorceress",
+      "level": 1,
+      "multiplier": {
+        "effective": 1,
+        "extra": 0,
+        "override": {
+          "present": false
+        }
+      },
+      "record": {
+        "flags": 0,
+        "keyword_flags": 0,
+        "name": "Mana",
+        "source": "Base",
+        "tags": [
+          {
+            "base": 30,
+            "type": "Multiplier",
+            "var": "Level"
+          }
+        ],
+        "type": "BASE",
+        "value": 4
+      }
+    },
+    {
+      "name": "original-05-level-91",
+      "xml_sha256": "5c3a00db8c774e13f8c0e0e11dc82c811b4d634fc0a8807608942f5bb86c9412",
+      "warm_xml_sha256": null,
+      "amount": 394,
+      "base_source_sum": 394,
+      "class_id": 7,
+      "class_name": "Sorceress",
+      "level": 91,
+      "multiplier": {
+        "effective": 91,
+        "extra": 0,
+        "override": {
+          "present": false
+        }
+      },
+      "record": {
+        "flags": 0,
+        "keyword_flags": 0,
+        "name": "Mana",
+        "source": "Base",
+        "tags": [
+          {
+            "base": 30,
+            "type": "Multiplier",
+            "var": "Level"
+          }
+        ],
+        "type": "BASE",
+        "value": 4
+      }
+    },
+    {
+      "name": "original-05-level-100",
+      "xml_sha256": "167322ae52514632f762b0510a9c53572eb95fa8229a87b803abcdbd71c8dfed",
+      "warm_xml_sha256": null,
+      "amount": 430,
+      "base_source_sum": 430,
+      "class_id": 7,
+      "class_name": "Sorceress",
+      "level": 100,
+      "multiplier": {
+        "effective": 100,
+        "extra": 0,
+        "override": {
+          "present": false
+        }
+      },
+      "record": {
+        "flags": 0,
+        "keyword_flags": 0,
+        "name": "Mana",
+        "source": "Base",
+        "tags": [
+          {
+            "base": 30,
+            "type": "Multiplier",
+            "var": "Level"
+          }
+        ],
+        "type": "BASE",
+        "value": 4
+      }
+    },
+    {
+      "name": "repeat-original-05",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "warm_xml_sha256": null,
+      "amount": 398,
+      "base_source_sum": 398,
+      "class_id": 7,
+      "class_name": "Sorceress",
+      "level": 92,
+      "multiplier": {
+        "effective": 92,
+        "extra": 0,
+        "override": {
+          "present": false
+        }
+      },
+      "record": {
+        "flags": 0,
+        "keyword_flags": 0,
+        "name": "Mana",
+        "source": "Base",
+        "tags": [
+          {
+            "base": 30,
+            "type": "Multiplier",
+            "var": "Level"
+          }
+        ],
+        "type": "BASE",
+        "value": 4
+      }
+    },
+    {
+      "name": "warm-original-05",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "warm_xml_sha256": "3b438022591d0ff146f4c18f1437f6ac9edc629277689dcc168cc89859295375",
+      "amount": 398,
+      "base_source_sum": 398,
+      "class_id": 7,
+      "class_name": "Sorceress",
+      "level": 92,
+      "multiplier": {
+        "effective": 92,
+        "extra": 0,
+        "override": {
+          "present": false
+        }
+      },
+      "record": {
+        "flags": 0,
+        "keyword_flags": 0,
+        "name": "Mana",
+        "source": "Base",
+        "tags": [
+          {
+            "base": 30,
+            "type": "Multiplier",
+            "var": "Level"
+          }
+        ],
+        "type": "BASE",
+        "value": 4
+      }
+    }
+  ],
+  "final_pool": false,
+  "complete_contributors": false
+}

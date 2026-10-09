@@ -103,7 +103,68 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Current data checkpoint: inherited and applied minion damage
+## Latest data checkpoint: shared Player intrinsic Mana
+
+While the Action query decision remains pending, Original05's requested Mana
+metric now has its intrinsic Player contribution. The
+[data packet](../data/owned/poe2/3887ae68/player-intrinsic-mana/README.md) adds one
+ordinary Actor program to shared Player owner `332a`: `4 × level + 30`. It reuses
+Mana channel `29f9`, Mana unit `0003` and the existing once-per-Player binding.
+It allocates no IDs and changes no Core/Data/Engine API. The coefficients live
+in injected rule data. All existing rule bodies and Partial coverage survive;
+there is no final Mana consumer or complete contributor-domain claim.
+
+The new optional source test reuses the complete `mlua` bootstrap, locates the
+actual loaded Mana record and invokes original ModStore methods without replacing
+them. It retains the relevant modifier read set, validates its level multiplier
+and checks unchanged scalar output. Five originals, three level controls, a fresh
+repeat, a warm transition and an independent warm replay pass with JIT both off
+and on. Each mode performs 13 complete loads; the 62,034-byte reports are identical
+with SHA-256 `441c1e547e5db98a292d32f5f1a6bf5def004c10e34657588f708786ff5ac839`.
+The source test passes in **40.93s**. Evidence:
+`runs/owned-player-intrinsic-mana-source-03.log` and
+`runs/owned-player-intrinsic-mana-source-02/source-jit-{off,on}.json`.
+
+The ordinary native tests replay those observations, check all eight classes at
+levels 1/92/100, reject invalid levels, preserve exact Player ownership, and prove
+that restoring the real Partial owner makes evaluation unavailable. Fresh/reused
+A–unknown–B–A and four-worker reports agree. These tests use an explicit finite
+domain with support-source declarations, not inferred game completeness. An
+initial fixture omitted those declarations and correctly failed the native gate;
+only the fixture was corrected. Source publication also uses the same CRLF
+normalization as the pinned-source verifier when authenticating upstream files.
+
+All **four native/publication tests pass in 26.85s**, including unchanged all-five
+imports and byte-identical reconstruction of all 18 published artifacts. There
+remain 110 queries, selected input counts **107/117/109/123/4**, and **0/5 complete
+native builds**. Strict all-feature Clippy for both new native and PoB targets
+passes in **0.46s**. Evidence:
+`runs/owned-player-intrinsic-mana-native-publication-03.log`,
+`runs/owned-player-intrinsic-mana-publication-03/validation.json`, and
+`runs/owned-player-intrinsic-mana-clippy-01.log`.
+
+The canonical successor is
+`runs/owned-player-intrinsic-mana-publication-03/package`:
+
+- Input: `17f95e89e08a9fca9eb18fe15eada5f89fbf3015b9e82e5d5c3e658f0c673af2`.
+- Schema: `ba2d9d35fb1433b43be4eee378a3bd8eae1bb524a666ec08c65b3287267cc28d`.
+- Rules: `ee9094a32e526693e8832522279e244ac601bb5e3466d6c274f2812c9b8b5c46`.
+- Compiled rules: `4bd2f0bc8c6b679cc7094125de8a53ac63cda735b6e183b7cf85313b4052baec`.
+- Operations remain V25; next free definition remains **3355**.
+
+**Resume:** keep Original05 first. The Action query proposal is still awaiting
+the owner's answer, not implicitly approved by the request for a summary. Once
+approved, resume the real Command consumer and physical damage path. Independent
+accepted work can proceed on Mana: the retained Original05 source read set has
+398 intrinsic points, 210 from Intelligence and a 5% quest increase, with final
+Mana 638. Validate the inherent Intelligence bonus and its suppression/doubling
+flags through existing typed rules and Boolean contributions, then establish
+checked contributor coverage and final rounding. Do not substitute those observed
+totals as runtime inputs or close domains from this one build. Player Life's
+equipment-domain/rounding proof and the four selected usage/configuration
+obligations remain unresolved. No unrelated incoming-critical draft was changed.
+
+## Preceding data checkpoint: inherited and applied minion damage
 
 The [mixed minion damage packet](../data/owned/poe2/3887ae68/mixed-minion-damage/README.md)
 now derives the admitted unconditional MORE factor as well as the inherited/
