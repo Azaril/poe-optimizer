@@ -35,7 +35,7 @@
             "context": "action",
             "reads": [
               {
-                "id": "intrinsic-min",
+                "id": "source-min",
                 "value_type": {
                   "kind": "quantity",
                   "value": {
@@ -65,7 +65,7 @@
                 }
               },
               {
-                "id": "intrinsic-max",
+                "id": "source-max",
                 "value_type": {
                   "kind": "quantity",
                   "value": {
@@ -95,37 +95,7 @@
                 }
               },
               {
-                "id": "bonus-min",
-                "value_type": {
-                  "kind": "quantity",
-                  "value": {
-                    "unit": {
-                      "kind": "unit",
-                      "namespace": {
-                        "game": "poe2",
-                        "version": "owned-mechanics-v1"
-                      },
-                      "key": "def.0000000000001d3a"
-                    }
-                  }
-                },
-                "source": {
-                  "kind": "stat",
-                  "value": {
-                    "entity": "current",
-                    "stat": {
-                      "kind": "stat",
-                      "namespace": {
-                        "game": "poe2",
-                        "version": "owned-mechanics-v1"
-                      },
-                      "key": "def.0000000000003370"
-                    }
-                  }
-                }
-              },
-              {
-                "id": "bonus-max",
+                "id": "self-flat-min",
                 "value_type": {
                   "kind": "quantity",
                   "value": {
@@ -155,7 +125,7 @@
                 }
               },
               {
-                "id": "self-flat-min",
+                "id": "self-flat-max",
                 "value_type": {
                   "kind": "quantity",
                   "value": {
@@ -185,7 +155,7 @@
                 }
               },
               {
-                "id": "self-flat-max",
+                "id": "enemy-flat-min",
                 "value_type": {
                   "kind": "quantity",
                   "value": {
@@ -215,7 +185,7 @@
                 }
               },
               {
-                "id": "enemy-flat-min",
+                "id": "enemy-flat-max",
                 "value_type": {
                   "kind": "quantity",
                   "value": {
@@ -245,36 +215,6 @@
                 }
               },
               {
-                "id": "enemy-flat-max",
-                "value_type": {
-                  "kind": "quantity",
-                  "value": {
-                    "unit": {
-                      "kind": "unit",
-                      "namespace": {
-                        "game": "poe2",
-                        "version": "owned-mechanics-v1"
-                      },
-                      "key": "def.0000000000001d3a"
-                    }
-                  }
-                },
-                "source": {
-                  "kind": "stat",
-                  "value": {
-                    "entity": "current",
-                    "stat": {
-                      "kind": "stat",
-                      "namespace": {
-                        "game": "poe2",
-                        "version": "owned-mechanics-v1"
-                      },
-                      "key": "def.0000000000003375"
-                    }
-                  }
-                }
-              },
-              {
                 "id": "added-multiplier",
                 "value_type": {
                   "kind": "quantity",
@@ -299,37 +239,7 @@
                         "game": "poe2",
                         "version": "owned-mechanics-v1"
                       },
-                      "key": "def.0000000000003376"
-                    }
-                  }
-                }
-              },
-              {
-                "id": "base-coefficient",
-                "value_type": {
-                  "kind": "quantity",
-                  "value": {
-                    "unit": {
-                      "kind": "unit",
-                      "namespace": {
-                        "game": "poe2",
-                        "version": "owned-mechanics-v1"
-                      },
-                      "key": "def.0000000000000001"
-                    }
-                  }
-                },
-                "source": {
-                  "kind": "stat",
-                  "value": {
-                    "entity": "current",
-                    "stat": {
-                      "kind": "stat",
-                      "namespace": {
-                        "game": "poe2",
-                        "version": "owned-mechanics-v1"
-                      },
-                      "key": "def.0000000000003377"
+                      "key": "def.000000000000336e"
                     }
                   }
                 }
@@ -337,31 +247,17 @@
             ],
             "nodes": [
               {
-                "id": "intrinsic-min",
+                "id": "source-min",
                 "expression": {
                   "kind": "read",
-                  "input": "intrinsic-min"
+                  "input": "source-min"
                 }
               },
               {
-                "id": "intrinsic-max",
+                "id": "source-max",
                 "expression": {
                   "kind": "read",
-                  "input": "intrinsic-max"
-                }
-              },
-              {
-                "id": "bonus-min",
-                "expression": {
-                  "kind": "read",
-                  "input": "bonus-min"
-                }
-              },
-              {
-                "id": "bonus-max",
-                "expression": {
-                  "kind": "read",
-                  "input": "bonus-max"
+                  "input": "source-max"
                 }
               },
               {
@@ -402,16 +298,21 @@
               {
                 "id": "base-coefficient",
                 "expression": {
-                  "kind": "read",
-                  "input": "base-coefficient"
-                }
-              },
-              {
-                "id": "source-min",
-                "expression": {
-                  "kind": "add",
-                  "left": "intrinsic-min",
-                  "right": "bonus-min"
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
                 }
               },
               {
@@ -444,14 +345,6 @@
                   "kind": "scale",
                   "value": "unscaled-min",
                   "factor": "base-coefficient"
-                }
-              },
-              {
-                "id": "source-max",
-                "expression": {
-                  "kind": "add",
-                  "left": "intrinsic-max",
-                  "right": "bonus-max"
                 }
               },
               {
@@ -500,7 +393,7 @@
                       "game": "poe2",
                       "version": "owned-mechanics-v1"
                     },
-                    "key": "def.000000000000336e"
+                    "key": "def.000000000000336f"
                   },
                   "value": "base-min"
                 }
@@ -517,7 +410,7 @@
                       "game": "poe2",
                       "version": "owned-mechanics-v1"
                     },
-                    "key": "def.000000000000336f"
+                    "key": "def.0000000000003370"
                   },
                   "value": "base-max"
                 }

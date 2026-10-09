@@ -1,0 +1,296 @@
+{
+  "cached_extra_stats": [
+    {
+      "path": "modCache/Inflict Corrupted Blood for 5 seconds on Block, dealing 50% of your maximum Life as Physical damage per second/[1]/[2]",
+      "record": {
+        "[1]": {
+          "skillId": "BloodbarrierPlayer",
+          "type": "SkillId"
+        },
+        "flags": 0,
+        "keywordFlags": 0,
+        "name": "ExtraSkillStat",
+        "type": "LIST",
+        "value": {
+          "key": "unique_blood_barrier_applies_x_stacks_of_corrupted_blood_on_block",
+          "value": 1
+        }
+      }
+    },
+    {
+      "path": "modCache/Inflict Corrupted Blood for 5 seconds on Block, dealing 50% of your maximum Life as Physical damage per second/[1]/[3]",
+      "record": {
+        "[1]": {
+          "skillId": "BloodbarrierPlayer",
+          "type": "SkillId"
+        },
+        "flags": 0,
+        "keywordFlags": 0,
+        "name": "ExtraSkillStat",
+        "type": "LIST",
+        "value": {
+          "key": "base_skill_effect_duration",
+          "value": 5000
+        }
+      }
+    },
+    {
+      "path": "modCache/Inflict Corrupted Blood for 5 seconds on Block, dealing 50% of your maximum Life as Physical damage per second/[1]/[4]",
+      "record": {
+        "[1]": {
+          "skillId": "BloodbarrierPlayer",
+          "type": "SkillId"
+        },
+        "flags": 0,
+        "keywordFlags": 0,
+        "name": "ExtraSkillStat",
+        "type": "LIST",
+        "value": {
+          "key": "base_physical_damage_%_of_maximum_life_to_deal_per_minute",
+          "value": 50
+        }
+      }
+    }
+  ],
+  "catalog_census": {
+    "modifiers": 11851,
+    "raw_rows": 436112,
+    "raw_tables": 145363
+  },
+  "coefficient_aliases": [],
+  "coefficient_factories": [
+    {
+      "key": "baseMultiplier",
+      "kind": "skill-helper",
+      "line": 2177,
+      "path": "src/Data/SkillStatMap.lua"
+    }
+  ],
+  "coefficient_modifiers": [
+    {
+      "path": "skillStatMap/active_skill_has_%_standard_scaling_attack_damage/[1]",
+      "record": {
+        "flags": 0,
+        "keywordFlags": 0,
+        "name": "SkillData",
+        "type": "LIST",
+        "value": {
+          "key": "baseMultiplier"
+        }
+      }
+    }
+  ],
+  "extra_stat_factories": [
+    {
+      "key": "unique_blood_barrier_applies_x_stacks_of_corrupted_blood_on_block",
+      "line": 3672,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "base_skill_effect_duration",
+      "line": 3673,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "base_physical_damage_%_of_maximum_life_to_deal_per_minute",
+      "line": 3674,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "purge_expose_resist_%_matching_highest_element_damage",
+      "line": 6207,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "purge_expose_resist_%_matching_highest_element_damage",
+      "line": 6208,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "arcane_cloak_consume_%_of_mana",
+      "line": 6209,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "steelskin_damage_limit_+%",
+      "line": 6217,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "consecrated_ground_enemy_damage_taken_+%",
+      "line": 6225,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "water_sphere_cold_lightning_exposure_%",
+      "line": 6226,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "frost_globe_health_per_stage",
+      "line": 6227,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "flame_wall_minimum_added_fire_damage",
+      "line": 6228,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "flame_wall_maximum_added_fire_damage",
+      "line": 6228,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "corrosive_shroud_poison_dot_multiplier_+_while_aura_active",
+      "line": 6229,
+      "path": "src/Modules/ModParser.lua"
+    },
+    {
+      "key": "shock_effect_+%",
+      "line": 6230,
+      "path": "src/Modules/ModParser.lua"
+    }
+  ],
+  "files": {
+    "src/Classes/ConfigTab.lua": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+    "src/Data/ModCache.lua": "8ac20aeca963e8b3745525da0444828e294632da0b57535144268489faa22b8b",
+    "src/Data/SkillStatMap.lua": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675",
+    "src/Data/Skills/minion.lua": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca",
+    "src/Data/Skills/sup_dex.lua": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac",
+    "src/Data/Skills/sup_str.lua": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3",
+    "src/Modules/CalcActiveSkill.lua": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04",
+    "src/Modules/CalcOffence.lua": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94",
+    "src/Modules/CalcTools.lua": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c",
+    "src/Modules/ConfigOptions.lua": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+    "src/Modules/Data.lua": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4",
+    "src/Modules/ModParser.lua": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+    "src/Modules/ModTools.lua": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+  },
+  "kind": "pinned-basic-attack-final-coefficient-domain",
+  "schema_version": 1,
+  "scope": {
+    "coefficient": 1.0,
+    "exact_profile": "RaisedSkeletonSniper",
+    "exact_skill": "MinionMeleeBow",
+    "lua_order_as_native_policy": false,
+    "native_numerical_coverage": false,
+    "normal_import_only": true
+  },
+  "selected": {
+    "altQualityStats": {},
+    "baseMods": null,
+    "direct_callbacks": {},
+    "id": "MinionMeleeBow",
+    "levels": {
+      "[1]": {
+        "levelRequirement": 0
+      }
+    },
+    "qualityStats": {},
+    "stat_sets": {
+      "1": {
+        "baseMods": null,
+        "constantStats": {
+          "[1]": {
+            "[1]": "arrow_projectile_variation",
+            "[2]": 1002
+          }
+        },
+        "direct_callbacks": {},
+        "levels": {
+          "[1]": {
+            "actorLevel": 1
+          }
+        },
+        "stats": {
+          "[1]": "skill_can_fire_arrows",
+          "[2]": "skill_can_fire_wand_projectiles",
+          "[3]": "projectile_uses_contact_position",
+          "[4]": "use_scaled_contact_offset",
+          "[5]": "maintain_projectile_direction_when_using_contact_position",
+          "[6]": "check_for_targets_between_initiator_and_projectile_source"
+        }
+      }
+    }
+  },
+  "selected_pass_corroboration": {
+    "path": "data/owned/poe2/3887ae68/minion-preconversion-source/report.json",
+    "role": "corroboration-not-supplier-completeness",
+    "sha256": "7a723a4eece7b297737006b08d1dc61ec0047d13cfd2b9fbfeaee94eb52397cb"
+  },
+  "selection_proof": {
+    "path": "data/owned/poe2/3887ae68/minion-attack-selection/source-evidence.json",
+    "sha256": "a2daf1e5c6c058ae2ce32f434feee325d06344a96a5ccbf29ed7320df2c63ec3"
+  },
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "stat_consumers": [
+    {
+      "index": 3,
+      "row": {
+        "[1]": "active_skill_has_%_standard_scaling_attack_damage",
+        "[2]": 35
+      },
+      "scope": "statSets/1/constantStats",
+      "skill_id": "TriggeredCraterPlayer",
+      "stat": "active_skill_has_%_standard_scaling_attack_damage",
+      "support": null
+    },
+    {
+      "index": 3,
+      "row": {
+        "[1]": "active_skill_has_%_standard_scaling_attack_damage",
+        "[2]": 50
+      },
+      "scope": "statSets/1/constantStats",
+      "skill_id": "StompingGroundShockwavePlayer",
+      "stat": "active_skill_has_%_standard_scaling_attack_damage",
+      "support": null
+    },
+    {
+      "index": 4,
+      "row": {
+        "[1]": "active_skill_has_%_standard_scaling_attack_damage",
+        "[2]": 30
+      },
+      "scope": "statSets/1/constantStats",
+      "skill_id": "ArmourExplosionPlayer",
+      "stat": "active_skill_has_%_standard_scaling_attack_damage",
+      "support": null
+    },
+    {
+      "index": 5,
+      "row": {
+        "[1]": "active_skill_has_%_standard_scaling_attack_damage",
+        "[2]": 35
+      },
+      "scope": "statSets/1/constantStats",
+      "skill_id": "TriggeredBrambleslamPlayer",
+      "stat": "active_skill_has_%_standard_scaling_attack_damage",
+      "support": null
+    },
+    {
+      "index": 6,
+      "row": {
+        "[1]": "active_skill_has_%_standard_scaling_attack_damage",
+        "[2]": 75
+      },
+      "scope": "statSets/1/constantStats",
+      "skill_id": "TriggeredCaltropsPlayer",
+      "stat": "active_skill_has_%_standard_scaling_attack_damage",
+      "support": null
+    },
+    {
+      "index": 7,
+      "row": {
+        "[1]": "active_skill_has_%_standard_scaling_attack_damage",
+        "[2]": 20
+      },
+      "scope": "statSets/1/constantStats",
+      "skill_id": "TriggeredVolcanicEruptionPlayer",
+      "stat": "active_skill_has_%_standard_scaling_attack_damage",
+      "support": null
+    }
+  ],
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+}

@@ -46,7 +46,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.000000000000336e"
+        "key": "def.000000000000336f"
       },
       "meaning": "physical minimum base before conversion"
     },
@@ -57,14 +57,14 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.000000000000336f"
+        "key": "def.0000000000003370"
       },
       "meaning": "physical maximum base before conversion"
     }
   ],
   "inputs": [
     {
-      "name": "intrinsic-min",
+      "name": "source-min",
       "stat": {
         "kind": "stat",
         "namespace": {
@@ -73,10 +73,10 @@
         },
         "key": "def.0000000000003212"
       },
-      "producer_status": "existing intrinsic Action endpoint"
+      "producer_status": "existing intrinsic Action endpoint; coherent source range under the pinned source-selection prerequisite"
     },
     {
-      "name": "intrinsic-max",
+      "name": "source-max",
       "stat": {
         "kind": "stat",
         "namespace": {
@@ -85,22 +85,10 @@
         },
         "key": "def.0000000000003213"
       },
-      "producer_status": "existing intrinsic Action endpoint"
+      "producer_status": "existing intrinsic Action endpoint; coherent source range under the pinned source-selection prerequisite"
     },
     {
-      "name": "bonus-min",
-      "stat": {
-        "kind": "stat",
-        "namespace": {
-          "game": "poe2",
-          "version": "owned-mechanics-v1"
-        },
-        "key": "def.0000000000003370"
-      },
-      "producer_status": "unimplemented in this fragment"
-    },
-    {
-      "name": "bonus-max",
+      "name": "self-flat-min",
       "stat": {
         "kind": "stat",
         "namespace": {
@@ -112,7 +100,7 @@
       "producer_status": "unimplemented in this fragment"
     },
     {
-      "name": "self-flat-min",
+      "name": "self-flat-max",
       "stat": {
         "kind": "stat",
         "namespace": {
@@ -124,7 +112,7 @@
       "producer_status": "unimplemented in this fragment"
     },
     {
-      "name": "self-flat-max",
+      "name": "enemy-flat-min",
       "stat": {
         "kind": "stat",
         "namespace": {
@@ -136,7 +124,7 @@
       "producer_status": "unimplemented in this fragment"
     },
     {
-      "name": "enemy-flat-min",
+      "name": "enemy-flat-max",
       "stat": {
         "kind": "stat",
         "namespace": {
@@ -148,18 +136,6 @@
       "producer_status": "unimplemented in this fragment"
     },
     {
-      "name": "enemy-flat-max",
-      "stat": {
-        "kind": "stat",
-        "namespace": {
-          "game": "poe2",
-          "version": "owned-mechanics-v1"
-        },
-        "key": "def.0000000000003375"
-      },
-      "producer_status": "unimplemented in this fragment"
-    },
-    {
       "name": "added-multiplier",
       "stat": {
         "kind": "stat",
@@ -167,22 +143,73 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.0000000000003376"
+        "key": "def.000000000000336e"
       },
-      "producer_status": "unimplemented in this fragment"
+      "producer_status": "existing combined-added-attack-damage producer; retained for source comparisons, replaced only by explicit synthetic arithmetic controls"
+    }
+  ],
+  "coverage": "No owner, producer inventory, configuration, complete-build or numerical-domain closure. Retained source operands authorize finite arithmetic comparisons only.",
+  "source_selection_prerequisite": {
+    "meaning": "The exact published Fixed intrinsic source supplies the complete source range for this binding. These endpoints are not generic aliases for every possible damage source.",
+    "bindings": {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/bindings.json",
+      "sha256": "f1db08ca4d9ee7dc1848da4dbf4ddbd45894e5e8658c4c095e407b6055da87db"
     },
-    {
-      "name": "base-coefficient",
-      "stat": {
+    "routes": {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/routes.json",
+      "sha256": "a098b39ce2538e5bc071d30f65fcc25878bb2ecb8ee53433c516404505cc3332"
+    },
+    "evidence": {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/source-evidence.json",
+      "sha256": "a2daf1e5c6c058ae2ce32f434feee325d06344a96a5ccbf29ed7320df2c63ec3"
+    },
+    "review": {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/source-review.md",
+      "sha256": "50d4be17c7a0278e39d8cf2e7db35033ed343e59d42f1e91d9ea8e0665f728c8"
+    },
+    "endpoint_stats": [
+      {
         "kind": "stat",
         "namespace": {
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.0000000000003377"
+        "key": "def.0000000000003212"
       },
-      "producer_status": "unimplemented in this fragment"
-    }
-  ],
-  "coverage": "No owner, producer inventory, configuration, complete-build or numerical-domain closure. Retained source operands authorize finite arithmetic comparisons only."
+      {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003213"
+      }
+    ],
+    "alternative_sources": "A future admitted source must prepare its own coherent range and bind the consumer through reviewed data and the existing source routes; it cannot inherit this intrinsic-only proof."
+  },
+  "adopted_factor_definition": {
+    "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/migration.json",
+    "pointer": "/schema/0/value"
+  },
+  "coefficient_prerequisite": {
+    "value": 1,
+    "unit": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000001"
+    },
+    "node": "base-coefficient",
+    "evidence": {
+      "path": "data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-evidence.json",
+      "sha256": "dac011e001b25674daea686c69d2df427d42804b798d479cc972a0b143105c5e"
+    },
+    "review": {
+      "path": "data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-review.md",
+      "sha256": "70c5441c8951f35cad401f2a35dbf1ad003626fb5e36e1caa1d427987fa4e3c7"
+    },
+    "meaning": "The exact Basic ability has no declared level or effective modifier coefficient supplier under the reviewed pinned normal-import domain. Its factor one is authored data, never a fallback for an unknown input."
+  }
 }

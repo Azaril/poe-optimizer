@@ -300,10 +300,41 @@ pub fn check_authored() {
 }
 
 pub fn assert_component(endpoint: &StagedOwnedRelease) {
+    assert_component_after_program_append(endpoint, &[]);
+}
+
+/// Check the original source proof after independently authenticated numerical
+/// programs have been appended. Reverse only those exact bodies on a copy;
+/// every preexisting owner, supply relation and potential supplier is still
+/// compared in full. This does not admit changed or additional source rules.
+pub fn assert_component_after_program_append(
+    endpoint: &StagedOwnedRelease,
+    appended: &[DefinitionRules],
+) {
     check_authored();
     let d: Dependencies = read("dependencies.json");
     let recipe = &endpoint.input().recipe;
-    check_supply_inventory(&json!(recipe.schema), &json!(recipe.rules.owners));
+    let mut owners = recipe.rules.owners.clone();
+    for addition in appended {
+        let owner = owners
+            .iter_mut()
+            .find(|o| o.owner == addition.owner)
+            .unwrap();
+        for program in &addition.programs.members {
+            let matches: Vec<_> = owner
+                .programs
+                .members
+                .iter()
+                .enumerate()
+                .filter(|(_, p)| p.id == program.id)
+                .collect();
+            assert_eq!(matches.len(), 1, "one exact appended program");
+            let (index, actual) = matches[0];
+            assert_eq!(actual, program);
+            owner.programs.members.remove(index);
+        }
+    }
+    check_supply_inventory(&json!(recipe.schema), &json!(owners));
     for row in &d.definitions {
         assert!(recipe.schema.definitions.contains(row));
     }
@@ -311,7 +342,7 @@ pub fn assert_component(endpoint: &StagedOwnedRelease) {
         assert!(recipe.schema.slots.contains(row));
     }
     for row in &d.owners {
-        assert!(recipe.rules.owners.contains(row));
+        assert!(owners.contains(row));
     }
     assert!(recipe.routing.outputs.contains(&routes().remove(0)));
     assert_eq!(

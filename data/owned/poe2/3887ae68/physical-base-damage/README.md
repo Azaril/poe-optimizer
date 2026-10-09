@@ -10,36 +10,61 @@ One generic Action program is bound by data to Basic Skill `0021` / output
 `0022`. For each minimum and maximum endpoint it evaluates, in this order:
 
 ```text
-((intrinsic + bonus) + ((self_flat + enemy_flat) * added_multiplier))
+(source_endpoint + ((self_flat + enemy_flat) * added_multiplier))
     * base_coefficient
 ```
 
 There is no rounding, clamp, implicit zero or implicit identity multiplier.
 The existing `3212` / `3213` inputs are intrinsic endpoints, already produced
-and routed by native rules in the finite replay. The intrinsic range is not
-multiplied by the profile's `1.15` again. `336e` / `336f` are the resulting
+and routed by native rules in the finite replay. Under the published Fixed
+intrinsic source-selection proof, they are the complete selected source range
+for this binding. The intrinsic range is not
+multiplied by the profile's `1.15` again. `336f` / `3370` are the resulting
 physical base endpoints before damage conversion and subsequent hit scaling.
 
-All ten inputs are required resolved Action quantities. The damage inputs and
-outputs use unit `1d3a`; the two factors use unit `0001`. Reserved draft Stats:
+All seven inputs are required resolved Action quantities. The damage inputs and
+outputs use unit `1d3a`; the two factors use unit `0001`. Adopted and draft Stats:
 
 | IDs | Meaning | Production state |
 | --- | --- | --- |
-| `336e`, `336f` | Minimum / maximum physical base output | This draft consumer |
-| `3370`, `3371` | Bonus endpoints on the selected damage source | Producer unfinished |
-| `3372`, `3373` | Eligible self flat minimum / maximum | Checked collection unfinished |
-| `3374`, `3375` | Eligible enemy flat minimum / maximum | Checked collection unfinished |
-| `3376` | Combined added physical / generic damage multiplier | Checked collection unfinished |
-| `3377` | Final base damage coefficient | Producer unfinished |
+| `336e` | Combined added physical / generic damage multiplier | Adopted from the separate real producer |
+| `336f`, `3370` | Minimum / maximum physical base output | This draft consumer |
+| `3371`, `3372` | Eligible self flat minimum / maximum | Checked collection unfinished |
+| `3373`, `3374` | Eligible enemy flat minimum / maximum | Checked collection unfinished |
 
-These operand declarations are a consumption boundary, not proof that the
-operands exist. Bonuses belong to the selected damage source, which need not
-always be an Actor. The coefficient must account for the selected skill-level
-coefficient and effective SkillData; the level table alone cannot establish
-its value. In particular, SkillData application at both CalcActiveSkill:896–900
-and CalcOffence:738, and the SkillStatMap's base-multiplier mapping, remain
-relevant upstream. An individual
-intrinsic AddedDamage contribution is not a complete combined multiplier.
+The former draft bonus ports were removed, and the remaining unpublished IDs
+were reassigned around the real combined-factor producer without a migration
+or compatibility path. The fixture checks exact reuse of the real factor's
+migration descriptor; only the other six declarations appear in this draft's
+definitions file. The intrinsic source
+constructor at CalcActiveSkill:991–998 contains the complete endpoints; the
+reviewed selection proof excludes replacement weapon and callback paths.
+CalcOffence:2413–2414 writes corpse bonuses to `skillData`, which is selected by
+the separate nonattack pass at 2593, not this attack's weapon copy at 2526.
+These source-record fields therefore do not become universal native inputs or
+zero-valued producer programs.
+
+`bindings.json` pins the published selection bindings, routes, constructed source
+evidence and source review. The finite composition requires that exact selector
+and its selected routes, with negative controls for missing or changed source
+authority. The existing source checker remains the authority for the proof;
+this packet does not duplicate it. Another source must prepare its own coherent
+range in data and bind it through the existing source routes before reusing this
+consumer. The intrinsic `3212` / `3213` definitions are not silently redefined
+as universal source endpoints.
+
+The coefficient is a typed literal `1` in the injected rule data, backed by the
+separately pinned `intrinsic-attack-coefficient` evidence and review. That proof
+covers both declared level rows and the effective modifier supplier domain,
+including support, global and minion transport. It is not an unknown-input
+fallback or a conclusion drawn from an observed `1`. The former coefficient
+port and draft Stat `3375` are removed. A future ability with a real variable
+coefficient must author its own rule composition and producer requirements.
+
+The remaining flat-input declarations are a consumption boundary, not proof
+that those operands exist. An individual intrinsic AddedDamage contribution is
+not by itself a complete combined multiplier; this fixture retains the separate
+checked combined-factor producer.
 This fragment adds no unchecked Enemy fold or new public query contract.
 
 `bindings.json` pins the existing intrinsic-added-attack-damage source vectors.
@@ -48,11 +73,14 @@ including 13 executed Basic occurrences across the ten recorded cases.
 Unexecuted CALCS occurrences are not observations. The source formula is
 CalcOffence lines 4131–4138 at the recorded revision.
 
-The Engine tests read the pinned source operands as finite test inputs, and
-compare native endpoints and final arithmetic directly with recorded source
-outputs. Only these records establish absent bonuses, zero enemy additions,
-the combined multiplier `1.15` and coefficient `1`. They do not authorize
-zero/one production defaults. Synthetic signed, zero and fractional controls
+The Engine source comparisons retain the real combined-factor consumer and its
+checked query, and inject only four unfinished operands: the self and enemy
+flat endpoints. They compare the real combined factor, native
+source endpoints and final arithmetic directly with recorded source outputs.
+The records' absent bonus fields corroborate the separate source-selection
+proof. Their zero enemy additions authorize only these finite comparisons,
+not zero production defaults. Coefficient `1` corroborates its independent proof.
+Synthetic signed, zero and fractional controls
 exercise arithmetic, operation order and exact occurrence separation; they
 are not evidence of game legality or unbounded numerical parity. Existing
 finite-quantity failure behavior remains in force; the pending numerical
@@ -60,15 +88,20 @@ domain decision is not resolved by these tests.
 
 The packet retains the Action owner's Partial declaration. Test composition
 preserves all predecessor closures and adds explicit scheduling without
-changing the tracked replay artifact. One fixture-only literal program supplies
-the eight operands solely in the Rust test helper. With any required input unavailable,
+changing the tracked replay artifact. Arithmetic-only tests first authenticate
+and remove the exact combined-factor consumer and its scheduling/readiness
+entries, then supply five explicit finite operands and edit the exact authored
+coefficient literal in the copied test program. Its query and contributor
+inventory remain unchanged. Real-factor comparisons freeze `336e` at its actual
+production stage; synthetic controls freeze it at their input stage instead.
+Both modes schedule the input stage after the combined-factor stage.
+With any required input unavailable,
 the affected endpoint stays unresolved, including when a known coefficient
 is zero. No complete build, final hit, average hit, DPS, conversion or defence
 result is claimed.
 
-Validation: all five new native tests passed across the full target run and
-one focused repair run; all 21 preceding tests passed in the full target run.
-Strict target Clippy also passed. Logs are
-`runs/owned-physical-base-draft-native-01.log`,
-`runs/owned-physical-base-draft-native-02.log` and
-`runs/owned-physical-base-draft-clippy-01.log`.
+All six updated fragment tests pass within the 30-test ordinary Engine replay,
+including source-binding refusal, all 13 retained source comparisons and parallel
+worker reuse. Strict target Clippy passes. Current evidence is
+`runs/owned-sniper-combined-added-engine-02.log` and
+`runs/owned-sniper-combined-added-engine-clippy-01.log`.

@@ -29,9 +29,10 @@ publishing those programs must retain the real definition's Partial coverage.
 
 ## Numerical boundaries
 
-1. Construct intrinsic weapon/skill endpoints using their own level/profile rules.
-2. Combine intrinsic values, source bonuses and added damage. Apply the declared
-   added-damage modifiers and base coefficient in their specified order. Preserve
+1. Construct coherent weapon/skill source endpoints using their own level/profile
+   rules and any source-specific additions, then select the source explicitly.
+2. Combine the selected source endpoints and applicable added damage. Apply the
+   declared added-damage modifiers and base coefficient in their specified order. Preserve
    intermediate precision unless the injected rule declares a rounding step.
 3. Resolve conversion and gain across the full declared damage-type domain.
    Conversion priority, normalization and simultaneous application are game data

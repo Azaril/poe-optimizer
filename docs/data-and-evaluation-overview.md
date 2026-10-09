@@ -936,10 +936,28 @@ on the exact admitted Actor relation. An exact Basic Action route and ordinary
 typed program produce one unrounded multiplicative contribution. Scale one
 means an inactive contribution; missing profile or source authority stays
 unavailable. The joined Sniper replay uses these published bodies through the
-normal native planner. This is an individual source, not the final added-damage
-factor, flat-damage census, conversion/gain calculation or final hit/DPS. The
+normal native planner. This is an individual source. The
 offline evidence authenticates the complete source profile and its eligibility;
 the evaluator never checks PoB skill names or Lua field-presence conventions.
+
+The [combined-factor packet](../data/owned/poe2/3887ae68/combined-added-attack-damage/README.md)
+collects that source through one checked exact-Action Product query, then applies
+the reviewed two-decimal group operation using ordinary typed rule nodes. The
+supplier proof includes constructed skills, supports, modifier cache, extra-stat
+delivery, precision declarations and source transport. Its numerical domain is
+bound to the actual immutable profile and producer chain, not arbitrary finite
+inputs. Unknown availability stays unresolved; even zero or inactive potential
+writers require membership. No global or Action rule coverage is closed.
+This proof requires accounted absence of imported party modifiers. PoB's saved
+`Party/ImportedBuffs` payloads can carry arbitrary numeric modifier names outside
+the ordinary catalogs. Owned normalization preserves those rows under live
+selected obligations; it does not currently convert them. The finite replay
+explicitly requires an absent or reviewed empty Party container before its
+test-only completion. Closing configuration or external-input obligations must
+retain this boundary; catalog absence alone cannot authorize a zero result.
+For the current Original05 import, Party rows link to configuration issue
+`01f2`; separate external-assumption issue `0207` also remains pending. Neither
+obligation is retired by publishing this contribution query.
 
 The [intrinsic source-selection packet](../data/owned/poe2/3887ae68/minion-attack-selection/README.md)
 binds the four existing Basic Attack source routes to one existing Fixed selector
@@ -949,12 +967,19 @@ Lua or reading that evidence. Independent numerical and rule coverage remains
 Partial. Source choice does not provide missing endpoint values or defaults.
 
 The [draft physical-base consumer](../data/owned/poe2/3887ae68/physical-base-damage/README.md)
-now combines the actual routed intrinsic endpoints with distinct required bonus,
-self-flat, Enemy-flat, added-factor and ability-coefficient inputs. Its injected
-Action rule preserves arithmetic order and performs no rounding. Ordinary native
-replay tests match retained original operands and exercise missing inputs and
-parallel reuse. Eight operand producers remain unfinished; finite test inputs
-are not canonical data or proof of whole-build support. Enemy-derived quantities
+combines the complete selected intrinsic endpoints, self-flat and Enemy-flat
+inputs and the real combined factor. Separate weapon-bonus ports were removed:
+the proved intrinsic constructor already supplies a coherent range. A separate
+[coefficient proof](../data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-review.md)
+permits a typed literal one in this exact ability's injected rule, replacing an
+unused input and declaration. It covers both level data and effective modifier
+suppliers; it is no general fallback for unknown abilities.
+
+The Action rule preserves arithmetic order and performs no additional rounding.
+Ordinary native replay tests compare retained source observations, require exact
+source bindings and exercise missing inputs and parallel reuse. Four flat-endpoint
+producers remain unfinished; finite test inputs are not canonical data or proof
+of whole-build support. Enemy-derived quantities
 must preserve any consuming-Action eligibility before they can supply this rule.
 
 Integrating that component under current readiness checks exposed an older owned

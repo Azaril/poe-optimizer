@@ -171,16 +171,15 @@ the current extractor while retaining exact source/content/catalog comparisons.
 No production coverage gate, old-format reader or runtime fallback was added.
 
 The repairs are pushed as `73d7e99`. These are local results, not a hosted-CI
-success claim. At the read-only snapshot of **15:22 UTC**, `7b50c6e` run
-`37921878787` had seventeen successful jobs and one active Windows CLI shard,
-with no completed failures. The latest `76b8666` run `37946641726` was pending
-at the preceding snapshot; the superseded pending `e67ce6a` run was cancelled
-by the configured workflow, not by this task. The older
-`10d37f0` run `37900429666` finished with failure at 11:24 UTC; its final
-Windows CLI failures match already-addressed exporter receipts, reward support
-and duplicate Mana definitions. Current HEAD verifies existing Mana definitions
-instead of reinserting them. Windows PoB passed. No new actionable failure or
-task-initiated cancellation was found.
+success claim. At the read-only snapshot of **16:29 UTC**, source-selection
+commit `83c7e81` run `37951954336` had seven successful jobs and eleven active
+jobs, with no completed failures. Its preceding `76b8666` run `37946641726`
+was cancelled by the configured workflow at 15:28 UTC, not by this task.
+The older `10d37f0` run `37900429666` finished with failure at 11:24 UTC; its
+final Windows CLI failures match already-addressed exporter receipts, reward
+support and duplicate Mana definitions. Current code verifies existing Mana
+definitions instead of reinserting them. Windows PoB passed. No new actionable
+failure or task-initiated cancellation was found.
 
 Compilation dominates much of the recorded time: an older Windows shard spent
 68m19s and 67m00s compiling its two feature profiles. Follow the next pushed
@@ -188,104 +187,142 @@ revision; track compilation and repeated historical-publication costs in tooling
 cleanup without removing independent coverage or displacing the first complete
 native build.
 
-## Current implementation checkpoint: intrinsic attack source selection
+## Current implementation checkpoint: combined added damage and source cleanup
 
-The [source-selection packet](../data/owned/poe2/3887ae68/minion-attack-selection/README.md)
-uses the existing Fixed selector to bind four Basic Attack channels to the exact
-Action's intrinsic Actor: physical minimum/maximum, rate and critical chance.
-Numerical producers, Stat bindings, accuracy and intrinsic added-damage routing
-are unchanged. One recorded choice serves each exact Action. A missing selected
-quantity remains unavailable rather than selecting another source or zero.
+The [combined added-damage packet](../data/owned/poe2/3887ae68/combined-added-attack-damage/README.md)
+adds one Stat (`336e`), one checked exact-Action Product query and one injected
+consumer. It computes the complete multiplier for the reviewed intrinsic Basic
+source from its existing contribution, preserving the original group arithmetic
+order. It does not inject a measured result. The actual immutable profile and
+producer chain bound this publication's numeric domain; it does not resolve the
+separate pending general numerical-domain decision. Native runtime APIs and
+operations V27 are unchanged, with no Lua, source-name dispatch or subprocess.
 
-The offline proof reuses the original bounded catalog constructor. Its retained
-inventory covers 1,436 skills, 211 SkillData modifiers, 16 callbacks, 25 indexed
-writers and 1,081 pinned Lua files, including nested records and stat maps.
-Normal imported-data suppliers cannot produce the apparent bow-inheritance key;
-its two source references are reads. Other weapon replacements are excluded by
-the actual selected declarations and their source guards. This is a proof for
-the pinned admitted domain, not an inference from one build's observed output.
-The publication additionally authenticates the complete owned supplier census.
+The offline audit constructs the original catalog and modifier cache, accounting
+for 145,363 tables, 436,112 rows and 11,851 modifiers. Two added-damage stat-map
+recipes have no skill/support consumers. Extra-stat factories, nested records,
+callbacks, transport, precision declarations and the complete intrinsic profile
+are checked. Real constructor mutations must fail even after source rehashing.
+The source artifact is 2,602,949 bytes, SHA-256
+`6c33fe128a0f6622785e70ef26843d47b8da33cc652f29ccf11246180e34fd45`.
 
-Review found and fixed two evidence holes before admission: table aliases could
-hide selected callbacks, and unreviewed metatables could supply fields absent
-from a raw walk. The proof now captures exact selected callbacks independently
-and permits only the original stat-map fallback on stat-map tables. Real
-constructed mutations exercise both refusals. Ambiguous integer/string key
-projections also fail acquisition. These checks remain offline; native routing
-receives no Lua fields, aliases, callbacks or new execution mechanism.
+**A material source omission was found and corrected before adoption:** saved
+`Party/ImportedBuffs` can carry arbitrary numeric modifier names, bypassing the
+ordinary catalogs and modifier parser. The proof now explicitly requires
+accounted absence of those inputs. An original ModTools parser test verifies
+numeric and zero payloads; it is not a downstream buff-delivery parity test.
+The finite joined fixture checks an absent or reviewed empty Party before its
+test-only completion. Actual owned normalization preserves every unsupported
+Party row under live selected configuration issue `01f2`; separate external
+assumptions `0207` remain pending. No source-only disposition, blanket raw-build
+rejection or new runtime input model was introduced.
 
-The final acquisition passes one authoring test and twelve ordinary catalog/
-proof tests (0.87s and 2.40s), including the unchanged identity catalog. Strict
-optional-PoB library/test Clippy passes (2.89s). Independent review has no remaining
-finding. Retained source evidence is 1,718,168 bytes, SHA-256
-`a2daf1e5c6c058ae2ce32f434feee325d06344a96a5ccbf29ed7320df2c63ec3`.
-Logs: `runs/owned-minion-attack-selection-source-{author-03,tests-02,clippy-02}.log`.
-The internal constructor refactor changes the live exporter fingerprint;
-historical source receipts remain unchanged evidence.
+The publication exercises an unchanged baseline plus seven modified Party
+controls through normalization and selected-request finalization. The original
+four obligations remain unchanged. Modified XML additionally retains exactly
+two saved-query source-snapshot guards at references 14/16, even for equivalent
+empty-element spelling. Every Party/ImportedBuffs row remains linked to `01f2`,
+and every calculation is `not_run`. Future configuration accounting must preserve
+this boundary; do not cite the unused legacy root-admission validator as an
+actual owned-import gate. Review other negative supplier proofs for the same
+external-input preconditions before closing a complete build.
+
+The [physical-base draft](../data/owned/poe2/3887ae68/physical-base-damage/README.md)
+now consumes the selected source's coherent endpoints. Two unused weapon-bonus
+ports were removed rather than filled with zero producers. A separate
+[coefficient proof](../data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-review.md)
+permits a typed literal one in this exact ability's injected rule, removing its
+unused coefficient port and declaration. The proof includes level/stat-set data,
+effective SkillData suppliers, support/global/minion transport and extra-stat
+delivery. A formatted Party scalar cannot create a valid structured SkillData
+payload; malformed records remain unsupported.
+
+Only four flat endpoints remain unfinished in this fragment. Its tests retain
+the real combined-factor producer for all 13 retained source observations.
+Synthetic arithmetic controls explicitly replace only the authenticated factor
+consumer and edit the authored coefficient literal in copied test data. The
+draft adds six unpublished declarations `336f–3374`; published allocator
+`336e` is not advanced to reserve them. No old/new reader or compatibility branch
+is retained.
+
+The shared offline table walk now retains Rust keys instead of every Lua value
+handle, avoiding the cache's auxiliary-reference limit. Its alias ledger also
+keeps the constructed Minions root alive through cache allocation; a forced-GC
+test verifies that lifetime. The earlier source-selection artifact remains
+byte-identical. Historical supplier checks reverse only the exact authenticated
+new numerical program before comparing full owners and supplier inventories.
 
 **Current canonical package:**
-`runs/owned-minion-attack-selection-publication-01/package`, input
-`c62bfe81622299ad447970c5df46de16a69b5912bfd05dce0c93432cbcd23e02`.
-All six publication-target tests pass (25.55s), including source authentication,
-negative controls, the full-input inverse, all-five imports and byte-identical
-rebuild of eighteen artifacts. Operations V27/schema6, definitions, programs,
-compiled-rule identity and allocator `336d` are unchanged. The release has 171
-provenance rows, 110 saved queries and no evaluation bundle. Only source
-selection becomes Complete; five route outputs, 5,825 rule owners and global
-query coverage retain their Partial state. Selected input obligations remain
-**106/117/109/123/4**; complete native builds remain **0/5**.
-Evidence: `runs/owned-minion-attack-selection-publication-01.log`.
+`runs/owned-combined-added-attack-publication-04/package`, input
+`690169b8e0303ca02ae9a49139a8446c6b470675c28914e7f06e69e09b4d8a54`.
+Definitions `efa0011ada155c02318c3243315e6e93793a44dadf90e2c917651ab7113dfc20`,
+rules `6a81f88031e0f3b6b3a1e60d4cfa2edd6c9979afa49aed1d2a6857cbaf64b6d5`,
+compiled rules `ee8bf2aba8eed0b3742d848703cef87950e05ae537144d49d009f79515e583ee`,
+routing `c34584136d3bffa6f4f2124795bbcf9c99dd94a2d09f7a560a2302946a222ef1`.
+The 18 artifacts rebuild identically; there are 172 provenance records, 110 saved
+queries and no evaluation bundle. All 5,825 Partial rule owners, route gaps and
+global query gaps remain. Selected obligations remain **106/117/109/123/4**;
+complete native builds remain **0/5**.
 
-All **93 joined native tests** pass (43.48s), including export and decoded
-full-report equality. The refreshed ordinary Engine replay passes **28 tests**
-(5.46s). New controls require one decision per exact Basic Action, preserve all
-numerical values against direct transport, keep a missing selected minimum
-unresolved while its maximum remains known, and verify changed-level isolation,
-fresh/reused scratch and four-worker equality. Strict Engine and three affected
-CLI-target Clippy checks pass (0.37s and 5.06s).
+Source authoring passes, all 12 ordinary source tests pass (13.67s), all seven
+publication tests pass (39.98s), and strict optional-PoB and publication-target
+Clippy pass. The publication performs the full migration inverse and all-five
+import/rebuild preservation checks. Logs:
+`runs/owned-added-damage-domain-source-tests-02.log`,
+`runs/owned-combined-added-attack-publication-04.log`,
+`runs/owned-combined-added-attack-clippy-01.log` and
+`runs/owned-added-damage-domain-clippy-01.log`.
 
-The maintained gzip is 138,921 bytes, SHA-256
-`cc168078a5b50f08770965dd315ef812af5418fa3c8911b1bf37ef94d35cd318`.
-A separate JSON inverse verifies only four route sources, one selector inventory
-and four dependent identities changed. The finite fixture now requires the
-current source proof and retains its selector; it no longer assumes an empty
-historical selector inventory. No old-format runtime branch is retained.
-Logs: `runs/owned-sniper-source-selection-{joined-01,engine-01,engine-clippy-01}.log`,
-`runs/owned-sniper-source-selection-replay-inverse-02.log` and
-`runs/owned-minion-attack-selection-cli-clippy-01.log`.
+All **93 joined native tests** pass (46.58s), including export and decoded
+full-report equality. All **30 ordinary Engine tests** pass (5.22s), including
+six physical-fragment tests, exact combined-factor membership, Partial authority,
+missing values, scratch reuse and four-worker equality. A test initially expected
+an unlisted contributor to reach compilation; binding correctly rejected it
+earlier. The assertion now requires that rejection, with no production change.
+Strict Engine and all-feature affected CLI Clippy pass (0.41s and 3.49s).
+All four ordinary source-selection successor regressions also pass (0.07s),
+recorded in `runs/owned-minion-selection-successor-tests-01.log`.
 
-**Resume: keep Original05 first and follow the saved-query map above.**
+The refreshed fixture has 928 definitions, 621 owners and 36 stages. Its gzip
+is 139,113 bytes, SHA-256
+`2416f092732e32cf9f8d16dc97482f5c80ac294bc46189f065e6726db7b560ad`;
+decoded JSON is 5,423,891 bytes, SHA-256
+`42ff215d5dad6e50610d05baaff0b3dbfc712b622650babb981a140f040735ca`.
+A separate full-JSON inverse proves exactly one Stat/owner/support domain,
+program/query, stage with readiness/freezes and sixteen dependent identity
+changes. Every other JSON value is unchanged. Independent integration review
+found no remaining ownership, coverage, Party-admission or scheduling issue.
+Logs: `runs/owned-sniper-combined-added-joined-01.log`,
+`runs/owned-sniper-combined-added-engine-02.log`,
+`runs/owned-sniper-combined-added-replay-inverse-01.log` and
+`runs/owned-sniper-combined-added-{engine,cli}-clippy-01.log`.
 
-1. Continue the unpublished physical-base arithmetic and its real operands.
-   Draft keys **336e–3377** remain reserved. The intrinsic constructor contains
-   no weapon bonus fields; SkillData bonus fields belong to another source
-   branch. Evaluate whether the owned intrinsic damage basis should simply use
-   its complete endpoints instead of copying PoB's union-table bonus columns.
-   Do not publish universal Action zeros or require a new selector API solely
-   for the orphan inheritance branch. The computed-condition selector proposal
-   is deferred until a demonstrated mechanic needs it.
-2. Authenticate the final ability coefficient and complete self/Enemy flat and
-   AddedDamage supplier domains using the retained preconversion census. Skill
-   level rows alone are insufficient: preparation also applies SkillData,
-   including explicit MAX merging. Preserve source authority and arithmetic
-   order, present zero and unknown coverage. Do not copy database insertion
-   order or use observed empty records as proof of complete domains.
-3. Before admitting an actual action-conditioned Enemy modifier, preserve the
-   consuming Action and typed applicability. Shared Enemy query identity alone
-   cannot express that condition. Investigate a concrete producer before asking
-   for a new delivery contract.
-4. Resolve the already-prompted numeric-domain and configuration-accounting
-   decisions, then continue final Player Mana/Life and the four selected input
-   inventories (`01f2/0505/0207/0208`). Configuration retains 36 source links.
-   Reuse the existing Mana draft and resource witnesses; positive minion resource
-   transfers must not displace direct saved-metric or input delivery.
+**Resume: finish Original05 first, using the saved-query map above.**
 
-Actor-to-Enemy reads, resource demand and scoped coverage remain unapproved.
-The separately approved exact Action query and optional numeric selection
-contracts are implemented; they do not grant these other extensions. Whole
-selected-plan coverage includes other selected skills. Begin D4 immediately
-when the first unchanged request, evaluation bundle and complete reference
-availability/value checks pass, while continuing the remaining builds.
+1. Finish the physical fragment's four actual flat-input suppliers. The Enemy
+   pair is the next bounded candidate, but requires a full producer/transport
+   census under explicit external-input accounting. Observed empty records and
+   absence from ordinary catalogs are insufficient. Reuse the current source
+   witness; do not publish universal zeros or introduce an Enemy API merely
+   to copy an unused PoB field. Audit configuration, Party, nested EnemyModifier,
+   global debuff/curse, ailment and payload-copy paths. If the admitted source
+   domain is proved empty, existing exact Action queries can express that
+   bounded result with explicit membership and unresolved-coverage controls.
+2. Self-flat inputs have real domains: minion modifier payloads, support/stat-map
+   rows, global buffs, parent-weapon additions, Rallying Cry and Hollow Palm.
+   Account for actual applicability and preserve potential zero/inactive donors.
+   Before admitting any action-conditioned Enemy writer, preserve the consuming
+   Action explicitly rather than widening a shared Enemy quantity read.
+3. Resolve the already-prompted numerical-domain and configuration-accounting
+   decisions, then continue final Player Mana/Life and selected input inventories
+   `01f2/0505/0207/0208`. Retire no Party fallback while closing configuration.
+   Unchanged-build admission, complete saved metrics and reference availability
+   remain separate gates; this damage fragment does not finish the build.
+4. Actor-to-Enemy reads, resource demand and scoped coverage remain unapproved.
+   Exact Action queries and optional numeric selection are already implemented
+   and do not authorize those extensions. Start D4 as soon as the first complete
+   unchanged request and full reference checks pass; keep the other four builds
+   as regressions without developing every build in lockstep.
 
 ## Unpublished final Mana arithmetic
 

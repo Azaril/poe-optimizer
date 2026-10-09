@@ -38,6 +38,26 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Physical-source ports, 2026-10-09:** remove the unpublished consumer's two
+required Bonus fields. They mirror PoB's weapon/spell union table rather than a
+separate mechanic of the proved intrinsic source. Reuse the complete selected
+range and compose future real source-specific additions before routing. No
+neutral-zero producers, deprecated ports or compatibility readers are needed.
+The separate coefficient audit proves one for this exact Basic ability across
+the admitted source domain, allowing an injected literal in its rule and removal
+of the unused coefficient port. The checked combined-factor producer has its own
+supplier proof. Four flat endpoints remain unresolved; this cleanup does not
+publish final damage or a complete build.
+
+**External-modifier ingress, 2026-10-09:** the added-damage audit found that saved
+PoB Party payloads bypass ordinary modifier parsing. Keep their owned source
+rows linked to live selected obligations; a source proof needs an explicit
+no-imported-party precondition until conversion is implemented. The existing
+legacy `root_admission::validate_main` is not called by owned normalization and
+cannot establish that boundary by itself. Review its remaining value during
+retirement rather than wiring the whole legacy validator into the lossless
+owned importer. Reuse current source accounting and selected-request gates.
+
 **Intrinsic attack source audit, 2026-10-09:** do not reproduce a PoB branch
 solely because it exists in source. The pinned bow-inheritance reads have no
 normal imported-data supplier in the constructed and reviewed source domain.

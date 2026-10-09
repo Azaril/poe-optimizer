@@ -1,9 +1,11 @@
-//! The individual intrinsic source factor on the ordinary joined native replay.
+//! The intrinsic source and checked combined factor on the joined native replay.
 use super::*;
 use poe_optimizer_core::owned_schema::*;
 
 const PROFILE: &str = "intrinsic-added-attack-percentage";
 const ACTION: &str = "intrinsic-added-attack-factor";
+const COMBINED: &str = "combined-added-attack-factor";
+const QUERY: &str = "intrinsic-added-attack-factors";
 fn key(s: &str) -> OwnedDefinitionKey {
     s.parse().unwrap()
 }
@@ -59,6 +61,32 @@ fn no_known_value(r: &SupportEffectsReport, entity: ConcreteEntity, stat: u64) {
     let row = effects(r).values.iter().find(|v| v.key == key);
     // A channel with no producer need not have a materialized value row.
     assert!(row.is_none_or(|v| matches!(v.value, EffectValue::Unresolved { .. })));
+}
+fn check_combined(i: &ReplayInput, r: &SupportEffectsReport, expected: Option<f64>) {
+    let mut basics = 0;
+    for action in actions(i) {
+        if action.action.output.slot == def(0x22) {
+            basics += 1;
+            match expected {
+                Some(expected) => assert_eq!(
+                    action_value(r, action, 0x336e),
+                    &EffectValue::Known {
+                        value: ParameterValue::Quantity(
+                            FiniteQuantity::new(expected, def(1)).unwrap()
+                        )
+                    }
+                ),
+                None => no_known_value(r, ConcreteEntity::Action(Box::new(action.clone())), 0x336e),
+            }
+        } else {
+            assert!(!effects(r).values.iter().any(|v| v.key
+                == PlanValueKey::Stat {
+                    entity: ConcreteEntity::Action(Box::new(action.clone())),
+                    stat: def(0x336e),
+                }));
+        }
+    }
+    assert_eq!(basics, 2);
 }
 fn check(i: &ReplayInput, r: &SupportEffectsReport, scale: Option<f64>) {
     let rows = contributions(r);
@@ -147,6 +175,36 @@ fn authored_intrinsic_source_is_preserved_on_exact_basic_actions() {
     }
     let r = run(&i);
     check(&i, &r, Some(1.15));
+    check_combined(&i, &r, Some(1.15));
+    let combined = root().join("data/owned/poe2/3887ae68/combined-added-attack-damage");
+    let consumer: Value =
+        serde_json::from_slice(&fs::read(combined.join("consumer.json")).unwrap()).unwrap();
+    let owners: Vec<DefinitionRules> = serde_json::from_value(consumer["owners"].clone()).unwrap();
+    for owner in owners {
+        let actual = i
+            .rules
+            .owners
+            .iter()
+            .find(|o| o.owner == owner.owner)
+            .unwrap();
+        for program in owner.programs.members {
+            assert!(actual.programs.members.contains(&program));
+        }
+    }
+    let queries: Vec<ContributionQuery> =
+        serde_json::from_slice(&fs::read(combined.join("queries.json")).unwrap()).unwrap();
+    assert_eq!(queries.len(), 1);
+    assert_eq!(queries[0].id, key(QUERY));
+    for query in queries {
+        assert!(
+            i.rules
+                .contribution_queries
+                .as_ref()
+                .unwrap()
+                .members
+                .contains(&query)
+        );
+    }
     let mut reordered = i.clone();
     reordered.build.skills.reverse();
     reordered.build.gems.reverse();
@@ -176,6 +234,16 @@ fn injected_profile_unknown_identity_and_changes_survive_reused_workers() {
             .zip([Some(1.15), Some(1.), Some(1.23456789), None, Some(0.)])
     {
         check(i, r, scale);
+    }
+    // The altered profiles are finite arithmetic controls, not additional
+    // production source domains admitted by the authored packet.
+    for ((i, r), expected) in
+        inputs
+            .into_iter()
+            .zip(&fresh)
+            .zip([Some(1.15), Some(1.), Some(1.23), None, Some(0.)])
+    {
+        check_combined(i, r, expected);
     }
     let mut scratch = plans[0].new_scratch();
     for index in [0, 1, 2, 3, 4, 0] {
@@ -223,6 +291,7 @@ fn profile_data_alone_does_not_authorize_the_intrinsic_source() {
         .retain(|p| !(p.owner == source_owner && p.program == key(PROFILE)));
     i.rebind_test_edit().unwrap();
     let r = run(&i);
+    check_combined(&i, &r, None);
     for actor in actors(&i) {
         assert!(
             matches!(value(&r, &actor, 0x2537), EffectValue::Known { .. }),
@@ -260,6 +329,7 @@ fn actor_amount_needs_its_exact_action_route() {
     assert_eq!(route.routes.members.len() + 1, count);
     i.rebind_test_edit().unwrap();
     let r = run(&i);
+    check_combined(&i, &r, None);
     for a in actions(&i)
         .into_iter()
         .filter(|a| a.action.output.slot == def(0x22))
@@ -281,7 +351,11 @@ fn actor_amount_needs_its_exact_action_route() {
 #[test]
 fn intrinsic_source_keeps_partial_coverage_and_stage_dependencies() {
     let original = load();
-    for (program, stage) in [(PROFILE, "prepare"), (ACTION, "facts")] {
+    for (program, stage) in [
+        (PROFILE, "prepare"),
+        (ACTION, "facts"),
+        (COMBINED, "intrinsic-added-damage-profile"),
+    ] {
         let mut early = original.clone();
         early
             .stages
@@ -317,6 +391,71 @@ fn intrinsic_source_keeps_partial_coverage_and_stage_dependencies() {
     let p = partial.compile().unwrap();
     assert!(matches!(
         p.evaluate(&mut p.new_scratch()).unwrap().outcome,
+        SupportEffectsOutcome::Unavailable { .. }
+    ));
+}
+
+#[test]
+fn combined_factor_requires_complete_exact_contributor_membership() {
+    let original = load();
+    for (amount, active) in [(0., true), (1., false), (1., true)] {
+        let mut i = original.clone();
+        let p = i
+            .rules
+            .owners
+            .iter_mut()
+            .flat_map(|o| &mut o.programs.members)
+            .find(|p| p.id == key(ACTION))
+            .unwrap();
+        p.nodes.extend([
+            RuleNode {
+                id: key("unlisted-value"),
+                expression: RuleExpression::Literal {
+                    value: ParameterValue::Quantity(FiniteQuantity::new(amount, def(1)).unwrap()),
+                },
+            },
+            RuleNode {
+                id: key("unlisted-active"),
+                expression: RuleExpression::Literal {
+                    value: ParameterValue::Boolean(active),
+                },
+            },
+        ]);
+        p.effects.push(RuleEffect {
+            id: key("unlisted-factor"),
+            when: Some(key("unlisted-active")),
+            effect: RuleEffectKind::Contribute {
+                entity: RuleEntity::Current,
+                stat: def(0x336d),
+                contribution: ContributionKind::Multiply,
+                value: key("unlisted-value"),
+            },
+        });
+        let error = i
+            .rebind_test_edit()
+            .expect_err("potential contributors need exact membership");
+        assert!(error.contains("no declared membership"), "{error}");
+    }
+    let mut partial = original.clone();
+    let query = partial
+        .rules
+        .contribution_queries
+        .as_mut()
+        .unwrap()
+        .members
+        .iter_mut()
+        .find(|q| q.id == key(QUERY))
+        .unwrap();
+    query.groups[0].members.closure = SchemaClosure::Partial {
+        gaps: vec![SchemaGap {
+            subject: SchemaSubject::Definition(DefinitionAddress::Stat(query.stat.clone())),
+            facet: SchemaFacet::GameRules,
+            code: key("unreviewed-added-damage-supplier"),
+        }],
+    };
+    partial.rebind_test_edit().unwrap();
+    assert!(matches!(
+        run(&partial).outcome,
         SupportEffectsOutcome::Unavailable { .. }
     ));
 }

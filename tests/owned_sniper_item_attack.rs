@@ -42,6 +42,9 @@ mod buff_effect_recipients_native;
 mod buff_source_family;
 #[path = "support/owned_buff_effect_sources_native.rs"]
 mod buff_sources_native;
+#[allow(dead_code)]
+#[path = "support/owned_combined_added_attack_damage.rs"]
+mod combined_added_damage_family;
 use buff_effect_family::evidence as source_evidence;
 #[path = "support/owned_sniper_item_attack_evidence.rs"]
 mod evidence;
@@ -138,6 +141,10 @@ fn imported_selection(package: &std::path::Path) -> (Value, Value) {
     let source = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("tests/fixtures/builds/breadth-20260908/build-05.xml");
     let xml = std::fs::read(&source).unwrap();
+    // This finite graph completes selected obligations only under its explicit
+    // source scope. Raw Party payloads can inject arbitrary numeric modifiers
+    // and must never disappear through that test-only completion.
+    combined_added_damage_family::assert_empty_party_source(std::str::from_utf8(&xml).unwrap());
     let temp = tempfile::tempdir().unwrap();
     let output = temp.path().join("canonical");
     release::normalize(package, &source, 5, &output);
@@ -218,9 +225,13 @@ impl World {
         let endpoint = release::load(&path);
         activation_family::assert_component(&endpoint);
         accuracy_family::assert_component(&endpoint);
-        attack_selection_family::assert_component(&endpoint);
+        attack_selection_family::assert_component_after_program_append(
+            &endpoint,
+            &combined_added_damage_family::consumer().owners,
+        );
         evidence::assert_current(&endpoint);
         player_life_inputs_native::check_current_packet(&endpoint);
+        let (draft, selection) = imported_selection(&path);
         let recipe = &endpoint.input().recipe;
         // This loader already performs a fresh canonical Original05 item import,
         // retains all 24 roll slots and uses actual applicability/copy/snapshot.
@@ -516,7 +527,6 @@ impl World {
         let recipient_buffs = buff_effect_recipients_native::install(&mut w, &endpoint);
         let source_buffs = buff_sources_native::install(&mut w, &endpoint);
         let gigantic = gigantic_native::install(&mut w, &endpoint, &path);
-        let (draft, selection) = imported_selection(&path);
         let attributes =
             attribute_base_native::install(&mut w, &endpoint, &path, &draft, &selection);
         let inherent_life = inherent_life_native::install(&mut w, &endpoint, &path);

@@ -1,7 +1,14 @@
 //! Test-only acquisition of a pinned source-selection proof. No runtime rules.
 use super::*;
 use serde_json::{Value as Json, json};
-use std::{path::PathBuf, sync::OnceLock};
+use std::{collections::BTreeSet, path::PathBuf, sync::OnceLock};
+
+#[path = "intrinsic_added_damage_domain_evidence.rs"]
+mod added_domain;
+#[path = "intrinsic_attack_coefficient_evidence.rs"]
+mod coefficient;
+#[path = "formatted_party_source_evidence.rs"]
+mod formatted_party;
 
 #[path = "../../../tests/support/owned_minion_attack_selection_evidence.rs"]
 mod retained;
@@ -123,6 +130,18 @@ struct Inventory {
     aliases: Vec<Json>,
     metatables: Vec<Json>,
     source_metadata: Vec<Json>,
+    // Count the entire modifier inventory, but retain live handles only for
+    // the four adjacent proof channels so the bounded Lua reference stack
+    // does not retain every unrelated modifier. Neither field is serialized
+    // into the previously retained source-selection artifact.
+    modifier_count: usize,
+    all_modifiers: Vec<(String, Table)>,
+}
+
+enum InventoryKey {
+    Text(String),
+    Integer(mlua::Integer),
+    Number(f64),
 }
 
 impl Inventory {
@@ -151,6 +170,17 @@ impl Inventory {
                     return Ok(());
                 }
                 self.seen.insert(pointer, path.to_owned());
+                if matches!(table.raw_get::<Value>("name")?, Value::String(_))
+                    && matches!(table.raw_get::<Value>("type")?, Value::String(_))
+                {
+                    self.modifier_count += 1;
+                    if matches!(
+                        table.raw_get::<String>("name")?.as_str(),
+                        "SkillData" | "ExtraSkillStat" | "AddedDamage" | "AddedPhysicalDamage"
+                    ) {
+                        self.all_modifiers.push((path.to_owned(), table.clone()));
+                    }
+                }
                 if table
                     .raw_get::<Value>("name")?
                     .as_string()
@@ -165,12 +195,26 @@ impl Inventory {
                 }
                 let mut rows = BTreeMap::new();
                 for pair in table.clone().pairs::<Value, Value>() {
-                    let (key, value) = pair?;
-                    if rows.insert(key_text(key)?, value).is_some() {
+                    let (key, _) = pair?;
+                    let stored = match &key {
+                        Value::String(value) => InventoryKey::Text(value.to_str()?.to_owned()),
+                        Value::Integer(value) => InventoryKey::Integer(*value),
+                        Value::Number(value) => InventoryKey::Number(*value),
+                        _ => return Err(error("unsupported raw catalog key")),
+                    };
+                    if rows.insert(key_text(key)?, stored).is_some() {
                         return Err(error("ambiguous raw catalog key projection"));
                     }
                 }
-                for (key, value) in rows {
+                for (key, stored) in rows {
+                    // A large cache may have more rows than Lua's auxiliary
+                    // reference stack. Keep Rust keys, not a live handle for
+                    // every value, while preserving deterministic raw order.
+                    let value: Value = match stored {
+                        InventoryKey::Text(value) => table.raw_get(value)?,
+                        InventoryKey::Integer(value) => table.raw_get(value)?,
+                        InventoryKey::Number(value) => table.raw_get(value)?,
+                    };
                     if matches!(
                         key.as_str(),
                         "minionUses" | "minionHasItemSet" | "addFlags" | "skillFlag"
@@ -238,6 +282,114 @@ fn direct_callbacks(sources: &BTreeMap<String, String>, table: &Table) -> Result
         }
     }
     Ok(json!(callbacks))
+}
+
+fn catalog_inventory(
+    lua: &Lua,
+    sources: &BTreeMap<String, String>,
+    data: &Table,
+    result: &Table,
+) -> Result<(Inventory, Table)> {
+    let skills: Table = data.raw_get("skills")?;
+    let global_map: Table = data.raw_get("skillStatMap")?;
+    let minions: Function = lua
+        .load(source(sources, "src/Data/Minions.lua")?)
+        .set_name("@src/Data/Minions.lua")
+        .eval()?;
+    let minions: Table = minions.call((
+        result.get::<Function>("mod")?,
+        result.get::<Function>("flag")?,
+    ))?;
+    for table in [
+        skills.raw_get::<Table>(SUMMON)?,
+        skills.raw_get::<Table>(BASIC)?,
+        minions.raw_get::<Table>(PROFILE)?,
+    ] {
+        if table.metatable().is_some() {
+            return Err(error(
+                "selected source root has unreviewed metatable behavior",
+            ));
+        }
+    }
+    let stat_map_meta: Table = data.raw_get("skillStatMapMeta")?;
+    let mut inventory = Inventory {
+        allowed_stat_map_meta: Some(stat_map_meta.to_pointer() as usize),
+        ..Inventory::default()
+    };
+    inventory.visit(sources, "skills", Value::Table(skills), 0)?;
+    inventory.visit(sources, "skillStatMap", Value::Table(global_map), 0)?;
+    inventory.visit(sources, "minions", Value::Table(minions.clone()), 0)?;
+    Ok((inventory, minions))
+}
+
+// Enumerate actual constructed inputs to buildSkillInstanceStats. Matching a
+// display name or the module a skill happens to be stored in is not ownership.
+fn stat_consumers(skills: &Table, keys: &BTreeSet<String>) -> Result<Json> {
+    fn collect(
+        rows: &Table,
+        tuple: bool,
+        owner: &str,
+        support: Option<bool>,
+        scope: &str,
+        keys: &BTreeSet<String>,
+        out: &mut Vec<Json>,
+    ) -> Result<()> {
+        for pair in rows.clone().pairs::<u32, Value>() {
+            let (index, value) = pair?;
+            let stat = if tuple {
+                let Value::Table(row) = &value else {
+                    return Err(error("stat input row is not a table"));
+                };
+                row.raw_get::<String>(1)?
+            } else {
+                let Value::String(stat) = &value else {
+                    return Err(error("stat input is not text"));
+                };
+                stat.to_str()?.to_owned()
+            };
+            if keys.contains(&stat) {
+                out.push(json!({"skill_id":owner,"support":support,"scope":scope,"index":index,"stat":stat,"row":plain(value,0)?}));
+            }
+        }
+        Ok(())
+    }
+    let mut owners = BTreeMap::new();
+    for pair in skills.clone().pairs::<String, Table>() {
+        let (id, table) = pair?;
+        owners.insert(id, table);
+    }
+    let mut out = Vec::new();
+    for (id, table) in owners {
+        let support = optional_bool(&table, "support")?;
+        for name in ["qualityStats", "altQualityStats"] {
+            if let Some(rows) = table.raw_get::<Option<Table>>(name)? {
+                collect(&rows, true, &id, support, name, keys, &mut out)?;
+            }
+        }
+        let sets: Table = table.raw_get("statSets")?;
+        let mut ordered = BTreeMap::new();
+        for pair in sets.pairs::<u32, Table>() {
+            let (index, set) = pair?;
+            ordered.insert(index, set);
+        }
+        for (index, set) in ordered {
+            for (name, tuple) in [("stats", false), ("constantStats", true)] {
+                if let Some(rows) = set.raw_get::<Option<Table>>(name)? {
+                    collect(
+                        &rows,
+                        tuple,
+                        &id,
+                        support,
+                        &format!("statSets/{index}/{name}"),
+                        keys,
+                        &mut out,
+                    )?;
+                }
+            }
+        }
+    }
+    out.sort_by_key(|row| serde_json::to_string(row).unwrap());
+    Ok(json!(out))
 }
 
 // This is an acquisition ledger, not a Lua interpreter. The original pinned
@@ -391,15 +543,7 @@ fn capture(sources: &BTreeMap<String, String>) -> Result<Json> {
     let (lua, result, module_order) = construct_catalog(sources)?;
     let data: Table = result.get("data")?;
     let skills: Table = data.get("skills")?;
-    let global_map: Table = data.get("skillStatMap")?;
-    let minions: Function = lua
-        .load(source(sources, "src/Data/Minions.lua")?)
-        .set_name("@src/Data/Minions.lua")
-        .eval()?;
-    let minions: Table = minions.call((
-        result.get::<Function>("mod")?,
-        result.get::<Function>("flag")?,
-    ))?;
+    let (inventory, minions) = catalog_inventory(&lua, sources, &data, &result)?;
     let summon: Table = skills.raw_get(SUMMON)?;
     let basic: Table = skills.raw_get(BASIC)?;
     let profile: Table = minions.raw_get(PROFILE)?;
@@ -410,14 +554,6 @@ fn capture(sources: &BTreeMap<String, String>) -> Result<Json> {
             ));
         }
     }
-    let stat_map_meta: Table = data.raw_get("skillStatMapMeta")?;
-    let mut inventory = Inventory {
-        allowed_stat_map_meta: Some(stat_map_meta.to_pointer() as usize),
-        ..Inventory::default()
-    };
-    inventory.visit(sources, "skills", Value::Table(skills.clone()), 0)?;
-    inventory.visit(sources, "skillStatMap", Value::Table(global_map), 0)?;
-    inventory.visit(sources, "minions", Value::Table(minions.clone()), 0)?;
     let stat_sets: Table = basic.raw_get("statSets")?;
     let mut flags = BTreeMap::new();
     for pair in stat_sets.pairs::<u32, Table>() {

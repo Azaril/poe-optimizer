@@ -1,5 +1,5 @@
 //! Exact Actor-profile producer joined to the existing item/preparation graph.
-//! This retains an individual added-damage factor, not a final aggregate or DPS.
+//! The individual factor feeds its checked combined multiplier, not final DPS.
 use super::*;
 use poe_optimizer_core::owned_stages::{EvaluationStage, FrozenStageChannel, StageChannel};
 use poe_optimizer_import::{
@@ -8,6 +8,7 @@ use poe_optimizer_import::{
 
 const PROFILE_STAGE: &str = "intrinsic-added-damage-profile";
 const ACTION_STAGE: &str = "intrinsic-added-damage-action";
+const COMBINED_STAGE: &str = "combined-added-attack-damage";
 
 pub(super) fn install(w: &mut sniper::World, endpoint: &StagedOwnedRelease) {
     added_damage_family::assert_component(endpoint);
@@ -47,6 +48,42 @@ pub(super) fn install(w: &mut sniper::World, endpoint: &StagedOwnedRelease) {
             existing.routes.members.push(member);
         }
     }
+    combined_added_damage_family::assert_component(endpoint);
+    let inner = &mut w.base.source.base.inner;
+    for entry in combined_added_damage_family::migration().schema {
+        let SchemaExtensionEntry::Definition(descriptor) = entry else {
+            panic!("combined multiplier adds one Stat only")
+        };
+        assert_eq!(descriptor.address(), d::<StatDefinition>(0x336e).address());
+        if let Some(existing) = inner
+            .schema
+            .definitions
+            .iter()
+            .find(|d| d.address() == descriptor.address())
+        {
+            assert_eq!(existing, &descriptor);
+        } else {
+            inner.schema.definitions.push(descriptor.clone());
+        }
+        inner.owner_mut(SchemaSubject::Definition(descriptor.address()));
+    }
+    for owner in combined_added_damage_family::consumer().owners {
+        let existing = inner.owner_mut(owner.owner);
+        for program in owner.programs.members {
+            assert!(!existing.programs.members.iter().any(|p| p.id == program.id));
+            existing.programs.members.push(program);
+        }
+    }
+    for query in combined_added_damage_family::queries() {
+        assert!(
+            !w.base
+                .contribution_queries
+                .members
+                .iter()
+                .any(|q| q.id == query.id)
+        );
+        w.base.contribution_queries.members.push(query);
+    }
 }
 
 pub(super) fn configure(s: &mut EvaluationStagesInput) {
@@ -58,6 +95,10 @@ pub(super) fn configure(s: &mut EvaluationStagesInput) {
         EvaluationStage {
             id: key(ACTION_STAGE),
             predecessors: vec![s.routing_stage.clone()],
+        },
+        EvaluationStage {
+            id: key(COMBINED_STAGE),
+            predecessors: vec![key(ACTION_STAGE)],
         },
     ]);
     // Routes execute in the graph's shared routing stage. Bind both sides:
@@ -72,10 +113,26 @@ pub(super) fn configure(s: &mut EvaluationStagesInput) {
         row.stage = match row.program.as_str() {
             added_damage_family::PROFILE_PROGRAM => key(PROFILE_STAGE),
             added_damage_family::ACTION_PROGRAM => key(ACTION_STAGE),
+            combined_added_damage_family::PROGRAM => key(COMBINED_STAGE),
             _ => row.stage.clone(),
         };
     }
     s.frozen_channels.extend([
+        FrozenStageChannel {
+            channel: StageChannel::Stat {
+                scope: RuleEntityKind::Action,
+                stat: d(0x336e),
+            },
+            stage: key(COMBINED_STAGE),
+        },
+        FrozenStageChannel {
+            channel: StageChannel::Contributions {
+                scope: RuleEntityKind::Action,
+                stat: d(0x336d),
+                contribution: ContributionKind::Multiply,
+            },
+            stage: key(ACTION_STAGE),
+        },
         FrozenStageChannel {
             channel: StageChannel::Stat {
                 scope: RuleEntityKind::Actor,
@@ -129,6 +186,12 @@ fn intrinsic_added_damage_keeps_exact_source_and_action_occurrences() {
         assert_eq!(
             rows[0].value,
             EffectValue::Known {
+                value: quantity(1.15, &d(1))
+            }
+        );
+        assert_eq!(
+            w.value(effects, index, true, 0x336e),
+            &EffectValue::Known {
                 value: quantity(1.15, &d(1))
             }
         );

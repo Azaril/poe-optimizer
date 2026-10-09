@@ -2,38 +2,67 @@
 
 `owned-sniper-replay.json.gz` contains the public typed inputs of the existing
 joined Sniper test graph, exported from
-`runs/owned-minion-attack-selection-publication-01/package`. It is test data, not a
-production release or an admitted complete build. Original05 still has four
-selected input obligations and incomplete mechanics coverage.
+`runs/owned-combined-added-attack-publication-04/package`, input
+`690169b8e0303ca02ae9a49139a8446c6b470675c28914e7f06e69e09b4d8a54`.
+It is test data, not a production release or an admitted complete build.
+Original05 still has four selected input obligations and incomplete mechanics
+coverage. Previous refreshes are recorded in the
+[implementation history](../../docs/implementation-history.md).
 
 The fixture exercises imported Crown/Solar item inputs, source preparation,
 population and intrinsic attack data, selected passive contributions, Offering
 activation and non-stacking application, mixed increased/MORE consumers, and
 exact Action Command queries on Basic plus all three Gas Arrow stat sets.
-It retains two Sniper recipients and two Offering occurrences. Its explicitly
-finite contributor inventories, activation/type facts and excluded mechanics
-have the same scope as `owned_sniper_item_attack`; they do not close production
-coverage. The original build XML and all-five import validation remain separate.
+It retains two Sniper recipients and two Offering occurrences. Its finite
+contributor inventories, activation/type facts and excluded mechanics have the
+same scope as `owned_sniper_item_attack`; they do not close production coverage.
+The joined fixture checks absent or reviewed empty Party input before its finite
+completions. Actual owned import preserves Party rows under selected obligation
+`01f2`; the original XML and all-five admission checks remain separate.
+
+The current graph includes the actual intrinsic source selector, added-factor
+contribution and checked combined Product consumer. One Fixed choice per exact
+Basic Action routes coherent physical endpoints, rate and critical chance from
+its supplied Actor. A missing selected value remains unavailable. The actual
+combined-factor producer and its stage dependencies are retained; it is not a
+measured result supplied by the fixture. Source delivery precedes frozen reads.
+Production owner, route and global coverage gaps remain unchanged.
+
+The fixture also includes numeric Life copy and its checked membership, six
+Life Increase carriers totalling 44, and inherent-Life receiving for both exact
+Snipers. Player remains Strength 27 and inherent Life 54. These retain finite
+Life scope and establish no canonical final Life pool. Missing minion targets
+stay unknown without affecting Player; no neutral MORE receiver is added.
+The retained 44/38/34/0 removal controls compare only Increase: original tree
+removal of 229 also removes Gigantic 46365, and removal of 1218 also removes
+cooldown 14945. They do not prove legal optimizer mutations or final Life parity.
 
 The snapshot stores schema, original validated rules, routing, stages, support
-preparation/input/receiving declarations, build, scenario and query inputs. It
-stores no private execution graph, scratch, evaluated results, PoB objects or
-Lua state. Replaying it runs the normal Core, Data and Engine constructors and
-checks all dependency identities before native compilation. The compiler's
-normalized rule copy is deliberately not substituted for its source artifact.
+preparation/input/receiving declarations, build, scenario and query inputs.
+It stores no private execution graph, scratch, evaluated results, PoB objects
+or Lua state. Replaying it runs normal Core, Data and Engine constructors and
+checks dependency identities before native compilation. The compiler's
+normalized rule copy is not substituted for its source artifact.
 
-The ordinary Engine tests need neither a local release directory nor PoB
-execution. They compare against the existing retained source vectors, check the
-snapshot's damage consumers/queries and Gigantic/population programs against current owned
-data, and exercise independent quality, source removal, inactive/missing Offering
-inputs, scratch reuse and four-worker equality of full reports. These remain
-component parity checks, not final physical damage or complete build parity.
-Fourteen retained Command vectors compare original-call results for every mode
-and branch-removal control on both recipients. Gas level projection comes from
-the same real population graph. The fixture also includes current numeric Life
-copy and its checked source membership, preserving the finite Life scope.
+Ordinary Engine tests need neither a local release directory nor PoB execution.
+They authenticate current owned data, compare retained original-call vectors,
+and exercise independent quality, source removal, inactive/missing inputs,
+exact occurrence ownership, scratch reuse and four-worker full-report equality.
+Fourteen Command vectors cover every mode and branch-removal control on both
+recipients. Gas level projection comes from the real population graph.
+These are component checks, not final damage or complete-build parity.
 
-Run the ordinary tests with:
+The [physical-base draft](../../data/owned/poe2/3887ae68/physical-base-damage/README.md)
+is composed by six Engine tests without adding that draft to the gzip. It reuses
+the coherent native endpoints and real combined-factor consumer; four unfinished
+flat inputs are supplied explicitly for thirteen retained source comparisons.
+Its exact ability coefficient is authored in rule data with separate source
+proof. Arithmetic-only controls authenticate and remove the combined consumer,
+supply five operands and edit the exact coefficient literal in copied test data.
+They preserve missing-input refusal even with a known zero coefficient and
+publish no final damage metric or coverage closure.
+
+Run ordinary replay tests with:
 
 ```text
 cargo test --locked -p poe-optimizer-engine --no-default-features --test owned_sniper_replay
@@ -47,91 +76,27 @@ then run:
 cargo test --locked -p poe-optimizer-cli --no-default-features --test owned_sniper_item_attack export_joined_sniper_replay -- --ignored --exact --nocapture
 ```
 
-The exporter rebuilds the existing fixture from its authenticated source/release
-inputs and requires the decoded replay's full report to equal the original
-report before writing. It refuses to overwrite an existing file. Review the new
-fixture and replace the checked-in file explicitly. Development-format changes
-require regeneration; there is no old-format decoder.
-
-Compression is ordinary gzip over JSON, using the existing Rust compression
-backend with fixed timestamp and OS header. Decoding is bounded to 8 MiB; the CI
-test requires deterministic re-encoding. Compression is a test dependency only.
+The exporter authenticates its source/release inputs and requires the decoded
+replay's full report to equal the original report before writing. It refuses
+to overwrite a file. Review the new fixture and replace the maintained file
+explicitly. Development-format changes require regeneration; there is no old
+format decoder. Compression is gzip over JSON using the existing Rust backend
+with fixed timestamp and OS header. Decoding is bounded to 8 MiB; ordinary tests
+require deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
-The current October 9 V27 fixture has 927 definitions, 620 owners and 35 stages.
-It is 138,921 compressed bytes and 5,418,886 JSON bytes, with SHA-256
-`cc168078a5b50f08770965dd315ef812af5418fa3c8911b1bf37ef94d35cd318`.
-The decoded JSON SHA-256 is
-`69f9ddcd8be96386ecfb3d2dc51608135ad15d549eb2cb4f8a7699150c08aa9d`.
-The exporter verifies full-report equality before writing; the ordinary native
-test checks deterministic re-encoding.
+The October 9 V27 fixture has **928 definitions, 621 owners and 36 stages**.
+It is 139,113 compressed bytes and 5,423,891 JSON bytes. Gzip SHA-256:
+`2416f092732e32cf9f8d16dc97482f5c80ac294bc46189f065e6726db7b560ad`.
+Decoded JSON SHA-256:
+`42ff215d5dad6e50610d05baaff0b3dbfc712b622650babb981a140f040735ca`.
 
-The prior intrinsic added-attack source contributes three Stats, two programs,
-one exact Basic route and its stage dependencies. The preceding refresh joined the
-published minion Life Increase receiver and the two remaining actual selected
-Life passives, preserving the four existing paired Life/Damage sources. Six
-carrier records total 44, then one received contribution reaches each exact
-Sniper. Source delivery precedes the frozen-channel read. The separate joined
-Life-query fixture retains the canonical member and runs its diagnostic probes
-afterward; it derives no canonical final Life pool.
-
-The preceding inherent-Life refresh extended eight existing Stat/program receiver target lists
-with exact slot `Skill0012/001f`, preserving Player targets and IDs. The unchanged
-inherent Life bridge then emits one explicit zero per exact Sniper, after checked
-empty attribute inputs and resolved inherent flags. Player remains Strength 27
-and inherent Life 54. Missing minion targets stay unknown without affecting
-Player; no neutral MORE receiver is added. A synthetic positive-BASE control
-cannot silently obtain Player MORE or establish nonempty minion attribute parity.
-
-At that checkpoint, all 21 ordinary replay tests passed. Seven tests cover exact targets and source
-identity, zero versus missing, potential zero/inactive/nonzero donors, unsupported
-positive inputs, actual Partial authority, frozen prerequisites and four-worker
-reuse. All fourteen preceding damage, Command, Offering and Life Increase tests
-remain intact. The retained 44/38/34/0 removals compare only Increase: original
-tree removal of 229 also removes Gigantic 46365, and removal of 1218 also removes
-cooldown 14945. These projections do not prove legal optimizer mutations or
-final Life/MORE parity.
-
-Regeneration: `runs/owned-sniper-replay-minion-inherent-01.log` (30.36s), from
-input `bdfb1811f1707b493a2d2277b6ac714cc7a5b91df1a5b4b0ce07518c78948a73`.
-An independent raw-JSON inverse verifies exactly eight target additions, one
-Actor-slot bridge, one stage, program/readiness rows and nine dependent identity
-fields. It reproduces every prior byte and authenticates the changed hashes.
-Schema, routing, build, scenario and queries remain byte-identical. The native
-data publication carries the target extensions, bridge and canonical query member;
-all production owner and global coverage gaps remain unchanged.
-The canonical publication is broader than this finite graph. Earlier refreshes
-are recorded in the implementation history; no old-format decoder is retained.
-
-The subsequent Cryptic Leggings declaration publication was checked by exporting
-from `runs/owned-leggings-declarations-publication-01/package`. All 93 composed
-native tests, including export, pass (`runs/owned-sniper-leggings-declarations-joined-01.log`).
-The new export is byte-identical to this fixture, both as gzip and decoded JSON;
-the finite fixture already declared those five intrinsic inventories complete.
-No fixture replacement is necessary. The preceding 21 Engine tests still cover
-these exact inputs; they were not repeated for this declaration-only update.
-
-The subsequent [physical-base draft](../../data/owned/poe2/3887ae68/physical-base-damage/README.md)
-is composed by five additional ordinary Engine tests without replacing this
-gzip. It reuses the native intrinsic endpoints and supplies eight unfinished
-operands explicitly in the fixture. Its arithmetic, exact Action separation,
-missing-input behavior and four-worker reuse are tested; it publishes no
-production operand, coverage closure or final damage metric. The 21 preceding
-tests and five additions pass across the full run and a focused test repair.
-
-The current source-selection refresh adds one shared Fixed decision per exact
-Basic Action and changes four routes to consume it. All numerical producers and
-unrelated public inputs remain unchanged. The publisher separately authenticates
-the admitted intrinsic-only source domain; the production output's route
-coverage remains Partial. No missing selected value becomes zero or falls back
-to another source.
-
-All 93 joined native tests and all 28 ordinary Engine replay tests pass. The two
-new Engine tests verify one decision per exact Basic, numerical equality with
-direct transport, separate known values after a level change, missing minimum
-versus known maximum, scratch reuse and four-worker execution. Regeneration log:
-`runs/owned-sniper-source-selection-joined-01.log`, from canonical input
-`c62bfe81622299ad447970c5df46de16a69b5912bfd05dce0c93432cbcd23e02`.
-The separate JSON inverse verifies only four route-source records, one selector
-inventory and four dependent identities changed. Schema, rules, build, scenario
-and query content are unchanged. Strict Engine and affected CLI Clippy pass.
+All **93 joined native tests** and **30 ordinary Engine replay tests** pass.
+Strict Engine and affected CLI Clippy pass. Regeneration and native evidence:
+`runs/owned-sniper-combined-added-joined-01.log`,
+`runs/owned-sniper-combined-added-engine-02.log` and
+`runs/owned-sniper-combined-added-{engine,cli}-clippy-01.log`.
+The separate full-JSON inverse in
+`runs/owned-sniper-combined-added-replay-inverse-01.log` authenticates exactly
+one Stat/owner/support domain, program/query, stage with readiness/freezes and
+sixteen dependent identity changes. Every other JSON value is unchanged.
