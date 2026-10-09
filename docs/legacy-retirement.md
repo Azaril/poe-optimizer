@@ -1917,3 +1917,23 @@ additional pre-scaling Mana 25.25 and stable final pools 665/0 with absent/zero
 override. Five neutral originals do not establish conversion-domain closure.
 Track this alongside the existing Lua-cleanup and rounding-bound investigations;
 it must not be used to defer unrelated work on the closest build.
+
+## Amulet Life copy precision and source record order (2026-10-09)
+
+The [new evidence](owned-amulet-life-copy-evidence.md) prevents transferring the
+nested Minion-level copy's floor law to numeric Life. Original ScaleAddMod uses
+identity/bypass, precision metadata and integer/fractional branches. Integral
+Life rounds to two decimals before truncating; fractional input selects default
+precision 1. Negative and near-integer probes distinguish these laws. Represent
+any adopted arithmetic through existing typed operations and injected data;
+do not add Lua table shapes or truthiness to the native contract. Source behavior
+alone does not prove obtainability or independent game truth for those probes.
+
+Run06 also retained swapped ring-copy record positions across JIT modes in a
+modified control. `CalcPerform.lua:1489` iterates item slots with `pairs`.
+All numerical results and Amulet sequences agree. The scoped comparison now
+retains raw per-mode diagnostics and compares full source-qualified multisets
+with duplicate counts; numerical comparison is exact. It explicitly claims no
+source sequence parity, native fold order or general floating-sum equivalence.
+Equipment-Life ordering remains open. This is not a new accepted numerical PoB
+bug, a tolerance, or a relaxation of native determinism.

@@ -89,6 +89,14 @@ would keep override presence/value coherent in the existing graph; it is pending
 the owner's decision and is not a current API. No Lua insertion-order behavior
 has been adopted as a selection law.
 
+The [Life-copy source witness](owned-amulet-life-copy-evidence.md) now establishes
+that numeric Life copies need their own injected arithmetic branches; the
+existing nested gem-level floor rule cannot be reused unchanged. Full source
+controls preserve per-modifier copies and exact results across JIT modes. A
+separate ring-record storage-order discrepancy is retained as diagnostics, not
+promoted into native reduction order. Native Life copy adoption and complete
+equipment/resource coverage are the next steps; the witness adds no runtime path.
+
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across
 groups and that generated-provider exclusions must be distinguished from the

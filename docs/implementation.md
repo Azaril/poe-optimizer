@@ -104,6 +104,40 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
+## Latest source checkpoint: flat-Life Amulet copying
+
+The [original-function witness](owned-amulet-life-copy-evidence.md) resolves the
+next copy-formula question: ordinary numeric Life takes different precision and
+truncation branches from the existing nested Minion-level consumer. Two parsed
+Amulet records of 17 and 19 at 25% bonus effect yield separate copies of 4 and 4.
+Nine original scalar probes distinguish zero, identity, negative, near-integer,
+fractional and bypass behavior. Do not transfer the gem-level floor rule to Life.
+
+Run08 passes **three tests in 40.41s**, covering five unchanged originals, four
+parsed controls, fresh/warm replay and **12 complete loads per JIT mode**. The two
+230,607-byte comparison reports have SHA-256
+`12956b5e5aba18aa246593597c44f20687257217566ed0f63144da0b1df00871`.
+Strict all-feature Clippy passes (**0.27s**). Evidence:
+`runs/owned-amulet-life-source-08.log`, `runs/owned-amulet-life-source-08` and
+`runs/owned-amulet-life-clippy-01.log`. The existing source linker warning remains.
+
+Run06 retained a raw order discrepancy between two ring-copy records across JIT
+modes. Values, multiplicity, Amulet-copy order and final Life were unchanged.
+The witness preserves raw per-mode diagnostics and compares complete read-set
+multisets; numbers and Amulet sequences remain exact. This proves neither general
+Life accumulation order nor raw source sequence determinism. The
+[retirement audit](legacy-retirement.md#amulet-life-copy-precision-and-source-record-order-2026-10-09)
+tracks this explicit limitation. No numerical tolerance or retry policy is added.
+
+**Resume:** implement the Life copy consumer through existing typed operations,
+eligibility, frozen pre-copy snapshot and exact occurrences. Register its writer
+in checked Life queries; preserve Partial equipment/owner coverage. Validate
+against the source controls and scratch/parallel reuse, then retire only the
+proved copy obligation. This is approved-model data work while exact-Action and
+numeric-selection decisions remain pending. Original05 stays first; four selected
+usage/configuration obligations and final resource/damage coverage remain. No
+native package changes here; the reward-domain package below remains canonical.
+
 ## Latest data checkpoint: reward support-source coverage
 
 The [reward support packet](../data/owned/poe2/3887ae68/reward-support-domains/README.md)
