@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "before": "5a184bc1bd70cec968c8276df38aeb391013e59bdaa7f432ac80a1fade8e9dd2",
+  "rule_owners": 19,
+  "reward_definitions": 31,
+  "admitted": 18,
+  "remaining_unknown": 13,
+  "artifacts": {
+    "extension.json": {
+      "bytes": 8222,
+      "sha256": "940651cef73fd396cd739a7f552f9570616c170288f78fc985fec3a5533d4e4a"
+    },
+    "dependencies.json": {
+      "bytes": 90262,
+      "sha256": "b2e455dcb83dba4291f71cec5d4fc99a24c986a747c3bdab7f082bf8ce0a9f7d"
+    }
+  },
+  "full_build": false
+}

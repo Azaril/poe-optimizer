@@ -91,8 +91,9 @@ its activation and non-stacking application with those inputs. Inherited/support
 delivery authority and the final damage consumer remain pending. Composed support discovery
 now has a **common native coverage gate**. Authored-input accounting is implemented
 for the admitted source relationships and closes Original05's `01de` obligation.
-Gem-definition source domains now have their first reviewed data publication;
-other provider domains and exact exclusions remain pending.
+Gem-definition source domains and 18 complete numeric Reward domains now have
+reviewed data publications; other provider domains and exact exclusions remain
+pending.
 These decisions supersede older checkpoint statements below describing them as
 awaiting approval. The latest runtime checkpoint below specifies the immediate
 data-adoption step for the same closest build. Life and Skill scaling reuse the
@@ -103,7 +104,46 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Latest data checkpoint: Mana pool adjustment inputs
+## Latest data checkpoint: reward support-source coverage
+
+The [reward support packet](../data/owned/poe2/3887ae68/reward-support-domains/README.md)
+certifies 18 already-complete numeric Reward owners through the existing composed
+discovery contract. These include all **17 selected Original05 rewards**. Their
+known schemas have complete empty declaration sets, and their complete rules
+only emit unconditional literal numeric Player contributions. Exact frozen
+definition/body checks prevent this certificate surviving a changed capability.
+One Partial owner and 12 definitions without reviewed owners remain unknown.
+No runtime inference, public API, schema, formula or import-policy change is added.
+
+Native regression removes the finite replay's Reward domains and observes
+MissingSupportSources, restores the two actual packet rows and reproduces its
+prior component result, then verifies Unmapped coverage blocks again. The exact
+reward schemas/bodies must match publication dependencies. The all-five
+publication passes **three tests in 24.73s**, preserves inputs/local IDs and
+provenance, and rebuilds all 18 artifacts identically. Strict all-feature Clippy
+passes (**0.48s**). Evidence: `runs/owned-reward-support-native-publication-02.log`,
+`runs/owned-reward-support-clippy-01.log` and
+`runs/owned-reward-support-publication-01/validation.json`.
+
+Canonical successor: `runs/owned-reward-support-publication-01/package`:
+
+- Input: `aada9fe41ef814d85dca1a4e20bfbcb3d1c3c12bea1bebcc8352cc6b8252ecc3`.
+- Schema: `407ace9074f4a4917d0d23617a631f9844b54799c3a9260b7a0a9a9461f0e438`.
+- Rules: `ef7a509a288385042d15f90ee2a67188b6f88d512e3b4962c1c3e25b2b17806e`.
+- Compiled: `9f0bcfaf1a3e4a4ce3f9a005af0dba0d94296f0c8960ae45490540bae9ae7435`.
+- Operations V25; next free ID **335c**. Protected incoming-critical drafts stay
+  untouched. Selected imported-input obligations remain **107/117/109/123/4**;
+  110 metric queries, no evaluation bundle, **0/5 complete native builds**.
+
+**Resume:** Original05 remains first. Numeric selection and exact-Action query
+authority still await the owner's separate decisions; the explanatory summary
+request approves neither. After approval, adopt those extensions in final Mana
+and Command/damage respectively, preserving outstanding arithmetic/coverage
+proofs. Independent accepted work can review other selected provider capability
+domains from closed semantics, without inferring absence from an empty runtime
+bucket. The four usage/configuration input obligations remain separate blockers.
+
+## Preceding data checkpoint: Mana pool adjustment inputs
 
 The [adjustment packet](../data/owned/poe2/3887ae68/mana-pool-adjustments/README.md)
 adds five injected Stat definitions, checked Add/Sum reducers and Player

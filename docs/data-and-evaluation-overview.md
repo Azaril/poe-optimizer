@@ -101,6 +101,13 @@ additional support effects. Eight missing runtime effects have independently
 reviewed active-effect classification from the pinned generated export inventory;
 their construction and mechanics remain unresolved. Other owner domains and
 exact provider exclusions remain pending.
+The [Reward support packet](../data/owned/poe2/3887ae68/reward-support-domains/README.md)
+adds 18 explicit domains for already-complete numeric rewards, covering all 17
+selected by Original05. It derives the offline certificates from frozen closed
+owned schemas and literal rule bodies; native execution still consumes explicit
+data and never infers support capabilities. Thirteen other Reward definitions
+remain unknown. All-five import preservation and native missing/restored/Unmapped
+controls pass; no formula or imported-input obligation changes.
 The corrected offline proof reuses typed catalog identities to keep stat-set
 metadata separate from effect origins; the initial packet had conflated them.
 A separate whole-source authored-input proof now

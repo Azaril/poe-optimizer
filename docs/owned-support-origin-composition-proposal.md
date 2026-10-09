@@ -2,7 +2,8 @@
 
 **Status:** Accepted 2026-10-08; common native coverage gate and admitted authored-input
 accounting implemented. Original05 `01de` is retired. The first Gem-domain data
-packet is published; other owner domains and provider exclusions remain pending.
+packet and 18 complete numeric Reward domains are published; other owner domains
+and provider exclusions remain pending.
 The first actual
 source-construction census and slot-sharing control pass in both JIT modes.
 The owner approved
@@ -28,7 +29,13 @@ Missing/Unmapped coverage blocks both preparation and retained delivery.
 Synthetic component fixtures explicitly declare their finite source domains.
 Those assertions are not publication evidence for game definitions. Current
 game data now has 966 Gem declarations (937 Known, 29 Unmapped); other owner
-domains and exact provider exclusions still need adoption. Preset/Draft/Build order has moved to the explicit
+domains and exact provider exclusions still need adoption. The
+[Reward packet](../data/owned/poe2/3887ae68/reward-support-domains/README.md) adds
+18 explicit domains from frozen complete numeric owner semantics, including all
+17 selected Original05 rewards. Thirteen remaining Reward definitions stay
+unknown; no source capability is inferred at runtime. Native missing/restored/
+Unmapped controls and all-five publication preservation pass. Preset/Draft/Build
+order has moved to the explicit
 `authored_support_order` contract described below. No new positive origin family
 is implemented.
 The offline proof now reconciles the existing typed effect/stat-set identities;
