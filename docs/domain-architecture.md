@@ -637,6 +637,16 @@ runtime tags or automatic catalyst properties. The
 uses this existing boundary; complete contributor collection and final resource
 calculation remain separate obligations.
 
+Resource aggregation preserves distinct base, increased, MORE, converted,
+extra/total and override inputs wherever the game requires them. A checked
+subtotal does not authorize the final resource result. Override presence is
+independent of its numeric value: a present zero can differ from an absent
+override followed by the ordinary minimum clamp. Acquisition should retain
+the original calculation's read set and boundary controls as evidence; runtime
+rules use owned typed values and explicit arithmetic. A neutral value observed
+in example builds establishes no universal empty source domain, and a bounded
+integer fold establishes no general floating-point ordering or rounding law.
+
 Applicability facts must name the precise delivery law they establish. Passing
 one exclusion does not authorize every other routing or scaling branch. For
 example, an item unaffected by Amulet diversion may still require grouped Focus

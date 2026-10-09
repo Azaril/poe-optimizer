@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "before": "ef3f45bb8aa6b755f21d79aeac6740bb469cc6406e8cce8ce4f11ce5147b7c56",
+  "scope": {
+    "potential_writers": 5,
+    "queries": 3,
+    "groups": 5,
+    "singleton_groups": 3,
+    "bounded_integer_passive_group": true,
+    "empty_more_guard": true,
+    "final_mana": false,
+    "whole_build": false
+  },
+  "artifacts": {
+    "queries.json": {
+      "bytes": 8654,
+      "sha256": "a7e639e7b9f11de5c63838c2a1845ac4053b57065c07e47c98eb636121e671fc"
+    },
+    "dependencies.json": {
+      "bytes": 28805,
+      "sha256": "2a54d9d5fcc93e617b2b70571828bf3cefa9d9574b9b6f14f4bd0d62aed61f8c"
+    }
+  }
+}

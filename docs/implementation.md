@@ -103,7 +103,84 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Latest data checkpoint: Intelligence-derived Player Mana
+## Latest data checkpoint: checked Mana contributor domains
+
+The [Mana query packet](../data/owned/poe2/3887ae68/mana-contribution-queries/README.md)
+adds three checked queries with five groups over existing channel `29f9`. Its
+full published-writer census found five effects: shared Player intrinsic and
+Intelligence Mana, one reward increase, and two passive reductions. It retains
+their exact Actor/reward/allocation origins. Three groups have zero/one-potential-
+effect bounds; the passive group's immutable -10/-30 integral values establish
+exact subset sums. The empty MORE group guards the currently admitted domain.
+Neither empty membership nor complete bounded groups close global game coverage.
+
+The existing owned assembler publishes these query additions directly, with an
+authenticated receipt and exact inverse proof. There is no metadata-only
+migration, new schema ID, receiver, producer, runtime API or compatibility path.
+Every existing body, owner/global gap and import policy survives. Publication
+checks every declared writer, including unselected sources; native planning
+checks potential writers bound to the composed request, including inactive
+sources. Keep these two guarantees distinct.
+
+The native resource target now also installs the exact published queries and
+reward/passive programs in its explicitly finite replay. The baseline calculates
+398 intrinsic Mana and 210 Intelligence Mana, receives the real 5% reward and
+resolves the empty MORE identity. Both passive reductions, their combination,
+reward removal and unknown Intelligence are exercised. The extra passive
+topology is finite test data, not a legal game-tree claim. Diagnostic outputs
+remain separate from final Mana. Missing inactive membership and duplicate
+numeric reward positions are rejected; the worker test now includes these
+queries in its fresh/reused A–unknown–B–A/four-worker comparison.
+
+The optional `owned_mana_pool` source test invokes the original
+`doActorLifeManaSpirit` twice after each complete build and retains original
+ModStore inputs/output. Five unchanged builds and parsed half-boundary,
+increased, MORE, negative-clamp and zero-override controls pass, along with fresh
+and warm restoration. There are **12 cases and 15 complete loads per JIT mode**.
+Both 98,915-byte reports have SHA-256
+`e73fa203a7f41c6be2faf9be4dc1a00094859039f263c9f47d3b644ffffb769b`.
+The test passes in **48.80s**; evidence:
+`runs/owned-mana-pool-source-02.log` and
+`runs/owned-mana-pool-source-02/source-jit-{off,on}.json`.
+The original pools are **876/630/881/858/638**. Original05's ordinary resource
+inputs are base 608, increased 5%, MORE 1, zero conversion/extra/total and absent
+override. A zero override produces zero despite the ordinary minimum-one clamp.
+These observations establish reference behavior, not native final-pool parity.
+
+Native/publication validation passes **nine tests in 24.38s**, including
+unchanged all-five inputs, exact local IDs, preserved provenance and byte-identical
+rebuilding of all 18 artifacts. The final ordinary run passes **eight tests in
+4.35s**; its two publication tests are intentionally ignored there. Strict
+all-feature Clippy passes for the native resource target (**0.52s**) and the
+new optional PoB target (**24.68s**). Changed-file rustfmt and diff checks pass.
+Evidence: `runs/owned-mana-queries-native-final-01.log`,
+`runs/owned-mana-queries-clippy-01.log`,
+`runs/owned-mana-queries-native-publication-02.log` and publication02's
+`validation.json`. There remain 110 metric queries, selected input obligations
+**107/117/109/123/4**, no evaluation bundle and **0/5 complete builds**.
+
+The canonical successor is `runs/owned-mana-queries-publication-02/package`:
+
+- Input: `7a8076e7e04177fa0c31f322598da5200e86e65f7f4592f79b98506168d65dbe`.
+- Schema unchanged: `c188fccd39144f5ebd1cb2e8430325234042d4ac37974013e02b95192d78cb8b`.
+- Rules: `073c3851b1353e1ca75eea211e4d0c6955ddc0f1b6adaab5caf43ccde36c0caa`.
+- Compiled: `75e1a04375977dd9346fdbcd3960c5c7bde89a1e6f25c097318e30a2fb497e77`.
+- Operations remain V25; next free ID remains **3357**.
+
+**Resume:** Original05 remains first; the Action query API decision is still
+pending. Once approved, resume Command and the physical damage path. Independent
+Mana work should now account for conversion, extra/total contributions and
+override presence/value before adopting the final pool consumer. Reuse the
+existing graph where its authority and reduction laws fit; discuss a public
+contract change before introducing one. Zero observed channels in the five
+builds are not a complete contributor-domain proof. Validate composed arithmetic
+and rounding rather than assuming native round matches PoB's half-bias/floor
+at every admitted magnitude. Player Life's equipment-domain/rounding proof and
+the four selected usage/configuration obligations remain. Protected incoming-
+critical drafts were not changed. Latest hosted CI must be checked at the
+actual pushed commit; preceding `5e07d11` was still pending during this work.
+
+## Preceding data checkpoint: Intelligence-derived Player Mana
 
 The [new packet](../data/owned/poe2/3887ae68/intelligence-mana/README.md) adds
 `contribute-inherent-intelligence-mana` to the existing shared Player Actor. It

@@ -61,10 +61,22 @@ Intelligence-specific Boolean flags. Disabled absence and enabled zero remain
 distinct; unknown values and incomplete membership remain unavailable. Its native
 baseline calculates Intelligence 105 and contributes 210 Mana without supplying
 either number as a runtime constant. Source-only controls remain finite tests.
-Both Mana source tests share one full-source loading/supervision helper; the
+The Mana source tests share one full-source loading/supervision helper; the
 refactor reproduces the previous intrinsic report byte for byte. The other
-modifiers, checked resource aggregation and final-pool arithmetic remain separate
-dependencies. These contributions do not make a complete build available.
+modifiers and final-pool arithmetic remain separate dependencies. These
+contributions do not make a complete build available.
+
+The [Mana query packet](../data/owned/poe2/3887ae68/mana-contribution-queries/README.md)
+now supplies checked base/increased/MORE groups for all five currently published
+writers, including the two passive reductions absent from Original05. Publication
+censuses all declarations; native planning validates bound potential writers,
+including inactive sources. Bounded numeric groups and an empty guarded MORE
+domain retain global Partial coverage. This adds data through the existing
+assembler without a schema migration or production Rust change.
+An independent full-source test confirms the final PoB resource calculation,
+including rounding, clamping and a zero override, with JIT off/on and warm/fresh
+agreement. Native conversion, extra/total, override and final rounding still
+need explicit coverage; neither reference output nor a subtotal is a substitute.
 
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across

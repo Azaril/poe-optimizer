@@ -1,6 +1,8 @@
 //! Joined native resource dependencies and explicit source-control fixtures.
 #[path = "support/owned_intelligence_mana.rs"]
 mod family;
+#[path = "support/owned_mana_contribution_queries.rs"]
+mod mana_queries;
 #[path = "support/owned_release_migration_preservation.rs"]
 mod migration_preservation;
 #[allow(dead_code)]
@@ -16,7 +18,8 @@ mod replay;
 #[path = "support/owned_selected_request.rs"]
 mod selected;
 use poe_optimizer_core::{
-    owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*, owned_stages::*,
+    build_identity::InstanceAllocator, owned_build::*, owned_definitions::*, owned_rules::*,
+    owned_schema::*, owned_stages::*,
 };
 use poe_optimizer_engine::owned_plan::*;
 use poe_optimizer_import::{
@@ -388,7 +391,7 @@ fn missing_input_and_incomplete_or_unlisted_flags_cannot_become_zero() {
 }
 #[test]
 fn mana_replays_match_across_fresh_reused_unknown_and_parallel_workers() {
-    let a = world();
+    let a = mana_query_world();
     let mut b = a.clone();
     flags(&mut b, &[(0x3318, true)]);
     b.rebind_test_edit().unwrap();
@@ -446,6 +449,236 @@ fn publish_intelligence_mana_preserving_all_five_originals() {
         &["authoring.json", "dependencies.json", "source-vectors.json"],
         family::stage,
         json!({"new_definitions":2,"new_programs":3,"new_queries":2,"final_mana":false,"whole_build_parity":false}),
+        [107, 117, 109, 123, 4],
+    );
+}
+
+// Finite query-binding fixture. Programs and membership are the published data;
+// passive topology below is deliberately finite, not a legal full game tree.
+fn mana_query_world() -> replay::ReplayInput {
+    let mut i = world();
+    let deps: mana_queries::Dependencies = mana_queries::read("dependencies.json");
+    for d in deps.definitions {
+        if i.schema
+            .definitions
+            .iter()
+            .any(|x| x.address() == d.address())
+        {
+            continue;
+        }
+        let mut d = json!(d);
+        if d["kind"] == "passive_node" {
+            d["value"]["schema"]["value"]["adjacent"]["members"] = json!([]);
+            d["value"]["schema"]["value"]["pools"]["members"] =
+                json!([i.build.allocations[0].pool]);
+        }
+        i.schema
+            .definitions
+            .push(serde_json::from_value(d).unwrap());
+    }
+    for d in deps.producers {
+        if i.rules.owners.iter().any(|o| o.owner == d.owner) {
+            continue;
+        }
+        stage(&mut i, d.owner.clone(), &d.program, "strength-life-halving");
+        i.rules.support_discovery.as_mut().unwrap().providers.push(
+            SupportSourceDomainDeclaration {
+                owner: d.owner.clone(),
+                domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+            },
+        );
+        i.rules.owners.push(DefinitionRules {
+            owner: d.owner,
+            programs: DeclaredSet::complete(vec![d.program]),
+        });
+    }
+    i.rules
+        .contribution_queries
+        .as_mut()
+        .unwrap()
+        .members
+        .extend(mana_queries::queries());
+    let mut reward = i.build.character.rewards[0].clone();
+    let mut allocator = InstanceAllocator::from_state(i.build.allocator);
+    reward.id = allocator.allocate().unwrap();
+    i.build.allocator = allocator.state();
+    reward.definition = def(0x003e);
+    i.build.character.rewards.push(reward);
+    // Diagnostic output channels do not replace the final Mana stat or formula.
+    for (n, unit) in [(0xff01, 3), (0xff02, 2), (0xff03, 1)] {
+        i.schema.definitions.push(serde_json::from_value(json!({"kind":"stat","value":{
+            "id":def::<StatDefinition>(n),"schema":{"kind":"known","value":{
+                "value":{"kind":"quantity","value":{"unit":def::<UnitDefinition>(unit)}},"targets":["actor"]}}
+        }})).unwrap());
+    }
+    let rows = [
+        (
+            "intrinsic",
+            "mana-base-contributions",
+            "intrinsic",
+            3,
+            0xff01,
+        ),
+        ("inherent", "mana-base-contributions", "inherent", 3, 0xff01),
+        (
+            "rewards",
+            "mana-increased-contributions",
+            "rewards",
+            2,
+            0xff02,
+        ),
+        (
+            "passives",
+            "mana-increased-contributions",
+            "passives",
+            2,
+            0xff02,
+        ),
+        ("more", "mana-more-contributions", "sources", 1, 0xff03),
+    ];
+    let p:RuleProgram = serde_json::from_value(json!({"id":"test-observe-mana-queries","context":"actor",
+        "reads":rows.iter().map(|(id,q,g,u,_)|json!({"id":id,"value_type":{"kind":"quantity","value":{"unit":def::<UnitDefinition>(*u)}},"source":{"kind":"contribution_query","value":{"entity":"current","query":q,"group":g}}})).collect::<Vec<_>>(),
+        "nodes":rows.iter().map(|(id,_,_,_,_)|json!({"id":id,"expression":{"kind":"read","input":id}})).collect::<Vec<_>>(),
+        "effects":rows.iter().map(|(id,_,_,_,stat)|json!({"id":id,"when":null,"effect":{"kind":"contribute","entity":"current","stat":def::<StatDefinition>(*stat),"contribution":"add","value":id}})).collect::<Vec<_>>() })).unwrap();
+    stage(&mut i, actor(), &p, "contribute-inherent-strength-life");
+    i.stages
+        .programs
+        .members
+        .iter_mut()
+        .find(|x| x.program == p.id)
+        .unwrap()
+        .stage = key("test-mana-queries");
+    i.stages.stages.push(
+        serde_json::from_value(
+            json!({"id":"test-mana-queries","predecessors":["player-inherent-life-contribution"]}),
+        )
+        .unwrap(),
+    );
+    for kind in [
+        ContributionKind::Add,
+        ContributionKind::Increase,
+        ContributionKind::Multiply,
+    ] {
+        i.stages.frozen_channels.push(serde_json::from_value(json!({"channel":{"kind":"contributions","scope":"actor","stat":def::<StatDefinition>(0x29f9),"contribution":kind},"stage":"player-inherent-life-contribution"})).unwrap());
+    }
+    i.rules
+        .owners
+        .iter_mut()
+        .find(|o| o.owner == actor())
+        .unwrap()
+        .programs
+        .members
+        .push(p);
+    i.rebind_test_edit().unwrap();
+    i
+}
+fn query_value(r: &SupportEffectsReport, id: &str) -> EffectValue {
+    effects(r)
+        .effects
+        .iter()
+        .find(|e| {
+            e.key.invocation.program.as_str() == "test-observe-mana-queries"
+                && e.key.effect.as_str() == id
+        })
+        .unwrap()
+        .value
+        .clone()
+}
+fn query_quantity(n: f64, unit: u64) -> EffectValue {
+    EffectValue::Known {
+        value: ParameterValue::Quantity(FiniteQuantity::new(n, def(unit)).unwrap()),
+    }
+}
+#[test]
+fn checked_mana_queries_bind_real_actor_reward_and_passive_programs() {
+    let i = mana_query_world();
+    let r = report(i.clone());
+    for (id, n, unit) in [
+        ("intrinsic", 398., 3),
+        ("inherent", 210., 3),
+        ("rewards", 5., 2),
+        ("passives", 0., 2),
+        ("more", 1., 1),
+    ] {
+        assert_eq!(query_value(&r, id), query_quantity(n, unit));
+    }
+    for (nodes, expected) in [
+        (vec![0x109b], -10.),
+        (vec![0x18d8], -30.),
+        (vec![0x109b, 0x18d8], -40.),
+    ] {
+        let mut x = i.clone();
+        let mut allocator = InstanceAllocator::from_state(x.build.allocator);
+        for node in nodes {
+            let mut a = x.build.allocations[0].clone();
+            a.node = def(node);
+            a.id = allocator.allocate().unwrap();
+            a.choices.clear();
+            x.build.allocations.push(a);
+        }
+        x.build.allocator = allocator.state();
+        assert_eq!(
+            query_value(&report(x), "passives"),
+            query_quantity(expected, 2)
+        );
+    }
+    let mut x = i.clone();
+    x.build
+        .character
+        .rewards
+        .retain(|r| r.definition != def(0x003e));
+    assert_eq!(query_value(&report(x), "rewards"), query_quantity(0., 2));
+    let mut x = i;
+    set_intelligence(&mut x, None);
+    assert!(matches!(
+        query_value(&report(x), "inherent"),
+        EffectValue::Unresolved { .. }
+    ));
+}
+#[test]
+fn checked_mana_membership_rejects_inactive_and_duplicate_bound_sources() {
+    let mut i = mana_query_world();
+    // Publication's census checks unselected declarations; the native request
+    // checks all its potential bound writers, including an inactive one.
+    flags(&mut i, &[(0x3355, true)]);
+    i.rules
+        .contribution_queries
+        .as_mut()
+        .unwrap()
+        .members
+        .iter_mut()
+        .find(|q| q.id.as_str() == "mana-base-contributions")
+        .unwrap()
+        .groups[1]
+        .members
+        .members
+        .pop();
+    i.rebind_test_edit().unwrap();
+    assert!(i.compile().is_err());
+    let mut i = mana_query_world();
+    let reward = i.build.character.rewards.last().unwrap().clone();
+    let mut duplicate = reward;
+    let mut allocator = InstanceAllocator::from_state(i.build.allocator);
+    duplicate.id = allocator.allocate().unwrap();
+    i.build.allocator = allocator.state();
+    i.build.character.rewards.push(duplicate);
+    i.rebind_test_edit().unwrap();
+    assert!(
+        i.compile().is_err(),
+        "equal semantic numeric positions must not silently reorder duplicate rewards"
+    );
+}
+#[test]
+#[ignore = "requires MANA_QUERIES_PRIOR/OUTPUT"]
+fn publish_mana_queries_preserving_all_five_originals() {
+    publication::run_with_expected_selected_counts(
+        PathBuf::from(std::env::var_os("POE_OPTIMIZER_TEST_MANA_QUERIES_PRIOR").unwrap()),
+        PathBuf::from(std::env::var_os("POE_OPTIMIZER_TEST_MANA_QUERIES_OUTPUT").unwrap()),
+        &mana_queries::data(),
+        &[],
+        &["authoring.json", "dependencies.json"],
+        mana_queries::stage,
+        json!({"new_queries":3,"groups":5,"potential_writers":5,"final_mana":false,"whole_build_parity":false}),
         [107, 117, 109, 123, 4],
     );
 }
