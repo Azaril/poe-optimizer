@@ -33,7 +33,11 @@ pub(super) fn install(w: &mut sniper::World, endpoint: &StagedOwnedRelease) -> C
     buff_source_family::assert_component(endpoint);
     let deps = buff_source_family::dependencies();
     let inner = &mut w.base.source.base.inner;
-    assert_eq!(inner.operations, key(OWNED_RULE_OPERATIONS_V24));
+    assert!(
+        RuleOperationsVersion::parse(inner.operations.as_str())
+            .unwrap()
+            .supports_skill_contribution_queries()
+    );
     for descriptor in deps.definitions {
         if let Some(existing) = inner
             .schema

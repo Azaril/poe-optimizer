@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "kind": "mixed-minion-damage",
+  "before": "802f807e1a7c1687c67f161148619e14430a871e61e90101d04f33c8e13112e2",
+  "scope": {
+    "new_definitions": 2,
+    "new_programs": 2,
+    "new_receivers": 2,
+    "new_queries": 1,
+    "closed_existing_owners": 0,
+    "complete_damage_domain": false,
+    "whole_build_parity": false
+  },
+  "source_packets": [
+    {
+      "path": "data/owned/poe2/3887ae68/plain-minion-damage-passives/authoring.json",
+      "bytes": 3398,
+      "sha256": "fb32f139881eda1e86ff0ff0bc3d78ddc374330057d856cd9cf6beab98a436ef"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/pain-offering/applications.json",
+      "bytes": 15007,
+      "sha256": "88177a7398a34fd46af60885f4a312bc8abbbe4186e4008a97b0469d86c54045"
+    }
+  ],
+  "artifacts": {
+    "migration.json": {
+      "bytes": 2375,
+      "sha256": "74312c823c70b57228c900211d5343e23afe2b26f6dea38ecfd7d585e54523cd"
+    },
+    "consumer.json": {
+      "bytes": 9560,
+      "sha256": "51fb3de7e5ca8014c5b47a1515daa71a282edd7cc3bd3fcccc2e438af1004727"
+    },
+    "queries.json": {
+      "bytes": 1476,
+      "sha256": "c26eca782e2a52c135fa78fed978173893bf8cc3a00196731238dd8daa1a5cd2"
+    },
+    "dependencies.json": {
+      "bytes": 26082,
+      "sha256": "ad575250f6566c7264fef3f0c3ef7e4a3a18d3702855e59000f4af50c47cc19d"
+    },
+    "source-vectors.json": {
+      "bytes": 26180,
+      "sha256": "80b6c032abf4c892677df15d5efcfbece9067891eefad2a80eaaa21fad09d169"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+[
+  {
+    "id": "owned-minion-applied-damage-increase",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000322d"
+    },
+    "contribution": "add",
+    "groups": [
+      {
+        "id": "all",
+        "reduction": "sum",
+        "ordering": "ordered",
+        "empty": {
+          "kind": "quantity",
+          "value": {
+            "value": 0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000002"
+            }
+          }
+        },
+        "members": {
+          "members": [
+            {
+              "producer": {
+                "kind": "application_group",
+                "family": "pain-offering-buff",
+                "modifier": "unconditional-damage-increase",
+                "declarations": [
+                  {
+                    "application": "pain-offering-minion-damage",
+                    "effect": "damage-increase"
+                  }
+                ]
+              },
+              "order": {
+                "source_rank": 0,
+                "program_rank": 0,
+                "effect_rank": 0,
+                "slot_ranks": []
+              }
+            }
+          ],
+          "closure": {
+            "kind": "complete"
+          }
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,1132 @@
+{
+  "schema_version": 1,
+  "vectors": [
+    {
+      "case": "original-05",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "actor_profile": "RaisedSkeletonSniper",
+      "effect_id": "MinionMeleeBow",
+      "records": [
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:19006",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:14598",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:54453",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:95",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:39461",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:8737",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:229",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:50837",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:4345",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:43979",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Skill:PainOfferingPlayer",
+            "tags": [
+              {
+                "effectType": "Buff",
+                "type": "GlobalEffect"
+              }
+            ],
+            "type": "INC",
+            "value": 62
+          },
+          "value": 62
+        }
+      ],
+      "increased_factor": 2.3
+    },
+    {
+      "case": "repeat-original-05",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "actor_profile": "RaisedSkeletonSniper",
+      "effect_id": "MinionMeleeBow",
+      "records": [
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:19006",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:14598",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:54453",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:95",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:39461",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:8737",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:229",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:50837",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:4345",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:43979",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Skill:PainOfferingPlayer",
+            "tags": [
+              {
+                "effectType": "Buff",
+                "type": "GlobalEffect"
+              }
+            ],
+            "type": "INC",
+            "value": 62
+          },
+          "value": 62
+        }
+      ],
+      "increased_factor": 2.3
+    },
+    {
+      "case": "offering-disabled",
+      "xml_sha256": "194e9b00cc81f4bb42f2943d037cc8ac2adb9a5a18d31a1a6a801adde5338ed9",
+      "actor_profile": "RaisedSkeletonSniper",
+      "effect_id": "MinionMeleeBow",
+      "records": [
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:19006",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:14598",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:54453",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:95",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:39461",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:8737",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:229",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:50837",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:4345",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:43979",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        }
+      ],
+      "increased_factor": 1.6800000000000002
+    },
+    {
+      "case": "offering-level-1",
+      "xml_sha256": "8289234dc9b58b4ee20f52343a57fb817e6fb2e5543bf891061c4c42d9118e21",
+      "actor_profile": "RaisedSkeletonSniper",
+      "effect_id": "MinionMeleeBow",
+      "records": [
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:19006",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:14598",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:54453",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:95",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:39461",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:8737",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:229",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:50837",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:4345",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:43979",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Skill:PainOfferingPlayer",
+            "tags": [
+              {
+                "effectType": "Buff",
+                "type": "GlobalEffect"
+              }
+            ],
+            "type": "INC",
+            "value": 24
+          },
+          "value": 24
+        }
+      ],
+      "increased_factor": 1.92
+    },
+    {
+      "case": "offering-duplicate-equal",
+      "xml_sha256": "c9ffd40f0cedf893a4793b5b610b470d3eb3a27b82ca9ae9300c44c2f26e51e3",
+      "actor_profile": "RaisedSkeletonSniper",
+      "effect_id": "MinionMeleeBow",
+      "records": [
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:19006",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:14598",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:54453",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:95",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:39461",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:8737",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:229",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:50837",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:4345",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:43979",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Skill:PainOfferingPlayer",
+            "tags": [
+              {
+                "effectType": "Buff",
+                "type": "GlobalEffect"
+              }
+            ],
+            "type": "INC",
+            "value": 62
+          },
+          "value": 62
+        }
+      ],
+      "increased_factor": 2.3
+    },
+    {
+      "case": "offering-higher-first",
+      "xml_sha256": "cb7150e921d035a8133d0e03b8088f08670a1008066f1816f2ebad31555ff643",
+      "actor_profile": "RaisedSkeletonSniper",
+      "effect_id": "MinionMeleeBow",
+      "records": [
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:19006",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:14598",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:54453",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:95",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:39461",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:8737",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:229",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:50837",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:4345",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:43979",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Skill:PainOfferingPlayer",
+            "tags": [
+              {
+                "effectType": "Buff",
+                "type": "GlobalEffect"
+              }
+            ],
+            "type": "INC",
+            "value": 80
+          },
+          "value": 80
+        }
+      ],
+      "increased_factor": 2.48
+    },
+    {
+      "case": "offering-higher-last",
+      "xml_sha256": "f2a46077274b2cc5574c38bd78279627b04005eba8df32ea46c69bfe25bd62f8",
+      "actor_profile": "RaisedSkeletonSniper",
+      "effect_id": "MinionMeleeBow",
+      "records": [
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:19006",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:14598",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:54453",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:95",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:39461",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:8737",
+            "tags": {},
+            "type": "INC",
+            "value": 10
+          },
+          "value": 10
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:229",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:50837",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:4345",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:43979",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Skill:PainOfferingPlayer",
+            "tags": [
+              {
+                "effectType": "Buff",
+                "type": "GlobalEffect"
+              }
+            ],
+            "type": "INC",
+            "value": 80
+          },
+          "value": 80
+        }
+      ],
+      "increased_factor": 2.48
+    },
+    {
+      "case": "without-plain-node",
+      "xml_sha256": "6d0333ecf0eb3d76f28fafa19223804c8282cf4990e8c3512033b79b6f2439ba",
+      "actor_profile": "RaisedSkeletonSniper",
+      "effect_id": "MinionMeleeBow",
+      "records": [
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:19006",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:39461",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:14598",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:54453",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:229",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:50837",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:4345",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Tree:43979",
+            "tags": {},
+            "type": "INC",
+            "value": 6
+          },
+          "value": 6
+        },
+        {
+          "mod": {
+            "flags": 0,
+            "keyword_flags": 0,
+            "name": "Damage",
+            "source": "Skill:PainOfferingPlayer",
+            "tags": [
+              {
+                "effectType": "Buff",
+                "type": "GlobalEffect"
+              }
+            ],
+            "type": "INC",
+            "value": 62
+          },
+          "value": 62
+        }
+      ],
+      "increased_factor": 2.1
+    }
+  ]
+}

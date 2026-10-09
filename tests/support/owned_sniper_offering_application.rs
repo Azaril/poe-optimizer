@@ -405,7 +405,7 @@ fn offering_imported_activation_and_real_inputs_reach_nonstacking_recipient_dama
     }
 }
 
-fn override_active(w: &mut World, index: usize, active: bool) {
+pub(super) fn override_active(w: &mut World, index: usize, active: bool) {
     let mut u = w.offering.preferences[index].selection.clone();
     u.parameters[0].value = ParameterValue::Boolean(active);
     w.offering.overrides.push(u);

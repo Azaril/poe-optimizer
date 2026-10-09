@@ -45,10 +45,16 @@ mod life_query_family;
 #[allow(dead_code)]
 #[path = "support/owned_flat_life_routing.rs"]
 mod life_routing_family;
+#[allow(dead_code)]
+#[path = "support/owned_mixed_minion_damage.rs"]
+mod mixed_damage_family;
+#[path = "support/owned_sniper_mixed_damage.rs"]
+mod mixed_damage_native;
 #[path = "support/owned_sniper_offering_application.rs"]
 mod offering_application_native;
 #[path = "support/owned_sniper_passive_damage_evidence.rs"]
 mod passive_damage_evidence;
+use passive_damage_evidence::family as plain_damage_source;
 #[path = "support/owned_sniper_passive_damage_native.rs"]
 mod passive_damage_native;
 #[path = "support/owned_sniper_player_life_contribution.rs"]
@@ -462,6 +468,7 @@ impl World {
         let player_life = player_life_contribution_native::install(&mut w, &endpoint);
         let life_inputs = player_life_inputs_native::install(&mut w, &endpoint, &path);
         let offering = offering_application_native::install(&mut w, &endpoint, &draft, &selection);
+        mixed_damage_native::install(&mut w, &endpoint);
         assert_eq!(before, release::inventory(&path));
         Self {
             sniper: w,
@@ -597,6 +604,7 @@ impl World {
             inherent_life_native::configure(stages);
             player_life_contribution_native::configure(stages);
             offering_application_native::configure(stages);
+            mixed_damage_native::configure(stages);
             configure(stages);
         })
     }

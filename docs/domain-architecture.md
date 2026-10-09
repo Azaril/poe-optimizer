@@ -293,8 +293,10 @@ effects from results after application stacking. Exact recipient binding and
 complete membership must survive that distinction; individual candidates cannot
 be counted again after their group has emitted a contribution. Core/Data/Engine
 operations V25 now implement this contract in the current member format. The
-real mixed damage-consumer publication remains separate work; no numerical or
-whole-build coverage follows merely from this capability.
+mixed damage-consumer publication now adopts it through ordinary typed Stat
+receivers, reading the existing inherited stat and the checked application group.
+No complete damage-domain or whole-build coverage follows merely from this
+capability or its initial data adoption.
 
 The [passive topology contract](owned-passive-topology.md) separates implicit roots,
 physical allocations, attached choices, scope eligibility and injected legality budgets.

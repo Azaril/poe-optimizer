@@ -1,7 +1,8 @@
 # Checked queries over stacked application contributions
 
 **Status:** Accepted and implemented in Core/Data/Engine operations V25 on
-2026-10-08. Real mixed damage-consumer data adoption remains pending.
+2026-10-08. The mixed inherited/applied damage packet adopts it; complete
+damage-domain coverage and the final hit calculation remain pending.
 **Date:** 2026-10-08.
 **Decider:** Project owner.
 **Scope:** Let the existing contribution graph consume the result of an effect
@@ -170,5 +171,9 @@ The new generic tests cover mixed ordinary/application channels, independent
 families, duplicate declarations sharing a family, source ties, repeated recipient
 groups, missing/extra/duplicate members, wrong channels/recipients, unread/inactive/
 zero sources, unknowns, Partial coverage, ordering, work bounds, stages, cycles,
-storage permutations and fresh/reused/four-worker execution. The next numerical
-step is real data adoption, not another contribution API.
+storage permutations and fresh/reused/four-worker execution. The
+[mixed damage packet](../data/owned/poe2/3887ae68/mixed-minion-damage/README.md)
+now reads the real stacked group alongside the existing inherited Actor stat.
+Its two ordinary typed consumers derive the subtotal and increase factor. This
+reuses the existing receiver and rule contracts; it introduces no additional
+contribution API. MORE aggregation and final hit damage remain next.

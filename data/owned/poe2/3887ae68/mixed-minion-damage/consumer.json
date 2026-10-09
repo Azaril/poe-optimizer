@@ -1,0 +1,342 @@
+{
+  "owners": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003353"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "owned-minion-unconditional-damage-increase",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "inherited",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d34"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "applied",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "owned-minion-applied-damage-increase",
+                    "group": "all"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "inherited",
+                "expression": {
+                  "kind": "read",
+                  "input": "inherited"
+                }
+              },
+              {
+                "id": "applied",
+                "expression": {
+                  "kind": "read",
+                  "input": "applied"
+                }
+              },
+              {
+                "id": "increase",
+                "expression": {
+                  "kind": "add",
+                  "left": "inherited",
+                  "right": "applied"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "increase",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003353"
+                  },
+                  "value": "increase"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "complete"
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003354"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "owned-minion-unconditional-increase-factor",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003353"
+                    }
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "increase"
+                }
+              },
+              {
+                "id": "fraction",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "increase",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "one",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "factor",
+                "expression": {
+                  "kind": "add",
+                  "left": "one",
+                  "right": "fraction"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "factor",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003354"
+                  },
+                  "value": "factor"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "complete"
+        }
+      }
+    }
+  ],
+  "receivers": [
+    {
+      "id": "owned-minion-unconditional-damage",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003353"
+      },
+      "program": "owned-minion-unconditional-damage-increase",
+      "targets": [
+        {
+          "kind": "owned_slot",
+          "value": {
+            "slot": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000012"
+                }
+              },
+              "slot": {
+                "kind": "actor_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000001f"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "owned-minion-unconditional-increase-factor",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003354"
+      },
+      "program": "owned-minion-unconditional-increase-factor",
+      "targets": [
+        {
+          "kind": "owned_slot",
+          "value": {
+            "slot": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000012"
+                }
+              },
+              "slot": {
+                "kind": "actor_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000001f"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

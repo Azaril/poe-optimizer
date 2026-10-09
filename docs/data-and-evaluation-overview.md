@@ -100,11 +100,13 @@ was accepted on October 8 and is implemented in Core/Data/Engine operations V25.
 Existing applications already resolve activation, exact recipients and stacking;
 the same checked query can now combine that result with ordinary contributions.
 Maintained packets use the current typed producer envelope; old development
-member bytes are rejected. The next step is the real mixed consumer's owned
-data, preserving the remaining coverage gaps. This adds no separate aggregator
+member bytes are rejected. The mixed consumer's owned data now combines the
+existing inherited Actor stat with a checked stacked-group read and derives its
+subtotal and increase factor. MORE aggregation and final hit damage remain
+pending, along with the broader coverage gaps. This adds no separate aggregator
 or Lua runtime dependency.
 Composed support discovery is already approved and remains
-independent implementation work. See the current [resume point](implementation.md#current-runtime-checkpoint-checked-application-group-producers).
+independent implementation work. See the current [resume point](implementation.md#current-data-checkpoint-inherited-and-applied-minion-damage).
 
 The joined graph calculates both attribute passes from the actual
 imported class/passive sources, resolves the five inherent Boolean flags through

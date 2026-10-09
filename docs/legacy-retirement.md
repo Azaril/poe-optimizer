@@ -133,9 +133,10 @@ definition programs for synthetic graph nodes. Core/Data/Engine V25 now implemen
 the accepted extension. The old member representation is retired; current
 authoring packets and the canonical package are rebuilt, with no compatibility
 deserializer. A one-off offline Rust rebuild records exact artifact and authoring
-commitment changes; it is not a new runtime lane. Real mixed consumer data remains
-pending. See the
-[current checkpoint](implementation.md#current-runtime-checkpoint-checked-application-group-producers)
+commitment changes; it is not a new runtime lane. The mixed consumer is now
+ordinary owned data using the same query and Stat receiver contracts. No runtime
+Rust path was added for the observed 62 + 68 subtotal. See the
+[current checkpoint](implementation.md#current-data-checkpoint-inherited-and-applied-minion-damage)
 and [proposal](owned-application-group-contribution-queries-proposal.md).
 
 **Offering source queries, 2026-10-08:** the current V24 packet uses three owned

@@ -415,7 +415,7 @@ fn check(w: &World, report: &SupportEffectsReport, total: f64, count: usize) {
     }
 }
 
-fn repaired(w: &World) -> World {
+pub(super) fn repaired(w: &World) -> World {
     let case = w
         .passives
         .cases
