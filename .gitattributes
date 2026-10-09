@@ -143,3 +143,5 @@ Cargo.lock text eol=lf
 # Historical source witnesses are retained as exact, non-executable evidence.
 /data/owned/poe2/3887ae68/class-start-root/evidence/* -text
 /data/owned/poe2/3887ae68/crown-declarations/evidence/* -text
+/data/owned/poe2/3887ae68/minion-life-increase/evidence/* -text
+/data/owned/poe2/3887ae68/minion-life-adjustments/evidence/* -text

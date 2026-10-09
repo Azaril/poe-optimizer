@@ -26,6 +26,12 @@ fn authored_life_increase_preserves_the_existing_contribution_contract() {
 }
 
 #[test]
+#[ignore = "requires retained original minion Life delivery reports"]
+fn retained_life_delivery_reports_authenticate_the_original_observer() {
+    family::check_retained_evidence();
+}
+
+#[test]
 #[ignore = "requires checked MINION_LIFE_INCREASE_PRIOR and fresh OUTPUT"]
 fn publish_life_increase_preserving_all_five_originals() {
     publication::run_with_scope(

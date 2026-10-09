@@ -45,13 +45,22 @@ graph; do not duplicate the four paired Life/Damage sources or add a second
 Life aggregator. Retain the historical source witness and its original observer
 hash. The ordinary replay carries current public inputs, with no runtime format
 branch or PoB dependency. Its finite contributor coverage is test-only.
-The next census must retain zero-valued suppliers: the original minion has a
-Strength-derived Life BASE 0 record in addition to intrinsic BASE 1615. The
-compact intrinsic-base projection omits that zero. Review raw ExtraLife,
-LifeTotal, conversion and Chaos Inoculation inventories before treating neutral
-adjustments as complete absence; the current Player observer cannot certify a
-minion recipient. Preserve these as offline source questions rather than Lua
-collection semantics in native resource evaluation.
+The new [source census](../data/owned/poe2/3887ae68/minion-life-adjustments/README.md)
+retains the Strength-derived Life BASE 0 record in all three original minion
+Life calls. ExtraLife and LifeTotal Conversion records, both zero, appear only
+at the third call. PoB's `Tabulate` omits these numeric zero entries; the native
+graph must preserve their producers rather than copy that collection behavior.
+Unexecuted CALCS actors have no output, not a zero-valued result. The census
+authenticates source observations only: incoming conversion/gain channels and
+the pre-transform LifeTotal inventory still need proof before admitting the
+generated adjustments. No native transformation formula or closure is added.
+
+The earlier Life-increase witness now authenticates its exact historical
+observer from a non-executable `evidence/` archive, matching its retained hash.
+The current observer has gained optional census instrumentation; comparing the
+old report to that changed file was a stale receipt, not grounds to rewrite
+the evidence hash. The new packet likewise retains the actual observer bytes.
+Neither archive introduces another runtime path or a compatibility reader.
 
 **Ascendancy inventory, 2026-10-09:** the existing offline declaration-refinement
 contract now admits exact Ascendancy owners through the same checked finalizer.

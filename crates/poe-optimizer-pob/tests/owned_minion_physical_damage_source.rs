@@ -4,6 +4,8 @@
 mod command_damage;
 #[path = "support/json_evidence.rs"]
 mod json_evidence;
+#[path = "support/minion_life_adjustments.rs"]
+mod life_adjustments;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
@@ -3443,10 +3445,19 @@ fn without_selected_level_items(xml: &str) -> String {
 }
 
 fn run_intrinsic_life_child(root: &Path, out: &Path, enabled: bool) {
-    run_actor_life_child(root, out, enabled, false);
+    run_actor_life_child(root, out, enabled, ActorLifeEvidence::Intrinsic);
 }
 
-fn run_actor_life_child(root: &Path, out: &Path, enabled: bool, delivery: bool) {
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum ActorLifeEvidence {
+    Intrinsic,
+    Delivery,
+    Adjustments,
+}
+
+fn run_actor_life_child(root: &Path, out: &Path, enabled: bool, evidence: ActorLifeEvidence) {
+    let delivery = evidence != ActorLifeEvidence::Intrinsic;
+    let adjustments = evidence == ActorLifeEvidence::Adjustments;
     assert_eq!(
         pinned::manifest_sha256(),
         "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
@@ -3546,17 +3557,23 @@ fn run_actor_life_child(root: &Path, out: &Path, enabled: bool, delivery: bool) 
     let mut definitions = None;
     for case in &cases {
         eprintln!("Actor Life source case {}", case.name);
-        let before = |lua: &Lua| {
-            lua.globals().set("physicalDamageJit", enabled)?;
+        let setup = |lua: &Lua, jit_enabled: bool| {
+            lua.globals().set("physicalDamageJit", jit_enabled)?;
             lua.globals().set("physicalDamageBenefitEvidence", true)?;
             lua.globals()
                 .set("physicalDamageLifeDeliveryEvidence", delivery)?;
+            lua.globals()
+                .set("physicalDamageLifeAdjustmentEvidence", adjustments)?;
             lua.globals()
                 .set("physicalDamageIntrinsicLifeEvidence", true)?;
             lua.load("if physicalDamageJit then jit.on() else jit.off();jit.flush() end")
                 .exec()?;
             Ok(())
         };
+        // Debug call/line observations are interpreter evidence. Independent
+        // unhooked loads below exercise the requested off/on reference mode.
+        let before = |lua: &Lua| setup(lua, enabled && !adjustments);
+        let before_plain = |lua: &Lua| setup(lua, enabled);
         let install = |lua: &Lua| {
             lua.globals().set("physicalDamagePhase", "before")?;
             Ok(lua
@@ -3565,6 +3582,9 @@ fn run_actor_life_child(root: &Path, out: &Path, enabled: bool, delivery: bool) 
                 .eval::<Function>()?)
         };
         let observe = |lua: &Lua| -> Result<Json, RuntimeError> {
+            if adjustments {
+                assert!(!lua.load("return jit.status()").eval::<bool>()?);
+            }
             lua.globals().set("physicalDamagePhase", "after")?;
             let value: Value = lua
                 .load(OBSERVE)
@@ -3573,6 +3593,9 @@ fn run_actor_life_child(root: &Path, out: &Path, enabled: bool, delivery: bool) 
             Ok(lua.from_value(value)?)
         };
         let snapshot = |lua: &Lua| -> Result<Json, RuntimeError> {
+            if adjustments {
+                assert_eq!(lua.load("return jit.status()").eval::<bool>()?, enabled);
+            }
             lua.globals()
                 .set("physicalDamagePhase", "benefit_snapshot")?;
             let value: Value = lua
@@ -3600,7 +3623,7 @@ fn run_actor_life_child(root: &Path, out: &Path, enabled: bool, delivery: bool) 
             &case.xml,
             case.warm.as_deref(),
             !case.original,
-            Some(&before),
+            Some(&before_plain),
             None,
             Some(&snapshot),
         )
@@ -3663,6 +3686,13 @@ fn run_actor_life_child(root: &Path, out: &Path, enabled: bool, delivery: bool) 
         report["scope"]["passive_life_delivery_only"] = json!(true);
         report["scope"]["removal_may_prune_other_nodes"] = json!(true);
     }
+    if adjustments {
+        report["scope"]["passive_life_delivery_only"] = json!(false);
+        report["capture"]["minion_life_adjustment_census"] = json!(true);
+        report["capture"]["raw_zero_valued_sources_retained"] = json!(true);
+        report["capture"]["observer_jit_enabled"] = json!(false);
+        report["capture"]["unhooked_jit_mode_from_report_filename"] = json!(true);
+    }
     let mode = if enabled { "on" } else { "off" };
     fs::write(
         out.join(format!("source-jit-{mode}-raw.json")),
@@ -3679,6 +3709,9 @@ fn run_actor_life_child(root: &Path, out: &Path, enabled: bool, delivery: bool) 
         check_life_delivery(&report);
     } else {
         check_intrinsic_life(&report);
+    }
+    if adjustments {
+        life_adjustments::check(&report);
     }
     assert_eq!(fs::read_to_string(fixture).unwrap(), original);
 }
@@ -3832,7 +3865,7 @@ fn minion_life_increase_observes_original_delivery() {
     );
 }
 fn run_life_delivery_child(root: &Path, out: &Path, enabled: bool) {
-    run_actor_life_child(root, out, enabled, true);
+    run_actor_life_child(root, out, enabled, ActorLifeEvidence::Delivery);
 }
 fn check_life_delivery(report: &Json) {
     let cases = rows(&report["cases"]);

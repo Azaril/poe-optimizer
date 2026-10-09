@@ -8,6 +8,14 @@ The original PoB delivery and Life-consumer witness passed seven cases under bot
 
 The source vectors retain exact Life delivery and consumer facts, excluding unrelated raw Damage inventories from the authored projection. Full reports remain authenticated by digest.
 
+The historical observer is retained as `evidence/original-observer.lua`, copied
+byte-for-byte from commit `9236dbd`: 51,408 bytes, SHA-256
+`d93ec7436ad587b5b581e1fb415dfcd2118c6e6386ef4fe786cc0d008c869701`.
+It authenticates the existing report's producer; it is not executable runtime
+code or a second supported acquisition path. Fresh observations identify the
+current observer separately. Older report hashes are not rewritten when that
+observer acquires additional channels.
+
 Publication passes in 25.72 seconds, preserving all five original imports and 110 queries. Five native tests pass in 12.94 seconds and the five existing Sniper input tests pass in 10.90 seconds after extracting their shared fixture. The native plan joins actual item preparation, final Sniper inputs, Actor level, intrinsic Life and passive Increase delivery. It checks independent occurrences, removal/restoration, complete-empty versus unknown contributors, scratch reuse and parallel replay.
 
 The fixture's finite contributor inventories do not close the real build's Partial owners or Pending support origins. Final Life equations and complete builds remain unfinished. See the [implementation checkpoint](../../../../../docs/implementation.md) for exact package identities, validation evidence and the next item/provider coverage blocker.

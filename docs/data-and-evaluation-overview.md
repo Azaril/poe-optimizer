@@ -965,7 +965,25 @@ The canonical Life query keeps that member instead of excluding it from the
 fixture. This reuses existing owned programs and stages; it adds no production
 API or coverage certificate. The retained removal controls compare only this
 Increase channel, since actual tree removals also disconnect other passives.
-Final Life still needs the independent source census and checked arithmetic.
+Final Life still needs complete source admission and checked arithmetic.
+
+The new [minion Life census](../data/owned/poe2/3887ae68/minion-life-adjustments/README.md)
+observes three original Life calls for every executed Sniper, with exact
+Actor/store/summoner identity. It retains the real Strength BASE 0 contribution
+and the ExtraLife/LifeTotal zero records generated before the final call. These
+records disappear from PoB's filtered numeric enumeration but remain part of
+the raw source inventory. An unselected CALCS Actor has not executed; it is not
+evidence of an empty domain. Instrumented acquisition uses JIT off, and separate
+uninstrumented controls run with JIT both off and on. The complete reports must
+agree, and the compact retained projection authenticates its source and observer.
+
+This packet is offline evidence, not new runtime rules or a coverage closure.
+The next bounded adoption reuses Actor-relative Strength, inherent flags and
+Life contribution programs for the exact supplied Actor. Later adjustment
+admission needs incoming conversion/gain channels from all five other resources
+and the original pre-transform LifeTotal inventory; observed generated zeros
+cannot replace those inputs. Positive resource transformation and final Life
+remain unfinished.
 
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference

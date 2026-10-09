@@ -31,6 +31,15 @@ pub fn data() -> PathBuf {
 pub fn read<T: DeserializeOwned>(name: &str) -> T {
     serde_json::from_slice(&fs::read(data().join(name)).unwrap()).unwrap()
 }
+pub fn check_retained_evidence() {
+    check_authored();
+    check_vectors(
+        &read("authoring.json"),
+        &read("bindings.json"),
+        &read("source-vectors.json"),
+        true,
+    );
+}
 fn hash(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
@@ -529,11 +538,13 @@ fn check_vectors(a: &Value, b: &Value, v: &Value, full: bool) {
     if !full {
         return;
     }
+    // Authenticate the bytes that produced this retained report. Today's
+    // observer may acquire further channels without rewriting old evidence.
     let observer = fs::read(
-        root()
-            .join("crates/poe-optimizer-pob/tests/support/owned_minion_physical_damage_source.lua"),
+        root().join("data/owned/poe2/3887ae68/minion-life-increase/evidence/original-observer.lua"),
     )
     .unwrap();
+    assert_eq!(observer.len(), 51_408);
     assert_eq!(hash(&observer), v["report_metadata"]["observer_sha256"]);
     let mut first = None;
     for (index, pin) in v["reports"].as_array().unwrap().iter().enumerate() {

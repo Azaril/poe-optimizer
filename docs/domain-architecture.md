@@ -340,6 +340,15 @@ conversion and override producers all need an explicit inventory, even when a
 selected producer happens to emit zero. Numerical domain and rounding guarantees
 are separate from that source-coverage proof.
 
+Source evidence must also identify the evaluation stage. The original minion
+Life census includes a Strength contribution of zero at all three calls, then
+generated ExtraLife and LifeTotal zero records only at the final call. A filtered
+source query can omit these records without proving their suppliers absent.
+Owned rules retain source identity and stage dependencies; they do not reproduce
+that Lua collection behavior. Admitting a generated result requires accounting
+for its inputs, including incoming resource transfers, even when this build's
+observed result is neutral.
+
 The approved [checked optional numeric selection](owned-numeric-selection-proposal.md)
 now runs in Core/Data/Engine operations V27. Its require-agreement result
 distinguishes absent, present (including zero), and unavailable. Presence/value
