@@ -1,0 +1,689 @@
+{
+  "owners": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000029f9"
+          }
+        }
+      },
+      "programs": {
+        "closure": {
+          "kind": "complete"
+        },
+        "members": [
+          {
+            "id": "resolve-player-mana",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "intrinsic",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000003"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "mana-base-contributions",
+                    "group": "intrinsic"
+                  }
+                }
+              },
+              {
+                "id": "inherent",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000003"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "mana-base-contributions",
+                    "group": "inherent"
+                  }
+                }
+              },
+              {
+                "id": "reward-increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "mana-increased-contributions",
+                    "group": "rewards"
+                  }
+                }
+              },
+              {
+                "id": "passive-increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "mana-increased-contributions",
+                    "group": "passives"
+                  }
+                }
+              },
+              {
+                "id": "more",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "mana-more-contributions",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "to-energy-shield",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003357"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "to-armour",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003358"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "to-evasion",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003359"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "extra",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000003"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000335a"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "total",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000003"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000335b"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "override-present",
+                "value_type": {
+                  "kind": "boolean"
+                },
+                "source": {
+                  "kind": "contribution_selection",
+                  "value": {
+                    "entity": "current",
+                    "query": "mana-override-contributions",
+                    "group": "sources",
+                    "projection": "present"
+                  }
+                }
+              },
+              {
+                "id": "override-value",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000003"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_selection",
+                  "value": {
+                    "entity": "current",
+                    "query": "mana-override-contributions",
+                    "group": "sources",
+                    "projection": "value"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "intrinsic",
+                "expression": {
+                  "kind": "read",
+                  "input": "intrinsic"
+                }
+              },
+              {
+                "id": "inherent",
+                "expression": {
+                  "kind": "read",
+                  "input": "inherent"
+                }
+              },
+              {
+                "id": "reward-increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "reward-increase"
+                }
+              },
+              {
+                "id": "passive-increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "passive-increase"
+                }
+              },
+              {
+                "id": "more",
+                "expression": {
+                  "kind": "read",
+                  "input": "more"
+                }
+              },
+              {
+                "id": "to-energy-shield",
+                "expression": {
+                  "kind": "read",
+                  "input": "to-energy-shield"
+                }
+              },
+              {
+                "id": "to-armour",
+                "expression": {
+                  "kind": "read",
+                  "input": "to-armour"
+                }
+              },
+              {
+                "id": "to-evasion",
+                "expression": {
+                  "kind": "read",
+                  "input": "to-evasion"
+                }
+              },
+              {
+                "id": "extra",
+                "expression": {
+                  "kind": "read",
+                  "input": "extra"
+                }
+              },
+              {
+                "id": "total",
+                "expression": {
+                  "kind": "read",
+                  "input": "total"
+                }
+              },
+              {
+                "id": "override-present",
+                "expression": {
+                  "kind": "read",
+                  "input": "override-present"
+                }
+              },
+              {
+                "id": "override-value",
+                "expression": {
+                  "kind": "read",
+                  "input": "override-value"
+                }
+              },
+              {
+                "id": "one-factor",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-mana",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000003"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "full-conversion",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 100,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "base",
+                "expression": {
+                  "kind": "add",
+                  "left": "intrinsic",
+                  "right": "inherent"
+                }
+              },
+              {
+                "id": "increase",
+                "expression": {
+                  "kind": "add",
+                  "left": "reward-increase",
+                  "right": "passive-increase"
+                }
+              },
+              {
+                "id": "conversion-first",
+                "expression": {
+                  "kind": "add",
+                  "left": "to-energy-shield",
+                  "right": "to-armour"
+                }
+              },
+              {
+                "id": "conversion-sum",
+                "expression": {
+                  "kind": "add",
+                  "left": "conversion-first",
+                  "right": "to-evasion"
+                }
+              },
+              {
+                "id": "conversion",
+                "expression": {
+                  "kind": "minimum",
+                  "left": "conversion-sum",
+                  "right": "full-conversion"
+                }
+              },
+              {
+                "id": "conversion-fraction",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "conversion",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "retained-factor",
+                "expression": {
+                  "kind": "subtract",
+                  "left": "one-factor",
+                  "right": "conversion-fraction"
+                }
+              },
+              {
+                "id": "retained-base",
+                "expression": {
+                  "kind": "scale",
+                  "value": "base",
+                  "factor": "retained-factor"
+                }
+              },
+              {
+                "id": "adjusted-base",
+                "expression": {
+                  "kind": "add",
+                  "left": "retained-base",
+                  "right": "extra"
+                }
+              },
+              {
+                "id": "increase-fraction",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "increase",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "increase-factor",
+                "expression": {
+                  "kind": "add",
+                  "left": "one-factor",
+                  "right": "increase-fraction"
+                }
+              },
+              {
+                "id": "increased",
+                "expression": {
+                  "kind": "scale",
+                  "value": "adjusted-base",
+                  "factor": "increase-factor"
+                }
+              },
+              {
+                "id": "multiplied",
+                "expression": {
+                  "kind": "scale",
+                  "value": "increased",
+                  "factor": "more"
+                }
+              },
+              {
+                "id": "rounding-operand",
+                "expression": {
+                  "kind": "add",
+                  "left": "multiplied",
+                  "right": "total"
+                }
+              },
+              {
+                "id": "rounded",
+                "expression": {
+                  "kind": "round",
+                  "value": "rounding-operand",
+                  "quantum": {
+                    "value": 1,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000003"
+                    }
+                  },
+                  "mode": "nearest_ties_positive"
+                }
+              },
+              {
+                "id": "ordinary",
+                "expression": {
+                  "kind": "maximum",
+                  "left": "rounded",
+                  "right": "one-mana"
+                }
+              },
+              {
+                "id": "result",
+                "expression": {
+                  "kind": "select",
+                  "condition": "override-present",
+                  "when_true": "override-value",
+                  "when_false": "ordinary"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "mana",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000029f9"
+                  },
+                  "value": "result"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "receivers": [
+    {
+      "id": "player-mana",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f9"
+      },
+      "program": "resolve-player-mana",
+      "targets": [
+        {
+          "kind": "player"
+        }
+      ]
+    }
+  ]
+}

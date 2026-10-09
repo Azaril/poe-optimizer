@@ -101,6 +101,16 @@ refusal. The passive's cost-conversion effect, item-granted origins, other resou
 suppliers and final arithmetic remain separate coverage obligations. Data adoption
 adds no resource-specific native engine behavior and does not finish Mana.
 
+The [draft final Mana program](../data/owned/poe2/3887ae68/mana-pool/README.md)
+joins those native inputs using ordinary typed arithmetic and lazy override
+selection. Its finite component fixture calculates 638 Mana; the scalar
+consumer matches all 16 retained source vectors. Nineteen ordinary native tests
+pass, including missing/Partial refusal and four-worker reuse. The program is
+not in the canonical release: computed-range admission awaits the
+[numeric-domain decision](owned-numeric-domain-proposal.md), and actual
+conversion/addition producers still need coverage. Neither the draft nor its
+scalar vector comparison completes the original build.
+
 The [Life-copy source witness](owned-amulet-life-copy-evidence.md) now establishes
 that numeric Life copies need their own injected arithmetic branches; the
 existing nested gem-level floor rule cannot be reused unchanged. Full source
@@ -137,7 +147,7 @@ supplies retain distinct authority; each Action retains its exact output, part,
 mode and stat set. The canonical V26
 [Action damage packet](../data/owned/poe2/3887ae68/action-minion-damage/README.md)
 now consumes Command alongside the shared increase. Optional numeric selection
-is implemented generically in V27; actual Mana override adoption follows it.
+is implemented generically in V27 and adopted by the actual Mana override packet.
 
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across

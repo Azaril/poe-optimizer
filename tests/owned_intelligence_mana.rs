@@ -1110,3 +1110,217 @@ fn publish_mana_override_preserving_all_five_originals() {
         [107, 117, 109, 123, 4],
     );
 }
+
+// Draft formula integration. The consumer is not published until numeric-domain
+// admission is implemented; these tests certify only the stated input domain.
+fn pool_world() -> replay::ReplayInput {
+    #[derive(serde::Deserialize)]
+    struct Consumer {
+        owners: Vec<DefinitionRules>,
+        receivers: Vec<StatReceiver>,
+    }
+    let c: Consumer = serde_json::from_slice(
+        &fs::read(family::root().join("data/owned/poe2/3887ae68/mana-pool/consumer.json")).unwrap(),
+    )
+    .unwrap();
+    let mut i = override_world();
+    for o in &c.owners {
+        assert!(!i.rules.owners.iter().any(|r| r.owner == o.owner));
+        for p in &o.programs.members {
+            stage(&mut i, o.owner.clone(), p, "test-observe-mana-queries");
+        }
+    }
+    i.rules.owners.extend(c.owners);
+    i.rules.receivers.members.extend(c.receivers);
+    i.rebind_test_edit().unwrap();
+    i
+}
+#[test]
+fn draft_mana_pool_uses_real_level_attributes_reward_and_override_queries() {
+    let i = pool_world();
+    let r = report(i.clone());
+    assert_eq!(adjustment_value(&r, 0x29f9), query_quantity(638., 3));
+    let mut changed = i.clone();
+    changed.build.character.level = 93;
+    assert_eq!(
+        adjustment_value(&report(changed), 0x29f9),
+        query_quantity(643., 3)
+    );
+    let mut changed = i.clone();
+    flags(&mut changed, &[(0x3355, true)]);
+    assert_eq!(
+        adjustment_value(&report(changed), 0x29f9),
+        query_quantity(418., 3)
+    );
+    let mut changed = i.clone();
+    allocate_override(&mut changed);
+    assert_eq!(
+        adjustment_value(&report(changed), 0x29f9),
+        query_quantity(0., 3)
+    );
+    let mut unknown = i;
+    set_intelligence(&mut unknown, None);
+    assert!(matches!(
+        adjustment_value(&report(unknown), 0x29f9),
+        EffectValue::Unresolved { .. }
+    ));
+}
+
+#[test]
+fn draft_mana_pool_matches_every_retained_original_source_vector() {
+    use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
+    use poe_optimizer_engine::owned_rules::{CompiledRulePackage, EffectDisposition, RuleFact};
+    let i = pool_world();
+    let schema = OwnedDefinitionSchemaPackage::new(i.schema.clone(), Default::default()).unwrap();
+    let compiled = CompiledRulePackage::compile(&i.rules, &schema, Default::default()).unwrap();
+    let owner = subject(0x29f9);
+    let p = key("resolve-player-mana");
+    let v: Value = mana_override::read("source-vectors.json");
+    let mut scratch = compiled.new_scratch();
+    let rows = v["vectors"].as_array().unwrap();
+    for row in rows.iter().chain(rows.iter().rev()) {
+        let s = &row["source"]["inputs"];
+        // This is a scalar consumer boundary: original aggregate inputs are
+        // injected only here. The joined test above uses actual producer data.
+        let mut facts: Vec<RuleFact> = [
+            ("intrinsic", s["base"].as_f64().unwrap(), 3),
+            ("inherent", 0., 3),
+            ("reward-increase", s["increased"].as_f64().unwrap(), 2),
+            ("passive-increase", 0., 2),
+            ("more", s["more"].as_f64().unwrap(), 1),
+            ("to-energy-shield", s["conversion_sum"].as_f64().unwrap(), 2),
+            ("to-armour", 0., 2),
+            ("to-evasion", 0., 2),
+            ("extra", s["extra"].as_f64().unwrap(), 3),
+            ("total", s["total"].as_f64().unwrap(), 3),
+        ]
+        .map(|(name, value, u)| RuleFact {
+            read: key(name),
+            value: ParameterValue::Quantity(FiniteQuantity::new(value, def(u)).unwrap()),
+        })
+        .into();
+        facts.push(RuleFact {
+            read: key("override-present"),
+            value: ParameterValue::Boolean(s["override"]["present"].as_bool().unwrap()),
+        });
+        if let Some(n) = s["override"]["value"].as_f64() {
+            facts.push(RuleFact {
+                read: key("override-value"),
+                value: ParameterValue::Quantity(FiniteQuantity::new(n, def(3)).unwrap()),
+            });
+        }
+        let result = compiled
+            .evaluate(&owner, &p, &facts, &schema, &mut scratch)
+            .unwrap();
+        assert_eq!(
+            result.effects[0].disposition,
+            EffectDisposition::Applied {
+                value: ParameterValue::Quantity(
+                    FiniteQuantity::new(row["source"]["final_mana"].as_f64().unwrap(), def(3))
+                        .unwrap()
+                )
+            },
+            "{}",
+            row["name"]
+        );
+        assert_eq!(
+            result,
+            compiled
+                .evaluate(&owner, &p, &facts, &schema, &mut compiled.new_scratch())
+                .unwrap()
+        );
+    }
+}
+
+#[test]
+fn draft_mana_pool_retains_coverage_and_frozen_adjustment_dependencies() {
+    let mut i = pool_world();
+    i.rules.receivers.members.retain(|r| r.stat != def(0x335a));
+    assert!(
+        matches!(
+            adjustment_value(&report(i), 0x29f9),
+            EffectValue::Unresolved { .. }
+        ),
+        "missing extra Mana is not zero"
+    );
+    let mut i = pool_world();
+    let query = i
+        .rules
+        .contribution_queries
+        .as_mut()
+        .unwrap()
+        .members
+        .iter_mut()
+        .find(|q| q.stat == def(0x335b))
+        .unwrap();
+    query.groups[0].members.closure = serde_json::from_value(json!({
+        "kind": "partial",
+        "value": { "gaps": [{
+            "subject": subject(0x335b),
+            "facet": "game_rules",
+            "code": "unreviewed-total-mana-sources"
+        }] }
+    }))
+    .unwrap();
+    assert!(matches!(
+        report(i).outcome,
+        SupportEffectsOutcome::Unavailable { .. }
+    ));
+    let mut i = pool_world();
+    i.stages
+        .programs
+        .members
+        .iter_mut()
+        .find(|s| s.program.as_str() == "resolve-player-mana")
+        .unwrap()
+        .stage = key("inherent-strength-life");
+    let error = i.rebind_test_edit().unwrap_err();
+    assert!(
+        error.contains("frozen channel read occurs before or outside frozen stage"),
+        "a consumer cannot run before the stage that freezes its contributions: {error}"
+    );
+}
+
+#[test]
+fn draft_mana_pool_parallel_workers_restore_after_zero_and_unknown() {
+    let base = pool_world();
+    let mut zero = base.clone();
+    allocate_override(&mut zero);
+    zero.rebind_test_edit().unwrap();
+    let mut missing = base.clone();
+    set_intelligence(&mut missing, None);
+    missing.rebind_test_edit().unwrap();
+    let plans = [
+        base.compile().unwrap(),
+        zero.compile().unwrap(),
+        missing.compile().unwrap(),
+    ];
+    let expected: Vec<_> = plans
+        .iter()
+        .map(|p| p.evaluate(&mut p.new_scratch()).unwrap())
+        .collect();
+    assert_eq!(
+        adjustment_value(&expected[0], 0x29f9),
+        query_quantity(638., 3)
+    );
+    assert_eq!(
+        adjustment_value(&expected[1], 0x29f9),
+        query_quantity(0., 3)
+    );
+    assert!(matches!(
+        adjustment_value(&expected[2], 0x29f9),
+        EffectValue::Unresolved { .. }
+    ));
+    rayon::ThreadPoolBuilder::new()
+        .num_threads(4)
+        .build()
+        .unwrap()
+        .install(|| {
+            (0..12).into_par_iter().for_each(|_| {
+                let mut s = plans[0].new_scratch();
+                for n in [0, 1, 2, 0, 2, 1, 0] {
+                    assert_eq!(plans[n].evaluate(&mut s).unwrap(), expected[n]);
+                }
+            })
+        });
+}

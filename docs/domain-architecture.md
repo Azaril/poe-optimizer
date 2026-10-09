@@ -603,6 +603,15 @@ rounding and caps as declared semantics, not arbitrary callback order. Reusable 
 families implement the operations; game coefficients, selectors, thresholds and effect
 composition remain data.
 
+Computed numeric limits must remain distinct from game legality, mechanic
+inactivity and missing inputs. The pending
+[checked numeric-domain proposal](owned-numeric-domain-proposal.md) would express
+an admitted calculation range in the same typed DAG and make values outside it
+explicitly unavailable, without clipping or importing incidental source rounding.
+This is a proposed public-contract extension awaiting owner decision; the current
+runtime does not yet provide that expression. Final-resource data adoption must
+establish the actual computed domain before claiming numerical parity.
+
 Common final-stat formulas need semantic ownership independent of a character class,
 encounter or user usage choice. The [stat-owned actor/equipment receivers](owned-stat-receivers.md)
 reuse typed rule programs with explicit Player, owned-actor-slot or equipment-template

@@ -113,6 +113,51 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
+## Current implementation checkpoint: draft final Mana arithmetic
+
+The [draft Mana consumer](../data/owned/poe2/3887ae68/mana-pool/README.md)
+now connects the existing native level, attribute, reward, adjustment and
+override producers through one data-defined rule program. The finite component
+fixture calculates **638 Mana**, changes with level and Intelligence inputs,
+and preserves a selected zero override. There is no new native resource kernel,
+definition, Lua behavior or second evaluation path. This is **not published**;
+the canonical release below and complete-build count remain unchanged.
+
+The existing `owned_intelligence_mana` target passes **19 ordinary tests**
+(`runs/owned-mana-pool-draft-native-05.log`, 4.93s); its four publication tests
+remain opt-in and were not rerun because no publication changed. The four added
+tests check the joined producers, all **16** retained original-source vectors
+in both traversal orders, missing/Partial dependencies, premature stage reads,
+and fresh/reused/four-worker equality. Scalar source inputs are injected only
+in the formula comparison; that test does not claim native implementation of
+every producer. The premature-read control is rejected by stage validation
+before compilation, as intended.
+Strict all-feature Clippy for the same target passes
+(`runs/owned-mana-pool-draft-clippy-01.log`); selective formatting and whitespace
+checks pass. This checkpoint changes data, tests and documentation only.
+
+**Pending owner decision:** the [checked numeric-domain proposal](owned-numeric-domain-proposal.md)
+would extend the existing rule DAG with a range check that preserves supported
+values and reports unsupported computed values explicitly. It is needed here
+because the proved native/PoB rounding domain does not follow from the current
+computed numeric types. No public-contract implementation or implicit approval
+is assumed. The draft must not enter the release before that decision and the
+corresponding admission checks are complete.
+
+The [resource transformation audit](legacy-retirement.md#other-current-compatibility-investigations)
+separates Extra/Total production from final-pool arithmetic and records suspected
+source normalization/order issues for controlled investigation. These are not
+accepted bug exceptions. Empty observed contributions remain insufficient to
+close unknown sources.
+
+**Resume:** Original05 remains first. Resolve the numeric-domain decision and
+actual conversion/addition producer coverage before publishing final Mana;
+reuse this draft and the retained source witness. Keep the canonical V27 package
+below until a checked successor is assembled, all five imports are verified and
+the ordinary replay is refreshed. Continue final damage/Life and the four selected
+input obligations toward one complete unchanged build, then begin D4. Complete
+native builds remain **0/5** and selected obligations **107/117/109/123/4**.
+
 ## Latest data checkpoint: actual Mana override selection
 
 The [Mana override packet](../data/owned/poe2/3887ae68/mana-override/README.md)

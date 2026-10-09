@@ -711,6 +711,28 @@ records the independent full-build consumer observations and their exact scope.
 
 ### Other current compatibility investigations
 
+**Resource transformation audit (2026-10-09):** the pinned
+`CalcDefence.lua:1342–1450` pass produces the resource Extra/Total records from
+slot bases, global bases, outgoing conversion and gain-as rates. This is a
+separate mechanic from the final maximum-pool formula. Its zero-valued
+Conversion records in the five examples are not an absence certificate for
+all possible producers. Reuse typed source/recipient contributions and frozen
+inputs when authoring this family; do not import its mutable resource objects.
+
+Two source behaviors require controlled investigation before adoption. The
+over-100% branch iterates string-keyed conversion rates with `ipairs`, and slot
+base reduction occurs within the loop over each positive outgoing target.
+These are suspected normalization/order issues, not validated bug exceptions.
+Retain raw and capped rates, positive transfers to multiple recipients,
+gain-as versus conversion, slot/global/Total branches and fresh/JIT controls
+when testing them. No source discrepancy is waived by this audit.
+
+The [checked numeric-domain proposal](owned-numeric-domain-proposal.md) addresses
+the separate computed-range boundary for final pool rounding. It proposes an
+explicit unsupported result instead of clipping, inactivity, game illegality or
+unconditional reproduction of add-half rounding at very large magnitudes.
+Public-contract implementation awaits the owner's decision.
+
 The [attribute setup witness](owned-attribute-setup-evidence.md) is a concrete
 unresolved case: synthetic configuration/item inputs expose different local MORE
 grouping between fresh and cached source setup (1.02 versus 1.0201). The finite-stage
