@@ -1937,3 +1937,13 @@ with duplicate counts; numerical comparison is exact. It explicitly claims no
 source sequence parity, native fold order or general floating-sum equivalence.
 Equipment-Life ordering remains open. This is not a new accepted numerical PoB
 bug, a tolerance, or a relaxation of native determinism.
+
+The native data consumer is now published and retires only the Amulet-copy
+obligation. It reuses existing typed arithmetic, checked contribution membership,
+eligibility and stages; no source-language representation crosses into runtime.
+The source's near-integer probe now obtains its factor through `99.99 / 100`,
+and native checks require identical transported factor bits. Decimal spelling
+alone is not an operand-equivalence proof. The retained source/method probes and
+copy membership remain useful parity evidence, not an alternate execution path.
+Canonical input admission, four other owner gaps and Partial equipment coverage
+remain open; no generic Life rounding/order compatibility layer is added.

@@ -94,8 +94,16 @@ that numeric Life copies need their own injected arithmetic branches; the
 existing nested gem-level floor rule cannot be reused unchanged. Full source
 controls preserve per-modifier copies and exact results across JIT modes. A
 separate ring-record storage-order discrepancy is retained as diagnostics, not
-promoted into native reduction order. Native Life copy adoption and complete
-equipment/resource coverage are the next steps; the witness adds no runtime path.
+promoted into native reduction order. The
+[native Life-copy packet](../data/owned/poe2/3887ae68/amulet-life-copy/README.md)
+now implements those branches with existing typed operations, eligibility,
+frozen percentage and exact occurrences. Its potential writer joins checked
+Life membership; five owner gaps and the Partial equipment query remain. The
+native test suite verifies that the actual Partial query refuses a total even
+when copy arithmetic works. No runtime Lua behavior or new public model is
+introduced; canonical input admission and remaining equipment/resource coverage
+are still required before final Life. Component parity remains distinct from
+the five-build completion gate.
 
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across

@@ -1,6 +1,6 @@
-# Flat-Life Amulet copying: evidence and native handoff
+# Flat-Life Amulet copying: evidence and native adoption
 
-Original05's flat-Life owner still has an Amulet-copy obligation. The existing
+Original05's flat-Life owner now has an injected Amulet-copy consumer. The existing
 Minion-level copy consumer cannot be transferred unchanged: its nested level
 record and an ordinary numeric Life record take different branches of original
 `ModStore:ScaleAddMod`. This is a dependency of equipment Life coverage, not a new
@@ -43,6 +43,11 @@ bypass tag are source-contract probes, not importer or gameplay admission.
 | 17.5 | 1 | 17.5 | Identity preserves the value |
 | 17 with the record bypass tag | 0.25 | 17 | Bypass preserves the value |
 
+The displayed near-integer factor is produced as `99.99 / 100` in source run09.
+Native tests supply the equivalent percentage and require the resulting factor's
+bits to match. A literal decimal `0.9999` can differ after percent conversion;
+merely obtaining the same rounded answer would not establish operand parity.
+
 Pinned `Modules/Data.lua` has no Life/BASE precision override and sets default
 precision 1. `ModStore.lua:82–121` handles identity/bypass first, then precision
 metadata and the effective value's fractional part. Integral Life rounds the
@@ -68,27 +73,32 @@ copies. **Raw source sequence parity is not claimed.** General equipment-Life
 accumulation order remains unproved; this diagnostic sorting is not a native
 numeric fold order. The separate Frost initialization issue is unaffected.
 
-## Validation and next step
+## Validation and native adoption
 
-Run08 passes three tests in **40.41s**. Both comparison reports are 230,607 bytes,
-SHA-256 `12956b5e5aba18aa246593597c44f20687257217566ed0f63144da0b1df00871`.
-Strict all-feature Clippy passes in 0.27s. Evidence:
-`runs/owned-amulet-life-source-08.log`, its report directory and
-`runs/owned-amulet-life-clippy-01.log`. The existing LNK4098 source-runtime linker
-warning remains; Clippy has no errors.
+Run09 passes three tests in **39.83s**. Both comparison reports are 230,739 bytes,
+SHA-256 `66c27ef862dc688eda80721710d61a204e4b24b09ca52637694c9e319ab97153`.
+Evidence is in `runs/owned-amulet-life-source-09.log` and its report directory.
+The existing LNK4098 source-runtime linker warning remains. Strict all-feature
+Clippy for the native and source targets passes in **0.49s** in
+`runs/owned-amulet-life-copy-clippy-01.log`.
 
 Reproduce with a fresh `POE_OPTIMIZER_TEST_AMULET_LIFE_SOURCE_OUT` directory and
 `cargo test --locked -p poe-optimizer-pob --test owned_amulet_life_copy -- --include-ignored`.
 
-Next, author the copy using existing typed arithmetic, explicit Count-to-Life
-units, exact modifier/equipment occurrences, eligibility `32e3`, pre-copy snapshot
-`32e4` and frozen stages. Add its potential writer to checked Life membership.
-Preserve Partial equipment reduction and unrelated owner gaps. Validate actual
-native rules against these controls, duplicate/removal and unknown inputs,
-staging, overflow, scratch reuse and parallel execution. Then retire only the
-proved copy-consumer obligation and continue the remaining Life dependencies.
+The [published copy data](../data/owned/poe2/3887ae68/amulet-life-copy/README.md)
+now uses existing typed arithmetic, explicit Count-to-Life units, exact
+modifier/equipment occurrences, eligibility `32e3`, pre-copy snapshot `32e4` and
+frozen stages. Its potential writer joins checked Life membership. Numeric Life
+delivery has execution readiness; gem-level preparation does not dictate its
+phase. No runtime API or import admission is changed.
 
-This source checkpoint changes no native artifact, API or import permission;
-complete native builds remain 0/5. The
-[implementation plan](implementation.md#latest-source-checkpoint-flat-life-amulet-copying)
-records the current resume point.
+All nine native/publication tests pass in **23.67s** in
+`runs/owned-amulet-life-native-publication-09.log`. They cover these source vectors,
+duplicate/removal and unknown inputs, exact recipients/units, staging, overflow,
+lazy branches, storage permutations, scratch reuse and four-worker execution.
+Publication preserves all five imports and rebuilds 18 artifacts identically.
+Only the copy-consumer obligation is retired. Partial equipment reduction and
+the five remaining flat-Life owner gaps still block complete resource coverage;
+complete native builds remain **0/5**. The
+[implementation plan](implementation.md#latest-data-checkpoint-native-amulet-life-copying)
+records the current package and next dependency.

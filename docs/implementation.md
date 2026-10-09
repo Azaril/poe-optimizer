@@ -104,41 +104,66 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Latest source checkpoint: flat-Life Amulet copying
+## Latest data checkpoint: native Amulet Life copying
 
-The [original-function witness](owned-amulet-life-copy-evidence.md) resolves the
-next copy-formula question: ordinary numeric Life takes different precision and
-truncation branches from the existing nested Minion-level consumer. Two parsed
-Amulet records of 17 and 19 at 25% bonus effect yield separate copies of 4 and 4.
-Nine original scalar probes distinguish zero, identity, negative, near-integer,
-fractional and bypass behavior. Do not transfer the gem-level floor rule to Life.
+The [Life-copy packet](../data/owned/poe2/3887ae68/amulet-life-copy/README.md)
+adds the numeric copy consumer through existing typed arithmetic and exact
+modifier/equipment occurrences. Identity and bypass preserve the effective
+value; integer and fractional inputs take their independently evidenced rounding
+branches. Two records of 17 and 19 at 25% produce separate copies of 4 and 4.
+The existing frozen pre-copy snapshot and eligibility are reused. Four known
+non-Amulet templates receive false eligibility; no new runtime API, schema
+definition, interpreter or compatibility branch is added.
 
-Run08 passes **three tests in 40.41s**, covering five unchanged originals, four
-parsed controls, fresh/warm replay and **12 complete loads per JIT mode**. The two
-230,607-byte comparison reports have SHA-256
-`12956b5e5aba18aa246593597c44f20687257217566ed0f63144da0b1df00871`.
-Strict all-feature Clippy passes (**0.27s**). Evidence:
-`runs/owned-amulet-life-source-08.log`, `runs/owned-amulet-life-source-08` and
-`runs/owned-amulet-life-clippy-01.log`. The existing source linker warning remains.
+The checked Life query now includes the new potential writer. Only
+`amulet-bonus-copy-unconverted` is retired: five flat-Life owner gaps and Partial
+equipment reduction remain. A test-only complete finite group sums the actual
+direct/copy records to 107 Life; restoring the real Partial group makes the
+request unavailable with IncompleteContributors. That control is neither final
+Player Life nor a general sum-order proof.
 
-Run06 retained a raw order discrepancy between two ring-copy records across JIT
-modes. Values, multiplicity, Amulet-copy order and final Life were unchanged.
-The witness preserves raw per-mode diagnostics and compares complete read-set
-multisets; numbers and Amulet sequences remain exact. This proves neither general
-Life accumulation order nor raw source sequence determinism. The
-[retirement audit](legacy-retirement.md#amulet-life-copy-precision-and-source-record-order-2026-10-09)
-tracks this explicit limitation. No numerical tolerance or retry policy is added.
+All **nine native/publication tests pass in 23.67s**, including the nine captured
+scalar cases, duplicates, exact Player/unit binding, missing producers, inactive
+sources, source removal, overflow/lazy branches, storage permutations, membership
+and stage refusal, and fresh/reused/four-worker execution. Publication preserves
+all five originals, local IDs, inputs and provenance; all 18 artifacts rebuild
+identically. Strict all-feature Clippy for native and optional source targets
+passes in **0.49s**. Evidence: `runs/owned-amulet-life-native-publication-09.log`,
+`runs/owned-amulet-life-copy-clippy-01.log` and
+`runs/owned-amulet-life-copy-publication-03/validation.json`.
 
-**Resume:** implement the Life copy consumer through existing typed operations,
-eligibility, frozen pre-copy snapshot and exact occurrences. Register its writer
-in checked Life queries; preserve Partial equipment/owner coverage. Validate
-against the source controls and scratch/parallel reuse, then retire only the
-proved copy obligation. This is approved-model data work while exact-Action and
-numeric-selection decisions remain pending. Original05 stays first; four selected
-usage/configuration obligations and final resource/damage coverage remain. No
-native package changes here; the reward-domain package below remains canonical.
+The [source witness](owned-amulet-life-copy-evidence.md) run09 passes **three tests
+in 39.83s**, with five unchanged originals, four parsed controls and 12 complete
+loads per JIT mode. Its near-integer probe now uses `99.99 / 100`; native input
+transport verifies the same factor bits rather than comparing nearby operands.
+Both 230,739-byte reports have SHA-256
+`66c27ef862dc688eda80721710d61a204e4b24b09ca52637694c9e319ab97153`.
+Publication authenticates source/witness bytes and the complete reports.
+The earlier ring-record order discrepancy remains diagnostic: no general source
+sequence parity, native accumulation order, tolerance or retry policy is claimed.
 
-## Latest data checkpoint: reward support-source coverage
+Canonical successor: `runs/owned-amulet-life-copy-publication-03/package`:
+
+- Input: `5d0609c9400c34db6621d23e697b2314142234f99949f9f4d33e49b12e51878f`.
+- Schema: `407ace9074f4a4917d0d23617a631f9844b54799c3a9260b7a0a9a9461f0e438`.
+- Rules: `5cbafe314bb05b69f991ff7e1af6d8bfbb2e7db479ad8e53b13db1806e366f94`.
+- Compiled: `2111fa5382ee371d91ca55912a160a34e7853f34c0e9787e6ed0164f1b33dace`.
+- Operations V25; next free ID **335c**. Selected input obligations remain
+  **107/117/109/123/4**, with 110 queries, no evaluation bundle and **0/5 complete
+  native builds**. Protected incoming-critical drafts remain untouched.
+
+**Resume:** Original05 remains the closest build. Next inspect flat-Life's
+canonical-input/source-encoding obligations against its current fixed unsigned
+line rule, source guards and retained full-source cases. Distinguish supported
+inputs from unresolved source contexts before closing any coverage; do not widen
+admission to ranges, fractional rolls or corrupted layouts by inference. This
+is the next accepted-model dependency toward equipment Life coverage. Remaining
+ordered transforms, routing (including minion receipt), external contribution
+membership/order and final resource arithmetic stay explicit. Exact-Action and
+optional numeric-selection decisions are still pending for damage/Mana; four
+usage/configuration obligations independently block request finalization.
+
+## Preceding data checkpoint: reward support-source coverage
 
 The [reward support packet](../data/owned/poe2/3887ae68/reward-support-domains/README.md)
 certifies 18 already-complete numeric Reward owners through the existing composed
@@ -159,7 +184,7 @@ passes (**0.48s**). Evidence: `runs/owned-reward-support-native-publication-02.l
 `runs/owned-reward-support-clippy-01.log` and
 `runs/owned-reward-support-publication-01/validation.json`.
 
-Canonical successor: `runs/owned-reward-support-publication-01/package`:
+Predecessor package: `runs/owned-reward-support-publication-01/package`:
 
 - Input: `aada9fe41ef814d85dca1a4e20bfbcb3d1c3c12bea1bebcc8352cc6b8252ecc3`.
 - Schema: `407ace9074f4a4917d0d23617a631f9844b54799c3a9260b7a0a9a9461f0e438`.

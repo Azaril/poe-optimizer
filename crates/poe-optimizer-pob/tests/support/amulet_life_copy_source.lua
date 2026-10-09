@@ -78,7 +78,7 @@ end
 local probes = {}
 local cases = {
     {"zero",17,0}, {"quarter",17,0.25}, {"negative-quarter",17,-0.25},
-    {"identity",17,1}, {"below-integer",17,0.9999},
+    {"identity",17,1}, {"below-integer",17,99.99/100},
     {"fractional-source",17.5,0.25}, {"fractional-negative",17.5,-0.25},
     {"fractional-identity",17.5,1}, {"bypass",17,0.25,true},
 }

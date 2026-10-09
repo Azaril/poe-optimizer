@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "before": "aada9fe41ef814d85dca1a4e20bfbcb3d1c3c12bea1bebcc8352cc6b8252ecc3",
+  "artifacts": {
+    "consumer.json": {
+      "bytes": 62048,
+      "sha256": "b30100c76ac35482439c9aefdd7166792fbbe105393486e54d239696eb4d213a"
+    },
+    "dependencies.json": {
+      "bytes": 160286,
+      "sha256": "ce4fb155f67019cd4f4953a55607426b3c8d59ecfb5b470912c382b36950e629"
+    },
+    "source-vectors.json": {
+      "bytes": 9779,
+      "sha256": "bc19c725699d3fb117d78c13106c31208d8e7be25301157b38d04e24031a6ce2"
+    }
+  },
+  "new_programs": 5,
+  "new_definitions": 0,
+  "retired_owner_gaps": 1,
+  "remaining_life_gaps": 5,
+  "whole_build": false
+}
