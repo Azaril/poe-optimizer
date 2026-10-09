@@ -58,6 +58,22 @@ fn child(root: &Path, out: &Path, jit: bool) {
             Some(expected),
         ));
     }
+    let conversion = "Convert 25% of maximum Energy Shield to maximum Mana";
+    for (name, text, expected) in [
+        ("incoming-conversion", conversion.to_owned(), None),
+        (
+            "incoming-conversion-zero-override",
+            format!("{conversion}\nYou have no Mana"),
+            Some(0.),
+        ),
+    ] {
+        cases.push((
+            name.to_owned(),
+            controlled(&originals[4], &text),
+            Some(text),
+            expected,
+        ));
+    }
     cases.push(("fresh-repeat".to_owned(), originals[4].clone(), None, None));
     cases.push((
         "warm-restoration".to_owned(),
@@ -72,17 +88,21 @@ fn child(root: &Path, out: &Path, jit: bool) {
         let main=&observed["state"]["modes"]["MAIN"];
         assert_eq!(main,&observed["state"]["modes"]["CALCS"]);
         if let Some(expected)=expected {assert_eq!(main["final_mana"].as_f64().unwrap(),*expected,"{name}");}
+        if name.starts_with("incoming-conversion") {
+            assert!(main["inputs"]["extra"].as_f64().unwrap()>0.,"conversion must really contribute");
+            if name=="incoming-conversion" { assert!(main["final_mana"].as_f64().unwrap()>638.); }
+        }
         json!({"name":name,"xml_sha256":hash(xml.as_bytes()),"control":control,"observed":observed})
     }).collect();
-    assert_eq!(rows[4]["observed"], rows[10]["observed"]);
-    assert_eq!(rows[4]["observed"], rows[11]["observed"]);
+    assert_eq!(rows[4]["observed"], rows[rows.len() - 2]["observed"]);
+    assert_eq!(rows[4]["observed"], rows[rows.len() - 1]["observed"]);
     let warm = observe(root, &originals[4], Some(&warm_xml), jit, OBSERVER);
-    assert_eq!(warm, rows[11]["observed"]);
+    assert_eq!(warm, rows[rows.len() - 1]["observed"]);
     let vectors:Vec<Value>=rows.iter().map(|r|json!({"name":r["name"],"xml_sha256":r["xml_sha256"],"control":r["control"],"source":r["observed"]["state"]["modes"]["MAIN"]})).collect();
     let report = json!({"source_revision":pinned::UPSTREAM_REVISION,"manifest_sha256":pinned::manifest_sha256(),
         "observer_sha256":hash(OBSERVER.as_bytes()),"bootstrap_sha256":hash(include_bytes!("support/configuration_preparation_source.rs")),"driver_sha256":hash(include_bytes!("support/player_resource_source.rs")),
         "files":(["src/Modules/CalcDefence.lua","src/Modules/ModParser.lua","src/Classes/ModStore.lua"].map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()}))),
-        "cases":rows,"vectors":vectors,"warm_repeat":warm,"complete_loads":15,"native_final_mana":false,"whole_build":false});
+        "cases":rows,"vectors":vectors,"warm_repeat":warm,"complete_loads":17,"native_final_mana":false,"whole_build":false});
     fs::write(
         out.join(format!(
             "source-jit-{}.json",

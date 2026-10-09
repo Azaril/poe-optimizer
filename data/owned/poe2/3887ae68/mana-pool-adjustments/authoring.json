@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "before": "7a8076e7e04177fa0c31f322598da5200e86e65f7f4592f79b98506168d65dbe",
+  "new_definitions": 5,
+  "new_programs": 5,
+  "new_queries": 5,
+  "new_receivers": 5,
+  "artifacts": {
+    "migration.json": {
+      "bytes": 5100,
+      "sha256": "d4c7f681c48cc473df295e644cc195271f3449023fbf7f42f420ce39cb217a3e"
+    },
+    "consumer.json": {
+      "bytes": 17721,
+      "sha256": "e4532391082212e5643fdee41b67a040cf42384f7dac4ee8a5bba621cc1024f3"
+    },
+    "dependencies.json": {
+      "bytes": 1430,
+      "sha256": "502661977fc798cad9fe7281d5af065b178b3ce4acdfa62be5541a6f395e24bb"
+    },
+    "bindings.json": {
+      "bytes": 2616,
+      "sha256": "fd80f436bb605d3f23744c14e45eace16dd8c62e286e8bc713197bea2b81939d"
+    }
+  }
+}

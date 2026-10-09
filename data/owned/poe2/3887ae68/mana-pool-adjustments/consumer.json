@@ -1,0 +1,693 @@
+{
+  "owners": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003357"
+          }
+        }
+      },
+      "programs": {
+        "closure": {
+          "kind": "complete"
+        },
+        "members": [
+          {
+            "id": "resolve-mana-conversion-to-energy-shield",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "sources",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "mana-conversion-to-energy-shield-sources",
+                    "group": "sources"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "resolved",
+                "expression": {
+                  "kind": "read",
+                  "input": "sources"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "resolved",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003357"
+                  },
+                  "value": "resolved"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003358"
+          }
+        }
+      },
+      "programs": {
+        "closure": {
+          "kind": "complete"
+        },
+        "members": [
+          {
+            "id": "resolve-mana-conversion-to-armour",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "sources",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "mana-conversion-to-armour-sources",
+                    "group": "sources"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "resolved",
+                "expression": {
+                  "kind": "read",
+                  "input": "sources"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "resolved",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003358"
+                  },
+                  "value": "resolved"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003359"
+          }
+        }
+      },
+      "programs": {
+        "closure": {
+          "kind": "complete"
+        },
+        "members": [
+          {
+            "id": "resolve-mana-conversion-to-evasion",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "sources",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "mana-conversion-to-evasion-sources",
+                    "group": "sources"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "resolved",
+                "expression": {
+                  "kind": "read",
+                  "input": "sources"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "resolved",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003359"
+                  },
+                  "value": "resolved"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000335a"
+          }
+        }
+      },
+      "programs": {
+        "closure": {
+          "kind": "complete"
+        },
+        "members": [
+          {
+            "id": "resolve-additional-pre-scaling-mana",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "sources",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000003"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "additional-pre-scaling-mana-sources",
+                    "group": "sources"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "resolved",
+                "expression": {
+                  "kind": "read",
+                  "input": "sources"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "resolved",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000335a"
+                  },
+                  "value": "resolved"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000335b"
+          }
+        }
+      },
+      "programs": {
+        "closure": {
+          "kind": "complete"
+        },
+        "members": [
+          {
+            "id": "resolve-additional-post-scaling-mana",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "sources",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000003"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "additional-post-scaling-mana-sources",
+                    "group": "sources"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "resolved",
+                "expression": {
+                  "kind": "read",
+                  "input": "sources"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "resolved",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000335b"
+                  },
+                  "value": "resolved"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "receivers": [
+    {
+      "id": "player-mana-conversion-to-energy-shield",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003357"
+      },
+      "program": "resolve-mana-conversion-to-energy-shield",
+      "targets": [
+        {
+          "kind": "player"
+        }
+      ]
+    },
+    {
+      "id": "player-mana-conversion-to-armour",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003358"
+      },
+      "program": "resolve-mana-conversion-to-armour",
+      "targets": [
+        {
+          "kind": "player"
+        }
+      ]
+    },
+    {
+      "id": "player-mana-conversion-to-evasion",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003359"
+      },
+      "program": "resolve-mana-conversion-to-evasion",
+      "targets": [
+        {
+          "kind": "player"
+        }
+      ]
+    },
+    {
+      "id": "player-additional-pre-scaling-mana",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000335a"
+      },
+      "program": "resolve-additional-pre-scaling-mana",
+      "targets": [
+        {
+          "kind": "player"
+        }
+      ]
+    },
+    {
+      "id": "player-additional-post-scaling-mana",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000335b"
+      },
+      "program": "resolve-additional-post-scaling-mana",
+      "targets": [
+        {
+          "kind": "player"
+        }
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "id": "mana-conversion-to-energy-shield-sources",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003357"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "value": 0
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "mana-conversion-to-armour-sources",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003358"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "value": 0
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "mana-conversion-to-evasion-sources",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003359"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "value": 0
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "additional-pre-scaling-mana-sources",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000335a"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000003"
+              },
+              "value": 0
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "additional-post-scaling-mana-sources",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000335b"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000003"
+              },
+              "value": 0
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "definitions": [
+    {
+      "kind": "unit",
+      "value": {
+        "id": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000002"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "dimension": "percentage_points"
+          }
+        }
+      }
+    },
+    {
+      "kind": "unit",
+      "value": {
+        "id": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000003"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "dimension": "resource_points"
+          }
+        }
+      }
+    }
+  ],
+  "query_registry_closure": {
+    "kind": "partial",
+    "value": {
+      "gaps": [
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "stat",
+              "value": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000331b"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "attribute-stage-contributor-domain-unproved"
+        }
+      ]
+    }
+  }
+}

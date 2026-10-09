@@ -1,0 +1,110 @@
+{
+  "scope": {
+    "guarded_current_empty_domains": true,
+    "complete_conversion_mechanics": false,
+    "final_mana": false,
+    "whole_build": false
+  },
+  "fields": [
+    {
+      "name": "mana-conversion-to-energy-shield",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003357"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "source_observation_key": "ManaConvertToEnergyShield"
+    },
+    {
+      "name": "mana-conversion-to-armour",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003358"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "source_observation_key": "ManaConvertToArmour"
+    },
+    {
+      "name": "mana-conversion-to-evasion",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003359"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "source_observation_key": "ManaConvertToEvasion"
+    },
+    {
+      "name": "additional-pre-scaling-mana",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000335a"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000003"
+      },
+      "source_observation_key": "ExtraMana"
+    },
+    {
+      "name": "additional-post-scaling-mana",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000335b"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000003"
+      },
+      "source_observation_key": "ManaTotal"
+    }
+  ]
+}

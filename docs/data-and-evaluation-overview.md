@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-08, including published Arsonist/Frost Mage/Reaver topology
+Snapshot: 2026-10-09, including published Arsonist/Frost Mage/Reaver topology
 and physical inventories, stable deferred V3 attachment, Sniper count/reservation,
 reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables,
 native readiness, source-property ownership, Ice source-input fragments and
@@ -77,6 +77,17 @@ An independent full-source test confirms the final PoB resource calculation,
 including rounding, clamping and a zero override, with JIT off/on and warm/fresh
 agreement. Native conversion, extra/total, override and final rounding still
 need explicit coverage; neither reference output nor a subtotal is a substitute.
+
+The [Mana adjustment packet](../data/owned/poe2/3887ae68/mana-pool-adjustments/README.md)
+now gives the conversion percentages and pre/post-scaling additions explicit
+typed collectors. Their admitted source domains are guarded empty groups;
+unconverted mechanics remain blocking. The independent source controls include
+a real nonzero fractional conversion input and its interaction with a zero
+override. Native conversion production and final Mana are still unfinished.
+The [optional numeric selection proposal](owned-numeric-selection-proposal.md)
+would keep override presence/value coherent in the existing graph; it is pending
+the owner's decision and is not a current API. No Lua insertion-order behavior
+has been adopted as a selection law.
 
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across

@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-08 (EDT).
+Updated: 2026-10-09 (EDT).
 
 This is the active delivery plan. The [design](domain-architecture.md) defines
 the end state; the [execution overview](data-and-evaluation-overview.md) explains
@@ -103,7 +103,80 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Latest data checkpoint: checked Mana contributor domains
+## Latest data checkpoint: Mana pool adjustment inputs
+
+The [adjustment packet](../data/owned/poe2/3887ae68/mana-pool-adjustments/README.md)
+adds five injected Stat definitions, checked Add/Sum reducers and Player
+receivers: conversion percentages to Energy Shield/Armour/Evasion (`3357–3359`),
+additional pre-scaling Mana (`335a`) and additional post-scaling Mana (`335b`).
+The current admitted writer domains are empty and guarded by the full publication
+census plus native potential-bound-writer checks. Zero identities do not close
+unconverted game mechanics. All existing owners/global gaps remain unchanged.
+There is no production Rust, public contract or operations change, conversion
+producer, final Mana consumer or new complete-build claim.
+
+The original full-source test now includes a positive Energy Shield-to-Mana
+conversion, with and without a zero override. PoB emits **25.25** additional
+pre-scaling Mana, giving **665** ordinarily and **0** with the override. All
+12 prior cases are preserved exactly. The expanded **14 cases / 17 complete
+loads per JIT mode** pass in **54.83s**; both 113,778-byte reports have SHA-256
+`9f13db531cbc18214f8468ac79714721d2536a7fca06e9f14567581d4fd3728e`.
+Evidence: `runs/owned-mana-pool-source-03.log` and
+`runs/owned-mana-pool-source-03/source-jit-{off,on}.json`. The observer and shared
+complete-source loader are unchanged. This validates original inputs/output;
+native receiving of a controlled value is not native conversion calculation.
+
+Native checks cover the five exact Player recipients/units, zero identities,
+positive/fractional and inactive controls, unknown activation, Partial domains
+and unlisted inactive writers. They install actual packet programs in the
+existing explicitly finite replay. The scratch test is extended with both
+doubling and a nonzero fractional adjustment case between unavailable and restored
+states; no production coverage is repaired for those fixtures.
+
+Publication passes **12 tests in 30.13s**, preserving all five originals, local
+IDs and prior provenance, and rebuilding all 18 artifacts identically.
+Evidence: `runs/owned-mana-adjustments-native-publication-01.log` and
+`runs/owned-mana-adjustments-publication-01/validation.json`. There remain 110
+metric queries, selected input obligations **107/117/109/123/4**, no evaluation
+bundle and **0/5 complete native builds**.
+
+The final ordinary run passes **11 tests in 4.51s**; three explicit publication
+tests are intentionally ignored in that run. It includes zero → unavailable →
+doubled → positive fractional adjustment → restored replay, both reused and on
+four workers. Strict all-feature Clippy passes for the native target (**0.57s**)
+and source target (**0.20s**). Evidence:
+`runs/owned-mana-adjustments-native-final-02.log` and
+`runs/owned-mana-adjustments-clippy-01.log`.
+
+Canonical successor: `runs/owned-mana-adjustments-publication-01/package`:
+
+- Input: `5a184bc1bd70cec968c8276df38aeb391013e59bdaa7f432ac80a1fade8e9dd2`.
+- Schema: `407ace9074f4a4917d0d23617a631f9844b54799c3a9260b7a0a9a9461f0e438`.
+- Rules: `bf74737ab0f3e158cd1b6f636f6cc7afcbb95d1ecf5ce6c3231846763f95af33`.
+- Compiled: `a704d1d15c3dc10563f64c975e86fd6436438264289527203709d97473c353a5`.
+- Operations V25; next free ID **335c**. Protected incoming-critical drafts are
+  untouched and still need rebasing if adopted.
+
+**Required design decision:** [numeric selection](owned-numeric-selection-proposal.md)
+is proposed and has been prompted, not implemented or accepted. The recommendation
+adds one coherent optional numeric selection to the existing graph, with typed
+presence/value projections and an initial require-agreement policy. Empty is
+absent, duplicate agreeing sources retain provenance, and conflicts/unknowns
+remain unavailable. This avoids a zero sentinel and avoids promoting PoB database
+insertion order into a game law. Implement only after the owner answers. The
+existing exact-Action query decision remains independently pending.
+
+**Resume:** keep Original05 first. After the numeric-selection decision is
+approved, implement it and adopt the actual Mana override domain, then finish the final resource
+arithmetic and its admitted rounding/magnitude proof. Return to Command/damage
+when the Action scope decision is approved. Independent conversion work must
+establish donor/recipient production, coverage and ordering before replacing
+guarded empty domains. A newly noted source normalization loop is an unverified
+[cleanup investigation](legacy-retirement.md#resource-conversion-normalization-investigation-2026-10-09),
+not a classified bug or native compatibility requirement. Player Life's equipment
+and rounding proofs and the four usage/configuration obligations remain open.
+
+## Preceding data checkpoint: checked Mana contributor domains
 
 The [Mana query packet](../data/owned/poe2/3887ae68/mana-contribution-queries/README.md)
 adds three checked queries with five groups over existing channel `29f9`. Its

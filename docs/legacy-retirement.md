@@ -1897,3 +1897,23 @@ preparation is now removed. Audit the remaining profile closure and preserve its
 independent numerical evidence. `SparkQuestRewards` and shared weapon types still
 have active callers; `NativeMetricSnapshot` is removed. The final distribution gate must remove
 those source/interpreter/snapshot dependencies, not just the optional PoB/Lua crates.
+
+## Resource conversion normalization investigation (2026-10-09)
+
+Before publishing native resource conversion producers, investigate the pinned
+`CalcDefence.lua:1354–1362` normalization branch. It fills `conversionRate` using
+resource-name keys, then uses `ipairs(conversionRate)` when combined conversion
+exceeds 100%. That appears inconsistent with the table's keys. This is a source
+inspection finding, **not yet a reproduced game discrepancy or an accepted PoB
+bug**. Establish a reachable parsed control, actual intermediate rates and
+donor/recipient outputs before classifying it. Do not copy Lua iteration behavior
+or change native semantics based on this inspection alone.
+
+The full resource loop also mutates intermediate conversion amounts in resource
+order. Test multiple destinations, over-100% totals, conversion versus gain-as,
+chaining and any reachable cycles before treating that order as a game law.
+The new 25% Energy Shield-to-Mana full-build control proves only its own path:
+additional pre-scaling Mana 25.25 and stable final pools 665/0 with absent/zero
+override. Five neutral originals do not establish conversion-domain closure.
+Track this alongside the existing Lua-cleanup and rounding-bound investigations;
+it must not be used to defer unrelated work on the closest build.

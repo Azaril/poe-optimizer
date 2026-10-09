@@ -1,4 +1,6 @@
 //! Joined native resource dependencies and explicit source-control fixtures.
+#[path = "support/owned_mana_pool_adjustments.rs"]
+mod adjustments;
 #[path = "support/owned_intelligence_mana.rs"]
 mod family;
 #[path = "support/owned_mana_contribution_queries.rs"]
@@ -391,10 +393,15 @@ fn missing_input_and_incomplete_or_unlisted_flags_cannot_become_zero() {
 }
 #[test]
 fn mana_replays_match_across_fresh_reused_unknown_and_parallel_workers() {
-    let a = mana_query_world();
+    let mut a = mana_query_world();
+    adjustments::install(&mut a);
     let mut b = a.clone();
     flags(&mut b, &[(0x3318, true)]);
     b.rebind_test_edit().unwrap();
+    let mut c = a.clone();
+    adjustment_sources(&mut c);
+    flags(&mut c, &[(0x3355, true)]);
+    c.rebind_test_edit().unwrap();
     let mut unknown = a.clone();
     unknown
         .rules
@@ -409,6 +416,7 @@ fn mana_replays_match_across_fresh_reused_unknown_and_parallel_workers() {
         a.compile().unwrap(),
         unknown.compile().unwrap(),
         b.compile().unwrap(),
+        c.compile().unwrap(),
     ];
     let expected: Vec<_> = plans
         .iter()
@@ -416,11 +424,20 @@ fn mana_replays_match_across_fresh_reused_unknown_and_parallel_workers() {
         .collect();
     assert_eq!(mana(&expected[0]), &amount(210.));
     assert_eq!(mana(&expected[2]), &amount(420.));
+    assert_eq!(mana(&expected[3]), &EffectValue::Inactive);
+    assert_eq!(
+        adjustment_value(&expected[0], 0x335a),
+        query_quantity(0., 3)
+    );
+    assert_eq!(
+        adjustment_value(&expected[3], 0x335a),
+        query_quantity(25.25, 3)
+    );
     assert!(matches!(
         expected[1].outcome,
         SupportEffectsOutcome::Unavailable { .. }
     ));
-    let seq = [0, 1, 2, 0];
+    let seq = [0, 1, 2, 3, 0];
     let mut scratch = plans[0].new_scratch();
     for n in seq {
         assert_eq!(plans[n].evaluate(&mut scratch).unwrap(), expected[n]);
@@ -679,6 +696,172 @@ fn publish_mana_queries_preserving_all_five_originals() {
         &["authoring.json", "dependencies.json"],
         mana_queries::stage,
         json!({"new_queries":3,"groups":5,"potential_writers":5,"final_mana":false,"whole_build_parity":false}),
+        [107, 117, 109, 123, 4],
+    );
+}
+
+fn adjustment_world() -> replay::ReplayInput {
+    let mut i = mana_query_world();
+    adjustments::install(&mut i);
+    i
+}
+fn adjustment_value(r: &SupportEffectsReport, stat: u64) -> EffectValue {
+    effects(r)
+        .values
+        .iter()
+        .find(|v| {
+            v.key
+                == PlanValueKey::Stat {
+                    entity: ConcreteEntity::Actor(ActorKey::Player),
+                    stat: def(stat),
+                }
+        })
+        .unwrap()
+        .value
+        .clone()
+}
+// Explicit finite controls only: selected values are not published game data.
+fn adjustment_sources(i: &mut replay::ReplayInput) {
+    let rows = [
+        (0x3357, 2, 25.),
+        (0x3358, 2, 10.),
+        (0x3359, 2, 0.),
+        (0x335a, 3, 25.25),
+        (0x335b, 3, 7.),
+    ];
+    let p:RuleProgram=serde_json::from_value(json!({"id":"test-mana-adjustment-sources","context":"actor",
+        "reads":[{"id":"active","value_type":{"kind":"boolean"},"source":{"kind":"stat","value":{"entity":"current","stat":def::<StatDefinition>(0x3355)}}}],
+        "nodes":std::iter::once(json!({"id":"active","expression":{"kind":"read","input":"active"}})).chain(rows.iter().enumerate().map(|(n,(_,u,v))|json!({"id":format!("value-{n}"),"expression":{"kind":"literal","value":{"kind":"quantity","value":{"unit":def::<UnitDefinition>(*u),"value":v}}}}))).collect::<Vec<_>>(),
+        "effects":rows.iter().enumerate().map(|(n,(stat,_,_))|json!({"id":format!("source-{n}"),"when":"active","effect":{"kind":"contribute","entity":"current","stat":def::<StatDefinition>(*stat),"contribution":"add","value":format!("value-{n}")}})).collect::<Vec<_>>() })).unwrap();
+    // This controlled producer needs the resolved flag. Move its channel freeze
+    // and receivers after it; retain explicit stages rather than skipping checks.
+    stage(i, actor(), &p, "contribute-inherent-strength-life");
+    i.rules
+        .owners
+        .iter_mut()
+        .find(|o| o.owner == actor())
+        .unwrap()
+        .programs
+        .members
+        .push(p);
+    for q in adjustments::consumer().queries {
+        let index = rows
+            .iter()
+            .position(|(stat, _, _)| def::<StatDefinition>(*stat) == q.stat)
+            .unwrap();
+        let g = &mut i
+            .rules
+            .contribution_queries
+            .as_mut()
+            .unwrap()
+            .members
+            .iter_mut()
+            .find(|r| r.id == q.id)
+            .unwrap()
+            .groups[0];
+        g.members.members.push(serde_json::from_value(json!({"producer":{"kind":"program_effect","owner":actor(),"program":"test-mana-adjustment-sources","effect":format!("source-{index}"),"origin":{"kind":"existing_actor","application":"shared-player-initialization"}},"order":{"source_rank":0,"program_rank":0,"effect_rank":index,"slot_ranks":[]}})).unwrap());
+    }
+    for o in adjustments::consumer().owners {
+        for row in &mut i.stages.programs.members {
+            if row.owner == o.owner {
+                row.stage = key("test-mana-queries");
+            }
+        }
+    }
+    for row in &mut i.stages.frozen_channels {
+        if matches!(&row.channel,StageChannel::Contributions{stat,..} if rows.iter().any(|(n,_,_)|*stat==def(*n)))
+        {
+            row.stage = key("player-inherent-life-contribution");
+        }
+    }
+}
+#[test]
+fn mana_adjustments_preserve_units_recipients_and_inactive_zero() {
+    let i = adjustment_world();
+    let r = report(i.clone());
+    for (stat, unit) in [
+        (0x3357, 2),
+        (0x3358, 2),
+        (0x3359, 2),
+        (0x335a, 3),
+        (0x335b, 3),
+    ] {
+        assert_eq!(adjustment_value(&r, stat), query_quantity(0., unit));
+        assert!(!effects(&r).values.iter().any(|v|matches!(&v.key,PlanValueKey::Stat{entity,stat:s} if *s==def(stat)&&*entity!=ConcreteEntity::Actor(ActorKey::Player))));
+    }
+    let mut inactive = i.clone();
+    adjustment_sources(&mut inactive);
+    assert_eq!(
+        adjustment_value(&report(inactive.clone()), 0x335a),
+        query_quantity(0., 3)
+    );
+    let mut active = inactive;
+    flags(&mut active, &[(0x3355, true)]);
+    let r = report(active);
+    for (stat, unit, value) in [
+        (0x3357, 2, 25.),
+        (0x3358, 2, 10.),
+        (0x3359, 2, 0.),
+        (0x335a, 3, 25.25),
+        (0x335b, 3, 7.),
+    ] {
+        assert_eq!(adjustment_value(&r, stat), query_quantity(value, unit));
+    }
+    assert!(
+        !effects(&r)
+            .values
+            .iter()
+            .any(|v| matches!(&v.key,PlanValueKey::Stat{stat,..} if *stat==def(0x29f9))),
+        "input collectors do not claim final Mana"
+    );
+}
+#[test]
+fn mana_adjustments_refuse_unknown_partial_and_unlisted_sources() {
+    let mut i = adjustment_world();
+    adjustment_sources(&mut i);
+    i.rules.receivers.members.retain(|r| r.stat != def(0x3355));
+    let r = report(i);
+    assert!(matches!(
+        adjustment_value(&r, 0x335a),
+        EffectValue::Unresolved { .. }
+    ));
+    let mut i = adjustment_world();
+    adjustment_sources(&mut i);
+    i.rules
+        .contribution_queries
+        .as_mut()
+        .unwrap()
+        .members
+        .iter_mut()
+        .find(|q| q.stat == def(0x335a))
+        .unwrap()
+        .groups[0]
+        .members
+        .members
+        .clear();
+    i.rebind_test_edit().unwrap();
+    assert!(
+        i.compile().is_err(),
+        "an inactive source still requires membership"
+    );
+    let mut i = adjustment_world();
+    i.rules.contribution_queries.as_mut().unwrap().members.iter_mut().find(|q|q.stat==def(0x335a)).unwrap().groups[0].members.closure=serde_json::from_value(json!({"kind":"partial","value":{"gaps":[{"subject":subject(0x335a),"facet":"game_rules","code":"unreviewed-conversion-sources"}]}})).unwrap();
+    assert!(matches!(
+        report(i).outcome,
+        SupportEffectsOutcome::Unavailable { .. }
+    ));
+}
+#[test]
+#[ignore = "requires MANA_ADJUSTMENTS_PRIOR/OUTPUT"]
+fn publish_mana_adjustments_preserving_all_five_originals() {
+    publication::run_with_expected_selected_counts(
+        PathBuf::from(std::env::var_os("POE_OPTIMIZER_TEST_MANA_ADJUSTMENTS_PRIOR").unwrap()),
+        PathBuf::from(std::env::var_os("POE_OPTIMIZER_TEST_MANA_ADJUSTMENTS_OUTPUT").unwrap()),
+        &adjustments::data(),
+        &[],
+        &["authoring.json", "dependencies.json", "bindings.json"],
+        adjustments::stage,
+        json!({"new_definitions":5,"new_queries":5,"new_programs":5,"new_receivers":5,"final_mana":false,"complete_conversion_mechanics":false,"whole_build_parity":false}),
         [107, 117, 109, 123, 4],
     );
 }
