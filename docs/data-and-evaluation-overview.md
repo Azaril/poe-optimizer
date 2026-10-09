@@ -941,6 +941,15 @@ factor, flat-damage census, conversion/gain calculation or final hit/DPS. The
 offline evidence authenticates the complete source profile and its eligibility;
 the evaluator never checks PoB skill names or Lua field-presence conventions.
 
+The [draft physical-base consumer](../data/owned/poe2/3887ae68/physical-base-damage/README.md)
+now combines the actual routed intrinsic endpoints with distinct required bonus,
+self-flat, Enemy-flat, added-factor and ability-coefficient inputs. Its injected
+Action rule preserves arithmetic order and performs no rounding. Ordinary native
+replay tests match retained original operands and exercise missing inputs and
+parallel reuse. Eight operand producers remain unfinished; finite test inputs
+are not canonical data or proof of whole-build support. Enemy-derived quantities
+must preserve any consuming-Action eligibility before they can supply this rule.
+
 Integrating that component under current readiness checks exposed an older owned
 program that combined actor preparation with an execution-only level requirement.
 The [population partition](../data/owned/poe2/3887ae68/sniper-population-readiness/README.md)

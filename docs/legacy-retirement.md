@@ -38,6 +38,15 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Physical base damage, 2026-10-09:** the next Action arithmetic is injected rule
+data using ordinary quantities, Add and Scale, tested through the current native
+replay. No named skill kernel, duplicate damage evaluator, Lua callback or direct
+Enemy reduction is added. Raw source SkillData/weapon-selection observations stay
+offline. The draft's required bonus, flat, multiplier and coefficient operands
+are not supplied by a source report in production; unfinished producers remain
+unresolved. Keep action-dependent enemy eligibility distinct from shared Enemy
+facts when choosing the later source-delivery contract.
+
 **Leggings declarations, 2026-10-09:** reuse the Crown source-evidence checker
 with exact item selection rather than copying its observer or publication
 machinery. The five empty intrinsic inventories use the existing refinement

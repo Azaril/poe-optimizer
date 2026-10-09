@@ -1,10 +1,124 @@
-> Historical snapshots through the native minion inherent-Life checkpoint on 2026-10-09.
+> Historical snapshots through the resource evidence and Leggings declaration checkpoint on 2026-10-09.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-09 checkpoint: resource evidence and Leggings declarations
+
+The [minion transformation witness](../data/owned/poe2/3887ae68/minion-life-transformations/README.md)
+now follows the original pass from all ten incoming conversion/gain channels and
+pre-transform LifeTotal through the actual rates, completed resource tables,
+two original record insertions and their final Life consumer. Seven cases cover
+sixteen complete loads per configured reference mode. The two complete reports
+agree byte for byte: 3,388,303 bytes, SHA-256
+`3d0906e6614a1a83147b3a8182a0c0eafc2eb1e6b2dec7942f5514683965ac1b`.
+Eight executed Actor/mode contexts retain sixteen generated zero records and
+twenty-four Life calls; six unexecuted CALCS contexts remain unexecuted.
+
+This proves the bounded observed neutral source domain, not a native default or
+complete supplier inventory. The packet retains the full report once, with
+non-executable observer/driver hash archives. It introduces no runtime rule,
+definition, transformation kernel or positive-conversion claim. Preexisting
+LifeTotal and generated LifeTotal require distinct producer ownership and stages.
+An empty collector alone would not implement the generating mechanic.
+
+In parallel, [Cryptic Leggings declarations](../data/owned/poe2/3887ae68/leggings-declarations/README.md)
+close five actual empty intrinsic inventories on template `1e0e`: choices,
+grants, actors, skill grants and outputs. This reuses the authenticated Crown
+evidence machinery with an exact item witness and all six existing source
+report files. It adds no source VM run, definition, numerical program or public
+API. Sockets, modifier/quality membership and the five-program numerical owner
+remain Partial. The shared checker preserves Crown's frozen evidence unchanged.
+
+The canonical package is now
+**`runs/owned-leggings-declarations-publication-01/package`**:
+
+- Input: `2390f617fbd22951299e68af43b780d548d46a7981152d5ac789c8914bb9a4ed`
+- Definitions: `4d7cfcdd88956dfd9b04f9727da77816006868c17d83f3cf7b821774b767790e`
+- Rules: `a71944d34ed9a1dd8e340d419ef99221e91218b5572a8ed830e32ed11a1af01d`
+- Compiled rules: `213d4a78d6cba7fc2f61d365380aebf0d05af825fb0df9cc5c49b171ace5c7db`
+
+Operations remain V27/schema6; the next free key remains **336e**. Publication
+retains eighteen artifacts, **170 provenance rows**, 110 saved queries and no
+evaluation bundle. All five imports retain selected obligations
+**106/117/109/123/4**; complete native builds remain **0/5**. The descriptor and
+whole-recipe inverses prove that only the five intrinsic facets and dependent
+identities change. Every artifact reconstructs byte for byte.
+
+Validation completed:
+
+- The full new source acquisition passes in 606.78s, with independent complete
+  off/on reports and unchanged uninstrumented results.
+- All **33 ordinary tests** in the PoB physical-damage target pass (687.56s),
+  including nine new evidence checks and the existing full physical-damage
+  reference regression. The separate full retained-report authentication passes
+  (0.15s), as does strict all-feature Clippy (0.79s).
+- Leggings authoring and full old-source authentication pass (5.66s), both
+  Crown ordinary tests and all three new Leggings tests pass, and publication
+  passes (28.03s). Strict all-feature Clippy for both CLI targets passes.
+- **All 93 composed native tests**, including replay export, pass on the new
+  package (43.45s). The exporter checks decoded full-report equality. Independent
+  review confirms that both gzip bytes and decoded JSON bytes exactly match the
+  tracked replay: 138,860 compressed / 5,417,997 JSON bytes, with unchanged
+  927 definitions, 620 owners and 35 stages. No fixture replacement or repeated
+  Engine test run is needed; the prior 21-test Engine result retains the same
+  inputs. Finite fixture declarations were already closed explicitly.
+- Independent review validates the exact five-field descriptor inverse,
+  retained report/source identities and observer non-interference. Formatting
+  and whitespace checks pass. Exact source archives have Git byte-preservation
+  attributes for cross-platform authentication.
+
+Logs: `runs/owned-minion-life-transformation-source-01.log`,
+`runs/owned-minion-life-transformations-{ordinary,retained,clippy}-01.log`,
+`runs/owned-leggings-declarations-{authoring,ordinary,publication,clippy}-01.log`
+and `runs/owned-sniper-leggings-declarations-joined-01.log`.
+The byte-identical exported replay is
+`runs/owned-sniper-replay-leggings-declarations-01.json.gz`; its SHA-256 remains
+`e4ca40a3833deb613f391109611d54fca8e9e9c659df4994ba48b5c58809b220`.
+
+**Resume: follow the saved-query delivery map above.** The bounded minion
+transformation acquisition is finished; do not repeat it or broaden positive
+transfers now. Minion Life is selected-Actor coverage work, not a saved metric.
+The immediate independent tracks are:
+
+1. Resolve the pending numeric-domain decision, then reuse the draft Player Mana
+   and retained Player Life witnesses for final pools. Complete their potential
+   adjustment/equipment supplier inventories; the new minion report cannot
+   authorize Player or whole-build coverage.
+2. Resolve configuration accounting (prompted October 9), then close the actual
+   selected input responsibilities through their real owners. Current IDs are
+   `01f2/0505/0207/0208`; configuration retains 36 source links after the eight
+   Warrior correspondences. Reporting ownership remains a separate decision.
+3. Continue Sniper's direct damage dependency at pre-conversion physical base on
+   exact Basic Action `0022`. Reuse `320f/3210 → 3212/3213` and the intrinsic
+   added-damage chain `336b → 336c → 336d`. Retained Source02 already proves
+   baseline 208–387 and flat 3–7 control 211.45–395.05; do not apply the intrinsic
+   coefficient again. Capture missing raw Enemy `SelfPhysicalMin/Max` and raw
+   zero/conditional flat/Added records, then establish endpoint bonus/coefficient
+   ownership and complete added-damage Increase/MORE inputs. Existing Action
+   authority can host this consumer. Checked numeric Enemy contribution queries
+   are a distinct unsupported contract, not covered by the pending shared-Actor
+   read proposal; discuss that extension before implementation if required.
+   Intimidated/Party:Intimidated/Debilitated already exist in the raw source
+   inventory. Faerie Fire's random gain is omitted and needs a later gain census;
+   these downstream effects must not block a correctly scoped preconversion
+   producer or be falsely included in its coverage claim.
+4. For later neutral minion adjustment adoption, bind the ten incoming domains
+   and preexisting totals to complete potential supplier authority. Preserve
+   actual Partial owners and distinguish generated outputs from their inputs.
+   A runtime zero-only capability restriction needs the numeric-domain facility
+   or a proof of the entire admitted domain, not a false effect guard.
+
+Resource-demand and scoped-coverage proposals remain unapproved. Current full
+selected-plan coverage still includes other selected skills. The Leggings
+intrinsic-declaration follow-up is complete; its remaining sockets, property
+and numerical coverage are different work. Thirteen selected passive owners
+remain Partial. Archived Firebolt correspondence and reporting responsibilities
+stay live. At the first complete unchanged request/bundle/reference result,
+start D4 immediately while continuing the other four builds.
 
 ## Archived 2026-10-09 checkpoint: native minion inherent Life
 

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "kind": "original-minion-preconversion-census",
+  "native_coverage": false,
+  "copied_formula_as_evidence": false,
+  "report": {
+    "path": "report.json",
+    "bytes": 4041068,
+    "sha256": "7a723a4eece7b297737006b08d1dc61ec0047d13cfd2b9fbfeaee94eb52397cb"
+  },
+  "reports": [
+    {
+      "path": "runs/owned-minion-preconversion-source-03/source-jit-off.json",
+      "jit_mode": "off",
+      "bytes": 4041068,
+      "sha256": "7a723a4eece7b297737006b08d1dc61ec0047d13cfd2b9fbfeaee94eb52397cb"
+    },
+    {
+      "path": "runs/owned-minion-preconversion-source-03/source-jit-on.json",
+      "jit_mode": "on",
+      "bytes": 4041068,
+      "sha256": "7a723a4eece7b297737006b08d1dc61ec0047d13cfd2b9fbfeaee94eb52397cb"
+    }
+  ],
+  "source_archives": [
+    {
+      "path": "evidence/observer.lua",
+      "source_path": "crates/poe-optimizer-pob/tests/support/owned_minion_physical_damage_source.lua",
+      "bytes": 81347,
+      "sha256": "9c6af9dd3261cf196dbd5182cce05e7eb87a9c2033090d96047fad7d4feeb7f0",
+      "executable": false
+    },
+    {
+      "path": "evidence/driver.rs",
+      "source_path": "crates/poe-optimizer-pob/tests/owned_minion_physical_damage_source.rs",
+      "bytes": 162012,
+      "sha256": "f2631889c06514de9dfa6c51640e85976a57bdc39ce14506399148789c237638",
+      "executable": false
+    },
+    {
+      "path": "evidence/source-helper.rs",
+      "source_path": "crates/poe-optimizer-pob/tests/support/minion_preconversion_source.rs",
+      "bytes": 22035,
+      "sha256": "8f774ea3547a5fdc40bd6f130559e9f07df4743d871a158d29c4169836d0e939",
+      "executable": false
+    },
+    {
+      "path": "evidence/bootstrap.rs",
+      "source_path": "crates/poe-optimizer-pob/tests/support/configuration_preparation_source.rs",
+      "bytes": 14535,
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9",
+      "executable": false
+    }
+  ]
+}

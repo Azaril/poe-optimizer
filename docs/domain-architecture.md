@@ -329,6 +329,22 @@ aggregation must account for the admitted modifier groups, numerical order and
 rounding boundaries explicitly. Source names, Lua truthiness and modifier-store
 objects remain offline evidence, not runtime dispatch.
 
+Damage assembly keeps intrinsic endpoints, selected-source bonuses, self-added
+damage, Enemy-derived added damage, the complete added-damage factor and the
+ability coefficient as distinct typed dependencies. An Actor profile's intrinsic
+scale is not a second multiplier on its already-scaled endpoints. The final
+ability coefficient can depend on skill preparation as well as level data;
+absence from one source table does not prove the complete input domain neutral.
+
+Enemy ownership alone does not establish modifier applicability. A quantity on
+the scenario Enemy is shared; a modifier filtered by the attacking Action must
+retain that Action's identity and typed conditions. Native Enemy query results
+currently have no consuming-Action dimension. Widening their numeric read
+allowlist would not implement action-dependent eligibility. Before adopting a
+real such source, prove action independence or review its explicit delivery to
+exact Actions through the shared graph. Keep raw PoB query configuration offline;
+neither a second modifier interpreter nor an unchecked global sum is authorized.
+
 Minion resource modifiers use the same source/recipient graph. A passive writes
 one contribution at its exact allocation; an admitted Actor relation reads the
 frozen incoming channel and emits one contribution for each exact recipient.

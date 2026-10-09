@@ -1,0 +1,188 @@
+{
+  "status": "unpublished-arithmetic-fragment",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_vectors": {
+    "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/source-vectors.json",
+    "sha256": "8ce7fe430ab74a5c2832f6d6d646ec17fd428083f4c76728e3fc08fea586644b"
+  },
+  "source_formula": {
+    "path": "src/Modules/CalcOffence.lua",
+    "first_line": 4131,
+    "last_line": 4138
+  },
+  "owner": {
+    "kind": "slot",
+    "value": {
+      "kind": "action_output",
+      "value": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000021"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000022"
+        }
+      }
+    }
+  },
+  "program": "physical-base-damage",
+  "outputs": [
+    {
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000336e"
+      },
+      "meaning": "physical minimum base before conversion"
+    },
+    {
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000336f"
+      },
+      "meaning": "physical maximum base before conversion"
+    }
+  ],
+  "inputs": [
+    {
+      "name": "intrinsic-min",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003212"
+      },
+      "producer_status": "existing intrinsic Action endpoint"
+    },
+    {
+      "name": "intrinsic-max",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003213"
+      },
+      "producer_status": "existing intrinsic Action endpoint"
+    },
+    {
+      "name": "bonus-min",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003370"
+      },
+      "producer_status": "unimplemented in this fragment"
+    },
+    {
+      "name": "bonus-max",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003371"
+      },
+      "producer_status": "unimplemented in this fragment"
+    },
+    {
+      "name": "self-flat-min",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003372"
+      },
+      "producer_status": "unimplemented in this fragment"
+    },
+    {
+      "name": "self-flat-max",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003373"
+      },
+      "producer_status": "unimplemented in this fragment"
+    },
+    {
+      "name": "enemy-flat-min",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003374"
+      },
+      "producer_status": "unimplemented in this fragment"
+    },
+    {
+      "name": "enemy-flat-max",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003375"
+      },
+      "producer_status": "unimplemented in this fragment"
+    },
+    {
+      "name": "added-multiplier",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003376"
+      },
+      "producer_status": "unimplemented in this fragment"
+    },
+    {
+      "name": "base-coefficient",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003377"
+      },
+      "producer_status": "unimplemented in this fragment"
+    }
+  ],
+  "coverage": "No owner, producer inventory, configuration, complete-build or numerical-domain closure. Retained source operands authorize finite arithmetic comparisons only."
+}

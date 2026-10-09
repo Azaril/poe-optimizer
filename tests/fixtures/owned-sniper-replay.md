@@ -108,3 +108,11 @@ The new export is byte-identical to this fixture, both as gzip and decoded JSON;
 the finite fixture already declared those five intrinsic inventories complete.
 No fixture replacement is necessary. The preceding 21 Engine tests still cover
 these exact inputs; they were not repeated for this declaration-only update.
+
+The subsequent [physical-base draft](../../data/owned/poe2/3887ae68/physical-base-damage/README.md)
+is composed by five additional ordinary Engine tests without replacing this
+gzip. It reuses the native intrinsic endpoints and supplies eight unfinished
+operands explicitly in the fixture. Its arithmetic, exact Action separation,
+missing-input behavior and four-worker reuse are tested; it publishes no
+production operand, coverage closure or final damage metric. The 21 preceding
+tests and five additions pass across the full run and a focused test repair.
