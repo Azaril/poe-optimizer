@@ -1,0 +1,1921 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "reports": [
+    {
+      "path": "runs/owned-mana-override-source-04/source-jit-off.json",
+      "bytes": 187952,
+      "sha256": "eaf85420f376350087f871c23560c6d435e6a85a24bb472ea25a5dcc2d207033"
+    },
+    {
+      "path": "runs/owned-mana-override-source-04/source-jit-on.json",
+      "bytes": 187952,
+      "sha256": "eaf85420f376350087f871c23560c6d435e6a85a24bb472ea25a5dcc2d207033"
+    }
+  ],
+  "complete_loads_per_mode": 19,
+  "observer_sha256": "7ba7af81d5a2175beb5cb1eb912bb8502a3a4975c2f614966cf292d56d8897d1",
+  "bootstrap_sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9",
+  "driver_sha256": "9a4d5bb93bc9c60da9959194c41219a7f12f1a66d95d06d912db8ced60751445",
+  "vectors": [
+    {
+      "control": null,
+      "name": "original-01",
+      "source": {
+        "final_mana": 876,
+        "has_override": false,
+        "inputs": {
+          "base": 973,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": -10,
+          "more": 1,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Item:9:Morbid Roar, Rattling Sceptre",
+                "sourceSlot": "Weapon 1",
+                "type": "BASE",
+                "value": 95
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Item:1:Plague Chant, Sacred Focus",
+                "sourceSlot": "Focus",
+                "type": "BASE",
+                "value": 7
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Item:2:Evergrasping Ring, Pearl Ring",
+                "sourceSlot": "Ring 1",
+                "type": "BASE",
+                "value": 79
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Item:10:Honour Circle, Prismatic Ring",
+                "sourceSlot": "Ring 2",
+                "type": "BASE",
+                "value": 66
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Tree:3215",
+                "type": "INC",
+                "value": -10
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 312
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+    },
+    {
+      "control": null,
+      "name": "original-02",
+      "source": {
+        "final_mana": 630,
+        "has_override": false,
+        "inputs": {
+          "base": 600,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Item:22:Blood Pace, Wanderer Shoes",
+                "sourceSlot": "Boots",
+                "type": "BASE",
+                "value": 26
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 192
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+    },
+    {
+      "control": null,
+      "name": "original-03",
+      "source": {
+        "final_mana": 881,
+        "has_override": false,
+        "inputs": {
+          "base": 839,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Item:7:Doom Eye, Ruby Ring",
+                "sourceSlot": "Ring 2",
+                "type": "BASE",
+                "value": 159
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Many Sources:^x88FFFF28% Ring 2 Bonus Effect",
+                "sourceSlot": "Ring 2",
+                "type": "BASE",
+                "value": 44
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 234
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    },
+    {
+      "control": null,
+      "name": "original-04",
+      "source": {
+        "final_mana": 858,
+        "has_override": false,
+        "inputs": {
+          "base": 817,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Item:14:Loath Nails, Ancient Mitts",
+                "sourceSlot": "Gloves",
+                "type": "BASE",
+                "value": 81
+              },
+              [
+                {
+                  "threshold": 10,
+                  "type": "MultiplierThreshold",
+                  "var": "BlueSupportGems"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 322
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+    },
+    {
+      "control": null,
+      "name": "original-05",
+      "source": {
+        "final_mana": 638,
+        "has_override": false,
+        "inputs": {
+          "base": 608,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    },
+    {
+      "control": "+2 to maximum Mana",
+      "name": "flat-tie",
+      "source": {
+        "final_mana": 641,
+        "has_override": false,
+        "inputs": {
+          "base": 610,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Custom:Mana Pool Control",
+                "type": "BASE",
+                "value": 2
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "8216de4f073ec726412f27cab1f98cb4bcf7b250a284076ba6558bf3fbe7e754"
+    },
+    {
+      "control": "10% increased maximum Mana",
+      "name": "increased",
+      "source": {
+        "final_mana": 699,
+        "has_override": false,
+        "inputs": {
+          "base": 608,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 15,
+          "more": 1,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Custom:Mana Pool Control",
+                "type": "INC",
+                "value": 10
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "37790a9ff134fc8d24dae522a2a33741f7960f14f93f88754bb4b92e08ef4345"
+    },
+    {
+      "control": "50% more maximum Mana",
+      "name": "more",
+      "source": {
+        "final_mana": 958,
+        "has_override": false,
+        "inputs": {
+          "base": 608,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 5,
+          "more": 1.5,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Custom:Mana Pool Control",
+                "type": "MORE",
+                "value": 50
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "cf8d1efd4d5f21a06659063116ea28c2187a2140da288701ca048a73ccf776cf"
+    },
+    {
+      "control": "200% reduced maximum Mana",
+      "name": "reduced-clamp",
+      "source": {
+        "final_mana": 1,
+        "has_override": false,
+        "inputs": {
+          "base": 608,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": -195,
+          "more": 1,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Custom:Mana Pool Control",
+                "type": "INC",
+                "value": -200
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "23f6e902053cca04fc3c93f30e88d8619c1fdca85ae9675e1cb70ce89c4c895e"
+    },
+    {
+      "control": "You have no Mana",
+      "name": "override-zero",
+      "source": {
+        "final_mana": 0,
+        "has_override": true,
+        "inputs": {
+          "base": 608,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": true,
+            "value": 0
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Custom:Mana Pool Control",
+                "type": "OVERRIDE",
+                "value": 0
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "23c6c4f1d3ef659bc864d35bb5fca1127336de91ff3bf0b15f4fffc24932c68e"
+    },
+    {
+      "control": "You have no Mana\nYou have no Mana",
+      "name": "override-zero-duplicates",
+      "source": {
+        "final_mana": 0,
+        "has_override": true,
+        "inputs": {
+          "base": 608,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": true,
+            "value": 0
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Custom:Mana Pool Control",
+                "type": "OVERRIDE",
+                "value": 0
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Custom:Mana Pool Control",
+                "type": "OVERRIDE",
+                "value": 0
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "7bc23f39450afa82a53d2eb9cfd12016a5f296db214ac9543d9370fddb5dc1d2"
+    },
+    {
+      "control": "allocate connected path to tree node 51749; numeric control, no point-budget claim",
+      "name": "allocated-override",
+      "source": {
+        "final_mana": 0,
+        "has_override": true,
+        "inputs": {
+          "base": 608,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": true,
+            "value": 0
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": true,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Tree:51749",
+                "type": "OVERRIDE",
+                "value": 0
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "2bb2249ceb49be6f4b648467008800bfd66dac82d5f72537d317700cfb3a087f"
+    },
+    {
+      "control": "Convert 25% of maximum Energy Shield to maximum Mana",
+      "name": "incoming-conversion",
+      "source": {
+        "final_mana": 665,
+        "has_override": false,
+        "inputs": {
+          "base": 608,
+          "conversion_sum": 0,
+          "extra": 25.25,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 25.25
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "96caed2667aa314ab0d1e92321de19c50a0101c828ff7a9b86cf2e56a71561cd"
+    },
+    {
+      "control": "Convert 25% of maximum Energy Shield to maximum Mana\nYou have no Mana",
+      "name": "incoming-conversion-zero-override",
+      "source": {
+        "final_mana": 0,
+        "has_override": true,
+        "inputs": {
+          "base": 608,
+          "conversion_sum": 0,
+          "extra": 25.25,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": true,
+            "value": 0
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 25.25
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Custom:Mana Pool Control",
+                "type": "OVERRIDE",
+                "value": 0
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "2582bd6e1909804ccee7d3f42635efc8e2de606b62af5ec039cdf0b9c6be1d50"
+    },
+    {
+      "control": null,
+      "name": "fresh-repeat",
+      "source": {
+        "final_mana": 638,
+        "has_override": false,
+        "inputs": {
+          "base": 608,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    },
+    {
+      "control": null,
+      "name": "warm-restoration",
+      "source": {
+        "final_mana": 638,
+        "has_override": false,
+        "inputs": {
+          "base": 608,
+          "conversion_sum": 0,
+          "extra": 0,
+          "increased": 5,
+          "more": 1,
+          "override": {
+            "present": false
+          },
+          "total": 0
+        },
+        "override_source": {
+          "allocated": false,
+          "default_modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "source": "Tree:51749",
+              "type": "OVERRIDE",
+              "value": 0
+            },
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "HybridManaAndLifeCost_Life",
+              "source": "Tree:51749",
+              "type": "BASE",
+              "value": 100
+            }
+          ],
+          "descriptions": [
+            "You have no Mana",
+            "Skill Mana Costs Converted to Life Costs"
+          ],
+          "modifiers": [
+            {
+              "flags": 0,
+              "keywordFlags": 0,
+              "name": "Mana",
+              "type": "OVERRIDE",
+              "value": 0
+            }
+          ],
+          "node_id": 51749,
+          "parser_cache_preserved": true,
+          "tree_version": "0_5"
+        },
+        "read_set": [
+          {
+            "ExtraMana": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ExtraMana",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ],
+            "Mana": [
+              [
+                {
+                  "base": 30,
+                  "type": "Multiplier",
+                  "var": "Level"
+                }
+              ],
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Quest:Act 4: Eye of Hinekora",
+                "type": "INC",
+                "value": 5
+              },
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "Mana",
+                "source": "Intelligence",
+                "type": "BASE",
+                "value": 210
+              }
+            ],
+            "ManaConvertToArmour": {},
+            "ManaConvertToEnergyShield": {},
+            "ManaConvertToEvasion": {},
+            "ManaTotal": [
+              {
+                "flags": 0,
+                "keywordFlags": 0,
+                "name": "ManaTotal",
+                "source": "Conversion",
+                "type": "BASE",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "scope": {
+    "allocated_passive": true,
+    "duplicate_zero_controls": true,
+    "cost_conversion": false,
+    "item_granted_keystone": false,
+    "final_mana": false,
+    "whole_build": false
+  }
+}

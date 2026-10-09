@@ -1,0 +1,54 @@
+[
+  {
+    "id": "mana-override-contributions",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000029f9"
+    },
+    "contribution": "override",
+    "groups": [
+      {
+        "id": "sources",
+        "reduction": "require_agreement",
+        "ordering": "unordered",
+        "empty": null,
+        "members": {
+          "members": [
+            {
+              "producer": {
+                "kind": "program_effect",
+                "owner": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "passive_node",
+                    "value": {
+                      "kind": "passive_node",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000016be"
+                    }
+                  }
+                },
+                "program": "set-mana-override",
+                "effect": "override",
+                "origin": {
+                  "kind": "allocation"
+                }
+              },
+              "order": null
+            }
+          ],
+          "closure": {
+            "kind": "complete"
+          }
+        }
+      }
+    ]
+  }
+]

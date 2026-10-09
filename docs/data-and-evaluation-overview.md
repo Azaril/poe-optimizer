@@ -75,7 +75,7 @@ domain retain global Partial coverage. This adds data through the existing
 assembler without a schema migration or production Rust change.
 An independent full-source test confirms the final PoB resource calculation,
 including rounding, clamping and a zero override, with JIT off/on and warm/fresh
-agreement. Native conversion, extra/total, override and final rounding still
+agreement. Native conversion, extra/total and final rounding still
 need explicit coverage; neither reference output nor a subtotal is a substitute.
 
 The [Mana adjustment packet](../data/owned/poe2/3887ae68/mana-pool-adjustments/README.md)
@@ -92,8 +92,14 @@ or unavailable. Conflicts and unknown sources block both projections. Exact
 units, occurrence membership, stages and worker isolation are checked; signed
 zero is normalized to positive zero. The staged result uses the channel's
 explicit freeze. No Lua insertion-order behavior is a selection law. The current
-canonical data package remains V26 until the actual Mana domain is reviewed
-and published; the generic contract does not finish Mana.
+canonical package now uses V27 and includes the
+[real Mana override packet](../data/owned/poe2/3887ae68/mana-override/README.md):
+one allocated passive emits a zero Mana quantity into a checked selection group.
+The complete PoB source witness covers duplicate zeros and the allocated passive,
+while native tests distinguish absence from a present zero and preserve Partial
+refusal. The passive's cost-conversion effect, item-granted origins, other resource
+suppliers and final arithmetic remain separate coverage obligations. Data adoption
+adds no resource-specific native engine behavior and does not finish Mana.
 
 The [Life-copy source witness](owned-amulet-life-copy-evidence.md) now establishes
 that numeric Life copies need their own injected arithmetic branches; the

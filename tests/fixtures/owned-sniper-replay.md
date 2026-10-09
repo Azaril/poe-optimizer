@@ -2,7 +2,7 @@
 
 `owned-sniper-replay.json.gz` contains the public typed inputs of the existing
 joined Sniper test graph, exported from
-`runs/owned-action-minion-damage-publication-01/package`. It is test data, not a
+`runs/owned-mana-override-publication-01/package`. It is test data, not a
 production release or an admitted complete build. Original05 still has four
 selected input obligations and incomplete mechanics coverage.
 
@@ -58,7 +58,12 @@ backend with fixed timestamp and OS header. Decoding is bounded to 8 MiB; the CI
 test requires deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
-The October 9 fixture is 138,053 compressed bytes and 5,397,012 JSON bytes.
-Two independent exports agree byte for byte, and the ordinary native test checks
-deterministic re-encoding. Its gzip SHA-256 is
-`dfebd921a4fbe54067e9d5b60553368855211a352164f9bff315c60e2e986350`.
+The October 9 V27 fixture is 138,049 compressed bytes and 5,397,012 JSON bytes.
+The exporter compares the decoded replay's full report against the original
+graph, and the ordinary native test checks deterministic re-encoding. Its gzip
+SHA-256 is `5ae76529f235385e2af8611972cccf4ce9553c708e139e87fc5ab43f513796e0`.
+The latest refresh changes only the operations capability and its dependent
+identities; the finite graph's 922 definitions and 615 owners retain their
+contents. Actual Mana override component checks extend these public inputs in
+the existing CLI `owned_intelligence_mana` test, without adding Blood Magic's
+unfinished mechanics to this fixture's claimed coverage.

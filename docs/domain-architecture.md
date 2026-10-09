@@ -325,8 +325,11 @@ conflicting or unknown candidates cannot choose an arbitrary winner. Numeric
 units are exact and signed zero is normalized to positive zero. Selection has
 no numeric empty identity. Staged evaluation binds the shared result to the
 channel's explicit freeze and rejects late writers or premature consumers.
-Retained support queries use the same graph and frozen-prefix checks. Real Mana
-adoption remains pending; no Lua database-order precedence is imported.
+Retained support queries use the same graph and frozen-prefix checks. The first
+real adoption is the data-defined Mana override from an allocated passive.
+Its exact source joins a checked query without adding a resource-specific
+engine branch or importing Lua database-order precedence. Admission of that
+effect does not close the owner's other mechanics or item-granted origins.
 
 The [passive topology contract](owned-passive-topology.md) separates implicit roots,
 physical allocations, attached choices, scope eligibility and injected legality budgets.

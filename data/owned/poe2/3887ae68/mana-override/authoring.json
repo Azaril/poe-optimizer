@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "kind": "mana-override",
+  "before": "53cb79e8a363e6d6fedb09a118a017c996b69896ee046513ac711a8bd7e49874",
+  "scope": {
+    "new_definitions": 0,
+    "new_programs": 1,
+    "new_queries": 1,
+    "closed_owners": 0,
+    "final_mana": false,
+    "whole_build": false
+  },
+  "artifacts": {
+    "migration.json": {
+      "bytes": 3114,
+      "sha256": "9cdb94c207cb4c69ec7ab3d9ebf4b156007668e66523d0b7f75ee22cf3270939"
+    },
+    "queries.json": {
+      "bytes": 1354,
+      "sha256": "b8fd64d73949c2c606f83d7b4230e60a91860bfbfef297df4c1cbf6b82bb4a69"
+    },
+    "dependencies.json": {
+      "bytes": 12348,
+      "sha256": "9dbb4b7addbbd6fe83597bfc4b45c4214b09c1c380856fab431a0e56ed380080"
+    },
+    "source-vectors.json": {
+      "bytes": 52263,
+      "sha256": "7b690ffb26ceca4f791bd3baa6d01f1465bbc7f23637013f535e914535233c10"
+    }
+  },
+  "source_packets": [
+    {
+      "path": "data/owned/poe2/3887ae68/tree/tree-catalog.json",
+      "bytes": 1676797,
+      "sha256": "37db1255f28d05f67a6d81dfe286bcc698a9811e907c67d29cf640d9c28e5557"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/mana_pool_source.lua",
+      "bytes": 3946,
+      "sha256": "7ba7af81d5a2175beb5cb1eb912bb8502a3a4975c2f614966cf292d56d8897d1"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/player_resource_source.rs",
+      "bytes": 4234,
+      "sha256": "9a4d5bb93bc9c60da9959194c41219a7f12f1a66d95d06d912db8ced60751445"
+    },
+    {
+      "path": "crates/poe-optimizer-pob/tests/support/configuration_preparation_source.rs",
+      "bytes": 14535,
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9"
+    },
+    {
+      "path": "vendor/path-of-building-poe2/src/TreeData/0_5/tree.lua",
+      "bytes": 2757566,
+      "sha256": "6f13f8e6ea1f49378c0c9e0e16bbe64cc227ae0efa08740f6ff24456b5b4b1da"
+    },
+    {
+      "path": "vendor/path-of-building-poe2/src/Modules/ModParser.lua",
+      "bytes": 684668,
+      "sha256": "1f0f0572ffd8b7288625696aa4462a989c0805e36418a55ca81318349aa6b3d2"
+    },
+    {
+      "path": "vendor/path-of-building-poe2/src/Modules/CalcDefence.lua",
+      "bytes": 244254,
+      "sha256": "59705b77bb971a076f3f0302536e7d16ebb015d8303df72a10f15bec6d278041"
+    },
+    {
+      "path": "vendor/path-of-building-poe2/src/Classes/ModStore.lua",
+      "bytes": 37555,
+      "sha256": "9d07787aaa117ced2c8c899a38d96fcb87f211dfa565d893531e6d982db34241"
+    }
+  ]
+}

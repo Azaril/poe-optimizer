@@ -176,7 +176,7 @@ pub fn install(i: &mut super::replay::ReplayInput) {
         let SchemaExtensionEntry::Definition(d) = row else {
             panic!()
         };
-        i.schema.definitions.push(d);
+        assert!(i.schema.definitions.contains(&d));
     }
     let c = consumer();
     for o in &c.owners {

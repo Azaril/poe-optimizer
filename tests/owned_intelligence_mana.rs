@@ -3,6 +3,8 @@
 mod adjustments;
 #[path = "support/owned_intelligence_mana.rs"]
 mod family;
+#[path = "support/owned_mana_override.rs"]
+mod mana_override;
 #[path = "support/owned_mana_contribution_queries.rs"]
 mod mana_queries;
 #[path = "support/owned_release_migration_preservation.rs"]
@@ -97,7 +99,9 @@ fn world() -> replay::ReplayInput {
         let SchemaExtensionEntry::Definition(d) = row else {
             panic!()
         };
-        i.schema.definitions.push(d);
+        // The current replay already carries these published definitions. This
+        // fixture installs only the additional component programs and stages.
+        assert!(i.schema.definitions.contains(&d));
     }
     for o in &c.owners {
         for p in &o.programs.members {
@@ -862,6 +866,247 @@ fn publish_mana_adjustments_preserving_all_five_originals() {
         &["authoring.json", "dependencies.json", "bindings.json"],
         adjustments::stage,
         json!({"new_definitions":5,"new_queries":5,"new_programs":5,"new_receivers":5,"final_mana":false,"complete_conversion_mechanics":false,"whole_build_parity":false}),
+        [107, 117, 109, 123, 4],
+    );
+}
+
+// This finite component fixture admits the actual override program only. It
+// deliberately does not claim Blood Magic's other mechanic or legal topology.
+fn override_world() -> replay::ReplayInput {
+    let mut i = adjustment_world();
+    let d: mana_override::Dependencies = mana_override::read("dependencies.json");
+    for definition in d.definitions {
+        if i.schema
+            .definitions
+            .iter()
+            .any(|x| x.address() == definition.address())
+        {
+            continue;
+        }
+        let mut v = json!(definition);
+        assert_eq!(v["kind"], "passive_node");
+        let schema = &mut v["value"]["schema"]["value"];
+        schema["adjacent"]["members"] = json!([]);
+        schema["pools"]["members"] = json!([i.build.allocations[0].pool]);
+        for declaration in schema["declarations"].as_object_mut().unwrap().values_mut() {
+            assert!(declaration["members"].as_array().unwrap().is_empty());
+            declaration["closure"] = json!({"kind":"complete"});
+        }
+        i.schema
+            .definitions
+            .push(serde_json::from_value(v).unwrap());
+    }
+    let mut owner = mana_override::migration().owners.remove(0);
+    owner.programs.closure = SchemaClosure::Complete;
+    stage(
+        &mut i,
+        owner.owner.clone(),
+        &owner.programs.members[0],
+        "strength-life-halving",
+    );
+    i.rules
+        .support_discovery
+        .as_mut()
+        .unwrap()
+        .providers
+        .push(SupportSourceDomainDeclaration {
+            owner: owner.owner.clone(),
+            domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+        });
+    i.rules.owners.push(owner);
+    i.rules.operations_version = key(OWNED_RULE_OPERATIONS_V27);
+    i.rules
+        .contribution_queries
+        .as_mut()
+        .unwrap()
+        .members
+        .extend(mana_override::queries());
+    i.stages.frozen_channels.push(serde_json::from_value(json!({"channel":{"kind":"contributions","scope":"actor","stat":def::<StatDefinition>(0x29f9),"contribution":"override"},"stage":"player-inherent-life-contribution"})).unwrap());
+    i.schema.definitions.push(serde_json::from_value(json!({"kind":"stat","value":{"id":def::<StatDefinition>(0xff04),"schema":{"kind":"known","value":{"value":{"kind":"boolean"},"targets":["actor"]}}}})).unwrap());
+    let p:RuleProgram=serde_json::from_value(json!({"id":"test-observe-mana-override","context":"actor",
+        "reads":[
+            {"id":"present","value_type":{"kind":"boolean"},"source":{"kind":"contribution_selection","value":{"entity":"current","query":"mana-override-contributions","group":"sources","projection":"present"}}},
+            {"id":"value","value_type":{"kind":"quantity","value":{"unit":def::<UnitDefinition>(3)}},"source":{"kind":"contribution_selection","value":{"entity":"current","query":"mana-override-contributions","group":"sources","projection":"value"}}}],
+        "nodes":[{"id":"present","expression":{"kind":"read","input":"present"}},{"id":"value","expression":{"kind":"read","input":"value"}}],
+        "effects":[{"id":"present","when":null,"effect":{"kind":"contribute","entity":"current","stat":def::<StatDefinition>(0xff04),"contribution":"flag","value":"present"}},
+            {"id":"value","when":"present","effect":{"kind":"contribute","entity":"current","stat":def::<StatDefinition>(0xff01),"contribution":"add","value":"value"}}]})).unwrap();
+    stage(&mut i, actor(), &p, "test-observe-mana-queries");
+    i.rules
+        .owners
+        .iter_mut()
+        .find(|o| o.owner == actor())
+        .unwrap()
+        .programs
+        .members
+        .push(p);
+    i.rebind_test_edit().unwrap();
+    i
+}
+fn allocate_override(i: &mut replay::ReplayInput) {
+    let mut allocator = InstanceAllocator::from_state(i.build.allocator);
+    let mut a = i.build.allocations[0].clone();
+    a.node = def(0x16be);
+    a.id = allocator.allocate().unwrap();
+    a.choices.clear();
+    i.build.allocations.push(a);
+    i.build.allocator = allocator.state();
+}
+fn override_value(r: &SupportEffectsReport, id: &str) -> EffectValue {
+    effects(r)
+        .effects
+        .iter()
+        .find(|e| {
+            e.key.invocation.program.as_str() == "test-observe-mana-override"
+                && e.key.effect.as_str() == id
+        })
+        .unwrap()
+        .value
+        .clone()
+}
+#[test]
+fn actual_mana_override_packet_preserves_gaps_and_checked_source_membership() {
+    mana_override::check_authored();
+    let owners = mana_override::migration().owners;
+    let mut bad = owners.clone();
+    bad[0].programs.members[0].effects[0].when = Some(key("zero"));
+    assert!(std::panic::catch_unwind(|| mana_override::check_membership(&bad, &[])).is_err());
+    let mut bad = owners.clone();
+    let mut duplicate = bad[0].programs.members[0].clone();
+    duplicate.id = key("unreviewed-override");
+    bad[0].programs.members.push(duplicate);
+    assert!(std::panic::catch_unwind(|| mana_override::check_membership(&bad, &[])).is_err());
+}
+#[test]
+fn actual_mana_override_distinguishes_unselected_from_selected_zero() {
+    let mut i = override_world();
+    let r = report(i.clone());
+    assert_eq!(
+        override_value(&r, "present"),
+        EffectValue::Known {
+            value: ParameterValue::Boolean(false)
+        }
+    );
+    assert_eq!(override_value(&r, "value"), EffectValue::Inactive);
+    allocate_override(&mut i);
+    let r = report(i);
+    assert_eq!(
+        override_value(&r, "present"),
+        EffectValue::Known {
+            value: ParameterValue::Boolean(true)
+        }
+    );
+    assert_eq!(override_value(&r, "value"), query_quantity(0., 3));
+    let contributions: Vec<_> = effects(&r)
+        .effects
+        .iter()
+        .filter(|e| e.key.invocation.program.as_str() == mana_override::PROGRAM)
+        .collect();
+    assert_eq!(contributions.len(), 1);
+    assert_eq!(contributions[0].value, query_quantity(0., 3));
+    assert!(
+        !effects(&r)
+            .values
+            .iter()
+            .any(|v| matches!(&v.key,PlanValueKey::Stat{stat,..} if *stat==def(0x29f9))),
+        "selection inputs are not a final Mana consumer"
+    );
+}
+#[test]
+fn actual_mana_override_refuses_unlisted_and_partial_sources() {
+    let mut i = override_world();
+    allocate_override(&mut i);
+    let q = i
+        .rules
+        .contribution_queries
+        .as_mut()
+        .unwrap()
+        .members
+        .iter_mut()
+        .find(|q| q.id.as_str() == "mana-override-contributions")
+        .unwrap();
+    q.groups[0].members.members.clear();
+    i.rebind_test_edit().unwrap();
+    assert!(i.compile().is_err());
+    let mut i = override_world();
+    allocate_override(&mut i);
+    let real = mana_override::migration().owners.remove(0);
+    i.rules
+        .owners
+        .iter_mut()
+        .find(|o| o.owner == real.owner)
+        .unwrap()
+        .programs
+        .closure = real.programs.closure;
+    assert!(
+        matches!(report(i).outcome, SupportEffectsOutcome::Unavailable { .. }),
+        "the production owner still has other unsupported mechanics"
+    );
+}
+#[test]
+fn actual_mana_override_is_stable_across_fresh_reused_and_parallel_workers() {
+    let base = override_world();
+    let mut allocated = base.clone();
+    allocate_override(&mut allocated);
+    allocated.rebind_test_edit().unwrap();
+    let mut unknown = allocated.clone();
+    let actual = mana_override::migration().owners.remove(0);
+    unknown
+        .rules
+        .owners
+        .iter_mut()
+        .find(|o| o.owner == actual.owner)
+        .unwrap()
+        .programs
+        .closure = actual.programs.closure;
+    unknown.rebind_test_edit().unwrap();
+    let plans = [
+        base.compile().unwrap(),
+        allocated.compile().unwrap(),
+        unknown.compile().unwrap(),
+    ];
+    let expected: Vec<_> = plans
+        .iter()
+        .map(|p| p.evaluate(&mut p.new_scratch()).unwrap())
+        .collect();
+    assert_eq!(
+        override_value(&expected[0], "present"),
+        EffectValue::Known {
+            value: ParameterValue::Boolean(false)
+        }
+    );
+    assert_eq!(override_value(&expected[1], "value"), query_quantity(0., 3));
+    assert!(matches!(
+        expected[2].outcome,
+        SupportEffectsOutcome::Unavailable { .. }
+    ));
+    let mut scratch = plans[0].new_scratch();
+    for n in [0, 1, 2, 1, 0] {
+        assert_eq!(plans[n].evaluate(&mut scratch).unwrap(), expected[n]);
+    }
+    rayon::ThreadPoolBuilder::new()
+        .num_threads(4)
+        .build()
+        .unwrap()
+        .install(|| {
+            (0..12).into_par_iter().for_each(|_| {
+                let mut scratch = plans[0].new_scratch();
+                for n in [0, 1, 2, 1, 0] {
+                    assert_eq!(plans[n].evaluate(&mut scratch).unwrap(), expected[n]);
+                }
+            })
+        });
+}
+#[test]
+#[ignore = "requires MANA_OVERRIDE_PRIOR/OUTPUT and authenticated source reports"]
+fn publish_mana_override_preserving_all_five_originals() {
+    publication::run_with_expected_selected_counts(
+        PathBuf::from(std::env::var_os("POE_OPTIMIZER_TEST_MANA_OVERRIDE_PRIOR").unwrap()),
+        PathBuf::from(std::env::var_os("POE_OPTIMIZER_TEST_MANA_OVERRIDE_OUTPUT").unwrap()),
+        &mana_override::data(),
+        &[],
+        &["authoring.json", "dependencies.json", "source-vectors.json"],
+        mana_override::stage,
+        json!({"new_queries":1,"new_programs":1,"closed_owners":0,"final_mana":false,"whole_build_parity":false}),
         [107, 117, 109, 123, 4],
     );
 }

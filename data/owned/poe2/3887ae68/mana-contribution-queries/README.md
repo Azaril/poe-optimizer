@@ -1,6 +1,6 @@
 # Checked Mana contribution queries
 
-This packet accounts for all five current owned writers to Mana `29f9`. It
+This packet accounts for the five base/increased writers to Mana `29f9`. It
 uses existing V25 queries and changes no Core/Data/Engine contract, producer
 program, definition, receiver, source importer or full-build coverage.
 
@@ -16,6 +16,9 @@ published potential writer, including unselected and inactive writers, and
 authenticates its complete program body. New or changed ordinary/application
 writers require review; an empty MORE domain is not inferred from the five builds.
 Existing global and owner Partial declarations remain mandatory.
+The later [Mana override packet](../mana-override/README.md) adds a separately
+checked `Override` channel through the same graph. It does not change these
+folds or their authenticated source programs.
 
 The intrinsic, inherent and reward groups admit at most one potential effect
 per recipient: equal semantic positions are rejected before activation. Each

@@ -46,8 +46,12 @@ domain or Lua insertion-order emulation was added. Fold identities are explicit
 fold data retains its current representation. There is one current authoring
 contract and no historical-format reader. Agreement uses exact numeric units
 and canonical positive zero. Unknown/conflicting candidates cannot become false
-or select a traversal-order winner. Actual Mana data adoption remains separate
-from this reusable contract and supplies no new complete-build certificate.
+or select a traversal-order winner. Real Mana data now adopts the contract with
+an allocation contribution and checked membership, retaining the owner's other
+mechanics gaps. No new production Rust path or complete-build certificate was
+added. The resource component fixtures no longer re-add definitions already
+present in the current replay: they verify those definitions before installing
+their additional programs. No historical replay compatibility branch is kept.
 
 **Exact Action queries, 2026-10-09:** the accepted V26 extension uses the existing
 checked contribution graph and worker reductions. Keep one native membership

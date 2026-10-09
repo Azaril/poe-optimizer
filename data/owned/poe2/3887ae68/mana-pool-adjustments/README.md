@@ -54,8 +54,9 @@ Publication `runs/owned-mana-adjustments-publication-01` passes with 12 tests in
 107/117/109/123/4. The final ordinary run passes 11 tests in 4.51s, and strict
 all-feature Clippy passes for the native and source resource targets.
 
-Numeric override selection awaits the separate
-[design decision](../../../../../docs/owned-numeric-selection-proposal.md).
-That proposal is not implemented here. Final arithmetic also needs validated
-contributor bounds and rounding; neither neutral observations nor these input
-collectors close that proof. The next free definition ID is **335c**.
+Numeric override selection has since been approved and implemented in V27,
+with real data in the [Mana override packet](../mana-override/README.md).
+Final arithmetic still needs validated contributor bounds and rounding;
+neither neutral observations nor these input collectors close that proof.
+The definition IDs listed here are unchanged; consult the current release
+registry for the next free ID.

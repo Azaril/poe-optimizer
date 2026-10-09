@@ -1,6 +1,6 @@
 # Checked optional numeric selection in the contribution graph
 
-**Status:** Accepted by the owner on 2026-10-09; generic native contract implemented in operations V27. Real Mana adoption remains pending.
+**Status:** Accepted by the owner on 2026-10-09; generic native contract implemented in operations V27 and adopted by the real Mana override data packet. Final Mana remains incomplete.
 **Date:** 2026-10-08.
 **Decider:** Project owner.
 
@@ -115,5 +115,10 @@ Acceptance tests use generic integer/quantity sources, duplicate equipment
 occurrences, exact Action selections, empty and inactive domains, unknown values
 and activation, conflicts, partial/unread membership, invalid units, cycles,
 stages, storage round trips, work bounds and reused/four-worker execution.
-Real Mana source census and data publication remain separate work; this contract
-does not establish final resource coverage or close any original build.
+The [Mana override packet](../data/owned/poe2/3887ae68/mana-override/README.md)
+now adopts the contract with one actual allocation producer and checked
+membership. The source witness includes an allocated Blood Magic control and
+duplicate agreeing zeros, with strict MAIN/CALCS, JIT and replay equality.
+The native joined fixture distinguishes absent from present zero and retains
+production Partial coverage. Neither this input domain nor the reusable
+contract establishes final resource coverage or closes any original build.

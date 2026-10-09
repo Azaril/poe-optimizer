@@ -6,6 +6,9 @@ local function plain(v, depth)
     depth = (depth or 0) + 1; assert(depth < 32)
     local out = {}; for k,x in pairs(v) do out[k] = plain(x,depth) end; return out
 end
+local function list(v)
+    local out = {}; for i,x in ipairs(v) do out[i] = plain(x) end; return out
+end
 local function equal(a,b)
     if type(a) ~= type(b) then return false end
     if type(a) ~= "table" then return a == b end
@@ -31,6 +34,7 @@ local sum = original(common.classes.ModStore.Sum,"Classes/ModStore.lua",202)
 local more = original(common.classes.ModStore.More,"Classes/ModStore.lua",261)
 local override = original(common.classes.ModStore.Override,"Classes/ModStore.lua",301)
 local calc = original(calcs.doActorLifeManaSpirit,"Modules/CalcDefence.lua",74)
+local parser = original(modLib.parseMod,"Modules/ModParser.lua",7404)
 assert(debug.gethook() == nil)
 local function inputs(db)
     assert(db.Sum == sum and db.More == more and db.Override == override)
@@ -52,7 +56,16 @@ for _,mode in ipairs({"MAIN","CALCS"}) do
     calc(actor,true)
     assert(actor.output.Mana == output and actor.output.ManaHasOverride == has)
     assert(equal(before,snapshot(db)) and equal(reads,inputs(db)))
-    modes[mode] = {inputs=reads,final_mana=output,has_override=has,read_set=before}
+    local node = assert(env.spec.tree.nodes[51749])
+    local description = assert(node.sd[1]); assert(description == "You have no Mana")
+    local cached = plain(assert(modLib.parseModCache[description]))
+    local mods, extra = parser(description)
+    assert(equal(cached,plain(modLib.parseModCache[description])))
+    assert(#mods==1 and not extra and mods[1].name=="Mana" and mods[1].type=="OVERRIDE" and mods[1].value==0)
+    assert(equal(before,snapshot(db)) and equal(reads,inputs(db)))
+    modes[mode] = {inputs=reads,final_mana=output,has_override=has,read_set=before,
+        override_source={tree_version="0_5",node_id=51749,allocated=env.allocNodes[51749]~=nil,
+            descriptions=list(node.sd),modifiers=list(mods),default_modifiers=list(node.modList),parser_cache_preserved=true}}
 end
 return {modes=modes,original_methods=true,original_calculation=true,repeated_equal=true,
     mana_inputs_preserved=true,native_final_pool_claim=false}

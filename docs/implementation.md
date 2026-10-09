@@ -103,8 +103,8 @@ coverage throughout.
 On October 9 the owner also explicitly approved
 [exact Action queries](owned-action-contribution-queries-proposal.md) and
 [coherent optional numeric selection](owned-numeric-selection-proposal.md).
-Action ownership/membership, real Command adoption and generic require-agreement
-numeric selection are now implemented. Actual Mana override adoption is next.
+Action ownership/membership, real Command adoption, generic require-agreement
+numeric selection and its actual Mana override adoption are now implemented.
 Both extend the existing graph; they authorize neither unrelated delivery
 origins nor arbitrary override precedence. Later references below to these two
 decisions as pending are historical.
@@ -113,7 +113,76 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Latest native checkpoint: coherent optional numeric selection
+## Latest data checkpoint: actual Mana override selection
+
+The [Mana override packet](../data/owned/poe2/3887ae68/mana-override/README.md)
+adds one real allocation contribution and one checked selection query to the
+existing V27 graph. Owned passive `16be` supplies a zero Mana quantity on channel
+`29f9`. Membership preserves its exact allocation origin; presence/value use
+the shared cached result. There are no new definitions, production Rust paths,
+carrier flags or source-language precedence rules.
+
+The source maps that passive to Blood Magic, node 51749 in tree 0_5. Its other
+mechanic converts skill Mana costs to Life costs. That mechanic, item-granted
+keystones and the existing declaration/rule Partial closures remain unfinished.
+The publication closes **zero** owners. A valid zero override is not a claim that
+the whole passive, resource calculation or original build is supported.
+
+The complete original-source witness passes **16 cases and 19 complete loads
+per JIT mode**, with exact MAIN/CALCS, JIT off/on, fresh and warm-restoration
+agreement (`runs/owned-mana-override-source-04.log`, 59.39s). New controls exercise
+two actual zero override records and a connected Blood Magic allocation. PoB
+removes disconnected allocations; the positive control adds a catalog-checked
+path and does not claim point-budget legality. The observer records list members,
+not the cyclic source modifier object's implementation fields. It preserves
+the parser cache, database read sets and original calculation functions.
+
+All **15 ordinary Mana tests** pass (`runs/owned-mana-override-native-02.log`,
+4.55s). They include actual-source selected-zero versus unselected absence,
+unlisted/Partial refusal and fresh/reused/four-worker equality. The current
+replay already carries published Mana definitions; stale fixture helpers now
+assert their exact contents instead of inserting duplicates. No old-format
+reader or production validation relaxation was added.
+
+Publication passes in 26.50s (`runs/owned-mana-override-publication-01.log`).
+The canonical package is now **`runs/owned-mana-override-publication-01/package`**,
+operations V27, with 18 artifact files, 110 query rows and no evaluation bundle.
+All artifacts rebuild byte for byte; all-five semantic import preservation and
+selected-request comparisons pass. Selected obligations remain
+**107/117/109/123/4**, and complete native builds remain **0/5**.
+
+Canonical receipt:
+
+- Input: `38df77a1d00764c418ffbc9fae75a785d051f7309f3e955b7e272376d3744b71`
+- Schema: `b5c4ed43cc1d998d2a9f0ad79dd6945e35af46357795b0ad0b225c56cc9e2643`
+- Rules: `de0f8783d377b59582cbcaede1c617e382a68fbbf14a64feb73260bb106b9f5c`
+- Compiled rules: `76f3551a818a673966c546ce98c3f2d9fe849d2af50488d639443bff1ec6ffcb`
+
+No definition was allocated; the next free ID remains **335e**. Existing query
+and owner gaps are retained, including the other resource conversion sources.
+Unrelated incoming-critical drafts remain untouched.
+
+The source-backed Sniper exporter passes against this package
+(`runs/owned-mana-override-sniper-replay.log`). The refreshed ordinary replay
+changes only the V27 capability and nine dependent identity fields; its finite
+definition/program contents are unchanged. Its digest and scope are recorded
+in the [fixture note](../tests/fixtures/owned-sniper-replay.md). The final run
+passes **23 native regression tests** across Mana, intrinsic Player Mana and
+Sniper replay (`runs/owned-mana-override-regression-01.log`). Strict all-feature
+Clippy passes for both affected native and PoB source targets
+(`runs/owned-mana-override-clippy-01.log`); selective formatting and whitespace
+checks pass. Predecessor CI `37900429666` had both validation jobs successful
+and test jobs still running when inspected; no overall CI completion is claimed.
+
+**Resume:** keep Original05 first. The actual override-input seam is now adopted.
+Next account for Mana conversion and pre/post-scaling addition producers, then
+establish the admitted arithmetic bounds and rounding before publishing its
+final consumer. Reuse the full source witness and existing typed operations;
+do not turn a guarded empty domain into universal game coverage. Continue final
+damage/Life and the four selected input obligations on the shortest evidenced
+path to one unchanged complete build. Begin D4 only when that gate is met.
+
+## Preceding native checkpoint: coherent optional numeric selection
 
 The approved [selection contract](owned-numeric-selection-proposal.md) now runs
 through the existing Core/Data/Engine graph in operations V27. `Override`
@@ -178,7 +247,7 @@ incoming-critical drafts remain untouched. No new design approval is required
 for the immediate Mana adoption step. GitHub run `37895955400` for predecessor
 `5e918b2` was still pending when inspected; no CI completion is claimed.
 
-## Canonical data checkpoint: Command joins the Action damage consumer
+## Preceding data checkpoint: Command joins the Action damage consumer
 
 The accepted V26 contract now has its first real data adoption in
 [action-minion-damage](../data/owned/poe2/3887ae68/action-minion-damage/README.md).
