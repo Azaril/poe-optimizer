@@ -260,6 +260,26 @@ production closure. That checkpoint is preserved in implementation history.
    membership. Do not silently clamp or copy PoB's large-number rounding
    discrepancy.
 
+The bounded native packet should be `minion-inherent-life`: append eight exact
+`001f` receivers (Strength first step `3321`, final `1d2e`, flags `3315–3319`,
+amount `331a`), reuse the existing program bodies, append the guarded inherent
+Life bridge and add its SuppliedActor member to `life-base-contributions`'s
+`inherent` group. No new definition keys are needed. Do not add neutral MORE
+producers: the existing Strength program short-circuits after a checked zero
+BASE input. Keep the declaration census for unused/zero/inactive potential writers.
+
+Integrate through the existing Sniper World and replay exporter. Reuse the
+attribute/flag/amount stages; place `minion-inherent-life-contribution` after
+`inherent-strength-life` and before `life-contributions-ready`. Existing
+attribute/inherent-Life tests currently assume all matching receivers belong
+to Player: select their exact unchanged Player receivers and prove the new
+minion receivers separately. The historical Player Life input/query checker
+must authenticate and invert both its existing Amulet rewrite and this new
+bridge/member before reusing the old complete donor census; do not bypass it.
+Publication must preserve the current five imports, query count and unrelated
+Partial closures. This is the next implementation task, not an already-published
+packet or proof of nonempty minion attributes.
+
 The following damage boundary remains pre-conversion physical base at pinned
 `CalcOffence.lua:4132–4136`: flat Actor/Action and Enemy additions, added-damage
 increased/MORE membership, endpoint bonuses and skill coefficient. Source02's
