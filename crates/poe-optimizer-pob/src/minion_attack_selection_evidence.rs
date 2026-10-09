@@ -7,6 +7,8 @@ use std::{collections::BTreeSet, path::PathBuf, sync::OnceLock};
 mod added_domain;
 #[path = "intrinsic_attack_coefficient_evidence.rs"]
 mod coefficient;
+#[path = "intrinsic_enemy_flat_damage_evidence.rs"]
+mod enemy_flat;
 #[path = "formatted_party_source_evidence.rs"]
 mod formatted_party;
 
@@ -131,10 +133,11 @@ struct Inventory {
     metatables: Vec<Json>,
     source_metadata: Vec<Json>,
     // Count the entire modifier inventory, but retain live handles only for
-    // the four adjacent proof channels so the bounded Lua reference stack
+    // the adjacent proof channels so the bounded Lua reference stack
     // does not retain every unrelated modifier. Neither field is serialized
     // into the previously retained source-selection artifact.
     modifier_count: usize,
+    modifier_name_counts: BTreeMap<String, usize>,
     all_modifiers: Vec<(String, Table)>,
 }
 
@@ -174,9 +177,18 @@ impl Inventory {
                     && matches!(table.raw_get::<Value>("type")?, Value::String(_))
                 {
                     self.modifier_count += 1;
+                    *self
+                        .modifier_name_counts
+                        .entry(table.raw_get::<String>("name")?)
+                        .or_default() += 1;
                     if matches!(
                         table.raw_get::<String>("name")?.as_str(),
-                        "SkillData" | "ExtraSkillStat" | "AddedDamage" | "AddedPhysicalDamage"
+                        "SkillData"
+                            | "ExtraSkillStat"
+                            | "AddedDamage"
+                            | "AddedPhysicalDamage"
+                            | "SelfPhysicalMin"
+                            | "SelfPhysicalMax"
                     ) {
                         self.all_modifiers.push((path.to_owned(), table.clone()));
                     }

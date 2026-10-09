@@ -53,12 +53,14 @@ recipients. Gas level projection comes from the real population graph.
 These are component checks, not final damage or complete-build parity.
 
 The [physical-base draft](../../data/owned/poe2/3887ae68/physical-base-damage/README.md)
-is composed by six Engine tests without adding that draft to the gzip. It reuses
-the coherent native endpoints and real combined-factor consumer; four unfinished
-flat inputs are supplied explicitly for thirteen retained source comparisons.
+is composed by ordinary Engine tests without adding that draft to the gzip. It
+reuses the coherent native endpoints and real combined-factor consumer; two
+unfinished self-flat inputs are supplied for thirteen retained source comparisons.
 Its exact ability coefficient is authored in rule data with separate source
-proof. Arithmetic-only controls authenticate and remove the combined consumer,
-supply five operands and edit the exact coefficient literal in copied test data.
+proof. The separately authenticated Enemy supplier proof removes two unused
+ports and declarations; it retains the required Party exclusion. Arithmetic-only
+controls authenticate and remove the combined consumer, supply three operands
+and edit the exact coefficient literal in copied test data.
 They preserve missing-input refusal even with a known zero coefficient and
 publish no final damage metric or coverage closure.
 
@@ -91,11 +93,13 @@ It is 139,113 compressed bytes and 5,423,891 JSON bytes. Gzip SHA-256:
 Decoded JSON SHA-256:
 `42ff215d5dad6e50610d05baaff0b3dbfc712b622650babb981a140f040735ca`.
 
-All **93 joined native tests** and **30 ordinary Engine replay tests** pass.
-Strict Engine and affected CLI Clippy pass. Regeneration and native evidence:
-`runs/owned-sniper-combined-added-joined-01.log`,
-`runs/owned-sniper-combined-added-engine-02.log` and
-`runs/owned-sniper-combined-added-{engine,cli}-clippy-01.log`.
+At its last regeneration, **93 joined native tests** passed. The unchanged gzip
+now passes **31 ordinary Engine replay tests**, including the Enemy-port cleanup
+and proof-binding controls (`runs/owned-enemy-flat-native-01.log`).
+Current strict Engine Clippy passes
+(`runs/owned-enemy-flat-engine-clippy-01.log`). Prior regeneration and affected
+CLI validation are retained in `runs/owned-sniper-combined-added-joined-01.log`
+and `runs/owned-sniper-combined-added-cli-clippy-01.log`.
 The separate full-JSON inverse in
 `runs/owned-sniper-combined-added-replay-inverse-01.log` authenticates exactly
 one Stat/owner/support domain, program/query, stage with readiness/freezes and

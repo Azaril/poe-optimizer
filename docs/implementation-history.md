@@ -1,10 +1,147 @@
-> Historical snapshots through the intrinsic source-selection checkpoint on 2026-10-09.
+> Historical snapshots through the combined added-damage checkpoint on 2026-10-09.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-09 checkpoint: combined added damage and source cleanup
+
+The [combined added-damage packet](../data/owned/poe2/3887ae68/combined-added-attack-damage/README.md)
+adds one Stat (`336e`), one checked exact-Action Product query and one injected
+consumer. It computes the complete multiplier for the reviewed intrinsic Basic
+source from its existing contribution, preserving the original group arithmetic
+order. It does not inject a measured result. The actual immutable profile and
+producer chain bound this publication's numeric domain; it does not resolve the
+separate pending general numerical-domain decision. Native runtime APIs and
+operations V27 are unchanged, with no Lua, source-name dispatch or subprocess.
+
+The offline audit constructs the original catalog and modifier cache, accounting
+for 145,363 tables, 436,112 rows and 11,851 modifiers. Two added-damage stat-map
+recipes have no skill/support consumers. Extra-stat factories, nested records,
+callbacks, transport, precision declarations and the complete intrinsic profile
+are checked. Real constructor mutations must fail even after source rehashing.
+The source artifact is 2,602,949 bytes, SHA-256
+`6c33fe128a0f6622785e70ef26843d47b8da33cc652f29ccf11246180e34fd45`.
+
+**A material source omission was found and corrected before adoption:** saved
+`Party/ImportedBuffs` can carry arbitrary numeric modifier names, bypassing the
+ordinary catalogs and modifier parser. The proof now explicitly requires
+accounted absence of those inputs. An original ModTools parser test verifies
+numeric and zero payloads; it is not a downstream buff-delivery parity test.
+The finite joined fixture checks an absent or reviewed empty Party before its
+test-only completion. Actual owned normalization preserves every unsupported
+Party row under live selected configuration issue `01f2`; separate external
+assumptions `0207` remain pending. No source-only disposition, blanket raw-build
+rejection or new runtime input model was introduced.
+
+The publication exercises an unchanged baseline plus seven modified Party
+controls through normalization and selected-request finalization. The original
+four obligations remain unchanged. Modified XML additionally retains exactly
+two saved-query source-snapshot guards at references 14/16, even for equivalent
+empty-element spelling. Every Party/ImportedBuffs row remains linked to `01f2`,
+and every calculation is `not_run`. Future configuration accounting must preserve
+this boundary; do not cite the unused legacy root-admission validator as an
+actual owned-import gate. Review other negative supplier proofs for the same
+external-input preconditions before closing a complete build.
+
+The [physical-base draft](../data/owned/poe2/3887ae68/physical-base-damage/README.md)
+now consumes the selected source's coherent endpoints. Two unused weapon-bonus
+ports were removed rather than filled with zero producers. A separate
+[coefficient proof](../data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-review.md)
+permits a typed literal one in this exact ability's injected rule, removing its
+unused coefficient port and declaration. The proof includes level/stat-set data,
+effective SkillData suppliers, support/global/minion transport and extra-stat
+delivery. A formatted Party scalar cannot create a valid structured SkillData
+payload; malformed records remain unsupported.
+
+Only four flat endpoints remain unfinished in this fragment. Its tests retain
+the real combined-factor producer for all 13 retained source observations.
+Synthetic arithmetic controls explicitly replace only the authenticated factor
+consumer and edit the authored coefficient literal in copied test data. The
+draft adds six unpublished declarations `336f–3374`; published allocator
+`336e` is not advanced to reserve them. No old/new reader or compatibility branch
+is retained.
+
+The shared offline table walk now retains Rust keys instead of every Lua value
+handle, avoiding the cache's auxiliary-reference limit. Its alias ledger also
+keeps the constructed Minions root alive through cache allocation; a forced-GC
+test verifies that lifetime. The earlier source-selection artifact remains
+byte-identical. Historical supplier checks reverse only the exact authenticated
+new numerical program before comparing full owners and supplier inventories.
+
+**Current canonical package:**
+`runs/owned-combined-added-attack-publication-04/package`, input
+`690169b8e0303ca02ae9a49139a8446c6b470675c28914e7f06e69e09b4d8a54`.
+Definitions `efa0011ada155c02318c3243315e6e93793a44dadf90e2c917651ab7113dfc20`,
+rules `6a81f88031e0f3b6b3a1e60d4cfa2edd6c9979afa49aed1d2a6857cbaf64b6d5`,
+compiled rules `ee8bf2aba8eed0b3742d848703cef87950e05ae537144d49d009f79515e583ee`,
+routing `c34584136d3bffa6f4f2124795bbcf9c99dd94a2d09f7a560a2302946a222ef1`.
+The 18 artifacts rebuild identically; there are 172 provenance records, 110 saved
+queries and no evaluation bundle. All 5,825 Partial rule owners, route gaps and
+global query gaps remain. Selected obligations remain **106/117/109/123/4**;
+complete native builds remain **0/5**.
+
+Source authoring passes, all 12 ordinary source tests pass (13.67s), all seven
+publication tests pass (39.98s), and strict optional-PoB and publication-target
+Clippy pass. The publication performs the full migration inverse and all-five
+import/rebuild preservation checks. Logs:
+`runs/owned-added-damage-domain-source-tests-02.log`,
+`runs/owned-combined-added-attack-publication-04.log`,
+`runs/owned-combined-added-attack-clippy-01.log` and
+`runs/owned-added-damage-domain-clippy-01.log`.
+
+All **93 joined native tests** pass (46.58s), including export and decoded
+full-report equality. All **30 ordinary Engine tests** pass (5.22s), including
+six physical-fragment tests, exact combined-factor membership, Partial authority,
+missing values, scratch reuse and four-worker equality. A test initially expected
+an unlisted contributor to reach compilation; binding correctly rejected it
+earlier. The assertion now requires that rejection, with no production change.
+Strict Engine and all-feature affected CLI Clippy pass (0.41s and 3.49s).
+All four ordinary source-selection successor regressions also pass (0.07s),
+recorded in `runs/owned-minion-selection-successor-tests-01.log`.
+
+The refreshed fixture has 928 definitions, 621 owners and 36 stages. Its gzip
+is 139,113 bytes, SHA-256
+`2416f092732e32cf9f8d16dc97482f5c80ac294bc46189f065e6726db7b560ad`;
+decoded JSON is 5,423,891 bytes, SHA-256
+`42ff215d5dad6e50610d05baaff0b3dbfc712b622650babb981a140f040735ca`.
+A separate full-JSON inverse proves exactly one Stat/owner/support domain,
+program/query, stage with readiness/freezes and sixteen dependent identity
+changes. Every other JSON value is unchanged. Independent integration review
+found no remaining ownership, coverage, Party-admission or scheduling issue.
+Logs: `runs/owned-sniper-combined-added-joined-01.log`,
+`runs/owned-sniper-combined-added-engine-02.log`,
+`runs/owned-sniper-combined-added-replay-inverse-01.log` and
+`runs/owned-sniper-combined-added-{engine,cli}-clippy-01.log`.
+
+**Resume: finish Original05 first, using the saved-query map above.**
+
+1. Finish the physical fragment's four actual flat-input suppliers. The Enemy
+   pair is the next bounded candidate, but requires a full producer/transport
+   census under explicit external-input accounting. Observed empty records and
+   absence from ordinary catalogs are insufficient. Reuse the current source
+   witness; do not publish universal zeros or introduce an Enemy API merely
+   to copy an unused PoB field. Audit configuration, Party, nested EnemyModifier,
+   global debuff/curse, ailment and payload-copy paths. If the admitted source
+   domain is proved empty, existing exact Action queries can express that
+   bounded result with explicit membership and unresolved-coverage controls.
+2. Self-flat inputs have real domains: minion modifier payloads, support/stat-map
+   rows, global buffs, parent-weapon additions, Rallying Cry and Hollow Palm.
+   Account for actual applicability and preserve potential zero/inactive donors.
+   Before admitting any action-conditioned Enemy writer, preserve the consuming
+   Action explicitly rather than widening a shared Enemy quantity read.
+3. Resolve the already-prompted numerical-domain and configuration-accounting
+   decisions, then continue final Player Mana/Life and selected input inventories
+   `01f2/0505/0207/0208`. Retire no Party fallback while closing configuration.
+   Unchanged-build admission, complete saved metrics and reference availability
+   remain separate gates; this damage fragment does not finish the build.
+4. Actor-to-Enemy reads, resource demand and scoped coverage remain unapproved.
+   Exact Action queries and optional numeric selection are already implemented
+   and do not authorize those extensions. Start D4 as soon as the first complete
+   unchanged request and full reference checks pass; keep the other four builds
+   as regressions without developing every build in lockstep.
 
 ## Archived 2026-10-09 checkpoint: intrinsic attack source selection
 

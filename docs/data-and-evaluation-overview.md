@@ -967,8 +967,8 @@ Lua or reading that evidence. Independent numerical and rule coverage remains
 Partial. Source choice does not provide missing endpoint values or defaults.
 
 The [draft physical-base consumer](../data/owned/poe2/3887ae68/physical-base-damage/README.md)
-combines the complete selected intrinsic endpoints, self-flat and Enemy-flat
-inputs and the real combined factor. Separate weapon-bonus ports were removed:
+combines the complete selected intrinsic endpoints, self-flat inputs and the
+real combined factor. Separate weapon-bonus ports were removed:
 the proved intrinsic constructor already supplies a coherent range. A separate
 [coefficient proof](../data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-review.md)
 permits a typed literal one in this exact ability's injected rule, replacing an
@@ -977,10 +977,14 @@ suppliers; it is no general fallback for unknown abilities.
 
 The Action rule preserves arithmetic order and performs no additional rounding.
 Ordinary native replay tests compare retained source observations, require exact
-source bindings and exercise missing inputs and parallel reuse. Four flat-endpoint
-producers remain unfinished; finite test inputs are not canonical data or proof
-of whole-build support. Enemy-derived quantities
-must preserve any consuming-Action eligibility before they can supply this rule.
+source bindings and exercise missing inputs and parallel reuse. The
+[Enemy-field proof](../data/owned/poe2/3887ae68/enemy-flat-attack-damage/source-review.md)
+authenticates constructed suppliers and transport, including boss configuration
+and the accounted absence of Party payloads. It justifies removing the unused
+ports and addition nodes without installing zero-producing subsystems.
+The two self-flat producers remain unfinished; finite test inputs are not
+canonical data or proof of whole-build support. A future real Enemy-derived
+addition must preserve its source ownership and consuming-Action eligibility.
 
 Integrating that component under current readiness checks exposed an older owned
 program that combined actor preparation with an execution-only level requirement.

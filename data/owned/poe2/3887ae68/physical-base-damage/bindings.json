@@ -112,30 +112,6 @@
       "producer_status": "unimplemented in this fragment"
     },
     {
-      "name": "enemy-flat-min",
-      "stat": {
-        "kind": "stat",
-        "namespace": {
-          "game": "poe2",
-          "version": "owned-mechanics-v1"
-        },
-        "key": "def.0000000000003373"
-      },
-      "producer_status": "unimplemented in this fragment"
-    },
-    {
-      "name": "enemy-flat-max",
-      "stat": {
-        "kind": "stat",
-        "namespace": {
-          "game": "poe2",
-          "version": "owned-mechanics-v1"
-        },
-        "key": "def.0000000000003374"
-      },
-      "producer_status": "unimplemented in this fragment"
-    },
-    {
       "name": "added-multiplier",
       "stat": {
         "kind": "stat",
@@ -211,5 +187,16 @@
       "sha256": "70c5441c8951f35cad401f2a35dbf1ad003626fb5e36e1caa1d427987fa4e3c7"
     },
     "meaning": "The exact Basic ability has no declared level or effective modifier coefficient supplier under the reviewed pinned normal-import domain. Its factor one is authored data, never a fallback for an unknown input."
+  },
+  "enemy_flat_prerequisite": {
+    "evidence": {
+      "path": "data/owned/poe2/3887ae68/enemy-flat-attack-damage/source-evidence.json",
+      "sha256": "02ff224a7ea4842694ea5039aae2db84043245e4aced95445d04418497ecfab6"
+    },
+    "review": {
+      "path": "data/owned/poe2/3887ae68/enemy-flat-attack-damage/source-review.md",
+      "sha256": "bdb35e3369afc801311c7f2ba2db0460d1a6ebeef5f25ac37c4637a7e5ae59ad"
+    },
+    "meaning": "The exact selected non-hostile intrinsic Basic source has no Enemy flat physical supplier under the reviewed pinned domain with accounted inputs and no imported Party payload. Remove the unused ports and identity addition; never infer absence from an unresolved source or an observed zero. This adds no query, producer, input disposition or coverage closure."
   }
 }

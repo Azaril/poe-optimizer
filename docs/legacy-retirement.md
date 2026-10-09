@@ -46,8 +46,23 @@ neutral-zero producers, deprecated ports or compatibility readers are needed.
 The separate coefficient audit proves one for this exact Basic ability across
 the admitted source domain, allowing an injected literal in its rule and removal
 of the unused coefficient port. The checked combined-factor producer has its own
-supplier proof. Four flat endpoints remain unresolved; this cleanup does not
+supplier proof. The subsequent Enemy audit below removes two more unused ports;
+only the two self-flat endpoints remain unfinished. This cleanup does not
 publish final damage or a complete build.
+
+**Enemy flat fields, 2026-10-09:** the completed audit covers constructed modifiers,
+boss `additionalStats`, dormant map callbacks, parser name factories, hostile
+Actor selection and all Enemy delivery paths. The
+[completed proof](../data/owned/poe2/3887ae68/enemy-flat-attack-damage/source-review.md)
+finds no admitted supplier, so the two unpublished Enemy ports, declarations
+and addition nodes are removed. No empty Action queries or zero-producing
+programs represent the unused PoB database fields. Saved Party payloads remain
+a genuine counterexample
+and must retain their import obligations. The existing native quantity contract
+canonicalizes signed zero, so a proved empty addition can be eliminated without
+adding a Lua compatibility rule or changing numeric semantics. Source and native
+validation pass; the canonical package, input obligations and whole-build
+coverage remain unchanged.
 
 **External-modifier ingress, 2026-10-09:** the added-damage audit found that saved
 PoB Party payloads bypass ordinary modifier parsing. Keep their owned source

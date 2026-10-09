@@ -10,7 +10,7 @@ One generic Action program is bound by data to Basic Skill `0021` / output
 `0022`. For each minimum and maximum endpoint it evaluates, in this order:
 
 ```text
-(source_endpoint + ((self_flat + enemy_flat) * added_multiplier))
+(source_endpoint + (self_flat * added_multiplier))
     * base_coefficient
 ```
 
@@ -22,20 +22,20 @@ for this binding. The intrinsic range is not
 multiplied by the profile's `1.15` again. `336f` / `3370` are the resulting
 physical base endpoints before damage conversion and subsequent hit scaling.
 
-All seven inputs are required resolved Action quantities. The damage inputs and
-outputs use unit `1d3a`; the two factors use unit `0001`. Adopted and draft Stats:
+All five inputs are required resolved Action quantities. The damage inputs and
+outputs use unit `1d3a`; the factor input and coefficient literal use unit `0001`.
+Adopted and draft Stats:
 
 | IDs | Meaning | Production state |
 | --- | --- | --- |
 | `336e` | Combined added physical / generic damage multiplier | Adopted from the separate real producer |
 | `336f`, `3370` | Minimum / maximum physical base output | This draft consumer |
 | `3371`, `3372` | Eligible self flat minimum / maximum | Checked collection unfinished |
-| `3373`, `3374` | Eligible enemy flat minimum / maximum | Checked collection unfinished |
 
 The former draft bonus ports were removed, and the remaining unpublished IDs
 were reassigned around the real combined-factor producer without a migration
 or compatibility path. The fixture checks exact reuse of the real factor's
-migration descriptor; only the other six declarations appear in this draft's
+migration descriptor; only the other four declarations appear in this draft's
 definitions file. The intrinsic source
 constructor at CalcActiveSkill:991–998 contains the complete endpoints; the
 reviewed selection proof excludes replacement weapon and callback paths.
@@ -67,6 +67,25 @@ not by itself a complete combined multiplier; this fixture retains the separate
 checked combined-factor producer.
 This fragment adds no unchecked Enemy fold or new public query contract.
 
+The two unpublished Enemy input ports and Stats `3373` / `3374` are removed,
+along with their internal addition nodes. `bindings.json` pins the separate
+`enemy-flat-attack-damage` evidence and review. The finite composition checks
+their exact revision, selected source identity, selection-proof dependency and
+accounted-input scope. A present zero record, changed source or widened scope
+cannot inherit this binding. The original source checker owns the complete
+factory and transport census; this consumer does not duplicate it. The proof
+excludes hostile minions and imported Party payloads. Existing selected input
+and owner obligations remain unresolved, including configuration `01f2` and
+external assumptions `0207`; this edit does not admit a complete build.
+Within that source domain, the eligible self subtotal starts at positive zero
+and uses ordered finite additions; the absent Enemy subtotal is positive zero.
+Adding that empty subtotal is an exact identity. Native `FiniteQuantity` also
+canonicalizes either zero encoding at construction and after arithmetic. The
+tests compare endpoint bits, including explicit negative-zero input controls.
+This simplification does not establish an arithmetic law for other profiles or
+authorize ignoring unknown contributors. A future self-flat collector must
+preserve its declared reduction order and refuse incomplete inventories.
+
 `bindings.json` pins the existing intrinsic-added-attack-damage source vectors.
 Those retain original CalcOffence observations from both source02 JIT modes,
 including 13 executed Basic occurrences across the ten recorded cases.
@@ -74,12 +93,12 @@ Unexecuted CALCS occurrences are not observations. The source formula is
 CalcOffence lines 4131–4138 at the recorded revision.
 
 The Engine source comparisons retain the real combined-factor consumer and its
-checked query, and inject only four unfinished operands: the self and enemy
-flat endpoints. They compare the real combined factor, native
+checked query, and inject only two unfinished operands: the self-flat endpoints.
+They compare the real combined factor, native
 source endpoints and final arithmetic directly with recorded source outputs.
 The records' absent bonus fields corroborate the separate source-selection
-proof. Their zero enemy additions authorize only these finite comparisons,
-not zero production defaults. Coefficient `1` corroborates its independent proof.
+proof. Their zero enemy additions corroborate a separate supplier-domain proof;
+they do not establish it. Coefficient `1` corroborates its independent proof.
 Synthetic signed, zero and fractional controls
 exercise arithmetic, operation order and exact occurrence separation; they
 are not evidence of game legality or unbounded numerical parity. Existing
@@ -90,7 +109,7 @@ The packet retains the Action owner's Partial declaration. Test composition
 preserves all predecessor closures and adds explicit scheduling without
 changing the tracked replay artifact. Arithmetic-only tests first authenticate
 and remove the exact combined-factor consumer and its scheduling/readiness
-entries, then supply five explicit finite operands and edit the exact authored
+entries, then supply three explicit finite operands and edit the exact authored
 coefficient literal in the copied test program. Its query and contributor
 inventory remain unchanged. Real-factor comparisons freeze `336e` at its actual
 production stage; synthetic controls freeze it at their input stage instead.
@@ -100,8 +119,11 @@ the affected endpoint stays unresolved, including when a known coefficient
 is zero. No complete build, final hit, average hit, DPS, conversion or defence
 result is claimed.
 
-All six updated fragment tests pass within the 30-test ordinary Engine replay,
-including source-binding refusal, all 13 retained source comparisons and parallel
-worker reuse. Strict target Clippy passes. Current evidence is
-`runs/owned-sniper-combined-added-engine-02.log` and
-`runs/owned-sniper-combined-added-engine-clippy-01.log`.
+All seven fragment tests pass within the **31-test** ordinary Engine replay
+(5.29s). These include the exact Enemy proof binding and scope refusals, all 13
+retained source comparisons, required missing inputs, signed-zero normalization
+and parallel worker reuse. Strict target Clippy passes (0.41s). Evidence:
+`runs/owned-enemy-flat-native-01.log` and
+`runs/owned-enemy-flat-engine-clippy-01.log`. The separate original-source subtree
+passes 15 ordinary tests, including seven actual writer mutations and artifact
+refusals (`runs/owned-enemy-flat-source-regressions-01.log`).

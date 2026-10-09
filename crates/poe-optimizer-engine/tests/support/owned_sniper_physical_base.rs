@@ -10,8 +10,8 @@ const PROGRAM: &str = "physical-base-damage";
 const OPERANDS: &str = "finite-physical-base-operands";
 const INPUT_STAGE: &str = "finite-physical-base-inputs";
 const OUTPUT_STAGE: &str = "physical-base-damage";
-const NEUTRAL: [f64; 6] = [0., 0., 0., 0., 1.15, 1.];
-const OPERAND_STATS: [u64; 5] = [0x3371, 0x3372, 0x3373, 0x3374, 0x336e];
+const NEUTRAL: [f64; 4] = [0., 0., 1.15, 1.];
+const OPERAND_STATS: [u64; 3] = [0x3371, 0x3372, 0x336e];
 const OUTPUT_STATS: [u64; 2] = [0x336f, 0x3370];
 
 fn key(s: &str) -> OwnedDefinitionKey {
@@ -50,6 +50,28 @@ fn authenticated(pin: &Value) -> Vec<u8> {
     let bytes = fs::read(root().join(pin["path"].as_str().unwrap())).unwrap();
     assert_eq!(format!("{:x}", Sha256::digest(&bytes)), pin["sha256"]);
     bytes
+}
+fn enemy_basis_matches(evidence: &Value, bindings: &Value, selection: &Value) -> bool {
+    let selection_pin = &bindings["source_selection_prerequisite"]["evidence"];
+    evidence["kind"] == "pinned-constructed-enemy-flat-physical-domain"
+        && evidence["upstream_revision"] == bindings["source_revision"]
+        && evidence["selected"] == selection["catalog"]["selected"]
+        && evidence["target_modifiers"] == serde_json::json!([])
+        && evidence["scope"]
+            == serde_json::json!({
+                "channels": ["SelfPhysicalMin", "SelfPhysicalMax"],
+                "exact_intrinsic_basic_source": true,
+                "hostile_minions_admitted": false,
+                "imported_party_admitted": false,
+                "requires_accounted_inputs": true,
+                "native_runtime_or_coverage_change": false
+            })
+        && evidence["dependencies"].as_array().is_some_and(|pins| {
+            pins.iter()
+                .filter(|pin| pin["path"] == selection_pin["path"])
+                .collect::<Vec<_>>()
+                == vec![selection_pin]
+        })
 }
 fn source_basis() -> ActionOutputRoutes {
     // Reuse the published proof, rather than repeating its upstream source
@@ -104,6 +126,10 @@ fn source_basis() -> ActionOutputRoutes {
         coefficient["unit"],
         serde_json::to_value(def::<UnitDefinition>(1)).unwrap()
     );
+    let enemy = &bindings["enemy_flat_prerequisite"];
+    let enemy_evidence: Value = serde_json::from_slice(&authenticated(&enemy["evidence"])).unwrap();
+    authenticated(&enemy["review"]);
+    assert!(enemy_basis_matches(&enemy_evidence, &bindings, &evidence));
     expected
 }
 fn source_basis_matches(i: &ReplayInput, expected: &ActionOutputRoutes) -> bool {
@@ -205,7 +231,7 @@ fn composed(synthetic_factor: bool) -> ReplayInput {
     }
     let definitions: Vec<DefinitionDescriptor> =
         serde_json::from_value(packet("definitions.json")).unwrap();
-    assert_eq!(definitions.len(), 6);
+    assert_eq!(definitions.len(), 4);
     let factor_binding = packet("bindings.json")["adopted_factor_definition"].clone();
     let migration: Value = serde_json::from_slice(
         &fs::read(root().join(factor_binding["path"].as_str().unwrap())).unwrap(),
@@ -227,7 +253,7 @@ fn composed(synthetic_factor: bool) -> ReplayInput {
         .find(|d| matches!(d, DefinitionDescriptor::Stat(s) if s.id == def(0x336e)))
         .expect("the canonical replay must include the real combined-factor Stat");
     assert_eq!(existing, &real_factor, "exact adopted combined-factor Stat");
-    for (n, definition) in (0x336f..=0x3374).zip(definitions) {
+    for (n, definition) in (0x336f..=0x3372).zip(definitions) {
         let DefinitionDescriptor::Stat(entry) = &definition else {
             panic!("only reserved draft Stats")
         };
@@ -285,7 +311,7 @@ fn composed(synthetic_factor: bool) -> ReplayInput {
 fn fixture() -> ReplayInput {
     composed(true)
 }
-fn inject(i: &mut ReplayInput, operands: [Option<f64>; 5]) {
+fn inject(i: &mut ReplayInput, operands: [Option<f64>; 3]) {
     let mut p = RuleProgram {
         id: key(OPERANDS),
         context: RuleEntityKind::Action,
@@ -317,13 +343,10 @@ fn inject(i: &mut ReplayInput, operands: [Option<f64>; 5]) {
     install(i, p, INPUT_STAGE);
     i.rebind_test_edit().unwrap();
 }
-fn supplied(operands: [f64; 6]) -> ReplayInput {
+fn supplied(operands: [f64; 4]) -> ReplayInput {
     let mut i = fixture();
-    let [self_min, self_max, enemy_min, enemy_max, added, coefficient] = operands;
-    inject(
-        &mut i,
-        [self_min, self_max, enemy_min, enemy_max, added].map(Some),
-    );
+    let [self_min, self_max, added, coefficient] = operands;
+    inject(&mut i, [self_min, self_max, added].map(Some));
     synthetic_coefficient(&mut i, coefficient);
     i
 }
@@ -360,19 +383,10 @@ fn synthetic_coefficient(i: &mut ReplayInput, coefficient: f64) {
     };
     i.rebind_test_edit().unwrap();
 }
-fn real_supplied(operands: [f64; 4]) -> ReplayInput {
+fn real_supplied(operands: [f64; 2]) -> ReplayInput {
     let mut i = composed(false);
-    let [self_min, self_max, enemy_min, enemy_max] = operands;
-    inject(
-        &mut i,
-        [
-            Some(self_min),
-            Some(self_max),
-            Some(enemy_min),
-            Some(enemy_max),
-            None,
-        ],
-    );
+    let [self_min, self_max] = operands;
+    inject(&mut i, [Some(self_min), Some(self_max), None]);
     i
 }
 fn number(r: &SupportEffectsReport, a: &ActionSelection, stat: u64) -> f64 {
@@ -391,7 +405,7 @@ fn check(i: &ReplayInput, r: &SupportEffectsReport, expected: [f64; 2]) {
         if a.action.output.slot == def(0x22) {
             seen += 1;
             for (stat, expected) in OUTPUT_STATS.into_iter().zip(expected) {
-                assert_eq!(number(r, a, stat), expected);
+                assert_eq!(number(r, a, stat).to_bits(), expected.to_bits());
             }
         } else {
             for stat in OUTPUT_STATS {
@@ -410,6 +424,43 @@ fn check(i: &ReplayInput, r: &SupportEffectsReport, expected: [f64; 2]) {
         .filter(|e| e.key.invocation.program == key(PROGRAM))
         .collect();
     assert_eq!(derived.len(), 4, "two endpoints for each exact occurrence");
+}
+
+#[test]
+fn enemy_absence_binding_requires_exact_source_and_accounted_input_scope() {
+    let bindings = packet("bindings.json");
+    let original: Value = serde_json::from_slice(&authenticated(
+        &bindings["enemy_flat_prerequisite"]["evidence"],
+    ))
+    .unwrap();
+    let selection: Value = serde_json::from_slice(&authenticated(
+        &bindings["source_selection_prerequisite"]["evidence"],
+    ))
+    .unwrap();
+    assert!(enemy_basis_matches(&original, &bindings, &selection));
+    for change in 0..8 {
+        let mut edited = original.clone();
+        match change {
+            0 => edited["scope"]["imported_party_admitted"] = true.into(),
+            1 => edited["scope"]["hostile_minions_admitted"] = true.into(),
+            2 => edited["scope"]["requires_accounted_inputs"] = false.into(),
+            3 => edited["scope"]["exact_intrinsic_basic_source"] = false.into(),
+            4 => edited["selected"]["basic_id"] = "UnreviewedAbility".into(),
+            5 => edited["upstream_revision"] = "unreviewed-revision".into(),
+            6 => edited["dependencies"] = serde_json::json!([]),
+            7 => {
+                edited["target_modifiers"] = serde_json::json!([{
+                    "path": "changed-source",
+                    "record": {"name": "SelfPhysicalMin", "type": "BASE", "value": 0}
+                }]);
+            }
+            _ => unreachable!(),
+        }
+        assert!(
+            !enemy_basis_matches(&edited, &bindings, &selection),
+            "changed source scope {change} cannot inherit the Enemy absence proof"
+        );
+    }
 }
 
 #[test]
@@ -462,8 +513,8 @@ fn retained_original_operands_match_the_native_arithmetic_boundary() {
         evidence["reports"][0]["sha256"],
         evidence["reports"][1]["sha256"]
     );
-    let neutral = real_supplied([0., 0., 0., 0.]);
-    let flat = real_supplied([3., 7., 0., 0.]);
+    let neutral = real_supplied([0., 0.]);
+    let flat = real_supplied([3., 7.]);
     let reports = [run(&neutral), run(&flat)];
     let inputs = [&neutral, &flat];
     let mut observed = 0;
@@ -530,15 +581,16 @@ fn retained_original_operands_match_the_native_arithmetic_boundary() {
 #[test]
 fn signed_inputs_and_coefficients_follow_declared_operation_order_without_rounding() {
     for (operands, expected) in [
-        ([3., 7., 0.5, -1., 1.5, 0.25], [53.3125, 99.]),
-        ([-3., -7., -2., 1., -2., -0.5], [-109., -199.5]),
-        ([2., -2., 3., -3., 0., 1.], [208., 387.]),
-        ([2., -2., 3., -3., 1., 0.], [0., 0.]),
-        // Flat inputs combine before addition to the source. Reassociating
-        // (source + self_flat) + enemy_flat incorrectly preserves 1e-20 here.
-        ([-208., -387., 1e-20, 1e-20, 1., 1.], [0., 0.]),
+        ([3.5, 6., 1.5, 0.25], [53.3125, 99.]),
+        ([-5., -6., -2., -0.5], [-109., -199.5]),
+        ([5., -5., 0., 1.], [208., 387.]),
+        ([5., -5., 1., 0.], [0., 0.]),
+        // Scale only the added component, then combine it with the source.
+        ([-104., -193.5, 2., 1.], [0., 0.]),
         // Exact cancellation leaves a fractional result without rounding.
-        ([-207.75, -386.5, 0., 0., 1., 0.5], [0.125, 0.25]),
+        ([-207.75, -386.5, 1., 0.5], [0.125, 0.25]),
+        // FiniteQuantity canonicalizes both zero encodings at each boundary.
+        ([-0., -0., -1., -0.], [0., 0.]),
     ] {
         let i = supplied(operands);
         check(&i, &run(&i), expected);
@@ -560,9 +612,9 @@ fn missing_operands_remain_unresolved_even_when_the_coefficient_is_zero() {
             ));
         }
     }
-    for absent in 0..5 {
+    for absent in 0..3 {
         let mut i = fixture();
-        let mut inputs = [Some(0.), Some(0.), Some(0.), Some(0.), Some(1.15)];
+        let mut inputs = [Some(0.), Some(0.), Some(1.15)];
         inputs[absent] = None;
         inject(&mut i, inputs);
         synthetic_coefficient(&mut i, 0.);
@@ -572,7 +624,7 @@ fn missing_operands_remain_unresolved_even_when_the_coefficient_is_zero() {
             .filter(|a| a.action.output.slot == def(0x22))
         {
             for (endpoint, stat) in OUTPUT_STATS.into_iter().enumerate() {
-                let unresolved = absent >= 4 || absent % 2 == endpoint;
+                let unresolved = absent == 2 || absent == endpoint;
                 if unresolved {
                     assert!(matches!(
                         action_value(&r, a, stat),
@@ -610,7 +662,7 @@ fn missing_operands_remain_unresolved_even_when_the_coefficient_is_zero() {
 #[test]
 fn exact_repeated_actions_survive_input_order_scratch_reuse_and_parallel_workers() {
     let a = supplied(NEUTRAL);
-    let mut b = supplied([3., 7., 0.5, -1., 1.5, 0.25]);
+    let mut b = supplied([3.5, 6., 1.5, 0.25]);
     b.build
         .gems
         .iter_mut()
@@ -618,7 +670,7 @@ fn exact_repeated_actions_survive_input_order_scratch_reuse_and_parallel_workers
         .unwrap()
         .level -= 1;
     let mut missing = fixture();
-    let mut values = [Some(0.), Some(0.), Some(0.), Some(0.), Some(1.15)];
+    let mut values = [Some(0.), Some(0.), Some(1.15)];
     values[0] = None;
     inject(&mut missing, values);
     let inputs = [&a, &b, &missing];
@@ -680,7 +732,7 @@ fn data_binding_units_staging_and_partial_scope_are_checked() {
     let p = program();
     let bindings = packet("bindings.json");
     let inputs = bindings["inputs"].as_array().unwrap();
-    assert_eq!(p.reads.len(), 7);
+    assert_eq!(p.reads.len(), 5);
     assert_eq!(inputs.len(), p.reads.len());
     for (read, input) in p.reads.iter().zip(inputs) {
         assert_eq!(serde_json::to_value(&read.id).unwrap(), input["name"]);

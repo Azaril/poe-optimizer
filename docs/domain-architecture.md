@@ -352,6 +352,15 @@ that value in the ability's injected rule. Do not retain an unused runtime input
 or a neutral producer solely to resemble PoB's intermediate storage. Other
 abilities retain their own declared or computed coefficient rules.
 
+Apply the same test to apparently unused calculation channels: a PoB read alone
+does not establish a game mechanic or require a native port. If every admitted
+supplier and external-input path is accounted for and no writer exists, remove
+the unused dependency from the owned rule. Retain its reviewed source scope and
+verify the numerical simplification, including signed zero and operation order.
+Do not create an empty native aggregation subsystem solely to mirror that read.
+A real newly admitted supplier must reopen the data/ownership contract rather
+than inherit the earlier absence proof.
+
 Enemy ownership alone does not establish modifier applicability. A quantity on
 the scenario Enemy is shared; a modifier filtered by the attacking Action must
 retain that Action's identity and typed conditions. Native Enemy query results

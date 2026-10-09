@@ -155,66 +155,6 @@
                 }
               },
               {
-                "id": "enemy-flat-min",
-                "value_type": {
-                  "kind": "quantity",
-                  "value": {
-                    "unit": {
-                      "kind": "unit",
-                      "namespace": {
-                        "game": "poe2",
-                        "version": "owned-mechanics-v1"
-                      },
-                      "key": "def.0000000000001d3a"
-                    }
-                  }
-                },
-                "source": {
-                  "kind": "stat",
-                  "value": {
-                    "entity": "current",
-                    "stat": {
-                      "kind": "stat",
-                      "namespace": {
-                        "game": "poe2",
-                        "version": "owned-mechanics-v1"
-                      },
-                      "key": "def.0000000000003373"
-                    }
-                  }
-                }
-              },
-              {
-                "id": "enemy-flat-max",
-                "value_type": {
-                  "kind": "quantity",
-                  "value": {
-                    "unit": {
-                      "kind": "unit",
-                      "namespace": {
-                        "game": "poe2",
-                        "version": "owned-mechanics-v1"
-                      },
-                      "key": "def.0000000000001d3a"
-                    }
-                  }
-                },
-                "source": {
-                  "kind": "stat",
-                  "value": {
-                    "entity": "current",
-                    "stat": {
-                      "kind": "stat",
-                      "namespace": {
-                        "game": "poe2",
-                        "version": "owned-mechanics-v1"
-                      },
-                      "key": "def.0000000000003374"
-                    }
-                  }
-                }
-              },
-              {
                 "id": "added-multiplier",
                 "value_type": {
                   "kind": "quantity",
@@ -275,20 +215,6 @@
                 }
               },
               {
-                "id": "enemy-flat-min",
-                "expression": {
-                  "kind": "read",
-                  "input": "enemy-flat-min"
-                }
-              },
-              {
-                "id": "enemy-flat-max",
-                "expression": {
-                  "kind": "read",
-                  "input": "enemy-flat-max"
-                }
-              },
-              {
                 "id": "added-multiplier",
                 "expression": {
                   "kind": "read",
@@ -316,18 +242,10 @@
                 }
               },
               {
-                "id": "flat-min",
-                "expression": {
-                  "kind": "add",
-                  "left": "self-flat-min",
-                  "right": "enemy-flat-min"
-                }
-              },
-              {
                 "id": "added-min",
                 "expression": {
                   "kind": "scale",
-                  "value": "flat-min",
+                  "value": "self-flat-min",
                   "factor": "added-multiplier"
                 }
               },
@@ -348,18 +266,10 @@
                 }
               },
               {
-                "id": "flat-max",
-                "expression": {
-                  "kind": "add",
-                  "left": "self-flat-max",
-                  "right": "enemy-flat-max"
-                }
-              },
-              {
                 "id": "added-max",
                 "expression": {
                   "kind": "scale",
-                  "value": "flat-max",
+                  "value": "self-flat-max",
                   "factor": "added-multiplier"
                 }
               },

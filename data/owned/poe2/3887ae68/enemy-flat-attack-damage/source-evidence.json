@@ -1,0 +1,6402 @@
+{
+  "boss_additional_stats": [
+    {
+      "boss": "Exarch Ball",
+      "mode": "base",
+      "stats": {
+        "CannotBeBlocked": "flag",
+        "CannotBeDodged": "flag",
+        "CannotBeSuppressed": "flag"
+      }
+    },
+    {
+      "boss": "Exarch Ball",
+      "mode": "uber",
+      "stats": {
+        "CannotBeBlocked": "flag",
+        "CannotBeDodged": "flag",
+        "CannotBeSuppressed": "flag"
+      }
+    },
+    {
+      "boss": "Maven Memory Game",
+      "mode": "base",
+      "stats": {
+        "CannotBeBlocked": "flag",
+        "CannotBeDodged": "flag",
+        "CannotBeSuppressed": "flag",
+        "PhysicalDamageSkillConvertToCold": 100,
+        "PhysicalDamageSkillConvertToFire": 100,
+        "PhysicalDamageSkillConvertToLightning": 100
+      }
+    },
+    {
+      "boss": "Maven Memory Game",
+      "mode": "uber",
+      "stats": {
+        "CannotBeBlocked": "flag",
+        "CannotBeDodged": "flag",
+        "CannotBeSuppressed": "flag",
+        "PhysicalDamageSkillConvertToCold": 100,
+        "PhysicalDamageSkillConvertToFire": 100,
+        "PhysicalDamageSkillConvertToLightning": 100
+      }
+    },
+    {
+      "boss": "Shaper Slam",
+      "mode": "uber",
+      "stats": {
+        "CannotBeBlocked": "flag",
+        "CannotBeDodged": "flag",
+        "CannotBeEvaded": "flag",
+        "CannotBeSuppressed": "flag"
+      }
+    },
+    {
+      "boss": "Sirus Meteor",
+      "mode": "base",
+      "stats": {
+        "PhysicalDamageSkillConvertToChaos": 25,
+        "PhysicalDamageSkillConvertToFire": 25,
+        "PhysicalDamageSkillConvertToLightning": 25
+      }
+    },
+    {
+      "boss": "Sirus Meteor",
+      "mode": "uber",
+      "stats": {
+        "PhysicalDamageSkillConvertToChaos": 25,
+        "PhysicalDamageSkillConvertToFire": 25,
+        "PhysicalDamageSkillConvertToLightning": 25
+      }
+    }
+  ],
+  "cache_census": {
+    "aliases_sha256": "13e6630a441b34db806d3f9dbcecb8b3fc2b3feeffc3514fd3c8b734c3548154",
+    "modifiers": 11851,
+    "raw_rows": 436112,
+    "raw_tables": 145363
+  },
+  "catalog": {
+    "aliases_sha256": "13e6630a441b34db806d3f9dbcecb8b3fc2b3feeffc3514fd3c8b734c3548154",
+    "callbacks_sha256": "9b42e932482f3dd95876e83f5c5293eff1046c643ae01d1003949e05cbac0a88",
+    "metatables_sha256": "26156c6328fd89d0bc3f4884409da4837dd048822e408d6a0c93692255c7ec2c",
+    "raw_rows": 344790,
+    "raw_tables": 112987
+  },
+  "corroboration": {
+    "bytes": 4041068,
+    "path": "data/owned/poe2/3887ae68/minion-preconversion-source/report.json",
+    "role": "corroboration-not-supplier-completeness",
+    "sha256": "7a723a4eece7b297737006b08d1dc61ec0047d13cfd2b9fbfeaee94eb52397cb"
+  },
+  "dependencies": [
+    {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/source-evidence.json",
+      "sha256": "a2daf1e5c6c058ae2ce32f434feee325d06344a96a5ccbf29ed7320df2c63ec3"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/source-evidence.json",
+      "sha256": "6c33fe128a0f6622785e70ef26843d47b8da33cc652f29ccf11246180e34fd45"
+    }
+  ],
+  "expanded_census": {
+    "callbacks": [
+      {
+        "path": "skills/ABTTProcessionBannerDrain/statMap/<metatable>/__index",
+        "source": {
+          "end_line": 924,
+          "line": 914,
+          "path": "src/Modules/Data.lua",
+          "sha256": "40eb88961a48d8a18b084bf5c644b51498fd6ef23fca3fb73fc8caa166e4530b"
+        }
+      },
+      {
+        "path": "skills/BonestormPlayer/preDamageFunc",
+        "source": {
+          "end_line": 1867,
+          "line": 1863,
+          "path": "src/Data/Skills/act_int.lua",
+          "sha256": "2583f30c142f98a0a6f68e9b49d0ed24308844286f8ddf8399d0df8dff720832"
+        }
+      },
+      {
+        "path": "skills/ChaosFrogExplosionPlayer/preDamageFunc",
+        "source": {
+          "end_line": 3186,
+          "line": 3184,
+          "path": "src/Data/Skills/sup_int.lua",
+          "sha256": "ad04f00f8152a65c28f7cebb827ce8fb423cbf3111290b4f4c9b75f4dc3b9f34"
+        }
+      },
+      {
+        "path": "skills/DetonatingArrowPlayer/preDamageFunc",
+        "source": {
+          "end_line": 1189,
+          "line": 1186,
+          "path": "src/Data/Skills/act_dex.lua",
+          "sha256": "6edce35bf108c1ea3ae82c47cd10039770a61c5d957636d53e6ca142d2151ab1"
+        }
+      },
+      {
+        "path": "skills/EnemyExplode/preDamageFunc",
+        "source": {
+          "end_line": 21195,
+          "line": 21146,
+          "path": "src/Data/Skills/other.lua",
+          "sha256": "03e867618c1bf3c5e9466e69c0d8465c8dc5a48c3234dece6145c6c4a9abb2dc"
+        }
+      },
+      {
+        "path": "skills/FlameblastPlayer/preDamageFunc",
+        "source": {
+          "end_line": 8519,
+          "line": 8517,
+          "path": "src/Data/Skills/act_int.lua",
+          "sha256": "f6133c10cbb521c549c9d888bc77a2b7e3aeb26014e61fe0e4f60c4891ab039b"
+        }
+      },
+      {
+        "path": "skills/FlickerStrikePlayer/preDamageFunc",
+        "source": {
+          "end_line": 8675,
+          "line": 8672,
+          "path": "src/Data/Skills/act_int.lua",
+          "sha256": "ba1f58c18a9b0feb6dd979249f15f33bee7260c37fadd988590cdfc3877641f4"
+        }
+      },
+      {
+        "path": "skills/GatheringStormPlayer/preDamageFunc",
+        "source": {
+          "end_line": 10499,
+          "line": 10496,
+          "path": "src/Data/Skills/act_int.lua",
+          "sha256": "ee3cc32862b839e31c2d842c765781a2e6f88649bf4a02004dcf1ccc56617f01"
+        }
+      },
+      {
+        "path": "skills/IncineratePlayer/preDamageFunc",
+        "source": {
+          "end_line": 13625,
+          "line": 13623,
+          "path": "src/Data/Skills/act_int.lua",
+          "sha256": "763ea23478068fde3105f8befb5025230371c32bf755c1248bbb99c9f8b8f87b"
+        }
+      },
+      {
+        "path": "skills/MinionInstability/preDamageFunc",
+        "source": {
+          "end_line": 1112,
+          "line": 1108,
+          "path": "src/Data/Skills/minion.lua",
+          "sha256": "bdbb3dc4a82b8375d111076fa176287e0f500cea006ddcaaf18898b8f7172b42"
+        }
+      },
+      {
+        "path": "skills/PerfectStrikePlayer/preDamageFunc",
+        "source": {
+          "end_line": 15072,
+          "line": 15069,
+          "path": "src/Data/Skills/act_str.lua",
+          "sha256": "ee3cc32862b839e31c2d842c765781a2e6f88649bf4a02004dcf1ccc56617f01"
+        }
+      },
+      {
+        "path": "skills/PlasmaBlastPlayer/preDamageFunc",
+        "source": {
+          "end_line": 11640,
+          "line": 11638,
+          "path": "src/Data/Skills/act_str.lua",
+          "sha256": "020a8356fe2e54a7f5fc36a4667b33fa91f2cbe04ca53a6fadcd36dc405d2594"
+        }
+      },
+      {
+        "path": "skills/ShieldChargePlayer/preDamageFunc",
+        "source": {
+          "end_line": 17072,
+          "line": 17069,
+          "path": "src/Data/Skills/act_str.lua",
+          "sha256": "0dab167fc6515bc5d967aa40dd2ea57f8dcebdd90ac41341e41ad21a70100bff"
+        }
+      },
+      {
+        "path": "skills/SnipePlayer/preDamageFunc",
+        "source": {
+          "end_line": 7279,
+          "line": 7276,
+          "path": "src/Data/Skills/act_dex.lua",
+          "sha256": "ee3cc32862b839e31c2d842c765781a2e6f88649bf4a02004dcf1ccc56617f01"
+        }
+      },
+      {
+        "path": "skills/SuperchargedSlamPlayer/preDamageFunc",
+        "source": {
+          "end_line": 18890,
+          "line": 18887,
+          "path": "src/Data/Skills/act_str.lua",
+          "sha256": "75f0d74e8937b445ac00fcab1c4b67f76d26dfbe94cf7b86b3b8d605f4d1aa2e"
+        }
+      },
+      {
+        "path": "skills/TemperWeaponPlayer/preDamageFunc",
+        "source": {
+          "end_line": 18234,
+          "line": 18232,
+          "path": "src/Data/Skills/other.lua",
+          "sha256": "78767e54b5a605becd639ac5f7c70e9b10b4788db2970d7a4de6e6a9605cb507"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Armoured/apply",
+        "source": {
+          "end_line": 14,
+          "line": 12,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "3c081e1369613cc5f3fb8ae20d4ad1b5f7535c2923f2906ca726c290ba3f73c1"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Buffered/apply",
+        "source": {
+          "end_line": 93,
+          "line": 91,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "5cb465fec32ee7911968e7ef83b3907709ecb777e6bd58f9ea4c6ccfe8f1a6b7"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Burning/apply",
+        "source": {
+          "end_line": 119,
+          "line": 117,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "c017cf540e414d4b527a9de892c1dead9fec87c421e301cb133d975c0e700781"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Conflagrating/apply",
+        "source": {
+          "end_line": 161,
+          "line": 158,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "c1106c7fa2f0d8345e0cc0079f2ed61aec63e1effbd01957cd022219dc613b23"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Empowered/apply",
+        "source": {
+          "end_line": 177,
+          "line": 175,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "3f2754bbd999423efa21476bd035ce28b46a04554ee079dee2b1bdd370a4137d"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Fecund/apply",
+        "source": {
+          "end_line": 58,
+          "line": 56,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "f2f7f496bcb4ed0200910b85206cc54e56269a4ece0f2ef7dc935adb0f731952"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Fleet/apply",
+        "source": {
+          "end_line": 153,
+          "line": 150,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "6b95ece39e817ffa09fe852f2bd6419a2b89359f92b6d841763ae3c0b3c74244"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Freezing/apply",
+        "source": {
+          "end_line": 127,
+          "line": 125,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "7b901a356ea8590c4eba6a5da7d6629a15cf7dac4455f1b7c74110fc4ce7d2ba"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Hexproof/apply",
+        "source": {
+          "end_line": 22,
+          "line": 20,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "a0a24591a38c3da620064ea31001087ffd0a6c70314a8b3fd619e8f1fb31f574"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Hexwarded/apply",
+        "source": {
+          "end_line": 31,
+          "line": 29,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "370e78a67c204be2a9831f3106f45aa136fa8e044547ebe2848def3791319a43"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Impaling/apply",
+        "source": {
+          "end_line": 169,
+          "line": 167,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "27fed0f070355a6dd526ea4133577d2a51405f931806946da8d0505eaef0a362"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Impervious/apply",
+        "source": {
+          "end_line": 77,
+          "line": 73,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "7a5b1dcc10f800f9bcba7fc657b09bbbfee0f2801b50a2790dd33ddbc7a8bfb0"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Mirrored/apply",
+        "source": {
+          "end_line": 201,
+          "line": 200,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "f6d9aa4ca516dd1fd32176041c2f7b1eb92b5962a80131d1246e09743f8c50f8"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Oppressive/apply",
+        "source": {
+          "end_line": 85,
+          "line": 83,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "f20ba57ec3889e9fff933fb80403aba54ca9ee1ecdebbf5fe1d49f09a7096046"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Overlord's/apply",
+        "source": {
+          "end_line": 186,
+          "line": 183,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "4dbed118141aeeb4e404852e7a26ed50af6923df5b793b30340a60c6c5f3d9fa"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Profane/apply",
+        "source": {
+          "end_line": 144,
+          "line": 141,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "08c580bb64f12ce7fdca492ca3ddd08e763e4e6922f7a9e11f4cd3bc96daf1a5"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Punishing/apply",
+        "source": {
+          "end_line": 194,
+          "line": 193,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "f6d9aa4ca516dd1fd32176041c2f7b1eb92b5962a80131d1246e09743f8c50f8"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Resistant/apply",
+        "source": {
+          "end_line": 41,
+          "line": 38,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "f76b5f40e447d0b08f8bd5c0789f78f737dad73a7679a0fbee34fb59b7582bcc"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Savage/apply",
+        "source": {
+          "end_line": 111,
+          "line": 109,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "f0d26d0e175ae3b9406e3146e52bd542a5702a661e158e72f2aa5c2f2f3994b7"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Shocking/apply",
+        "source": {
+          "end_line": 135,
+          "line": 133,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "ec1ee97849ac370d4a97f81df55a69f66e0ac42182942ca740c0ac18d1a6cdf2"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Titan's/apply",
+        "source": {
+          "end_line": 102,
+          "line": 99,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "465ff061e558a45cd1f856afc6f8392d4336f768e9624dc8e81222a229d8b34c"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Unstoppable/apply",
+        "source": {
+          "end_line": 67,
+          "line": 64,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "f6d280f6ad10cbd1b727bd106a368eaa3700e448ec51a95a62a0e7ed71482821"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/Unwavering/apply",
+        "source": {
+          "end_line": 50,
+          "line": 47,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "a76b542754d7df7a5ffd594aed53fbcada115b1932649ae9e1843ee454ea5d90"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Balance/apply",
+        "source": {
+          "end_line": 211,
+          "line": 208,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "3c487aa564edac573ca71c06cd92f15d084434d6edefde460f953ad22a0b232d"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Blinding/apply",
+        "source": {
+          "end_line": 351,
+          "line": 349,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "47498e41c385c8e10c6ea2e5e073b01530ddf7b8e814e07c441d8ac6d2c9590a"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Congealment/apply",
+        "source": {
+          "end_line": 221,
+          "line": 217,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "a2fda5d0c8cdb8d0e18ed9644e1fcf71478944493ef8cf072c81724bb9c445b4"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Deadliness/apply",
+        "source": {
+          "end_line": 367,
+          "line": 364,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "352b7b4a10bd492be08e3a7cf15e3c9aec0cf0ed56e74c9a4ddd2c823ee8f48f"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Doubt/apply",
+        "source": {
+          "end_line": 336,
+          "line": 334,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "9e3c2a2fc11e00d4bc839e4cb6fefea86795d4250404937f24715af3d519dbd4"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Drought/apply",
+        "source": {
+          "end_line": 230,
+          "line": 228,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "2dabaaf5e1f1511483982123290f4415eebf9447b4a6b12dda4ab30b39c2e730"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Exposure/apply",
+        "source": {
+          "end_line": 246,
+          "line": 238,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "a35e43543f5154e256377598b1429ebe238676cf99414aa7b1a3d30344c0aeb8"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Fatigue/apply",
+        "source": {
+          "end_line": 321,
+          "line": 319,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "e34153c07687ba8231d1c0a046d86cfcf52530cc9459e3335b6d4a08fbcad593"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Impotence/apply",
+        "source": {
+          "end_line": 255,
+          "line": 253,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "29d6e401f0c8528ec105325618cbc6b9f0c4370e027c4b069715d0622836982f"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Imprecision/apply",
+        "source": {
+          "end_line": 344,
+          "line": 342,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "9b31a7bb36bdacb265726fedc93846016a6e5e5902538b6a0cc5219e90de32d4"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Insulation/apply",
+        "source": {
+          "end_line": 264,
+          "line": 262,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "a555b04f5d761c21e42a2af93cd0bb039f0b6bd15b512f3af3f1d06a0ee50846"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Miring/apply",
+        "source": {
+          "end_line": 275,
+          "line": 271,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "3191d08197439cb9776be148295fed8de6efffeafd7b2e672d5380d154fba6bb"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Rust/apply",
+        "source": {
+          "end_line": 285,
+          "line": 282,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "40ee610bdfd4a1dba57420129894e96e2c7d0639774cddcba8687fb59b6c29ba"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Smothering/apply",
+        "source": {
+          "end_line": 295,
+          "line": 292,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "92420a7ab2c4af7d4a2d95b1db5603e7d06a43bf2c34c9ca93e07f54b9221220"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Stasis/apply",
+        "source": {
+          "end_line": 305,
+          "line": 301,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "538f74917caa511aa4853374799b8a5379a2cd9b9473a7b046749f334bc984d8"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Toughness/apply",
+        "source": {
+          "end_line": 313,
+          "line": 311,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "873a1503a7e58e959de23404549b1cebca8524ad0c9924ae8f2f921651713f36"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Transience/apply",
+        "source": {
+          "end_line": 328,
+          "line": 327,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "f6d9aa4ca516dd1fd32176041c2f7b1eb92b5962a80131d1246e09743f8c50f8"
+        }
+      },
+      {
+        "path": "mapMods/AffixData/of Venom/apply",
+        "source": {
+          "end_line": 358,
+          "line": 356,
+          "path": "src/Data/ModMap.lua",
+          "sha256": "50b4301fb435174e9dc434522816d0cd4cc7165ee70636337ff7737334daf709"
+        }
+      }
+    ],
+    "modifiers": 11851,
+    "raw_rows": 436948,
+    "raw_tables": 145688,
+    "self_modifier_names": {
+      "SelfAilmentDuration": 2,
+      "SelfAurasCannotAffectAllies": 1,
+      "SelfBleedChance": 2,
+      "SelfBleedDuration": 5,
+      "SelfBleedEffect": 2,
+      "SelfChillDuration": 4,
+      "SelfChillEffect": 11,
+      "SelfChillEffectIsReversed": 1,
+      "SelfCritMultiplier": 2,
+      "SelfDamageLifeLeech": 1,
+      "SelfDamageManaLeech": 1,
+      "SelfDebuffExpirationRate": 9,
+      "SelfElementalAilmentDuration": 3,
+      "SelfExtraCritChance": 1,
+      "SelfFreezeChance": 1,
+      "SelfFreezeDuration": 8,
+      "SelfIgniteChance": 1,
+      "SelfIgniteDuration": 7,
+      "SelfIgniteEffect": 8,
+      "SelfIgnoreLightningResistance": 1,
+      "SelfKnockbackChance": 1,
+      "SelfLifeOnHit": 1,
+      "SelfLifeOnKill": 1,
+      "SelfManaOnHit": 1,
+      "SelfManaOnKill": 1,
+      "SelfPierceChance": 1,
+      "SelfPoisonDuration": 6,
+      "SelfPoisonEffect": 1,
+      "SelfShockChance": 1,
+      "SelfShockDuration": 6,
+      "SelfShockEffect": 11
+    }
+  },
+  "full_profile": {
+    "accuracy": 1,
+    "attackRange": 80,
+    "attackTime": 1.5,
+    "baseDamageIgnoresAttackSpeed": true,
+    "baseMovementSpeed": 37,
+    "chaosResist": 0,
+    "coldResist": 0,
+    "companionChaosResist": 0,
+    "companionColdResist": 0,
+    "companionFireResist": 0,
+    "companionLightningResist": 0,
+    "companionReservation": 30,
+    "critChance": 5,
+    "damage": 1.15,
+    "damageSpread": 0.3,
+    "fireResist": 0,
+    "life": 0.55,
+    "lightningResist": 0,
+    "limit": "ActiveSkeletonLimit",
+    "modList": {},
+    "monsterCategory": "Undead",
+    "monsterTags": {
+      "[10]": "undead",
+      "[1]": "bone_armour",
+      "[2]": "bones",
+      "[3]": "has_bow",
+      "[4]": "medium_movement",
+      "[5]": "physical_affinity",
+      "[6]": "puncturing_weapon",
+      "[7]": "ranged",
+      "[8]": "skeleton",
+      "[9]": "Stab_onhit_audio"
+    },
+    "name": "Skeletal Sniper",
+    "skillList": {
+      "[1]": "MinionMeleeBow",
+      "[2]": "GasShotSkeletonSniperMinion"
+    },
+    "spawnLocation": {},
+    "spectreReservation": 50,
+    "weaponType1": "Bow"
+  },
+  "kind": "pinned-constructed-enemy-flat-physical-domain",
+  "module_order": [
+    "src/Data/Global.lua",
+    "src/Data/SkillStatMap.lua",
+    "src/Data/Skills/act_str.lua",
+    "src/Data/Skills/act_dex.lua",
+    "src/Data/Skills/act_int.lua",
+    "src/Data/Skills/other.lua",
+    "src/Data/Skills/minion.lua",
+    "src/Data/Skills/spectre.lua",
+    "src/Data/Skills/sup_str.lua",
+    "src/Data/Skills/sup_dex.lua",
+    "src/Data/Skills/sup_int.lua",
+    "src/Data/Gems.lua",
+    "src/Data/Assets.lua",
+    "src/Data/Skills/SkillAssets.lua"
+  ],
+  "name_ledger": {
+    "dynamic_factories": [
+      {
+        "argument": [
+          "\"Multiplier:QualityOn\"",
+          ".",
+          ".",
+          "slotName"
+        ],
+        "factory": "NewMod",
+        "line": 2451,
+        "path": "src/Classes/Item.lua"
+      },
+      {
+        "argument": [
+          ".",
+          ".",
+          "."
+        ],
+        "factory": "MergeNewMod",
+        "line": 98,
+        "path": "src/Classes/ModList.lua"
+      },
+      {
+        "argument": [
+          ".",
+          ".",
+          "."
+        ],
+        "factory": "mod_createMod",
+        "line": 99,
+        "path": "src/Classes/ModList.lua"
+      },
+      {
+        "argument": [
+          ".",
+          ".",
+          "."
+        ],
+        "factory": "NewMod",
+        "line": 142,
+        "path": "src/Classes/ModStore.lua"
+      },
+      {
+        "argument": [
+          ".",
+          ".",
+          "."
+        ],
+        "factory": "mod_createMod",
+        "line": 143,
+        "path": "src/Classes/ModStore.lua"
+      },
+      {
+        "argument": [
+          ".",
+          ".",
+          "."
+        ],
+        "factory": "ReplaceMod",
+        "line": 158,
+        "path": "src/Classes/ModStore.lua"
+      },
+      {
+        "argument": [
+          ".",
+          ".",
+          "."
+        ],
+        "factory": "mod_createMod",
+        "line": 159,
+        "path": "src/Classes/ModStore.lua"
+      },
+      {
+        "argument": [
+          ".",
+          ".",
+          "."
+        ],
+        "factory": "mod_createMod",
+        "line": 172,
+        "path": "src/Classes/ModStore.lua"
+      },
+      {
+        "argument": [
+          "line",
+          ":",
+          "gsub",
+          "(",
+          "\"Condition:\"",
+          ",",
+          "\"Condition:Party:\"",
+          ")"
+        ],
+        "factory": "NewMod",
+        "line": 722,
+        "path": "src/Classes/PartyTab.lua"
+      },
+      {
+        "argument": [
+          "line"
+        ],
+        "factory": "NewMod",
+        "line": 789,
+        "path": "src/Classes/PartyTab.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:ConnectedTo\"",
+          ".",
+          ".",
+          "class",
+          ".",
+          "name",
+          ".",
+          ".",
+          "\"Start\""
+        ],
+        "factory": "NewMod",
+        "line": 2071,
+        "path": "src/Classes/PassiveSpec.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:ConnectedTo\"",
+          ".",
+          ".",
+          "class",
+          ".",
+          "name",
+          ".",
+          ".",
+          "\"Start\""
+        ],
+        "factory": "NewMod",
+        "line": 414,
+        "path": "src/Classes/PassiveTree.lua"
+      },
+      {
+        "argument": [
+          "\"GemSupport\"",
+          ".",
+          ".",
+          "value",
+          ".",
+          "key",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")"
+        ],
+        "factory": "NewMod",
+        "line": 784,
+        "path": "src/Modules/CalcActiveSkill.lua"
+      },
+      {
+        "argument": [
+          "\"GemItem\"",
+          ".",
+          ".",
+          "value",
+          ".",
+          "key",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")"
+        ],
+        "factory": "NewMod",
+        "line": 790,
+        "path": "src/Modules/CalcActiveSkill.lua"
+      },
+      {
+        "argument": [
+          "\"Multiplier:\"",
+          ".",
+          ".",
+          "activeGrantedEffect",
+          ".",
+          "name",
+          ":",
+          "gsub",
+          "(",
+          "\"%s+\"",
+          ",",
+          "\"\"",
+          ")",
+          ".",
+          ".",
+          "\"Stage\""
+        ],
+        "factory": "NewMod",
+        "line": 876,
+        "path": "src/Modules/CalcActiveSkill.lua"
+      },
+      {
+        "argument": [
+          "\"Multiplier:\"",
+          ".",
+          ".",
+          "activeGrantedEffect",
+          ".",
+          "name",
+          ":",
+          "gsub",
+          "(",
+          "\"%s+\"",
+          ",",
+          "\"\"",
+          ")",
+          ".",
+          ".",
+          "\"StageAfterFirst\""
+        ],
+        "factory": "NewMod",
+        "line": 878,
+        "path": "src/Modules/CalcActiveSkill.lua"
+      },
+      {
+        "argument": [
+          "modList"
+        ],
+        "factory": "mod",
+        "line": 72,
+        "path": "src/Modules/CalcBreakdown.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 223,
+        "path": "src/Modules/CalcBreakdown.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 243,
+        "path": "src/Modules/CalcBreakdown.lua"
+      },
+      {
+        "argument": [
+          "resTo",
+          ".",
+          ".",
+          "\"ResistMax\""
+        ],
+        "factory": "NewMod",
+        "line": 876,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "resTo",
+          ".",
+          ".",
+          "\"Resist\""
+        ],
+        "factory": "NewMod",
+        "line": 896,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "resTo",
+          ".",
+          ".",
+          "\"Resist\""
+        ],
+        "factory": "NewMod",
+        "line": 899,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "resTo",
+          ".",
+          ".",
+          "\"Resist\""
+        ],
+        "factory": "NewMod",
+        "line": 902,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "elem",
+          ".",
+          ".",
+          "\"ResistMax\""
+        ],
+        "factory": "NewMod",
+        "line": 921,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 934,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 941,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1037,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1056,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "\"Extra\"",
+          ".",
+          ".",
+          "res",
+          ".",
+          "name"
+        ],
+        "factory": "NewMod",
+        "line": 1440,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "res",
+          ".",
+          "name",
+          ".",
+          ".",
+          "\"Total\""
+        ],
+        "factory": "NewMod",
+        "line": 1441,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1455,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1456,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1457,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1458,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 1495,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1498,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1499,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1500,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1501,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1550,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1656,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1658,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1659,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "resources",
+          "[",
+          "j",
+          "]",
+          ":",
+          "gsub",
+          "(",
+          "\" \"",
+          ",",
+          "\"\"",
+          ")",
+          ".",
+          ".",
+          "\"Regen\""
+        ],
+        "factory": "NewMod",
+        "line": 1713,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "resources",
+          "[",
+          "j",
+          "]",
+          ":",
+          "gsub",
+          "(",
+          "\" \"",
+          ",",
+          "\"\"",
+          ")",
+          ".",
+          ".",
+          "\"Recovery\""
+        ],
+        "factory": "NewMod",
+        "line": 1723,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1732,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:CanGain\"",
+          ".",
+          ".",
+          "resource"
+        ],
+        "factory": "NewMod",
+        "line": 1743,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"EnergyShieldRecoup\""
+        ],
+        "factory": "ReplaceMod",
+        "line": 1858,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1911,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 1926,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1930,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1996,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1998,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 2034,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 2034,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 2034,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 2248,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 2278,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 2344,
+        "path": "src/Modules/CalcDefence.lua"
+      },
+      {
+        "argument": [
+          "newSkill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 214,
+        "path": "src/Modules/CalcMirages.lua"
+      },
+      {
+        "argument": [
+          "boltSkill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 374,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "mod",
+          ".",
+          "name"
+        ],
+        "factory": "ReplaceMod",
+        "line": 389,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 419,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 437,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "actorDB"
+        ],
+        "factory": "mod",
+        "line": 448,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 452,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 569,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 695,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 775,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 776,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "NewMod",
+        "line": 797,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "NewMod",
+        "line": 798,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "NewMod",
+        "line": 809,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "NewMod",
+        "line": 810,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "NewMod",
+        "line": 814,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "NewMod",
+        "line": 815,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "NewMod",
+        "line": 828,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "NewMod",
+        "line": 831,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1117,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "NewMod",
+        "line": 1238,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "NewMod",
+        "line": 1239,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "NewMod",
+        "line": 1243,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "NewMod",
+        "line": 1244,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "NewMod",
+        "line": 1248,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "NewMod",
+        "line": 1249,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "NewMod",
+        "line": 1257,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "NewMod",
+        "line": 1258,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "NewMod",
+        "line": 1262,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "NewMod",
+        "line": 1263,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "NewMod",
+        "line": 1267,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "NewMod",
+        "line": 1268,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1293,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1294,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1308,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1311,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1316,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1332,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1508,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1510,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1545,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1545,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1547,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1553,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1553,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1554,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1554,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1554,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1563,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1571,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1573,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1576,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1577,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1596,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1598,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1602,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1615,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1631,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1655,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1657,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1661,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1664,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1724,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1743,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1747,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1781,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1852,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1856,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1924,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1944,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1950,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1958,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1959,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1960,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1964,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 1997,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2000,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2003,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2031,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2039,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2058,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2066,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2085,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2100,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2115,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2128,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2133,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2310,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2717,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2768,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2773,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2880,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2881,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2894,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 3123,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 3126,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 3127,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 3319,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 3757,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 3797,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 4065,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 4134,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:\"",
+          ".",
+          ".",
+          "damageType",
+          ".",
+          ".",
+          "\"HasDamage\""
+        ],
+        "factory": "NewMod",
+        "line": 4491,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:\"",
+          ".",
+          ".",
+          "highestType",
+          ".",
+          ".",
+          "\"IsHighestDamageType\""
+        ],
+        "factory": "NewMod",
+        "line": 4501,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 4573,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 4908,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 4911,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 4914,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 4969,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 5243,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 5243,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 5245,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 5246,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:Single\"",
+          ".",
+          ".",
+          "ailment"
+        ],
+        "factory": "NewMod",
+        "line": 5272,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 5353,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 5398,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 5570,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 5574,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 5731,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 5731,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 5810,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 6114,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 6114,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 6295,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 6300,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 6319,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 6325,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 6334,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 6335,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 6342,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 6351,
+        "path": "src/Modules/CalcOffence.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 761,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 768,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 785,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 789,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 870,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 879,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 888,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "v",
+          ".",
+          "condition"
+        ],
+        "factory": "NewMod",
+        "line": 1269,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "conditionName"
+        ],
+        "factory": "NewMod",
+        "line": 1270,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "v",
+          ".",
+          "condition"
+        ],
+        "factory": "NewMod",
+        "line": 1272,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "conditionName"
+        ],
+        "factory": "NewMod",
+        "line": 1273,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "activeSkill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1340,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "activeSkill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1432,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1450,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "entry",
+          ".",
+          "stat"
+        ],
+        "factory": "NewMod",
+        "line": 1574,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "type",
+          ".",
+          ".",
+          "\"Recovery\""
+        ],
+        "factory": "createMod",
+        "line": 1632,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1871,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1872,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modDB"
+        ],
+        "factory": "mod",
+        "line": 1873,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "\"Multiplier:\"",
+          ".",
+          ".",
+          "activeSkill",
+          ".",
+          "activeEffect",
+          ".",
+          "grantedEffect",
+          ".",
+          "name",
+          ":",
+          "gsub",
+          "(",
+          "\"%s+\"",
+          ",",
+          "\"\"",
+          ")",
+          ".",
+          ".",
+          "\"MaxStages\""
+        ],
+        "factory": "NewMod",
+        "line": 2088,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "\"Multiplier:\"",
+          ".",
+          ".",
+          "activeSkill",
+          ".",
+          "activeEffect",
+          ".",
+          "grantedEffect",
+          ".",
+          "name",
+          ":",
+          "gsub",
+          "(",
+          "\"%s+\"",
+          ",",
+          "\"\"",
+          ")",
+          ".",
+          ".",
+          "\"StageAfterFirst\""
+        ],
+        "factory": "NewMod",
+        "line": 2089,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "\"Multiplier:\"",
+          ".",
+          ".",
+          "activeSkill",
+          ".",
+          "activeEffect",
+          ".",
+          "grantedEffect",
+          ".",
+          "name",
+          ":",
+          "gsub",
+          "(",
+          "\"%s+\"",
+          ",",
+          "\"\"",
+          ")",
+          ".",
+          ".",
+          "\"MaxStages\""
+        ],
+        "factory": "NewMod",
+        "line": 2099,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "\"Multiplier:\"",
+          ".",
+          ".",
+          "activeSkill",
+          ".",
+          "activeEffect",
+          ".",
+          "grantedEffect",
+          ".",
+          "name",
+          ":",
+          "gsub",
+          "(",
+          "\"%s+\"",
+          ",",
+          "\"\"",
+          ")",
+          ".",
+          ".",
+          "\"StageAfterFirst\""
+        ],
+        "factory": "NewMod",
+        "line": 2100,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modStore"
+        ],
+        "factory": "mod",
+        "line": 2135,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modStore"
+        ],
+        "factory": "mod",
+        "line": 2147,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modStore"
+        ],
+        "factory": "mod",
+        "line": 2153,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modStore"
+        ],
+        "factory": "mod",
+        "line": 2166,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "\"Num\"",
+          ".",
+          ".",
+          "warcryName",
+          ".",
+          ".",
+          "\"Empowers\""
+        ],
+        "factory": "NewMod",
+        "line": 2185,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modStore"
+        ],
+        "factory": "mod",
+        "line": 2214,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2227,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "NewMod",
+        "line": 2242,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "NewMod",
+        "line": 2245,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2255,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2281,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2299,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2312,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2335,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2384,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2432,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2452,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2453,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "\"Multiplier:\"",
+          ".",
+          ".",
+          "buff",
+          ".",
+          "name",
+          ".",
+          ".",
+          "\"Stack\""
+        ],
+        "factory": "NewMod",
+        "line": 2461,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2481,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2538,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2600,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modStore"
+        ],
+        "factory": "mod",
+        "line": 2624,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2653,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2671,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2685,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2708,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2741,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 2766,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "\"Multiplier:\"",
+          ".",
+          ".",
+          "buff",
+          ".",
+          "name",
+          ".",
+          ".",
+          "\"Stack\""
+        ],
+        "factory": "NewMod",
+        "line": 2789,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:\"",
+          ".",
+          ".",
+          "val",
+          ".",
+          "condition"
+        ],
+        "factory": "NewMod",
+        "line": 3311,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "env",
+          ".",
+          "player",
+          ".",
+          "mainSkill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 3319,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 3319,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "env",
+          ".",
+          "player",
+          ".",
+          "mainSkill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 3321,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "enemyDB"
+        ],
+        "factory": "mod",
+        "line": 3321,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "ailment",
+          ".",
+          ".",
+          "\"Override\""
+        ],
+        "factory": "NewMod",
+        "line": 3323,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:Already\"",
+          ".",
+          ".",
+          "val",
+          ".",
+          "condition"
+        ],
+        "factory": "NewMod",
+        "line": 3342,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:Has\"",
+          ".",
+          ".",
+          "element",
+          ".",
+          ".",
+          "\"Exposure\""
+        ],
+        "factory": "NewMod",
+        "line": 3477,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "element",
+          ".",
+          ".",
+          "\"Resist\""
+        ],
+        "factory": "NewMod",
+        "line": 3479,
+        "path": "src/Modules/CalcPerform.lua"
+      },
+      {
+        "argument": [
+          "modList"
+        ],
+        "factory": "mod",
+        "line": 269,
+        "path": "src/Modules/CalcSetup.lua"
+      },
+      {
+        "argument": [
+          "stat"
+        ],
+        "factory": "NewMod",
+        "line": 832,
+        "path": "src/Modules/CalcSetup.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:WeaponSet\"",
+          ".",
+          ".",
+          "(",
+          "build",
+          ".",
+          "itemsTab",
+          ".",
+          "activeItemSet",
+          ".",
+          "useSecondWeaponSet",
+          "and",
+          "2",
+          "or",
+          "1",
+          ")"
+        ],
+        "factory": "NewMod",
+        "line": 1020,
+        "path": "src/Modules/CalcSetup.lua"
+      },
+      {
+        "argument": [
+          "nodesModsList"
+        ],
+        "factory": "mod",
+        "line": 1473,
+        "path": "src/Modules/CalcSetup.lua"
+      },
+      {
+        "argument": [
+          "nodesModsList"
+        ],
+        "factory": "mod",
+        "line": 1474,
+        "path": "src/Modules/CalcSetup.lua"
+      },
+      {
+        "argument": [
+          "modStore"
+        ],
+        "factory": "mod",
+        "line": 16,
+        "path": "src/Modules/CalcTools.lua"
+      },
+      {
+        "argument": [
+          "modStore"
+        ],
+        "factory": "mod",
+        "line": 53,
+        "path": "src/Modules/CalcTools.lua"
+      },
+      {
+        "argument": [
+          "skill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 67,
+        "path": "src/Modules/CalcTriggers.lua"
+      },
+      {
+        "argument": [
+          "env",
+          ".",
+          "player",
+          ".",
+          "mainSkill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 148,
+        "path": "src/Modules/CalcTriggers.lua"
+      },
+      {
+        "argument": [
+          "env",
+          ".",
+          "player",
+          ".",
+          "mainSkill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 149,
+        "path": "src/Modules/CalcTriggers.lua"
+      },
+      {
+        "argument": [
+          "env",
+          ".",
+          "player",
+          ".",
+          "mainSkill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 252,
+        "path": "src/Modules/CalcTriggers.lua"
+      },
+      {
+        "argument": [
+          "actor",
+          ".",
+          "mainSkill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 552,
+        "path": "src/Modules/CalcTriggers.lua"
+      },
+      {
+        "argument": [
+          "env",
+          ".",
+          "player",
+          ".",
+          "mainSkill",
+          ".",
+          "skillModList"
+        ],
+        "factory": "mod",
+        "line": 1121,
+        "path": "src/Modules/CalcTriggers.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:\"",
+          ".",
+          ".",
+          "val",
+          ".",
+          ".",
+          "\"Unravel\""
+        ],
+        "factory": "NewMod",
+        "line": 712,
+        "path": "src/Modules/ConfigOptions.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:\"",
+          ".",
+          ".",
+          "val",
+          ".",
+          ".",
+          "\"IsHighestDamageType\""
+        ],
+        "factory": "NewMod",
+        "line": 1399,
+        "path": "src/Modules/ConfigOptions.lua"
+      },
+      {
+        "argument": [
+          "k"
+        ],
+        "factory": "NewMod",
+        "line": 2254,
+        "path": "src/Modules/ConfigOptions.lua"
+      },
+      {
+        "argument": [
+          "k"
+        ],
+        "factory": "NewMod",
+        "line": 2256,
+        "path": "src/Modules/ConfigOptions.lua"
+      },
+      {
+        "argument": [
+          "src"
+        ],
+        "factory": "MergeNewMod",
+        "line": 37,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "dst"
+        ],
+        "factory": "MergeNewMod",
+        "line": 40,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "dst"
+        ],
+        "factory": "MergeNewMod",
+        "line": 42,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "name"
+        ],
+        "factory": "flag",
+        "line": 2177,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "name"
+        ],
+        "factory": "mod",
+        "line": 2178,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"UnaffectedBy\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "type",
+          ")",
+          ".",
+          ".",
+          "\"Regen\""
+        ],
+        "factory": "flag",
+        "line": 2360,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"UnaffectedByNonInstant\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "type",
+          ")",
+          ".",
+          ".",
+          "\"Leech\""
+        ],
+        "factory": "flag",
+        "line": 2364,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "ailment",
+          ":",
+          "gsub",
+          "(",
+          "\"ing\"",
+          ",",
+          "\"\"",
+          ")",
+          ")",
+          ".",
+          ".",
+          "\"DurationBase\""
+        ],
+        "factory": "mod",
+        "line": 2498,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"ArmourAppliesTo\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageTaken\""
+        ],
+        "factory": "mod",
+        "line": 2585,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"ArmourAppliesTo\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageTaken\""
+        ],
+        "factory": "mod",
+        "line": 2586,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"ArmourAppliesTo\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageTaken\""
+        ],
+        "factory": "mod",
+        "line": 2587,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"ArmourAppliesTo\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageTaken\""
+        ],
+        "factory": "mod",
+        "line": 2588,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageReductionMax\""
+        ],
+        "factory": "mod",
+        "line": 2590,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "fromType",
+          ")",
+          ".",
+          ".",
+          "\"DamageConvertTo\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "toType",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 2632,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "fromType",
+          ")",
+          ".",
+          ".",
+          "\"DamageConvertTo\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "toType",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 2633,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "sourceType",
+          ")",
+          ".",
+          ".",
+          "\"CanIgnite\""
+        ],
+        "factory": "flag",
+        "line": 2634,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageManaLeech\""
+        ],
+        "factory": "mod",
+        "line": 2710,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageLifeLeech\""
+        ],
+        "factory": "mod",
+        "line": 2713,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageEnergyShieldLeech\""
+        ],
+        "factory": "mod",
+        "line": 2716,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageManaLeech\""
+        ],
+        "factory": "mod",
+        "line": 2719,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageLifeLeech\""
+        ],
+        "factory": "mod",
+        "line": 2722,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageEnergyShieldLeech\""
+        ],
+        "factory": "mod",
+        "line": 2725,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "resourceTable",
+          "[",
+          "resource",
+          "]",
+          ".",
+          ".",
+          "\"LeechBasedOn\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Damage\""
+        ],
+        "factory": "flag",
+        "line": 2734,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "resourceTable",
+          "[",
+          "resource",
+          "]",
+          ".",
+          ".",
+          "\"LeechBasedOn\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Damage\""
+        ],
+        "factory": "flag",
+        "line": 2746,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:No\"",
+          ".",
+          ".",
+          "resourceTable",
+          "[",
+          "resource",
+          "]",
+          ".",
+          ".",
+          "\"LeechFromPhysicalDamage\""
+        ],
+        "factory": "flag",
+        "line": 2746,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"LifeLeechBasedOn\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Damage\""
+        ],
+        "factory": "flag",
+        "line": 2753,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"ManaLeechBasedOn\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Damage\""
+        ],
+        "factory": "flag",
+        "line": 2754,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"EnergyShieldLeechBasedOn\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Damage\""
+        ],
+        "factory": "flag",
+        "line": 2755,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"LifeLeechBasedOn\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Damage\""
+        ],
+        "factory": "flag",
+        "line": 2760,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"ManaLeechBasedOn\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Damage\""
+        ],
+        "factory": "flag",
+        "line": 2761,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"EnergyShieldLeechBasedOn\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Damage\""
+        ],
+        "factory": "flag",
+        "line": 2762,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "mod",
+        "line": 2769,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "mod",
+        "line": 2770,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "mod",
+        "line": 2771,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "mod",
+        "line": 2772,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "attr",
+          ")",
+          ":",
+          "match",
+          "(",
+          "\"^%a%l%l\"",
+          ")"
+        ],
+        "factory": "NewMod",
+        "line": 2908,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Multiplier:Consumed\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "type",
+          ")",
+          ".",
+          ".",
+          "\"ChargeEffect\""
+        ],
+        "factory": "mod",
+        "line": 2938,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Can\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "ailment",
+          ")"
+        ],
+        "factory": "flag",
+        "line": 3041,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Can\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "ailment",
+          ")"
+        ],
+        "factory": "flag",
+        "line": 3064,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Can\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "ailment",
+          ")"
+        ],
+        "factory": "flag",
+        "line": 3067,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Can\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "ailment2",
+          ")"
+        ],
+        "factory": "flag",
+        "line": 3070,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Self\"",
+          ".",
+          ".",
+          "ailment",
+          ".",
+          ".",
+          "\"Effect\""
+        ],
+        "factory": "mod",
+        "line": 3138,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "combineToUpper",
+          "(",
+          "resource1",
+          ")",
+          ".",
+          ".",
+          "\"Regen\""
+        ],
+        "factory": "mod",
+        "line": 3180,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"ArmourAppliesTo\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageTaken\""
+        ],
+        "factory": "mod",
+        "line": 3307,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"ArmourAppliesTo\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "dmgType",
+          ")",
+          ".",
+          ".",
+          "\"DamageTaken\""
+        ],
+        "factory": "mod",
+        "line": 3310,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"DamageGainAs\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "strType",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 3409,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "(",
+          "resFrom",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")",
+          ".",
+          ".",
+          "\"MaxResConvertTo\"",
+          ".",
+          ".",
+          "(",
+          "resTo1",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 3715,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "(",
+          "resFrom",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")",
+          ".",
+          ".",
+          "\"MaxResConvertTo\"",
+          ".",
+          ".",
+          "(",
+          "resTo2",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 3716,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "(",
+          "resFrom",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")",
+          ".",
+          ".",
+          "\"ResConvertTo\"",
+          ".",
+          ".",
+          "(",
+          "resTo1",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 3719,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "(",
+          "resFrom",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")",
+          ".",
+          ".",
+          "\"ResConvertTo\"",
+          ".",
+          ".",
+          "(",
+          "resTo2",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 3720,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "damageType",
+          ")",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "mod",
+        "line": 3748,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "damageType",
+          ")",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "mod",
+        "line": 3749,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "fromDmg",
+          ")",
+          ".",
+          ".",
+          "\"DamageConvertTo\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "toDmg",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 3752,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "(",
+          "damageFrom",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")",
+          ".",
+          ".",
+          "\"DamageConvertTo\"",
+          ".",
+          ".",
+          "(",
+          "damageTo",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 3761,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "(",
+          "damageFrom",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")",
+          ".",
+          ".",
+          "\"DamageConvertTo\"",
+          ".",
+          ".",
+          "(",
+          "damageTo",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 3762,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "(",
+          "damageFrom",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")",
+          ".",
+          ".",
+          "\"DamageConvertTo\"",
+          ".",
+          ".",
+          "(",
+          "damageTo",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 3763,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"AttributeRequirementsConvertedTo\"",
+          ".",
+          ".",
+          "attr",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 3791,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "damage",
+          ")",
+          ".",
+          ".",
+          "\"Can\"",
+          ".",
+          ".",
+          "ailment",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ":",
+          "gsub",
+          "(",
+          "\" %l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ":",
+          "gsub",
+          "(",
+          "\" \"",
+          ",",
+          "\"\"",
+          ")"
+        ],
+        "factory": "flag",
+        "line": 3895,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Can\"",
+          ".",
+          ".",
+          "ailment",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ":",
+          "gsub",
+          "(",
+          "\" %l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ":",
+          "gsub",
+          "(",
+          "\" \"",
+          ",",
+          "\"\"",
+          ")"
+        ],
+        "factory": "flag",
+        "line": 3898,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Can\"",
+          ".",
+          ".",
+          "ailment",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ":",
+          "gsub",
+          "(",
+          "\" %l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ":",
+          "gsub",
+          "(",
+          "\" \"",
+          ",",
+          "\"\"",
+          ")"
+        ],
+        "factory": "flag",
+        "line": 3901,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "damage",
+          ")",
+          ".",
+          ".",
+          "\"CanPin\""
+        ],
+        "factory": "flag",
+        "line": 3904,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "type",
+          ")",
+          ".",
+          ".",
+          "\"CanBleed\""
+        ],
+        "factory": "flag",
+        "line": 4141,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "damageType",
+          ")",
+          ".",
+          ".",
+          "\"LuckyHitsChance\""
+        ],
+        "factory": "mod",
+        "line": 4312,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "damageType",
+          ".",
+          ".",
+          "\"LuckyHitsChance\""
+        ],
+        "factory": "mod",
+        "line": 4323,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "damageType",
+          ")",
+          ".",
+          ".",
+          "\"LuckyHitsChance\""
+        ],
+        "factory": "mod",
+        "line": 4326,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "modName"
+        ],
+        "factory": "mod",
+        "line": 4521,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "modName"
+        ],
+        "factory": "mod",
+        "line": 4533,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "exposureType",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ".",
+          ".",
+          "\"Exposure\""
+        ],
+        "factory": "mod",
+        "line": 4585,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "element1",
+          ")",
+          ".",
+          ".",
+          "\"ExposureChance\""
+        ],
+        "factory": "mod",
+        "line": 4606,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "element2",
+          ")",
+          ".",
+          ".",
+          "\"Exposure\""
+        ],
+        "factory": "mod",
+        "line": 4607,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "element1",
+          ")",
+          ".",
+          ".",
+          "\"ExposureChance\""
+        ],
+        "factory": "mod",
+        "line": 4610,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "element2",
+          ")",
+          ".",
+          ".",
+          "\"Exposure\""
+        ],
+        "factory": "mod",
+        "line": 4611,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "element1",
+          ")",
+          ".",
+          ".",
+          "\"ExposureChance\""
+        ],
+        "factory": "mod",
+        "line": 4614,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "element2",
+          ")",
+          ".",
+          ".",
+          "\"Exposure\""
+        ],
+        "factory": "mod",
+        "line": 4615,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Low\"",
+          ".",
+          ".",
+          "resourceType",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ".",
+          ".",
+          "\"Percentage\""
+        ],
+        "factory": "mod",
+        "line": 4641,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Full\"",
+          ".",
+          ".",
+          "resourceType",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ".",
+          ".",
+          "\"Percentage\""
+        ],
+        "factory": "mod",
+        "line": 4642,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Totem\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "resistance",
+          ")",
+          ".",
+          ".",
+          "\"Resist\""
+        ],
+        "factory": "mod",
+        "line": 4728,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "source",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ".",
+          ".",
+          "\"DamageConvertTo\"",
+          ".",
+          ".",
+          "target",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 4837,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "source",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ".",
+          ".",
+          "\"DamageConvertTo\"",
+          ".",
+          ".",
+          "target",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 4852,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "type",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ".",
+          ".",
+          "\"ExposureChance\""
+        ],
+        "factory": "mod",
+        "line": 4884,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "source",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ".",
+          ".",
+          "\"DamageConvertTo\"",
+          ".",
+          ".",
+          "target",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 4887,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"EffectOfBonusesFromRing\"",
+          ".",
+          ".",
+          "(",
+          "side",
+          "=",
+          "=",
+          "\"left\"",
+          "and",
+          "\" 1\"",
+          "or",
+          "\" 2\"",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 5000,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "type",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ".",
+          ".",
+          "\"ReflectedDamageTaken\""
+        ],
+        "factory": "mod",
+        "line": 5097,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "type",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ".",
+          ".",
+          "\"ReflectedDamageTaken\""
+        ],
+        "factory": "mod",
+        "line": 5098,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Add\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "type",
+          ")",
+          ".",
+          ".",
+          "\"RecoupToEnergyShieldRecoup\""
+        ],
+        "factory": "flag",
+        "line": 5140,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Self\"",
+          ".",
+          ".",
+          "ailment",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ".",
+          ".",
+          "\"Effect\""
+        ],
+        "factory": "mod",
+        "line": 5300,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "ailment",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ".",
+          ".",
+          "\"Immune\""
+        ],
+        "factory": "flag",
+        "line": 5303,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "ailment",
+          ")",
+          ".",
+          ".",
+          "\"Immune\""
+        ],
+        "factory": "flag",
+        "line": 5318,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "statType",
+          ")",
+          ".",
+          ".",
+          "\"Threshold\""
+        ],
+        "factory": "mod",
+        "line": 5321,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "statType",
+          ")",
+          ".",
+          ".",
+          "\"Threshold\""
+        ],
+        "factory": "mod",
+        "line": 5324,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "firstToUpper",
+          "(",
+          "thresholdType",
+          ")",
+          ".",
+          ".",
+          "\"Threshold\""
+        ],
+        "factory": "mod",
+        "line": 5338,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"EnemyCannotPen\"",
+          ".",
+          ".",
+          "(",
+          "res",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")",
+          ".",
+          ".",
+          "\"Resistance\""
+        ],
+        "factory": "flag",
+        "line": 5430,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"CanSocketJewelBase\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "jewelType",
+          ")"
+        ],
+        "factory": "flag",
+        "line": 5624,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"LegacyOf\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "flask",
+          ")"
+        ],
+        "factory": "mod",
+        "line": 5633,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "string",
+          ".",
+          "gsub",
+          "(",
+          "\" \"",
+          ".",
+          ".",
+          "resource",
+          ",",
+          "\"%W%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ":",
+          "sub",
+          "(",
+          "2",
+          ")",
+          ".",
+          ".",
+          "\"Reserved\""
+        ],
+        "factory": "mod",
+        "line": 5777,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Facebreaker\"",
+          ".",
+          ".",
+          "dmg",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "mod",
+        "line": 6027,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Facebreaker\"",
+          ".",
+          ".",
+          "dmg",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "mod",
+        "line": 6028,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Facebreaker\"",
+          ".",
+          ".",
+          "dmg",
+          ".",
+          ".",
+          "\"Min\""
+        ],
+        "factory": "mod",
+        "line": 6029,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Facebreaker\"",
+          ".",
+          ".",
+          "dmg",
+          ".",
+          ".",
+          "\"Max\""
+        ],
+        "factory": "mod",
+        "line": 6030,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Enemy\"",
+          ".",
+          ".",
+          "(",
+          "res",
+          ":",
+          "gsub",
+          "(",
+          "\"^%l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ")",
+          ".",
+          ".",
+          "\"ResistEqualToYours\""
+        ],
+        "factory": "flag",
+        "line": 6087,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "\"Condition:Have\"",
+          ".",
+          ".",
+          "firstToUpper",
+          "(",
+          "name",
+          ")",
+          ":",
+          "gsub",
+          "(",
+          "\" %l\"",
+          ",",
+          "string",
+          ".",
+          "upper",
+          ")",
+          ":",
+          "gsub",
+          "(",
+          "\" \"",
+          ",",
+          "\"\"",
+          ")"
+        ],
+        "factory": "flag",
+        "line": 6331,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "mod",
+          ".",
+          "name"
+        ],
+        "factory": "MergeNewMod",
+        "line": 7100,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "mod",
+          ".",
+          "name"
+        ],
+        "factory": "MergeNewMod",
+        "line": 7101,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "mod",
+          ".",
+          "name"
+        ],
+        "factory": "MergeNewMod",
+        "line": 7113,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "mod",
+          ".",
+          "name"
+        ],
+        "factory": "MergeNewMod",
+        "line": 7114,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "dst"
+        ],
+        "factory": "NewMod",
+        "line": 7226,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "name"
+        ],
+        "factory": "mod",
+        "line": 7284,
+        "path": "src/Modules/ModParser.lua"
+      },
+      {
+        "argument": [
+          "modName"
+        ],
+        "factory": "createMod",
+        "line": 57,
+        "path": "src/Modules/ModTools.lua"
+      }
+    ],
+    "name_writes": [
+      {
+        "line": 150,
+        "path": "src/Classes/CalcBreakdownControl.lua",
+        "text": "local ns, name = sectionData.breakdown:match(\"^(%a+)%.(%a+)$\")"
+      },
+      {
+        "line": 418,
+        "path": "src/Classes/CalcBreakdownControl.lua",
+        "text": "row.name = self:FormatModName(row.mod.name)"
+      },
+      {
+        "line": 241,
+        "path": "src/Classes/CalcsTab.lua",
+        "text": "local child = { elem = \"Input\", attrib = {name = k} }"
+      },
+      {
+        "line": 78,
+        "path": "src/Classes/CompareBuySimilar.lua",
+        "text": "queryTable.query.name = tradeName"
+      },
+      {
+        "line": 121,
+        "path": "src/Classes/CompareCalcsHelpers.lua",
+        "text": "local name = row.mod.name or \"\""
+      },
+      {
+        "line": 157,
+        "path": "src/Classes/CompareCalcsHelpers.lua",
+        "text": "local ns, name = sectionData.breakdown:match(\"^(%a+)%.(%a+)$\")"
+      },
+      {
+        "line": 404,
+        "path": "src/Classes/CompareCalcsHelpers.lua",
+        "text": "row.name = M.FormatCalcModName(mod.name or \"\")"
+      },
+      {
+        "line": 1248,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "currentSection = { name = varData.section, col = varData.col, items = {} }"
+      },
+      {
+        "line": 1530,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "controls.name = new(\"EditControl\"):EditControl(nil, { 0, 80, 450, 20 }, \"\", \"Name (optional)\", nil, 100, nil)"
+      },
+      {
+        "line": 2199,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "name = section.name,"
+      },
+      {
+        "line": 2534,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = gem.grantedEffect and gem.grantedEffect.name or gem.nameSpec"
+      },
+      {
+        "line": 2549,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = gem.grantedEffect and gem.grantedEffect.name or gem.nameSpec"
+      },
+      {
+        "line": 2558,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = gem.grantedEffect and gem.grantedEffect.name or gem.nameSpec"
+      },
+      {
+        "line": 2640,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = ge.name or gem.nameSpec"
+      },
+      {
+        "line": 2647,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = ge.name or gem.nameSpec"
+      },
+      {
+        "line": 2742,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "name = pNode.dn,"
+      },
+      {
+        "line": 2793,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "name = (cItem.name or \"Unknown\") .. \", \" .. slotName,"
+      },
+      {
+        "line": 2878,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "name = (jEntry.cItem.name or \"Unknown\") .. \", \" .. bestSlotLabel,"
+      },
+      {
+        "line": 2942,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "name = label,"
+      },
+      {
+        "line": 2976,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = ge.name or gem.nameSpec"
+      },
+      {
+        "line": 2984,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = cGrantedEffect.name or cGem.nameSpec"
+      },
+      {
+        "line": 3022,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "name = name,"
+      },
+      {
+        "line": 3101,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "name = displayName .. \"  (\" .. pDisplay .. \" -> \" .. cDisplay .. \")\","
+      },
+      {
+        "line": 3997,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = gem.grantedEffect and gem.grantedEffect.name or gem.nameSpec"
+      },
+      {
+        "line": 4127,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = getGemName(gem)"
+      },
+      {
+        "line": 4138,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = getGemName(gem)"
+      },
+      {
+        "line": 4141,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "t_insert(pDisplay, { gem = gem, name = name, status = \"common\" })"
+      },
+      {
+        "line": 4142,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "t_insert(cDisplay, { gem = cGemByName[name], name = name, status = \"common\" })"
+      },
+      {
+        "line": 4150,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = getGemName(gem)"
+      },
+      {
+        "line": 4152,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "t_insert(pDisplay, { gem = gem, name = name, status = \"additional\" })"
+      },
+      {
+        "line": 4158,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "local name = getGemName(gem)"
+      },
+      {
+        "line": 4160,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "t_insert(cDisplay, { gem = gem, name = name, status = \"additional\" })"
+      },
+      {
+        "line": 4178,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "t_insert(pDisplay, { gem = nil, name = name, status = \"missing\" })"
+      },
+      {
+        "line": 4181,
+        "path": "src/Classes/CompareTab.lua",
+        "text": "t_insert(cDisplay, { gem = nil, name = name, status = \"missing\" })"
+      },
+      {
+        "line": 1011,
+        "path": "src/Classes/ConfigTab.lua",
+        "text": "local node = { elem = \"Input\", attrib = { name = k } }"
+      },
+      {
+        "line": 1023,
+        "path": "src/Classes/ConfigTab.lua",
+        "text": "local node = { elem = \"Placeholder\", attrib = { name = k } }"
+      },
+      {
+        "line": 54,
+        "path": "src/Classes/FolderListControl.lua",
+        "text": "name = fileName,"
+      },
+      {
+        "line": 486,
+        "path": "src/Classes/ImportTab.lua",
+        "text": "name = self.controls.buildPlannerBuildName.buf ~= \"\" and self.controls.buildPlannerBuildName.buf or self.controls.buildPlannerBuildName.placeholder,"
+      },
+      {
+        "line": 1379,
+        "path": "src/Classes/ImportTab.lua",
+        "text": "item.name = item.title .. \", \" .. item.baseName"
+      },
+      {
+        "line": 1391,
+        "path": "src/Classes/ImportTab.lua",
+        "text": "item.name = sanitiseText(itemData.typeLine)"
+      },
+      {
+        "line": 1400,
+        "path": "src/Classes/ImportTab.lua",
+        "text": "item.name = oneHanded and \"Energy Blade One Handed\" or \"Energy Blade Two Handed\""
+      },
+      {
+        "line": 470,
+        "path": "src/Classes/Item.lua",
+        "text": "self.name = \"?\""
+      },
+      {
+        "line": 522,
+        "path": "src/Classes/Item.lua",
+        "text": "self.name = \"Unidentified item\""
+      },
+      {
+        "line": 526,
+        "path": "src/Classes/Item.lua",
+        "text": "self.name = self.rawLines[l]"
+      },
+      {
+        "line": 529,
+        "path": "src/Classes/Item.lua",
+        "text": "self.name = self.rawLines[l]"
+      },
+      {
+        "line": 586,
+        "path": "src/Classes/Item.lua",
+        "text": "local _, name = specVal:match(\"{([%w_]+)}(.+)\")"
+      },
+      {
+        "line": 1017,
+        "path": "src/Classes/Item.lua",
+        "text": "self.name = itemClass:match(\"One Hand\") and \"Energy Blade One Handed\" or \"Energy Blade Two Handed\""
+      },
+      {
+        "line": 1048,
+        "path": "src/Classes/Item.lua",
+        "text": "self.name = self.name:gsub(\" %(.+%)\",\"\")"
+      },
+      {
+        "line": 1360,
+        "path": "src/Classes/Item.lua",
+        "text": "self.name = self.title .. \", \" .. self.baseName:gsub(\" %(.+%)\",\"\")"
+      },
+      {
+        "line": 1523,
+        "path": "src/Classes/Item.lua",
+        "text": "local rune = { name = runeName, type = slotMod.type, values = values, effectApplied = effectModifier ~= 0 }"
+      },
+      {
+        "line": 2148,
+        "path": "src/Classes/Item.lua",
+        "text": "local name = self.runes[i]"
+      },
+      {
+        "line": 2465,
+        "path": "src/Classes/Item.lua",
+        "text": "weaponData.name = self.name"
+      },
+      {
+        "line": 1377,
+        "path": "src/Classes/ItemsTab.lua",
+        "text": "t_insert(child, { elem = \"Slot\", attrib = { name = slotName, itemId = tostring(itemSet[slotName].selItemId), itemPbURL = itemSet[slotName].pbURL or \"\", active = itemSet[slotName].active and \"true\", note = itemSet[slotName].note }})"
+      },
+      {
+        "line": 1380,
+        "path": "src/Classes/ItemsTab.lua",
+        "text": "t_insert(child, { elem = \"SocketIdURL\", attrib = { name = slotName, nodeId = tostring(slot.nodeId), itemPbURL = itemSet[slot.nodeId] and itemSet[slot.nodeId].pbURL or \"\"}})"
+      },
+      {
+        "line": 2216,
+        "path": "src/Classes/ItemsTab.lua",
+        "text": "runeModLines = { { name = \"None\", label = \"None\", lines = { \"None\" }, mods = { }, req = 1, order = -1, slot = \"None\", group = -1, isSocketBound = false } }"
+      },
+      {
+        "line": 2237,
+        "path": "src/Classes/ItemsTab.lua",
+        "text": "t_insert(runeModLines, { name = name, label = runeMod[1], lines = lines, mods = mods, req = runeMod.levelReq, order = order, slot = slotType, type = runeMod.type, group = #lines, isSocketBound = runeMod.isSocketBound, localMod = runeMod.localMod, limit = runeMod.limit, canSocketInChakraSlots = runeMod.canSocketInChakraSlots, canSocketInUniqueItems = runeMod.canSocketInUniqueItems, canSocketInJewellery = runeMod.canSocketInJewellery })"
+      },
+      {
+        "line": 2729,
+        "path": "src/Classes/ItemsTab.lua",
+        "text": "item.name = base.name"
+      },
+      {
+        "line": 32,
+        "path": "src/Classes/ModDB.lua",
+        "text": "local name = mod.name"
+      },
+      {
+        "line": 45,
+        "path": "src/Classes/ModDB.lua",
+        "text": "local name = mod.name"
+      },
+      {
+        "line": 116,
+        "path": "src/Classes/ModDB.lua",
+        "text": "local name = mod.name"
+      },
+      {
+        "line": 578,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ImportedBuffs\", attrib = { name = \"PartyMemberStats\" } }"
+      },
+      {
+        "line": 583,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ImportedBuffs\", attrib = { name = \"Aura\" } }"
+      },
+      {
+        "line": 588,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ImportedBuffs\", attrib = { name = \"Curse\" } }"
+      },
+      {
+        "line": 593,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ImportedBuffs\", attrib = { name = \"Warcry Skills\" } }"
+      },
+      {
+        "line": 598,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ImportedBuffs\", attrib = { name = \"Link Skills\" } }"
+      },
+      {
+        "line": 603,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ImportedBuffs\", attrib = { name = \"EnemyConditions\" } }"
+      },
+      {
+        "line": 608,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ImportedBuffs\", attrib = { name = \"EnemyMods\" } }"
+      },
+      {
+        "line": 614,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ExportedBuffs\", attrib = { name = \"PartyMemberStats\" } }"
+      },
+      {
+        "line": 620,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ExportedBuffs\", attrib = { name = \"Aura\" } }"
+      },
+      {
+        "line": 626,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ExportedBuffs\", attrib = { name = \"Curse\" } }"
+      },
+      {
+        "line": 632,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ExportedBuffs\", attrib = { name = \"Warcry Skills\" } }"
+      },
+      {
+        "line": 638,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ExportedBuffs\", attrib = { name = \"Link Skills\" } }"
+      },
+      {
+        "line": 644,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ExportedBuffs\", attrib = { name = \"EnemyConditions\" } }"
+      },
+      {
+        "line": 650,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "child = { elem = \"ExportedBuffs\", attrib = { name = \"EnemyMods\" } }"
+      },
+      {
+        "line": 884,
+        "path": "src/Classes/PartyTab.lua",
+        "text": "mod.name = mod.name:gsub(\"Parent\", \"PartyMember\")"
+      },
+      {
+        "line": 2316,
+        "path": "src/Classes/PassiveSpec.lua",
+        "text": "name = \"Nothingness\","
+      },
+      {
+        "line": 118,
+        "path": "src/Classes/PassiveTree.lua",
+        "text": "class.classes[0] = { name = \"None\" }"
+      },
+      {
+        "line": 564,
+        "path": "src/Classes/PassiveTree.lua",
+        "text": "name = oil,"
+      },
+      {
+        "line": 761,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "{ name = \"Exalted Orb Equivalent\", id = nil },"
+      },
+      {
+        "line": 762,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "{ name = \"Exalted Orb\", id = \"exalted\" },"
+      },
+      {
+        "line": 763,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "{ name = \"Chaos Orb\", id = \"chaos\" },"
+      },
+      {
+        "line": 764,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "{ name = \"Divine Orb\", id = \"divine\" },"
+      },
+      {
+        "line": 765,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "{ name = \"Orb of Augmentation\", id = \"aug\" },"
+      },
+      {
+        "line": 766,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "{ name = \"Orb of Transmutation\", id = \"transmute\" },"
+      },
+      {
+        "line": 767,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "{ name = \"Regal Orb\", id = \"regal\" },"
+      },
+      {
+        "line": 768,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "{ name = \"Vaal Orb\", id = \"vaal\" },"
+      },
+      {
+        "line": 769,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "{ name = \"Orb of Annulment\", id = \"annul\" },"
+      },
+      {
+        "line": 770,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "{ name = \"Orb of Alchemy\", id = \"alch\" },"
+      },
+      {
+        "line": 771,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "{ name = \"Mirror of Kalandra\", id = \"mirror\" }"
+      },
+      {
+        "line": 796,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "name = \"Megalomaniac\","
+      },
+      {
+        "line": 806,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "name = options.special.itemName,"
+      },
+      {
+        "line": 818,
+        "path": "src/Classes/TradeQueryGenerator.lua",
+        "text": "name = options.special.itemName,"
+      },
+      {
+        "line": 309,
+        "path": "src/Classes/TradeQueryRequests.lua",
+        "text": "local name = escapeGGGString(property.name)"
+      },
+      {
+        "line": 755,
+        "path": "src/Classes/TreeTab.lua",
+        "text": "controls.name = new(\"EditControl\"):EditControl(nil, { 100, 20, 350, 18 }, \"\", nil, nil, nil, function(buf)"
+      },
+      {
+        "line": 990,
+        "path": "src/Classes/TreeTab.lua",
+        "text": "name = node.dn,"
+      },
+      {
+        "line": 1022,
+        "path": "src/Classes/TreeTab.lua",
+        "text": "name = node.dn,"
+      },
+      {
+        "line": 1076,
+        "path": "src/Classes/TreeTab.lua",
+        "text": "{ label = \"Glorious Vanity\", name = \"vaal\", id = 1 },"
+      },
+      {
+        "line": 1077,
+        "path": "src/Classes/TreeTab.lua",
+        "text": "{ label = \"Lethal Pride\", name = \"karui\", id = 2 },"
+      },
+      {
+        "line": 1078,
+        "path": "src/Classes/TreeTab.lua",
+        "text": "{ label = \"Brutal Restraint\", name = \"maraketh\", id = 3 },"
+      },
+      {
+        "line": 1079,
+        "path": "src/Classes/TreeTab.lua",
+        "text": "{ label = \"Militant Faith\", name = \"templar\", id = 4 },"
+      },
+      {
+        "line": 1080,
+        "path": "src/Classes/TreeTab.lua",
+        "text": "{ label = \"Elegant Hubris\", name = \"eternal\", id = 5 }"
+      },
+      {
+        "line": 1838,
+        "path": "src/Modules/Build.lua",
+        "text": "{ name = \"Beast\", x = 0 },"
+      },
+      {
+        "line": 1839,
+        "path": "src/Modules/Build.lua",
+        "text": "{ name = \"Humanoid\", x = 37 },"
+      },
+      {
+        "line": 1840,
+        "path": "src/Modules/Build.lua",
+        "text": "{ name = \"Eldritch\", x = 74 },"
+      },
+      {
+        "line": 1841,
+        "path": "src/Modules/Build.lua",
+        "text": "{ name = \"Construct\", x = 111 },"
+      },
+      {
+        "line": 1842,
+        "path": "src/Modules/Build.lua",
+        "text": "{ name = \"Demon\", x = 148 },"
+      },
+      {
+        "line": 1843,
+        "path": "src/Modules/Build.lua",
+        "text": "{ name = \"Undead\", x = 184 },"
+      },
+      {
+        "line": 2022,
+        "path": "src/Modules/Build.lua",
+        "text": "name = \"PoB Archives\","
+      },
+      {
+        "line": 2358,
+        "path": "src/Modules/Build.lua",
+        "text": "local namespace, name = key:match(\"^(%a+)%.(%a+)$\")"
+      },
+      {
+        "line": 22,
+        "path": "src/Modules/BuildExportPoE2.lua",
+        "text": "name = (name and name ~= \"\") and name or \"Unnamed\""
+      },
+      {
+        "line": 23,
+        "path": "src/Modules/BuildExportPoE2.lua",
+        "text": "name = name:gsub(\"[\\\\/:%*%?\\\"<>|%c]\", \"-\")"
+      },
+      {
+        "line": 273,
+        "path": "src/Modules/BuildExportPoE2.lua",
+        "text": "name = plainName,"
+      },
+      {
+        "line": 290,
+        "path": "src/Modules/BuildExportPoE2.lua",
+        "text": "name = (metadata.name and metadata.name ~= \"\") and metadata.name"
+      },
+      {
+        "line": 353,
+        "path": "src/Modules/BuildExportPoE2.lua",
+        "text": "name = s_format(\"%s - %s\", metadata and metadata.name or build.buildName, loadout.name),"
+      },
+      {
+        "line": 123,
+        "path": "src/Modules/BuildList.lua",
+        "text": "name = \"PoB Archives\","
+      },
+      {
+        "line": 97,
+        "path": "src/Modules/BuildListHelpers.lua",
+        "text": "t_insert(subFolders, { name = folderName, modified = modified })"
+      },
+      {
+        "line": 1067,
+        "path": "src/Modules/CalcActiveSkill.lua",
+        "text": "name = effectName,"
+      },
+      {
+        "line": 206,
+        "path": "src/Modules/CalcDefence.lua",
+        "text": "activeSkill.activeEffect.srcInstance.displayEffect.grantedEffect.name = \"Companion: \"..activeSkill.minion.minionData.name -- for breakdown"
+      },
+      {
+        "line": 212,
+        "path": "src/Modules/CalcDefence.lua",
+        "text": "activeSkill.activeEffect.srcInstance.displayEffect.grantedEffect.name = \"Spectre: \"..activeSkill.minion.minionData.name-- for breakdown"
+      },
+      {
+        "line": 1343,
+        "path": "src/Modules/CalcDefence.lua",
+        "text": "{ name = \"Armour\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"Armour\", \"ArmourAndEvasion\", \"Defences\" }, modsTotal = { \"ArmourTotal\" }, defence = true },"
+      },
+      {
+        "line": 1344,
+        "path": "src/Modules/CalcDefence.lua",
+        "text": "{ name = \"Evasion\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"Evasion\", \"ArmourAndEvasion\", \"Defences\" }, modsTotal = { \"EvasionTotal\" }, defence = true },"
+      },
+      {
+        "line": 1345,
+        "path": "src/Modules/CalcDefence.lua",
+        "text": "{ name = \"EnergyShield\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"EnergyShield\", \"Defences\" }, modsTotal = { \"EnergyShieldTotal\" }, defence = true },"
+      },
+      {
+        "line": 1346,
+        "path": "src/Modules/CalcDefence.lua",
+        "text": "{ name = \"Life\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"Life\" }, modsTotal = { \"LifeTotal\" }, },"
+      },
+      {
+        "line": 1347,
+        "path": "src/Modules/CalcDefence.lua",
+        "text": "{ name = \"Mana\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"Mana\" }, modsTotal = { \"ManaTotal\" }, },"
+      },
+      {
+        "line": 1348,
+        "path": "src/Modules/CalcDefence.lua",
+        "text": "{ name = \"Ward\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"Ward\", \"Defences\" }, modsInc = modDB:Flag(nil, \"EnergyShieldToWard\") and { \"EnergyShield\" }, modsTotal = { \"WardTotal\" }, defence = true },"
+      },
+      {
+        "line": 78,
+        "path": "src/Modules/CalcMirages.lua",
+        "text": "env.player.mainSkill.mirage.name = newSkill.activeEffect.grantedEffect.name"
+      },
+      {
+        "line": 321,
+        "path": "src/Modules/CalcMirages.lua",
+        "text": "env.player.mainSkill.mirage.name = newSkill.activeEffect.grantedEffect.name"
+      },
+      {
+        "line": 357,
+        "path": "src/Modules/CalcOffence.lua",
+        "text": "t_insert(breakdownRadius.rowList, { name = \"r\", value = s_format(\"%d\", deadzoneRadius), description = \"fixed deadzone radius\" })"
+      },
+      {
+        "line": 358,
+        "path": "src/Modules/CalcOffence.lua",
+        "text": "t_insert(breakdownRadius.rowList, { name = \"R\", value = s_format(\"%d\", baseRadius), description = \"base outer radius\" })"
+      },
+      {
+        "line": 359,
+        "path": "src/Modules/CalcOffence.lua",
+        "text": "t_insert(breakdownRadius.rowList, { name = \"a\", value = s_format(\"%.2f\", currentAreaMod), description = \"net AoE multiplier (scales area)\" })"
+      },
+      {
+        "line": 360,
+        "path": "src/Modules/CalcOffence.lua",
+        "text": "t_insert(breakdownRadius.rowList, { name = \"s\", value = s_format(\"%.2f\", currentSpeedMod), description = \"net projectile speed multiplier (scales range)\" })"
+      },
+      {
+        "line": 500,
+        "path": "src/Modules/CalcOffence.lua",
+        "text": "newMod.name = convertModName"
+      },
+      {
+        "line": 1613,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "local name = item.name"
+      },
+      {
+        "line": 2344,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "totemMod.name = \"Totem\"..totemMod.name"
+      },
+      {
+        "line": 2470,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "name = buff.name,"
+      },
+      {
+        "line": 2717,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "totemMod.name = \"Totem\"..totemMod.name"
+      },
+      {
+        "line": 2737,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "name = buff.name,"
+      },
+      {
+        "line": 2964,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "name = grantedEffect.name,"
+      },
+      {
+        "line": 2984,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "name = curseName,"
+      },
+      {
+        "line": 3098,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "t_insert(guardSlots, { name = name, modList = modList })"
+      },
+      {
+        "line": 3101,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "t_insert(guardSlots, { name = name, modList = modList })"
+      },
+      {
+        "line": 3103,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "t_insert(guardSlots, { name = name, modList = modList })"
+      },
+      {
+        "line": 3199,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "totemMod.name = totemModName"
+      },
+      {
+        "line": 3390,
+        "path": "src/Modules/CalcPerform.lua",
+        "text": "t_insert(lifeList, { name = minion.minionData and minion.minionData.name or activeSkill.activeEffect.grantedEffect.name, life = minion.output.Life })"
+      },
+      {
+        "line": 243,
+        "path": "src/Modules/CalcSetup.lua",
+        "text": "local name = modList[i].name"
+      },
+      {
+        "line": 292,
+        "path": "src/Modules/CalcSetup.lua",
+        "text": "local name = modList[i].name"
+      },
+      {
+        "line": 1409,
+        "path": "src/Modules/CalcSetup.lua",
+        "text": "local name = info.oneHand and \"Energy Blade One Handed\" or \"Energy Blade Two Handed\""
+      },
+      {
+        "line": 1411,
+        "path": "src/Modules/CalcSetup.lua",
+        "text": "item.name = name"
+      },
+      {
+        "line": 1621,
+        "path": "src/Modules/CalcSetup.lua",
+        "text": "local name = ascTbl.name"
+      },
+      {
+        "line": 128,
+        "path": "src/Modules/CalcTriggers.lua",
+        "text": "t_insert(trigRateTable.rates, { name = sd.uuid, rate = 1 / (SIM_TIME / sd.count + (triggerIncrement / chance * 100) - triggerIncrement) })"
+      },
+      {
+        "line": 174,
+        "path": "src/Modules/Calcs.lua",
+        "text": "t_insert(fullDPS.skills, { name = actor.name, dps = out.TotalDPS, count = actor.count, trigger = actor.trigger, skillPart = actor.skillPart })"
+      },
+      {
+        "line": 335,
+        "path": "src/Modules/Calcs.lua",
+        "text": "name = skillName,"
+      },
+      {
+        "line": 354,
+        "path": "src/Modules/Calcs.lua",
+        "text": "name = activeSkill.mirage.name .. \" (Mirage)\","
+      },
+      {
+        "line": 366,
+        "path": "src/Modules/Calcs.lua",
+        "text": "name = skillName,"
+      },
+      {
+        "line": 395,
+        "path": "src/Modules/Calcs.lua",
+        "text": "t_insert(fullDPS.skills, { name = \"Best Bleed DPS\", dps = fullDPS.bleedDPS, count = 1, source = sources.bleedDPS or \"\" })"
+      },
+      {
+        "line": 399,
+        "path": "src/Modules/Calcs.lua",
+        "text": "t_insert(fullDPS.skills, { name = \"Best Corr. Blood DPS\", dps = fullDPS.corruptingBloodDPS, count = 1, source = sources.corruptingBloodDPS or \"\" })"
+      },
+      {
+        "line": 403,
+        "path": "src/Modules/Calcs.lua",
+        "text": "t_insert(fullDPS.skills, { name = \"Best Ignite DPS\", dps = fullDPS.igniteDPS, count = 1, source = sources.igniteDPS or \"\" })"
+      },
+      {
+        "line": 407,
+        "path": "src/Modules/Calcs.lua",
+        "text": "t_insert(fullDPS.skills, { name = \"Best Burning Ground DPS\", dps = fullDPS.burningGroundDPS, count = 1, source = sources.burningGroundDPS or \"\" })"
+      },
+      {
+        "line": 411,
+        "path": "src/Modules/Calcs.lua",
+        "text": "t_insert(fullDPS.skills, { name = \"Best Poison DPS\", dps = fullDPS.poisonDPS, count = 1, source = sources.poisonDPS or \"\" })"
+      },
+      {
+        "line": 415,
+        "path": "src/Modules/Calcs.lua",
+        "text": "t_insert(fullDPS.skills, { name = \"Best Caustic Ground DPS\", dps = fullDPS.causticGroundDPS, count = 1, source = sources.causticGroundDPS or \"\" })"
+      },
+      {
+        "line": 419,
+        "path": "src/Modules/Calcs.lua",
+        "text": "t_insert(fullDPS.skills, { name = \"Full Impale DPS\", dps = fullDPS.impaleDPS, count = 1 })"
+      },
+      {
+        "line": 423,
+        "path": "src/Modules/Calcs.lua",
+        "text": "t_insert(fullDPS.skills, { name = \"Full Decay DPS\", dps = fullDPS.decayDPS, count = 1 })"
+      },
+      {
+        "line": 427,
+        "path": "src/Modules/Calcs.lua",
+        "text": "t_insert(fullDPS.skills, { name = \"Full DoT DPS\", dps = fullDPS.dotDPS, count = 1 })"
+      },
+      {
+        "line": 434,
+        "path": "src/Modules/Calcs.lua",
+        "text": "t_insert(fullDPS.skills, { name = \"Full Culling DPS\", dps = fullDPS.cullingDPS, count = 1 })"
+      },
+      {
+        "line": 58,
+        "path": "src/Modules/Data.lua",
+        "text": "name = modName,"
+      },
+      {
+        "line": 930,
+        "path": "src/Modules/Data.lua",
+        "text": "grantedEffect.name = sanitiseText(grantedEffect.name)"
+      },
+      {
+        "line": 1007,
+        "path": "src/Modules/Data.lua",
+        "text": "skill.name = \"Command\""
+      },
+      {
+        "line": 1054,
+        "path": "src/Modules/Data.lua",
+        "text": "gem.name = sanitiseText(gem.name)"
+      },
+      {
+        "line": 1110,
+        "path": "src/Modules/Data.lua",
+        "text": "table.insert(data.itemBaseLists[type], { label = name:gsub(\" %(.+%)\",\"\"), name = name, base = base })"
+      },
+      {
+        "line": 367,
+        "path": "src/Modules/ItemTools.lua",
+        "text": "name = gemData.name"
+      },
+      {
+        "line": 369,
+        "path": "src/Modules/ItemTools.lua",
+        "text": "name = name .. \" Support\""
+      },
+      {
+        "line": 372,
+        "path": "src/Modules/ItemTools.lua",
+        "text": "name = gemData;"
+      },
+      {
+        "line": 378,
+        "path": "src/Modules/ItemTools.lua",
+        "text": "local name = (item.rarity == \"UNIQUE\" or item.rarity == \"RELIC\") and item.title or item.baseName"
+      },
+      {
+        "line": 2194,
+        "path": "src/Modules/ModParser.lua",
+        "text": "name = name:gsub(\" skill\",\"\")"
+      },
+      {
+        "line": 2203,
+        "path": "src/Modules/ModParser.lua",
+        "text": "name = name:gsub(\" skill\",\"\")"
+      },
+      {
+        "line": 3671,
+        "path": "src/Modules/ModParser.lua",
+        "text": "mod(\"ExtraSkill\", \"LIST\", { skillId = \"BloodbarrierPlayer\",\tlevel = 1, noSupports = true, name = \"Bloodbarrier\" }),"
+      },
+      {
+        "line": 5947,
+        "path": "src/Modules/ModParser.lua",
+        "text": "[\"allocates (.+) if you have the matching modifiers? on forbidden (.+)\"] = function(_, ascendancy, side) return { mod(\"GrantedAscendancyNode\", \"LIST\", { side = side, name = ascendancy }) } end,"
+      },
+      {
+        "line": 6494,
+        "path": "src/Modules/ModParser.lua",
+        "text": "[\"hexproof\"] = { name = \"CurseEffectOnSelf\", value = -100, type = \"MORE\" },"
+      },
+      {
+        "line": 6967,
+        "path": "src/Modules/ModParser.lua",
+        "text": "name = name .. (modSuffix or misc.modSuffix or \"\"),"
+      },
+      {
+        "line": 83,
+        "path": "src/Modules/ModTools.lua",
+        "text": "name = modName,"
+      },
+      {
+        "line": 132,
+        "path": "src/Modules/ModTools.lua",
+        "text": "name = modStrings[3],"
+      },
+      {
+        "line": 26,
+        "path": "src/Modules/StatDescriber.lua",
+        "text": "scope.name = scopeName"
+      }
+    ],
+    "self_literals": [
+      {
+        "line": 2023,
+        "path": "src/Modules/CalcDefence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 2024,
+        "path": "src/Modules/CalcDefence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 2025,
+        "path": "src/Modules/CalcDefence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 2025,
+        "path": "src/Modules/CalcDefence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 2029,
+        "path": "src/Modules/CalcDefence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 2030,
+        "path": "src/Modules/CalcDefence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 2031,
+        "path": "src/Modules/CalcDefence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 2031,
+        "path": "src/Modules/CalcDefence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 2034,
+        "path": "src/Modules/CalcDefence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 2034,
+        "path": "src/Modules/CalcDefence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 4102,
+        "path": "src/Modules/CalcDefence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 4132,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 4133,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 5243,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 5246,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 5246,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 5540,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 5619,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 5620,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 5621,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 5728,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 5729,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 5731,
+        "path": "src/Modules/CalcOffence.lua",
+        "value": "Self"
+      },
+      {
+        "line": 3319,
+        "path": "src/Modules/CalcPerform.lua",
+        "value": "Self"
+      },
+      {
+        "line": 3321,
+        "path": "src/Modules/CalcPerform.lua",
+        "value": "Self"
+      },
+      {
+        "line": 114,
+        "path": "src/Modules/CalcSections.lua",
+        "value": "SelfPhysicalMin"
+      },
+      {
+        "line": 137,
+        "path": "src/Modules/CalcSections.lua",
+        "value": "SelfPhysicalMax"
+      },
+      {
+        "line": 281,
+        "path": "src/Modules/CalcSetup.lua",
+        "value": "Self"
+      },
+      {
+        "line": 1153,
+        "path": "src/Modules/CalcSetup.lua",
+        "value": "Self"
+      },
+      {
+        "line": 1166,
+        "path": "src/Modules/CalcSetup.lua",
+        "value": "Self"
+      },
+      {
+        "line": 1192,
+        "path": "src/Modules/CalcSetup.lua",
+        "value": "Self"
+      },
+      {
+        "line": 3138,
+        "path": "src/Modules/ModParser.lua",
+        "value": "Self"
+      },
+      {
+        "line": 5300,
+        "path": "src/Modules/ModParser.lua",
+        "value": "Self"
+      },
+      {
+        "line": 7389,
+        "path": "src/Modules/ModParser.lua",
+        "value": "Self"
+      }
+    ]
+  },
+  "name_ledger_sha256": "83bdd2316a727f2d35bd416c7df832f0729fc68e9aae761ea9e3cbe33c833495",
+  "schema_version": 1,
+  "scope": {
+    "channels": [
+      "SelfPhysicalMin",
+      "SelfPhysicalMax"
+    ],
+    "exact_intrinsic_basic_source": true,
+    "hostile_minions_admitted": false,
+    "imported_party_admitted": false,
+    "native_runtime_or_coverage_change": false,
+    "requires_accounted_inputs": true
+  },
+  "selected": {
+    "basic": {
+      "addFlags": null,
+      "baseFlags": null,
+      "parts": null,
+      "weaponTypes": null
+    },
+    "basic_callbacks": {},
+    "basic_id": "MinionMeleeBow",
+    "basic_stat_sets": {
+      "1": {
+        "baseFlags": {
+          "attack": true,
+          "projectile": true
+        },
+        "direct_callbacks": {},
+        "parts": null,
+        "skillFlags": null
+      }
+    },
+    "profile": {
+      "attackTime": 1.5,
+      "baseDamageIgnoresAttackSpeed": true,
+      "critChance": 5,
+      "damage": 1.15,
+      "damageSpread": 0.3,
+      "hostile": null,
+      "modList": {},
+      "skillList": {
+        "[1]": "MinionMeleeBow",
+        "[2]": "GasShotSkeletonSniperMinion"
+      },
+      "weaponType1": "Bow",
+      "weaponType2": null
+    },
+    "profile_callbacks": {},
+    "profile_id": "RaisedSkeletonSniper",
+    "selected_roots_have_no_metatable": true,
+    "summon": {
+      "addFlags": null,
+      "minionHasItemSet": null,
+      "minionList": {
+        "[1]": "RaisedSkeletonSniper"
+      },
+      "minionUses": null,
+      "parts": null
+    },
+    "summon_callbacks": {},
+    "summon_id": "SummonSkeletalSnipersPlayer"
+  },
+  "source_files_sha256": "5ac7d831fb2d5f5b42eb7cb3adf0896ec57b1ba8e0d098c77c2570900067fefe",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "target_modifiers": [],
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+}
