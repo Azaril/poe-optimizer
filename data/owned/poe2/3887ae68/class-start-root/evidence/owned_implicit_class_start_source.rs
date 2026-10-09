@@ -1,4 +1,4 @@
-//! Original constructor/default-inventory evidence for Class and Ascendancy roots.
+//! Original constructor/default-inventory evidence for implicit root 54447.
 //! This does not close Class, universal Player, or externally transformed behavior.
 #![cfg(not(target_arch = "wasm32"))]
 #[allow(dead_code)]
@@ -16,7 +16,6 @@ use std::{
 };
 const OBSERVE: &str = include_str!("support/implicit_class_start_source.lua");
 const TEST: &str = "actual_implicit_class_start_preserves_default_inventory_and_shared_root";
-const ROOT: &str = "POE_IMPLICIT_ROOT_SOURCE_ID";
 const CHILD: &str = "POE_IMPLICIT_CLASS_START_SOURCE_CHILD";
 const OUTPUT: &str = "POE_OPTIMIZER_TEST_IMPLICIT_CLASS_START_SOURCE_OUT";
 fn hash(bytes: &[u8]) -> String {
@@ -30,7 +29,7 @@ fn rows(value: &Json) -> &[Json] {
         &[]
     }
 }
-fn observed(root: &Path, xml: &str, enabled: bool, execute: bool, root_id: u64) -> Json {
+fn observed(root: &Path, xml: &str, enabled: bool, execute: bool) -> Json {
     let before = |lua: &Lua| {
         lua.load(if enabled {
             "jit.on()"
@@ -45,7 +44,7 @@ fn observed(root: &Path, xml: &str, enabled: bool, execute: bool, root_id: u64) 
             .load(OBSERVE)
             .set_name("@implicit_class_start_source.lua")
             .eval()?;
-        let result: Table = observer.call((execute, enabled, root_id))?;
+        let result: Table = observer.call((execute, enabled))?;
         Ok(lua.from_value(Value::Table(result))?)
     };
     let scratch = tempfile::tempdir().unwrap();
@@ -71,19 +70,11 @@ fn without_probe(mut host: Json) -> Json {
     state.remove("constructor_probe");
     host
 }
-fn check(host: &Json, executed: bool, root_id: u64) {
-    let class_root = root_id == 54447;
-    assert!(class_root || root_id == 8305);
+fn check(host: &Json, executed: bool) {
     let s = &host["state"];
     assert_eq!(s["executed"], executed);
-    assert_eq!(s["raw"]["skill"], root_id);
-    if class_root {
-        assert_eq!(s["raw"]["classesStart"], json!(["Witch", "Sorceress"]));
-    } else {
-        assert_eq!(s["raw"]["isAscendancyStart"], true);
-        assert_eq!(s["raw"]["ascendancyName"], "Disciple of Varashta");
-        assert!(s["raw"].get("classesStart").is_none());
-    }
+    assert_eq!(s["raw"]["skill"], 54447);
+    assert_eq!(s["raw"]["classesStart"], json!(["Witch", "Sorceress"]));
     assert!(rows(&s["raw"]["stats"]).is_empty());
     assert_eq!(
         s["methods"]["constructor"]["path"],
@@ -93,22 +84,14 @@ fn check(host: &Json, executed: bool, root_id: u64) {
     assert_eq!(s["methods"]["constructor_wrapper"]["first"], 167);
     assert_eq!(s["methods"]["process_stats"]["first"], 448);
     let node = &s["constructed"];
-    assert_eq!(node["id"], root_id);
-    assert_eq!(
-        node["type"],
-        if class_root {
-            "ClassStart"
-        } else {
-            "AscendClassStart"
-        }
-    );
+    assert_eq!(node["id"], 54447);
+    assert_eq!(node["type"], "ClassStart");
     assert_eq!(node["default_mod_count"], 0);
     assert_eq!(node["fields"]["modKey"], "");
     for field in ["mods", "stats", "sd"] {
         assert!(rows(&node["fields"][field]).is_empty());
     }
     let mods = &node["default_modifiers"];
-    assert_eq!(s["selected_modifiers"], *mods);
     assert!(rows(&mods["records"]).is_empty());
     assert_eq!(mods["fields"]["parent"], false);
     for field in ["actor", "multipliers", "conditions"] {
@@ -119,17 +102,6 @@ fn check(host: &Json, executed: bool, root_id: u64) {
     let declarations = rows(&node["declaration_fields"]);
     assert_eq!(declarations.len(), 26);
     for declaration in declarations {
-        if !class_root
-            && ["isAscendancyStart", "ascendancyName"]
-                .contains(&declaration["name"].as_str().unwrap())
-        {
-            assert_eq!(declaration["present"], true);
-            assert_eq!(
-                declaration["value"],
-                s["raw"][declaration["name"].as_str().unwrap()]
-            );
-            continue;
-        }
         assert_eq!(
             declaration["present"], false,
             "unexpected intrinsic field {}",
@@ -144,28 +116,18 @@ fn check(host: &Json, executed: bool, root_id: u64) {
             .all(|v| v[0]["key"].as_str() < v[1]["key"].as_str())
     );
     let classes = rows(&s["classes"]);
-    if class_root {
-        assert_eq!(classes.len(), 2);
-        assert!(rows(&s["ascendancies"]).is_empty());
-        for (row, (id, name)) in classes.iter().zip([(1, "Witch"), (7, "Sorceress")]) {
-            assert_eq!(row["class_id"], id);
-            assert_eq!(row["name"], name);
-            assert_eq!(row["start_node_id"], root_id);
-            assert_eq!(row["same_root"], true);
-        }
-    } else {
-        assert!(classes.is_empty());
-        assert_eq!(
-            s["ascendancies"],
-            json!([{"class_id":7,"ascendancy_id":3,
-            "internal_id":"Sorceress3","name":"Disciple of Varashta","start_node_id":root_id,"same_root":true}])
-        );
+    assert_eq!(classes.len(), 2);
+    for (row, (id, name)) in classes.iter().zip([(1, "Witch"), (7, "Sorceress")]) {
+        assert_eq!(row["class_id"], id);
+        assert_eq!(row["name"], name);
+        assert_eq!(row["start_node_id"], 54447);
+        assert_eq!(row["same_root"], true);
     }
     assert_eq!(
         s["selected_root"],
-        json!({"source_id":root_id,"class_id":7,
+        json!({"source_id":54447,"class_id":7,
         "tree_prototype_identity":true,"allocated_object_identity":true,
-        "default_modifier_object_identity":class_root,"default_modifier_value_identity":true})
+        "default_modifier_object_identity":true})
     );
     assert_eq!(
         s["selected"],
@@ -180,7 +142,7 @@ fn check(host: &Json, executed: bool, root_id: u64) {
     );
     for neighbor in neighbors {
         let id = neighbor["container_node_id"].as_u64().unwrap();
-        assert_ne!(id, root_id);
+        assert_ne!(id, 54447);
         assert_eq!(neighbor["distinct_from_root"], true);
         for flag in rows(&neighbor["connection_flags"]) {
             assert_eq!(flag["type"], "FLAG");
@@ -204,12 +166,11 @@ fn check(host: &Json, executed: bool, root_id: u64) {
         "complete_intrinsic_modifier_fields",
         "selected_default_root_unchanged",
         "cached_scalar_outputs_preserved",
+        "both_class_roots_identical",
         "saved_selection_preserved",
     ] {
         assert_eq!(s["evidence"][key], true);
     }
-    assert_eq!(s["evidence"]["both_class_roots_identical"], class_root);
-    assert_eq!(s["evidence"]["exact_selected_ascendancy_root"], !class_root);
     for key in [
         "class_owner_closed",
         "universal_player_initialization_closed",
@@ -220,7 +181,7 @@ fn check(host: &Json, executed: bool, root_id: u64) {
         assert_eq!(s["evidence"][key], false);
     }
 }
-fn child(root: &Path, out: &Path, enabled: bool, root_id: u64) {
+fn child(root: &Path, out: &Path, enabled: bool) {
     let source_root = root.join("vendor/path-of-building-poe2");
     let files = [
         "src/Classes/PassiveTree.lua",
@@ -251,14 +212,14 @@ fn child(root: &Path, out: &Path, enabled: bool, root_id: u64) {
     let mode = if enabled { "on" } else { "off" };
     let mut captured = vec![];
     for (name, execute) in [("original", true), ("repeat", true), ("control", false)] {
-        eprintln!("Implicit root {root_id} {name} JIT {mode}");
-        let host = observed(root, &xml, enabled, execute, root_id);
+        eprintln!("Implicit class root {name} JIT {mode}");
+        let host = observed(root, &xml, enabled, execute);
         fs::write(
             out.join(format!("source-jit-{mode}-{name}.raw.json")),
             serde_json::to_vec_pretty(&host).unwrap(),
         )
         .unwrap();
-        check(&host, execute, root_id);
+        check(&host, execute);
         captured.push(host);
     }
     assert!(
@@ -270,7 +231,7 @@ fn child(root: &Path, out: &Path, enabled: bool, root_id: u64) {
         "constructor probe changed actual selected state; inspect raw evidence"
     );
     assert_eq!(fs::read_to_string(root.join(source_path)).unwrap(), xml);
-    let report = json!({"schema_version":1,"source_root":root_id,"source_revision":pinned::UPSTREAM_REVISION,
+    let report = json!({"schema_version":1,"source_revision":pinned::UPSTREAM_REVISION,
         "manifest_sha256":pinned::manifest_sha256(),"observer_sha256":hash(OBSERVE.as_bytes()),
         "bootstrap_sha256":hash(include_bytes!("support/configuration_preparation_source.rs")),
         "files":files,"original_source":{"path":source_path,"sha256":hash(xml.as_bytes())},
@@ -278,7 +239,7 @@ fn child(root: &Path, out: &Path, enabled: bool, root_id: u64) {
         "complete_loads_per_jit":3,"explicit_constructor_probes_per_jit":2,
         "scope":{"original_loaded_tree_default":true,"original_full_constructor_probe":true,
             "whole_raw_descriptor":true,"complete_intrinsic_modifier_inventory":true,
-            "exact_constructed_field_inventory":true,"shared_witch_sorceress_root":root_id == 54447,"selected_ascendancy_root":root_id == 8305,
+            "exact_constructed_field_inventory":true,"shared_witch_sorceress_root":true,
             "fresh_repeat":true,"fresh_no_probe_control":true,"scalar_output_comparison":true,
             "full_runtime_object_graph":false,"external_transformations_closed":false,
             "class_owner_closed":false,"universal_player_initialization_closed":false,
@@ -302,46 +263,40 @@ fn actual_implicit_class_start_preserves_default_inventory_and_shared_root() {
         .unwrap_or_else(|| root.join("runs/owned-implicit-class-start-source-01"));
     if let Some(mode) = std::env::var_os(CHILD) {
         assert!(mode == "off" || mode == "on");
-        let root_id = std::env::var(ROOT).unwrap().parse::<u64>().unwrap();
-        child(&root, &out, mode == "on", root_id);
+        child(&root, &out, mode == "on");
         return;
     }
     assert!(!out.exists(), "use fresh immutable source output");
     fs::create_dir_all(&out).unwrap();
-    for root_id in [54447_u64, 8305] {
-        let lane = out.join(format!("root-{root_id}"));
-        fs::create_dir(&lane).unwrap();
-        for mode in ["off", "on"] {
-            let path = lane.join(format!("source-jit-{mode}.log"));
-            let log = fs::File::create(&path).unwrap();
-            let mut process = Command::new(std::env::current_exe().unwrap())
-                .args(["--ignored", "--exact", TEST, "--nocapture"])
-                .env(CHILD, mode)
-                .env(OUTPUT, &lane)
-                .env(ROOT, root_id.to_string())
-                .current_dir(root.join("vendor/path-of-building-poe2/src"))
-                .stdout(Stdio::from(log.try_clone().unwrap()))
-                .stderr(Stdio::from(log))
-                .spawn()
-                .unwrap();
-            let start = Instant::now();
-            loop {
-                if let Some(status) = process.try_wait().unwrap() {
-                    assert!(status.success(), "source child failed: {}", path.display());
-                    break;
-                }
-                if start.elapsed() > Duration::from_secs(600) {
-                    process.kill().unwrap();
-                    process.wait().unwrap();
-                    panic!("source deadline: {}", path.display());
-                }
-                std::thread::sleep(Duration::from_millis(100));
+    for mode in ["off", "on"] {
+        let path = out.join(format!("source-jit-{mode}.log"));
+        let log = fs::File::create(&path).unwrap();
+        let mut process = Command::new(std::env::current_exe().unwrap())
+            .args(["--ignored", "--exact", TEST, "--nocapture"])
+            .env(CHILD, mode)
+            .env(OUTPUT, &out)
+            .current_dir(root.join("vendor/path-of-building-poe2/src"))
+            .stdout(Stdio::from(log.try_clone().unwrap()))
+            .stderr(Stdio::from(log))
+            .spawn()
+            .unwrap();
+        let start = Instant::now();
+        loop {
+            if let Some(status) = process.try_wait().unwrap() {
+                assert!(status.success(), "source child failed: {}", path.display());
+                break;
             }
+            if start.elapsed() > Duration::from_secs(600) {
+                process.kill().unwrap();
+                process.wait().unwrap();
+                panic!("source deadline: {}", path.display());
+            }
+            std::thread::sleep(Duration::from_millis(100));
         }
-        assert!(
-            fs::read(lane.join("source-jit-off.json")).unwrap()
-                == fs::read(lane.join("source-jit-on.json")).unwrap(),
-            "fresh JIT lanes must preserve byte-identical root evidence"
-        );
     }
+    assert!(
+        fs::read(out.join("source-jit-off.json")).unwrap()
+            == fs::read(out.join("source-jit-on.json")).unwrap(),
+        "fresh JIT lanes must preserve byte-identical root evidence"
+    );
 }

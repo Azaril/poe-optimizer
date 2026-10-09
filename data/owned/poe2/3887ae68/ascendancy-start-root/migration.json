@@ -1,0 +1,18 @@
+{
+  "schema_version": 5,
+  "before": "38df77a1d00764c418ffbc9fae75a785d051f7309f3e955b7e272376d3744b71",
+  "release": "pob-3887ae68-ascendancy-start-root-v1",
+  "reason": "ascendancy-start-root-default-inventory",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v27",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "schema": [],
+  "owners": [],
+  "receivers": [],
+  "tables": [],
+  "query_targets": [],
+  "evaluation": null
+}

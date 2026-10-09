@@ -2045,3 +2045,20 @@ No source bug exception or obtainable-item claim is made. Establish reachable
 factor bounds alongside real `ProjectModifierTransform` producers and revisit
 this boundary only with that evidence. All four Life owner gaps remain; no
 production path was added or removed by the audit.
+
+## Implicit-root witness consolidation (2026-10-09)
+
+The optional original-constructor witness now handles the ordinary shared class
+root and the selected ascendancy root through one observer. PoB's allocated
+ascendancy root owns a newly processed modifier list; the ordinary class root
+inherits its prototype's list. The witness retains both actual lists and checks
+their complete intrinsic content rather than requiring identical objects.
+Neither behavior becomes a native aliasing or copying requirement.
+
+The earlier class-root packet authenticated the exact previous driver and
+observer bytes. Those are preserved under
+`data/owned/poe2/3887ae68/class-start-root/evidence/` as non-executable historical
+evidence. Its checker resolves those two pins explicitly to that archive;
+there is no old runtime, fallback parser or historical format reader. The
+current driver authenticates new reports independently. Existing report and
+publication provenance bytes remain unchanged.

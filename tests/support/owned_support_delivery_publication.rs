@@ -174,7 +174,7 @@ pub fn run_with_item_parameter_completions(
 }
 
 #[allow(clippy::too_many_arguments)] // One shared gate, with explicit diagnostic expectations.
-fn run_with_item_parameter_completions_and_counts(
+pub fn run_with_item_parameter_completions_and_counts(
     prior_path: PathBuf,
     out: PathBuf,
     authoring: &Path,

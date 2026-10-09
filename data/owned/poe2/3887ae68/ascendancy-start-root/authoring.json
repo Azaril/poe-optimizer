@@ -1,0 +1,69 @@
+{
+  "before": "38df77a1d00764c418ffbc9fae75a785d051f7309f3e955b7e272376d3744b71",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-mana-override-v1",
+    "schema_version": 6,
+    "content_sha256": "b5c4ed43cc1d998d2a9f0ad79dd6945e35af46357795b0ad0b225c56cc9e2643",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "17c6068fb78768cb842b5615f734b5f8eeb95a8eceabf1c3256c262c4e1a6972",
+  "rules": "de0f8783d377b59582cbcaede1c617e382a68fbbf14a64feb73260bb106b9f5c",
+  "mapping": "289f7df08ceedccbeb8278b13ab831e0733ae46f09425ddc72ad529edf5261fe",
+  "roles": "e74b2e44b0f1c8907a5a6cea2aa1b550c8dbc829fd8b711f6bcf7292b2b31eec",
+  "normalization": "cf8acd9559334271ac56c81c17dd9735c130a3cc53ef29fa3a9b20ce51f9992c",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "allocated_definitions": 0,
+  "new_programs": 0,
+  "new_receivers": 0,
+  "closed_passive_owners": 1,
+  "closed_empty_declaration_inventories": 7,
+  "registry_last_issued_before": 13149,
+  "registry_last_issued_after": 13149,
+  "scope": {
+    "default_root_only": true,
+    "class_rule_closure_changed": false,
+    "ascendancy_rule_closure_changed": false,
+    "universal_player_initialization_closed": false,
+    "external_transformations_closed": false,
+    "whole_build_parity": false
+  },
+  "source_validation": {
+    "status": "passed",
+    "log": "runs/owned-implicit-roots-source-03.log",
+    "complete_loads_per_jit": 3,
+    "explicit_constructor_probes_per_jit": 2,
+    "observer_sha256": "b66f38d838c58d72373f5135c50cee2ea350a8841d655edcf2f25ad3811ce107",
+    "witness_test_sha256": "ac650fe16ae3e255feddd62b430f304b3d83f79ebd7e90efda5d239447a5475c",
+    "report_bytes": 235225,
+    "report_sha256": "5202a6d68cd2514643997d13cb69a5b2ac78f46f417fb6feb82d0f2a60c07dca"
+  },
+  "artifacts": [
+    {
+      "file": "bindings.json",
+      "bytes": 5062,
+      "sha256": "e70b429d6f80a9a446ebd76bcad2333bc6669c8dbefdd2fe7d259f324484b3e0"
+    },
+    {
+      "file": "dependencies.json",
+      "bytes": 82505,
+      "sha256": "2ab421ba62d656a1c31ebd44c6dde7054011bc9aa14ae4026c3bc43c28fdf7a4"
+    },
+    {
+      "file": "closure.json",
+      "bytes": 4506,
+      "sha256": "1a905bdf4a0f6e0693eb6e65490a193abc4fad0cbcbf753d9568a4a435383933"
+    },
+    {
+      "file": "migration.json",
+      "bytes": 569,
+      "sha256": "c9aee35efed40b7635bf245610822bad4d1e4eb9f9f2144f79f43c83cf7d8c24"
+    },
+    {
+      "file": "source-vectors.json",
+      "bytes": 83240,
+      "sha256": "68cba6d7817c09fe25fba9e65736e11ab63376312cde1f9af79cdcb5d917ebd2"
+    }
+  ]
+}

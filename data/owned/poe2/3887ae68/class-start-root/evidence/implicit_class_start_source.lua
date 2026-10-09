@@ -1,8 +1,5 @@
--- Bounded original implicit-root construction witness; no copied parser or native rule.
-return function(execute, expectedJit, rootId)
-    assert(rootId == 54447 or rootId == 8305)
-    local classRoot = rootId == 54447
-    local rootType = classRoot and "ClassStart" or "AscendClassStart"
+-- Bounded original class-start construction witness; no copied parser or native rule.
+return function(execute, expectedJit)
     assert(debug.gethook() == nil and jit.status() == expectedJit)
     local function original(f, path, first)
         local i = debug.getinfo(f, "S")
@@ -53,20 +50,16 @@ return function(execute, expectedJit, rootId)
         build_node_mods=original(require("Modules.CalcBase").buildModListForNode, "Modules/CalcSetup.lua", 200),
     }
     local rawTree = LoadModule("TreeData/0_5/tree")
-    local raw = plain(assert(rawTree.nodes[rootId]))
-    assert(raw.skill == rootId and #raw.stats == 0)
-    if classRoot then
-        assert(raw.classesStart[1] == "Witch" and raw.classesStart[2] == "Sorceress" and #raw.classesStart == 2)
-    else
-        assert(raw.isAscendancyStart and raw.ascendancyName == "Disciple of Varashta" and raw.classesStart == nil)
-    end
+    local raw = plain(assert(rawTree.nodes[54447]))
+    assert(raw.skill == 54447 and #raw.stats == 0)
+    assert(raw.classesStart[1] == "Witch" and raw.classesStart[2] == "Sorceress" and #raw.classesStart == 2)
     local spec = build.spec
     local tree = spec.tree
     assert(tree.treeVersion == "0_5" and spec.curClassId == 7)
-    local root, selectedRoot = assert(tree.nodes[rootId]), assert(spec.nodes[rootId])
+    local root, selectedRoot = assert(tree.nodes[54447]), assert(spec.nodes[54447])
     assert(getmetatable(selectedRoot) == root and root.__index == root)
-    assert(selectedRoot.alloc and spec.allocNodes[rootId] == selectedRoot)
-    assert((selectedRoot.modList == root.modList) == classRoot)
+    assert(selectedRoot.alloc and spec.allocNodes[54447] == selectedRoot)
+    assert(selectedRoot.modList == root.modList)
     local function modList(list)
         assert(getmetatable(list) == common.classes.ModList)
         local out = {records={}, fields={}, own_keys={}}
@@ -107,7 +100,7 @@ return function(execute, expectedJit, rootId)
         "grantedPassive", "grantedPassives", "socket", "sockets", "skillId",
     }
     local function nodeProjection(node, ownerTree)
-        assert(node.type == rootType and node.id == rootId and node.sd == node.stats)
+        assert(node.type == "ClassStart" and node.id == 54447 and node.sd == node.stats)
         local fields, inventory, excluded = {}, {}, {}
         for k, v in pairs(node) do
             assert(type(k) == "string")
@@ -138,22 +131,13 @@ return function(execute, expectedJit, rootId)
             declaration_fields=declarations, default_modifiers=modList(node.modList)}
     end
     local before = nodeProjection(root, tree)
-    local selectedModifiers = modList(selectedRoot.modList)
-    assert(equal(selectedModifiers, before.default_modifiers))
-    local classes, ascendancies = {}, {}
-    for _, id in ipairs(classRoot and {1, 7} or {}) do
+    local classes = {}
+    for _, id in ipairs({1, 7}) do
         local c = assert(tree.classes[id])
         assert(c.startNodeId == 54447 and tree.nodes[c.startNodeId] == root)
         assert(tree.classStartNodeNameMap[c.name] == 54447)
         classes[#classes+1] = {class_id=id, name=c.name, start_node_id=c.startNodeId,
             same_root=true, base_str=c.base_str, base_dex=c.base_dex, base_int=c.base_int}
-    end
-    if not classRoot then
-        local asc = assert(tree.classes[7].classes[3])
-        assert(asc.startNodeId == rootId and asc.internalId == "Sorceress3")
-        assert(spec.curAscendClass == asc and spec.curAscendClassId == 3)
-        ascendancies[1] = {class_id=7, ascendancy_id=3, internal_id=asc.internalId,
-            name=asc.name, start_node_id=asc.startNodeId, same_root=tree.nodes[asc.startNodeId] == root}
     end
     local neighbors = {}
     for _, id in ipairs(root.linkedId) do
@@ -178,7 +162,7 @@ return function(execute, expectedJit, rootId)
     local outputs, snapshots = {}, {}
     for _, mode in ipairs({"MAIN", "CALCS"}) do
         local env = mode == "MAIN" and build.calcsTab.mainEnv or build.calcsTab.calcsEnv
-        assert(env.spec == spec and env.allocNodes[rootId] == selectedRoot)
+        assert(env.spec == spec and env.allocNodes[54447] == selectedRoot)
         outputs[mode] = env.player.output
         local scalars = {}
         for k,v in pairs(outputs[mode]) do
@@ -189,18 +173,13 @@ return function(execute, expectedJit, rootId)
     local probe
     if execute then
         local freshTree = new("PassiveTree"):PassiveTree("0_5")
-        local freshRoot = assert(freshTree.nodes[rootId])
+        local freshRoot = assert(freshTree.nodes[54447])
         assert(freshRoot ~= root and freshRoot.modList ~= root.modList)
         probe = nodeProjection(freshRoot, freshTree)
         assert(equal(probe, before))
-        if classRoot then
-            for _, id in ipairs({1,7}) do assert(freshTree.classes[id].startNodeId == rootId) end
-        else
-            assert(freshTree.classes[7].classes[3].startNodeId == rootId)
-        end
+        for _, id in ipairs({1,7}) do assert(freshTree.classes[id].startNodeId == 54447) end
     end
     assert(equal(before, nodeProjection(root, tree)) and equal(selected, selection()))
-    assert(equal(selectedModifiers, modList(selectedRoot.modList)))
     for mode, output in pairs(outputs) do
         local env = mode == "MAIN" and build.calcsTab.mainEnv or build.calcsTab.calcsEnv
         assert(env.player.output == output and env.spec == spec)
@@ -213,15 +192,14 @@ return function(execute, expectedJit, rootId)
     assert(class.PassiveTree == wrapper and class.ProcessStats == processor)
     assert(upvalue(class.PassiveTree, "originalFunc") == implementation and jit.status() == expectedJit)
     return {executed=execute, raw=raw, constructed=before, constructor_probe=probe,
-        selected_modifiers=selectedModifiers, classes=classes, ascendancies=ascendancies, neighbor_connection_flags=neighbors, methods=methods, selected=selected,
-        selected_root={source_id=rootId, class_id=7, tree_prototype_identity=true,
-            allocated_object_identity=true, default_modifier_object_identity=classRoot,
-            default_modifier_value_identity=true},
+        classes=classes, neighbor_connection_flags=neighbors, methods=methods, selected=selected,
+        selected_root={source_id=54447, class_id=7, tree_prototype_identity=true,
+            allocated_object_identity=true, default_modifier_object_identity=true},
         player_scalar_outputs=snapshots,
         evidence={original_constructor=true, original_process_stats=true, original_methods_preserved=true,
             exact_raw_descriptor=true, complete_intrinsic_modifier_fields=true,
             selected_default_root_unchanged=true, cached_scalar_outputs_preserved=true,
-            both_class_roots_identical=classRoot, exact_selected_ascendancy_root=not classRoot, saved_selection_preserved=true,
+            both_class_roots_identical=true, saved_selection_preserved=true,
             class_owner_closed=false, universal_player_initialization_closed=false,
             external_transformations_closed=false, all_same_source_labels_owned_by_root=false,
             complete_build_claim=false}}

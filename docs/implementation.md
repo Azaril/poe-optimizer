@@ -113,7 +113,60 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Current implementation checkpoint: draft final Mana arithmetic
+## Current implementation checkpoint: implicit Ascendancy root
+
+The [Ascendancy-root packet](../data/owned/poe2/3887ae68/ascendancy-start-root/README.md)
+retires the empty default program inventory and seven intrinsic declaration
+inventories of Original05's implicit passive `1b5d` (source `8305`). It adds no
+definitions or numerical programs. Class `0a23`, Ascendancy `0a36`, shared Player
+`332a`, external transformations and all other owners retain their coverage.
+The thirteen explicitly selected Partial passive owners remain unresolved;
+this root is a separate implicit provider.
+
+The existing original-constructor witness now handles both Class and Ascendancy
+roots. Twelve full loads pass in 23.68s across JIT modes. It records a real
+source distinction: the selected Ascendancy root has its own freshly processed
+modifier list, with the same empty intrinsic content as the prototype. Native
+ownership does not adopt that source object-copy behavior. Historical driver
+and observer bytes remain non-executable evidence; there is one current witness.
+
+Six ordinary tests pass in 0.01s, covering exact inventory/ownership, unknown
+fields, hidden modifiers and topology changes. The first publication rejected
+two signed zeros accidentally rewritten during JSON authoring; the projection
+now preserves the exact original number tokens. The strict comparison was not
+relaxed. Publication02 passes in 30.80s: all five drafts, selections, source
+sidecars, 110 queries and unresolved counts remain unchanged; the eighteen-file
+release rebuilds byte-identically. No evaluation bundle is added. Independent
+review also corrected geometry dispositions to preserve their relevance to
+external radius transformations. Strict all-feature Clippy passes for the
+publication and source targets (`runs/owned-ascendancy-start-root-clippy-01.log`
+and `runs/owned-implicit-roots-clippy-01.log`).
+
+The canonical package is **`runs/owned-ascendancy-start-root-publication-02/package`**:
+
+- Input: `d22618ec692e1d76d683e92cb623aebe5939d034681eb6876caafdfd10b20f84`
+- Definitions: `54d692c16b3c19b33fcc9cd565328bd93aa30f633b96a56dbea1063010d8389b`
+- Rules: `3401f86bcfc6bd7188dae48204b9e030b7943b282972615730b65235c862a46b`
+- Compiled rules: `936593a95a8ce1b28d8c1d7a53bd0d12842fa9b223050ecd30f8817f71cee25c`
+
+Operations remain V27; no IDs were allocated. Complete native builds remain
+**0/5**, with selected input obligations **107/117/109/123/4**. Evidence:
+`runs/owned-implicit-roots-source-03.log`,
+`runs/owned-ascendancy-start-root-native-01.log`, and
+`runs/owned-ascendancy-start-root-publication-02/validation.json`.
+
+**Next blocker work:** exact item-granted Skeletal Warrior correspondence for
+eight archived source rows currently attached to Original05's configuration
+fallback. Existing physical-gem selector/deferred-field proofs can be borrowed
+without transferring physical assignment authority. Preserve the twelve live
+raw/usage/support obligations and all numerical Partial owners; this work cannot
+retire the four selected issue IDs by itself. A separate agent is implementing
+the data and private proof reuse; validate/rebase against the canonical package
+above before adoption. Archived Firebolt needs a different proof because its
+usage inventory is Complete-empty. The numeric-domain decision below remains
+pending; do not implement it by assumption.
+
+## Unpublished final Mana arithmetic
 
 The [draft Mana consumer](../data/owned/poe2/3887ae68/mana-pool/README.md)
 now connects the existing native level, attribute, reward, adjustment and
@@ -121,7 +174,7 @@ override producers through one data-defined rule program. The finite component
 fixture calculates **638 Mana**, changes with level and Intelligence inputs,
 and preserves a selected zero override. There is no new native resource kernel,
 definition, Lua behavior or second evaluation path. This is **not published**;
-the canonical release below and complete-build count remain unchanged.
+the canonical release above and complete-build count remain unchanged.
 
 The existing `owned_intelligence_mana` target passes **19 ordinary tests**
 (`runs/owned-mana-pool-draft-native-05.log`, 4.93s); its four publication tests
@@ -180,16 +233,15 @@ Preserve all unrelated Class/Actor/item/passive/global gaps. No literal zero wri
 or build-name/identity selector should be introduced. The evidence document records
 the separate path toward positive donor-property and transformation support.
 Reuse the draft and retained source witness. Keep the canonical V27 package
-below until a checked successor is assembled, all five imports are verified and
+above until a checked successor is assembled, all five imports are verified and
 the ordinary replay is refreshed. Continue final damage/Life and the four selected
 input obligations toward one complete unchanged build, then begin D4. Complete
 native builds remain **0/5** and selected obligations **107/117/109/123/4**.
 
-CI snapshot at 08:50 UTC: `4146a0e` run `37905740359` was pending with no jobs,
-and predecessor `6060447` run `37903219631` was cancelled with no jobs. No failed
-job or actionable regression was found; no success is claimed for this checkpoint.
+Latest CI snapshot: `d9145cf` run `37908336365` is pending; preceding runs for
+`4146a0e` and `6060447` were cancelled. No CI success is claimed for this checkpoint.
 
-## Latest data checkpoint: actual Mana override selection
+## Previous data checkpoint: actual Mana override selection
 
 The [Mana override packet](../data/owned/poe2/3887ae68/mana-override/README.md)
 adds one real allocation contribution and one checked selection query to the
@@ -221,7 +273,7 @@ assert their exact contents instead of inserting duplicates. No old-format
 reader or production validation relaxation was added.
 
 Publication passes in 26.50s (`runs/owned-mana-override-publication-01.log`).
-The canonical package is now **`runs/owned-mana-override-publication-01/package`**,
+That checkpoint's package is **`runs/owned-mana-override-publication-01/package`**,
 operations V27, with 18 artifact files, 110 query rows and no evaluation bundle.
 All artifacts rebuild byte for byte; all-five semantic import preservation and
 selected-request comparisons pass. Selected obligations remain

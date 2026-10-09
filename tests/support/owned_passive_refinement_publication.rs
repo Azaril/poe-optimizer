@@ -148,11 +148,9 @@ fn stage_inner(
             "pure refinement cannot bypass any extension or evaluation migration"
         );
         let old = &prior.input().recipe;
-        assert_eq!(old.schema.schema_version, 6);
-        assert_eq!(
-            old.rules.operations_version.as_str(),
-            "owned-domain-operations-v20"
-        );
+        // Refinement preserves the checked predecessor's contract. A fixed
+        // historical operations version would reject newer publications even
+        // though no expression, schema or evaluator semantics change here.
         assert_eq!(migration.contract.schema_version, old.schema.schema_version);
         assert_eq!(
             migration.contract.schema_semantics_version,

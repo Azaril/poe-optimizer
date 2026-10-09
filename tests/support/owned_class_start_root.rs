@@ -211,16 +211,36 @@ pub fn check_authored() {
 /// Full constructor projection is committed once; JIT reports are authenticated
 /// separately rather than substituting a count or source-label filter for it.
 pub fn check_vectors(a: &Value, v: &Value, authenticate: bool) {
+    check_root_vectors(a, v, authenticate, false);
+}
+
+/// Shared complete root evidence validation. Historical Class reports retain their
+/// exact archived witness; current Ascendancy reports authenticate the live witness.
+pub fn check_root_vectors(a: &Value, v: &Value, authenticate: bool, ascendancy: bool) {
+    let root_id = if ascendancy { 8305 } else { 54447 };
     assert_eq!(v["status"], "passed");
     assert_eq!(a["source_validation"]["status"], "passed");
     let s = &v["projection"];
     assert_eq!(s["executed"], true);
-    assert_eq!(s["raw"]["skill"], 54447);
+    assert_eq!(s["raw"]["skill"], root_id);
     assert!(rows(&s["raw"]["stats"]).is_empty());
-    assert_eq!(s["raw"]["classesStart"], json!(["Witch", "Sorceress"]));
+    if ascendancy {
+        assert_eq!(s["raw"]["isAscendancyStart"], true);
+        assert_eq!(s["raw"]["ascendancyName"], "Disciple of Varashta");
+        assert!(s["raw"].get("classesStart").is_none());
+    } else {
+        assert_eq!(s["raw"]["classesStart"], json!(["Witch", "Sorceress"]));
+    }
     let node = &s["constructed"];
-    assert_eq!(node["id"], 54447);
-    assert_eq!(node["type"], "ClassStart");
+    assert_eq!(node["id"], root_id);
+    assert_eq!(
+        node["type"],
+        if ascendancy {
+            "AscendClassStart"
+        } else {
+            "ClassStart"
+        }
+    );
     assert_eq!(node["default_mod_count"], 0);
     assert_eq!(node["fields"]["modKey"], "");
     for field in ["mods", "stats", "sd"] {
@@ -259,8 +279,15 @@ pub fn check_vectors(a: &Value, v: &Value, authenticate: bool) {
     let names: BTreeSet<_> = declarations
         .iter()
         .map(|row| {
-            assert_eq!(row["present"], false);
-            assert!(row.get("value").is_none());
+            if ascendancy
+                && ["isAscendancyStart", "ascendancyName"].contains(&row["name"].as_str().unwrap())
+            {
+                assert_eq!(row["present"], true);
+                assert_eq!(row["value"], s["raw"][row["name"].as_str().unwrap()]);
+            } else {
+                assert_eq!(row["present"], false);
+                assert!(row.get("value").is_none());
+            }
             row["name"].as_str().unwrap()
         })
         .collect();
@@ -333,22 +360,33 @@ pub fn check_vectors(a: &Value, v: &Value, authenticate: bool) {
             .map(|row| row["key"].as_str().unwrap())
             .collect()
     );
-    assert_eq!(
-        s["selected_root"],
-        json!({"source_id":54447,"class_id":7,
-        "tree_prototype_identity":true,"allocated_object_identity":true,"default_modifier_object_identity":true})
-    );
+    let mut selected_root = json!({"source_id":root_id,"class_id":7,
+        "tree_prototype_identity":true,"allocated_object_identity":true,"default_modifier_object_identity":!ascendancy});
+    if ascendancy {
+        selected_root["default_modifier_value_identity"] = json!(true);
+        assert_eq!(s["selected_modifiers"], node["default_modifiers"]);
+    }
+    assert_eq!(s["selected_root"], selected_root);
     assert_eq!(
         s["selected"],
         json!({"items":2,"spec":3,"skills":4,"config":1,"group":3})
     );
     let classes = rows(&s["classes"]);
-    assert_eq!(classes.len(), 2);
-    for (row, (id, name)) in classes.iter().zip([(1, "Witch"), (7, "Sorceress")]) {
-        assert_eq!(row["class_id"], id);
-        assert_eq!(row["name"], name);
-        assert_eq!(row["start_node_id"], 54447);
-        assert_eq!(row["same_root"], true);
+    if ascendancy {
+        assert!(classes.is_empty());
+        assert_eq!(
+            s["ascendancies"],
+            json!([{"class_id":7,"ascendancy_id":3,
+            "internal_id":"Sorceress3","name":"Disciple of Varashta","start_node_id":root_id,"same_root":true}])
+        );
+    } else {
+        assert_eq!(classes.len(), 2);
+        for (row, (id, name)) in classes.iter().zip([(1, "Witch"), (7, "Sorceress")]) {
+            assert_eq!(row["class_id"], id);
+            assert_eq!(row["name"], name);
+            assert_eq!(row["start_node_id"], root_id);
+            assert_eq!(row["same_root"], true);
+        }
     }
     for (field, path, first) in [
         ("constructor_wrapper", "Modules/Common.lua", 167),
@@ -366,7 +404,7 @@ pub fn check_vectors(a: &Value, v: &Value, authenticate: bool) {
     assert!(!neighbors.is_empty());
     for neighbor in neighbors {
         let id = neighbor["container_node_id"].as_u64().unwrap();
-        assert_ne!(id, 54447);
+        assert_ne!(id, root_id);
         assert_eq!(neighbor["distinct_from_root"], true);
         for flag in rows(&neighbor["connection_flags"]) {
             assert_eq!(flag["type"], "FLAG");
@@ -382,10 +420,13 @@ pub fn check_vectors(a: &Value, v: &Value, authenticate: bool) {
         "complete_intrinsic_modifier_fields",
         "selected_default_root_unchanged",
         "cached_scalar_outputs_preserved",
-        "both_class_roots_identical",
         "saved_selection_preserved",
     ] {
         assert_eq!(s["evidence"][field], true);
+    }
+    assert_eq!(s["evidence"]["both_class_roots_identical"], !ascendancy);
+    if ascendancy {
+        assert_eq!(s["evidence"]["exact_selected_ascendancy_root"], true);
     }
     for field in [
         "class_owner_closed",
@@ -429,11 +470,16 @@ pub fn check_vectors(a: &Value, v: &Value, authenticate: bool) {
                 .unwrap()
                 .ends_with(&format!("/source-jit-{mode}.json"))
         );
-        assert_eq!(row["bytes"], 229_933);
-        assert_eq!(
-            row["sha256"],
-            "869eb7f6bce5267d0a06970ce75e56f125d59b0c5729ff71ef5abc0b3105d5b4"
-        );
+        if !ascendancy {
+            assert_eq!(row["bytes"], 229_933);
+            assert_eq!(
+                row["sha256"],
+                "869eb7f6bce5267d0a06970ce75e56f125d59b0c5729ff71ef5abc0b3105d5b4"
+            );
+        } else {
+            assert_eq!(row["bytes"], a["source_validation"]["report_bytes"]);
+            assert_eq!(row["sha256"], a["source_validation"]["report_sha256"]);
+        }
     }
     if authenticate {
         let mut prior_bytes = None;
@@ -487,7 +533,11 @@ pub fn check_vectors(a: &Value, v: &Value, authenticate: bool) {
         );
         for (path, field) in [
             (
-                "crates/poe-optimizer-pob/tests/support/implicit_class_start_source.lua",
+                if ascendancy {
+                    "crates/poe-optimizer-pob/tests/support/implicit_class_start_source.lua"
+                } else {
+                    "data/owned/poe2/3887ae68/class-start-root/evidence/implicit_class_start_source.lua"
+                },
                 "observer_sha256",
             ),
             (
@@ -510,7 +560,7 @@ pub fn check_vectors(a: &Value, v: &Value, authenticate: bool) {
             hash(
                 &fs::read(
                     root().join(
-                        "crates/poe-optimizer-pob/tests/owned_implicit_class_start_source.rs"
+                        if ascendancy { "crates/poe-optimizer-pob/tests/owned_implicit_class_start_source.rs" } else { "data/owned/poe2/3887ae68/class-start-root/evidence/owned_implicit_class_start_source.rs" }
                     )
                 )
                 .unwrap()

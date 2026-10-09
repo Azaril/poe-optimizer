@@ -603,6 +603,14 @@ rounding and caps as declared semantics, not arbitrary callback order. Reusable 
 families implement the operations; game coefficients, selectors, thresholds and effect
 composition remain data.
 
+Intrinsic owner coverage is separate from instance preparation and external
+effects. For example, a stat-free implicit root can have complete default
+declarations while its class, ascendancy, neighboring nodes and external
+transformations remain independently incomplete. Acquisition must inspect the
+constructed definition and selected occurrence; empty source text alone is
+insufficient. Source object sharing or copying is evidence about acquisition,
+not a native ownership rule.
+
 Resource transformations preserve donor stage, exact source/recipient and the
 distinction between outgoing conversion and additional gain. They must not read
 a fully scaled Actor resource when a mechanic uses earlier item/global bases.

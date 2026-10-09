@@ -698,7 +698,14 @@ final Strength or authorize a false-default shortcut.
 
 The [shared class-start root](../data/owned/poe2/3887ae68/class-start-root/README.md)
 has a source-proved empty intrinsic inventory. Its closure changes no class
-mechanic, external transformation, topology or imported selection. The
+mechanic, external transformation, topology or imported selection. The same
+original-constructor witness now proves the selected
+[Ascendancy root](../data/owned/poe2/3887ae68/ascendancy-start-root/README.md)'s
+empty default inventory. Its allocated source occurrence has a separately
+processed modifier list; both complete projections are verified rather than
+assuming shared objects. The native data-only closure preserves independent
+Ascendancy, Class, Player and transformation coverage. Its release preserves all
+five imports and all 110 queries; it does not complete a build. The
 [scalability reconciliation](../data/owned/poe2/3887ae68/minion-level-scalability/README.md)
 also retires one proven obligation without changing numerical programs, source
 admission or schema identity.
