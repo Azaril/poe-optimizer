@@ -8,7 +8,10 @@ mod native;
 #[path = "support/owned_release_fixture.rs"]
 mod release;
 use native::*;
-use poe_optimizer_core::owned_build::AssumptionTarget;
+use poe_optimizer_core::{
+    owned_build::AssumptionTarget,
+    owned_schema::{SchemaFacet, SchemaGap, SchemaState},
+};
 use poe_optimizer_engine::owned_plan::{EffectValue, PlanGapReason, SupportEffectsOutcome};
 use rayon::prelude::*;
 use std::path::PathBuf;
@@ -91,6 +94,36 @@ fn real_partial_owner_still_prevents_complete_preparation() {
         r.outcome,
         SupportEffectsOutcome::Evaluated { .. }
     ));
+}
+#[test]
+fn finite_rule_closure_does_not_fill_missing_or_unknown_support_sources() {
+    for unmapped in [false, true] {
+        let mut w = World::new(Some(-60.0), true);
+        let providers = &mut w.recipe.rules.support_discovery.as_mut().unwrap().providers;
+        if unmapped {
+            providers[1].domain = SchemaState::Unmapped {
+                gaps: vec![SchemaGap {
+                    subject: providers[1].owner.clone(),
+                    facet: SchemaFacet::GameRules,
+                    code: "unknown-fixture-support-sources".parse().unwrap(),
+                }],
+            };
+        } else {
+            providers.remove(1);
+        }
+        let p = w.plan().unwrap();
+        let r = p.evaluate(&mut p.new_scratch()).unwrap();
+        let expected = if unmapped {
+            PlanGapReason::UnmappedSupportSources
+        } else {
+            PlanGapReason::MissingSupportSources
+        };
+        assert!(r.gaps.iter().any(|g| g.reason == expected));
+        assert!(!matches!(
+            r.outcome,
+            SupportEffectsOutcome::Evaluated { .. }
+        ));
+    }
 }
 #[test]
 fn penalty_and_rewards_are_deterministic_with_reused_scratch_and_rayon() {

@@ -1,33 +1,19 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-09, including published Arsonist/Frost Mage/Reaver topology
-and physical inventories, stable deferred V3 attachment, Sniper count/reservation,
-reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables,
-native readiness, source-property ownership, Ice source-input fragments and
-the ordinary Minion-level Amulet-copy fragments, selected passive/reward
-producer closures, the reward ailment/recovery/Charm input channels, Growing
-Swarm's complete default Area/cooldown inputs, finite Sniper receiving, Bidding's
-conditional minion Action delivery, corrected per-effect Gem supply classification,
-exact manual Direct support targets, native Action Area eligibility, Rapid Casting
-contributions, Encroaching cost factors, real Offering/Prolonged Duration actions,
-actual zero-factor Amulet transport evidence, published Offering final-input
-assembly, the bounded stages-V4 local-item extension, the real pre-Amulet
-aggregation/receiver, conditional Command damage, the population program
-partition, canonical intrinsic minion Life, physical Sniper final inputs,
-passive Life Increase delivery, Solar intrinsic declaration closure, local
-Armour/ES composition before per-level additions and overrides, canonical Cold
-item contribution delivery, selected item parameter inventories, Leggings
-placement, component-scalability reconciliation, intrinsic Player Life,
-Strength-derived inherent Life, six ordinary attribute consumers over checked
-contribution queries, guarded empty-MORE producers, the shared default class-start
-closure, once-per-Player Actor rule ownership, generated-field accounting,
-native requested-participation gates, strict group-value projection, shared
-Player equipment-slot reads, unified typed physical usage, the first Sniper
-participation data packet, published selected off-hand facts, and the
-accepted generality, generated-usage and socket decisions.
-This explains the implementation and
-the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
-are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
+Snapshot: 2026-10-09. The owned path imports an external build into explicit
+occurrences, validates it against injected definitions and rules, and executes
+the resulting graph in Rust. The CLI, future UI and optimizer share those public
+contracts. Native calculation has no Lua state or PoB subprocess. Optional
+`mlua`/LuaJIT tooling acquires source facts and executes the independent PoB
+reference; source parsing and saved-field interpretation remain at the import
+boundary. Some older acquisition/reference modules still await retirement, as
+listed below and in the cleanup register.
+
+This overview distinguishes implemented components, incomplete coverage and
+accepted future contracts. Generated owned artifacts and loaded Rust indexes
+remain the storage plan; SQLite and an ORM are not required. Detailed mechanics
+checkpoints below explain what each component proves without implying complete
+build support.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
 

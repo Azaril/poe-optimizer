@@ -932,6 +932,22 @@ mod occurrence_plan {
                     programs: DeclaredSet::complete(vec![]),
                 });
             }
+            // Explicit finite synthetic source inventory, independent of rule
+            // coverage: these four definitions introduce no support origins.
+            f.recipe.rules.support_discovery = Some(SupportDiscoveryInput {
+                providers: [
+                    binding.modifier.address(),
+                    class.address(),
+                    encounter.address(),
+                    template.address(),
+                ]
+                .into_iter()
+                .map(|address| SupportSourceDomainDeclaration {
+                    owner: SchemaSubject::Definition(address),
+                    domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+                })
+                .collect(),
+            });
             f.recipe.registry = registry.input().clone();
             f.rebind();
             let out = f.compile().unwrap();
@@ -1190,6 +1206,43 @@ mod occurrence_plan {
                 });
             }
         });
+    }
+    #[test]
+    fn missing_or_unmapped_support_sources_still_refuse_complete_values() {
+        for provider_index in 0..4 {
+            for unmapped in [false, true] {
+                let mut f = OccurrenceFixture::new();
+                f.complete();
+                let providers = &mut f.recipe.rules.support_discovery.as_mut().unwrap().providers;
+                let owner = providers[provider_index].owner.clone();
+                if unmapped {
+                    providers[provider_index].domain = SchemaState::Unmapped {
+                        gaps: vec![SchemaGap {
+                            subject: owner.clone(),
+                            facet: SchemaFacet::GameRules,
+                            code: key("unknown-fixture-support-sources"),
+                        }],
+                    };
+                } else {
+                    providers.remove(provider_index);
+                }
+                let plan = f.plan();
+                let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+                let expected = if unmapped {
+                    PlanGapReason::UnmappedSupportSources
+                } else {
+                    PlanGapReason::MissingSupportSources
+                };
+                assert!(report.gaps.iter().any(|g| g.reason == expected));
+                assert!(matches!(
+                    f.value(&report, 6, 4, &f.binding.output),
+                    EffectValue::Unresolved {
+                        reason: PlanGapReason::IncompleteContributors,
+                        ..
+                    }
+                ));
+            }
+        }
     }
     #[test]
     fn missing_scalar_stage_cannot_turn_into_unity_or_known_effective_values() {

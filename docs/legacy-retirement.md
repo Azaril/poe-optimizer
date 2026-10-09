@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-10-08 for the owner's aggressive retirement direction. This is a living companion to
+Updated 2026-10-09 for the owner's aggressive retirement direction. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -37,6 +37,25 @@ coverage; otherwise retire their orchestration and retain useful source witnesse
 Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
+
+**Fixture and evidence maintenance, 2026-10-09:** the common support-source gate
+also applies to isolated numerical fixtures. Real Reward fixtures reuse published
+source-domain certificates; synthetic boundaries explicitly declare their finite
+authored-assignment domains. Neither test convenience nor a complete numerical
+program is production evidence of support completeness. Refusal tests remove or
+unmap those domains and continue to require failure.
+
+The current Sniper replay already contains the numeric Amulet Life-copy programs
+and their stage/readiness declarations. The older component fixture now verifies
+and reuses those exact records, rejecting missing, duplicate or conflicting
+records; it no longer creates duplicate programs. Historical Crown source reports
+retain their exact original driver/observer bytes under the packet's `evidence/`
+directory, outside executable modules. Explicit path mappings authenticate those
+bytes without weakening the original hashes or maintaining a runtime alternative.
+Fresh item-observation exports identify the actual current extractor. Their CLI
+receipt must match the authenticated current export, while catalog bytes and all
+other source/content/count fields must still match the retained historical data.
+An extractor code change does not authorize rewriting historical evidence.
 
 **Numeric selection, 2026-10-09:** operations V27 extends the existing typed
 contribution graph. One cached result per exact recipient/channel/query/group

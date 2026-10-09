@@ -60,6 +60,49 @@ fn resolved_copy_boundary_preserves_fractional_identity_and_signed_floor() {
 }
 
 #[test]
+fn finite_template_and_passive_rules_do_not_imply_support_source_coverage() {
+    for passive in [false, true] {
+        for unmapped in [false, true] {
+            let mut f = Fixture::new();
+            f.actual_passive();
+            let owner = SchemaSubject::Definition(if passive {
+                f.bindings.passive.definition.address()
+            } else {
+                f.build.items[0].template.address()
+            });
+            let providers = &mut f.recipe.rules.support_discovery.as_mut().unwrap().providers;
+            let index = providers.iter().position(|d| d.owner == owner).unwrap();
+            if unmapped {
+                providers[index].domain = SchemaState::Unmapped {
+                    gaps: vec![SchemaGap {
+                        subject: owner,
+                        facet: SchemaFacet::GameRules,
+                        code: "unknown-fixture-support-sources".parse().unwrap(),
+                    }],
+                };
+            } else {
+                providers.remove(index);
+            }
+            let plan = f.plan().unwrap();
+            let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+            let expected = if unmapped {
+                PlanGapReason::UnmappedSupportSources
+            } else {
+                PlanGapReason::MissingSupportSources
+            };
+            assert!(report.gaps.iter().any(|g| g.reason == expected));
+            assert!(matches!(
+                f.total(&report),
+                EffectValue::Unresolved {
+                    reason: PlanGapReason::IncompleteContributors,
+                    ..
+                }
+            ));
+        }
+    }
+}
+
+#[test]
 fn synthetic_unscalable_copy_bypasses_floor_only_for_its_exact_occurrence() {
     // Native Boolean30e0 permits true, but the current source importer emits
     // false. A PoB line-level {unscalable} marker is not copy-tag parity proof.

@@ -13,6 +13,20 @@ const CONSTRUCTION_PHASES: [&str; 5] = [
     "fresh_after_reparse",
 ];
 
+// These retained reports authenticate the historical witness contents. Later
+// investigations extend the live helper; they do not rewrite this proof.
+fn witness_path(path: &str) -> &str {
+    match path {
+        "crates/poe-optimizer-pob/tests/support/generated_extra_stat_consumption.rs" => {
+            "data/owned/poe2/3887ae68/crown-declarations/evidence/generated_extra_stat_consumption.rs"
+        }
+        "crates/poe-optimizer-pob/tests/support/generated_extra_stat_consumption.lua" => {
+            "data/owned/poe2/3887ae68/crown-declarations/evidence/generated_extra_stat_consumption.lua"
+        }
+        _ => path,
+    }
+}
+
 fn select(value: &Value, fields: &[&str]) -> Value {
     Value::Object(
         fields
@@ -164,7 +178,7 @@ pub fn check(proof: &Value, full: bool) {
     for pin in proof["local_pins"].as_array().unwrap() {
         assert!(local_paths.insert(pin["path"].as_str().unwrap()));
         assert_eq!(
-            hash(&fs::read(root().join(pin["path"].as_str().unwrap())).unwrap()),
+            hash(&fs::read(root().join(witness_path(pin["path"].as_str().unwrap()))).unwrap()),
             pin["sha256"]
         );
     }
@@ -212,9 +226,9 @@ pub fn check(proof: &Value, full: bool) {
         hash(observer.as_bytes()),
         witnesses[0]["report_metadata"]["observer_sha256"]
     );
-    let observer = fs::read(
-        root().join("crates/poe-optimizer-pob/tests/support/generated_extra_stat_consumption.lua"),
-    )
+    let observer = fs::read(root().join(witness_path(
+        "crates/poe-optimizer-pob/tests/support/generated_extra_stat_consumption.lua",
+    )))
     .unwrap();
     assert_eq!(
         hash(&observer),

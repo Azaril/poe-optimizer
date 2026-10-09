@@ -338,13 +338,30 @@ fn check_export(cwd: &Path, authored: &Path) {
             .unwrap()
     };
     let report = success(run(&output));
-    assert_eq!(report, json(authored.join("evidence.json")));
-    for name in ["catalog.json", "evidence.json"] {
-        assert_eq!(
-            fs::read(output.join(name)).unwrap(),
-            fs::read(authored.join(name)).unwrap()
-        );
-    }
+    let current = poe_optimizer_pob::owned_item_observations::export_owned_item_observations(
+        &super::support::root().join("vendor/path-of-building-poe2"),
+        Default::default(),
+    )
+    .unwrap();
+    let evidence = serde_json::to_value(current.evidence()).unwrap();
+    assert_eq!(report, evidence, "CLI reports its actual current extractor");
+    // The retained catalogue is an independent content reference. Its original
+    // extractor receipt remains historical evidence, not the identity of code
+    // that has since changed. Every other source/content/count field must match.
+    let historical = json(authored.join("evidence.json"));
+    let mut same_facts = evidence;
+    same_facts["extractor_sha256"] = historical["extractor_sha256"].clone();
+    assert_eq!(same_facts, historical);
+    assert_eq!(
+        fs::read(output.join("catalog.json")).unwrap(),
+        fs::read(authored.join("catalog.json")).unwrap()
+    );
+    let mut expected_receipt = serde_json::to_vec_pretty(current.evidence()).unwrap();
+    expected_receipt.push(b'\n');
+    assert_eq!(
+        fs::read(output.join("evidence.json")).unwrap(),
+        expected_receipt
+    );
     let before = bundle(&output);
     assert!(!run(&output).status.success());
     unchanged(&bundle(&output), &before);

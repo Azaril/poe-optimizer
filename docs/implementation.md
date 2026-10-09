@@ -113,6 +113,33 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
+## CI repair checkpoint (2026-10-09)
+
+The eight affected CLI targets now pass **52 ordinary tests**, including the
+full export/publication regression (708.70s). The separate Import recipe target
+passes **11 tests** (0.02s), including the failing occurrence-plan regression
+and the new missing/unmapped support-domain refusal. Evidence:
+`runs/owned-ci-regressions-02.log` and
+`runs/owned-import-ci-regressions-01.log`. Strict all-feature Clippy passes for
+the same CLI targets and Import library/recipe target:
+`runs/owned-ci-clippy-01.log` and `runs/owned-import-ci-clippy-01.log`.
+
+Fixtures now use the common support-source gate explicitly. Real Rewards reuse
+published source certificates; isolated synthetic owners declare only their
+finite test domains. The Amulet Life fixture verifies and reuses current replay
+programs/stages instead of duplicating them. Crown's historical source hashes
+resolve to archived exact witness bytes; fresh item-observation receipts identify
+the current extractor while retaining exact source/content/catalog comparisons.
+No production coverage gate, old-format reader or runtime fallback was added.
+
+These are local results, not a hosted-CI success claim. At 09:50 UTC, run
+`37900429666` still had four Windows CLI and two PoB jobs active; the `802ff10`
+run `37911319985` was queued. Completed logs contain the addressed failure
+families, including the already-fixed Mana duplicate address. Active logs were
+unavailable. Recorded compilation time was substantial (Windows Import 66m41s;
+Ubuntu CLI 34–48m per feature profile); no additional hang was established.
+Follow the next pushed revision's results and fix any newly observed failure.
+
 ## Current implementation checkpoint: implicit Ascendancy root
 
 The [Ascendancy-root packet](../data/owned/poe2/3887ae68/ascendancy-start-root/README.md)

@@ -16,8 +16,13 @@ mod replay;
 #[path = "support/owned_selected_request.rs"]
 mod selected;
 use poe_optimizer_core::{
-    build_identity::InstanceAllocator, owned_build::*, owned_definitions::*, owned_rules::*,
-    owned_schema::*, owned_stages::*,
+    build_identity::InstanceAllocator,
+    owned_build::*,
+    owned_definitions::*,
+    owned_readiness::{ReadinessPhase, ReadinessProgram, ReadinessProgramRole},
+    owned_rules::*,
+    owned_schema::*,
+    owned_stages::*,
 };
 use poe_optimizer_engine::owned_plan::*;
 use poe_optimizer_engine::owned_rules::NumericalFailure;
@@ -77,6 +82,71 @@ fn staged(
     }
     r.programs.members.push(s);
 }
+fn retained_copy_rules(w: &replay::ReplayInput, c: &family::Consumer) {
+    let readiness = &w.stages.readiness.as_ref().unwrap().programs.members;
+    let expected =
+        std::iter::once((life(), &c.program, false)).chain(c.eligibility.iter().map(|owner| {
+            assert_eq!(owner.programs.members.len(), 1);
+            (owner.owner.clone(), &owner.programs.members[0], true)
+        }));
+    for (owner, program, eligibility) in expected {
+        let owners: Vec<_> = w.rules.owners.iter().filter(|o| o.owner == owner).collect();
+        assert_eq!(owners.len(), 1);
+        assert_eq!(
+            owners[0]
+                .programs
+                .members
+                .iter()
+                .filter(|p| p.id == program.id)
+                .collect::<Vec<_>>(),
+            vec![program],
+            "retained copy program must exist exactly once and match authored data"
+        );
+        let stage = StagedRuleProgram {
+            owner: owner.clone(),
+            program: program.id.clone(),
+            stage: key(if eligibility { "prepare" } else { "deliver" }),
+        };
+        assert_eq!(
+            w.stages
+                .programs
+                .members
+                .iter()
+                .filter(|p| p.owner == owner && p.program == program.id)
+                .collect::<Vec<_>>(),
+            vec![&stage]
+        );
+        let requirement = ReadinessProgram {
+            owner: owner.clone(),
+            program: program.id.clone(),
+            phase: if eligibility {
+                ReadinessPhase::Structural
+            } else {
+                ReadinessPhase::Execution
+            },
+            role: if eligibility {
+                ReadinessProgramRole::PreparationFacts
+            } else {
+                ReadinessProgramRole::Execution
+            },
+            outputs: if eligibility {
+                vec![StageChannel::Stat {
+                    scope: RuleEntityKind::EquipmentUse,
+                    stat: def(0x32e3),
+                }]
+            } else {
+                vec![]
+            },
+        };
+        assert_eq!(
+            readiness
+                .iter()
+                .filter(|p| p.owner == owner && p.program == program.id)
+                .collect::<Vec<_>>(),
+            vec![&requirement]
+        );
+    }
+}
 fn world() -> replay::ReplayInput {
     let mut w = replay::ReplayInput::decode(
         &fs::read(family::root().join("tests/fixtures/owned-sniper-replay.json.gz")).unwrap(),
@@ -109,38 +179,10 @@ fn world() -> replay::ReplayInput {
         }
     }
     let c = family::consumer();
-    staged(
-        &mut w,
-        life(),
-        &c.program,
-        "contribute-player-flat-life",
-        def(0x311a),
-    );
-    w.rules
-        .owners
-        .iter_mut()
-        .find(|o| o.owner == life())
-        .unwrap()
-        .programs
-        .members
-        .push(c.program);
-    for o in c.eligibility {
-        staged(
-            &mut w,
-            o.owner.clone(),
-            &o.programs.members[0],
-            "amulet-copy-eligibility",
-            def(0x32e3),
-        );
-        w.rules
-            .owners
-            .iter_mut()
-            .find(|x| x.owner == o.owner)
-            .unwrap()
-            .programs
-            .members
-            .extend(o.programs.members);
-    }
+    // The current replay already carries these exact production programs and
+    // scheduling declarations. Assert their identity instead of reinserting them
+    // or silently accepting a conflicting implementation from a newer fixture.
+    retained_copy_rules(&w, &c);
     let mut query = c.query;
     // Only this finite component's controlled input cases assert equipment
     // closure. Publication retains the actual Partial domain and order gap.
@@ -307,6 +349,84 @@ fn bypass(w: &mut replay::ReplayInput) {
                     .value = ParameterValue::Boolean(true);
             }
         }
+    }
+}
+#[test]
+fn retained_copy_rules_reject_missing_duplicate_or_conflicting_fixture_declarations() {
+    let baseline = replay::ReplayInput::decode(
+        &fs::read(family::root().join("tests/fixtures/owned-sniper-replay.json.gz")).unwrap(),
+    );
+    let consumer = family::consumer();
+    retained_copy_rules(&baseline, &consumer);
+    for case in 0..7 {
+        let mut changed = baseline.clone();
+        match case {
+            0..=2 => {
+                let programs = &mut changed
+                    .rules
+                    .owners
+                    .iter_mut()
+                    .find(|o| o.owner == life())
+                    .unwrap()
+                    .programs
+                    .members;
+                let index = programs
+                    .iter()
+                    .position(|p| p.id == consumer.program.id)
+                    .unwrap();
+                match case {
+                    0 => {
+                        programs.remove(index);
+                    }
+                    1 => programs.push(programs[index].clone()),
+                    2 => programs[index].context = RuleEntityKind::Actor,
+                    _ => unreachable!(),
+                }
+            }
+            3 | 4 => {
+                let stages = &mut changed.stages.programs.members;
+                let index = stages
+                    .iter()
+                    .position(|p| p.owner == life() && p.program == consumer.program.id)
+                    .unwrap();
+                if case == 3 {
+                    stages.push(stages[index].clone());
+                } else {
+                    stages[index].stage = key("prepare");
+                }
+            }
+            5 => {
+                changed
+                    .stages
+                    .readiness
+                    .as_mut()
+                    .unwrap()
+                    .programs
+                    .members
+                    .iter_mut()
+                    .find(|p| p.owner == life() && p.program == consumer.program.id)
+                    .unwrap()
+                    .phase = ReadinessPhase::Structural
+            }
+            6 => changed
+                .rules
+                .owners
+                .iter_mut()
+                .find(|o| o.owner == consumer.eligibility[0].owner)
+                .unwrap()
+                .programs
+                .members
+                .iter_mut()
+                .find(|p| p.id == consumer.eligibility[0].programs.members[0].id)
+                .unwrap()
+                .nodes
+                .clear(),
+            _ => unreachable!(),
+        }
+        assert!(
+            std::panic::catch_unwind(|| retained_copy_rules(&changed, &consumer)).is_err(),
+            "case {case}"
+        );
     }
 }
 #[test]

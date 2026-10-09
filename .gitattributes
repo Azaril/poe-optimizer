@@ -142,3 +142,4 @@ Cargo.lock text eol=lf
 /data/owned/**/*.json -text
 # Historical source witnesses are retained as exact, non-executable evidence.
 /data/owned/poe2/3887ae68/class-start-root/evidence/* -text
+/data/owned/poe2/3887ae68/crown-declarations/evidence/* -text

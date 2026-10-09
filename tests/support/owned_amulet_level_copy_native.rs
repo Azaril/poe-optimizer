@@ -281,6 +281,19 @@ impl Fixture {
                 owner: actual.owner.clone(),
                 programs: DeclaredSet::complete(programs),
             });
+            // This finite template has only the literal catalyst inputs and
+            // placement program above; it supplies no additional supports.
+            native
+                .recipe
+                .rules
+                .support_discovery
+                .as_mut()
+                .unwrap()
+                .providers
+                .push(SupportSourceDomainDeclaration {
+                    owner: actual.owner.clone(),
+                    domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+                });
         }
         for slot in [&b.placement_slots.helmet, &b.placement_slots.amulet] {
             let definition = d
@@ -329,6 +342,19 @@ impl Fixture {
             owner: passive_owner.owner.clone(),
             programs: DeclaredSet::complete(vec![passive.clone()]),
         });
+        // The isolated passive retains only the authored numerical producer.
+        // This is fixture truth, not complete source-game passive coverage.
+        native
+            .recipe
+            .rules
+            .support_discovery
+            .as_mut()
+            .unwrap()
+            .providers
+            .push(SupportSourceDomainDeclaration {
+                owner: passive_owner.owner.clone(),
+                domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+            });
 
         let solar: ItemTemplateDefId =
             DefId::parse(b.modifier.namespace().clone(), "def.0000000000002343").unwrap();

@@ -424,6 +424,40 @@ impl World {
                 }
             })
             .collect();
+        // These three finite owners contain only the penalty inputs/program
+        // above. Their test boundaries introduce no additional support origins.
+        let mut support_providers: Vec<_> = [
+            subject(def::<ClassDefinition>(0xa23)),
+            subject(def::<ActorDefinition>(0x332a)),
+            subject(def::<EncounterDefinition>(0x31d1)),
+        ]
+        .into_iter()
+        .map(|owner| SupportSourceDomainDeclaration {
+            owner,
+            domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
+        })
+        .collect();
+        let support_packet: Value = serde_json::from_slice(
+            &fs::read(
+                root().join("data/owned/poe2/3887ae68/reward-support-domains/extension.json"),
+            )
+            .unwrap(),
+        )
+        .unwrap();
+        let reward_domains: Vec<SupportSourceDomainDeclaration> =
+            decode(&support_packet["support_source_domains"]);
+        for owner in &reward_owners {
+            support_providers.push(
+                reward_domains
+                    .iter()
+                    .find(|d| d.owner == owner.owner)
+                    .expect("the actual Reward retains its published support-source certificate")
+                    .clone(),
+            );
+        }
+        recipe.rules.support_discovery = Some(SupportDiscoveryInput {
+            providers: support_providers,
+        });
         let build = BuildInput {
             allocator: InstanceAllocatorState::from_parts(
                 BuildLineage::from_bytes([0x7c; 16]),

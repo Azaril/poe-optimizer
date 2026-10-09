@@ -79,6 +79,9 @@ fn add_definition(f: &mut Fixture, definition: DefinitionDescriptor) {
 pub fn append_packet(f: &mut Fixture, family: &str) {
     let dependencies: Value = packet(family, "dependencies.json");
     let closure: Value = packet(family, "closure.json");
+    let support_packet: Value = packet("reward-support-domains", "extension.json");
+    let support_domains: Vec<SupportSourceDomainDeclaration> =
+        serde_json::from_value(support_packet["support_source_domains"].clone()).unwrap();
     for field in [&dependencies["definitions"], &closure["definitions"]] {
         let definitions: Vec<DefinitionDescriptor> = serde_json::from_value(field.clone()).unwrap();
         for definition in definitions {
@@ -104,6 +107,15 @@ pub fn append_packet(f: &mut Fixture, family: &str) {
             definition: reward.clone(),
             parameters: vec![],
         });
+        // Reuse the published certificate for this exact numerical Reward;
+        // absent certificates must never become fixture-inferred completeness.
+        let domain = support_domains
+            .iter()
+            .find(|d| d.owner == owner.owner)
+            .expect("an appended Reward requires its published support-source certificate");
+        let providers = &mut f.recipe.rules.support_discovery.as_mut().unwrap().providers;
+        assert!(!providers.iter().any(|old| old.owner == domain.owner));
+        providers.push(domain.clone());
         f.recipe.rules.owners.push(owner);
     }
     f.build.allocator = allocator.state();

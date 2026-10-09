@@ -160,6 +160,35 @@ fn four_exact_player_contributions_preserve_every_prior_item_and_reward_effect()
 }
 
 #[test]
+fn published_reward_programs_do_not_replace_missing_or_unknown_support_certificates() {
+    for unmapped in [false, true] {
+        let mut f = fixture();
+        let owner = SchemaSubject::Definition(id::<RewardDefinition>(&f, REWARDS[0]).address());
+        let providers = &mut f.recipe.rules.support_discovery.as_mut().unwrap().providers;
+        let index = providers.iter().position(|d| d.owner == owner).unwrap();
+        if unmapped {
+            providers[index].domain = SchemaState::Unmapped {
+                gaps: vec![SchemaGap {
+                    subject: owner,
+                    facet: SchemaFacet::GameRules,
+                    code: "unknown-reward-support-sources".parse().unwrap(),
+                }],
+            };
+        } else {
+            providers.remove(index);
+        }
+        let result = report(&f);
+        let expected = if unmapped {
+            PlanGapReason::UnmappedSupportSources
+        } else {
+            PlanGapReason::MissingSupportSources
+        };
+        assert!(result.gaps.iter().any(|g| g.reason == expected));
+        assert_incomplete(&f, &result);
+    }
+}
+
+#[test]
 fn each_reward_removal_preserves_every_other_effect_and_removes_both_charm_records() {
     let f = fixture();
     let original = report(&f);
