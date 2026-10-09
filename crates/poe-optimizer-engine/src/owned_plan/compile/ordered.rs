@@ -29,6 +29,16 @@ fn owner(subject: &SchemaSubject) -> Owner<'_> {
 enum Source<'a> {
     Provider(&'a ProviderKey),
     ExistingActor(&'a OwnedDefinitionKey, &'a ActorKey),
+    ApplicationGroup(
+        &'a ConcreteEntity,
+        &'a OwnedDefinitionKey,
+        &'a OwnedDefinitionKey,
+    ),
+}
+#[derive(Clone, Copy, Eq, PartialEq, Ord, PartialOrd)]
+enum ProducerAddress<'a> {
+    Program(Owner<'a>, &'a OwnedDefinitionKey, &'a OwnedDefinitionKey),
+    ApplicationGroup(&'a OwnedDefinitionKey, &'a OwnedDefinitionKey),
 }
 impl Sources<'_> {
     fn effect(&self, index: usize) -> Result<&EffectOccurrenceKey> {
@@ -42,7 +52,7 @@ impl Sources<'_> {
     fn source<'a>(
         &self,
         effect: &'a EffectOccurrenceKey,
-        member: &ContributionMember,
+        member: &ProgramContributionProducer,
         work: &mut usize,
     ) -> Result<Source<'a>> {
         let origin = &member.origin;
@@ -365,7 +375,14 @@ impl Sources<'_> {
         for row in &query.groups {
             charge(work, row.members.members.len())?;
             for member in &row.members.members {
-                let identity = (owner(&member.owner), &member.program, &member.effect);
+                let identity = match &member.producer {
+                    ContributionProducer::ProgramEffect(p) => {
+                        ProducerAddress::Program(owner(&p.owner), &p.program, &p.effect)
+                    }
+                    ContributionProducer::ApplicationGroup(p) => {
+                        ProducerAddress::ApplicationGroup(&p.family, &p.modifier)
+                    }
+                };
                 if policies.insert(identity, (row, member)).is_some() {
                     return Err(invalid(
                         "contribution effect occurs in multiple membership rows",
@@ -383,18 +400,62 @@ impl Sources<'_> {
             }
             let effect = self.effect(*index)?;
             let invocation = &effect.invocation;
-            let identity = (
-                owner(&invocation.owner),
-                &invocation.program,
-                &effect.effect,
-            );
+            let identity = match &invocation.origin {
+                RuleOrigin::EffectApplicationGroup {
+                    family, modifier, ..
+                } => ProducerAddress::ApplicationGroup(family, modifier),
+                _ => ProducerAddress::Program(
+                    owner(&invocation.owner),
+                    &invocation.program,
+                    &effect.effect,
+                ),
+            };
             let (group, member) = policies
                 .get(&identity)
                 .ok_or_else(|| invalid("actual contribution has no declared membership"))?;
-            let source = self.source(effect, member, work)?;
+            let (source, origin) = match &member.producer {
+                ContributionProducer::ProgramEffect(p) => {
+                    (self.source(effect, p, work)?, Some(&p.origin))
+                }
+                ContributionProducer::ApplicationGroup(p) => {
+                    let RuleOrigin::EffectApplicationGroup {
+                        recipient,
+                        family,
+                        modifier,
+                    } = &invocation.origin
+                    else {
+                        return Err(invalid(
+                            "application membership requires a post-stacking group",
+                        ));
+                    };
+                    if recipient != &key.entity
+                        || recipient != &invocation.entity
+                        || family != &p.family
+                        || modifier != &p.modifier
+                    {
+                        return Err(invalid(
+                            "application contribution differs from its exact recipient group",
+                        ));
+                    }
+                    (Source::ApplicationGroup(recipient, family, modifier), None)
+                }
+            };
             match (group.ordering, &member.order) {
                 (ContributionOrdering::Ordered, Some(policy)) => {
-                    let position = self.position(source, &member.origin, policy, work)?;
+                    let position = if let Some(origin) = origin {
+                        self.position(source, origin, policy, work)?
+                    } else {
+                        if !policy.slot_ranks.is_empty() {
+                            return Err(invalid("application groups cannot have equipment ranks"));
+                        }
+                        (
+                            policy.source_rank,
+                            0,
+                            0,
+                            policy.program_rank,
+                            policy.effect_rank,
+                        )
+                    };
                     if positions
                         .entry(&group.id)
                         .or_default()

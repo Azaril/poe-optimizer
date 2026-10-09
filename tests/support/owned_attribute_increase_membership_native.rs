@@ -265,10 +265,12 @@ impl World {
             assert!(!q.groups[0].members.is_complete());
             let index = (0..6).find(|i| q.stat == def(0x331b + i)).unwrap();
             q.groups[0].members = DeclaredSet::complete(vec![ContributionMember {
-                owner: class_owner.clone(),
-                program: key("fixture-projected-base"),
-                effect: key(&format!("base-{index}")),
-                origin: ContributionOrigin::Character,
+                producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+                    owner: class_owner.clone(),
+                    program: key("fixture-projected-base"),
+                    effect: key(&format!("base-{index}")),
+                    origin: ContributionOrigin::Character,
+                }),
                 order: Some(ContributionOrder {
                     source_rank: 0,
                     program_rank: 0,
@@ -768,7 +770,7 @@ fn missing_members_and_actual_partial_domains_are_never_promoted_to_zero() {
         .groups[0]
         .members
         .members
-        .retain(|m| m.owner != source().owners[0].owner);
+        .retain(|m| m.producer.as_program_effect().unwrap().owner != source().owners[0].owner);
     assert!(
         matches!(missing_member.plan(), Err(PlanError::Invalid(message))
         if message == "actual contribution has no ordered membership")

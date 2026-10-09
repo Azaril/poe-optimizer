@@ -629,10 +629,12 @@ fn extra_flag(w: &mut World, name: &str, value: Option<bool>, enabled: bool) {
         .members
         .members
         .push(ContributionMember {
-            owner,
-            program: key(name),
-            effect: key("grant"),
-            origin: ContributionOrigin::Character,
+            producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+                owner,
+                program: key(name),
+                effect: key("grant"),
+                origin: ContributionOrigin::Character,
+            }),
             order: None,
         });
 }
@@ -876,7 +878,10 @@ fn gigantic_numeric_flag_unlisted_source_and_early_consumers_are_rejected() {
     query_mut(&mut unlisted).groups[0]
         .members
         .members
-        .retain(|m| m.program != key("counterfactual-unlisted-gigantic"));
+        .retain(|m| {
+            m.producer.as_program_effect().unwrap().program
+                != key("counterfactual-unlisted-gigantic")
+        });
     let error = unlisted.checked_plan().err().unwrap();
     assert!(
         error.contains("actual contribution has no declared membership"),

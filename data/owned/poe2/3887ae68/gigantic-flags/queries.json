@@ -1,76 +1,79 @@
 [
   {
-    "id": "minion-gigantic-grants",
-    "stat": {
-      "kind": "stat",
-      "namespace": {
-        "game": "poe2",
-        "version": "owned-mechanics-v1"
-      },
-      "key": "def.0000000000003307"
-    },
     "contribution": "flag",
     "groups": [
       {
-        "id": "sources",
-        "reduction": "any",
         "empty": {
           "kind": "boolean",
           "value": false
         },
+        "id": "sources",
         "members": {
-          "members": [
-            {
-              "owner": {
-                "kind": "definition",
-                "value": {
-                  "kind": "passive_node",
-                  "value": {
-                    "kind": "passive_node",
-                    "namespace": {
-                      "game": "poe2",
-                      "version": "owned-mechanics-v1"
-                    },
-                    "key": "def.0000000000001532"
-                  }
-                }
-              },
-              "program": "ordinary-minion-gigantic",
-              "effect": "grant",
-              "origin": {
-                "kind": "allocation"
-              },
-              "order": null
-            }
-          ],
           "closure": {
             "kind": "partial",
             "value": {
               "gaps": [
                 {
+                  "code": "gigantic-flag-producer-domain-unproved",
+                  "facet": "game_rules",
                   "subject": {
                     "kind": "definition",
                     "value": {
                       "kind": "stat",
                       "value": {
+                        "key": "def.0000000000003307",
                         "kind": "stat",
                         "namespace": {
                           "game": "poe2",
                           "version": "owned-mechanics-v1"
-                        },
-                        "key": "def.0000000000003307"
+                        }
                       }
                     }
-                  },
-                  "facet": "game_rules",
-                  "code": "gigantic-flag-producer-domain-unproved"
+                  }
                 }
               ]
             }
-          }
+          },
+          "members": [
+            {
+              "order": null,
+              "producer": {
+                "effect": "grant",
+                "kind": "program_effect",
+                "origin": {
+                  "kind": "allocation"
+                },
+                "owner": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "passive_node",
+                    "value": {
+                      "key": "def.0000000000001532",
+                      "kind": "passive_node",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      }
+                    }
+                  }
+                },
+                "program": "ordinary-minion-gigantic"
+              }
+            }
+          ]
         },
-        "ordering": "unordered"
+        "ordering": "unordered",
+        "reduction": "any"
       }
-    ]
+    ],
+    "id": "minion-gigantic-grants",
+    "stat": {
+      "key": "def.0000000000003307",
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      }
+    }
   }
 ]

@@ -172,10 +172,12 @@ fn input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
             }]),
         });
         members.push(ContributionMember {
-            owner: subject(name),
-            program: key("supply"),
-            effect: key("add"),
-            origin,
+            producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+                owner: subject(name),
+                program: key("supply"),
+                effect: key("add"),
+                origin,
+            }),
             order: Some(ContributionOrder {
                 source_rank: rank,
                 program_rank: 0,
@@ -312,11 +314,19 @@ fn every_group_and_exact_producer_reference_is_validated_even_when_unread() {
                 "ordered producer occurs more than once across query groups"
             }
             3 => {
-                group(&mut raw).members.members[0].program = key("missing");
+                group(&mut raw).members.members[0]
+                    .producer
+                    .as_program_effect_mut()
+                    .unwrap()
+                    .program = key("missing");
                 "ordered member references an unknown producer program"
             }
             4 => {
-                group(&mut raw).members.members[0].effect = key("missing");
+                group(&mut raw).members.members[0]
+                    .producer
+                    .as_program_effect_mut()
+                    .unwrap()
+                    .effect = key("missing");
                 "ordered member references an unknown or duplicate effect"
             }
             5 => {
@@ -347,7 +357,11 @@ fn explicit_origin_context_and_slot_policies_cannot_be_replaced_by_ids() {
         let mut raw = input(&schema);
         let expected = match mutation {
             0 => {
-                group(&mut raw).members.members[0].origin = ContributionOrigin::Allocation;
+                group(&mut raw).members.members[0]
+                    .producer
+                    .as_program_effect_mut()
+                    .unwrap()
+                    .origin = ContributionOrigin::Allocation;
                 "ordered origin policy does not match its owner and program context"
             }
             1 => {
@@ -355,8 +369,11 @@ fn explicit_origin_context_and_slot_policies_cannot_be_replaced_by_ids() {
                 "ordered origin policy does not match its owner and program context"
             }
             2 => {
-                group(&mut raw).members.members[2].origin =
-                    ContributionOrigin::EquipmentUse { slots: vec![] };
+                group(&mut raw).members.members[2]
+                    .producer
+                    .as_program_effect_mut()
+                    .unwrap()
+                    .origin = ContributionOrigin::EquipmentUse { slots: vec![] };
                 "contribution equipment origin needs explicit slot membership"
             }
             3 => {
@@ -387,7 +404,7 @@ fn explicit_origin_context_and_slot_policies_cannot_be_replaced_by_ids() {
     second.id = key("second");
     raw.owners[4].programs.members.push(second);
     let mut member = group(&mut raw).members.members[3].clone();
-    member.program = key("second");
+    member.producer.as_program_effect_mut().unwrap().program = key("second");
     member.order.as_mut().unwrap().program_rank = 1;
     member.order.as_mut().unwrap().source_rank = 99;
     group(&mut raw).members.members.push(member);
@@ -401,7 +418,7 @@ fn explicit_origin_context_and_slot_policies_cannot_be_replaced_by_ids() {
     second.id = key("second");
     raw.owners[1].programs.members.push(second);
     let mut member = group(&mut raw).members.members[0].clone();
-    member.program = key("second");
+    member.producer.as_program_effect_mut().unwrap().program = key("second");
     member.order.as_mut().unwrap().program_rank = 1;
     member.order.as_mut().unwrap().source_rank = 99;
     group(&mut raw).members.members.push(member);
@@ -828,13 +845,14 @@ fn membership_and_rank_validation_stay_independent() {
     for mutation in 0..3 {
         let mut raw = boolean_input(&schema);
         let member = &mut group(&mut raw).members.members[2];
-        member.origin = ContributionOrigin::EquipmentUse {
-            slots: match mutation {
-                0 => vec![],
-                1 => vec![id("left"), id("left")],
-                _ => vec![id("missing")],
-            },
-        };
+        member.producer.as_program_effect_mut().unwrap().origin =
+            ContributionOrigin::EquipmentUse {
+                slots: match mutation {
+                    0 => vec![],
+                    1 => vec![id("left"), id("left")],
+                    _ => vec![id("missing")],
+                },
+            };
         reject(
             raw,
             &schema,
@@ -887,7 +905,11 @@ fn boolean_queries_retain_exact_member_and_partial_inventory_evidence() {
         "ordered producer occurs more than once across query groups",
     );
     let mut raw = boolean_input(&schema);
-    group(&mut raw).members.members[0].effect = key("missing");
+    group(&mut raw).members.members[0]
+        .producer
+        .as_program_effect_mut()
+        .unwrap()
+        .effect = key("missing");
     reject(
         raw,
         &schema,

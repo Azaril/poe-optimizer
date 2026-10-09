@@ -17,9 +17,18 @@ use std::sync::Arc;
 // fixtures: all real programs execute, with no support/input values invented.
 pub fn checked_plan(
     f: &Fixture,
+    rules_input: RulePackageInput,
+    routing_input: ActionRoutingInput,
+    limits: PlanLimits,
+) -> Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>> {
+    checked_plan_with_stages(f, rules_input, routing_input, limits, |_| {})
+}
+pub fn checked_plan_with_stages(
+    f: &Fixture,
     mut rules_input: RulePackageInput,
     mut routing_input: ActionRoutingInput,
     limits: PlanLimits,
+    edit: impl FnOnce(&mut EvaluationStagesInput),
 ) -> Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>> {
     let namespace = f.schema.namespace.clone();
     let build = &f.build;
@@ -33,8 +42,12 @@ pub fn checked_plan(
         .unwrap()
     };
     assert!(
-        [OWNED_RULE_OPERATIONS_V22, OWNED_RULE_OPERATIONS_V23]
-            .contains(&rules_input.operations_version.as_str())
+        [
+            OWNED_RULE_OPERATIONS_V22,
+            OWNED_RULE_OPERATIONS_V23,
+            OWNED_RULE_OPERATIONS_V25
+        ]
+        .contains(&rules_input.operations_version.as_str())
     );
     // Actor-supplying Gems may have complete empty Skill exposure. They create
     // real provider/Actor occurrences but no support recipient in this fixture.
@@ -71,10 +84,10 @@ pub fn checked_plan(
             .as_ref()
             .is_none_or(Vec::is_empty)
     );
-    assert_eq!(
-        rules_input.effect_applications,
-        Some(DeclaredSet::complete(vec![]))
-    );
+    let applications = rules_input
+        .effect_applications
+        .clone()
+        .expect("explicit application inventory");
     let unused = [
         (
             unused_input("support-level"),
@@ -139,69 +152,81 @@ pub fn checked_plan(
         .iter()
         .flat_map(|o| o.programs.members.iter().map(move |p| (o, p)))
         .collect();
-    let stages = Arc::new(
-        OwnedEvaluationStages::new(
-            EvaluationStagesInput {
-                schema_version: OWNED_EVALUATION_STAGES_V3,
-                namespace: namespace.clone(),
-                release: key("finite-empty-support-stages"),
-                definitions: schema.identity().clone(),
-                rules: *stored.identity(),
-                routing: *routing.identity(),
-                stages: vec![
-                    EvaluationStage {
-                        id: key("prepare"),
-                        predecessors: vec![],
-                    },
-                    EvaluationStage {
-                        id: key("execute"),
-                        predecessors: vec![key("prepare")],
-                    },
-                ],
-                programs: DeclaredSet::complete(
-                    programs
-                        .iter()
-                        .map(|(o, p)| StagedRuleProgram {
-                            owner: o.owner.clone(),
-                            program: p.id.clone(),
-                            stage: key("execute"),
-                        })
-                        .collect(),
-                ),
-                effect_applications: Some(DeclaredSet::complete(vec![])),
-                routing_stage: key("execute"),
-                frozen_channels: unused
+    let mut stage_input = EvaluationStagesInput {
+        schema_version: OWNED_EVALUATION_STAGES_V3,
+        namespace: namespace.clone(),
+        release: key("finite-empty-support-stages"),
+        definitions: schema.identity().clone(),
+        rules: *stored.identity(),
+        routing: *routing.identity(),
+        stages: vec![
+            EvaluationStage {
+                id: key("prepare"),
+                predecessors: vec![],
+            },
+            EvaluationStage {
+                id: key("execute"),
+                predecessors: vec![key("prepare")],
+            },
+        ],
+        programs: DeclaredSet::complete(
+            programs
+                .iter()
+                .map(|(o, p)| StagedRuleProgram {
+                    owner: o.owner.clone(),
+                    program: p.id.clone(),
+                    stage: key("execute"),
+                })
+                .collect(),
+        ),
+        effect_applications: Some(DeclaredSet {
+            members: applications
+                .members
+                .iter()
+                .map(|a| StagedEffectApplication {
+                    application: a.id.clone(),
+                    stage: key("execute"),
+                })
+                .collect(),
+            closure: applications.closure,
+        }),
+        routing_stage: key("execute"),
+        frozen_channels: unused
+            .iter()
+            .map(|(id, scope, _)| FrozenStageChannel {
+                channel: StageChannel::Stat {
+                    scope: *scope,
+                    stat: id.clone(),
+                },
+                stage: key("prepare"),
+            })
+            .collect(),
+        readiness: Some(ReadinessInput {
+            skills: vec![],
+            programs: DeclaredSet::complete(
+                programs
                     .iter()
-                    .map(|(id, scope, _)| FrozenStageChannel {
-                        channel: StageChannel::Stat {
-                            scope: *scope,
-                            stat: id.clone(),
-                        },
-                        stage: key("prepare"),
+                    .map(|(o, p)| ReadinessProgram {
+                        owner: o.owner.clone(),
+                        program: p.id.clone(),
+                        phase: ReadinessPhase::Execution,
+                        role: ReadinessProgramRole::Execution,
+                        outputs: vec![],
                     })
                     .collect(),
-                readiness: Some(ReadinessInput {
-                    skills: vec![],
-                    programs: DeclaredSet::complete(
-                        programs
-                            .iter()
-                            .map(|(o, p)| ReadinessProgram {
-                                owner: o.owner.clone(),
-                                program: p.id.clone(),
-                                phase: ReadinessPhase::Execution,
-                                role: ReadinessProgramRole::Execution,
-                                outputs: vec![],
-                            })
-                            .collect(),
-                    ),
-                }),
-            },
+            ),
+        }),
+    };
+    edit(&mut stage_input);
+    let stages = Arc::new(
+        OwnedEvaluationStages::new(
+            stage_input,
             schema.as_ref(),
             &stored,
             &routing,
             Default::default(),
         )
-        .unwrap(),
+        .map_err(|e| PlanError::Invalid(e.to_string()))?,
     );
     let preparation = Arc::new(
         OwnedSupportPreparation::new(

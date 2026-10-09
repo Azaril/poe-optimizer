@@ -45,21 +45,25 @@ fn member(
     source_rank: u32,
     origin: ContributionOrigin,
 ) -> ContributionMember {
+    let slot_ranks = match &origin {
+        ContributionOrigin::EquipmentUse { .. } | ContributionOrigin::ItemModifier { .. } => {
+            slots()
+        }
+        _ => vec![],
+    };
     ContributionMember {
-        owner,
-        program: key(program),
-        effect: key("add"),
+        producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+            owner,
+            program: key(program),
+            effect: key("add"),
+            origin,
+        }),
         order: Some(ContributionOrder {
             source_rank,
             program_rank: 0,
             effect_rank: 0,
-            slot_ranks: match &origin {
-                ContributionOrigin::EquipmentUse { .. }
-                | ContributionOrigin::ItemModifier { .. } => slots(),
-                _ => vec![],
-            },
+            slot_ranks,
         }),
-        origin,
     }
 }
 fn slots() -> Vec<ContributionSlotRank> {
@@ -473,13 +477,22 @@ fn exact_membership_rejects_unmapped_duplicate_tied_and_missing_group_policies()
     w.registry.members[0].groups.pop();
     assert!(w.plan().is_err());
     let mut w = World::new();
-    let ContributionOrigin::ItemModifier { slots } = &mut w.members()[3].origin else {
+    let ContributionOrigin::ItemModifier { slots } = &mut w.members()[3]
+        .producer
+        .as_program_effect_mut()
+        .unwrap()
+        .origin
+    else {
         panic!()
     };
     slots.pop();
     assert!(w.plan().is_err());
     let mut w = World::new();
-    w.members()[3].origin = ContributionOrigin::Allocation;
+    w.members()[3]
+        .producer
+        .as_program_effect_mut()
+        .unwrap()
+        .origin = ContributionOrigin::Allocation;
     assert!(w.plan().is_err());
 }
 #[test]
@@ -874,7 +887,12 @@ fn boolean_membership_checks_inactive_and_unread_sources_and_preserves_provider_
     w.f.owner_mut(&modifier_owner()).programs.closure = partial(modifier_owner());
     assert_incomplete(&w.report(), PlanGapReason::PartialPrograms);
     let mut w = boolean_world();
-    let ContributionOrigin::ItemModifier { slots } = &mut w.members()[3].origin else {
+    let ContributionOrigin::ItemModifier { slots } = &mut w.members()[3]
+        .producer
+        .as_program_effect_mut()
+        .unwrap()
+        .origin
+    else {
         panic!()
     };
     slots.pop();

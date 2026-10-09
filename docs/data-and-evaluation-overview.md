@@ -96,12 +96,15 @@ and the published rules, without changing production behavior or closing the
 real Pending inventories. All 79 joined checks pass, including reused and Rayon
 execution. The next damage consumer needs checked membership for application
 group results; that [public-contract proposal](owned-application-group-contribution-queries-proposal.md)
-was accepted on October 8; its producer-address extension is not yet implemented.
+was accepted on October 8 and is implemented in Core/Data/Engine operations V25.
 Existing applications already resolve activation, exact recipients and stacking;
-the pending change lets the same checked query combine that result with ordinary
-contributions. It adds no separate aggregator or Lua runtime dependency.
+the same checked query can now combine that result with ordinary contributions.
+Maintained packets use the current typed producer envelope; old development
+member bytes are rejected. The next step is the real mixed consumer's owned
+data, preserving the remaining coverage gaps. This adds no separate aggregator
+or Lua runtime dependency.
 Composed support discovery is already approved and remains
-independent implementation work. See the current [resume point](implementation.md#latest-integration-checkpoint-offering-activation-and-application).
+independent implementation work. See the current [resume point](implementation.md#current-runtime-checkpoint-checked-application-group-producers).
 
 The joined graph calculates both attribute passes from the actual
 imported class/passive sources, resolves the five inherent Boolean flags through

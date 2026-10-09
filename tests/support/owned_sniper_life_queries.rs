@@ -29,13 +29,16 @@ fn world() -> World {
     // This existing finite graph has no received-minion-Life producer. Keep
     // that one exclusion explicit rather than silently filtering by selection.
     let excluded = queries[1].groups[1].members.members.pop().unwrap();
-    assert_eq!(excluded.program, key("received-minion-life-increase"));
+    assert_eq!(
+        excluded.producer.as_program_effect().unwrap().program,
+        key("received-minion-life-increase")
+    );
     assert!(queries[1].groups[1].members.members.is_empty());
     assert!(
         !f.owners
             .iter()
             .flat_map(|o| &o.programs.members)
-            .any(|p| p.id == excluded.program)
+            .any(|p| p.id == excluded.producer.as_program_effect().unwrap().program)
     );
     for descriptor in life_query_family::definitions() {
         if matches!(descriptor, DefinitionDescriptor::EquipmentSlot(_))
@@ -333,10 +336,9 @@ fn unread_minion_membership_and_partial_life_queries_cannot_be_skipped() {
         .iter_mut()
         .find(|q| q.id == key(QUERY_IDS[0]))
         .unwrap();
-    q.groups[0]
-        .members
-        .members
-        .retain(|m| m.program != key("intrinsic-allied-minion-life"));
+    q.groups[0].members.members.retain(|m| {
+        m.producer.as_program_effect().unwrap().program != key("intrinsic-allied-minion-life")
+    });
     assert!(
         w.checked_plan_configured(configure)
             .is_err_and(|e| e.contains("no declared membership"))

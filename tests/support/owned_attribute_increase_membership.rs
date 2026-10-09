@@ -87,9 +87,9 @@ fn census(owners: &[DefinitionRules], queries: &[Replacement]) {
                             .iter()
                             .enumerate()
                             .filter(|(_, m)| {
-                                m.owner == owner.owner
-                                    && m.program == program.id
-                                    && m.effect == effect.id
+                                m.producer.as_program_effect().unwrap().owner == owner.owner
+                                    && m.producer.as_program_effect().unwrap().program == program.id
+                                    && m.producer.as_program_effect().unwrap().effect == effect.id
                             })
                             .collect();
                         assert_eq!(
@@ -252,13 +252,16 @@ pub fn check_authored() {
         let mut positions = BTreeSet::new();
         let mut sum = 0.;
         for member in &group.members.members {
-            assert_eq!(member.origin, ContributionOrigin::Allocation);
+            assert_eq!(
+                member.producer.as_program_effect().unwrap().origin,
+                ContributionOrigin::Allocation
+            );
             assert_eq!(member.order.as_ref().unwrap().program_rank, 0);
             let contributor = b["contributors"]
                 .as_array()
                 .unwrap()
                 .iter()
-                .find(|c| c["owner"] == json!(member.owner))
+                .find(|c| c["owner"] == json!(member.producer.as_program_effect().unwrap().owner))
                 .unwrap();
             assert_eq!(
                 json!(member.order.as_ref().unwrap().source_rank),
@@ -269,14 +272,21 @@ pub fn check_authored() {
                 member.order.as_ref().unwrap().program_rank,
                 member.order.as_ref().unwrap().effect_rank
             )));
-            let owner = d.owners.iter().find(|o| o.owner == member.owner).unwrap();
+            let owner = d
+                .owners
+                .iter()
+                .find(|o| o.owner == member.producer.as_program_effect().unwrap().owner)
+                .unwrap();
             let program = &owner.programs.members[0];
-            assert_eq!(member.program, program.id);
+            assert_eq!(
+                member.producer.as_program_effect().unwrap().program,
+                program.id
+            );
             let (index, effect) = program
                 .effects
                 .iter()
                 .enumerate()
-                .find(|(_, e)| e.id == member.effect)
+                .find(|(_, e)| e.id == member.producer.as_program_effect().unwrap().effect)
                 .unwrap();
             assert_eq!(member.order.as_ref().unwrap().effect_rank as usize, index);
             assert_eq!(effect.when.as_ref().unwrap().as_str(), "default");

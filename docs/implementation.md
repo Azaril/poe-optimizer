@@ -103,7 +103,73 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Current native data checkpoint: shared Life routing
+## Current runtime checkpoint: checked application-group producers
+
+The accepted [application-group query contract](owned-application-group-contribution-queries-proposal.md)
+is implemented in Core/Data/Engine operations **V25**. Members of the existing
+query now name either an ordinary program effect or a result after application
+stacking. The Data layer checks the complete potential application/effect census,
+channel, recipient capability and numeric order. The shared initial/late-support
+binding gate uses the group's exact recipient, family and modifier. Execution
+retains the existing reductions and worker scratch; no second aggregation path,
+Lua state, fabricated definition owner or game-specific opcode was added.
+
+**105 focused native tests pass**, including eight new generic query tests in
+the 22-test application suite. These cover mixed ordinary/application values,
+independent families, tied sources, repeated recipients, missing/extra/duplicate
+membership, unread/inactive/zero writers, unknowns, Partial coverage, ordering,
+work bounds, stages, cycles, storage permutations and fresh/reused/four-worker
+execution. Evidence: `runs/application-groups-native-tests-06.log`. These finite
+controls do not prove all positive combinations of late support delivery.
+
+The [producer-format packet](../data/owned/poe2/3887ae68/application-group-producers/README.md)
+records the rebuild of **2,017 canonical ordinary members**, seven maintained
+member-bearing data files, one dependent reference pin and five authoring
+commitments. Numeric rules, memberships, source evidence and ordering are
+unchanged. The runtime rejects the old development member format; the one-off
+Rust rebuild remains offline evidence. Older operation capabilities use the
+current grammar, not compatibility parsers. The canonical package still uses
+V24 because it contains ordinary producers; real application-query data will
+opt into V25 and plan identity domain `owned-effect-plan-v22`.
+
+The successor package is
+`runs/owned-application-group-producers-publication-02/package`, input
+`802f807e1a7c1687c67f161148619e14430a871e61e90101d04f33c8e13112e2`, rules
+`2247acae6be01175f30834ddabc47d4dc114177388c99964bbf53249cac4e5ab`, compiled rules
+`94ef07506af0bd6d127bd38d74c9d401d273d13bfa77e4441d9d9bb70c61e999`.
+Schema identity is unchanged. Exactly three of 18 artifacts change: rules,
+manifest and release. The rebuilt release independently reproduces its bytes.
+
+All-five preservation and byte-pin tests pass in **13.04s**; all **79 joined
+Sniper checks pass in 38.25s** against that successor. Evidence:
+`runs/application-groups-integration-03.log` and
+`runs/owned-application-group-producers-five-builds-03/report.json`.
+Fresh CLI imports deliberately mint new project lineages. The comparison
+authenticates the draft digests, rebases only fresh lineages and their digest
+references, and compares every remaining draft, sidecar and finalization field.
+This is import identity behavior, not nondeterministic evaluation. All 110
+queries, five query sets and input counts **107/117/109/123/4** are preserved.
+Complete native builds remain **0/5**.
+
+The seven maintained authoring/consumer targets also pass **16 ordinary tests**
+(artifact-dependent historical tests remain ignored):
+`runs/application-groups-authored-tests-04.log`. Strict all-feature Clippy passes
+for changed Core/Data/Engine/Import libraries and the selected native/CLI targets:
+`runs/application-groups-clippy-01.log`. Changed Rust formatting and whitespace
+checks pass. Unrelated untracked incoming-critical drafts remain excluded.
+
+**Resume:** keep Original05 first. Publish the real mixed damage consumer using
+the accepted query capability, then continue toward its physical damage endpoint.
+The Offering application already emits channel `322d`; the selected passive
+component currently reaches the minion through derived stat `1d34`. Do not claim
+both are already writers to one channel or manufacture an ordinary owner for the
+Offering group. Reuse checked group reads and typed arithmetic, or publish an
+explicitly reviewed shared contribution channel. Validate the observed 62 + 68
+component subtotal without turning 130 into a rule literal or complete damage
+coverage. Preserve all remaining source-domain and input obligations. Composed
+support coverage and the final Player Life consumer remain separate pending work.
+
+## Preceding native data checkpoint: shared Life routing
 
 The [flat-Life routing packet](../data/owned/poe2/3887ae68/flat-life-routing/README.md)
 adds the existing Talisman exclusion to ordinary Player Life delivery. It reuses
@@ -144,22 +210,21 @@ the final resource formula; its known component subtotal is not final Life.
 This checkpoint implements one routing law and intentionally closes no broad
 owner gap. Channel `3306`'s historical broad name means only the Talisman exclusion;
 do not treat true as proof of every item routing law. Minion receipt is separate.
-The owner has now accepted application-group producers. Implement that existing
-query extension, then the mixed passive/Offering consumer as described in the
-accepted checkpoint below. Other support-source owners and provider exclusions
+The application-group query extension is now implemented at the current
+checkpoint above; the mixed passive/Offering consumer remains next. Other support-source owners and provider exclusions
 remain open despite complete selected physical-Gem classifications.
 
-## Accepted checkpoint: application-group contribution queries
+## Historical acceptance checkpoint: application-group contribution queries
 
 On October 8 the owner explicitly approved the
 [application-group producer contract](owned-application-group-contribution-queries-proposal.md).
 This supersedes older awaiting-review statements in checkpoint history below.
-No further approval is needed for its implementation. No runtime or package
-change has shipped at this checkpoint: the canonical flat-Life-routing package,
+No further approval is needed for its implementation. At the acceptance-only
+checkpoint, no runtime or package change had shipped: the flat-Life-routing package,
 operations V24, four selected input obligations and **0/5 complete builds** are
 unchanged.
 
-**Next implementation:** extend the existing member contract with typed ordinary
+**Implementation scope accepted then, completed above:** extend the existing member contract with typed ordinary
 program-effect and application-group producers; validate every potential
 application/effect declaration; bind concrete groups by exact recipient/family/
 modifier in the common initial and late-support inventory gate. Preserve the
@@ -2828,7 +2893,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Equipment ordering, global/owner coverage and the final Life consumer remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
 | Composed support discovery | Accepted October 8. The common native gate, current authored-order DTO and source-input accounting are implemented; Original05 `01de` is retired. The Gem packet publishes 937 Known and 29 Unmapped domains with all-five preservation; all 23 selected physical Gem domains are covered. Existing typed identities fixed 111 false stat-set blockers. Pinned generated export metadata classifies eight missing runtime effects as active without implementing their Command mechanics. Continue other owner domains and exact provider exclusions; keep Command action/usage gaps separate. Unsupported positive and archived source relationships remain blocking. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
-| Application-group contribution queries | Accepted October 8; implementation pending and next in priority. Give the existing query members typed program-effect/application-group producer addresses, validating exact recipients and all potential sources before values. Preserve stacking, unknowns, explicit numeric order and one checked reduction path; rebuild current artifacts without compatibility branches. This is the next combined damage consumer boundary. [Accepted contract](owned-application-group-contribution-queries-proposal.md). |
+| Application-group contribution queries | Accepted and implemented October 8 in Core/Data/Engine V25. Typed program-effect/application-group addresses preserve exact recipients, potential-source census, stacking, unknowns and explicit numeric order in one checked reduction path. Current artifacts are rebuilt with no old-format compatibility. Real mixed damage-consumer data adoption remains next. [Accepted contract](owned-application-group-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |
 | Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 21 Config-local and 23 non-Config origins after selected/generated accounting, cached-Buffs, archived responsibility and overwritten-placeholder proofs. Fourteen archived rows retain their exact existing raw-input, usage and support-origin Pending owners; they gain no provider or known value. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Typed constructor defaults now reach Player/Enemy/Environment inputs; the real Player resistance-penalty consumer is published, but no global inventory closes. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |

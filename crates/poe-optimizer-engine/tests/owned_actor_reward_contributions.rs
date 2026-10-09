@@ -44,10 +44,12 @@ fn slot_owner() -> SchemaSubject {
 }
 fn member(owner: SchemaSubject, origin: ContributionOrigin, rank: u32) -> ContributionMember {
     ContributionMember {
-        owner,
-        program: key("produce"),
-        effect: key("add"),
-        origin,
+        producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+            owner,
+            program: key("produce"),
+            effect: key("add"),
+            origin,
+        }),
         order: Some(ContributionOrder {
             source_rank: rank,
             slot_ranks: vec![],
@@ -349,12 +351,18 @@ fn boolean_world() -> World {
         }
     }
     for m in w.members().clone() {
-        let p = &mut w.f.owner_mut(&m.owner).programs.members[0];
+        let p = &mut w
+            .f
+            .owner_mut(&m.producer.as_program_effect().unwrap().owner)
+            .programs
+            .members[0];
         p.reads.clear();
         p.nodes = vec![node(
             "value",
             RuleExpression::Literal {
-                value: ParameterValue::Boolean(m.owner == shared()),
+                value: ParameterValue::Boolean(
+                    m.producer.as_program_effect().unwrap().owner == shared(),
+                ),
             },
         )];
         let RuleEffectKind::Contribute { contribution, .. } = &mut p.effects[0].effect else {
@@ -466,8 +474,10 @@ fn true_shared_flag_cannot_hide_unknown_reward_and_inactive_unlisted_sources() {
             value: ParameterValue::Boolean(true)
         }
     );
-    w.members()
-        .retain(|m| m.owner != subject(def::<RewardDefinition>("reward-a")));
+    w.members().retain(|m| {
+        m.producer.as_program_effect().unwrap().owner
+            != subject(def::<RewardDefinition>("reward-a"))
+    });
     assert!(
         w.plan(Default::default())
             .is_err_and(|e| e.to_string().contains("no declared membership"))
@@ -525,19 +535,37 @@ fn format_roundtrip_and_raw_compilation_authenticate_owner_origin_and_capability
         match n {
             0 => bad.operations_version = key(OWNED_RULE_OPERATIONS_V22),
             1 => {
-                members[0].origin = ContributionOrigin::ExistingActor {
-                    application: key("absent"),
-                }
+                members[0].producer.as_program_effect_mut().unwrap().origin =
+                    ContributionOrigin::ExistingActor {
+                        application: key("absent"),
+                    }
             }
-            2 => members[1].origin = ContributionOrigin::SuppliedActor { slots: vec![] },
-            3 => members[2].origin = ContributionOrigin::Reward,
-            4 => members[3].origin = ContributionOrigin::Character,
+            2 => {
+                members[1].producer.as_program_effect_mut().unwrap().origin =
+                    ContributionOrigin::SuppliedActor { slots: vec![] }
+            }
+            3 => {
+                members[2].producer.as_program_effect_mut().unwrap().origin =
+                    ContributionOrigin::Reward
+            }
+            4 => {
+                members[3].producer.as_program_effect_mut().unwrap().origin =
+                    ContributionOrigin::Character
+            }
             5 => {
-                members[1].origin = ContributionOrigin::SuppliedActor {
-                    slots: vec![child_slot(), child_slot()],
-                }
+                members[1].producer.as_program_effect_mut().unwrap().origin =
+                    ContributionOrigin::SuppliedActor {
+                        slots: vec![child_slot(), child_slot()],
+                    }
             }
-            6 => members[0].origin = members[1].origin.clone(),
+            6 => {
+                members[0].producer.as_program_effect_mut().unwrap().origin = members[1]
+                    .producer
+                    .as_program_effect()
+                    .unwrap()
+                    .origin
+                    .clone()
+            }
             _ => {
                 bad.existing_actor_rules.as_mut().unwrap().members[0].owner = def("supplied");
             }

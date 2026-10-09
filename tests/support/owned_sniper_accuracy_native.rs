@@ -132,10 +132,12 @@ impl World {
             assert_eq!(group.reduction, ContributionReduction::Any);
             assert_eq!(group.ordering, ContributionOrdering::Unordered);
             group.members.members.push(ContributionMember {
-                owner,
-                program: key(name),
-                effect: key("source"),
-                origin: ContributionOrigin::Character,
+                producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+                    owner,
+                    program: key(name),
+                    effect: key("source"),
+                    origin: ContributionOrigin::Character,
+                }),
                 order: None,
             });
         }

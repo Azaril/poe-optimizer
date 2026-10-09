@@ -91,7 +91,7 @@ fn check_queries(queries: &[ContributionQuery]) {
                 // per recipient, even if currently inactive. No associativity
                 // or source traversal law is needed for zero/one-element folds.
                 assert!(group.members.members.iter().all(|m| !matches!(
-                    m.origin,
+                    m.producer.as_program_effect().unwrap().origin,
                     ContributionOrigin::EquipmentUse { .. }
                         | ContributionOrigin::ItemModifier { .. }
                 )));
@@ -105,7 +105,9 @@ fn check_queries(queries: &[ContributionQuery]) {
                     (order.source_rank, order.program_rank, order.effect_rank),
                     (0, 0, 0)
                 );
-                if let ContributionOrigin::ItemModifier { slots } = &member.origin {
+                if let ContributionOrigin::ItemModifier { slots } =
+                    &member.producer.as_program_effect().unwrap().origin
+                {
                     assert_eq!(json!(slots), b["equipment_slots"]);
                     assert_eq!(order.slot_ranks.len(), slots.len());
                     for (i, (slot, rank)) in slots.iter().zip(&order.slot_ranks).enumerate() {
@@ -154,7 +156,9 @@ fn census(
                     .flat_map(|q| &q.groups)
                     .flat_map(|g| &g.members.members)
                     .filter(|m| {
-                        m.owner == owner.owner && m.program == program.id && m.effect == effect.id
+                        m.producer.as_program_effect().unwrap().owner == owner.owner
+                            && m.producer.as_program_effect().unwrap().program == program.id
+                            && m.producer.as_program_effect().unwrap().effect == effect.id
                     })
                     .collect();
                 assert_eq!(

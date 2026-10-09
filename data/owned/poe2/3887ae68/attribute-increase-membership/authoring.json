@@ -1,47 +1,4 @@
 {
-  "schema_version": 1,
-  "before": "98d7a8cbd812535194ea4379a0bfc9ac910abb7b352888c4ebd9521144ac3520",
-  "definitions": {
-    "game": "poe2",
-    "release": "pob-3887ae68-player-offhand-facts-v1",
-    "schema_version": 6,
-    "content_sha256": "1d65ca708007732943046d2d000aad831673ab71a95a2f45309a9ccd5ed395ba",
-    "semantics_version": "owned-mechanics-skill-inputs-v1"
-  },
-  "registry": "274df864ba96949566f0ab5890debb9f487e6ebfa205ac23885362f1fe646310",
-  "rules": "a4f90b501700dd6e53c11cf5e48960b2b7a9cf38d1b0877aac52736b50591762",
-  "mapping": "24cfc49f303943403dfe15ed5544f91cd475fbdd8658e25f34e83149a5fe24d3",
-  "roles": "a57d4b2fcfdbe171de9feb083f4d5111694013314deec46f0ee81b5f3559e3ae",
-  "normalization": "8b5ba80475a40a89a7a7d952adf57aea76eb2927b13a12769fa5b928bff9c86e",
-  "scope": {
-    "complete_increase_groups": 6,
-    "declared_effect_members": 34,
-    "unchanged_owners": 9,
-    "closed_existing_rule_owners": 0,
-    "new_definitions": 0,
-    "new_programs": 0,
-    "new_receivers": 0,
-    "numeric_program_changes": 0,
-    "global_registry_closure_changed": false,
-    "base_membership_changed": false,
-    "source_admission_widened": false,
-    "whole_build_parity": false
-  },
-  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
-  "proof": {
-    "maximum_members_per_query": 7,
-    "minimum_literal": 3,
-    "maximum_literal": 8,
-    "full_member_sums": [
-      29,
-      24,
-      22,
-      29,
-      24,
-      22
-    ],
-    "meaning": "Explicit data ranks are deterministic enumeration only. Each direct Allocation member has a unique semantic position; binding rejects a second occurrence at that position. The fixed integral literals sum exactly in every order (at most 29 percentage points), independent of runtime resource limits. No PoB node traversal order is claimed."
-  },
   "artifacts": {
     "bindings.json": {
       "bytes": 8027,
@@ -52,12 +9,55 @@
       "sha256": "fb884093b19013f75b6e055c8db26a6b139346a30fc5da67db68241dda779893"
     },
     "queries.json": {
-      "bytes": 46316,
-      "sha256": "8e09ddb382252431e54c500491c1d575e0fb3e21e049a0ae12e1b88d9f277fb8"
+      "bytes": 50736,
+      "sha256": "8d9e54b5a60a5a51219eeed52c0f2974c6282c89b23dc5b17ea72a9a4133f0b6"
     },
     "source-vectors.json": {
       "bytes": 234949,
       "sha256": "0ec5a13b048f9f06cf76c41d83e62277594844a3953e877e76e90d2c03be4190"
     }
-  }
+  },
+  "before": "98d7a8cbd812535194ea4379a0bfc9ac910abb7b352888c4ebd9521144ac3520",
+  "definitions": {
+    "content_sha256": "1d65ca708007732943046d2d000aad831673ab71a95a2f45309a9ccd5ed395ba",
+    "game": "poe2",
+    "release": "pob-3887ae68-player-offhand-facts-v1",
+    "schema_version": 6,
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "mapping": "24cfc49f303943403dfe15ed5544f91cd475fbdd8658e25f34e83149a5fe24d3",
+  "normalization": "8b5ba80475a40a89a7a7d952adf57aea76eb2927b13a12769fa5b928bff9c86e",
+  "proof": {
+    "full_member_sums": [
+      29,
+      24,
+      22,
+      29,
+      24,
+      22
+    ],
+    "maximum_literal": 8,
+    "maximum_members_per_query": 7,
+    "meaning": "Explicit data ranks are deterministic enumeration only. Each direct Allocation member has a unique semantic position; binding rejects a second occurrence at that position. The fixed integral literals sum exactly in every order (at most 29 percentage points), independent of runtime resource limits. No PoB node traversal order is claimed.",
+    "minimum_literal": 3
+  },
+  "registry": "274df864ba96949566f0ab5890debb9f487e6ebfa205ac23885362f1fe646310",
+  "roles": "a57d4b2fcfdbe171de9feb083f4d5111694013314deec46f0ee81b5f3559e3ae",
+  "rules": "a4f90b501700dd6e53c11cf5e48960b2b7a9cf38d1b0877aac52736b50591762",
+  "schema_version": 1,
+  "scope": {
+    "base_membership_changed": false,
+    "closed_existing_rule_owners": 0,
+    "complete_increase_groups": 6,
+    "declared_effect_members": 34,
+    "global_registry_closure_changed": false,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "new_receivers": 0,
+    "numeric_program_changes": 0,
+    "source_admission_widened": false,
+    "unchanged_owners": 9,
+    "whole_build_parity": false
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
 }

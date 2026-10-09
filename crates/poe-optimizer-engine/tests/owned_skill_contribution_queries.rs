@@ -21,13 +21,15 @@ fn known<I, S>(id: I, schema: S) -> DefinitionEntry<I, S> {
 }
 fn member(effect: &str, rank: u32) -> ContributionMember {
     ContributionMember {
-        owner: child_owner(),
-        program: key("query-producer"),
-        effect: key(effect),
-        origin: ContributionOrigin::Skill {
-            authored: false,
-            supplies: vec![ability_supply("first"), ability_supply("second")],
-        },
+        producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+            owner: child_owner(),
+            program: key("query-producer"),
+            effect: key(effect),
+            origin: ContributionOrigin::Skill {
+                authored: false,
+                supplies: vec![ability_supply("first"), ability_supply("second")],
+            },
+        }),
         order: Some(ContributionOrder {
             source_rank: 0,
             program_rank: 0,
@@ -269,7 +271,9 @@ fn reused_parallel_and_permuted_storage_agree() {
     reversed.f.owners.reverse();
     reversed.group().members.members.reverse();
     for m in &mut reversed.group().members.members {
-        let ContributionOrigin::Skill { supplies, .. } = &mut m.origin else {
+        let ContributionOrigin::Skill { supplies, .. } =
+            &mut m.producer.as_program_effect_mut().unwrap().origin
+        else {
             panic!()
         };
         supplies.reverse();
@@ -328,28 +332,44 @@ fn membership_rejects_wrong_supply_owner_context_ranks_and_recipient() {
         let mut w = World::new();
         let expected = match case {
             0 => {
-                w.group().members.members[0].origin = ContributionOrigin::Skill {
+                w.group().members.members[0]
+                    .producer
+                    .as_program_effect_mut()
+                    .unwrap()
+                    .origin = ContributionOrigin::Skill {
                     authored: false,
                     supplies: vec![],
                 };
                 "explicit supply membership"
             }
             1 => {
-                w.group().members.members[0].origin = ContributionOrigin::Skill {
+                w.group().members.members[0]
+                    .producer
+                    .as_program_effect_mut()
+                    .unwrap()
+                    .origin = ContributionOrigin::Skill {
                     authored: false,
                     supplies: vec![ability_supply("first"), ability_supply("first")],
                 };
                 "duplicate supplied Skill"
             }
             2 => {
-                w.group().members.members[0].origin = ContributionOrigin::Skill {
+                w.group().members.members[0]
+                    .producer
+                    .as_program_effect_mut()
+                    .unwrap()
+                    .origin = ContributionOrigin::Skill {
                     authored: false,
                     supplies: vec![summon_supply()],
                 };
                 "owner differs from its slot"
             }
             3 => {
-                w.group().members.members[0].origin = ContributionOrigin::Skill {
+                w.group().members.members[0]
+                    .producer
+                    .as_program_effect_mut()
+                    .unwrap()
+                    .origin = ContributionOrigin::Skill {
                     authored: false,
                     supplies: vec![ability_supply("missing")],
                 };
@@ -380,7 +400,11 @@ fn membership_rejects_wrong_supply_owner_context_ranks_and_recipient() {
                 "only the exact current Skill recipient"
             }
             _ => {
-                w.group().members.members[0].origin = ContributionOrigin::Skill {
+                w.group().members.members[0]
+                    .producer
+                    .as_program_effect_mut()
+                    .unwrap()
+                    .origin = ContributionOrigin::Skill {
                     authored: true,
                     supplies: vec![],
                 };
@@ -410,7 +434,7 @@ fn unread_inactive_and_neutral_effects_still_require_exact_membership() {
     }
     let mut w = World::new();
     for m in &mut w.group().members.members {
-        m.origin = ContributionOrigin::Skill {
+        m.producer.as_program_effect_mut().unwrap().origin = ContributionOrigin::Skill {
             authored: false,
             supplies: vec![ability_supply("first")],
         };
@@ -549,8 +573,8 @@ fn direct_authored_copies_use_explicit_permission_and_preserve_each_occurrence()
     }
     for (name, rank) in [("level", 0), ("bonus", 1)] {
         let mut row = member(name, rank);
-        row.owner = subject(direct.clone());
-        row.origin = ContributionOrigin::Skill {
+        row.producer.as_program_effect_mut().unwrap().owner = subject(direct.clone());
+        row.producer.as_program_effect_mut().unwrap().origin = ContributionOrigin::Skill {
             authored: true,
             supplies: vec![],
         };
@@ -661,9 +685,9 @@ fn direct_authored_copies_use_explicit_permission_and_preserve_each_occurrence()
         .members
         .members
         .iter_mut()
-        .filter(|m| m.owner == subject(direct.clone()))
+        .filter(|m| m.producer.as_program_effect().unwrap().owner == subject(direct.clone()))
     {
-        row.origin = ContributionOrigin::Skill {
+        row.producer.as_program_effect_mut().unwrap().origin = ContributionOrigin::Skill {
             authored: true,
             supplies: vec![supply.clone()],
         };
@@ -687,9 +711,9 @@ fn direct_authored_copies_use_explicit_permission_and_preserve_each_occurrence()
         .members
         .members
         .iter_mut()
-        .filter(|m| m.owner == subject(direct.clone()))
+        .filter(|m| m.producer.as_program_effect().unwrap().owner == subject(direct.clone()))
     {
-        row.origin = ContributionOrigin::Skill {
+        row.producer.as_program_effect_mut().unwrap().origin = ContributionOrigin::Skill {
             authored: false,
             supplies: vec![supply.clone()],
         };
@@ -773,6 +797,9 @@ fn raw_compilation_target_types_and_limits_preserve_the_checked_boundary() {
         &mut raw.contribution_queries.as_mut().unwrap().members[0].groups[0]
             .members
             .members[0]
+            .producer
+            .as_program_effect_mut()
+            .unwrap()
             .origin
     else {
         panic!()

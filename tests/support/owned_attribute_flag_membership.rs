@@ -265,9 +265,16 @@ pub fn check_authored() {
         inverse.groups[0].members.closure = q.before.groups[0].members.closure.clone();
         assert_eq!(inverse, q.before, "only bounded member closure changes");
         for member in &group.members.members {
-            assert_eq!(member.origin, ContributionOrigin::Allocation);
+            assert_eq!(
+                member.producer.as_program_effect().unwrap().origin,
+                ContributionOrigin::Allocation
+            );
             assert!(member.order.is_none());
-            let owner = d.owners.iter().find(|o| o.owner == member.owner).unwrap();
+            let owner = d
+                .owners
+                .iter()
+                .find(|o| o.owner == member.producer.as_program_effect().unwrap().owner)
+                .unwrap();
             assert!(
                 !owner.programs.is_complete(),
                 "unrelated passive mechanics remain Partial"
@@ -276,12 +283,12 @@ pub fn check_authored() {
                 .programs
                 .members
                 .iter()
-                .find(|p| p.id == member.program)
+                .find(|p| p.id == member.producer.as_program_effect().unwrap().program)
                 .unwrap();
             let effect = program
                 .effects
                 .iter()
-                .find(|e| e.id == member.effect)
+                .find(|e| e.id == member.producer.as_program_effect().unwrap().effect)
                 .unwrap();
             let RuleEffectKind::Contribute {
                 entity,
@@ -470,7 +477,7 @@ fn changed_flag_guard_or_recipient_invalidates_membership_proof() {
         let owner = d
             .owners
             .iter_mut()
-            .find(|o| o.owner == member.owner)
+            .find(|o| o.owner == member.producer.as_program_effect().unwrap().owner)
             .unwrap();
         let effect = &mut owner.programs.members[0].effects[0];
         if change_guard {

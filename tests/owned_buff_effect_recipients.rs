@@ -72,10 +72,12 @@ fn recipient_buff_effect_authoring_rejects_scope_bypass_and_nonempty_domain() {
             .members
             .members
             .push(ContributionMember {
-                owner: producer.owner,
-                program: "fixture-unreviewed-producer".parse().unwrap(),
-                effect: "value".parse().unwrap(),
-                origin: ContributionOrigin::Character,
+                producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+                    owner: producer.owner,
+                    program: "fixture-unreviewed-producer".parse().unwrap(),
+                    effect: "value".parse().unwrap(),
+                    origin: ContributionOrigin::Character,
+                }),
                 order: Some(ContributionOrder {
                     source_rank: 0,
                     program_rank: 0,

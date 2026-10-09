@@ -50,7 +50,7 @@ fn gigantic_cutover_rejects_changed_player_routing_and_numeric_presence() {
     let baseline = json!(family::queries());
     for (pointer, value) in [
         (
-            "/0/groups/0/members/members/0/origin/kind",
+            "/0/groups/0/members/members/0/producer/origin/kind",
             json!("character"),
         ),
         ("/0/groups/0/members/closure", json!({"kind":"complete"})),

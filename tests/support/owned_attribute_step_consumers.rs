@@ -782,10 +782,14 @@ mod native {
                                 ContributionOrigin::Allocation
                             };
                             members.push(ContributionMember {
-                                owner: owner.owner.clone(),
-                                program: program.id.clone(),
-                                effect: effect.id.clone(),
-                                origin,
+                                producer: ContributionProducer::ProgramEffect(
+                                    ProgramContributionProducer {
+                                        owner: owner.owner.clone(),
+                                        program: program.id.clone(),
+                                        effect: effect.id.clone(),
+                                        origin,
+                                    },
+                                ),
                                 order: Some(ContributionOrder {
                                     source_rank: rank,
                                     program_rank: 0,

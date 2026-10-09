@@ -117,9 +117,10 @@ fn census(owners: &[DefinitionRules], applications: &[EffectApplicationRule]) {
                             .members
                             .members
                             .iter()
-                            .filter(|m| m.owner == owner.owner
-                                && m.program == program.id
-                                && m.effect == effect.id)
+                            .filter(|m| m.producer.as_program_effect().unwrap().owner
+                                == owner.owner
+                                && m.producer.as_program_effect().unwrap().program == program.id
+                                && m.producer.as_program_effect().unwrap().effect == effect.id)
                             .count(),
                         1
                     );
@@ -318,9 +319,17 @@ pub fn check_authored() {
         let mut positions = BTreeSet::new();
         let mut sum = 0.;
         for member in &group.members.members {
-            let expected = domain(&member.owner).expect("only direct class and passive origins");
-            assert_eq!(member.origin, expected);
-            let owner = d.owners.iter().find(|o| o.owner == member.owner).unwrap();
+            let expected = domain(&member.producer.as_program_effect().unwrap().owner)
+                .expect("only direct class and passive origins");
+            assert_eq!(
+                member.producer.as_program_effect().unwrap().origin,
+                expected
+            );
+            let owner = d
+                .owners
+                .iter()
+                .find(|o| o.owner == member.producer.as_program_effect().unwrap().owner)
+                .unwrap();
             if expected == ContributionOrigin::Character {
                 assert!(!owner.programs.is_complete());
                 let SchemaSubject::Definition(DefinitionAddress::Class(class)) = &owner.owner
@@ -335,14 +344,14 @@ pub fn check_authored() {
                 .programs
                 .members
                 .iter()
-                .find(|p| p.id == member.program)
+                .find(|p| p.id == member.producer.as_program_effect().unwrap().program)
                 .unwrap();
             assert_eq!(program.context, RuleEntityKind::Actor);
             let (index, effect) = program
                 .effects
                 .iter()
                 .enumerate()
-                .find(|(_, e)| e.id == member.effect)
+                .find(|(_, e)| e.id == member.producer.as_program_effect().unwrap().effect)
                 .unwrap();
             let RuleEffectKind::Contribute {
                 entity,
@@ -499,18 +508,18 @@ fn changed_donor_body_is_not_covered_by_the_bounded_sum_proof() {
     let owner = d
         .owners
         .iter_mut()
-        .find(|o| o.owner == member.owner)
+        .find(|o| o.owner == member.producer.as_program_effect().unwrap().owner)
         .unwrap();
     let program = owner
         .programs
         .members
         .iter_mut()
-        .find(|p| p.id == member.program)
+        .find(|p| p.id == member.producer.as_program_effect().unwrap().program)
         .unwrap();
     program
         .effects
         .iter_mut()
-        .find(|e| e.id == member.effect)
+        .find(|e| e.id == member.producer.as_program_effect().unwrap().effect)
         .unwrap()
         .when = Some("unreviewed-guard".parse().unwrap());
     let failure = std::panic::catch_unwind(|| census(&d.owners, &[]));

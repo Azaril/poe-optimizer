@@ -291,8 +291,10 @@ accepted by the owner on 2026-10-08. It adds a typed producer address
 inside the existing checked contribution model, distinguishing ordinary program
 effects from results after application stacking. Exact recipient binding and
 complete membership must survive that distinction; individual candidates cannot
-be counted again after their group has emitted a contribution. This is accepted
-end-state design; the current runtime member format has not yet been extended.
+be counted again after their group has emitted a contribution. Core/Data/Engine
+operations V25 now implement this contract in the current member format. The
+real mixed damage-consumer publication remains separate work; no numerical or
+whole-build coverage follows merely from this capability.
 
 The [passive topology contract](owned-passive-topology.md) separates implicit roots,
 physical allocations, attached choices, scope eligibility and injected legality budgets.

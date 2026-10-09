@@ -440,14 +440,17 @@ pub(crate) fn preflight(input: &OwnedReleaseInput, limits: OwnedReleaseLimits) -
                     if let Some(order) = &member.order {
                         charge(&mut left, order.slot_ranks.len(), "validation entries")?;
                     }
-                    if let poe_optimizer_core::owned_rules::ContributionOrigin::EquipmentUse {
-                        slots,
-                    }
-                    | poe_optimizer_core::owned_rules::ContributionOrigin::ItemModifier {
-                        slots,
-                    } = &member.origin
-                    {
-                        charge(&mut left, slots.len(), "validation entries")?;
+                    match &member.producer {
+                        poe_optimizer_core::owned_rules::ContributionProducer::ProgramEffect(producer) => {
+                            if let poe_optimizer_core::owned_rules::ContributionOrigin::EquipmentUse { slots }
+                                | poe_optimizer_core::owned_rules::ContributionOrigin::ItemModifier { slots } = &producer.origin
+                            {
+                                charge(&mut left, slots.len(), "validation entries")?;
+                            }
+                        }
+                        poe_optimizer_core::owned_rules::ContributionProducer::ApplicationGroup(producer) => {
+                            charge(&mut left, producer.declarations.len(), "validation entries")?;
+                        }
                     }
                 }
             }

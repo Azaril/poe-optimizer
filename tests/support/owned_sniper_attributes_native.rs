@@ -85,8 +85,8 @@ pub(super) fn install(
         .iter()
         .flat_map(|q| q.after.groups[0].members.members.iter())
     {
-        if !member_owners.contains(&member.owner) {
-            member_owners.push(member.owner.clone());
+        if !member_owners.contains(&member.producer.as_program_effect().unwrap().owner) {
+            member_owners.push(member.producer.as_program_effect().unwrap().owner.clone());
         }
     }
     let mut owners: Vec<_> = recipe
@@ -187,12 +187,15 @@ pub(super) fn install(
         .flat_map(|q| &q.groups)
         .flat_map(|g| &g.members.members)
     {
-        if !owners.iter().any(|o| o.owner == member.owner) {
+        if !owners
+            .iter()
+            .any(|o| o.owner == member.producer.as_program_effect().unwrap().owner)
+        {
             let actual = recipe
                 .rules
                 .owners
                 .iter()
-                .find(|o| o.owner == member.owner)
+                .find(|o| o.owner == member.producer.as_program_effect().unwrap().owner)
                 .unwrap();
             assert!(actual.programs.is_complete());
             owners.push(actual.clone());

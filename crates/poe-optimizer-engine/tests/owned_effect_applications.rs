@@ -1,5 +1,7 @@
 //! General application semantics using explicitly synthetic, finite providers.
 //! These fixtures do not assert an Offering value or real-build completeness.
+#[path = "support/application_group_queries.rs"]
+mod checked_queries;
 #[allow(dead_code)]
 #[path = "support/owned_computed_support_fixture.rs"]
 mod fixture;

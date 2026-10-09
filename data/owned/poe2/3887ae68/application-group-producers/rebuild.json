@@ -1,0 +1,91 @@
+{
+  "artifacts": [
+    {
+      "after_sha256": "769a1a5f07a58455e47eb166dbefffa3826e336ba520e0cc28b7c7f1bf334b3e",
+      "before_sha256": "e9d1d6523d079144de8bcfdf425928c086fe76c8586772ad84b25a69c434c6d3",
+      "members": 37,
+      "path": "data/owned/poe2/3887ae68/attribute-base-class-passive/dependencies.json"
+    },
+    {
+      "after_sha256": "e943c35c8790d0aa55fb32e4b78729736b8ec7d9784f5049a358eb931382e594",
+      "before_sha256": "4759b62876941c5dd4452416a668e7f743305f8c602cebc03bcbe1e1170345ba",
+      "members": 1972,
+      "path": "data/owned/poe2/3887ae68/attribute-base-class-passive/queries.json"
+    },
+    {
+      "after_sha256": "8d9e54b5a60a5a51219eeed52c0f2974c6282c89b23dc5b17ea72a9a4133f0b6",
+      "before_sha256": "8e09ddb382252431e54c500491c1d575e0fb3e21e049a0ae12e1b88d9f277fb8",
+      "members": 34,
+      "path": "data/owned/poe2/3887ae68/attribute-increase-membership/queries.json"
+    },
+    {
+      "after_sha256": "a24da2d51d5c75d86fd6821cb88538bbbeddd4af9f0662c4503921f8de049c92",
+      "before_sha256": "bd0c592866662addee5a1e3beb3d7f09a5f465633ae071e311f66eecf7092cc0",
+      "members": 1,
+      "path": "data/owned/poe2/3887ae68/gigantic-flags/queries.json"
+    },
+    {
+      "after_sha256": "573074024aab402b4c96e12ad4de7f9a5f09f8f7db7d6077d87a8bd6bd563765",
+      "before_sha256": "1bc8a98235142849f18125c536917f43e532bde76777fef9f7173e65da23134e",
+      "members": 4,
+      "path": "data/owned/poe2/3887ae68/inherent-attribute-flag-membership/queries.json"
+    },
+    {
+      "after_sha256": "9eeb2b81d70382919f235931fd275fe54e1a7f30004d7ac687e477b661b82334",
+      "before_sha256": "4ad07efff9421a3f2b8b38417d134d7e0196b7b352867eb1cd6ea843a5f9953e",
+      "members": 2,
+      "path": "data/owned/poe2/3887ae68/inherent-attribute-flags/rules.json"
+    },
+    {
+      "after_sha256": "a2a8ae76ade52aee419c8131739f599eb6cc29760e8ab57a5d7c6dbeb3ffc448",
+      "before_sha256": "a0f81a9bab97f5551a2d1e152f862a018573dad0e696dda919d23269147780ac",
+      "members": 8,
+      "path": "data/owned/poe2/3887ae68/life-contribution-queries/queries.json"
+    },
+    {
+      "after_sha256": "57180fde3123f35025140b6b0b6c73164a430c5306a860fdd82357cee528773e",
+      "before_sha256": "6240e87dceeee6690f77e8d17b688f14ea741b8fcaa2752c305d0035d3e61c6b",
+      "members": 0,
+      "path": "data/owned/poe2/3887ae68/inherent-attribute-flag-membership/source-vectors.json",
+      "reason": "reference byte pin only"
+    }
+  ],
+  "authoring_rebindings": [
+    {
+      "after": "e5208ba8ee16abccc688e6d7681cbbdc4fb14e73449a4faea16f5be47861d366",
+      "before": "4839832fb19d30efcb5ae1f9f64ef9349a55f30db9f99020c768d3ac234ac3df",
+      "kind": "attribute-base-class-passive-membership"
+    },
+    {
+      "after": "d34e8c67a2ea10bf9fdc1d7b9c0dacbb6f457d7658f17668e1197ac802352850",
+      "before": "4bd44e527f9f3307eeebd0726ae231cf49f72b1370ea33df3ec5147d144020a8",
+      "kind": "attribute-increase-membership"
+    },
+    {
+      "after": "6e95e4acfcc47910f152dca12fbb95441f0158bde61e866db6d73d3255972f80",
+      "before": "f2064e4f1cfce292349c705946170fde7e2db33b4f50d50fcedb56acce256487",
+      "kind": "inherent-attribute-flag-membership"
+    },
+    {
+      "after": "5c6b4cba636c02d29f866d9b7bf746906caa76b6bceb29f31e13750c2932f5e6",
+      "before": "e1baa20f1a0a9976a9fece244442c229fbf0d737d3f354514f7766a52e7a1fbe",
+      "kind": "life-contribution-queries"
+    },
+    {
+      "after": "cda14b74a0481875dafe19289cbc3f4c343c24e4266da588ab258d6127ff4af7",
+      "before": "029d9ff43bb149469367dc97d46ad59aab0b57624829ca6104d272dd1bc26df1",
+      "kind": "gigantic-flags-v1"
+    }
+  ],
+  "members": 2017,
+  "prior_input": "06905cc38c8ceadfe27019a843b507bb6d71b210ada9738a45aa1173884f62f9",
+  "schema_version": 1,
+  "scope": {
+    "coverage_closed": false,
+    "members_added": 0,
+    "members_removed": 0,
+    "numeric_rules_changed": false,
+    "producer_address_format_only": true
+  },
+  "source_commit": "d1dd93c"
+}

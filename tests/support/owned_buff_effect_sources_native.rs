@@ -261,13 +261,15 @@ fn potential(w: &mut World, index: usize, amount: Option<f64>, enabled: bool, ad
             .members
             .members
             .push(ContributionMember {
-                owner: owner(),
-                program,
-                effect: key("potential"),
-                origin: ContributionOrigin::Skill {
-                    authored: false,
-                    supplies: vec![slot(SlotOwnerDefId::Gem(d(0x86b)), 0x3221)],
-                },
+                producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+                    owner: owner(),
+                    program,
+                    effect: key("potential"),
+                    origin: ContributionOrigin::Skill {
+                        authored: false,
+                        supplies: vec![slot(SlotOwnerDefId::Gem(d(0x86b)), 0x3221)],
+                    },
+                }),
                 order: Some(ContributionOrder {
                     source_rank: 0,
                     program_rank: 0,

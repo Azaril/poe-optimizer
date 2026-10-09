@@ -260,10 +260,12 @@ fn actor_applications_cannot_impersonate_character_origins_in_ordered_queries() 
             ordering: ContributionOrdering::Ordered,
             empty: ParameterValue::Integer(BoundedInteger::new(0).unwrap()),
             members: DeclaredSet::complete(vec![ContributionMember {
-                owner: subject(),
-                program: key("life"),
-                effect: key("base"),
-                origin: ContributionOrigin::Character,
+                producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+                    owner: subject(),
+                    program: key("life"),
+                    effect: key("base"),
+                    origin: ContributionOrigin::Character,
+                }),
                 order: Some(ContributionOrder {
                     source_rank: 1,
                     program_rank: 0,

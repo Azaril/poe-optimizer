@@ -130,7 +130,7 @@ pub fn check_queries(rows: &[ContributionQuery]) {
         json!(rows),
         json!([{"id":QUERY,"stat":stat,"contribution":"flag","groups":[{
             "id":GROUP,"reduction":"any","ordering":"unordered","empty":{"kind":"boolean","value":false},
-            "members":{"members":[{"owner":old[0].owner,"program":old[0].program.id,"effect":"grant","origin":{"kind":"allocation"},"order":null}],
+            "members":{"members":[{"producer":{"kind":"program_effect","owner":old[0].owner,"program":old[0].program.id,"effect":"grant","origin":{"kind":"allocation"}},"order":null}],
             "closure":{"kind":"partial","value":{"gaps":[{"subject":{"kind":"definition","value":{"kind":"stat","value":stat}},"facet":"game_rules","code":"gigantic-flag-producer-domain-unproved"}]}}}
         }]}])
     );

@@ -1,6 +1,7 @@
 # Checked queries over stacked application contributions
 
-**Status:** Accepted by the project owner on 2026-10-08; implementation pending.
+**Status:** Accepted and implemented in Core/Data/Engine operations V25 on
+2026-10-08. Real mixed damage-consumer data adoption remains pending.
 **Date:** 2026-10-08.
 **Decider:** Project owner.
 **Scope:** Let the existing contribution graph consume the result of an effect
@@ -20,8 +21,8 @@ them to the physical damage calculation. The expected 130% subtotal for these
 two components is a validation control, not a complete damage-domain claim or a
 value to put in the evaluator.
 
-Applications already use the same effect DAG. The missing piece is *checked
-membership*: Core's `ContributionMember` names only an ordinary
+Applications already use the same effect DAG. The missing piece was *checked
+membership*: Core's previous `ContributionMember` named only an ordinary
 owner/program/effect plus its source origin. Data requires that program to exist
 in a definition owner. Engine's application compiler instead emits a synthetic
 group keyed by exact recipient, stacking family and modifier. Its diagnostic
@@ -140,11 +141,11 @@ The implementation layers remain:
 | Engine execution | Use the existing dependency graph, reductions and per-worker scratch; no new aggregation engine |
 | Offline reference | Acquire and validate game rules against pinned PoB; no Lua state in native execution |
 
-Code inspection confirms that `compile/ordered.rs` currently indexes members by
-owner/program/effect and rejects application groups at the ordinary-provider
-origin check. `compile/effect_applications.rs` already emits a
+Before this implementation, `compile/ordered.rs` indexed members by
+owner/program/effect and rejected application groups at the ordinary-provider
+origin check. `compile/effect_applications.rs` already emitted a
 `RuleOrigin::EffectApplicationGroup` with exact recipient, family and modifier.
-Use that typed origin to bind the new address; the synthetic node's diagnostic
+The new binding uses that typed origin; the synthetic node's diagnostic
 owner/program fields are not definition-side ownership.
 
 Both initial planning in `owned_plan/compile.rs` and late binding in
@@ -153,6 +154,21 @@ shared gate. Validate declarations even if a source or recipient is not selected
 validate concrete groups even when unread, inactive or neutral. Declaration
 completeness and runtime availability are separate checks.
 
-This handoff records accepted design and inspected integration points only.
-The current canonical package still uses operations V24 and the original member
-contract; no new producer format, runtime path or consumer is claimed implemented.
+The current member format now has a tagged `producer` plus `order`.
+`ProgramEffect` retains the ordinary definition/program/effect/origin;
+`ApplicationGroup` carries family, modifier and exact declaration membership.
+The bounded Data census and shared Engine binding gate implement both variants.
+Execution still uses the existing reduction indices and application operations.
+
+Operations V25 uses plan domain `owned-effect-plan-v22`. Earlier operation
+subsets use the same current wire format and reject application-group members;
+they are capability subsets, not old-format parsers. The maintained data packets
+and canonical package's 2,017 ordinary members have been re-expressed and their
+authoring commitments rebound. No prior-member deserializer is retained.
+
+The new generic tests cover mixed ordinary/application channels, independent
+families, duplicate declarations sharing a family, source ties, repeated recipient
+groups, missing/extra/duplicate members, wrong channels/recipients, unread/inactive/
+zero sources, unknowns, Partial coverage, ordering, work bounds, stages, cycles,
+storage permutations and fresh/reused/four-worker execution. The next numerical
+step is real data adoption, not another contribution API.

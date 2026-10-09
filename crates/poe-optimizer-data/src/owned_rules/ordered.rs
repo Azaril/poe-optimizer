@@ -2,7 +2,7 @@
 use super::*;
 use poe_optimizer_core::{
     owned_build::ParameterValue,
-    owned_definitions::{EquipmentSlotDefId, OwnedDefinitionKey},
+    owned_definitions::{EquipmentSlotDefId, OwnedDefinitionKey, StatDefId},
     owned_schema::{SchemaDefinitionId, UnitDimension},
 };
 use std::collections::BTreeMap;
@@ -18,6 +18,123 @@ struct EquipmentLane {
 struct QueryIndex<'a> {
     queries: BTreeMap<&'a OwnedDefinitionKey, &'a ContributionQuery>,
     group_types: BTreeMap<(&'a OwnedDefinitionKey, &'a OwnedDefinitionKey), ComputedValueType>,
+}
+
+struct ApplicationGroup<'a> {
+    stat: &'a StatDefId,
+    kind: ContributionKind,
+    reduction: EffectStackingReduction,
+    declarations: BTreeSet<(&'a OwnedDefinitionKey, &'a OwnedDefinitionKey)>,
+}
+type ApplicationGroups<'a> =
+    BTreeMap<(&'a OwnedDefinitionKey, &'a OwnedDefinitionKey), ApplicationGroup<'a>>;
+
+/// Census declarations before any candidate is selected or evaluated. This is
+/// shared by storage and standalone compilation, including unread query groups.
+fn application_groups<'a, I: DefinitionSchemaIndex>(
+    input: &'a RulePackageInput,
+    index: &I,
+    usage: &mut RuleStorageUse,
+    limits: RuleStorageLimits,
+) -> Result<ApplicationGroups<'a>, RuleStorageError> {
+    let invalid = RuleStorageError::Structure;
+    let mut groups: ApplicationGroups<'a> = BTreeMap::new();
+    let Some(registry) = &input.effect_applications else {
+        return Ok(groups);
+    };
+    work(usage, limits, registry.members.len())?;
+    let mut ids = BTreeSet::new();
+    for application in &registry.members {
+        if !ids.insert(&application.id) {
+            return Err(invalid("duplicate application in contribution census"));
+        }
+        work(usage, limits, application.program.effects.len())?;
+        let mut effects = BTreeMap::new();
+        for effect in &application.program.effects {
+            if effects.insert(&effect.id, effect).is_some() {
+                return Err(invalid("duplicate application contribution effect"));
+            }
+        }
+        work(usage, limits, application.stacking.len())?;
+        let mut mapped = BTreeSet::new();
+        for mapping in &application.stacking {
+            let Some(effect) = effects.get(&mapping.effect) else {
+                return Err(invalid(
+                    "application membership references an unknown effect",
+                ));
+            };
+            if !mapped.insert(&mapping.effect) {
+                return Err(invalid("duplicate application contribution mapping"));
+            }
+            let RuleEffectKind::Contribute {
+                entity: RuleEntity::Current,
+                stat,
+                contribution,
+                ..
+            } = &effect.effect
+            else {
+                return Err(invalid(
+                    "application group requires an exact-recipient contribution",
+                ));
+            };
+            let SchemaLookup::Known(schema) = index.definition(stat) else {
+                return Err(invalid("application group requires a known stat"));
+            };
+            work(
+                usage,
+                limits,
+                schema.targets.len() + application.targets.len(),
+            )?;
+            let context = application.program.context;
+            if !schema.targets.contains(&context)
+                || !matches!(
+                    schema.value,
+                    ComputedValueType::Integer | ComputedValueType::Quantity { .. }
+                )
+                || application.targets.is_empty()
+                || application.targets.iter().any(|target| match target {
+                    EffectApplicationTarget::Player => context != RuleEntityKind::Actor,
+                    EffectApplicationTarget::Enemy => context != RuleEntityKind::Enemy,
+                    EffectApplicationTarget::OwnedSlot { slot } => {
+                        context != RuleEntityKind::Actor
+                            || !matches!(index.slot(slot), SchemaLookup::Known(_))
+                    }
+                })
+            {
+                return Err(invalid(
+                    "application group recipient or value type differs from its stat",
+                ));
+            }
+            let group = groups
+                .entry((&mapping.family, &mapping.modifier))
+                .or_insert_with(|| ApplicationGroup {
+                    stat,
+                    kind: *contribution,
+                    reduction: mapping.reduction,
+                    declarations: BTreeSet::new(),
+                });
+            if group.stat != stat
+                || group.kind != *contribution
+                || group.reduction != mapping.reduction
+            {
+                return Err(invalid(
+                    "application group contribution channel or reduction disagrees",
+                ));
+            }
+            if !group
+                .declarations
+                .insert((&application.id, &mapping.effect))
+            {
+                return Err(invalid("duplicate application group declaration"));
+            }
+        }
+        if mapped.len() != effects.len() {
+            return Err(invalid(
+                "application contribution has no stacking declaration",
+            ));
+        }
+    }
+    Ok(groups)
 }
 
 fn work(
@@ -148,12 +265,17 @@ fn order<I: DefinitionSchemaIndex>(
     limits: RuleStorageLimits,
 ) -> Result<Option<EquipmentLane>, RuleStorageError> {
     let invalid = RuleStorageError::Structure;
+    let ContributionProducer::ProgramEffect(producer) = &member.producer else {
+        return Err(invalid(
+            "ordinary contribution requires a program-effect producer",
+        ));
+    };
     if (ordering == ContributionOrdering::Ordered) != member.order.is_some() {
         return Err(invalid(
             "contribution member ordering differs from its group",
         ));
     }
-    if let ContributionOrigin::Skill { authored, supplies } = &member.origin {
+    if let ContributionOrigin::Skill { authored, supplies } = &producer.origin {
         if !RuleOperationsVersion::parse(input.operations_version.as_str())
             .is_some_and(RuleOperationsVersion::supports_skill_contribution_queries)
         {
@@ -171,7 +293,7 @@ fn order<I: DefinitionSchemaIndex>(
                 "Skill contribution origins require Skill context and no equipment ranks",
             ));
         }
-        let SchemaSubject::Definition(DefinitionAddress::Skill(skill)) = &member.owner else {
+        let SchemaSubject::Definition(DefinitionAddress::Skill(skill)) = &producer.owner else {
             return Err(invalid(
                 "Skill contribution requires a Skill definition owner",
             ));
@@ -208,7 +330,7 @@ fn order<I: DefinitionSchemaIndex>(
         return Ok(None);
     }
     let extended = matches!(
-        member.origin,
+        producer.origin,
         ContributionOrigin::ExistingActor { .. }
             | ContributionOrigin::Reward
             | ContributionOrigin::SuppliedActor { .. }
@@ -231,9 +353,9 @@ fn order<I: DefinitionSchemaIndex>(
                 "Actor/reward contribution origins require Actor context and no equipment ranks",
             ));
         }
-        match &member.origin {
+        match &producer.origin {
             ContributionOrigin::ExistingActor { application } => {
-                let SchemaSubject::Definition(DefinitionAddress::Actor(actor)) = &member.owner
+                let SchemaSubject::Definition(DefinitionAddress::Actor(actor)) = &producer.owner
                 else {
                     return Err(invalid(
                         "existing Actor contribution requires an Actor definition owner",
@@ -256,7 +378,7 @@ fn order<I: DefinitionSchemaIndex>(
                 }
             }
             ContributionOrigin::Reward => {
-                let SchemaSubject::Definition(DefinitionAddress::Reward(reward)) = &member.owner
+                let SchemaSubject::Definition(DefinitionAddress::Reward(reward)) = &producer.owner
                 else {
                     return Err(invalid(
                         "reward contribution requires a Reward definition owner",
@@ -294,7 +416,7 @@ fn order<I: DefinitionSchemaIndex>(
                             "supplied Actor contribution provider must be known",
                         ));
                     }
-                    let valid = match &member.owner {
+                    let valid = match &producer.owner {
                         SchemaSubject::Definition(DefinitionAddress::Actor(id)) => id == actor,
                         SchemaSubject::Slot(SlotAddress::Actor(id)) => id == slot,
                         _ => false,
@@ -310,7 +432,7 @@ fn order<I: DefinitionSchemaIndex>(
         }
         return Ok(None);
     }
-    let definition = match &member.owner {
+    let definition = match &producer.owner {
         SchemaSubject::Definition(id) => id,
         SchemaSubject::Slot(_) => {
             return Err(invalid("ordered member requires a direct definition owner"));
@@ -333,7 +455,7 @@ fn order<I: DefinitionSchemaIndex>(
             "ordered producer definition must have a known schema",
         ));
     }
-    let (valid, context, equipment) = match &member.origin {
+    let (valid, context, equipment) = match &producer.origin {
         ContributionOrigin::Character => (
             matches!(
                 definition,
@@ -616,6 +738,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             }
         }
     }
+    let applications = application_groups(input, index, usage, limits)?;
     let mut catalog = QueryIndex::default();
     for query in &registry.members {
         if catalog.queries.insert(&query.id, query).is_some() {
@@ -656,6 +779,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             ));
         }
         let mut members = BTreeSet::new();
+        let mut application_members = BTreeSet::new();
         for group in &query.groups {
             let ty = group_type(query, group, &stat.value, index)?;
             if catalog
@@ -673,17 +797,82 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             let mut owner_ranks = BTreeMap::new();
             let mut program_ranks = BTreeMap::new();
             for member in &group.members.members {
-                if !members.insert((owner_key(&member.owner), &member.program, &member.effect)) {
+                let producer = match &member.producer {
+                    ContributionProducer::ProgramEffect(producer) => producer,
+                    ContributionProducer::ApplicationGroup(producer) => {
+                        if !RuleOperationsVersion::parse(input.operations_version.as_str())
+                            .is_some_and(
+                                RuleOperationsVersion::supports_application_group_contributions,
+                            )
+                        {
+                            return Err(RuleStorageError::Structure(
+                                "application-group contributions require owned-domain-operations-v25",
+                            ));
+                        }
+                        let address = (&producer.family, &producer.modifier);
+                        if !application_members.insert(address) {
+                            return Err(RuleStorageError::Structure(
+                                "application group occurs more than once across query groups",
+                            ));
+                        }
+                        let Some(actual) = applications.get(&address) else {
+                            return Err(RuleStorageError::Structure(
+                                "unknown application group producer",
+                            ));
+                        };
+                        if actual.stat != &query.stat || actual.kind != query.contribution {
+                            return Err(RuleStorageError::Structure(
+                                "application group contribution channel differs from query",
+                            ));
+                        }
+                        add(&mut usage.ordered_members, producer.declarations.len())?;
+                        work(
+                            usage,
+                            limits,
+                            producer.declarations.len() + actual.declarations.len(),
+                        )?;
+                        let mut declared = BTreeSet::new();
+                        for declaration in &producer.declarations {
+                            if !declared.insert((&declaration.application, &declaration.effect)) {
+                                return Err(RuleStorageError::Structure(
+                                    "duplicate application producer declaration",
+                                ));
+                            }
+                        }
+                        if declared != actual.declarations {
+                            return Err(RuleStorageError::Structure(
+                                "application producer declarations differ from complete potential census",
+                            ));
+                        }
+                        if (group.ordering == ContributionOrdering::Ordered)
+                            != member.order.is_some()
+                            || member
+                                .order
+                                .as_ref()
+                                .is_some_and(|o| !o.slot_ranks.is_empty())
+                        {
+                            return Err(RuleStorageError::Structure(
+                                "application group ordering requires the group's policy and no equipment ranks",
+                            ));
+                        }
+                        continue;
+                    }
+                };
+                if !members.insert((
+                    owner_key(&producer.owner),
+                    &producer.program,
+                    &producer.effect,
+                )) {
                     return Err(RuleStorageError::Structure(
                         "ordered producer occurs more than once across query groups",
                     ));
                 }
-                if !subject_known(&member.owner, index) {
+                if !subject_known(&producer.owner, index) {
                     return Err(RuleStorageError::Structure(
                         "ordered member owner must be known",
                     ));
                 }
-                let Some(program) = programs.get(&(owner_key(&member.owner), &member.program))
+                let Some(program) = programs.get(&(owner_key(&producer.owner), &producer.program))
                 else {
                     return Err(RuleStorageError::Structure(
                         "ordered member references an unknown producer program",
@@ -693,7 +882,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                 let matching: Vec<_> = program
                     .effects
                     .iter()
-                    .filter(|e| e.id == member.effect)
+                    .filter(|e| e.id == producer.effect)
                     .collect();
                 if matching.len() != 1 {
                     return Err(RuleStorageError::Structure(
@@ -716,7 +905,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                         "ordered member contribution channel differs from query",
                     ));
                 }
-                if matches!(member.origin, ContributionOrigin::Skill { .. })
+                if matches!(producer.origin, ContributionOrigin::Skill { .. })
                     && *entity != RuleEntity::Current
                 {
                     return Err(RuleStorageError::Structure(
@@ -756,7 +945,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                 };
                 let order = (member_order.source_rank, member_order.program_rank);
                 if let Some(prior) =
-                    owner_ranks.insert(owner_key(&member.owner), member_order.source_rank)
+                    owner_ranks.insert(owner_key(&producer.owner), member_order.source_rank)
                     && prior != member_order.source_rank
                 {
                     return Err(RuleStorageError::Structure(
@@ -764,13 +953,24 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                     ));
                 }
                 if let Some(prior) =
-                    program_ranks.insert((owner_key(&member.owner), &member.program), order)
+                    program_ranks.insert((owner_key(&producer.owner), &producer.program), order)
                     && prior != order
                 {
                     return Err(RuleStorageError::Structure(
                         "ordered effects of one program must share source and program ranks",
                     ));
                 }
+            }
+        }
+        work(usage, limits, applications.len())?;
+        for (address, application) in &applications {
+            if application.stat == &query.stat
+                && application.kind == query.contribution
+                && !application_members.contains(address)
+            {
+                return Err(RuleStorageError::Structure(
+                    "potential application contribution has no declared membership",
+                ));
             }
         }
     }

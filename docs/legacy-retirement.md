@@ -129,9 +129,13 @@ new evaluator branch. Retain the separate ordinary Engine application tests
 until the joined artifact-dependent checks run automatically in CI. Do not
 replace useful independent coverage with ignored-only tests. The next
 query extension must name application groups explicitly, not create dummy
-definition programs for synthetic graph nodes. The owner accepted this extension
-on October 8; implementation remains pending. See the
-[current checkpoint](implementation.md#latest-integration-checkpoint-offering-activation-and-application)
+definition programs for synthetic graph nodes. Core/Data/Engine V25 now implement
+the accepted extension. The old member representation is retired; current
+authoring packets and the canonical package are rebuilt, with no compatibility
+deserializer. A one-off offline Rust rebuild records exact artifact and authoring
+commitment changes; it is not a new runtime lane. Real mixed consumer data remains
+pending. See the
+[current checkpoint](implementation.md#current-runtime-checkpoint-checked-application-group-producers)
 and [proposal](owned-application-group-contribution-queries-proposal.md).
 
 **Offering source queries, 2026-10-08:** the current V24 packet uses three owned

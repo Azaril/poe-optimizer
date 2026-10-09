@@ -14,6 +14,8 @@ pub const OWNED_RULE_PACKAGE_VERSION: u32 = 3;
 /// Baseline operation subset used when authors do not opt into newer capabilities.
 /// Package schema and content identity domains always use the current format.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+/// Checked membership of contributions after exact-recipient application stacking.
+pub const OWNED_RULE_OPERATIONS_V25: &str = "owned-domain-operations-v25";
 /// Checked query reads and self-contributions on exact authored/supplied Skills.
 pub const OWNED_RULE_OPERATIONS_V24: &str = "owned-domain-operations-v24";
 /// Exact shared/supplied Actor and selected reward contribution membership.
@@ -76,6 +78,7 @@ pub enum RuleOperationsVersion {
     V22,
     V23,
     V24,
+    V25,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -99,6 +102,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V22 => Self::V22,
             OWNED_RULE_OPERATIONS_V23 => Self::V23,
             OWNED_RULE_OPERATIONS_V24 => Self::V24,
+            OWNED_RULE_OPERATIONS_V25 => Self::V25,
             _ => return None,
         })
     }
@@ -123,6 +127,7 @@ impl RuleOperationsVersion {
             Self::V22 => 22,
             Self::V23 => 23,
             Self::V24 => 24,
+            Self::V25 => 25,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -179,6 +184,9 @@ impl RuleOperationsVersion {
     pub const fn supports_skill_contribution_queries(self) -> bool {
         self.revision() >= 24
     }
+    pub const fn supports_application_group_contributions(self) -> bool {
+        self.revision() >= 25
+    }
     /// Current explicit Skill participation in V4 readiness metadata.
     pub const fn supports_skill_participation(self) -> bool {
         self.revision() >= 21
@@ -206,6 +214,7 @@ impl RuleOperationsVersion {
             Self::V22 => "owned-effect-plan-v19",
             Self::V23 => "owned-effect-plan-v20",
             Self::V24 => "owned-effect-plan-v21",
+            Self::V25 => "owned-effect-plan-v22",
         }
     }
 }
@@ -320,11 +329,54 @@ pub enum ContributionOrdering {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ContributionMember {
+    pub producer: ContributionProducer,
+    pub order: Option<ContributionOrder>,
+}
+/// Ordinary effects and post-stacking application results have distinct ownership.
+/// A group never impersonates a definition program or counts its candidates again.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ContributionProducer {
+    ProgramEffect(ProgramContributionProducer),
+    ApplicationGroup(ApplicationGroupContributionProducer),
+}
+impl ContributionProducer {
+    pub fn as_program_effect(&self) -> Option<&ProgramContributionProducer> {
+        match self {
+            Self::ProgramEffect(producer) => Some(producer),
+            Self::ApplicationGroup(_) => None,
+        }
+    }
+    pub fn as_program_effect_mut(&mut self) -> Option<&mut ProgramContributionProducer> {
+        match self {
+            Self::ProgramEffect(producer) => Some(producer),
+            Self::ApplicationGroup(_) => None,
+        }
+    }
+}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ProgramContributionProducer {
     pub owner: SchemaSubject,
     pub program: OwnedDefinitionKey,
     pub effect: OwnedDefinitionKey,
     pub origin: ContributionOrigin,
-    pub order: Option<ContributionOrder>,
+}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ApplicationGroupContributionProducer {
+    pub family: OwnedDefinitionKey,
+    pub modifier: OwnedDefinitionKey,
+    /// Exact, unordered census of all potential declarations in this group,
+    /// including sources not selected by the current build. Runtime recipients
+    /// come from the existing application graph, never a replacement address here.
+    pub declarations: Vec<ApplicationContributionDeclaration>,
+}
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ApplicationContributionDeclaration {
+    pub application: OwnedDefinitionKey,
+    pub effect: OwnedDefinitionKey,
 }
 /// Compare (source_rank, slot_rank, modifier_position, program_rank, effect_rank).
 /// Inapplicable slot/position components are zero. No instance ID or discovery

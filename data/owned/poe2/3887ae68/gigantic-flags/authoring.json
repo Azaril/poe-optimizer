@@ -1,40 +1,40 @@
 {
-  "schema_version": 1,
-  "kind": "gigantic-flags-v1",
-  "before": "e1f41287d4ba9c7fb3961c9c42e9722837fbd39b13e849502148a26103fc78cd",
-  "release": "pob-3887ae68-gigantic-flags-v1",
   "artifacts": [
     {
-      "file": "schemas.json",
       "bytes": 439,
+      "file": "schemas.json",
       "sha256": "13eca10833446a7c1caa3c6ea56e101c98dc118db8d8fe077fca092df21c16f8"
     },
     {
-      "file": "programs.json",
       "bytes": 2856,
+      "file": "programs.json",
       "sha256": "6b90bc1458e6a0cd2473f7fe4b7999e7788b2fd1a70597e1d4e99cc7dc833f6a"
     },
     {
+      "bytes": 2119,
       "file": "queries.json",
-      "bytes": 1995,
-      "sha256": "bd0c592866662addee5a1e3beb3d7f09a5f465633ae071e311f66eecf7092cc0"
+      "sha256": "a24da2d51d5c75d86fd6821cb88538bbbeddd4af9f0662c4503921f8de049c92"
     },
     {
-      "file": "dependencies.json",
       "bytes": 18571,
+      "file": "dependencies.json",
       "sha256": "c728333555908fa2c875b2f0544cdbd4ea34f7f18b3f5782b73a6c599ef73f21"
     }
   ],
+  "before": "e1f41287d4ba9c7fb3961c9c42e9722837fbd39b13e849502148a26103fc78cd",
+  "kind": "gigantic-flags-v1",
+  "release": "pob-3887ae68-gigantic-flags-v1",
+  "schema_version": 1,
   "scope": {
-    "schema_replacements": 1,
-    "replaced_programs": 2,
-    "new_queries": 1,
-    "new_definitions": 0,
-    "new_programs": 0,
-    "new_producers": 0,
-    "closed_rule_owners": 0,
     "closed_query_memberships": 0,
+    "closed_rule_owners": 0,
     "evaluation_bundle_added": false,
+    "new_definitions": 0,
+    "new_producers": 0,
+    "new_programs": 0,
+    "new_queries": 1,
+    "replaced_programs": 2,
+    "schema_replacements": 1,
     "whole_build_parity": false
   }
 }
