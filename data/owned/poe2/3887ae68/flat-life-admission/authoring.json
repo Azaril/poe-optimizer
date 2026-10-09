@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "before": "5d0609c9400c34db6621d23e697b2314142234f99949f9f4d33e49b12e51878f",
+  "retired": "canonical-input-admission-unproved",
+  "remaining_owner_gaps": 4,
+  "admitted_original_records": 6,
+  "source_original_records": 24,
+  "artifacts": {
+    "context.json": {
+      "bytes": 43126,
+      "sha256": "0902fda14c738a2276e7542c8b3fa3862322987be2c957400fd040ce9ecc6101"
+    },
+    "source-vectors.json": {
+      "bytes": 17598,
+      "sha256": "17523ff5877a128861bbd1f659c6e3fef194696daf52b850ee4e7a950c197e24"
+    }
+  },
+  "source_admission_widened": false,
+  "whole_build": false
+}

@@ -104,7 +104,56 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Latest data checkpoint: native Amulet Life copying
+## Latest data checkpoint: fixed-Life canonical input admission
+
+The [input-admission packet](../data/owned/poe2/3887ae68/flat-life-admission/README.md)
+retires only `canonical-input-admission-unproved`. The current fixed unsigned
+integer grammar, source-layout guards, 24 inputs and all formulas are unchanged.
+This adds evidence and removes one coverage obligation; it introduces no parser,
+runtime API, schema definition or broader source admission. The owner remains
+Partial with four gaps, and the equipment Life query remains Partial.
+
+The independent source test passes in **25.09s**: 21 controls across all five
+originals, fresh replay and warm restoration, with eight complete loads per JIT
+mode. Both 152,045-byte reports have SHA-256
+`9420fbb73341caaa5910173d59164b3a741d564a311c1d84923d56ab933d99b3`.
+Native transport agrees for the 12 admitted controls; the other nine remain
+excluded. All six currently admitted original physical Life records agree with
+the earlier full-source witness. Its other 18 original lines remain Pending;
+unknown context is not treated as a known category or default flags.
+
+All **four native/publication tests pass in 23.22s**, including every control
+through the actual full policies, potential-emitter census, exact whole-input
+inverse, all-five import preservation and byte-identical rebuild of 18 artifacts.
+Strict all-feature Clippy for both targets passes in **0.87s**. Evidence:
+`runs/owned-flat-life-admission-source-01.log`,
+`runs/owned-flat-life-admission-publication-04.log`,
+`runs/owned-flat-life-admission-clippy-01.log` and
+`runs/owned-flat-life-admission-publication-01/validation.json`.
+
+Canonical successor: `runs/owned-flat-life-admission-publication-01/package`:
+
+- Input: `26c0a5022e550ae9f2d2488c27b761a58917f2153aeda4b402f465a7d7c0bf76`.
+- Schema: `407ace9074f4a4917d0d23617a631f9844b54799c3a9260b7a0a9a9461f0e438`.
+- Rules: `496e819bced92ff44a64104579497f2658a8c30cb08d13c1ba8f43fafa6444cb`.
+- Compiled: `90929331df58eb374220d6b8f598c68b0023ea998065d5d8d5e59f0ffe80215d`.
+- Operations V25; next free ID **335c**. Selected input obligations remain
+  **107/117/109/123/4**, with 110 queries, no evaluation bundle and **0/5 complete
+  native builds**. Protected incoming-critical drafts remain untouched.
+
+**Resume:** Original05 remains the closest build. Next audit the source
+encoding/corrupted-range gap against the now-proved canonical input boundary:
+identify exactly which source work precedes those inputs and which magnitude
+work still executes after them. Use the existing original-call witness and
+numeric compiler before adding a new mechanism. This audit must distinguish a
+redundant acquisition obligation from an unimplemented native mechanic; it must
+not close global coverage merely because imported controls exclude that case.
+Then address the evidenced remaining ordered transform/routing dependency.
+External membership/order and final resource arithmetic remain open. Exact-Action
+and optional numeric-selection decisions are still pending for damage/Mana;
+four usage/configuration obligations independently block request finalization.
+
+## Preceding data checkpoint: native Amulet Life copying
 
 The [Life-copy packet](../data/owned/poe2/3887ae68/amulet-life-copy/README.md)
 adds the numeric copy consumer through existing typed arithmetic and exact
@@ -142,7 +191,7 @@ Publication authenticates source/witness bytes and the complete reports.
 The earlier ring-record order discrepancy remains diagnostic: no general source
 sequence parity, native accumulation order, tolerance or retry policy is claimed.
 
-Canonical successor: `runs/owned-amulet-life-copy-publication-03/package`:
+Preceding successor: `runs/owned-amulet-life-copy-publication-03/package`:
 
 - Input: `5d0609c9400c34db6621d23e697b2314142234f99949f9f4d33e49b12e51878f`.
 - Schema: `407ace9074f4a4917d0d23617a631f9844b54799c3a9260b7a0a9a9461f0e438`.
@@ -152,16 +201,10 @@ Canonical successor: `runs/owned-amulet-life-copy-publication-03/package`:
   **107/117/109/123/4**, with 110 queries, no evaluation bundle and **0/5 complete
   native builds**. Protected incoming-critical drafts remain untouched.
 
-**Resume:** Original05 remains the closest build. Next inspect flat-Life's
-canonical-input/source-encoding obligations against its current fixed unsigned
-line rule, source guards and retained full-source cases. Distinguish supported
-inputs from unresolved source contexts before closing any coverage; do not widen
-admission to ranges, fractional rolls or corrupted layouts by inference. This
-is the next accepted-model dependency toward equipment Life coverage. Remaining
-ordered transforms, routing (including minion receipt), external contribution
-membership/order and final resource arithmetic stay explicit. Exact-Action and
-optional numeric-selection decisions are still pending for damage/Mana; four
-usage/configuration obligations independently block request finalization.
+The input-admission follow-up is now published above. This checkpoint's five
+remaining owner gaps describe its predecessor state; the current successor has
+four. Remaining routing includes minion receipt as well as ordinary Player
+delivery, and is not completed by the Amulet copy consumer alone.
 
 ## Preceding data checkpoint: reward support-source coverage
 

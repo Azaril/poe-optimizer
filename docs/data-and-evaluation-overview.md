@@ -98,12 +98,21 @@ promoted into native reduction order. The
 [native Life-copy packet](../data/owned/poe2/3887ae68/amulet-life-copy/README.md)
 now implements those branches with existing typed operations, eligibility,
 frozen percentage and exact occurrences. Its potential writer joins checked
-Life membership; five owner gaps and the Partial equipment query remain. The
+Life membership; four owner gaps and the Partial equipment query now remain. The
 native test suite verifies that the actual Partial query refuses a total even
 when copy arithmetic works. No runtime Lua behavior or new public model is
-introduced; canonical input admission and remaining equipment/resource coverage
-are still required before final Life. Component parity remains distinct from
+introduced; remaining equipment/resource coverage is still required before
+final Life. Component parity remains distinct from
 the five-build completion gate.
+
+The [fixed-Life admission packet](../data/owned/poe2/3887ae68/flat-life-admission/README.md)
+now proves the existing acquisition-to-canonical-input boundary without changing
+it. All 24 typed inputs of six admitted original physical records agree with
+authenticated source observations. The remaining 18 source lines stay Pending.
+Boundary controls run through both the real full policies and a checked finite
+projection; only one coverage gap and evidence provenance change. Source text,
+Lua field shapes and captured outputs remain offline evidence. No second parser,
+native compatibility layer or broader range/corruption support is introduced.
 
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across

@@ -1945,5 +1945,28 @@ The source's near-integer probe now obtains its factor through `99.99 / 100`,
 and native checks require identical transported factor bits. Decimal spelling
 alone is not an operand-equivalence proof. The retained source/method probes and
 copy membership remain useful parity evidence, not an alternate execution path.
-Canonical input admission, four other owner gaps and Partial equipment coverage
-remain open; no generic Life rounding/order compatibility layer is added.
+At that checkpoint canonical input admission, four other owner gaps and Partial
+equipment coverage remained open; the admission follow-up below retires only
+the first. No generic Life rounding/order compatibility layer is added.
+
+## Fixed-Life acquisition boundary proof (2026-10-09)
+
+The [admission packet](../data/owned/poe2/3887ae68/flat-life-admission/README.md)
+retires a now-proved coverage obligation without adding a production path.
+The same source-layout policy and item-line converter run in finite tests and
+the actual full release. Publication authenticates that projection, censuses
+potential emitters, checks all 24 required typed inputs against source evidence
+and proves an exact inverse for all unrelated release state. No parser,
+interpreter or compatibility behavior is duplicated.
+
+The source witness uses original methods on detached Items and checks unchanged
+original objects/results. Its captures stay in optional PoB tests and authoring
+evidence. Fixed-number range annotations, empty tags and leading zeros do not
+become runtime concepts; only the same admitted canonical amount/category/flags
+cross the import boundary. Unsupported source forms remain Pending/excluded.
+
+Four owner gaps remain, including the broader source-encoding/corrupted-range
+obligation. Next identify whether each part of that obligation belongs to offline
+acquisition or still requires native magnitude semantics. Do not erase a global
+mechanics gap merely because the current imported controls exclude its cases.
+The separate Lua-cleanup, order and resource-arithmetic investigations remain.

@@ -1,0 +1,724 @@
+{
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    }
+  ],
+  "observer_sha256": "c1983bfb9e3103c75392cdde39e691ea7913e5f25255b8514265885e564d7504",
+  "witness_sha256": "c6d4235429b6e5966cb0bd5fd26aff4eb942ebbc56c13f21a2e25cd52c027594",
+  "driver_sha256": "9a4d5bb93bc9c60da9959194c41219a7f12f1a66d95d06d912db8ced60751445",
+  "report": {
+    "path": "runs/owned-flat-life-admission-source-01",
+    "bytes": 152045,
+    "sha256": "9420fbb73341caaa5910173d59164b3a741d564a311c1d84923d56ab933d99b3"
+  },
+  "controls": [
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "fixed",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 0
+        }
+      ],
+      "body": "+0 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+0 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 0
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "zero",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n+0 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "+00017 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+00017 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "leading-zero",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n+00017 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 1000000
+        }
+      ],
+      "body": "+1000000 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+1000000 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 1000000
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "upper-bound",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n+1000000 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 1000001
+        }
+      ],
+      "body": "+1000001 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+1000001 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 1000001
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "beyond-bound",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n+1000001 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "+17.0 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+17.0 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "decimal-integer",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n+17.0 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 18
+        }
+      ],
+      "body": "+17.5 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+17.5 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 18
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "fraction",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n+17.5 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": -18
+        }
+      ],
+      "body": "-17.5 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "-17.5 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": -18
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "negative",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n-17.5 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "+17 to maximum Life\n+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        },
+        {
+          "category": "explicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "duplicate",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n+17 to maximum Life\n+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "+17 to maximum Life",
+      "implicit_count": 1,
+      "lines": [
+        {
+          "category": "implicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "implicit-count",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 1\n+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "{implicit}+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "implicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "implicit-tag",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n{implicit}+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "{enchant}+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "enchant",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "enchant-tag",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n{enchant}+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "{range:0}+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0,
+          "value_scalar": 1
+        }
+      ],
+      "name": "fixed-range-zero",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n{range:0}+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "{range:0.5}+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "fixed-range-half",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n{range:0.5}+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "{range:1}+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 1,
+          "value_scalar": 1
+        }
+      ],
+      "name": "fixed-range-one",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n{range:1}+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "{tags:}+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "empty-tags",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n{tags:}+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "{fractured}+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "fractured",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n{fractured}+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "{desecrated}+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "desecrated",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n{desecrated}+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "{unscalable}+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "unscalable": true,
+          "value_scalar": 1
+        }
+      ],
+      "name": "unscalable",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n{unscalable}+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 17
+        }
+      ],
+      "body": "{corruptedRange:1}+17 to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "corrupted_range": 1,
+          "line": "+17 to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 17
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "corrupted-identity",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n{corruptedRange:1}+17 to maximum Life"
+    },
+    {
+      "active": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "tags": {},
+          "value": 15
+        }
+      ],
+      "body": "{range:0.5}+(10-20) to maximum Life",
+      "implicit_count": 0,
+      "lines": [
+        {
+          "category": "explicit",
+          "line": "+(10-20) to maximum Life",
+          "mod_tags": {},
+          "parsed": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "tags": {},
+              "value": 15
+            }
+          ],
+          "range": 0.5,
+          "value_scalar": 1
+        }
+      ],
+      "name": "ranged",
+      "raw": "Rarity: RARE\nAdmission Control\nSapphire Ring\nImplicits: 0\n{range:0.5}+(10-20) to maximum Life"
+    }
+  ],
+  "admitted_controls": [
+    "fixed",
+    "zero",
+    "leading-zero",
+    "upper-bound",
+    "duplicate",
+    "implicit-count",
+    "implicit-tag",
+    "enchant-tag",
+    "fixed-range-zero",
+    "fixed-range-half",
+    "fixed-range-one",
+    "empty-tags"
+  ]
+}

@@ -1,0 +1,1332 @@
+{
+  "items": {
+    "schema_version": 7,
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "version": "global-energy-shield-items-v1",
+    "definitions": {
+      "game": "poe2",
+      "release": "pob-3887ae68-mana-adjustments-v1",
+      "schema_version": 6,
+      "content_sha256": "407ace9074f4a4917d0d23617a631f9844b54799c3a9260b7a0a9a9461f0e438",
+      "semantics_version": "owned-mechanics-skill-inputs-v1"
+    },
+    "whitespace": "trim_ascii",
+    "rules": [
+      {
+        "id": "sapphire-ring-template",
+        "pattern": [
+          {
+            "kind": "literal",
+            "value": "Sapphire Ring"
+          }
+        ],
+        "captures": [],
+        "emissions": [
+          {
+            "kind": "template",
+            "value": {
+              "definition": {
+                "kind": "item_template",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000009dc"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "rarity",
+        "pattern": [
+          {
+            "kind": "literal",
+            "value": "Rarity: "
+          },
+          {
+            "kind": "capture",
+            "value": "text"
+          }
+        ],
+        "captures": [
+          {
+            "id": "text",
+            "codec": {
+              "kind": "opaque_text"
+            }
+          }
+        ],
+        "emissions": [
+          {
+            "kind": "metadata",
+            "value": {
+              "role": "source-preamble-only"
+            }
+          }
+        ]
+      },
+      {
+        "id": "implicit-count",
+        "pattern": [
+          {
+            "kind": "literal",
+            "value": "Implicits: "
+          },
+          {
+            "kind": "capture",
+            "value": "text"
+          }
+        ],
+        "captures": [
+          {
+            "id": "text",
+            "codec": {
+              "kind": "opaque_text"
+            }
+          }
+        ],
+        "emissions": [
+          {
+            "kind": "metadata",
+            "value": {
+              "role": "source-preamble-only"
+            }
+          }
+        ]
+      },
+      {
+        "id": "fixed-life",
+        "pattern": [
+          {
+            "kind": "literal",
+            "value": "+"
+          },
+          {
+            "kind": "numeric_capture",
+            "value": {
+              "capture": "amount",
+              "syntax": "decimal",
+              "sign": "forbidden"
+            }
+          },
+          {
+            "kind": "literal",
+            "value": " to maximum Life"
+          }
+        ],
+        "captures": [
+          {
+            "id": "amount",
+            "codec": {
+              "kind": "value",
+              "value": {
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "whitespace": "exact",
+                "codec": {
+                  "kind": "quantity",
+                  "value": {
+                    "syntax": "decimal",
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000295a"
+                    },
+                    "scale": {
+                      "numerator": 1,
+                      "denominator": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "emissions": [
+          {
+            "kind": "modifier",
+            "value": {
+              "definition": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003100"
+              },
+              "rolls": [
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003101"
+                    }
+                  },
+                  "value": {
+                    "kind": "numeric_projection",
+                    "value": {
+                      "source": {
+                        "kind": "capture",
+                        "value": "amount"
+                      },
+                      "negate": false,
+                      "decimal": {
+                        "kind": "exact"
+                      },
+                      "result": {
+                        "kind": "signed_quantity"
+                      }
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003102"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "cold_resistance"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003103"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "elemental_resistance"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003104"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "elemental"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003105"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "cold"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003106"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "resistance"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003107"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "life"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003108"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "mana"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003109"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "defences"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000310a"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "armour"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000310b"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "evasion"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000310c"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "energyshield"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000310d"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "physical"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000310e"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "fire"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000310f"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "lightning"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003110"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "chaos"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003111"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "attack"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003112"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "caster"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003113"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "speed"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003114"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "attribute"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003115"
+                    }
+                  },
+                  "value": {
+                    "kind": "property",
+                    "value": {
+                      "property": "minion"
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003116"
+                    }
+                  },
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "boolean",
+                      "value": false
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003117"
+                    }
+                  },
+                  "value": {
+                    "kind": "literal",
+                    "value": {
+                      "kind": "quantity",
+                      "value": {
+                        "value": 1,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003100"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003118"
+                    }
+                  },
+                  "value": {
+                    "kind": "context_option",
+                    "value": {
+                      "input": "modifier-source-category"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "source": {
+    "schema_version": 8,
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "version": "global-energy-shield-source-v1",
+    "source": {
+      "system": "path_of_building2",
+      "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+      "files": [
+        {
+          "path": "src/Classes/ConfigTab.lua",
+          "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+        },
+        {
+          "path": "src/Classes/Item.lua",
+          "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+        },
+        {
+          "path": "src/Classes/ItemsTab.lua",
+          "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+        },
+        {
+          "path": "src/Classes/PassiveSpec.lua",
+          "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+        },
+        {
+          "path": "src/Classes/SkillsTab.lua",
+          "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+        },
+        {
+          "path": "src/Data/Assets.lua",
+          "sha256": "d57230441d6205f001466a1c3a0d4458ddda0a1ccf9f685345f0f0fa2d5154ba"
+        },
+        {
+          "path": "src/Data/Bases/amulet.lua",
+          "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+        },
+        {
+          "path": "src/Data/Bases/axe.lua",
+          "sha256": "285b9cca5c877ff55d4863e9a02432ea5ddecf85063ecfdda1ff84bc9ba1656e"
+        },
+        {
+          "path": "src/Data/Bases/belt.lua",
+          "sha256": "74f5846300ea7cb88f5589e62cb73affe147d7870411efcd885090d9c1ea850e"
+        },
+        {
+          "path": "src/Data/Bases/body.lua",
+          "sha256": "0d3156d893bcfca1eb8c9b299f2a28c62a1d4c9f1d3a39f3a087cac18d23e9cd"
+        },
+        {
+          "path": "src/Data/Bases/boots.lua",
+          "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+        },
+        {
+          "path": "src/Data/Bases/bow.lua",
+          "sha256": "6bd10dbe0dbfea1638ea8f15f828cfa99d294dbf832bcab8f8472990154f725e"
+        },
+        {
+          "path": "src/Data/Bases/claw.lua",
+          "sha256": "fc771b343199a85505401868fd34320dc6117266d6672637e1757430262c18cb"
+        },
+        {
+          "path": "src/Data/Bases/crossbow.lua",
+          "sha256": "e9988fbc6b482c36bfc0865afc441952df3de4013061629952377472723590a6"
+        },
+        {
+          "path": "src/Data/Bases/dagger.lua",
+          "sha256": "a3b81d4868f7d556bd4ba412e1edabb931f5a4240283e6e351dacd9419b50c8e"
+        },
+        {
+          "path": "src/Data/Bases/fishing.lua",
+          "sha256": "53f70fb8e80c64f593152b3b12504ab9320ad188dc8753003ac6e751d50c40bb"
+        },
+        {
+          "path": "src/Data/Bases/flail.lua",
+          "sha256": "1fa7b45de89051684ccd534b96866279ebb7290be2e49e7421e6702a269a75d9"
+        },
+        {
+          "path": "src/Data/Bases/flask.lua",
+          "sha256": "ed025daab24f4964874296c5e5eb0855f1b90a4063b4a69cc8a65fef7c293cc7"
+        },
+        {
+          "path": "src/Data/Bases/focus.lua",
+          "sha256": "b5a315245cc0f9f11657f7fdab751e5ed5306166df54c2c19ef83295b876820e"
+        },
+        {
+          "path": "src/Data/Bases/gloves.lua",
+          "sha256": "05b91c71f9292f120482355447566db285cb513f6b506e349e9a29efa0b329f2"
+        },
+        {
+          "path": "src/Data/Bases/helmet.lua",
+          "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+        },
+        {
+          "path": "src/Data/Bases/incursionlimb.lua",
+          "sha256": "1df6a73c327b7ccbbb9172ec4fdec905015aeb168084e53ef0f00544a16c6763"
+        },
+        {
+          "path": "src/Data/Bases/jewel.lua",
+          "sha256": "b9fe5096276439717b9f24e7e389279f2ef88c3f518ee2443cfbf73494e7d442"
+        },
+        {
+          "path": "src/Data/Bases/mace.lua",
+          "sha256": "d3bb896069429fcff68d4e04ff517e49ad290cfc70b26fdbe8db3406c8392fec"
+        },
+        {
+          "path": "src/Data/Bases/quiver.lua",
+          "sha256": "7d100d232b052507f734256f36625552e4cdccff963a690b643af5d35e552721"
+        },
+        {
+          "path": "src/Data/Bases/ring.lua",
+          "sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382"
+        },
+        {
+          "path": "src/Data/Bases/sceptre.lua",
+          "sha256": "3a232d7eff8ed199a7c738623de52fd1bd6540051283fda174472fd4295d9ae0"
+        },
+        {
+          "path": "src/Data/Bases/shield.lua",
+          "sha256": "d4628eed0450bdeaeec8ea10b4960aa0e5e5705829b6c53500069ebfcef478ef"
+        },
+        {
+          "path": "src/Data/Bases/spear.lua",
+          "sha256": "8cb6acac3e44d924ffe3ac5522fae408697fa322f02f99896edfca8f49e62268"
+        },
+        {
+          "path": "src/Data/Bases/staff.lua",
+          "sha256": "6b04f45c0763088f865b8902733cecc6126829871a6766955a953a54cd657bf7"
+        },
+        {
+          "path": "src/Data/Bases/sword.lua",
+          "sha256": "8bb14bdafc5fa6c243f7bc0b7b8d611183b629828f361e84c3e64e72a071df06"
+        },
+        {
+          "path": "src/Data/Bases/talisman.lua",
+          "sha256": "4e721181ba512ab359a9b1b5e5afa4a8c6666332dbbad1d2f3432243fe8d8191"
+        },
+        {
+          "path": "src/Data/Bases/wand.lua",
+          "sha256": "6549a279abfc376d3efc90458cefe45857ad5129f6a848c401a5d614f6d6535c"
+        },
+        {
+          "path": "src/Data/BossSkills.lua",
+          "sha256": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d"
+        },
+        {
+          "path": "src/Data/Bosses.lua",
+          "sha256": "831a328c0c554687b5f3c40e1ff8a4ee905457f8b940baab236fab9281415ed3"
+        },
+        {
+          "path": "src/Data/Gems.lua",
+          "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+        },
+        {
+          "path": "src/Data/Global.lua",
+          "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+        },
+        {
+          "path": "src/Data/Minions.lua",
+          "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+        },
+        {
+          "path": "src/Data/Misc.lua",
+          "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+        },
+        {
+          "path": "src/Data/ModScalability.lua",
+          "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+        },
+        {
+          "path": "src/Data/QuestRewards.lua",
+          "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af"
+        },
+        {
+          "path": "src/Data/SkillStatMap.lua",
+          "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+        },
+        {
+          "path": "src/Data/Skills/SkillAssets.lua",
+          "sha256": "6fab71e4a5f07e04bd363472374fe059f8ae1cdd77c126357f3adceff8f145ed"
+        },
+        {
+          "path": "src/Data/Skills/act_dex.lua",
+          "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+        },
+        {
+          "path": "src/Data/Skills/act_int.lua",
+          "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+        },
+        {
+          "path": "src/Data/Skills/act_str.lua",
+          "sha256": "7da86ad169055e234fcfdd82ded89c2b4cf883ed3d1b217ef25533ad64ebeeed"
+        },
+        {
+          "path": "src/Data/Skills/minion.lua",
+          "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+        },
+        {
+          "path": "src/Data/Skills/other.lua",
+          "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+        },
+        {
+          "path": "src/Data/Skills/spectre.lua",
+          "sha256": "3bc57d7abee172364977c174884cdf3d2d94980c70e3b12b7ae65c62bd726603"
+        },
+        {
+          "path": "src/Data/Skills/sup_dex.lua",
+          "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac"
+        },
+        {
+          "path": "src/Data/Skills/sup_int.lua",
+          "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+        },
+        {
+          "path": "src/Data/Skills/sup_str.lua",
+          "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+        },
+        {
+          "path": "src/Modules/CalcActiveSkill.lua",
+          "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+        },
+        {
+          "path": "src/Modules/CalcDefence.lua",
+          "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+        },
+        {
+          "path": "src/Modules/CalcTools.lua",
+          "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+        },
+        {
+          "path": "src/Modules/Common.lua",
+          "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+        },
+        {
+          "path": "src/Modules/ConfigOptions.lua",
+          "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+        },
+        {
+          "path": "src/Modules/Data.lua",
+          "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+        },
+        {
+          "path": "src/Modules/ItemTools.lua",
+          "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+        },
+        {
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+        }
+      ]
+    },
+    "item_lines": "261644be089000fc051e9d0378fa1491a5448e71c8f5e67504247230e8fc319f",
+    "dialect": {
+      "pob_exported_single_text_categories_v1": {
+        "flag_bindings": [],
+        "metadata_rules": [],
+        "single_modifier_conditions": [
+          {
+            "rule": "fixed-life",
+            "all": [
+              {
+                "kind": "no_source_scaling_tags"
+              },
+              {
+                "kind": "initial_scaling_is_one"
+              },
+              {
+                "kind": "no_generated_buff_members"
+              },
+              {
+                "kind": "unsigned_integer_capture",
+                "value": {
+                  "capture": "amount",
+                  "min": 0,
+                  "max": 1000000
+                }
+              }
+            ]
+          }
+        ],
+        "preamble_observations": [],
+        "category_bindings": [
+          {
+            "input": "modifier-source-category",
+            "values": [
+              {
+                "category": "enchant",
+                "value": {
+                  "kind": "option",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000030e4"
+                }
+              },
+              {
+                "category": "implicit",
+                "value": {
+                  "kind": "option",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000030e3"
+                }
+              },
+              {
+                "category": "explicit",
+                "value": {
+                  "kind": "option",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000030e2"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "property_bindings": [
+      {
+        "label": "cold_resistance",
+        "property": "cold_resistance"
+      },
+      {
+        "label": "elemental_resistance",
+        "property": "elemental_resistance"
+      },
+      {
+        "label": "elemental",
+        "property": "elemental"
+      },
+      {
+        "label": "cold",
+        "property": "cold"
+      },
+      {
+        "label": "resistance",
+        "property": "resistance"
+      },
+      {
+        "label": "life",
+        "property": "life"
+      },
+      {
+        "label": "mana",
+        "property": "mana"
+      },
+      {
+        "label": "defences",
+        "property": "defences"
+      },
+      {
+        "label": "armour",
+        "property": "armour"
+      },
+      {
+        "label": "evasion",
+        "property": "evasion"
+      },
+      {
+        "label": "energyshield",
+        "property": "energyshield"
+      },
+      {
+        "label": "physical",
+        "property": "physical"
+      },
+      {
+        "label": "fire",
+        "property": "fire"
+      },
+      {
+        "label": "lightning",
+        "property": "lightning"
+      },
+      {
+        "label": "chaos",
+        "property": "chaos"
+      },
+      {
+        "label": "attack",
+        "property": "attack"
+      },
+      {
+        "label": "caster",
+        "property": "caster"
+      },
+      {
+        "label": "speed",
+        "property": "speed"
+      },
+      {
+        "label": "attribute",
+        "property": "attribute"
+      },
+      {
+        "label": "minion",
+        "property": "minion"
+      }
+    ],
+    "template_defaults": [],
+    "rule_layouts": [
+      {
+        "rule": "sapphire-ring-template",
+        "role": "header"
+      },
+      {
+        "rule": "rarity",
+        "role": "header"
+      },
+      {
+        "rule": "implicit-count",
+        "role": "header"
+      },
+      {
+        "rule": "fixed-life",
+        "role": "unresolved"
+      }
+    ],
+    "template_layouts": [
+      {
+        "template": {
+          "kind": "item_template",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000009dc"
+        },
+        "load_index_prefix": "no_generated_buff_members"
+      }
+    ]
+  }
+}
