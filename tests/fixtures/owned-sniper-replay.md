@@ -78,3 +78,10 @@ reflect the reproduced Source04 witness after parent-harness formatting. All
 other receipt fields match, including definitions, rules and compiled identities.
 No fixture bytes changed.
 The current package is broader than this deliberately finite numerical graph.
+
+Revalidation after intrinsic Ascendancy-owner closure also reproduces this exact
+fixture (29.16s; `runs/owned-sniper-replay-ascendancy-01.log`). It uses canonical
+`runs/owned-ascendancy-owner-publication-01/package`, input
+`37e12592a376ea2d79a190678a3691760f701cf9d0fb3ab270b8024579b141fa`.
+The owner refinement supplies no additional numerical program to this finite
+graph; its 138,049 compressed bytes and SHA-256 above remain unchanged.

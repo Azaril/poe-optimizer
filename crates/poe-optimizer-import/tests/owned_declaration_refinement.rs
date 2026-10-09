@@ -5,6 +5,9 @@ use poe_optimizer_import::owned_successor::*;
 use serde::de::DeserializeOwned;
 use std::{fs, path::PathBuf};
 
+#[path = "support/owned_ascendancy_refinement.rs"]
+mod ascendancy;
+
 fn load<T: DeserializeOwned>(name: &str) -> T {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../../data/owned/poe2/3887ae68/current")

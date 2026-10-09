@@ -941,6 +941,17 @@ line of a multi-line passive cannot close its owner. Publish such refinements
 against exact predecessor rows, preserving program bodies and unrelated owners,
 rather than inferring completeness from a program's presence.
 
+Class and Ascendancy metadata have their own intrinsic inventories. An
+Ascendancy with a complete class/root relation and no direct declarations or
+effects can close that intrinsic owner while its passive nodes and the shared
+Player remain incomplete. Authenticate the full source descriptor and its
+constructed fields before making that assertion; absence of a modifier in one
+evaluated build is insufficient. Offline declaration refinement preserves the
+exact class membership, implicit roots, existing slot members and all unrelated
+descriptors. It does not complete numerical rules or inherited providers as a
+side effect. Such refinements use the existing checked publication boundary;
+native evaluation consumes only the resulting owned definitions.
+
 Copied modifiers retain the original occurrence and a distinct copy effect. Apply
 rounding to the individual record where the mechanic requires it; rounding an
 aggregate can change the result. A copy that reads bonuses before copying must

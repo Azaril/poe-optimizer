@@ -39,7 +39,7 @@ use crate::{
 use poe_optimizer_core::{
     data::DataIdentity,
     owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},
-    owned_definitions::{ClassDefId, OwnedDefinitionKey, PassiveNodeDefId},
+    owned_definitions::{AscendancyDefId, ClassDefId, OwnedDefinitionKey, PassiveNodeDefId},
     owned_schema::{
         DeclaredSlots, DefinitionAddress, DefinitionDescriptor, DefinitionSchemaIndex,
         SchemaClosure, SchemaLookup, SchemaState,
@@ -91,12 +91,14 @@ pub struct PassiveDeclarationRefinement {
 pub enum DeclarationRefinementOwner {
     PassiveNode(PassiveNodeDefId),
     Class(ClassDefId),
+    Ascendancy(AscendancyDefId),
 }
 impl DeclarationRefinementOwner {
     pub fn address(&self) -> DefinitionAddress {
         match self {
             Self::PassiveNode(id) => DefinitionAddress::PassiveNode(id.clone()),
             Self::Class(id) => DefinitionAddress::Class(id.clone()),
+            Self::Ascendancy(id) => DefinitionAddress::Ascendancy(id.clone()),
         }
     }
 }
@@ -220,6 +222,10 @@ impl SchemaDeclarationRefinement {
                     SchemaLookup::Known(s) => &s.declarations,
                     _ => return Err(SuccessorBundleError::Refinement("unknown current owner")),
                 },
+                DeclarationRefinementOwner::Ascendancy(id) => match index.definition(id) {
+                    SchemaLookup::Known(s) => &s.declarations,
+                    _ => return Err(SuccessorBundleError::Refinement("unknown current owner")),
+                },
             };
             if !declarations_complete(declarations) {
                 return Err(SuccessorBundleError::Refinement(
@@ -246,6 +252,10 @@ fn close_declarations(descriptor: &mut DefinitionDescriptor) -> Result<()> {
             _ => return Err(SuccessorBundleError::Refinement("unmapped owner")),
         },
         DefinitionDescriptor::Class(entry) => match &mut entry.schema {
+            SchemaState::Known(schema) => &mut schema.declarations,
+            _ => return Err(SuccessorBundleError::Refinement("unmapped owner")),
+        },
+        DefinitionDescriptor::Ascendancy(entry) => match &mut entry.schema {
             SchemaState::Known(schema) => &mut schema.declarations,
             _ => return Err(SuccessorBundleError::Refinement("unmapped owner")),
         },
@@ -988,6 +998,25 @@ pub fn transition_owned_catalog_with_declaration_refinement(
         Some(tree),
         Some(refinement.into()),
         limits,
+    )
+}
+
+/// Compact publication of the same exact input-port closure. The finalizer and
+/// endpoint validation are shared with all other declaration refinements.
+pub fn transition_owned_catalog_with_declaration_refinement_compact(
+    input: SuccessorBundleInput,
+    append: CatalogAppend,
+    tree: TreePolicyTransitionInput,
+    refinement: DeclarationClosureRefinement,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
+    finalize_successor_with_format(
+        input,
+        Some(append),
+        Some(tree),
+        Some(refinement.into()),
+        limits,
+        PublicationFormat::CompactV2,
     )
 }
 

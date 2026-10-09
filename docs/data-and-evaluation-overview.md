@@ -35,7 +35,19 @@ implicit line in Original05 also admits one existing adjacent Minion-level recip
 both exact modifier occurrences and their source ranges are preserved. No native
 calculation contract or new numerical rule is added. The all-five count is now
 106/117/109/123/4; full native builds remain 0/5. The selected Sniper replay is
-byte-identical, and the implementation plan records the next resource-coverage step.
+byte-identical. The implementation plan records the current endpoint and next
+complete-build dependency.
+
+The [intrinsic Ascendancy packet](../data/owned/poe2/3887ae68/ascendancy-owner-closure/README.md)
+now completes Disciple of Varashta's empty intrinsic declarations and rule
+inventory. Its Class and passive-root relations were already known and remain
+unchanged. The raw/constructed source metadata and actual selected root are
+authenticated offline. Its selected Puppet, Archon, Djinn and other passive
+mechanics remain separate incomplete owners, as does shared Player initialization.
+The existing publisher handles the typed Ascendancy refinement; native rules,
+operations V27, input-obligation counts and the 0/5 complete-build result remain
+unchanged. No numerical result or general resource absence follows from this
+metadata closure.
 
 Ordinary native CI now includes a serialized replay of the joined Sniper
 component's public inputs. It repeats normal validation, preparation and

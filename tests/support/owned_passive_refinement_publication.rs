@@ -14,8 +14,10 @@ use poe_optimizer_import::{
     owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
     owned_release_migration::{OwnedReleaseMigrationInput, compile_owned_release_migration},
     owned_successor::{
-        CatalogAppend, CatalogItemPolicyMode, PassiveDeclarationRefinement, SuccessorBundleInput,
-        TreePolicyTransitionInput, transition_owned_catalog_with_tree_refinement_compact,
+        CatalogAppend, CatalogItemPolicyMode, DeclarationClosureRefinement,
+        DeclarationRefinementOwner, PassiveDeclarationRefinement, SuccessorBundleInput,
+        TreePolicyTransitionInput, transition_owned_catalog_with_declaration_refinement_compact,
+        transition_owned_catalog_with_tree_refinement_compact,
     },
 };
 use serde_json::{Value, json};
@@ -30,7 +32,7 @@ pub fn stage(
     provenance: &str,
     domain: &'static str,
 ) -> StagedOwnedRelease {
-    stage_inner(prior, directory, provenance, domain, false)
+    stage_inner(prior, directory, provenance, domain, false, false)
 }
 
 /// Refine already-declared passive owners without inventing a migration change.
@@ -43,7 +45,19 @@ pub fn stage_refinement(
     provenance: &str,
     domain: &'static str,
 ) -> StagedOwnedRelease {
-    stage_inner(prior, directory, provenance, domain, true)
+    stage_inner(prior, directory, provenance, domain, true, false)
+}
+
+/// Use the existing typed declaration-refinement contract for an explicitly
+/// reviewed Ascendancy owner. Historical passive callers retain their V1 proof.
+#[allow(dead_code)]
+pub fn stage_declaration_refinement(
+    prior: &StagedOwnedRelease,
+    directory: &Path,
+    provenance: &str,
+    domain: &'static str,
+) -> StagedOwnedRelease {
+    stage_inner(prior, directory, provenance, domain, true, true)
 }
 
 fn stage_inner(
@@ -52,6 +66,7 @@ fn stage_inner(
     provenance: &str,
     domain: &'static str,
     refinement_only: bool,
+    typed_declarations: bool,
 ) -> StagedOwnedRelease {
     let read = |name: &str| -> Value {
         serde_json::from_slice(&fs::read(directory.join(name)).unwrap()).unwrap()
@@ -187,6 +202,7 @@ fn stage_inner(
         );
     }
     let mut nodes = vec![];
+    let mut declaration_owners = vec![];
     for (old, new) in old_definitions.iter().zip(&next_definitions) {
         let row = recipe
             .schema
@@ -195,10 +211,19 @@ fn stage_inner(
             .find(|x| x.address() == old.address())
             .unwrap();
         assert_eq!(row, old);
-        let DefinitionDescriptor::PassiveNode(passive) = new else {
-            panic!("passive refinement")
-        };
-        nodes.push(passive.id.clone());
+        if typed_declarations {
+            let DefinitionDescriptor::Ascendancy(ascendancy) = new else {
+                panic!("explicit Ascendancy declaration refinement")
+            };
+            declaration_owners.push(DeclarationRefinementOwner::Ascendancy(
+                ascendancy.id.clone(),
+            ));
+        } else {
+            let DefinitionDescriptor::PassiveNode(passive) = new else {
+                panic!("passive refinement")
+            };
+            nodes.push(passive.id.clone());
+        }
         *row = new.clone();
     }
     for (old, new) in old_owners.iter().zip(&next_owners) {
@@ -215,35 +240,53 @@ fn stage_inner(
         OwnedDefinitionSchemaPackage::new(recipe.schema.clone(), Default::default()).unwrap();
     recipe.rules.definitions = schema.identity().clone();
     recipe.routing.definitions = schema.identity().clone();
-    let refined = transition_owned_catalog_with_tree_refinement_compact(
-        SuccessorBundleInput {
-            schema_version: 1,
-            prior: base.input().recipe.clone(),
-            successor: recipe,
-            mapping: base.input().mapping.clone(),
-            roles: base.input().roles.clone(),
-            normalization: base.input().normalization.clone(),
-            rewards: base.input().rewards.clone(),
-            query_sets: base.input().query_sets.clone(),
-            items: base.input().items.clone(),
-            item_source: base.input().item_source.clone(),
-        },
-        CatalogAppend {
-            mappings: vec![],
-            source: base.input().mapping.source.clone(),
-            item_policies: CatalogItemPolicyMode::RebindPrior,
-        },
-        TreePolicyTransitionInput::RebindPrior {
-            prior: Box::new(base.input().tree.clone().unwrap()),
-        },
-        PassiveDeclarationRefinement {
-            schema_version: 1,
-            before: base.receipt().definitions.clone(),
-            after: schema.identity().clone(),
-            nodes,
-        },
-        Default::default(),
-    )
+    let successor = SuccessorBundleInput {
+        schema_version: 1,
+        prior: base.input().recipe.clone(),
+        successor: recipe,
+        mapping: base.input().mapping.clone(),
+        roles: base.input().roles.clone(),
+        normalization: base.input().normalization.clone(),
+        rewards: base.input().rewards.clone(),
+        query_sets: base.input().query_sets.clone(),
+        items: base.input().items.clone(),
+        item_source: base.input().item_source.clone(),
+    };
+    let append = CatalogAppend {
+        mappings: vec![],
+        source: base.input().mapping.source.clone(),
+        item_policies: CatalogItemPolicyMode::RebindPrior,
+    };
+    let tree = TreePolicyTransitionInput::RebindPrior {
+        prior: Box::new(base.input().tree.clone().unwrap()),
+    };
+    let refined = if typed_declarations {
+        transition_owned_catalog_with_declaration_refinement_compact(
+            successor,
+            append,
+            tree,
+            DeclarationClosureRefinement {
+                schema_version: 2,
+                before: base.receipt().definitions.clone(),
+                after: schema.identity().clone(),
+                owners: declaration_owners,
+            },
+            Default::default(),
+        )
+    } else {
+        transition_owned_catalog_with_tree_refinement_compact(
+            successor,
+            append,
+            tree,
+            PassiveDeclarationRefinement {
+                schema_version: 1,
+                before: base.receipt().definitions.clone(),
+                after: schema.identity().clone(),
+                nodes,
+            },
+            Default::default(),
+        )
+    }
     .unwrap();
     let mut input = base.input().clone();
     input.recipe = refined.recipe().clone();

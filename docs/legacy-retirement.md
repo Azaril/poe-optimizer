@@ -38,6 +38,17 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Ascendancy inventory, 2026-10-09:** the existing offline declaration-refinement
+contract now admits exact Ascendancy owners through the same checked finalizer.
+The generic compact wrapper changes publication storage, not runtime semantics.
+Full source metadata, constructor and renderer fields stay in offline evidence;
+the native package stores the owned class/root relation and reviewed empty
+intrinsic inventories. The shared publication helper reuses its assembly and
+whole-recipe comparison rather than copying a second pipeline. Existing passive
+source/publication regressions remain useful consumers of that helper. This
+work adds no compatibility version, source-language object behavior or numerical
+fallback, and does not retire separately owned passive/Player coverage.
+
 **Generated selector proof reuse, 2026-10-09:** private Import accounting can
 borrow the existing physical correspondence and deferred-field proof when all
 six identities match. Keep one source resolver and explicit proof-origin
