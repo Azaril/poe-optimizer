@@ -2,7 +2,7 @@
 
 `owned-sniper-replay.json.gz` contains the public typed inputs of the existing
 joined Sniper test graph, exported from
-`runs/owned-minion-inherent-life-publication-03/package`. It is test data, not a
+`runs/owned-minion-attack-selection-publication-01/package`. It is test data, not a
 production release or an admitted complete build. Original05 still has four
 selected input obligations and incomplete mechanics coverage.
 
@@ -59,8 +59,10 @@ test requires deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
 The current October 9 V27 fixture has 927 definitions, 620 owners and 35 stages.
-It is 138,860 compressed bytes and 5,417,997 JSON bytes, with SHA-256
-`e4ca40a3833deb613f391109611d54fca8e9e9c659df4994ba48b5c58809b220`.
+It is 138,921 compressed bytes and 5,418,886 JSON bytes, with SHA-256
+`cc168078a5b50f08770965dd315ef812af5418fa3c8911b1bf37ef94d35cd318`.
+The decoded JSON SHA-256 is
+`69f9ddcd8be96386ecfb3d2dc51608135ad15d549eb2cb4f8a7699150c08aa9d`.
 The exporter verifies full-report equality before writing; the ordinary native
 test checks deterministic re-encoding.
 
@@ -73,7 +75,7 @@ Sniper. Source delivery precedes the frozen-channel read. The separate joined
 Life-query fixture retains the canonical member and runs its diagnostic probes
 afterward; it derives no canonical final Life pool.
 
-The current refresh extends eight existing Stat/program receiver target lists
+The preceding inherent-Life refresh extended eight existing Stat/program receiver target lists
 with exact slot `Skill0012/001f`, preserving Player targets and IDs. The unchanged
 inherent Life bridge then emits one explicit zero per exact Sniper, after checked
 empty attribute inputs and resolved inherent flags. Player remains Strength 27
@@ -81,7 +83,7 @@ and inherent Life 54. Missing minion targets stay unknown without affecting
 Player; no neutral MORE receiver is added. A synthetic positive-BASE control
 cannot silently obtain Player MORE or establish nonempty minion attribute parity.
 
-All 21 ordinary replay tests pass. Seven new tests cover exact targets and source
+At that checkpoint, all 21 ordinary replay tests passed. Seven tests cover exact targets and source
 identity, zero versus missing, potential zero/inactive/nonzero donors, unsupported
 positive inputs, actual Partial authority, frozen prerequisites and four-worker
 reuse. All fourteen preceding damage, Command, Offering and Life Increase tests
@@ -116,3 +118,20 @@ operands explicitly in the fixture. Its arithmetic, exact Action separation,
 missing-input behavior and four-worker reuse are tested; it publishes no
 production operand, coverage closure or final damage metric. The 21 preceding
 tests and five additions pass across the full run and a focused test repair.
+
+The current source-selection refresh adds one shared Fixed decision per exact
+Basic Action and changes four routes to consume it. All numerical producers and
+unrelated public inputs remain unchanged. The publisher separately authenticates
+the admitted intrinsic-only source domain; the production output's route
+coverage remains Partial. No missing selected value becomes zero or falls back
+to another source.
+
+All 93 joined native tests and all 28 ordinary Engine replay tests pass. The two
+new Engine tests verify one decision per exact Basic, numerical equality with
+direct transport, separate known values after a level change, missing minimum
+versus known maximum, scratch reuse and four-worker execution. Regeneration log:
+`runs/owned-sniper-source-selection-joined-01.log`, from canonical input
+`c62bfe81622299ad447970c5df46de16a69b5912bfd05dce0c93432cbcd23e02`.
+The separate JSON inverse verifies only four route-source records, one selector
+inventory and four dependent identities changed. Schema, rules, build, scenario
+and query content are unchanged. Strict Engine and affected CLI Clippy pass.

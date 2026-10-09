@@ -10,7 +10,6 @@ mod vectors;
 use super::activation_family::{self, population_partition as population};
 use poe_optimizer_core::{
     owned_build::{AssumptionTarget, EnemySpec, ExternalAssumption, ParameterValue},
-    owned_routing::{ActionOutputRoutes, ActionRoutingInput},
     owned_rules::{DefinitionRules, IntegerRuleTable, RuleProgram},
     owned_schema::{DefinitionDescriptor, SchemaSubject, SlotDescriptor},
 };
@@ -289,9 +288,7 @@ pub fn assert_current(endpoint: &StagedOwnedRelease) {
             vec![&table]
         );
     }
-    let routes: Vec<ActionOutputRoutes> = read(&format!("{DATA}minion-attack-source/routes.json"));
-    let v2: ActionRoutingInput = read(&format!("{DATA}ice-nova-intrinsics/routing.json"));
-    assert_eq!(v2.schema_version, 2);
+    let routes = super::attack_selection_family::routes();
     assert_eq!(routes.len(), 1);
     for expected in routes {
         let actual: Vec<_> = endpoint
@@ -305,21 +302,9 @@ pub fn assert_current(endpoint: &StagedOwnedRelease) {
         assert_eq!(actual.len(), 1);
         assert!(!actual[0].routes.is_complete());
         assert_eq!(actual[0].routes.closure, expected.routes.closure);
-        // The checked Ice Nova V1 -> V2 adaptation gave every prior output an
-        // explicit empty selector inventory with its unchanged Partial closure.
-        // Require that exact declaration, rather than treating absence as empty
-        // or allowing a later Complete declaration to pass this component proof.
-        assert!(expected.source_selectors.is_none());
-        let adapted: Vec<_> = v2
-            .outputs
-            .iter()
-            .filter(|r| r.output == expected.output)
-            .collect();
-        assert_eq!(adapted.len(), 1);
-        let selectors = adapted[0].source_selectors.as_ref().unwrap();
-        assert!(selectors.members.is_empty());
-        assert_eq!(selectors.closure, expected.routes.closure);
-        assert_eq!(actual[0].source_selectors, adapted[0].source_selectors);
+        // The source-selection packet separately authenticates the supplier
+        // domain. Its exact selector is now part of this current component.
+        assert_eq!(actual[0].source_selectors, expected.source_selectors);
         for route in expected.routes.members {
             assert_eq!(
                 actual[0]

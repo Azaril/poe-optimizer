@@ -22,6 +22,9 @@ mod added_damage_native;
 #[path = "support/owned_amulet_life_copy.rs"]
 mod amulet_life_family;
 #[allow(dead_code)]
+#[path = "support/owned_minion_attack_selection.rs"]
+mod attack_selection_family;
+#[allow(dead_code)]
 #[path = "support/owned_attribute_base_membership.rs"]
 mod attribute_base_family;
 #[path = "support/owned_sniper_attributes_native.rs"]
@@ -215,6 +218,7 @@ impl World {
         let endpoint = release::load(&path);
         activation_family::assert_component(&endpoint);
         accuracy_family::assert_component(&endpoint);
+        attack_selection_family::assert_component(&endpoint);
         evidence::assert_current(&endpoint);
         player_life_inputs_native::check_current_packet(&endpoint);
         let recipe = &endpoint.input().recipe;
@@ -434,21 +438,22 @@ impl World {
         let old_tables: Vec<IntegerRuleTable> = decode(&historical["tables"]);
         assert_eq!(Some(table), old_tables.iter().find(|t| t.id == table.id));
         w.base.tables.push(table.clone());
-        let mut authored: Vec<ActionOutputRoutes> = shared::read(
-            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .join("data/owned/poe2/3887ae68/minion-attack-source/routes.json"),
-        );
+        let mut authored = attack_selection_family::routes();
         assert_eq!(authored.len(), 1);
-        let accuracy_routes: Vec<ActionOutputRoutes> = shared::read(
-            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .join("data/owned/poe2/3887ae68/minion-accuracy/routes.json"),
-        );
-        assert_eq!(accuracy_routes.len(), 1);
-        assert_eq!(accuracy_routes[0].output, basic_output());
-        authored[0]
-            .routes
-            .members
-            .extend(accuracy_routes[0].routes.members.clone());
+        assert_eq!(authored[0].output, basic_output());
+        // The factor component below installs its own unchanged route. Retain
+        // the current shared source decision rather than rebuilding historical
+        // direct Actor routes or inventing an empty selector inventory.
+        for later in added_damage_family::routes()[0].routes.members.iter() {
+            let position = authored[0]
+                .routes
+                .members
+                .iter()
+                .position(|route| route == later)
+                .unwrap();
+            authored[0].routes.members.remove(position);
+        }
+        assert_eq!(authored[0].routes.members.len(), 5);
         let actual = recipe
             .routing
             .outputs
@@ -464,7 +469,7 @@ impl World {
         w.base.action_routes = vec![ActionOutputRoutes {
             output: basic_output(),
             routes: DeclaredSet::complete(authored[0].routes.members.clone()),
-            source_selectors: Some(DeclaredSet::complete(vec![])),
+            source_selectors: authored[0].source_selectors.clone(),
         }];
         let queries = recipe.rules.contribution_queries.as_ref().unwrap();
         let mut actual_accuracy_queries = DeclaredSet::complete(vec![]);

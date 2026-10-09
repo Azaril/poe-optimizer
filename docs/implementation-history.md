@@ -1,10 +1,130 @@
-> Historical snapshots through the resource evidence and Leggings declaration checkpoint on 2026-10-09.
+> Historical snapshots through the physical-base damage checkpoint on 2026-10-09.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-09 checkpoint: physical base damage
+
+The [draft physical-base consumer](../data/owned/poe2/3887ae68/physical-base-damage/README.md)
+executes the missing pre-conversion arithmetic through one injected Action rule.
+It uses actual native intrinsic endpoints `3212/3213`, distinct required bonus,
+self-flat and Enemy-flat endpoints, the complete added-damage multiplier and
+the final ability coefficient. Its operation order is
+`((intrinsic + bonus) + ((self_flat + enemy_flat) * added_multiplier)) * coefficient`.
+There is no rounding or second application of the intrinsic profile scale.
+
+This is **unpublished**. The eight operand producers remain unfinished, and the
+finite fixture supplies them explicitly. Removing any relevant input leaves
+that endpoint unresolved, including with a known zero coefficient. Production
+coverage and input obligations do not change. Draft keys **336e–3377** are
+reserved for this work; the canonical allocator is still at **336d**. Authenticate
+those reservations or remap the draft when assembling its eventual successor.
+The tracked replay gzip is unchanged.
+
+Native validation passes all **five new tests and 21 preceding tests**. The full
+run passed 25/26 in 4.96s; its sole failure expected a unit mismatch to be rejected
+at artifact rebinding rather than semantic compilation. That test was corrected
+and passed separately in 0.31s. No runtime check was weakened. Strict Engine
+target Clippy passes. Logs: `runs/owned-physical-base-draft-native-{01,02}.log`
+and `runs/owned-physical-base-draft-clippy-01.log`.
+
+Thirteen retained original-source observations match directly: baseline
+**208–387**, and the flat 3–7 control **211.45–395.05**. Synthetic signed, zero,
+fractional and cancellation-sensitive operands check operation order without
+claiming game legality or the entire computed numeric domain. Different raw
+levels keep two exact Actions independent; source reordering, missing endpoint
+routes, stage errors, fresh/reused scratch and four-worker equality are covered.
+
+The [original pre-conversion census](../data/owned/poe2/3887ae68/minion-preconversion-source/README.md)
+retains raw zero/conditional sources, the original selected weapon pass and
+coefficient inputs. Eight controls cover fresh/repeated/warm builds, explicit
+CALCS selection and flat/zero/inactive/active damage. All independent unhooked
+scalar snapshots and both complete canonical reports agree: **4,041,068 bytes**,
+SHA-256 `7a723a4eece7b297737006b08d1dc61ec0047d13cfd2b9fbfeaee94eb52397cb`.
+Source03 passed in **1,016.92s**, with eighteen full loads per JIT mode. The new
+raw inventories remain ordered and exact; only the previously reviewed Offering
+buff-multiset normalization is reused. Raw reports and observed/plain pairs are
+retained locally before normalization or assertions.
+
+Earlier acquisition attempts exposed two harness problems: an overly broad raw
+snapshot included unrelated Arsonist metadata, and unexecuted CALCS calls were
+treated as required observations. Those were corrected explicitly. Subsequent
+fresh/warm differences were confined to the existing unordered Offering metadata
+and now use its established projection. Source03 is one successful fixed paired
+run, not retry-until-equal evidence.
+
+All **39 ordinary PoB target tests** pass (0.81s), including the new retained
+report authentication. The preexisting expensive full physical-damage acquisition
+was filtered out rather than rerun; the focused paired run above is independent.
+One initial retained assertion expected JSON floats where captured records are
+integers; its expectation was corrected without changing captured data, then the
+ordinary target passed. Exact retained/off/on byte comparison passes (0.09s),
+and strict all-feature target Clippy passes (0.87s). Logs:
+`runs/owned-minion-preconversion-{ordinary-02,retained-01,clippy-01}.log`.
+The packet adds no production operand, native coverage closure or final metric.
+
+**Current canonical package is unchanged:**
+`runs/owned-leggings-declarations-publication-01/package`, input
+`2390f617fbd22951299e68af43b780d548d46a7981152d5ac789c8914bb9a4ed`.
+Operations V27/schema6 retain eighteen artifacts, 170 provenance rows, 110 saved
+queries and no evaluation bundle. Selected input obligations remain
+**106/117/109/123/4**, and complete native builds remain **0/5**.
+
+**Resume: keep Original05 first and follow the saved-query map above.**
+
+1. Reuse the physical-base fragment. Bind its actual selected-source bonuses
+   and prepared skill coefficient through the existing source/Action model.
+   The smaller candidate is the two weapon-source bonus endpoints, but it first
+   needs an owned fact proving which source this Action uses. The intrinsic
+   weapon constructor has no bonus fields, and original SkillData bonus writes
+   are a separate source branch. Observing the unchanged build's weapon branch
+   does not authorize an unconditional Action zero; Partial routing/source-selector
+   declarations are coverage gaps, not applicability predicates. Authenticate
+   or author the source-selection inventory before production bonus admission.
+   Current `3212/3213` routes read ActionActor directly, and there is no existing
+   selector member proving intrinsic weapon selection. Reuse
+   `ActionStatRouteSource::Selected { selector, stats }` with an authored
+   `ActionSourceSelector.sources/policy` inventory. Route bonus fields from the
+   selected source and leave unavailable selection unresolved. A Fixed policy
+   requires an admitted intrinsic-only domain, not only this observed build.
+   The original skill-level row alone does not prove coefficient identity:
+   both `CalcActiveSkill:896–900` and `CalcOffence:738` apply SkillData, whose
+   baseMultiplier can be supplied through `SkillStatMap:2176–2178`. The latter
+   application also supports explicit MAX merging; do not equate that to an
+   arbitrary winner from conflicting candidates. Selected weapon replacement and raw potential
+   suppliers remain part of admission. Keep unaccounted producers unavailable.
+   Existing checked numeric selection can represent separate level and prepared-
+   skill candidate domains with explicit authored precedence, preserving present
+   zero. Require agreement within each domain; never turn unknown coverage into
+   the fallback coefficient or copy SkillData insertion order. Positive/conflicting
+   source cases need their own evidence before broader admission.
+2. Complete self/Enemy flat and AddedDamage membership using the retained raw
+   census and complete potential-supplier authority. Source zeros, absent
+   selected records and the individual intrinsic `336d` factor do not establish
+   complete domains. Preserve source groups and their arithmetic/rounding order.
+   No new Enemy query extension is needed merely to evaluate this draft.
+3. Before an actual action-conditioned Enemy modifier is admitted, preserve its
+   consuming Action and typed applicability. PoB's Enemy Sum receives Action cfg;
+   native shared Enemy query identities do not. A numeric allowlist extension
+   alone would lose that distinction. The pinned textual scan found no explicit
+   SelfPhysicalMin/Max writer, but that is not a dynamic source-completeness proof.
+   Investigate a concrete producer before proposing a new delivery contract.
+4. Resolve the already-prompted numeric-domain and configuration-accounting
+   decisions, then continue final Player Mana/Life and the four real selected
+   input inventories (`01f2/0505/0207/0208`). Configuration has 36 source links;
+   reporting remains separate. Reuse the existing Mana draft and resource
+   witnesses. Bounded minion transformation acquisition is finished; positive
+   transfers must not displace direct metric/input delivery.
+
+Actor-to-Enemy reads, resource demand and scoped coverage remain unapproved.
+Whole selected-plan coverage includes other selected skills. Do not narrow
+the unchanged-build gate to the dependency paths implemented so far. At the
+first complete request/bundle/reference result, begin D4 immediately while
+continuing the remaining builds.
+
 
 ## Archived 2026-10-09 checkpoint: resource evidence and Leggings declarations
 

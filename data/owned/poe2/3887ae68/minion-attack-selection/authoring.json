@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "kind": "intrinsic-minion-attack-source-selection",
+  "before": "2390f617fbd22951299e68af43b780d548d46a7981152d5ac789c8914bb9a4ed",
+  "scope": {
+    "new_definitions": 0,
+    "new_programs": 0,
+    "replaced_routes": 4,
+    "new_selectors": 1,
+    "closed_selector_inventories": 1,
+    "closed_route_inventories": 0,
+    "closed_rule_owners": 0,
+    "new_queries": 0,
+    "whole_build_parity": false,
+    "other_action_outputs_admitted": false
+  },
+  "registry_last_issued_before": 13165,
+  "registry_last_issued_after": 13165,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "artifacts": {
+    "bindings.json": {
+      "bytes": 2480,
+      "sha256": "f1db08ca4d9ee7dc1848da4dbf4ddbd45894e5e8658c4c095e407b6055da87db"
+    },
+    "dependencies.json": {
+      "bytes": 149157,
+      "sha256": "3068622d51fcbc8ce00423f862a51784e0e70dae777babf04481b1815389a6b0"
+    },
+    "routes.json": {
+      "bytes": 5970,
+      "sha256": "a098b39ce2538e5bc071d30f65fcc25878bb2ecb8ee53433c516404505cc3332"
+    },
+    "source-evidence.json": {
+      "bytes": 1718168,
+      "sha256": "a2daf1e5c6c058ae2ce32f434feee325d06344a96a5ccbf29ed7320df2c63ec3"
+    },
+    "source-review.md": {
+      "bytes": 7872,
+      "sha256": "50d4be17c7a0278e39d8cf2e7db35033ed343e59d42f1e91d9ea8e0665f728c8"
+    }
+  }
+}

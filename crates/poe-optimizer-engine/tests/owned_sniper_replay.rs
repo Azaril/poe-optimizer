@@ -11,6 +11,8 @@ mod physical_base;
 #[allow(dead_code)]
 #[path = "../../../tests/support/owned_plan_replay.rs"]
 mod replay;
+#[path = "support/owned_sniper_source_selection.rs"]
+mod source_selection;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*};
 use poe_optimizer_engine::owned_plan::*;
 use rayon::prelude::*;

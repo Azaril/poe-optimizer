@@ -390,7 +390,10 @@ fn declarations<'a>(
     }
     Ok(out)
 }
-pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<SkillIdentityData> {
+// Retain the actual bounded construction as the one acquisition path. Offline
+// source-selection evidence uses these same original tables, without a second
+// constructor or a numeric evaluator.
+fn construct_catalog(sources: &BTreeMap<String, String>) -> Result<(Lua, Table, Vec<String>)> {
     let lua = Lua::new_with(
         StdLib::TABLE | StdLib::STRING | StdLib::MATH | StdLib::BIT | StdLib::JIT,
         LuaOptions::default(),
@@ -451,18 +454,36 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<SkillIdentit
         "-----------------\n-- Common Data",
     )?;
     let construction = section(original, "-- Load skills\n", "-- Load minions\n")?;
+    // Preserve original line positions for callbacks retained by offline audits.
+    let prefix_start = prefix.as_ptr() as usize - original.as_ptr() as usize;
+    let construction_start = construction.as_ptr() as usize - original.as_ptr() as usize;
+    let before = original[..prefix_start]
+        .bytes()
+        .filter(|b| *b == b'\n')
+        .count();
+    let between = original[prefix_start + prefix.len()..construction_start]
+        .bytes()
+        .filter(|b| *b == b'\n')
+        .count();
     let code = format!(
-        "{prefix}\n{construction}\nreturn{{data=data,mod=makeSkillMod,flag=makeFlagMod,skill=makeSkillDataMod}}"
+        "{}{prefix}{}{construction}\nreturn{{data=data,mod=makeSkillMod,flag=makeFlagMod,skill=makeSkillDataMod}}",
+        "\n".repeat(before),
+        "\n".repeat(between),
     );
     let result: Table = lua.load(code).set_name(format!("@{DATA}")).eval()?;
-    let data: Table = result.get("data")?;
-    let mod_fn: Function = result.get("mod")?;
-    let flag_fn: Function = result.get("flag")?;
-    let skill_fn: Function = result.get("skill")?;
     let module_order = modules
         .lock()
         .map_err(|_| error("module order poisoned"))?
         .clone();
+    Ok((lua, result, module_order))
+}
+
+pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<SkillIdentityData> {
+    let (lua, result, module_order) = construct_catalog(sources)?;
+    let data: Table = result.get("data")?;
+    let mod_fn: Function = result.get("mod")?;
+    let flag_fn: Function = result.get("flag")?;
+    let skill_fn: Function = result.get("skill")?;
     let skill_module_order: Vec<_> = module_order
         .iter()
         .filter(|p| {
@@ -633,6 +654,9 @@ pub(crate) fn extract(sources: &BTreeMap<String, String>) -> Result<SkillIdentit
     out.validate().map_err(error)?;
     Ok(out)
 }
+#[cfg(test)]
+#[path = "minion_attack_selection_evidence.rs"]
+mod minion_attack_selection_evidence;
 #[cfg(test)]
 mod tests {
     use super::*;

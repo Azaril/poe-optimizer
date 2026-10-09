@@ -263,15 +263,19 @@ pub fn assert_component(endpoint: &StagedOwnedRelease) {
         .iter()
         .find(|r| r.output == d.route_before.output)
         .unwrap();
-    assert_eq!(actual.routes.closure, d.route_before.routes.closure);
-    assert_eq!(actual.source_selectors, d.route_before.source_selectors);
-    for route in d
-        .route_before
-        .routes
-        .members
-        .iter()
-        .chain(&routes()[0].routes.members)
-    {
+    // This family owns the percentage route only. Independent, authenticated
+    // refinements may select the earlier intrinsic weapon routes or complete
+    // their source inventory without changing this route's meaning.
+    for route in &routes()[0].routes.members {
+        assert_eq!(
+            actual
+                .routes
+                .members
+                .iter()
+                .filter(|r| r.id == route.id)
+                .count(),
+            1
+        );
         assert!(actual.routes.members.contains(route));
     }
     assert_eq!(

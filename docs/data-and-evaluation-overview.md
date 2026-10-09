@@ -941,6 +941,13 @@ factor, flat-damage census, conversion/gain calculation or final hit/DPS. The
 offline evidence authenticates the complete source profile and its eligibility;
 the evaluator never checks PoB skill names or Lua field-presence conventions.
 
+The [intrinsic source-selection packet](../data/owned/poe2/3887ae68/minion-attack-selection/README.md)
+binds the four existing Basic Attack source routes to one existing Fixed selector
+on the exact Action's Actor. Offline construction and supplier review establish
+the source domain; native workers consume typed routing data without executing
+Lua or reading that evidence. Independent numerical and rule coverage remains
+Partial. Source choice does not provide missing endpoint values or defaults.
+
 The [draft physical-base consumer](../data/owned/poe2/3887ae68/physical-base-damage/README.md)
 now combines the actual routed intrinsic endpoints with distinct required bonus,
 self-flat, Enemy-flat, added-factor and ability-coefficient inputs. Its injected

@@ -121,5 +121,7 @@ graph validates Basic plus all three Gas modes, removals, duplicate recipients,
 Offering stacking, missing inputs and worker reuse against retained original
 calls. Gas supply is partitioned with the existing exact offline checker, so
 structural activation does not require execution-time actor level first.
-This does not close final damage coverage or produce a complete build. Optional
-numeric selection remains the accepted next implementation step.
+This does not close final damage coverage or produce a complete build. The
+separately approved [numeric selection contract](owned-numeric-selection-proposal.md)
+is also implemented and adopted by the Mana override packet. Follow the current
+[implementation checkpoint](implementation.md) for the next delivery boundary.

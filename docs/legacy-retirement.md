@@ -38,6 +38,17 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Intrinsic attack source audit, 2026-10-09:** do not reproduce a PoB branch
+solely because it exists in source. The pinned bow-inheritance reads have no
+normal imported-data supplier in the constructed and reviewed source domain.
+Authenticate that domain and the owned supply relationships before using the
+existing Fixed source selector. Keep the original constructors, callback spans,
+Lua table aliases and source-field inventories in offline evidence. They do not
+belong in native rules or runtime data types. The proposed computed-condition
+selector remains [deferred](owned-computed-source-selection-proposal.md) until
+a real supported mechanic requires it. Preserve independent numerical and
+whole-build coverage gaps.
+
 **Physical base damage, 2026-10-09:** the next Action arithmetic is injected rule
 data using ordinary quantities, Add and Scale, tested through the current native
 replay. No named skill kernel, duplicate damage evaluator, Lua callback or direct
