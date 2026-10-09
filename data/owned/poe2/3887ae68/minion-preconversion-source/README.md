@@ -99,7 +99,9 @@ Use the project's serial Cargo lane. The parent target is
 `preconversion::original_preconversion_inputs_are_complete_and_stable`, with
 `POE_MINION_PRECONVERSION_SOURCE_OUT` set to a fresh output directory.
 
-The separate [native arithmetic draft](../physical-base-damage/README.md) keeps
-intrinsic, bonus, self-flat, Enemy-flat, added multiplier and coefficient inputs
-distinct. Its eight unfinished operand producers remain unresolved in
-production; these reference records are not production input defaults.
+The separate [native arithmetic draft](../physical-base-damage/README.md) now
+reuses the proved complete intrinsic endpoints and combined added multiplier.
+Independent supplier proofs allowed removal of the bonus and Enemy-flat ports
+and a data-authored coefficient of one for this ability. The two self-flat
+producers remain unfinished. This source report retains the original observations
+unchanged; it does not supply production input defaults or close native coverage.

@@ -191,72 +191,86 @@ revision; track compilation and repeated historical-publication costs in tooling
 cleanup without removing independent coverage or displacing the first complete
 native build.
 
-## Current implementation checkpoint: retire unused Enemy damage inputs
+## Current implementation checkpoint: real flat-damage suppliers and CI repair
 
-The [physical-base draft](../data/owned/poe2/3887ae68/physical-base-damage/README.md)
-now requires only the selected intrinsic endpoints, the two self-flat endpoints
-and the real combined factor. A separate
-[Enemy supplier proof](../data/owned/poe2/3887ae68/enemy-flat-attack-damage/source-review.md)
-justifies removing two unused input ports, their Stat declarations and addition
-nodes. No empty query, zero producer, new runtime API or Lua compatibility path
-was added. The two self-flat producers remain unfinished. This is still an
-unpublished arithmetic fragment; the current complete-build count remains **0/5**.
+Original05 remains the closest complete-build target. The next unfinished
+physical inputs are the self-flat endpoints `3371` / `3372`. The new
+[offline supplier census](../data/owned/poe2/3887ae68/self-flat-attack-damage/source-review.md)
+shows that this domain is nonempty: an observed zero in the unchanged build
+cannot replace source membership or applicability. No native rule, public API,
+input disposition or coverage closure is added by this checkpoint.
 
-The new offline acquisition executes original skills, stat maps, minions,
-ModCache, BossSkills and ModMap constructors. The expanded census covers 145,688
-tables, 436,948 rows, 11,851 modifiers and 57 callbacks. It contains no
-`SelfPhysicalMin/Max` writer, including nested, inactive and zero-valued records.
-The review accounts for 377 computed factory sites, 182 name assignments, 34
-Self/target literals and seven boss additional-stat maps. Those factory sites
-include readers as well as potential writers; their count alone is not closure.
-The selected non-hostile profile must target the environment Enemy. Parser,
-curse/debuff, ailment, payload-copy and name-rewrite paths are reviewed explicitly.
+Original constructors and ModCache contain **256 unique physical-endpoint
+modifier objects**, 128 minimum and 128 maximum. The census retains 23 mapping
+rows, 42 resolved consumer rows across 19 definitions, and three relevant alias
+groups. These are object/recipe counts, not eligible occurrence counts. The
+existing shared traversal now serializes target bodies and bounded enclosing
+wrappers without retaining thousands of extra Lua handles. Canonical paths and
+alias routes remain distinct; the audit does not claim every delivery occurrence.
+Stat-map metadata backlinks require exact owner identity before exclusion.
 
-Saved Party payloads remain a genuine arbitrary-name supplier. This proof requires
-accounted absence of those inputs; it does not grant general empty Enemy sums.
-The joined finite fixture retains its explicit empty-Party precondition, and
-actual import keeps every Party row linked to selected configuration issue
-`01f2`. External assumptions `0207` and the other two selected obligations remain
-pending. A future actual Enemy supplier needs its own source ownership and
-consuming-Action eligibility; it cannot inherit this absence proof or masquerade
-as an Action self-contribution.
+The two actual support consumers scale physical additions from Ward cost;
+active skills stored in support files are classified from their real metadata.
+Cached minion Attack additions remain distinct from the parser's unqualified
+3-7 and Full-Life controls. Nine executed source03 calls retain raw zero/inactive
+records; seven unexecuted CALCS rows remain unobserved. Existing independent
+reference reports are reused, without a fresh expensive whole-build acquisition.
 
-The compact artifact is **148,383 bytes**, SHA-256
-`02ff224a7ea4842694ea5039aae2db84043245e4aced95445d04418497ecfab6`.
-It reuses exact prior selection/combined evidence instead of duplicating their
-large source manifests. Review SHA-256:
-`bdb35e3369afc801311c7f2ba2db0460d1a6ebeef5f25ac37c4637a7e5ae59ad`.
-Nine original preconversion calls corroborate the empty Enemy domain. Unexecuted
-CALCS occurrences omit their base call and remain unobserved; acquisition was
-corrected to distinguish this shape rather than invent an empty result.
-The separate arithmetic fixture still checks thirteen retained source vectors.
+**Native direction:** first prove a bounded source family and the complete
+selected-source domain. For Action-invariant amounts and eligibility, reuse the
+existing exact-Actor contributions, checked queries and ordinary Action routing.
+A FullLife subset additionally needs a typed receiving-Actor condition and proof
+that Action-specific overrides cannot change it; no owned production binding
+exists yet. Keep local and inherited numeric folds separate. Source ownership,
+zero/inactive membership and unknown coverage survive aggregation. PoB parent
+storage alone does not justify a new transport API. Review additional exact-Action
+delivery only when an actually required Action-sensitive supplier needs it.
 
-Both source Sum implementations start at positive zero. Existing native
-`FiniteQuantity` already canonicalizes signed zero, including after arithmetic.
-Removing the proved identity addition is therefore exact under the existing
-contract; it does not approve the broader numerical-domain proposal. Five reads
-remain mandatory even with a known zero coefficient. Four unpublished draft
-Stats remain (`336f–3372`); the canonical allocator is unchanged at `336e`.
+Artifact: **209,378 bytes**, SHA-256
+`2a07ddefddd45cdd01a8593c506412428997eff3c618ba2fc365b6e0d93c5ba8`.
+Review SHA-256:
+`c600fe33b75f693dc77962f70968b6e8a015efceeb90a77cd6eb7b7b90d15252`.
+The retained prior Enemy-port cleanup is in [history](implementation-history.md);
+its proof remains valid and its removed ports stay removed.
 
-**Validation:** the authoring run passes (1.63s); the full original-source subtree
-passes **15 ordinary tests** (14.96s), including seven real constructor mutations
-and seven artifact refusals. Historical selection, coefficient and added-factor
-reconstruction remains identical. All **31 Engine replay tests** pass (5.29s),
-including seven physical-fragment tests, exact source/scope refusal, missing
-inputs, bitwise endpoint comparisons, reused scratch and four-worker equality.
-Strict optional-PoB and Engine Clippy pass (3.04s and 0.41s). Independent source,
-numeric and integration reviews found no remaining issue. Logs:
-`runs/owned-enemy-flat-{author-03,source-regressions-01,clippy-01}.log`,
-`runs/owned-enemy-flat-native-01.log` and
-`runs/owned-enemy-flat-engine-clippy-01.log`.
+**Source validation:** author04 passes (2.09s). All **19 ordinary source-subtree
+tests** pass (18.65s), with five opt-in acquisitions ignored. This includes real
+constructor/consumer mutations, zero and nested-alias records, exact backlink
+identity, constructor order and artifact scope refusals. Strict optional-PoB
+library/tests Clippy passes (3.09s). Logs:
+`runs/owned-self-flat-author-04.log`,
+`runs/owned-self-flat-source-tests-01.log` and
+`runs/owned-self-flat-source-clippy-02.log`. Source and native-contract reviews
+found no remaining issue. No native-engine change requires replay regeneration.
+After the final mechanical lint edit, a fresh focused reconstruction also
+reproduces the retained artifact exactly (one test, 2.07s):
+`runs/owned-self-flat-final-reconstruction-01.log`.
 
-The existing Rust publication binary was rerun against unchanged current CLI
-code: all **seven tests pass** (48.56s), including all-five normalization,
-selected requests and Party controls. A separate comparison confirms all 18
-rebuilt package files are byte-identical to the canonical package; the tracked
-replay gzip is unchanged. Evidence:
-`runs/owned-enemy-flat-cleanup-regression-01.log`, its `validation.json` and
-`runs/owned-enemy-flat-package-inverse-01.log`.
+**CI repair validation:** the Amulet Life target passes **nine ordinary tests**
+with one opt-in publication ignored in both profiles: all features (2.66s) and
+no default features (2.64s). Strict all-feature target Clippy passes (0.47s).
+Logs: `runs/owned-amulet-life-ci-repair-all-features-01.log`,
+`runs/owned-amulet-life-ci-repair-no-default-features-01.log` and
+`runs/owned-amulet-life-ci-repair-clippy-01.log`.
+
+The existing all-five publication binary was independently rerun against unchanged
+current application code: **seven tests pass** (43.26s), including all-five
+normalization, selected requests and Party controls. All 18 generated package
+artifacts are byte-identical to the canonical package. Logs:
+`runs/owned-self-flat-current-package-regression-01.log`, its `validation.json`
+and `runs/owned-self-flat-current-package-identity-01.log`.
+
+An older Linux CI shard exposed a stale Amulet Life fixture: its historical query
+omitted the now-present supplied-Actor inherent Life contributor. The isolated
+test repair reuses the published query and authenticates its exact added member
+and real producer body. The Partial-equipment refusal restores only that group's
+coverage; a separate control still rejects an omitted zero-valued contributor.
+Production rules and coverage are unchanged. The failed hosted job was
+`113895577595` (`ubuntu-latest, cli-2`) in run `37951954336` at `83c7e81`;
+its public annotations identify this target in both profiles, and local execution
+reproduced the exact missing-membership error. At the checkpoint's status read,
+`91f7bc7` run `37963058187` remained queued without jobs. These local repair
+results do not establish a successful hosted run for the forthcoming commit.
 
 **Canonical package remains:**
 `runs/owned-combined-added-attack-publication-04/package`, input
@@ -266,31 +280,33 @@ rules `6a81f88031e0f3b6b3a1e60d4cfa2edd6c9979afa49aed1d2a6857cbaf64b6d5`,
 compiled rules `ee8bf2aba8eed0b3742d848703cef87950e05ae537144d49d009f79515e583ee`,
 routing `c34584136d3bffa6f4f2124795bbcf9c99dd94a2d09f7a560a2302946a222ef1`.
 There are 172 provenance records, 110 saved queries and no evaluation bundle.
-All 5,825 Partial rule owners and route/global query gaps remain. Selected
-obligations remain **106/117/109/123/4**.
+All 5,825 Partial rule owners and route/global query gaps remain. The allocator
+is still `336e`; unpublished physical endpoint declarations reserve nothing.
+Selected obligations remain **106/117/109/123/4**, complete originals **0/5**.
 
 **Resume: finish Original05 first, following the saved-query map above.**
 
-1. Implement the two self-flat collections through the existing checked graph.
-   The unchanged selected build has no actual flat donor: Sniper quality/support
-   inputs, Offering, Gigantic and selected passive damage affect other channels.
-   This observation is not a universal empty-domain certificate. Authenticate
-   the composed selected sources and all applicability gates; do not write a
-   Sniper-specific zero program or reinterpret increased/MORE as flat damage.
-2. Cover real potential flat sources: support/stat-map and MinionModifier
-   payloads, global buffs, Tactician/Companion parent-weapon transfer, Rallying Cry,
-   Hollow Palm and Party. Preserve actual origin and Action eligibility, zero
-   and inactive potential members, ordered reduction and incomplete-coverage
-   refusal. Reuse the retained 3–7, explicit-zero and Full-Life off/on controls;
-   changed support, aura, parent or Party inputs must invalidate a claimed empty
-   selected domain. Publish the physical consumer only with actual suppliers
-   and its source/input gates, not injected test values.
-3. Resolve the already-prompted numerical-domain and configuration-accounting
-   decisions before their dependent resource/admission work. Continue final
-   Player Mana/Life and input inventories `01f2/0505/0207/0208`. Preserve Party
-   accounting when closing configuration. Actor-to-Enemy reads, resource demand
-   and scoped coverage remain unapproved; this cleanup authorizes none of them.
-4. Begin D4 as soon as the first complete unchanged request, full saved metrics
+1. Authenticate the actual selected item/tree/skill/support and external-input
+   domains for the two flat endpoints, using this nonempty census and its dynamic
+   path ledger. Do not turn catalog counts, absence in one observed call, or the
+   114 unqualified inner records into a universal empty/invariant certificate.
+   Tactician, Rallying Cry, Hollow Palm, conditional overrides and Party each need
+   an explicit disposition in the admitted source domain.
+2. Implement the first proved family through existing Actor queries and Action
+   routing, retaining real source ownership, typed conditions and ordered local/
+   inherited groups. Exercise absent/present-zero/3-7/condition-false-true-unknown,
+   repeated Actors, missing membership and fresh/reused/Rayon equality against
+   retained evidence. Publish the physical consumer only with actual suppliers
+   and accounted inputs; finite component fixtures cannot close production gaps.
+3. Resolve the re-prompted numerical-domain and configuration-accounting decisions
+   before their dependent resource/admission work. Continue final Player Mana/Life
+   and input inventories `01f2/0505/0207/0208`. The configuration proposal now
+   distinguishes implemented participation/support discovery from its own pending
+   authority; numerical-domain wording respects existing positive-zero
+   canonicalization. Actor-to-Enemy reads, resource demand and scoped coverage
+   remain unapproved. No broader Action-delivery model is inferred from prior
+   approval of Action self-queries.
+4. Begin D4 immediately after the first complete unchanged request, saved metrics
    and reference availability/value checks pass. Keep the other four originals
    as regressions without developing every build in lockstep.
 
@@ -3984,7 +4000,8 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated source-property owners | Accepted contract implemented: exact generated Skills own properties and their exact declaring provider can project final inputs. Current native contract tests and component regressions pass. Sand incoming source evidence is captured; real numerical authoring remains downstream of Original05 request admission. Ownership support does not establish complete mechanic coverage. |
 | Effect-application breadth | General application model accepted and Maximum component implemented. Select a real contrasting stacking/grouping case and prove duplicate, cap, source and recipient semantics before extending its bounded policies. Do not replace the shared graph with effect-specific paths. |
 | Computed source selection | [Investigation](owned-computed-source-selection-proposal.md) deferred: pinned Sniper source review found no normal imported-data supplier for the motivating bow-inheritance branch. Use the existing Fixed selector only after authenticating its actual domain. Revisit a computed Boolean policy when a demonstrated supported mechanic needs it; do not copy an orphan PoB branch or infer approval from the separate Action-query decision. |
-| Enemy ownership versus Action applicability | The physical-base audit found that PoB filters Enemy flat-damage queries by the consuming Action configuration. Native Enemy query results have no such Action dimension. Keep the new arithmetic's Enemy-derived operands Action-specific; before admitting an actual conditioned writer, prove action independence or review explicit delivery to exact Actions. Do not widen numeric Enemy reads as a substitute for applicability. No concrete Enemy-flat writer or new API is admitted by this checkpoint. |
+| Enemy ownership versus Action applicability | The completed bounded supplier proof permits removal of the unused Enemy-flat ports; no empty collector or new API replaces them. Any future real conditioned writer must prove Action independence or gain reviewed delivery to exact Actions. Shared numeric Enemy reads alone cannot preserve consuming-Action eligibility. Saved Party modifiers remain an explicit input obligation. |
+| Self-flat source ownership and eligibility | The nonempty supplier audit distinguishes canonical modifier objects, wrapper delivery and actual stat-map consumers; observed zero is not absence. For proved Actor-invariant families, reuse exact Actor contributions/checked queries and ordinary Action routing. FullLife needs an explicit Actor condition plus absence of Action-specific overrides; no owned production FullLife binding exists yet. Preserve source ownership, separate local/inherited numeric groups and incomplete coverage. New source-to-Action authority is deferred until a required concrete supplier demonstrates the need; support and post-stacking origins cannot impersonate Action self-sources. |
 | Physical-input/reference separation | Design refinement pending: classify fields without requiring successful MAIN/CALCS selection or a live Pending usage issue to preserve known intrinsic facts. Preserve independent unknown-field/usage obligations. |
 | Generated selector/supply separation | [Proposal](owned-source-action-root-separation-proposal.md) pending. Archived item-only Warrior exposes physical/manual root coupling in the source-selector adapter. Separate selector interpretation from checked supply, reuse existing child topology, and preserve all unresolved owners. The narrow eight archived Warrior correspondences are published, reducing configuration source links from 44 to 36; this does not implement the broader separation or confer native authority. |
 | Immutable normalization preparation | Compile existing checked policies once per exact release; separate construction/traversal budgets and prove identical outputs. Implementation pending; no storage-layer change. |

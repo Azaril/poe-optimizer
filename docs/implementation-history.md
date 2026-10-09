@@ -1,10 +1,113 @@
-> Historical snapshots through the combined added-damage checkpoint on 2026-10-09.
+> Historical snapshots through the Enemy damage-input cleanup checkpoint on 2026-10-09.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-09 checkpoint: retire unused Enemy damage inputs
+
+The [physical-base draft](../data/owned/poe2/3887ae68/physical-base-damage/README.md)
+now requires only the selected intrinsic endpoints, the two self-flat endpoints
+and the real combined factor. A separate
+[Enemy supplier proof](../data/owned/poe2/3887ae68/enemy-flat-attack-damage/source-review.md)
+justifies removing two unused input ports, their Stat declarations and addition
+nodes. No empty query, zero producer, new runtime API or Lua compatibility path
+was added. The two self-flat producers remain unfinished. This is still an
+unpublished arithmetic fragment; the current complete-build count remains **0/5**.
+
+The new offline acquisition executes original skills, stat maps, minions,
+ModCache, BossSkills and ModMap constructors. The expanded census covers 145,688
+tables, 436,948 rows, 11,851 modifiers and 57 callbacks. It contains no
+`SelfPhysicalMin/Max` writer, including nested, inactive and zero-valued records.
+The review accounts for 377 computed factory sites, 182 name assignments, 34
+Self/target literals and seven boss additional-stat maps. Those factory sites
+include readers as well as potential writers; their count alone is not closure.
+The selected non-hostile profile must target the environment Enemy. Parser,
+curse/debuff, ailment, payload-copy and name-rewrite paths are reviewed explicitly.
+
+Saved Party payloads remain a genuine arbitrary-name supplier. This proof requires
+accounted absence of those inputs; it does not grant general empty Enemy sums.
+The joined finite fixture retains its explicit empty-Party precondition, and
+actual import keeps every Party row linked to selected configuration issue
+`01f2`. External assumptions `0207` and the other two selected obligations remain
+pending. A future actual Enemy supplier needs its own source ownership and
+consuming-Action eligibility; it cannot inherit this absence proof or masquerade
+as an Action self-contribution.
+
+The compact artifact is **148,383 bytes**, SHA-256
+`02ff224a7ea4842694ea5039aae2db84043245e4aced95445d04418497ecfab6`.
+It reuses exact prior selection/combined evidence instead of duplicating their
+large source manifests. Review SHA-256:
+`bdb35e3369afc801311c7f2ba2db0460d1a6ebeef5f25ac37c4637a7e5ae59ad`.
+Nine original preconversion calls corroborate the empty Enemy domain. Unexecuted
+CALCS occurrences omit their base call and remain unobserved; acquisition was
+corrected to distinguish this shape rather than invent an empty result.
+The separate arithmetic fixture still checks thirteen retained source vectors.
+
+Both source Sum implementations start at positive zero. Existing native
+`FiniteQuantity` already canonicalizes signed zero, including after arithmetic.
+Removing the proved identity addition is therefore exact under the existing
+contract; it does not approve the broader numerical-domain proposal. Five reads
+remain mandatory even with a known zero coefficient. Four unpublished draft
+Stats remain (`336f–3372`); the canonical allocator is unchanged at `336e`.
+
+**Validation:** the authoring run passes (1.63s); the full original-source subtree
+passes **15 ordinary tests** (14.96s), including seven real constructor mutations
+and seven artifact refusals. Historical selection, coefficient and added-factor
+reconstruction remains identical. All **31 Engine replay tests** pass (5.29s),
+including seven physical-fragment tests, exact source/scope refusal, missing
+inputs, bitwise endpoint comparisons, reused scratch and four-worker equality.
+Strict optional-PoB and Engine Clippy pass (3.04s and 0.41s). Independent source,
+numeric and integration reviews found no remaining issue. Logs:
+`runs/owned-enemy-flat-{author-03,source-regressions-01,clippy-01}.log`,
+`runs/owned-enemy-flat-native-01.log` and
+`runs/owned-enemy-flat-engine-clippy-01.log`.
+
+The existing Rust publication binary was rerun against unchanged current CLI
+code: all **seven tests pass** (48.56s), including all-five normalization,
+selected requests and Party controls. A separate comparison confirms all 18
+rebuilt package files are byte-identical to the canonical package; the tracked
+replay gzip is unchanged. Evidence:
+`runs/owned-enemy-flat-cleanup-regression-01.log`, its `validation.json` and
+`runs/owned-enemy-flat-package-inverse-01.log`.
+
+**Canonical package remains:**
+`runs/owned-combined-added-attack-publication-04/package`, input
+`690169b8e0303ca02ae9a49139a8446c6b470675c28914e7f06e69e09b4d8a54`.
+Definitions `efa0011ada155c02318c3243315e6e93793a44dadf90e2c917651ab7113dfc20`,
+rules `6a81f88031e0f3b6b3a1e60d4cfa2edd6c9979afa49aed1d2a6857cbaf64b6d5`,
+compiled rules `ee8bf2aba8eed0b3742d848703cef87950e05ae537144d49d009f79515e583ee`,
+routing `c34584136d3bffa6f4f2124795bbcf9c99dd94a2d09f7a560a2302946a222ef1`.
+There are 172 provenance records, 110 saved queries and no evaluation bundle.
+All 5,825 Partial rule owners and route/global query gaps remain. Selected
+obligations remain **106/117/109/123/4**.
+
+**Resume: finish Original05 first, following the saved-query map above.**
+
+1. Implement the two self-flat collections through the existing checked graph.
+   The unchanged selected build has no actual flat donor: Sniper quality/support
+   inputs, Offering, Gigantic and selected passive damage affect other channels.
+   This observation is not a universal empty-domain certificate. Authenticate
+   the composed selected sources and all applicability gates; do not write a
+   Sniper-specific zero program or reinterpret increased/MORE as flat damage.
+2. Cover real potential flat sources: support/stat-map and MinionModifier
+   payloads, global buffs, Tactician/Companion parent-weapon transfer, Rallying Cry,
+   Hollow Palm and Party. Preserve actual origin and Action eligibility, zero
+   and inactive potential members, ordered reduction and incomplete-coverage
+   refusal. Reuse the retained 3–7, explicit-zero and Full-Life off/on controls;
+   changed support, aura, parent or Party inputs must invalidate a claimed empty
+   selected domain. Publish the physical consumer only with actual suppliers
+   and its source/input gates, not injected test values.
+3. Resolve the already-prompted numerical-domain and configuration-accounting
+   decisions before their dependent resource/admission work. Continue final
+   Player Mana/Life and input inventories `01f2/0505/0207/0208`. Preserve Party
+   accounting when closing configuration. Actor-to-Enemy reads, resource demand
+   and scoped coverage remain unapproved; this cleanup authorizes none of them.
+4. Begin D4 as soon as the first complete unchanged request, full saved metrics
+   and reference availability/value checks pass. Keep the other four originals
+   as regressions without developing every build in lockstep.
 
 ## Archived 2026-10-09 checkpoint: combined added damage and source cleanup
 

@@ -29,8 +29,10 @@ rule DAG. It accepts an expression and an explicit inclusive numeric range,
 reusing the existing IntegerRange and QuantityRange representations. Its result
 has exactly the input's type and, for quantities, exact unit.
 
-- A known value inside the declared range passes through unchanged, including
-  zero and its sign. The operator does not clamp, convert units or round.
+- A known value inside the declared range passes through unchanged within the
+  existing canonical numeric representation. `FiniteQuantity` already represents
+  either signed zero as positive zero, including after arithmetic. The operator
+  does not introduce another normalization, clamp, unit conversion or rounding.
 - A known value outside the range produces an explicit unsupported-domain
   diagnostic. Consumers cannot use it as zero, absence or an inactive mechanic.
 - Missing inputs, upstream unavailability and numerical failures remain distinct
@@ -42,8 +44,9 @@ has exactly the input's type and, for quantities, exact unit.
   scratch. There is no Lua code, separate evaluator or game-specific branch.
 
 The implementation must use the current diagnostic and availability pipeline,
-with an explicit representation for the new domain failure if necessary. A
-failed game Requirement currently represents a different concept and is not a
+extending its currently table-specific unsupported-domain diagnostic to distinguish
+this numeric-range failure. A failed game Requirement currently represents a
+different concept and is not a
 substitute. A false effect guard also means inactivity, so it cannot stand in
 for a failed numeric-domain check.
 
@@ -58,7 +61,7 @@ not a hard-coded resource constant in the engine.
 | Option | Benefit | Cost |
 | --- | --- | --- |
 | **Checked numeric-domain expression — recommended** | Explicit availability, reusable across resource/timing/scaling formulas, typed and constant-work | Extends the public rule and diagnostic contract; requires compiler, stage and worker tests |
-| Prove every upstream source bound before adding each consumer | No new expression; strongest whole-domain static proof when obtainable | Delays consumers behind every supplier and composition limit; future source additions need new proofs, and unbounded computed types remain |
+| Prove every upstream source bound before adding each consumer | No new expression; strongest whole-domain static proof when obtainable | Delays consumers behind every supplier and composition limit; future source additions need new proofs, and the computed types alone do not establish mechanic-specific bounds |
 | Express PoB's add-half/floor sequence directly | Immediate exact reproduction of this source arithmetic | Carries an incidental large-number discrepancy into owned behavior; does not solve other supported-domain limits |
 
 This proposal changes no global rounding mode or game-legality rule. It does
@@ -70,7 +73,7 @@ remove redundant checks while preserving the declared semantics.
 1. Extend the current contract in place, invalidating affected plan identities;
    do not add a historical reader or parallel rule path.
 2. Check valid/reversed ranges, mismatched units/types, endpoint inclusion,
-   adjacent values, signed zero, finite extremes and malformed storage.
+   adjacent values, existing zero normalization, finite extremes and malformed storage.
 3. Preserve lazy evaluation, missing/unknown propagation, preparation readiness,
    stage dependencies and complete-request coverage. Demonstrate that a domain
    failure cannot be mistaken for a satisfied game constraint or a zero metric.

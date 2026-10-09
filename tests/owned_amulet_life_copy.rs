@@ -147,6 +147,49 @@ fn retained_copy_rules(w: &replay::ReplayInput, c: &family::Consumer) {
         );
     }
 }
+fn current_life_query(w: &replay::ReplayInput) -> ContributionQuery {
+    let path = family::root().join("data/owned/poe2/3887ae68/minion-inherent-life");
+    let bindings: Value =
+        serde_json::from_slice(&fs::read(path.join("bindings.json")).unwrap()).unwrap();
+    let program: RuleProgram =
+        serde_json::from_slice(&fs::read(path.join("program.json")).unwrap()).unwrap();
+    let query: ContributionQuery =
+        serde_json::from_slice(&fs::read(path.join("query.json")).unwrap()).unwrap();
+    let owner: SchemaSubject = serde_json::from_value(bindings["owner"].clone()).unwrap();
+    let actual: Vec<_> = w
+        .rules
+        .owners
+        .iter()
+        .filter(|o| o.owner == owner)
+        .flat_map(|o| o.programs.members.iter().filter(|p| p.id == program.id))
+        .collect();
+    assert_eq!(
+        actual,
+        vec![&program],
+        "retain the real minion Life producer"
+    );
+    let mut inverse = query.clone();
+    let inherent = inverse
+        .groups
+        .iter_mut()
+        .find(|g| g.id.as_str() == "inherent")
+        .unwrap();
+    assert!(inherent.members.is_complete());
+    assert_eq!(inherent.members.members.len(), 2);
+    let added = inherent.members.members.pop().unwrap();
+    let mut expected = json!(inherent.members.members[0]);
+    expected["producer"]["owner"] = json!(owner);
+    expected["producer"]["origin"] = json!({"kind":"supplied_actor","slots":[bindings["slot"]]});
+    assert_eq!(expected["producer"]["program"], json!(program.id));
+    assert_eq!(expected["producer"]["effect"], "inherent-life");
+    assert_eq!(json!(added), expected);
+    assert_eq!(
+        inverse,
+        family::consumer().query,
+        "only the exact supplied-Actor inherent membership extends the historical query"
+    );
+    query
+}
 fn world() -> replay::ReplayInput {
     let mut w = replay::ReplayInput::decode(
         &fs::read(family::root().join("tests/fixtures/owned-sniper-replay.json.gz")).unwrap(),
@@ -183,7 +226,7 @@ fn world() -> replay::ReplayInput {
     // scheduling declarations. Assert their identity instead of reinserting them
     // or silently accepting a conflicting implementation from a newer fixture.
     retained_copy_rules(&w, &c);
-    let mut query = c.query;
+    let mut query = current_life_query(&w);
     // Only this finite component's controlled input cases assert equipment
     // closure. Publication retains the actual Partial domain and order gap.
     query
@@ -611,6 +654,33 @@ fn current_partial_coverage_missing_membership_and_stage_refusals_remain() {
         .rebind_test_edit()
         .and_then(|_| missing.compile().map(|_| ()));
     assert!(error.is_err(), "inactive source must still be listed");
+    let mut missing_minion = world();
+    let inherent = missing_minion
+        .rules
+        .contribution_queries
+        .as_mut()
+        .unwrap()
+        .members
+        .iter_mut()
+        .find(|q| q.id.as_str() == "life-base-contributions")
+        .unwrap()
+        .groups
+        .iter_mut()
+        .find(|g| g.id.as_str() == "inherent")
+        .unwrap();
+    assert_eq!(inherent.members.members.len(), 2);
+    let removed = inherent.members.members.pop().unwrap();
+    assert!(matches!(
+        removed.producer.as_program_effect().unwrap().origin,
+        ContributionOrigin::SuppliedActor { .. }
+    ));
+    assert!(
+        missing_minion
+            .rebind_test_edit()
+            .and_then(|_| missing_minion.compile().map(|_| ()))
+            .is_err_and(|error| error.contains("actual contribution has no declared membership")),
+        "the zero-valued minion source remains mandatory even for an equipment-only read"
+    );
     let mut early = world();
     early
         .stages
@@ -669,7 +739,12 @@ fn published_partial_equipment_query_cannot_be_read_as_a_known_total() {
     };
     assert_eq!(total(report(w.clone())), known(107.));
     let actual = family::consumer().query;
-    w.rules
+    let equipment = actual
+        .groups
+        .into_iter()
+        .find(|g| g.id.as_str() == "equipment")
+        .unwrap();
+    *w.rules
         .contribution_queries
         .as_mut()
         .unwrap()
@@ -677,7 +752,10 @@ fn published_partial_equipment_query_cannot_be_read_as_a_known_total() {
         .iter_mut()
         .find(|q| q.id == actual.id)
         .unwrap()
-        .groups = actual.groups;
+        .groups
+        .iter_mut()
+        .find(|g| g.id.as_str() == "equipment")
+        .unwrap() = equipment;
     let partial = report(w);
     assert!(matches!(
         partial.outcome,

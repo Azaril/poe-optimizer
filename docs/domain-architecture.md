@@ -370,6 +370,24 @@ real such source, prove action independence or review its explicit delivery to
 exact Actions through the shared graph. Keep raw PoB query configuration offline;
 neither a second modifier interpreter nor an unchecked global sum is authorized.
 
+The same distinction applies to modifiers carried by the acting Actor. Storage
+under a PoB parent modifier list does not by itself require a new native delivery
+contract. An explicitly reviewed source family whose value and eligibility are
+independent of the consuming Action can use a checked exact-Actor subtotal and
+an ordinary Action read, as existing damage rules already do. A receiving-Actor
+condition may fit that model; a skill-specific override of that condition, attack
+selection, hand, part, mode or stat set does not. Prove the admitted family and
+its source coverage before aggregating away individual eligibility. Keep local
+and inherited numeric groups separate where their reduction order matters.
+
+Source-conditional controls do not automatically establish obtainable item or
+support mechanics. Keep their provenance, external-input obligations and actual
+recipient binding explicit. The accepted Action self-contribution contract does
+not authorize relabeling inherited or support producers as self-sources. Adopt
+an additional source-to-Action binding only when a required concrete family
+demonstrates that the existing Actor path is insufficient, and review that
+ownership change before implementation.
+
 Minion resource modifiers use the same source/recipient graph. A passive writes
 one contribution at its exact allocation; an admitted Actor relation reads the
 frozen incoming channel and emits one contribution for each exact recipient.

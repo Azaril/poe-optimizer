@@ -20,6 +20,23 @@ independently closable by checking Config alone: the current obligation also
 guards otherwise unaccounted source outside Config. The evidence below does not
 justify completing scenario usage or assumptions.
 
+**Current state (2026-10-09):** Original05 retains four selected input
+obligations: configuration `01f2` with 36 linked source origins, preset usage
+`0505` with 23 known preferences, external assumptions `0207` with 17 known
+members, and scenario usage `0208` with an empty Pending list. Known members
+do not certify complete inventories. The proposed configuration authority is
+still unimplemented; retiring shared `01f2` requires accounting for every
+remaining Config and outside-Config origin, including Party.
+
+[Requested participation](owned-skill-participation-proposal.md) and
+[composed support discovery](owned-support-origin-composition-proposal.md) are
+accepted and implemented. They do not complete the remaining global-switch,
+reporting or default-input inventories. Authored support issue `01de` is retired;
+the current usage issue is `0505`. The dated evidence below preserves earlier
+issue IDs, source-link counts and sidecar formats as historical observations.
+Use the [current delivery gates](implementation.md#complete-build-delivery-gates)
+for implementation order and the current package.
+
 ## Evidence and current boundary
 
 The 2026-10-07 resistance-penalty checkpoint supplies a real Player assumption
@@ -346,14 +363,13 @@ Core/Engine model is needed for field non-applicability. Contrast Tree and Item
 grants with a same-definition manual source; reject dormant/unproved providers,
 new effects, Vaal/global-effect cases, late-discovered tags and incomplete pins.
 
-Actual activation remains a separate checkpoint: usage programs inherit provider
-activation gates and cannot safely write the same gate they require to execute
-(`owned_plan/compile/usage.rs:39–60`, `compile.rs:1939–1950`). Establish the
-consumer/dependency order before extending activation; preserve one occurrence
-graph. The [participation proposal](owned-skill-participation-proposal.md) separates
+This investigation identified an activation cycle risk: a usage program cannot
+safely write the gate it requires to execute. The accepted and implemented
+[participation contract](owned-skill-participation-proposal.md) separates
 mechanical supply from an explicit requested execution requirement while reusing
-typed usage. It awaits an owner decision. Full DPS likewise needs its own
-reporting consumer.
+typed usage and one occurrence graph. Its remaining family and coverage work is
+recorded in that ADR and the current implementation plan. Full DPS still needs
+its separate reporting consumer.
 
 Further source review found an open reachability path beyond catalog stat lists:
 `CalcActiveSkill.lua:795` passes `ExtraSkillStat` values from the skill modifier
@@ -804,7 +820,9 @@ accounting implementation reuses the already-compiled topology/selector checks
 through a private inspection seam after exact generated-provider proof. It does
 not construct a Direct request or relax public manual-source authority. Unproved
 reference fields keep the whole pair's fallback. All-five accounting validation
-passed; the separate participation contract is accepted with implementation open.
+passed. The separate [participation contract](owned-skill-participation-proposal.md)
+is now implemented; its input and rule coverage is independent of this historical
+accounting proof.
 
 Acceptance tests must cover Tree and Item positives; repeated/manual/generated
 identity separation; absent versus empty or literal `nil` source; unknown or
@@ -848,11 +866,14 @@ known input. The [accepted accounting design](owned-generated-skill-dispositions
 records the strict source-frame, type, selector, duplicate and retained-owner
 gates; the implementation plan records executed all-five results.
 
-This does not generalize to every archived source. Unknown Warrior correspondence
-and Firebolt's absent Pending usage witness retain fallback. No Config field,
-container, external assumption or scenario usage inventory is completed by this
-change. Global `01f2` remains live until every remaining contributor has its real
-owner or a proven source-only disposition.
+This does not generalize to every archived source. At that checkpoint, unknown
+Warrior correspondence and Firebolt's absent Pending usage witness retained
+fallback. The later Warrior correspondence checkpoint accounts for eight more
+origins; Firebolt still lacks the required Pending usage witness. See the
+[current implementation](implementation.md) for that successor evidence. Neither
+change completes a Config field, container, external assumption or scenario
+usage inventory. Global `01f2` remains live until every remaining contributor
+has its real owner or a proven source-only disposition.
 
 ### Overwritten raw-override placeholders (2026-10-07)
 
@@ -943,7 +964,10 @@ scalar must not erase both meanings. Existing distance source controls can be
 reused. The shared configuration frame proves structure, not semantic closure:
 it admits well-framed unknown names and custom blocks. Config/ConfigSet and
 complete assumptions/usage remain unresolved until every responsibility is owned.
-Support-origin composition and FullDPS reporting remain separate design decisions.
+[Support-origin composition](owned-support-origin-composition-proposal.md) is
+accepted and implemented; remaining owner-domain coverage is separate from
+configuration accounting. FullDPS reporting still needs its own ownership and
+consumer decision.
 
 ### Default-encounter branch dispositions (2026-10-07 investigation)
 
@@ -979,10 +1003,12 @@ inventory obligation. Test changed finite values independently of saved 70,
 missing/wrong guards, selector writes in every lane (including explicit `None`),
 multiple ConfigSets, ambiguity, source updates and bounded-work failures.
 
-For current Original05, such a proof would account for one source leaf only;
-the five selected input obligations would remain. The critical consumer and
-already approved Sand preparation remain more useful immediate implementation
-work. This investigation does not authorize full configuration closure.
+Such a proof would account for one source leaf only. The five selected input
+obligations at this investigation's checkpoint would remain; the current four
+obligations likewise cannot be closed by this leaf proof. Follow the
+[current delivery gates](implementation.md#complete-build-delivery-gates) for
+the next numerical and input-admission work. This investigation does not
+authorize full configuration closure.
 
 ## Proposed Import contract
 
@@ -1133,8 +1159,11 @@ is accepted. It updates the sole current generated-input policy in place and
 runs field accounting independently of successful raw-quality/count imports.
 The owner explicitly declined a compatibility branch: reimport affected builds
 and regenerate evidence instead of preserving old V1 behavior beside a V2.
-Current generated-policy output uses sidecar21; the CLI reports its version and
-SHA256 of the exact written bytes. Declarative policy identities and draft values
-remain separate from that evidence contract. The completed all-five comparison
-and exact changed origins are recorded above. Preset-owned input bindings and the separately accepted participation contract
-retain their existing responsibilities.
+Current imports with configuration-input policy use sidecar23; generated-input
+policy without configuration inputs uses sidecar22. The earlier sidecar21
+receipts above remain historical evidence. The CLI reports the actual version
+and SHA256 of the exact written bytes. Declarative policy identities and draft
+values remain separate from that evidence contract. The completed all-five
+comparison and exact changed origins are recorded above. Preset-owned input
+bindings and the accepted, implemented participation contract retain their
+existing responsibilities.

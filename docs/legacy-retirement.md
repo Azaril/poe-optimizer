@@ -64,6 +64,16 @@ adding a Lua compatibility rule or changing numeric semantics. Source and native
 validation pass; the canonical package, input obligations and whole-build
 coverage remain unchanged.
 
+**Self-flat collection, 2026-10-09:** the
+[new nonempty source census](../data/owned/poe2/3887ae68/self-flat-attack-damage/source-review.md)
+prevents extending the Enemy absence proof to real self additions. Keep source
+wrappers, dynamic factories, exact recipients and condition overrides in the
+offline review. Use existing Actor queries and Action routing for proved
+invariant families; do not introduce a parent-modifier-store interpreter or a
+second collector to mirror Lua topology. A new delivery authority requires a
+concrete necessary Action-sensitive source. Canonical-object counts and aliases
+are evidence, not native source membership; the two flat producers remain open.
+
 **External-modifier ingress, 2026-10-09:** the added-damage audit found that saved
 PoB Party payloads bypass ordinary modifier parsing. Keep their owned source
 rows linked to live selected obligations; a source proof needs an explicit
@@ -88,10 +98,12 @@ whole-build coverage gaps.
 data using ordinary quantities, Add and Scale, tested through the current native
 replay. No named skill kernel, duplicate damage evaluator, Lua callback or direct
 Enemy reduction is added. Raw source SkillData/weapon-selection observations stay
-offline. The draft's required bonus, flat, multiplier and coefficient operands
-are not supplied by a source report in production; unfinished producers remain
-unresolved. Keep action-dependent enemy eligibility distinct from shared Enemy
-facts when choosing the later source-delivery contract.
+offline. The later source audits removed the unnecessary bonus, coefficient and
+Enemy ports; the current draft reuses real intrinsic endpoints and the combined
+factor, with its two self-flat producers still unfinished. Source reports never
+provide production operand defaults. Before adding new delivery authority,
+distinguish Actor-invariant quantities from genuinely Action-sensitive sources;
+PoB parent-list storage alone is not a reason to add native machinery.
 
 **Leggings declarations, 2026-10-09:** reuse the Crown source-evidence checker
 with exact item selection rather than copying its observer or publication

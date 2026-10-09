@@ -11,6 +11,8 @@ mod coefficient;
 mod enemy_flat;
 #[path = "formatted_party_source_evidence.rs"]
 mod formatted_party;
+#[path = "intrinsic_self_flat_damage_evidence.rs"]
+mod self_flat;
 
 #[path = "../../../tests/support/owned_minion_attack_selection_evidence.rs"]
 mod retained;
@@ -139,6 +141,10 @@ struct Inventory {
     modifier_count: usize,
     modifier_name_counts: BTreeMap<String, usize>,
     all_modifiers: Vec<(String, Table)>,
+    // Serialize the flat census immediately. Only the bounded ancestor stack
+    // holds Lua handles; large caches do not exhaust the auxiliary ref stack.
+    physical_flat_records: Vec<Json>,
+    modifier_ancestors: Vec<(String, Table)>,
 }
 
 enum InventoryKey {
@@ -165,7 +171,9 @@ impl Inventory {
                     && (Some(meta.to_pointer() as usize) != self.allowed_stat_map_meta
                         || !path.ends_with("/statMap"))
                 {
-                    return Err(error("unreviewed catalog metatable behavior"));
+                    return Err(error(format!(
+                        "unreviewed catalog metatable behavior at {path}"
+                    )));
                 }
                 let pointer = table.to_pointer() as usize;
                 if let Some(previous) = self.seen.get(&pointer) {
@@ -173,9 +181,9 @@ impl Inventory {
                     return Ok(());
                 }
                 self.seen.insert(pointer, path.to_owned());
-                if matches!(table.raw_get::<Value>("name")?, Value::String(_))
-                    && matches!(table.raw_get::<Value>("type")?, Value::String(_))
-                {
+                let is_modifier = matches!(table.raw_get::<Value>("name")?, Value::String(_))
+                    && matches!(table.raw_get::<Value>("type")?, Value::String(_));
+                if is_modifier {
                     self.modifier_count += 1;
                     *self
                         .modifier_name_counts
@@ -192,6 +200,17 @@ impl Inventory {
                     ) {
                         self.all_modifiers.push((path.to_owned(), table.clone()));
                     }
+                    if matches!(
+                        table.raw_get::<String>("name")?.as_str(),
+                        "PhysicalMin" | "PhysicalMax"
+                    ) {
+                        let wrappers = self.modifier_ancestors.iter().map(|(path, record)| {
+                            Ok(json!({"path":path,"record":plain(Value::Table(record.clone()),0)?}))
+                        }).collect::<Result<Vec<_>>>()?;
+                        self.physical_flat_records.push(json!({"path":path,"record":plain(Value::Table(table.clone()),0)?,"wrappers":wrappers}));
+                    }
+                    self.modifier_ancestors
+                        .push((path.to_owned(), table.clone()));
                 }
                 if table
                     .raw_get::<Value>("name")?
@@ -246,6 +265,9 @@ impl Inventory {
                         Value::Table(meta),
                         depth + 1,
                     )?;
+                }
+                if is_modifier {
+                    self.modifier_ancestors.pop();
                 }
             }
             Value::Function(function) => self
