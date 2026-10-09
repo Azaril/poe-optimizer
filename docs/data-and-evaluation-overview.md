@@ -39,6 +39,13 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
+Ordinary native CI now includes a serialized replay of the joined Sniper
+component's public inputs. It repeats normal validation, preparation and
+execution; no private plan, scratch or PoB state is persisted. The compressed
+[test fixture](../tests/fixtures/owned-sniper-replay.md) retains explicit finite
+coverage boundaries and is not a production release or a complete build. Source
+acquisition, all-five import and broader artifact-backed tests remain separate.
+
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across
 groups and that generated-provider exclusions must be distinguished from the

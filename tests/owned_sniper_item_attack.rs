@@ -133,6 +133,38 @@ fn imported_selection(package: &std::path::Path) -> (Value, Value) {
     let selection = selected::selection(&xml, &output);
     (serde_json::from_slice(&bytes).unwrap(), selection)
 }
+
+#[test]
+#[ignore = "requires current release; exports checked public inputs for ordinary native CI"]
+fn export_joined_sniper_replay() {
+    let w = World::load();
+    let plan = w.plan();
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert!(report.gaps.is_empty());
+    assert!(matches!(
+        report.outcome,
+        SupportEffectsOutcome::Evaluated { .. }
+    ));
+    let snapshot = plan.snapshot();
+    let bytes = snapshot.encode();
+    let decoded = shared::replay::ReplayInput::decode(&bytes);
+    let replay = decoded.compile().unwrap();
+    assert!(replay.evaluate(&mut replay.new_scratch()).unwrap() == report);
+    let path = PathBuf::from(
+        std::env::var_os("POE_OPTIMIZER_TEST_SNIPER_REPLAY_OUTPUT")
+            .expect("explicit replay output file"),
+    );
+    assert!(
+        !path.exists(),
+        "do not overwrite an existing fixture implicitly"
+    );
+    std::fs::write(&path, bytes).unwrap();
+    eprintln!(
+        "checked public-input replay: {} ({} bytes)",
+        path.display(),
+        std::fs::metadata(&path).unwrap().len()
+    );
+}
 #[derive(Clone)]
 struct World {
     sniper: sniper::World,

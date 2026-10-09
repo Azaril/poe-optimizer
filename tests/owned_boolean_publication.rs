@@ -69,12 +69,14 @@ fn authored_passive_flags_are_source_bound_and_do_not_complete_missing_domains()
             poe_optimizer_core::owned_build::ParameterValue::Boolean(false)
         );
         assert!(!g.members.is_complete());
-        assert!(
-            g.members
-                .members
-                .iter()
-                .all(|m| m.order.is_none() && m.origin == ContributionOrigin::Allocation)
-        );
+        assert!(g.members.members.iter().all(|m| m.order.is_none()
+            && matches!(
+                &m.producer,
+                ContributionProducer::ProgramEffect(ProgramContributionProducer {
+                    origin: ContributionOrigin::Allocation,
+                    ..
+                })
+            )));
     }
     for (producer, source) in rules["producers"]
         .as_array()

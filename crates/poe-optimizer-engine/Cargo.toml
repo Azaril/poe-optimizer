@@ -17,6 +17,7 @@ serde = { version = "1", features = ["derive"] }
 poe-optimizer-data = { path = "../poe-optimizer-data", default-features = false }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
+flate2 = { version = "1", default-features = false, features = ["rust_backend"] }
 mlua = { version = "=0.12.1", features = ["luajit", "vendored"] }
 sha2 = "0.10"
 serde_json = { workspace = true }

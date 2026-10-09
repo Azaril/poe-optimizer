@@ -977,9 +977,11 @@ mod native {
                     .members
                     .iter()
                     .find(|m| {
-                        m.owner == invocation.owner
-                            && m.program == invocation.program
-                            && m.effect == effect.key.effect
+                        m.producer.as_program_effect().is_some_and(|producer| {
+                            producer.owner == invocation.owner
+                                && producer.program == invocation.program
+                                && producer.effect == effect.key.effect
+                        })
                     })
                     .unwrap();
                 actual.push((

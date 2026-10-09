@@ -33,7 +33,11 @@ use std::{
     sync::{Arc, OnceLock},
 };
 
-pub type Plan = OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>;
+// Most finite consumers execute the retained plan without exporting a replay.
+#[allow(dead_code)]
+#[path = "owned_plan_replay.rs"]
+pub mod replay;
+pub use replay::RetainedPlan as Plan;
 /// Explicit opt-in components for joined finite fixtures. Historical worlds use
 /// the empty defaults and retain their existing stage and input configuration.
 pub struct PlanComponents {
@@ -1467,6 +1471,7 @@ impl World {
             },
             Default::default(),
             Default::default(),
+            stored,
         )
         .map_err(|e| e.to_string())
     }

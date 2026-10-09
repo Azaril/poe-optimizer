@@ -460,6 +460,7 @@ name = "poe-optimizer-cli"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "flate2",
  "getrandom",
  "poe-optimizer-core",
  "poe-optimizer-data",
@@ -500,6 +501,7 @@ dependencies = [
 name = "poe-optimizer-engine"
 version = "0.1.0"
 dependencies = [
+ "flate2",
  "mlua",
  "poe-optimizer-core",
  "poe-optimizer-data",

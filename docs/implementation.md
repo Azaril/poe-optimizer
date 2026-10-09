@@ -158,16 +158,10 @@ cover quality/status/coverage failures and fresh/reused A–unknown–B–A/four
 execution with independent quality values. Existing source, membership, stage,
 storage-order and duplicated-source checks also exercise the new consumer.
 
-Ordinary CI replay remains follow-up work. An attempted reuse of the older
-unstaged minion component fixture was rejected by the current checked-readiness
-gate (`operation v16 requires checked readiness stages`). That experiment was
-withdrawn from test discovery, and its shared-helper change was reverted; no
-production admission rule was relaxed. Reuse the joined graph's checked public
-inputs for a reproducible CI fixture, or provision its release in CI. Do not
-duplicate the staged orchestration or count scalar-only tests as joined coverage.
-The failed experiment is retained locally under
-`runs/owned-minion-more-ci-experiment.rs`; logs are
-`runs/owned-minion-more-ci-01.log` and `runs/owned-minion-more-ci-02.log`.
+Ordinary CI now replays this joined component from checked public inputs, as
+described below. The rejected attempt to reuse an older unstaged fixture was
+withdrawn without relaxing admission. Its local experiment and failure logs
+remain under `runs/owned-minion-more-ci-*`; it is not an alternate test path.
 
 Current package: `runs/owned-mixed-minion-damage-publication-06/package`.
 Input `6a365378322411f6c4864a382941bb438a90d53edcd196114b565188a515016c`;
@@ -198,6 +192,64 @@ rounding boundary: deliberate in PoB, independently unconfirmed as game behavior
 Owned data retains its observed arithmetic without importing store ancestry or
 Lua empty-table semantics. Latest checked hosted CI for pushed HEAD
 `fa8104a` remains pending (run `37870692916`); no hosted success is claimed.
+
+## Current validation checkpoint: reproducible joined native replay
+
+The [Sniper replay fixture](../tests/fixtures/owned-sniper-replay.md) makes the
+existing joined component runnable in ordinary Engine CI without a local release
+directory or PoB execution. It retains real item/source preparation, exact
+recipient occurrences, Offering stacking and the mixed increased/MORE consumers.
+It does not substitute final-input literals or bypass current readiness checks.
+The existing test world's finite closures and exclusions remain explicit test
+boundaries; the four selected input obligations and **0/5 complete builds** are
+unchanged. No production rule, admission contract or release artifact changed.
+
+The exporter retains the original validated rule artifact alongside the existing
+fixture's immutable public inputs. Replaying a compiler-normalized copy first
+failed the stage identity check, correctly exposing that those are different
+artifacts. The completed path keeps the original identity and passes all normal
+Core/Data/Engine constructors. It stores no private plan, result or scratch.
+Gzip reduces 5,315,517 JSON bytes to 135,637 bytes using the already-locked Rust
+backend as a test-only dependency; no new dependency version is introduced.
+
+Four ordinary Engine checks pass in **0.69s** with default features disabled and
+**0.68s** in the final all-feature run: current damage-program/query and
+Gigantic/population dependency correspondence; independent
+quality and source removal; duplicate/inactive/missing Offering behavior; full
+report equality across fresh/reused scratch and four workers; deterministic
+fixture encoding and stale artifact rejection. The checks use retained source
+vectors for expected numbers. Evidence: `runs/owned-sniper-replay-engine-01.log`
+and `runs/owned-sniper-replay-engine-final-01.log`.
+The exporter independently compares the full replay result to the pre-export
+graph and passes in **28.98s** (`runs/owned-sniper-replay-export-04.log`).
+
+All **86 checks** in the existing Sniper target pass: 76 explicitly enabled
+artifact-backed checks in **40.34s**, including regeneration, and ten ordinary
+checks in **0.04s**. The regenerated gzip is byte-identical; its SHA-256 is
+`ca722f2f8e3e06cea205da19d23d6f277e88fb5e2494c99fa1a88157e98ea944`.
+Evidence: `runs/owned-sniper-replay-joined-01.log`,
+`runs/owned-sniper-replay-ordinary-01.log` and
+`runs/owned-sniper-replay-verification-01.json`.
+
+Strict all-feature Clippy passes for the replay Engine target and the CLI binary
+plus **all 198 tracked CLI test targets**. The broad check exposed stale accesses
+to the removed `ContributionMember` fields in the Boolean publication test and
+attribute-step source probe. Both now inspect the current typed program producer;
+no compatibility field was restored. Their three ordinary authored-data checks
+also pass; historical artifact-backed tests in those targets were not rerun.
+Shared fixture consumers that do not export snapshots explicitly permit unused
+replay helpers. Evidence: `runs/owned-sniper-replay-clippy-engine-01.log`,
+`runs/owned-sniper-replay-clippy-cli-03.log` and
+`runs/owned-sniper-replay-migration-tests-01.log`. Untracked incoming-critical
+drafts remain untouched and excluded from this tracked-target validation.
+
+This checkpoint does not claim hosted CI success or that the replay replaces
+all-five import, complete-build, source acquisition or the broader artifact-backed
+tests. **Resume:** the current Action authority proposal remains pending; implement
+it only after the owner's answer. Keep the closest-build priority and the actual
+usage/configuration and numerical coverage obligations intact. The ordinary CI
+replay follow-up is now complete, rather than another prerequisite to finishing
+the first real build.
 
 ## Preceding runtime checkpoint: checked application-group producers
 
