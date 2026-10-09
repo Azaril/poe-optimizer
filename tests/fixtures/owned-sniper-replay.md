@@ -67,3 +67,14 @@ identities; the finite graph's 922 definitions and 615 owners retain their
 contents. Actual Mana override component checks extend these public inputs in
 the existing CLI `owned_intelligence_mana` test, without adding Blood Magic's
 unfinished mechanics to this fixture's claimed coverage.
+
+Revalidation after the Ascendancy-root and generated-Warrior publications
+reproduces this exact fixture (30.03s; `runs/owned-sniper-replay-warrior-01.log`).
+It used input `d8a030ae8dd7f98b237511e010f654a89c87a9bf4d55fe52dfebff8d0857a8c0`.
+The final `runs/owned-warrior-correspondence-publication-07/package` reproduces
+seventeen artifact files from that provisional Publication03 package byte-for-byte.
+Only `release.json` differs: its input and final evidence-authoring digests
+reflect the reproduced Source04 witness after parent-harness formatting. All
+other receipt fields match, including definitions, rules and compiled identities.
+No fixture bytes changed.
+The current package is broader than this deliberately finite numerical graph.

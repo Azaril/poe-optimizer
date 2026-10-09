@@ -275,6 +275,23 @@ impl SourceActionCorrespondenceInput {
     pub(crate) fn is_minion(&self) -> bool {
         self.minion_fields().is_some()
     }
+    /// Exact immutable correspondence identity only. This does not transfer the
+    /// checked root's physical assignment or manual-source authority.
+    pub(crate) fn matches_generated_identity(
+        &self,
+        gem: &GemDefId,
+        source_identity: [&str; 4],
+        primary: &SkillDefId,
+    ) -> bool {
+        let [game_id, variant_id, skill_id, name_spec] = source_identity;
+        let fields = self.fields();
+        fields.gem == gem
+            && fields.game_id == game_id
+            && fields.variant_id == variant_id
+            && fields.skill_id == skill_id
+            && fields.name_spec == name_spec
+            && fields.primary == primary
+    }
     pub(crate) fn matches_direct(
         &self,
         catalog_gem: &GemDefId,

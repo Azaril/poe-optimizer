@@ -1,4 +1,4 @@
-> Historical snapshots through the first Player Life consumer witness on 2026-10-08.
+> Historical snapshots through the implicit Ascendancy-root checkpoint on 2026-10-09.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -23448,3 +23448,56 @@ by the current loader. The current all-five test is `owned_boolean_publication`.
 Import ownership/disposition regressions and shared authentication helpers remain
 maintained. Earlier reproduction commands in this history describe their saved
 checkpoint, not a request to retain a historical loading mode.
+
+## Archived 2026-10-09 checkpoint: implicit Ascendancy root
+
+The [Ascendancy-root packet](../data/owned/poe2/3887ae68/ascendancy-start-root/README.md)
+retires the empty default program inventory and seven intrinsic declaration
+inventories of Original05's implicit passive `1b5d` (source `8305`). It adds no
+definitions or numerical programs. Class `0a23`, Ascendancy `0a36`, shared Player
+`332a`, external transformations and all other owners retain their coverage.
+The thirteen explicitly selected Partial passive owners remain unresolved;
+this root is a separate implicit provider.
+
+The existing original-constructor witness now handles both Class and Ascendancy
+roots. Twelve full loads pass in 23.68s across JIT modes. It records a real
+source distinction: the selected Ascendancy root has its own freshly processed
+modifier list, with the same empty intrinsic content as the prototype. Native
+ownership does not adopt that source object-copy behavior. Historical driver
+and observer bytes remain non-executable evidence; there is one current witness.
+
+Six ordinary tests pass in 0.01s, covering exact inventory/ownership, unknown
+fields, hidden modifiers and topology changes. The first publication rejected
+two signed zeros accidentally rewritten during JSON authoring; the projection
+now preserves the exact original number tokens. The strict comparison was not
+relaxed. Publication02 passes in 30.80s: all five drafts, selections, source
+sidecars, 110 queries and unresolved counts remain unchanged; the eighteen-file
+release rebuilds byte-identically. No evaluation bundle is added. Independent
+review also corrected geometry dispositions to preserve their relevance to
+external radius transformations. Strict all-feature Clippy passes for the
+publication and source targets (`runs/owned-ascendancy-start-root-clippy-01.log`
+and `runs/owned-implicit-roots-clippy-01.log`).
+
+The canonical package is **`runs/owned-ascendancy-start-root-publication-02/package`**:
+
+- Input: `d22618ec692e1d76d683e92cb623aebe5939d034681eb6876caafdfd10b20f84`
+- Definitions: `54d692c16b3c19b33fcc9cd565328bd93aa30f633b96a56dbea1063010d8389b`
+- Rules: `3401f86bcfc6bd7188dae48204b9e030b7943b282972615730b65235c862a46b`
+- Compiled rules: `936593a95a8ce1b28d8c1d7a53bd0d12842fa9b223050ecd30f8817f71cee25c`
+
+Operations remain V27; no IDs were allocated. Complete native builds remain
+**0/5**, with selected input obligations **107/117/109/123/4**. Evidence:
+`runs/owned-implicit-roots-source-03.log`,
+`runs/owned-ascendancy-start-root-native-01.log`, and
+`runs/owned-ascendancy-start-root-publication-02/validation.json`.
+
+**Next blocker work:** exact item-granted Skeletal Warrior correspondence for
+eight archived source rows currently attached to Original05's configuration
+fallback. Existing physical-gem selector/deferred-field proofs can be borrowed
+without transferring physical assignment authority. Preserve the twelve live
+raw/usage/support obligations and all numerical Partial owners; this work cannot
+retire the four selected issue IDs by itself. A separate agent is implementing
+the data and private proof reuse; validate/rebase against the canonical package
+above before adoption. Archived Firebolt needs a different proof because its
+usage inventory is Complete-empty. The numeric-domain decision below remains
+pending; do not implement it by assumption.

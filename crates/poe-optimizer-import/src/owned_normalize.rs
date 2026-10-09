@@ -2274,6 +2274,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         &draft,
         generated_skill_inputs.as_ref(),
         direct_skill_inputs.as_ref(),
+        gem_inventory.as_ref(),
         &generated_input_receipts,
         &usage_receipts,
     )?;

@@ -1,0 +1,54 @@
+[
+  {
+    "rule": "ranged-item-warrior-grant",
+    "all": [
+      {
+        "kind": "no_source_scaling_tags"
+      },
+      {
+        "kind": "initial_scaling_is_one"
+      },
+      {
+        "kind": "no_generated_buff_members"
+      },
+      {
+        "kind": "unsigned_integer_capture",
+        "value": {
+          "capture": "lower",
+          "min": 1,
+          "max": 20
+        }
+      },
+      {
+        "kind": "unsigned_integer_capture",
+        "value": {
+          "capture": "upper",
+          "min": 1,
+          "max": 20
+        }
+      }
+    ]
+  },
+  {
+    "rule": "fixed-item-warrior-grant",
+    "all": [
+      {
+        "kind": "no_source_scaling_tags"
+      },
+      {
+        "kind": "initial_scaling_is_one"
+      },
+      {
+        "kind": "no_generated_buff_members"
+      },
+      {
+        "kind": "unsigned_integer_capture",
+        "value": {
+          "capture": "level",
+          "min": 1,
+          "max": 20
+        }
+      }
+    ]
+  }
+]

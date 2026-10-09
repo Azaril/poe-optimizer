@@ -570,6 +570,15 @@ shared resolver serves exact generated raw inputs and occurrence usage; typed
 recipes independently decode each consumer's parameters. A usage importer cannot
 acquire physical inventory authority merely by sharing that decoder.
 
+A selector/topology proof may be reused across physical and generated source
+accounting only when every saved identity and the primary Skill match exactly.
+Conflicting or simultaneous proof origins are errors, even if their values
+agree. Borrowing that proof for generated accounting does not reclassify the
+Gem, create a physical assignment, manufacture a provider, or complete raw-input,
+usage or support inventories. Archived source records must retain their actual unresolved
+owners in the same preset; a Complete-empty inventory is not a substitute for a
+missing ownership proof. Keep these external source checks inside Import.
+
 Requested count, reporting inclusion, skill activation and actor population are
 different semantic responsibilities. A count parameter does not grant all four.
 The [damage-reporting investigation](owned-full-dps-aggregation-proposal.md)

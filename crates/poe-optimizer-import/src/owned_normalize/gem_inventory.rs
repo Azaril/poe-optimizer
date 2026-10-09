@@ -177,6 +177,24 @@ struct BoundGem<'p> {
     disposition: Option<dispositions::CompiledDisposition<'p>>,
 }
 
+impl CompiledGemInventory<'_> {
+    /// Borrow only the immutable selector/deferred-field proof. Generated
+    /// accounting never receives physical parameter-assignment authority.
+    pub(super) fn generated_proof(
+        &self,
+        row: &generated_skill_inputs::GeneratedSkillInputRule,
+    ) -> Option<(
+        &crate::owned_source_actions::SourceActionCorrespondence,
+        &skill_input_disposition::CompiledDeferredUsage,
+    )> {
+        self.gems
+            .get(&row.gem)?
+            .disposition
+            .as_ref()?
+            .generated_proof(row)
+    }
+}
+
 /// The independently reviewed physical inventory selects one usage policy.
 /// Other projections on the same primary never inherit this authority.
 #[derive(Clone, Copy)]

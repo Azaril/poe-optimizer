@@ -25,6 +25,18 @@ we do not wait for all five. Subsequent candidate changes need their own coverag
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
 
+The current [generated-skill correspondence packet](../data/owned/poe2/3887ae68/warrior-generated-correspondence/README.md)
+reuses an exact Import selector proof across saved physical and generated records.
+That reuse does not transfer physical assignment or provider authority. Eight
+archived Original05 records now point to their existing raw/usage/support owners;
+those owners remain unresolved. Original01's physical raw-input inventory closes
+independently, while its blocked item grant remains unadmitted. Recognizing the
+implicit line in Original05 also admits one existing adjacent Minion-level recipe;
+both exact modifier occurrences and their source ranges are preserved. No native
+calculation contract or new numerical rule is added. The all-five count is now
+106/117/109/123/4; full native builds remain 0/5. The selected Sniper replay is
+byte-identical, and the implementation plan records the next resource-coverage step.
+
 Ordinary native CI now includes a serialized replay of the joined Sniper
 component's public inputs. It repeats normal validation, preparation and
 execution; no private plan, scratch or PoB state is persisted. The compressed

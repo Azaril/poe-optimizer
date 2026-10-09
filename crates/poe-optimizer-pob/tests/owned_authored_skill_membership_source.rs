@@ -11,6 +11,8 @@ mod generated_skill_usage;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
+#[path = "support/warrior_generated_source.rs"]
+mod warrior_generated_source;
 
 use mlua::{Function, Lua, LuaSerdeExt, Value};
 use poe_optimizer_core::build_identity::BuildLineage;

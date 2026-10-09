@@ -117,6 +117,20 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
 }
 
 impl CompiledDisposition<'_> {
+    pub(super) fn generated_proof(
+        &self,
+        row: &generated_skill_inputs::GeneratedSkillInputRule,
+    ) -> Option<(&SourceActionCorrespondence, &CompiledDeferredUsage)> {
+        self.row
+            .reference_action
+            .matches_generated_identity(
+                &row.gem,
+                [&row.game_id, &row.variant_id, &row.skill_id, &row.name_spec],
+                &row.skill,
+            )
+            .then_some((&self.reference, &self.deferred))
+    }
+
     pub(super) fn is_minion(&self) -> bool {
         self.row.reference_action.is_minion()
     }
@@ -236,6 +250,57 @@ mod tests {
     use super::*;
     use crate::{build_instance::ImportedBuildInstance, decode_build};
     use poe_optimizer_data::owned_schema::*;
+
+    #[test]
+    fn physical_selector_reuse_requires_all_six_identity_fields_without_direct_authority() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(
+            "../../data/owned/poe2/3887ae68/warrior-generated-correspondence/disposition.json",
+        );
+        let disposition: PrimaryGemInputDisposition =
+            serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
+        let reference = &disposition.reference_action;
+        let SourceActionCorrespondenceInput::PobPhysicalSingletonMinionActionsV1 {
+            gem,
+            game_id,
+            variant_id,
+            skill_id,
+            name_spec,
+            primary,
+            ..
+        } = reference
+        else {
+            panic!("physical correspondence")
+        };
+        let identity = [
+            game_id.as_str(),
+            variant_id.as_str(),
+            skill_id.as_str(),
+            name_spec.as_str(),
+        ];
+        assert!(reference.matches_generated_identity(gem, identity, primary));
+        assert!(!reference.matches_direct(gem, identity, primary, &[]));
+        for field in 0..6 {
+            let mut changed = serde_json::to_value(reference).unwrap();
+            let key = [
+                "gem",
+                "game_id",
+                "variant_id",
+                "skill_id",
+                "name_spec",
+                "primary",
+            ][field];
+            if field == 0 || field == 5 {
+                changed[key]["key"] = serde_json::json!("foreign");
+            } else {
+                changed[key] = serde_json::json!("foreign");
+            }
+            let changed: SourceActionCorrespondenceInput = serde_json::from_value(changed).unwrap();
+            assert!(
+                !changed.matches_generated_identity(gem, identity, primary),
+                "{key}"
+            );
+        }
+    }
 
     const SOURCE: &str = r#"<PathOfBuilding2><Skills activeSkillSet="1"><SkillSet id="1"><Skill><Gem/></Skill></SkillSet><SkillSet id="2"><Skill><Gem/></Skill></SkillSet></Skills></PathOfBuilding2>"#;
 

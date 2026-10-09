@@ -132,66 +132,103 @@ resolve to archived exact witness bytes; fresh item-observation receipts identif
 the current extractor while retaining exact source/content/catalog comparisons.
 No production coverage gate, old-format reader or runtime fallback was added.
 
-These are local results, not a hosted-CI success claim. At 09:50 UTC, run
-`37900429666` still had four Windows CLI and two PoB jobs active; the `802ff10`
-run `37911319985` was queued. Completed logs contain the addressed failure
-families, including the already-fixed Mana duplicate address. Active logs were
-unavailable. Recorded compilation time was substantial (Windows Import 66m41s;
-Ubuntu CLI 34–48m per feature profile); no additional hang was established.
-Follow the next pushed revision's results and fix any newly observed failure.
+The repairs are pushed as `73d7e99`. These are local results, not a hosted-CI
+success claim. At 10:15 UTC, its run `37915896956` was queued behind
+`37900429666`, which still had three Windows CLI and two PoB jobs active. Newly
+completed Windows shard0 repeats only the repaired Crown failures; no new unique
+failure appeared. Active logs were unavailable. Compilation dominates much of
+the recorded time: that shard spent 68m19s and 67m00s compiling its two feature
+profiles. Follow the next pushed revision's results and fix new failures. Track
+compilation and repeated historical-publication costs in tooling cleanup without
+removing independent coverage or displacing the first complete native build.
 
-## Current implementation checkpoint: implicit Ascendancy root
+## Current implementation checkpoint: generated-skill correspondence
 
-The [Ascendancy-root packet](../data/owned/poe2/3887ae68/ascendancy-start-root/README.md)
-retires the empty default program inventory and seven intrinsic declaration
-inventories of Original05's implicit passive `1b5d` (source `8305`). It adds no
-definitions or numerical programs. Class `0a23`, Ascendancy `0a36`, shared Player
-`332a`, external transformations and all other owners retain their coverage.
-The thirteen explicitly selected Partial passive owners remain unresolved;
-this root is a separate implicit provider.
+The [Warrior packet](../data/owned/poe2/3887ae68/warrior-generated-correspondence/README.md)
+now replaces eight Original05 configuration-fallback links with their actual
+same-preset raw-input, usage and support obligations. Configuration origins fall
+from 44 to 36; all twelve live obligations and the four selected issue IDs remain.
+Private Import code reuses the existing exact physical selector/deferred-field
+proof without changing the Gem's role or manufacturing an assignment/provider.
+All six identity fields must agree, and ambiguous proof origins fail. No native
+Core/Data/Engine contract, runtime Lua path or numerical rule was added.
 
-The existing original-constructor witness now handles both Class and Ascendancy
-roots. Twelve full loads pass in 23.68s across JIT modes. It records a real
-source distinction: the selected Ascendancy root has its own freshly processed
-modifier list, with the same empty intrinsic content as the prototype. Native
-ownership does not adopt that source object-copy behavior. Historical driver
-and observer bytes remain non-executable evidence; there is one current witness.
+Original01's physical Warrior input inventory independently completes, removing
+one selected raw-input obligation. Its analogous item grant remains unadmitted:
+the recipe is recognized, but existing header/rune/lifecycle blockers remain.
+Original05's checked item layout admits two exact modifiers: the new raw Warrior
+grant and an existing global Minion-level modifier. The unchanged second recipe
+becomes usable after the implicit line is understood. Both complete raw rolls,
+their two identity allocations and their exact Item/ModRange links are proved;
+the item's parameters, modifier inventory and ordering remain Pending. Every new
+supported Actor declaration facet and numerical owner remains Partial. Actor
+parameters/sockets use the current schema's mandatory Complete-empty shape;
+this does not add those unsupported features or grant numerical coverage.
 
-Six ordinary tests pass in 0.01s, covering exact inventory/ownership, unknown
-fields, hidden modifiers and topology changes. The first publication rejected
-two signed zeros accidentally rewritten during JSON authoring; the projection
-now preserves the exact original number tokens. The strict comparison was not
-relaxed. Publication02 passes in 30.80s: all five drafts, selections, source
-sidecars, 110 queries and unresolved counts remain unchanged; the eighteen-file
-release rebuilds byte-identically. No evaluation bundle is added. Independent
-review also corrected geometry dispositions to preserve their relevance to
-external radius transformations. Strict all-feature Clippy passes for the
-publication and source targets (`runs/owned-ascendancy-start-root-clippy-01.log`
-and `runs/owned-implicit-roots-clippy-01.log`).
+Validation is complete:
 
-The canonical package is **`runs/owned-ascendancy-start-root-publication-02/package`**:
+- Source04: eight cases, 16 full loads per JIT mode, independent uninstrumented
+  controls and fixed rebuilds; 61.30s. Both 23,418,591-byte reports exactly reproduce
+  both Source03 reports after a formatting-only parent-module reorder. The
+  packet retains truthful current helper hashes and preserves all numerical bytes.
+- Eighteen private normalization tests and 25 existing physical/manual/minion
+  source-action regressions pass, preserving authority and refusal boundaries.
+- Publication07: six tests pass in 24.56s, including repeated fresh imports of
+  all five originals, exact draft/source/selection inverses, bounded-work failure
+  and recovery, 110 unchanged queries and an eighteen-file byte-identical rebuild.
+- Strict Clippy passes for Import, the publication target and source witness.
+  The joined native Sniper replay passes in 30.03s and reproduces the existing
+  compressed fixture byte-for-byte. Seventeen Publication07 artifact files equal
+  the provisional Publication03 input used by that replay. Only `release.json`
+  differs, in its input digest and final evidence-authoring digest after Source04;
+  every other receipt field is exact. No fixture replacement or repeated unchanged
+  numerical test run is needed.
 
-- Input: `d22618ec692e1d76d683e92cb623aebe5939d034681eb6876caafdfd10b20f84`
-- Definitions: `54d692c16b3c19b33fcc9cd565328bd93aa30f633b96a56dbea1063010d8389b`
-- Rules: `3401f86bcfc6bd7188dae48204b9e030b7943b282972615730b65235c862a46b`
-- Compiled rules: `936593a95a8ce1b28d8c1d7a53bd0d12842fa9b223050ecd30f8817f71cee25c`
+Retained failed publications caught an unsupported Actor facet representation
+and incorrect test assumptions about item admission, allocation count, numeric
+wire type and ModRange attribution. The final assertions account for the actual
+two source-bound modifiers and preserve every unrelated field; no coverage or
+identity comparison was relaxed. Independent review covers those corrections.
+Logs: `runs/owned-warrior-generated-source-04.log`,
+`runs/owned-warrior-normalize-unit-01.log`,
+`runs/owned-warrior-source-action-regressions-01.log`,
+`runs/owned-warrior-correspondence-publication-07.log`,
+`runs/owned-warrior-correspondence-clippy-01.log` and
+`runs/owned-sniper-replay-warrior-01.log`. Final source Clippy also passes in
+`runs/owned-warrior-source-clippy-03.log`.
 
-Operations remain V27; no IDs were allocated. Complete native builds remain
-**0/5**, with selected input obligations **107/117/109/123/4**. Evidence:
-`runs/owned-implicit-roots-source-03.log`,
-`runs/owned-ascendancy-start-root-native-01.log`, and
-`runs/owned-ascendancy-start-root-publication-02/validation.json`.
+The canonical package is **`runs/owned-warrior-correspondence-publication-07/package`**:
 
-**Next blocker work:** exact item-granted Skeletal Warrior correspondence for
-eight archived source rows currently attached to Original05's configuration
-fallback. Existing physical-gem selector/deferred-field proofs can be borrowed
-without transferring physical assignment authority. Preserve the twelve live
-raw/usage/support obligations and all numerical Partial owners; this work cannot
-retire the four selected issue IDs by itself. A separate agent is implementing
-the data and private proof reuse; validate/rebase against the canonical package
-above before adoption. Archived Firebolt needs a different proof because its
-usage inventory is Complete-empty. The numeric-domain decision below remains
-pending; do not implement it by assumption.
+- Input: `9299c4298a416886e4d4c748ff249f4633270cb8b6716e280d7cd77e535d9367`
+- Definitions: `c7d3b7b9b3752ffdf103dd59bd3945c040b5015bdd88541563a3f95e692ce6f6`
+- Rules: `88bb1c0ea69c5f2284c1c2ce11afc5d69e9d4da93284c693769c4f5f6830f2f1`
+- Compiled rules: `f446f51b2af3c44642d5b39473ec540bbd07d0a8a5fb889b4612a273e28dd03e`
+
+Operations remain V27; keys **335e–336a** were allocated. It has eighteen artifacts,
+166 provenance rows and no evaluation bundle. Complete native builds remain
+**0/5**; selected input obligations are **106/117/109/123/4**. Original05 remains
+first because this breadth improvement does not change the closest-build ranking.
+The detailed all-five census is
+`runs/owned-warrior-correspondence-publication-07/all-five-preservation.json`.
+
+**Resume:** pursue the selected Player resource-source coverage next. Check the
+complete selected source bodies and existing modifier/declaration inventories to
+authenticate neutral conversion/addition admission; empty contribution groups
+alone are not that proof. Final Mana arithmetic still awaits the numeric-domain
+decision below. Preserve the thirteen selected Partial passives, eight Partial
+item templates and all unrelated Actor/Class/skill gaps until independently closed.
+
+The remaining configuration origins comprise 21 Config-local and 15 external
+rows. Archived Firebolt `174/175` is a separate follow-up: its preset has Pending
+generated inputs/supports but Complete-empty usage, and no selector/deferred-field
+disposition. Investigate genuine archived usage responsibility under the accepted
+preset model before changing accounting. Keep accounting allocation-free; do not
+invent a Pending owner or physical/manual root. A reviewed absent-selector proof
+and complete usage-field evidence are independently required. New public
+disposition permissions or a relaxed ownership contract require discussion.
+Broader configuration closure still depends on the pending configuration design;
+these two rows alone would not retire a selected issue. The existing numeric-domain
+and configuration proposals are not approved by the Action/selection answers.
 
 ## Unpublished final Mana arithmetic
 
@@ -4084,6 +4121,9 @@ checkpoint:
 2. Rerun unchanged saved selections for all five originals; evaluate when admitted.
 3. Record exact data/source identities, commands, results and retained failures.
    Distinguish component evidence from whole-build and hosted-CI results.
+   Format evidence-producing Rust files before capture, including shared parent
+   modules. A later formatting change still changes a pinned file's bytes;
+   reproduce the witness or preserve its exact historical source before rebinding.
    After changing a current bundle or transition, regenerate its dependent
    provenance receipts and run their strict reproduction checks, even when the
    dependent numerical artifact is unchanged. A rule-admission change also needs

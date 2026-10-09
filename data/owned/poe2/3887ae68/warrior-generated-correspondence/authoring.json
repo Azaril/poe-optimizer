@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "before": "d22618ec692e1d76d683e92cb623aebe5939d034681eb6876caafdfd10b20f84",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "allocated_keys": [
+    "def.000000000000335e",
+    "def.000000000000335f",
+    "def.0000000000003360",
+    "def.0000000000003361",
+    "def.0000000000003362",
+    "def.0000000000003363",
+    "def.0000000000003364",
+    "def.0000000000003365",
+    "def.0000000000003366",
+    "def.0000000000003367",
+    "def.0000000000003368",
+    "def.0000000000003369",
+    "def.000000000000336a"
+  ],
+  "expected_archived_ordinals": [
+    185,
+    186,
+    246,
+    247,
+    351,
+    352,
+    418,
+    419
+  ],
+  "scope": {
+    "complete_generated_usage": false,
+    "numerical_warrior_coverage": false,
+    "complete_selected_build": false,
+    "physical_materialization_unchanged": true,
+    "archived_firebolt_unchanged": true
+  }
+}

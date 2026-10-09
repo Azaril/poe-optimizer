@@ -46,6 +46,30 @@ const SELECTOR_FIELDS: &[&str] = &[
     "skillMinionSkill",
     "skillMinionSkillCalcs",
 ];
+
+type SelectorProof<'a> = (
+    &'a crate::owned_source_actions::SourceActionCorrespondence,
+    &'a skill_input_disposition::CompiledDeferredUsage,
+);
+fn selector_proof<'a>(
+    row: &GeneratedSkillInputRule,
+    direct: Option<&'a direct_skill_inputs::CompiledDirectInputs<'_>>,
+    physical: Option<&'a gem_inventory::CompiledGemInventory<'_>>,
+) -> Result<Option<SelectorProof<'a>>> {
+    let direct = direct.and_then(|d| {
+        d.generated_selector_adapter(row)
+            .zip(d.generated_deferred_usage(row))
+    });
+    let physical = physical.and_then(|p| p.generated_proof(row));
+    unique_selector_proof(direct, physical)
+}
+fn unique_selector_proof<T>(direct: Option<T>, physical: Option<T>) -> Result<Option<T>> {
+    match (direct, physical) {
+        (Some(_), Some(_)) => invalid("ambiguous generated selector proof"),
+        (Some(proof), None) | (None, Some(proof)) => Ok(Some(proof)),
+        (None, None) => Ok(None),
+    }
+}
 fn saved_switch(row: &SourceEvidenceRow<'_>, name: &str, nil: bool) -> bool {
     matches!(value(row, name), None | Some("true" | "false"))
         || (nil && value(row, name) == Some("nil"))
@@ -127,6 +151,7 @@ pub(in crate::owned_normalize) fn account(
     draft: &DraftSessionInput,
     compiled: Option<&CompiledGeneratedInputs<'_>>,
     direct: Option<&direct_skill_inputs::CompiledDirectInputs<'_>>,
+    physical: Option<&gem_inventory::CompiledGemInventory<'_>>,
     inputs: &InputAccounting,
     usages: &[usage_inputs::MaterializedUsage],
 ) -> Result<()> {
@@ -179,9 +204,7 @@ pub(in crate::owned_normalize) fn account(
         };
         let bound = &compiled.rows[receipt.row];
         let row = &b.evidence.rows()[receipt.source.ordinal() as usize];
-        let children = if let Some(adapter) =
-            direct.and_then(|d| d.generated_selector_adapter(bound.row))
-        {
+        let children = if let Some((adapter, _)) = selector_proof(bound.row, direct, physical)? {
             let evidence = b.evidence;
             let Some(children) = account_reference(
                 b,
@@ -216,7 +239,15 @@ pub(in crate::owned_normalize) fn account(
             );
         }
     }
-    account_archived(b, draft, compiled, direct, &inputs.archived, &configuration)?;
+    account_archived(
+        b,
+        draft,
+        compiled,
+        direct,
+        physical,
+        &inputs.archived,
+        &configuration,
+    )?;
     Ok(())
 }
 
@@ -225,10 +256,10 @@ fn account_archived(
     draft: &DraftSessionInput,
     compiled: &CompiledGeneratedInputs<'_>,
     direct: Option<&direct_skill_inputs::CompiledDirectInputs<'_>>,
+    physical: Option<&gem_inventory::CompiledGemInventory<'_>>,
     inputs: &[ArchivedInput],
     configuration: &BTreeSet<DraftIssueId>,
 ) -> Result<()> {
-    let Some(direct) = direct else { return Ok(()) };
     for receipt in inputs {
         b.charge(1)?;
         let preset = &draft.skill_presets.members[receipt.preset];
@@ -252,15 +283,12 @@ fn account_archived(
         {
             continue;
         }
-        let Some(usage) = direct.generated_deferred_usage(bound.row) else {
+        let Some((adapter, usage)) = selector_proof(bound.row, direct, physical)? else {
             continue;
         };
         if !usage.prove_generated(b, row, group)? {
             continue;
         }
-        let Some(adapter) = direct.generated_selector_adapter(bound.row) else {
-            continue;
-        };
         let Some(children) = account_reference(
             b,
             row,
@@ -317,6 +345,20 @@ fn account_archived(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn ambiguous_selector_proofs_never_have_precedence_even_when_equal() {
+        assert!(unique_selector_proof(Some("same"), Some("same")).is_err());
+        assert!(unique_selector_proof(Some("direct"), Some("physical")).is_err());
+        assert_eq!(
+            unique_selector_proof(Some("direct"), None).unwrap(),
+            Some("direct")
+        );
+        assert_eq!(
+            unique_selector_proof(None, Some("physical")).unwrap(),
+            Some("physical")
+        );
+        assert_eq!(unique_selector_proof::<()>(None, None).unwrap(), None);
+    }
     #[test]
     fn materialized_receipts_require_exact_live_values_targets_and_single_binding() {
         let namespace = GameVersionNamespace::new("receipt-test", "one").unwrap();

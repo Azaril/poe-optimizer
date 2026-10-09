@@ -323,10 +323,10 @@ pub(super) fn inspect_generated_selectors(
     source: SourceOccurrenceId,
     context: ImportReferenceContext,
 ) -> Result<SourceActionInspection> {
-    require(
-        matches!(adapter.input.fields().root, RootAuthority::Direct { .. }),
-        "generated selector adapter topology",
-    )?;
+    // Both correspondence kinds have already validated their entire topology.
+    // Inspecting selectors transfers neither root authority nor an input proof;
+    // the normalizer independently proves a generated provider or live Pending
+    // responsibilities. In particular, this never calls physical assignment.
     let mut budget = Budget {
         used: adapter.work,
         maximum: adapter.limits.max_work,

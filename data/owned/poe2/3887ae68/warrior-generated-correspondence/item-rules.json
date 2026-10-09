@@ -1,0 +1,213 @@
+[
+  {
+    "id": "ranged-item-warrior-grant",
+    "pattern": [
+      {
+        "kind": "literal",
+        "value": "Grants Skill: Level ("
+      },
+      {
+        "kind": "numeric_capture",
+        "value": {
+          "capture": "lower",
+          "syntax": "integer",
+          "sign": "forbidden"
+        }
+      },
+      {
+        "kind": "literal",
+        "value": "-"
+      },
+      {
+        "kind": "numeric_capture",
+        "value": {
+          "capture": "upper",
+          "syntax": "integer",
+          "sign": "forbidden"
+        }
+      },
+      {
+        "kind": "literal",
+        "value": ") Skeletal Warrior Minion"
+      }
+    ],
+    "captures": [
+      {
+        "id": "lower",
+        "codec": {
+          "kind": "value",
+          "value": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "integer",
+              "value": {
+                "syntax": "integer"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "upper",
+        "codec": {
+          "kind": "value",
+          "value": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "integer",
+              "value": {
+                "syntax": "integer"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "emissions": [
+      {
+        "kind": "modifier",
+        "value": {
+          "definition": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000335e"
+          },
+          "rolls": [
+            {
+              "slot": {
+                "declaration": {
+                  "kind": "modifier",
+                  "definition": {
+                    "kind": "modifier",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000335e"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000335f"
+                }
+              },
+              "value": {
+                "kind": "interpolate_offset",
+                "value": {
+                  "lower": "lower",
+                  "upper": "upper",
+                  "quantum": {
+                    "kind": "integer",
+                    "value": 1
+                  },
+                  "rounding": "symmetric_half_offset"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "fixed-item-warrior-grant",
+    "pattern": [
+      {
+        "kind": "literal",
+        "value": "Grants Skill: Level "
+      },
+      {
+        "kind": "numeric_capture",
+        "value": {
+          "capture": "level",
+          "syntax": "integer",
+          "sign": "forbidden"
+        }
+      },
+      {
+        "kind": "literal",
+        "value": " Skeletal Warrior Minion"
+      }
+    ],
+    "captures": [
+      {
+        "id": "level",
+        "codec": {
+          "kind": "value",
+          "value": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "integer",
+              "value": {
+                "syntax": "integer"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "emissions": [
+      {
+        "kind": "modifier",
+        "value": {
+          "definition": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000335e"
+          },
+          "rolls": [
+            {
+              "slot": {
+                "declaration": {
+                  "kind": "modifier",
+                  "definition": {
+                    "kind": "modifier",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000335e"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000335f"
+                }
+              },
+              "value": {
+                "kind": "capture",
+                "value": "level"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,199 @@
+{
+  "gem": {
+    "kind": "gem",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000091a"
+  },
+  "game_id": "Metadata/Items/Gems/SkillGemSkeletalWarriorWeaponSkill",
+  "variant_id": "SkeletalWarrior",
+  "skill_id": "SummonSkeletalWarriorsPlayer",
+  "name_spec": "Skeletal Warrior",
+  "skill": {
+    "kind": "skill",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000329"
+  },
+  "provider": {
+    "kind": "item_modifier",
+    "modifier": {
+      "kind": "modifier",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000335e"
+    },
+    "skill_supply": {
+      "declaration": {
+        "kind": "modifier",
+        "definition": {
+          "kind": "modifier",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000335e"
+        }
+      },
+      "slot": {
+        "kind": "skill_grant_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003361"
+      }
+    },
+    "template": {
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001fe3"
+    },
+    "source_name": "New Item, Rattling Sceptre",
+    "name_lines": [
+      {
+        "index": 0,
+        "text": "Rarity: RARE"
+      },
+      {
+        "index": 1,
+        "text": "New Item"
+      },
+      {
+        "index": 2,
+        "text": "Rattling Sceptre"
+      }
+    ]
+  },
+  "saved_level": {
+    "id": "generated-source-matching-level",
+    "codec": {
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "whitespace": "exact",
+      "codec": {
+        "kind": "integer",
+        "value": {
+          "syntax": "integer"
+        }
+      }
+    },
+    "tiers": [
+      {
+        "selectors": [
+          {
+            "lane": "attribute",
+            "name": "level"
+          }
+        ],
+        "duplicates": "reject"
+      }
+    ],
+    "missing": {
+      "kind": "pending"
+    }
+  },
+  "provider_level": {
+    "kind": "modifier_roll",
+    "slot": {
+      "declaration": {
+        "kind": "modifier",
+        "definition": {
+          "kind": "modifier",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000335e"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000335f"
+      }
+    }
+  },
+  "parameters": [
+    {
+      "field": "quality",
+      "slot": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000329"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003363"
+        }
+      },
+      "value": {
+        "id": "generated-source-raw-quality",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          }
+        },
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "attribute",
+                "name": "quality"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        }
+      }
+    }
+  ]
+}

@@ -38,6 +38,18 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Generated selector proof reuse, 2026-10-09:** private Import accounting can
+borrow the existing physical correspondence and deferred-field proof when all
+six identities match. Keep one source resolver and explicit proof-origin
+ambiguity errors. This adds no second physical/generated importer, role alias,
+native source-type dependency or numerical evaluator. The optional Warrior
+witness reuses the current complete-source loader and retains its exact helper
+pins. Archived rows still require three actual same-preset Pending owners; the
+Firebolt Complete-empty usage case remains a separate unresolved investigation.
+The all-five publication retains exact source/identity deltas, including the
+existing Minion-level recipe enabled by a newly proven item layout. This is
+source-admission evidence, not closure of the item's remaining inventories.
+
 **Fixture and evidence maintenance, 2026-10-09:** the common support-source gate
 also applies to isolated numerical fixtures. Real Reward fixtures reuse published
 source-domain certificates; synthetic boundaries explicitly declare their finite
