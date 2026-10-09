@@ -21,6 +21,8 @@ pub const KIND: &str = "mixed-minion-damage";
 pub const PROGRAM: &str = "owned-minion-unconditional-damage-increase";
 pub const FACTOR: &str = "owned-minion-unconditional-increase-factor";
 pub const QUERY: &str = "owned-minion-applied-damage-increase";
+pub const MORE: &str = "owned-minion-unconditional-more-factor";
+pub const MORE_QUERY: &str = "owned-minion-unconditional-more-contributions";
 const FILES: [&str; 6] = [
     "authoring.json",
     "migration.json",
@@ -50,6 +52,13 @@ pub struct Dependencies {
     pub receivers: Vec<StatReceiver>,
     pub applications: DeclaredSet<EffectApplicationRule>,
     pub query_registry_closure: SchemaClosure,
+    pub source_programs: Vec<SourceProgram>,
+}
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SourceProgram {
+    pub owner: SchemaSubject,
+    pub program: RuleProgram,
 }
 pub fn migration() -> OwnedReleaseMigrationInput {
     read("migration.json")
@@ -81,7 +90,7 @@ pub fn check_authored() {
     );
     assert_eq!(
         a["scope"],
-        json!({"new_definitions":2,"new_programs":2,"new_receivers":2,"new_queries":1,"closed_existing_owners":0,"complete_damage_domain":false,"whole_build_parity":false})
+        json!({"new_definitions":2,"new_programs":3,"new_receivers":3,"new_queries":2,"closed_existing_owners":0,"complete_damage_domain":false,"whole_build_parity":false})
     );
     for name in FILES.iter().skip(1) {
         let b = fs::read(data().join(name)).unwrap();
@@ -102,8 +111,8 @@ pub fn check_authored() {
     assert_eq!(m.schema.len(), 2);
     assert!(m.tables.is_empty() && m.query_targets.is_empty() && m.evaluation.is_none());
     assert!(m.owners.is_empty() && m.receivers.is_empty());
-    assert_eq!(c.owners.len(), 2);
-    assert_eq!(c.receivers.len(), 2);
+    assert_eq!(c.owners.len(), 3);
+    assert_eq!(c.receivers.len(), 3);
     for (owner, receiver) in c.owners.iter().zip(&c.receivers) {
         assert!(owner.programs.is_complete());
         assert_eq!(owner.programs.members.len(), 1);
@@ -121,8 +130,8 @@ pub fn check_authored() {
     assert!(
         matches!(&p.reads[1].source, RuleReadSource::ContributionQuery { entity: RuleEntity::Current, query, group } if *query==key(QUERY) && *group==key("all"))
     );
-    // Only the mathematical multiplicative identity is literal. Build levels,
-    // passive amounts, Offering strength and expected results are not inputs.
+    // Literals express identity and the reviewed decimal rounding boundary.
+    // Build levels, passive amounts, Offering strength and quality remain inputs.
     let literals: Vec<_> = c
         .owners
         .iter()
@@ -133,11 +142,16 @@ pub fn check_authored() {
             _ => None,
         })
         .collect();
-    assert_eq!(literals.len(), 1);
-    assert_eq!(literals[0]["value"]["value"].as_f64(), Some(1.));
+    assert_eq!(
+        literals
+            .iter()
+            .map(|v| v["value"]["value"].as_f64().unwrap())
+            .collect::<Vec<_>>(),
+        [1., 100., 0.5]
+    );
     assert_eq!(c.owners[1].programs.members[0].id, key(FACTOR));
     let qs = queries();
-    assert_eq!(qs.len(), 1);
+    assert_eq!(qs.len(), 2);
     assert_eq!(qs[0].id, key(QUERY));
     assert_eq!(qs[0].contribution, ContributionKind::Add);
     assert_eq!(qs[0].groups.len(), 1);
@@ -161,6 +175,32 @@ pub fn check_authored() {
         (&g.family, &g.modifier),
         (&mapping.family, &mapping.modifier)
     );
+    let more = &c.owners[2].programs.members[0];
+    assert_eq!(more.id, key(MORE));
+    assert_eq!(more.context, RuleEntityKind::Actor);
+    assert!(
+        matches!(&more.reads[0].source, RuleReadSource::Stat { entity: RuleEntity::Current, stat } if stat.key().as_str() == "def.000000000000001d")
+    );
+    assert!(
+        matches!(&more.reads[1].source, RuleReadSource::ContributionQuery { entity: RuleEntity::Current, query, group } if *query == key(MORE_QUERY) && *group == key("sources"))
+    );
+    assert_eq!(qs[1].id, key(MORE_QUERY));
+    assert_eq!(qs[1].stat.key().as_str(), "def.000000000000330b");
+    assert_eq!(qs[1].contribution, ContributionKind::Multiply);
+    assert_eq!(qs[1].groups.len(), 1);
+    let group = &qs[1].groups[0];
+    assert_eq!(group.reduction, ContributionReduction::Product);
+    assert!(group.members.is_complete());
+    assert_eq!(group.members.members.len(), 1);
+    let producer = group.members.members[0]
+        .producer
+        .as_program_effect()
+        .unwrap();
+    assert_eq!(producer.program, key("gigantic-life-and-damage"));
+    assert_eq!(producer.effect, key("damage_more"));
+    assert!(
+        matches!(&producer.origin, ContributionOrigin::SuppliedActor { slots } if slots.len() == 1)
+    );
     check_source(false);
 }
 
@@ -173,7 +213,7 @@ pub fn vectors() -> Vec<Value> {
 pub fn check_source(full: bool) {
     let report = full.then(|| source_family::source_proof(&source_family::read("authoring.json")));
     let vs = vectors();
-    assert_eq!(vs.len(), 8);
+    assert_eq!(vs.len(), 12);
     for v in &vs {
         let records = v["records"].as_array().unwrap();
         let mut total = 0.;
@@ -195,6 +235,27 @@ pub fn check_source(full: bool) {
         }
         assert!(offering <= 1);
         assert_eq!(1. + total / 100., v["increased_factor"].as_f64().unwrap());
+        // The selected sources share one reviewed unconditional-damage rounding
+        // domain. This is not a universal rounding rule for every MORE channel.
+        let more = v["more_records"].as_array().unwrap();
+        let mut product = 1.;
+        for row in more {
+            let m = &row["mod"];
+            assert_eq!(m["name"], "Damage");
+            assert_eq!(m["type"], "MORE");
+            assert_eq!(m["flags"], 0);
+            assert_eq!(m["keyword_flags"], 0);
+            assert_eq!(row["value"], m["value"]);
+            assert!(
+                ["Gigantic", "Skill:SummonSkeletalSnipersPlayer"]
+                    .contains(&m["source"].as_str().unwrap())
+            );
+            product *= 1. + row["value"].as_f64().unwrap() / 100.;
+        }
+        assert_eq!(
+            (product * 100. + 0.5).floor() / 100.,
+            v["more_factor"].as_f64().unwrap()
+        );
         if let Some(report) = &report {
             let c = report["cases"]
                 .as_array()
@@ -227,6 +288,14 @@ pub fn check_source(full: bool) {
             assert_eq!(calls[0]["query_state_preserved"], true);
             assert_eq!(calls[0]["increased_records"], v["records"]);
             assert_eq!(calls[0]["increased_factor"], v["increased_factor"]);
+            let source_more = &calls[0]["more_records"];
+            if more.is_empty() {
+                // Normalize the observer's empty Lua table only at acquisition.
+                assert_eq!(source_more, &json!({}));
+            } else {
+                assert_eq!(source_more, &v["more_records"]);
+            }
+            assert_eq!(calls[0]["more_factor"], v["more_factor"]);
         }
     }
 }
@@ -248,6 +317,15 @@ pub fn assert_component(endpoint: &StagedOwnedRelease) {
     }
     for owner in c.owners.into_iter().chain(deps.owners) {
         assert!(r.rules.owners.contains(&owner));
+    }
+    for source in deps.source_programs {
+        let owner = r
+            .rules
+            .owners
+            .iter()
+            .find(|o| o.owner == source.owner)
+            .unwrap();
+        assert!(owner.programs.members.contains(&source.program));
     }
     for receiver in c.receivers.into_iter().chain(deps.receivers) {
         assert!(r.rules.receivers.members.contains(&receiver));

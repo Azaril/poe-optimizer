@@ -106,78 +106,87 @@ these answers. Ask when one becomes the next necessary design boundary.
 ## Current data checkpoint: inherited and applied minion damage
 
 The [mixed minion damage packet](../data/owned/poe2/3887ae68/mixed-minion-damage/README.md)
-adopts the accepted V25 application-group query capability. It reads the existing
-inherited Actor stat `1d34` and the exact post-stacking `322d` group, deriving
-subtotal `3353` and multiplier `3354`. Two ordinary Stat receivers use the current
-one-final-stat contract. The formula is injected data: addition, percentage
-conversion and the mathematical identity one. Build selections and source values
-remain upstream; no runtime Rust change or source-name branch was needed.
+now derives the admitted unconditional MORE factor as well as the inherited/
+applied increased-damage subtotal. It reads existing projected quality factor
+`001d` and the checked Gigantic `330b` Multiply contribution, then derives the
+final factor on `330b`. It reuses V25 queries, the supplied-Actor membership and
+ordinary Stat receivers. All arithmetic remains injected data; production Rust,
+schema definitions and public contracts are unchanged by this extension.
 
-The new checked query declares the existing application/effect mapping and one
-numeric group position. Global application/query inventories, every prior owner
-closure, all input obligations and whole-damage coverage are preserved. The
-published receivers currently admit the existing Sniper Actor slot; this is an
-explicit data scope, not runtime build dispatch or proof of other actor families.
+Quality and Gigantic are independent sources in the reviewed unconditional
+damage group. Retained source controls expose a two-decimal product boundary:
+quality 1 with Gigantic yields 1.21, quality 20 yields 1.44, and removal leaves
+1.0 or 1.2 depending on quality. The consumer reads prepared quality rather
+than raw gem quality and expresses scale, half bias, floor and division as
+ordinary typed nodes. Missing projected quality or status remains unknown;
+incomplete query membership prevents evaluation. Duplicate flag sources still
+enable only one Gigantic benefit per recipient. This is not complete action
+damage coverage or a universal rounding rule for every MORE channel.
 
-Publication and all-five preservation pass in **28.47s**. Source authentication
-reuses the existing complete physical-damage reports; eight compact observations
-match both byte-identical JIT reports. The joined native consumer also matches
-those observations after real item preparation, passive receipt and Offering
-activation/stacking, including duplicate/unequal Offerings and the explicit
-two-node repair control. The initial integration run exposed a test-loader
-assumption that the new definitions were absent; the common loader already
-retained them. It now authenticates those exact definitions instead of inserting
-duplicates. The focused numerical check passes in **29.82s**.
+The same packet was rebuilt from the checked producer-format predecessor rather
+than retaining two packet formats or a new evaluator. It still allocates only
+`3353/3354` for the previously implemented increase subtotal/factor. Three Stat
+owners/receivers and two queries now compose the component. The exact upstream
+program dependencies are retained without copying unrelated Actor/Skill bodies.
+The provisional incoming-critical draft remains untouched; its old `3353–3364`
+identities are superseded and must be rebased if adopted. Next free allocation
+remains `3355`.
 
-Determinism checks distinguish request storage from authored data identity.
-Reordering selected allocations/preferences preserves the entire report.
-Reordering the authored query registry changes its committed package and plan
-identities; all other result fields must remain identical. The first full run
-passed 82 checks and exposed that overly broad identity assertion in the new
-permutation control. Comparing the complete failure reports confirmed that only
-the two reported plan identities differed. The revised control checks both the
-expected identity difference and exact equality of every effect, value, gap and
-application-group record. Repeated/fresh/reused/Rayon runs retain full-report
-equality requirements; no tolerance or retry-until-pass behavior was added.
+Publication and all-five preservation pass in **28.53s**. Twelve compact
+observations are authenticated against the existing byte-identical JIT source
+reports; they cover the original/replay, Offering levels/activation/stacking,
+passive removal, nonzero quality and Gigantic removal. These are expectations,
+not runtime inputs. All 18 artifacts reproduce byte-for-byte, 110 queries remain,
+and selected input counts remain **107/117/109/123/4**. Complete native builds
+remain **0/5**. Evidence: `runs/owned-mixed-minion-damage-publication-06.log` and
+its `validation.json`. Publication05 also passed; publication06 narrows only
+offline dependency evidence while retaining identical runtime rule identities.
 
-The complete joined target now passes **83/83 checks in 38.63s**, including four
-new mixed-consumer tests. Fresh/reused A–unknown–B–A execution and four-worker
-Rayon reports agree exactly. Evidence: `runs/owned-mixed-minion-damage-sniper-03.log`
-and `runs/owned-mixed-minion-damage-replay-01.log`. Strict all-feature Clippy for
-both affected CLI targets passes in `runs/owned-mixed-minion-damage-clippy-02.log`.
-The new helper shares the existing source authenticator instead of loading its
-module twice. Changed Rust formatting and whitespace checks pass. Generic runtime
-tests from the preceding checkpoint remain applicable; no runtime code changed.
+The first joined integration passed **84/85** checks. Its single failure was a
+test-helper mismatch: a partial MORE query correctly returns whole-evaluation
+`Unavailable(IncompleteContributors)`, but the assertion called a helper requiring
+a successful report. The assertion now checks that exact unavailable outcome.
+The focused twelve-observation numerical integration passed in **29.89s**.
+The final joined rerun passes **85/85 checks in 39.64s** against publication06;
+strict all-feature Clippy for both affected CLI targets passes in **2.71s**.
+Evidence: `runs/owned-mixed-minion-more-joined-02.log` and
+`runs/owned-mixed-minion-more-clippy-01.log`. Changed Rust formatting and whitespace
+checks pass. These joined numerical tests were explicitly enabled locally with
+the checked artifact; ordinary CI does not yet provision this entire release.
+The two new tests
+cover quality/status/coverage failures and fresh/reused A–unknown–B–A/four-worker
+execution with independent quality values. Existing source, membership, stage,
+storage-order and duplicated-source checks also exercise the new consumer.
 
-The package is `runs/owned-mixed-minion-damage-publication-04/package`, input
-`506db758f194bc4bb433dd05caa1e596338ae99d5c395715e9728910eac7f2ae`, schema
-`4036bef4c8b1e3588a49748d2ba1e71f2e8e60a0f4a02c79c620b5945edcbdb2`, rules
-`bfbc5daa7b3417d7815d1721d0d4fd9f4e2b4c117e9c4538b0ac7ee71709347c`, compiled rules
-`e0e0e947156b8da70ef49bc05141afbd29853d9d86da454b5fc8d0242cb71492`.
-All 18 published files rebuild identically. All five imports, 110 queries and
-selected input counts **107/117/109/123/4** survive. Evidence:
-`runs/owned-mixed-minion-damage-publication-04.log`, its `validation.json`, and
-`runs/owned-mixed-minion-damage-debug-02.log`. Complete native builds remain **0/5**.
+Current package: `runs/owned-mixed-minion-damage-publication-06/package`.
+Input `6a365378322411f6c4864a382941bb438a90d53edcd196114b565188a515016c`;
+schema `4036bef4c8b1e3588a49748d2ba1e71f2e8e60a0f4a02c79c620b5945edcbdb2`;
+rules `4dc0b3145c0d7021db94f1d229f50a384350efc35609b84269170d799e54f146`;
+compiled rules `163adf75fdab67003bcefe3e4d600a9a114828e161bb8bdf89f958c3c3ba79b6`.
 
-The current catalog allocates definitions consecutively. This publication uses
-`3353` and `3354`; the uncommitted incoming-critical draft's earlier provisional
-`3353`–`3364` range is superseded. Its files remain untouched and must be rebased
-against the actual catalog if that separate work is resumed. Do not reuse its
-old identities or edit the protected draft to make this checkpoint compile.
+**Resume:** keep Original05 first. The next action-specific increase consumer
+must account for the existing Command `3304` contributions alongside the inherited/
+applied components. Basic's zero and Gas Arrow's positive results are both real
+data behavior. Current checked queries can read an Action's Actor, but cannot
+address the current Action or authenticate its output-owned producers. The
+[exact Action query proposal](owned-action-contribution-queries-proposal.md)
+recommends extending the same graph with exact Action authority, not inventing
+an unchecked aggregate or ignoring conditional modifiers. The owner was prompted;
+the decision is pending. Do not implement that contract until answered.
 
-**Resume:** keep Original05 first and continue toward physical hit damage. The
-existing Gigantic program already emits its damage MORE contribution on `330b`,
-but no final Stat on that channel or complete MORE reduction is published. The
-retained original physical call has one 20% MORE record, factor 1.2, and no
-minimum/maximum-specific MORE records. Connect that existing producer through
-checked membership; retain domain/order/rounding obligations and validate removal
-and changed-level controls. Then join the existing action base ranges (`3212/3`)
-and the applicable factors with the explicit conversion/gain/flat-damage and
-rounding model. The observed 574–1068 range is source evidence, never a rule
-literal. Do not substitute supplied factors or claim final hit/DPS coverage from
-the new increased-damage component. No new public design decision was needed for
-this publication; the separate Actor-to-Enemy and input/reporting proposals remain
-unapproved until they become necessary.
+Then connect the existing action base ranges (`3212/3`) through checked flat
+damage, conversion/gain, minimum/maximum-specific modifiers and final rounding.
+The observed 574–1068 physical range is evidence, never a rule literal. Retained
+flat/quality/conversion/gain controls already exist in the physical source report.
+Do not bypass those domains to publish a base-times-two-factors final-hit claim.
+The four imported-input obligations and separate Actor-to-Enemy, resource,
+configuration/reporting and scoped-coverage decisions remain independent.
+
+The Lua/game-semantics retirement audit now explicitly includes the MORE
+rounding boundary: deliberate in PoB, independently unconfirmed as game behavior.
+Owned data retains its observed arithmetic without importing store ancestry or
+Lua empty-table semantics. Latest checked hosted CI for prior pushed HEAD
+`36d1a1b` remains pending (run `37868775041`); it is not validation of this work.
 
 ## Preceding runtime checkpoint: checked application-group producers
 

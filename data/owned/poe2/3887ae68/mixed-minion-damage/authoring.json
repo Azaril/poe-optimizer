@@ -4,9 +4,9 @@
   "before": "802f807e1a7c1687c67f161148619e14430a871e61e90101d04f33c8e13112e2",
   "scope": {
     "new_definitions": 2,
-    "new_programs": 2,
-    "new_receivers": 2,
-    "new_queries": 1,
+    "new_programs": 3,
+    "new_receivers": 3,
+    "new_queries": 2,
     "closed_existing_owners": 0,
     "complete_damage_domain": false,
     "whole_build_parity": false
@@ -21,6 +21,11 @@
       "path": "data/owned/poe2/3887ae68/pain-offering/applications.json",
       "bytes": 15007,
       "sha256": "88177a7398a34fd46af60885f4a312bc8abbbe4186e4008a97b0469d86c54045"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/gigantic-benefits/authoring.json",
+      "bytes": 7373,
+      "sha256": "11a89de35db18e76e6b258f9729e1cdf4ce9b7b024b2057ea1293624b1c4a022"
     }
   ],
   "artifacts": {
@@ -29,20 +34,20 @@
       "sha256": "74312c823c70b57228c900211d5343e23afe2b26f6dea38ecfd7d585e54523cd"
     },
     "consumer.json": {
-      "bytes": 9560,
-      "sha256": "51fb3de7e5ca8014c5b47a1515daa71a282edd7cc3bd3fcccc2e438af1004727"
+      "bytes": 16853,
+      "sha256": "a29320a10b1360f29b021551a35f2b04a16b0f43467bb00d62262752e1e4dded"
     },
     "queries.json": {
-      "bytes": 1476,
-      "sha256": "c26eca782e2a52c135fa78fed978173893bf8cc3a00196731238dd8daa1a5cd2"
+      "bytes": 4683,
+      "sha256": "ac8a99da31bc273379237e6f4b6fdb6143da201ceb75c83a4e56d57f039b7d35"
     },
     "dependencies.json": {
-      "bytes": 26082,
-      "sha256": "ad575250f6566c7264fef3f0c3ef7e4a3a18d3702855e59000f4af50c47cc19d"
+      "bytes": 39122,
+      "sha256": "31b3e359e082230ed36377c3c733bd54529bf757c11c3c8eb902da634d8166bb"
     },
     "source-vectors.json": {
-      "bytes": 26180,
-      "sha256": "80b6c032abf4c892677df15d5efcfbece9067891eefad2a80eaaa21fad09d169"
+      "bytes": 44002,
+      "sha256": "327fab05bd165e2fcd6181db6e22ca89cfd5a3d652a2b26e5e964e9ab4d8a374"
     }
   }
 }

@@ -176,4 +176,7 @@ storage permutations and fresh/reused/four-worker execution. The
 now reads the real stacked group alongside the existing inherited Actor stat.
 Its two ordinary typed consumers derive the subtotal and increase factor. This
 reuses the existing receiver and rule contracts; it introduces no additional
-contribution API. MORE aggregation and final hit damage remain next.
+contribution API. The same packet now also consumes projected quality and checked
+Gigantic contributions for the reviewed unconditional MORE factor. Further
+modifier domains, action-local contribution membership and final hit damage
+remain next; the proposed Action authority is a separate design decision.

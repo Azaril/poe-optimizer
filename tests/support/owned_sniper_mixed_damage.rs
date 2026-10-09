@@ -52,16 +52,39 @@ pub(super) fn install(w: &mut sniper::World, endpoint: &StagedOwnedRelease) {
 pub(super) fn configure(s: &mut EvaluationStagesInput) {
     s.stages.push(EvaluationStage {
         id: key(STAGE),
-        predecessors: vec![key("passive-damage-receive"), key("offering-application")],
+        predecessors: vec![
+            key("passive-damage-receive"),
+            key("offering-application"),
+            key("gigantic-benefits"),
+        ],
     });
     for row in &mut s.programs.members {
-        if [mixed_damage_family::PROGRAM, mixed_damage_family::FACTOR]
-            .contains(&row.program.as_str())
+        if [
+            mixed_damage_family::PROGRAM,
+            mixed_damage_family::FACTOR,
+            mixed_damage_family::MORE,
+        ]
+        .contains(&row.program.as_str())
         {
             row.stage = key(STAGE);
         }
     }
     s.frozen_channels.extend([
+        FrozenStageChannel {
+            channel: StageChannel::Stat {
+                scope: RuleEntityKind::Actor,
+                stat: d(0x1d),
+            },
+            stage: key("population"),
+        },
+        FrozenStageChannel {
+            channel: StageChannel::Contributions {
+                scope: RuleEntityKind::Actor,
+                stat: d(0x330b),
+                contribution: ContributionKind::Multiply,
+            },
+            stage: key("gigantic-benefits"),
+        },
         FrozenStageChannel {
             channel: StageChannel::Stat {
                 scope: RuleEntityKind::Actor,
@@ -79,7 +102,7 @@ pub(super) fn configure(s: &mut EvaluationStagesInput) {
         },
     ]);
 }
-fn expected(case: &str) -> (f64, f64) {
+fn expected(case: &str) -> (f64, f64, f64) {
     let v = mixed_damage_family::vectors()
         .into_iter()
         .find(|v| v["case"] == case)
@@ -92,23 +115,31 @@ fn expected(case: &str) -> (f64, f64) {
             .map(|r| r["value"].as_f64().unwrap())
             .sum(),
         v["increased_factor"].as_f64().unwrap(),
+        v["more_factor"].as_f64().unwrap(),
     )
 }
 fn check(w: &World, r: &SupportEffectsReport, case: &str) {
+    check_cases(w, r, [case, case]);
+}
+fn check_cases(w: &World, r: &SupportEffectsReport, cases: [&str; 2]) {
     assert!(r.gaps.is_empty(), "{:?}", r.gaps);
     let e = sniper::offering::effects(r);
     assert!(e.gaps.is_empty(), "{:?}", e.gaps);
-    let (increase, factor) = expected(case);
     let rows: Vec<_> = e
         .effects
         .iter()
         .filter(|e| {
-            [mixed_damage_family::PROGRAM, mixed_damage_family::FACTOR]
-                .contains(&e.key.invocation.program.as_str())
+            [
+                mixed_damage_family::PROGRAM,
+                mixed_damage_family::FACTOR,
+                mixed_damage_family::MORE,
+            ]
+            .contains(&e.key.invocation.program.as_str())
         })
         .collect();
-    assert_eq!(rows.len(), 4, "two outputs per exact recipient");
-    for i in 0..2 {
+    assert_eq!(rows.len(), 6, "three outputs per exact recipient");
+    for (i, case) in cases.into_iter().enumerate() {
+        let (increase, factor, more) = expected(case);
         assert_eq!(
             w.value(e, i, false, 0x3353),
             &EffectValue::Known {
@@ -122,7 +153,13 @@ fn check(w: &World, r: &SupportEffectsReport, case: &str) {
             }
         );
         let recipient = w.sniper.actor(i);
-        assert_eq!(rows.iter().filter(|r|matches!(&r.key.invocation.origin,RuleOrigin::Receiver {actor,..} if *actor==recipient)).count(),2);
+        assert_eq!(
+            w.value(e, i, false, 0x330b),
+            &EffectValue::Known {
+                value: quantity(more, &d(1))
+            }
+        );
+        assert_eq!(rows.iter().filter(|r|matches!(&r.key.invocation.origin,RuleOrigin::Receiver {actor,..} if *actor==recipient)).count(),3);
     }
 }
 fn unresolved(w: &World, r: &SupportEffectsReport) {
@@ -162,6 +199,22 @@ fn mixed_damage_matches_actual_source_consumers_after_non_stacking() {
         offering_application_native::override_active(&mut disabled, i, false);
     }
     check(&disabled, &disabled.evaluate(), "offering-disabled");
+    let mut quality = a.clone();
+    quality.sniper.raw(0, 20, 1., 0.);
+    quality.sniper.raw(1, 20, 20., 0.);
+    check_cases(
+        &quality,
+        &quality.evaluate(),
+        ["sniper-quality-1", "sniper-quality-20"],
+    );
+    let mut removed = a.clone();
+    gigantic_native::remove(&mut removed);
+    removed.sniper.raw(1, 20, 20., 0.);
+    check_cases(
+        &removed,
+        &removed.evaluate(),
+        ["without-gigantic", "quality-20-without-gigantic"],
+    );
 }
 #[test]
 #[ignore = "requires current mixed-damage release; exact producer failures"]
@@ -199,29 +252,160 @@ fn mixed_damage_does_not_replace_missing_inherited_or_application_inputs_with_ze
 #[test]
 #[ignore = "requires current mixed-damage release; membership and stage gates"]
 fn mixed_damage_rejects_membership_holes_and_premature_reads() {
-    let mut w = World::load();
-    let q = w
+    for query in [mixed_damage_family::QUERY, mixed_damage_family::MORE_QUERY] {
+        let mut w = World::load();
+        let q = w
+            .sniper
+            .base
+            .contribution_queries
+            .members
+            .iter_mut()
+            .find(|q| q.id == key(query))
+            .unwrap();
+        q.groups[0].members.members.clear();
+        assert!(w.checked_plan().is_err());
+    }
+    let w = World::load();
+    for program in [mixed_damage_family::PROGRAM, mixed_damage_family::MORE] {
+        assert!(
+            w.checked_plan_configured(|s| {
+                s.programs
+                    .members
+                    .iter_mut()
+                    .find(|r| r.program == key(program))
+                    .unwrap()
+                    .stage = key("facts");
+            })
+            .is_err()
+        );
+    }
+}
+
+fn missing_quality(w: &mut World) {
+    w.sniper
+        .base
+        .source
+        .base
+        .inner
+        .owner_mut(subject(d::<SkillDefinition>(0x12)))
+        .programs
+        .members
+        .iter_mut()
+        .find(|p| p.id == key("ordinary-population-inputs"))
+        .unwrap()
+        .effects
+        .retain(|e| e.id != key("project-quality-factor"));
+}
+fn more_unresolved(w: &World, report: &SupportEffectsReport) {
+    for i in 0..2 {
+        assert!(matches!(
+            w.value(sniper::offering::effects(report), i, false, 0x330b),
+            EffectValue::Unresolved { .. }
+        ));
+    }
+}
+#[test]
+#[ignore = "requires current mixed-damage release; MORE unknown and coverage gates"]
+fn damage_more_requires_quality_status_and_complete_membership() {
+    let a = World::load();
+    let mut quality = a.clone();
+    missing_quality(&mut quality);
+    more_unresolved(&quality, &quality.evaluate());
+    let mut status = a.clone();
+    status
+        .sniper
+        .receivers
+        .members
+        .retain(|r| r.stat != d(0x3308));
+    more_unresolved(&status, &status.evaluate());
+    let mut partial = a.clone();
+    partial
         .sniper
         .base
         .contribution_queries
         .members
         .iter_mut()
-        .find(|q| q.id == key(mixed_damage_family::QUERY))
-        .unwrap();
-    q.groups[0].members.members.clear();
-    assert!(w.checked_plan().is_err());
-    let w = World::load();
+        .find(|q| q.id == key(mixed_damage_family::MORE_QUERY))
+        .unwrap()
+        .groups[0]
+        .members
+        .closure = SchemaClosure::Partial {
+        gaps: vec![SchemaGap {
+            subject: subject(d::<StatDefinition>(0x330b)),
+            facet: SchemaFacet::GameRules,
+            code: key("counterfactual-unreviewed-damage-more"),
+        }],
+    };
+    let p = partial.plan();
     assert!(
-        w.checked_plan_configured(|s| {
-            s.programs
-                .members
-                .iter_mut()
-                .find(|r| r.program == key(mixed_damage_family::PROGRAM))
-                .unwrap()
-                .stage = key("facts");
-        })
-        .is_err()
+        p.gaps()
+            .iter()
+            .any(|g| g.reason == PlanGapReason::IncompleteContributors)
     );
+    let r = p.evaluate(&mut p.new_scratch()).unwrap();
+    assert_eq!(
+        r.outcome,
+        SupportEffectsOutcome::Unavailable {
+            cause: EffectValue::Unresolved {
+                reason: PlanGapReason::IncompleteContributors,
+                read: None
+            },
+            input: None,
+        }
+    );
+}
+
+#[test]
+#[ignore = "requires current mixed-damage release; independent quality and scratch reuse"]
+fn damage_more_preserves_recipient_quality_and_unknowns_across_workers() {
+    let a = World::load();
+    let mut b = a.clone();
+    b.sniper.raw(0, 20, 1., 0.);
+    b.sniper.raw(1, 20, 20., 0.);
+    let mut unknown = a.clone();
+    missing_quality(&mut unknown);
+    let (pa, pb, pu) = (a.plan(), b.plan(), unknown.plan());
+    let mut scratch = pa.new_scratch();
+    let ra = pa.evaluate(&mut scratch).unwrap();
+    let ru = pu.evaluate(&mut scratch).unwrap();
+    more_unresolved(&unknown, &ru);
+    let rb = pb.evaluate(&mut scratch).unwrap();
+    check_cases(&b, &rb, ["sniper-quality-1", "sniper-quality-20"]);
+    assert!(
+        pa.evaluate(&mut scratch).unwrap() == ra,
+        "A after unknown and different qualities"
+    );
+    assert!(
+        pb.evaluate(&mut pb.new_scratch()).unwrap() == rb,
+        "fresh B agrees"
+    );
+    let pool = rayon::ThreadPoolBuilder::new()
+        .num_threads(4)
+        .build()
+        .unwrap();
+    let results = pool.install(|| {
+        (0..12)
+            .into_par_iter()
+            .map_init(
+                || pa.new_scratch(),
+                |s, i| match i % 3 {
+                    0 => pa.evaluate(s).unwrap(),
+                    1 => pu.evaluate(s).unwrap(),
+                    _ => pb.evaluate(s).unwrap(),
+                },
+            )
+            .collect::<Vec<_>>()
+    });
+    for (i, r) in results.iter().enumerate() {
+        assert!(
+            r == match i % 3 {
+                0 => &ra,
+                1 => &ru,
+                _ => &rb,
+            },
+            "parallel report {i}"
+        );
+    }
 }
 #[test]
 #[ignore = "requires current mixed-damage release; storage and parallel scratch"]

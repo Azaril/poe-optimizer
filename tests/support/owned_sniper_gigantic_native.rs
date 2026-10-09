@@ -350,7 +350,7 @@ fn intrinsic_life_rows(report: &OwnedEffectsReport) -> Vec<BoundEffectResult> {
         .cloned()
         .collect()
 }
-fn remove(w: &mut World) {
+pub(super) fn remove(w: &mut World) {
     let selected = w.gigantic.selected.id;
     let before = inner(w).build.allocations.len();
     inner(w).build.allocations.retain(|a| a.id != selected);
@@ -544,12 +544,23 @@ fn check_actors(
         }
     }
     assert!(!r.values.iter().any(|v| matches!(&v.key, PlanValueKey::Stat { entity: ConcreteEntity::Actor(ActorKey::Player), stat } if *stat == d(0x3308))));
-    assert!(
-        !r.values
-            .iter()
-            .any(|v| matches!(&v.key, PlanValueKey::Stat { stat, .. } if *stat == d(0x330b))),
-        "individual factor is not a final multiplier"
-    );
+    // The mixed-damage receiver now consumes this contribution and the exact
+    // projected quality factor. It preserves the reviewed rounding boundary.
+    for &index in recipients {
+        let EffectValue::Known {
+            value: ParameterValue::Quantity(quality),
+        } = w.value(r, index, false, 0x1d)
+        else {
+            panic!("known projected quality")
+        };
+        let factor = (quality.value() * if active { 1.2 } else { 1. } * 100. + 0.5).floor() / 100.;
+        assert_eq!(
+            w.value(r, index, false, 0x330b),
+            &EffectValue::Known {
+                value: quantity(factor, &d(1))
+            }
+        );
+    }
     assert!(!r.effects.iter().any(|e| matches!(&e.target, BoundEffectTarget::Contribution { key } if key.stat == d(0x330a))), "retired Life channel stays absent");
     assert!(!r.values.iter().any(|v| matches!(&v.key, PlanValueKey::Stat { stat, .. } if *stat == d(0x311a) || *stat == d(0x330a))),
         "base Add and status Multiply are not a final Life pool or an alias");

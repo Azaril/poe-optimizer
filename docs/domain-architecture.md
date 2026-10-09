@@ -298,6 +298,16 @@ receivers, reading the existing inherited stat and the checked application group
 No complete damage-domain or whole-build coverage follows merely from this
 capability or its initial data adoption.
 
+The same packet derives an unconditional MORE factor from prepared population
+quality and checked supplied-Actor contributions. Precision and grouping are
+authored semantic arithmetic, not generic Lua modifier-store behavior. The
+currently reviewed quality/Gigantic group retains its observed two-decimal
+rounding boundary; broader modifier groups need independent evidence. Actor
+factors alone do not account for action-local conditions. The proposed
+[exact Action query extension](owned-action-contribution-queries-proposal.md)
+would add that authority to the same graph; it is awaiting the owner's decision
+and is not implemented by the MORE data consumer.
+
 The [passive topology contract](owned-passive-topology.md) separates implicit roots,
 physical allocations, attached choices, scope eligibility and injected legality budgets.
 It prevents source node lists or UI point totals from becoming native game semantics.

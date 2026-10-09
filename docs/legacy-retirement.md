@@ -139,6 +139,20 @@ Rust path was added for the observed 62 + 68 subtotal. See the
 [current checkpoint](implementation.md#current-data-checkpoint-inherited-and-applied-minion-damage)
 and [proposal](owned-application-group-contribution-queries-proposal.md).
 
+**Damage MORE precision, 2026-10-08:** the mixed data packet now consumes
+the existing projected quality factor and checked Gigantic contribution.
+Retained original-call controls prove that these sources share an effective
+two-decimal product boundary (quality 1 with Gigantic yields 1.21). Native data
+expresses scale-by-100, half bias, floor and division explicitly. It does not
+import a Lua table hierarchy, store-depth field or generic ModStore emulation.
+The observed rounding is deliberate PoB code, but its equivalence to game
+mechanics has no independent confirmation here. Keep it classified as
+source-compatible arithmetic pending the planned Lua/game-semantics audit;
+do not generalize it to all damage types, modifier groups, inherited layers or
+high-precision overrides. The acquisition-only empty-table representation is
+normalized in observations and excluded from native artifacts. No new runtime
+Rust path, compatibility format or isolated evaluator was introduced.
+
 **Offering source queries, 2026-10-08:** the current V24 packet uses three owned
 Skill programs and four checked empty-domain queries. It adds no evaluator mode
 or source-shaped runtime value. Retain the earlier application-only fixture until

@@ -102,9 +102,14 @@ the same checked query can now combine that result with ordinary contributions.
 Maintained packets use the current typed producer envelope; old development
 member bytes are rejected. The mixed consumer's owned data now combines the
 existing inherited Actor stat with a checked stacked-group read and derives its
-subtotal and increase factor. MORE aggregation and final hit damage remain
-pending, along with the broader coverage gaps. This adds no separate aggregator
-or Lua runtime dependency.
+subtotal and increase factor. It also reads the existing prepared quality factor
+and a checked product of Gigantic contributions, deriving the admitted
+unconditional MORE factor with an explicit decimal rounding boundary. This is
+owned rule data, with no separate aggregator or Lua runtime dependency.
+Action-specific modifiers, further modifier domains and final hit damage remain
+pending, along with the broader coverage gaps. The next proposed contract is
+[checked queries on exact Actions](owned-action-contribution-queries-proposal.md);
+it awaits a design decision. The current consumer does not authorize it.
 Composed support discovery is already approved and remains
 independent implementation work. See the current [resume point](implementation.md#current-data-checkpoint-inherited-and-applied-minion-damage).
 

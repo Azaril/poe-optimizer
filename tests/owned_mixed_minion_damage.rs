@@ -36,7 +36,7 @@ fn publish_mixed_damage_preserving_all_five_originals() {
         &[],
         &["authoring.json", "source-vectors.json", "dependencies.json"],
         family::stage,
-        serde_json::json!({"new_definitions":2,"new_queries":1,"whole_build_parity":false}),
+        serde_json::json!({"new_definitions":2,"new_queries":2,"whole_build_parity":false}),
         [107, 117, 109, 123, 4],
     );
 }
