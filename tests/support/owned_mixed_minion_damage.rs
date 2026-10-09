@@ -305,7 +305,11 @@ pub fn assert_component(endpoint: &StagedOwnedRelease) {
     let c = consumer();
     let deps: Dependencies = read("dependencies.json");
     let r = &endpoint.input().recipe;
-    assert_eq!(r.rules.operations_version, key(OWNED_RULE_OPERATIONS_V25));
+    assert!(
+        RuleOperationsVersion::parse(r.rules.operations_version.as_str())
+            .unwrap()
+            .supports_application_group_contributions()
+    );
     for d in deps.definitions {
         assert!(r.schema.definitions.contains(&d));
     }

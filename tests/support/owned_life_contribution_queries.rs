@@ -123,7 +123,7 @@ fn check_queries(queries: &[ContributionQuery]) {
     assert_eq!(total, 8);
 }
 
-/// Freeze complete donor bodies and inspect all potential Life contributions,
+/// Freeze complete donor program bodies and inspect all potential Life contributions,
 /// including inactive effects and unrelated selected/unselected definitions.
 fn census(
     owners: &[DefinitionRules],
@@ -149,7 +149,18 @@ fn census(
                     .iter()
                     .find(|o| o.owner == owner.owner)
                     .expect("new Life donor needs review");
-                assert_eq!(owner, frozen, "Life donor body, guard or recipient changed");
+                let frozen_program = frozen
+                    .programs
+                    .members
+                    .iter()
+                    .find(|p| p.id == program.id)
+                    .expect("new Life program needs review");
+                assert_eq!(
+                    program, frozen_program,
+                    "Life donor body, guard or recipient changed"
+                );
+                // Unrelated Mana programs may share this Actor owner. Every
+                // potential Life writer is still censused, selected or not.
                 let rows: Vec<_> = queries
                     .iter()
                     .filter(|q| q.stat == *stat && q.contribution == *contribution)
@@ -225,7 +236,18 @@ pub fn check_authored() {
     ));
 }
 pub fn assert_component(endpoint: &StagedOwnedRelease) {
-    assert_component_owners(endpoint, &endpoint.input().recipe.rules.owners);
+    assert_component_owners(
+        endpoint,
+        &endpoint.input().recipe.rules.owners,
+        &endpoint
+            .input()
+            .recipe
+            .rules
+            .contribution_queries
+            .as_ref()
+            .unwrap()
+            .members,
+    );
 }
 /// A later data packet must authenticate its exact donor rewrite before using
 /// this comparison. Only that reviewed body is restored for the historical
@@ -235,6 +257,8 @@ pub fn assert_component_with_reviewed_donor(
     endpoint: &StagedOwnedRelease,
     before: &DefinitionRules,
     after: &DefinitionRules,
+    before_query: &ContributionQuery,
+    after_query: &ContributionQuery,
 ) {
     let deps: Dependencies = read("dependencies.json");
     assert!(deps.owners.contains(before));
@@ -243,9 +267,30 @@ pub fn assert_component_with_reviewed_donor(
     let current = owners.iter_mut().find(|o| o.owner == before.owner).unwrap();
     assert_eq!(current, after);
     *current = before.clone();
-    assert_component_owners(endpoint, &owners);
+    assert!(queries().contains(before_query));
+    assert_eq!(before_query.id, after_query.id);
+    let mut registry = endpoint
+        .input()
+        .recipe
+        .rules
+        .contribution_queries
+        .as_ref()
+        .unwrap()
+        .members
+        .clone();
+    let query = registry
+        .iter_mut()
+        .find(|q| q.id == after_query.id)
+        .unwrap();
+    assert_eq!(query, after_query);
+    *query = before_query.clone();
+    assert_component_owners(endpoint, &owners, &registry);
 }
-fn assert_component_owners(endpoint: &StagedOwnedRelease, owners: &[DefinitionRules]) {
+fn assert_component_owners(
+    endpoint: &StagedOwnedRelease,
+    owners: &[DefinitionRules],
+    reviewed_queries: &[ContributionQuery],
+) {
     check_authored();
     let recipe = &endpoint.input().recipe;
     assert!(
@@ -267,7 +312,7 @@ fn assert_component_owners(endpoint: &StagedOwnedRelease, owners: &[DefinitionRu
     let registry = recipe.rules.contribution_queries.as_ref().unwrap();
     assert_eq!(registry.closure, deps.query_registry_closure);
     for query in queries() {
-        assert_eq!(registry.members.iter().filter(|q| **q == query).count(), 1);
+        assert_eq!(reviewed_queries.iter().filter(|q| **q == query).count(), 1);
     }
     census(
         owners,

@@ -202,7 +202,22 @@ fn dependencies(endpoint: &StagedOwnedRelease, after: bool) {
     let d: Dependencies = read("dependencies.json");
     let rules = &endpoint.input().recipe.rules;
     let owner = if after { owner_after() } else { d.owner_before };
-    assert_eq!(rules.owners.iter().filter(|o| **o == owner).count(), 1);
+    let actual = rules
+        .owners
+        .iter()
+        .find(|o| o.owner == owner.owner)
+        .unwrap();
+    if after {
+        assert_eq!(actual.programs.closure, owner.programs.closure);
+        for p in &owner.programs.members {
+            assert_eq!(
+                actual.programs.members.iter().find(|a| a.id == p.id),
+                Some(p)
+            );
+        }
+    } else {
+        assert_eq!(actual, &owner, "exact offline predecessor");
+    }
     assert_eq!(rules.owners.iter().filter(|o| **o == d.consumer).count(), 1);
     assert_eq!(
         rules

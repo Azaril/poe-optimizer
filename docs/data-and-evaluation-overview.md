@@ -122,8 +122,10 @@ an accepted bug exception or complete numeric coverage. Four Life owner gaps
 remain. Exact Action queries are now implemented in Core/Data/Engine operations
 V26 through the same native contribution graph. Direct uses and generated Skill
 supplies retain distinct authority; each Action retains its exact output, part,
-mode and stat set. The canonical data package remains V25 pending real Command
-consumer adoption. Optional numeric selection is approved and follows that work.
+mode and stat set. The canonical V26
+[Action damage packet](../data/owned/poe2/3887ae68/action-minion-damage/README.md)
+now consumes Command alongside the shared increase. Optional numeric selection
+is approved and follows that work.
 
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across
@@ -199,14 +201,18 @@ subtotal and increase factor. It also reads the existing prepared quality factor
 and a checked product of Gigantic contributions, deriving the admitted
 unconditional MORE factor with an explicit decimal rounding boundary. This is
 owned rule data, with no separate aggregator or Lua runtime dependency.
-Action-specific modifiers, further modifier domains and final hit damage remain
-pending, along with the broader coverage gaps.
+Further modifier domains and final hit damage remain pending, along with the
+broader coverage gaps.
 [Checked queries on exact Actions](owned-action-contribution-queries-proposal.md)
-were accepted on October 9 and their generic contract now runs in V26. The next
-data adoption consumes actual Command contributions, including positive Gas Arrow
-and zero Basic Attack controls. This does not yet complete the damage pipeline.
+were accepted on October 9 and their generic contract now runs in V26. The
+published consumer adds actual Command contributions to each exact Action after
+shared Offering/passive aggregation. Fourteen original-call controls cover
+positive Gas Arrow, zero Basic Attack and branch removals. The existing joined
+native graph now includes all three Gas modes and repeated recipients, using
+actual item/population inputs and the partitioned Gas supply. This does not
+complete the damage pipeline.
 Composed support discovery is already approved and remains
-independent implementation work. See the current [resume point](implementation.md#current-data-checkpoint-inherited-and-applied-minion-damage).
+independent implementation work. See the current [resume point](implementation.md#latest-native-checkpoint-command-joins-the-action-damage-consumer).
 
 The joined graph calculates both attribute passes from the actual
 imported class/passive sources, resolves the five inherent Boolean flags through

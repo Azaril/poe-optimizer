@@ -44,8 +44,16 @@ implementation, with explicit Skill-definition/output ownership and exact supply
 authority. Gem root selectors cannot replace generated child occurrences.
 Potential declarations remain checked even when no Action is selected; an empty
 selected set is not a false unsupported-context gap. No Lua collection behavior,
-second aggregator or game-name runtime branch is added. Real Command data
-adoption is the next consumer; this capability is not a closure certificate.
+second aggregator or game-name runtime branch is added. Real Command data now
+consumes this capability in the joined item/preparation/population graph,
+including all three Gas modes. Its source observations reuse the existing
+Command witness; no new Lua runner or fixed-final-level production path is added.
+The joined Life fixture was also rebased to the current numeric amulet-copy
+program and membership. Historical checks now authenticate relevant program
+bodies without rejecting unrelated Mana additions on the same shared Actor;
+potential Life writers still undergo a full census. Current evaluation consumes
+current data, with no compatibility loader. This capability is not a closure
+certificate.
 
 **Shared Life routing, 2026-10-08:** flat Life now consumes the same injected
 Talisman exclusion as ordinary Minion-level delivery. Retain one predicate and

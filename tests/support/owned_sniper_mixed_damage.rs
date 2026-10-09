@@ -12,7 +12,11 @@ pub(super) fn install(w: &mut sniper::World, endpoint: &StagedOwnedRelease) {
     let m = mixed_damage_family::migration();
     let c = mixed_damage_family::consumer();
     let inner = &mut w.base.source.base.inner;
-    assert_eq!(inner.operations, key(OWNED_RULE_OPERATIONS_V25));
+    assert!(
+        RuleOperationsVersion::parse(inner.operations.as_str())
+            .unwrap()
+            .supports_application_group_contributions()
+    );
     for row in m.schema {
         let SchemaExtensionEntry::Definition(d) = row else {
             panic!()

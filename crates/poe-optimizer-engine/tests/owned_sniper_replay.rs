@@ -122,6 +122,65 @@ fn check(input: &ReplayInput, r: &SupportEffectsReport, cases: [&str; 2]) {
             );
         }
     }
+    check_actions(input, r, cases.map(|case| expected(case).0), 55.);
+}
+fn action_value<'a>(
+    r: &'a SupportEffectsReport,
+    action: &ActionSelection,
+    stat: u64,
+) -> &'a EffectValue {
+    &effects(r)
+        .values
+        .iter()
+        .find(|v| {
+            v.key
+                == PlanValueKey::Stat {
+                    entity: ConcreteEntity::Action(Box::new(action.clone())),
+                    stat: def(stat),
+                }
+        })
+        .expect("exact Action value")
+        .value
+}
+fn actions(input: &ReplayInput) -> Vec<&ActionSelection> {
+    let found: Vec<_> = input
+        .queries
+        .requests
+        .iter()
+        .filter_map(|r| match &r.target {
+            MetricTarget::Action(a) if [def(0x22), def(0x25)].contains(&a.action.output.slot) => {
+                Some(a.as_ref())
+            }
+            _ => None,
+        })
+        .collect();
+    assert_eq!(found.len(), 8, "Basic and three Gas modes per exact Sniper");
+    found
+}
+fn check_actions(input: &ReplayInput, r: &SupportEffectsReport, shared: [f64; 2], command: f64) {
+    let recipients = actors(input);
+    for action in actions(input) {
+        let i = recipients
+            .iter()
+            .position(|a| *a == action.action.actor)
+            .unwrap();
+        let total = shared[i]
+            + if action.action.output.slot == def(0x25) {
+                command
+            } else {
+                0.
+            };
+        for (stat, expected, unit) in [(0x335c, total, 2), (0x335d, 1. + total / 100., 1)] {
+            assert_eq!(
+                action_value(r, action, stat),
+                &EffectValue::Known {
+                    value: ParameterValue::Quantity(
+                        FiniteQuantity::new(expected, def(unit)).unwrap()
+                    ),
+                }
+            );
+        }
+    }
 }
 fn quality(input: &mut ReplayInput, values: [f64; 2]) {
     let gems: Vec<_> = input
@@ -196,7 +255,113 @@ fn replay_uses_current_published_damage_consumers_and_queries() {
                 .contains(&program)
         );
     }
+    let packet = root().join("data/owned/poe2/3887ae68/action-minion-damage");
+    let consumer: Value =
+        serde_json::from_slice(&fs::read(packet.join("consumer.json")).unwrap()).unwrap();
+    let owners: Vec<DefinitionRules> = serde_json::from_value(consumer["owners"].clone()).unwrap();
+    for owner in owners {
+        let current = i
+            .rules
+            .owners
+            .iter()
+            .find(|o| o.owner == owner.owner)
+            .unwrap();
+        for program in owner.programs.members {
+            assert!(current.programs.members.contains(&program));
+        }
+    }
+    let queries: Vec<ContributionQuery> =
+        serde_json::from_slice(&fs::read(packet.join("queries.json")).unwrap()).unwrap();
+    for query in queries {
+        assert!(
+            i.rules
+                .contribution_queries
+                .as_ref()
+                .unwrap()
+                .members
+                .contains(&query)
+        );
+    }
+    let dependencies: Value =
+        serde_json::from_slice(&fs::read(packet.join("dependencies.json")).unwrap()).unwrap();
+    let sources = dependencies["source_programs"].as_array().unwrap();
+    assert_eq!(sources.len(), 9);
+    for source in sources {
+        let owner = serde_json::from_value(source["owner"].clone()).unwrap();
+        let program: RuleProgram = serde_json::from_value(source["program"].clone()).unwrap();
+        assert!(
+            i.rules
+                .owners
+                .iter()
+                .find(|o| o.owner == owner)
+                .unwrap()
+                .programs
+                .members
+                .contains(&program)
+        );
+    }
     check(&i, &run(&i), ["original-05", "original-05"]);
+}
+
+#[test]
+fn command_modes_and_source_removals_match_retained_original_calls() {
+    let packet = root().join("data/owned/poe2/3887ae68");
+    let vectors: Value = serde_json::from_slice(
+        &fs::read(packet.join("action-minion-damage/source-vectors.json")).unwrap(),
+    )
+    .unwrap();
+    let bindings: Value =
+        serde_json::from_slice(&fs::read(packet.join("command-damage/bindings.json")).unwrap())
+            .unwrap();
+    let original = load();
+    let mut scratch = original.compile().unwrap().new_scratch();
+    for vector in vectors["vectors"].as_array().unwrap() {
+        let mut i = original.clone();
+        for removed in vector["removed"].as_array().unwrap() {
+            let source_id = removed.as_u64().unwrap().to_string();
+            if let Some(binding) = bindings["nodes"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|b| b["source_id"].as_str() == Some(source_id.as_str()))
+            {
+                let node: PassiveNodeDefId =
+                    serde_json::from_value(binding["definition"].clone()).unwrap();
+                let before = i.build.allocations.len();
+                i.build.allocations.retain(|a| a.node != node);
+                assert_eq!(i.build.allocations.len() + 1, before);
+            }
+        }
+        let plan = i.compile().unwrap();
+        let r = plan.evaluate(&mut scratch).unwrap();
+        assert_eq!(plan.evaluate(&mut plan.new_scratch()).unwrap(), r);
+        let gas = vector["effect_id"] == "GasShotSkeletonSniperMinion";
+        let stat_set = if gas {
+            [0x32ec, 0x32ed, 0x32ee][vector["stat_set"].as_u64().unwrap() as usize - 1]
+        } else {
+            9
+        };
+        let selected: Vec<_> = actions(&i)
+            .into_iter()
+            .filter(|a| a.stat_set == def(stat_set))
+            .collect();
+        assert_eq!(selected.len(), 2);
+        for a in selected {
+            for (stat, field, unit) in [(0x335c, "subtotal", 2), (0x335d, "increase_factor", 1)] {
+                assert_eq!(
+                    action_value(&r, a, stat),
+                    &EffectValue::Known {
+                        value: ParameterValue::Quantity(
+                            FiniteQuantity::new(vector[field].as_f64().unwrap(), def(unit))
+                                .unwrap()
+                        ),
+                    },
+                    "{}: {field}",
+                    vector["case"]
+                );
+            }
+        }
+    }
 }
 
 #[test]
@@ -272,6 +437,14 @@ fn offering_stacking_activation_and_missing_inputs_survive_reused_parallel_worke
         for stat in [0x3353, 0x3354] {
             assert!(matches!(
                 value(&fresh[1], &actor, stat),
+                EffectValue::Unresolved { .. }
+            ));
+        }
+    }
+    for action in actions(&unknown) {
+        for stat in [0x335c, 0x335d] {
+            assert!(matches!(
+                action_value(&fresh[1], action, stat),
                 EffectValue::Unresolved { .. }
             ));
         }

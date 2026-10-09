@@ -1,6 +1,6 @@
 # Checked contribution queries on exact Actions
 
-**Status:** Accepted by the owner on 2026-10-09; Core/Data/Engine implemented in operations V26. Command data adoption is next.
+**Status:** Accepted by the owner on 2026-10-09; Core/Data/Engine operations V26 and real Command data adoption implemented.
 **Date:** 2026-10-08.
 **Decider:** Project owner.
 
@@ -113,7 +113,13 @@ and Partial results, forged membership, unreviewed support delivery, work bounds
 cycles, stage ordering, storage round trips/permutations and fresh/reused/four-worker
 evaluation. See the current implementation checkpoint for actual run results.
 
-The canonical game-data package remains V25 until the real Command consumer is
-published and its five original inputs are revalidated. This capability alone
-closes no game-mechanics coverage gap and produces no complete build. Optional
-numeric selection is accepted but remains a separate next implementation step.
+The [real Command consumer](../data/owned/poe2/3887ae68/action-minion-damage/README.md)
+is published in the canonical V26 package, preserving all five original inputs
+and their 107/117/109/123/4 obligations. Its two data-defined programs combine
+the shared Actor subtotal with a checked exact-Action query. The joined native
+graph validates Basic plus all three Gas modes, removals, duplicate recipients,
+Offering stacking, missing inputs and worker reuse against retained original
+calls. Gas supply is partitioned with the existing exact offline checker, so
+structural activation does not require execution-time actor level first.
+This does not close final damage coverage or produce a complete build. Optional
+numeric selection remains the accepted next implementation step.

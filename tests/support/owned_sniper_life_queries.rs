@@ -26,6 +26,11 @@ fn world() -> World {
             .supports_actor_reward_contributions()
     );
     let mut queries = life_query_family::queries();
+    // The current canonical Life query also accounts for numeric amulet copy.
+    // Its exact donor/query changes are authenticated by World::load.
+    let copy = amulet_life_family::consumer();
+    let target = queries.iter_mut().find(|q| q.id == copy.query.id).unwrap();
+    *target = copy.query;
     // This existing finite graph has no received-minion-Life producer. Keep
     // that one exclusion explicit rather than silently filtering by selection.
     let excluded = queries[1].groups[1].members.members.pop().unwrap();

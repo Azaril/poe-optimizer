@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "vectors": [
+    {
+      "case": "original-05",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "effect_id": "MinionMeleeBow",
+      "stat_set": 1,
+      "subtotal": 130,
+      "increase_factor": 2.3,
+      "command_contribution": 0,
+      "removed": [],
+      "damage_types": [
+        "Physical"
+      ]
+    },
+    {
+      "case": "selected-1-1",
+      "xml_sha256": "e210976c0960b80fc62d0738f618bc25379d2aad90d3c220d14d251a503a9e85",
+      "effect_id": "MinionMeleeBow",
+      "stat_set": 1,
+      "subtotal": 130,
+      "increase_factor": 2.3,
+      "command_contribution": 0,
+      "removed": [],
+      "damage_types": [
+        "Physical"
+      ]
+    },
+    {
+      "case": "removed-command-branches-1-1",
+      "xml_sha256": "87f2377389c2135a2331ce9a5999cb166e95a7c9ca85ca21be81cd5bdb960e0f",
+      "effect_id": "MinionMeleeBow",
+      "stat_set": 1,
+      "subtotal": 130,
+      "increase_factor": 2.3,
+      "command_contribution": 0,
+      "removed": [
+        25927,
+        41511,
+        32847,
+        35560
+      ],
+      "damage_types": [
+        "Physical"
+      ]
+    },
+    {
+      "case": "selected-2-1",
+      "xml_sha256": "eb31bd1cdfc6d235ba33c326a6f6f331db9f04c0cd7cebdceb45fdfb7e57ab3e",
+      "effect_id": "GasShotSkeletonSniperMinion",
+      "stat_set": 1,
+      "subtotal": 185,
+      "increase_factor": 2.85,
+      "command_contribution": 55,
+      "removed": [],
+      "damage_types": [
+        "Physical"
+      ]
+    },
+    {
+      "case": "removed-command-branches-2-1",
+      "xml_sha256": "793e39e4c3e81b140e0d4b2b202ba70eefc34a714a520e96c96355f947906ce2",
+      "effect_id": "GasShotSkeletonSniperMinion",
+      "stat_set": 1,
+      "subtotal": 130,
+      "increase_factor": 2.3,
+      "command_contribution": 0,
+      "removed": [
+        25927,
+        41511,
+        32847,
+        35560
+      ],
+      "damage_types": [
+        "Physical"
+      ]
+    },
+    {
+      "case": "selected-2-2",
+      "xml_sha256": "52a559c289d6b717e137ef46ec7260cb026f23d9e6143f2b384037e28896dd5b",
+      "effect_id": "GasShotSkeletonSniperMinion",
+      "stat_set": 2,
+      "subtotal": 185,
+      "increase_factor": 2.85,
+      "command_contribution": 55,
+      "removed": [],
+      "damage_types": [
+        "Physical"
+      ]
+    },
+    {
+      "case": "removed-command-branches-2-2",
+      "xml_sha256": "0bd3272cd0d1b2f53cc0133edfc10ac836c3027993955036b7c2fef0aeb7d0e8",
+      "effect_id": "GasShotSkeletonSniperMinion",
+      "stat_set": 2,
+      "subtotal": 130,
+      "increase_factor": 2.3,
+      "command_contribution": 0,
+      "removed": [
+        25927,
+        41511,
+        32847,
+        35560
+      ],
+      "damage_types": [
+        "Physical"
+      ]
+    },
+    {
+      "case": "selected-2-3",
+      "xml_sha256": "892ad63ef129fc62268840364d252d3e66925532c8cb7f8e3fe1632ebbbfc782",
+      "effect_id": "GasShotSkeletonSniperMinion",
+      "stat_set": 3,
+      "subtotal": 185,
+      "increase_factor": 2.85,
+      "command_contribution": 55,
+      "removed": [],
+      "damage_types": [
+        "Fire"
+      ]
+    },
+    {
+      "case": "removed-command-branches-2-3",
+      "xml_sha256": "e4834dacffe4e5bc2fca7ce2eb6fb1a678172e937f5ec1cb860b52f78c520316",
+      "effect_id": "GasShotSkeletonSniperMinion",
+      "stat_set": 3,
+      "subtotal": 130,
+      "increase_factor": 2.3,
+      "command_contribution": 0,
+      "removed": [
+        25927,
+        41511,
+        32847,
+        35560
+      ],
+      "damage_types": [
+        "Fire"
+      ]
+    },
+    {
+      "case": "removed-25927-branch",
+      "xml_sha256": "31c1bc3313c138a2a8adfd37beb7740e36fce48275c277eea2422dbdfa705f3b",
+      "effect_id": "GasShotSkeletonSniperMinion",
+      "stat_set": 1,
+      "subtotal": 145,
+      "increase_factor": 2.45,
+      "command_contribution": 15,
+      "removed": [
+        25927,
+        32847
+      ],
+      "damage_types": [
+        "Physical"
+      ]
+    },
+    {
+      "case": "removed-41511-branch",
+      "xml_sha256": "dd230d2080fb30f56da80128061af04dd5d2e4ec2a514fe14b7c14eb7629e39b",
+      "effect_id": "GasShotSkeletonSniperMinion",
+      "stat_set": 1,
+      "subtotal": 170,
+      "increase_factor": 2.7,
+      "command_contribution": 40,
+      "removed": [
+        41511,
+        35560
+      ],
+      "damage_types": [
+        "Physical"
+      ]
+    },
+    {
+      "case": "removed-32847",
+      "xml_sha256": "f462c84330db2de56960e048d379d0d50ffa8497aa0632cf7d405d8727f71be8",
+      "effect_id": "GasShotSkeletonSniperMinion",
+      "stat_set": 1,
+      "subtotal": 165,
+      "increase_factor": 2.65,
+      "command_contribution": 35,
+      "removed": [
+        32847
+      ],
+      "damage_types": [
+        "Physical"
+      ]
+    },
+    {
+      "case": "original-05-repeat",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "effect_id": "MinionMeleeBow",
+      "stat_set": 1,
+      "subtotal": 130,
+      "increase_factor": 2.3,
+      "command_contribution": 0,
+      "removed": [],
+      "damage_types": [
+        "Physical"
+      ]
+    },
+    {
+      "case": "selected-2-3-repeat",
+      "xml_sha256": "892ad63ef129fc62268840364d252d3e66925532c8cb7f8e3fe1632ebbbfc782",
+      "effect_id": "GasShotSkeletonSniperMinion",
+      "stat_set": 3,
+      "subtotal": 185,
+      "increase_factor": 2.85,
+      "command_contribution": 55,
+      "removed": [],
+      "damage_types": [
+        "Fire"
+      ]
+    }
+  ]
+}

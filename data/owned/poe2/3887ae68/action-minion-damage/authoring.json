@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "action-minion-damage",
+  "before": "26c0a5022e550ae9f2d2488c27b761a58917f2153aeda4b402f465a7d7c0bf76",
+  "scope": {
+    "new_definitions": 2,
+    "new_action_programs": 4,
+    "new_queries": 1,
+    "partitioned_supply_programs": 1,
+    "whole_build_parity": false,
+    "complete_damage_domain": false
+  },
+  "artifacts": {
+    "migration.json": {
+      "bytes": 3278,
+      "sha256": "17d877882c3f021b82dbca7f234afbafc3b2c02da9064ffde2c61b30bc37c2c6"
+    },
+    "consumer.json": {
+      "bytes": 14561,
+      "sha256": "f8b6b0e184177241706b92c626027c37aad2c76fa98d9baaa2506087ca81e1d7"
+    },
+    "queries.json": {
+      "bytes": 5610,
+      "sha256": "16a276a89607e18000c0bab5230201660a17631b0ec7de9faaec4824ac89fc71"
+    },
+    "dependencies.json": {
+      "bytes": 43052,
+      "sha256": "2a0a26393454f5a0e1ae3476063c112453f2a7a7748b249308965b593bb57a32"
+    },
+    "gas-partition.json": {
+      "bytes": 14620,
+      "sha256": "56b05048e2a458a19feec9004b67f5a38896c439fb94391184a70d784b05d82e"
+    },
+    "source-vectors.json": {
+      "bytes": 5484,
+      "sha256": "c4a2af301ea628852746611f8487dd457c739c167784a2f213d75cd6486f4398"
+    }
+  },
+  "source_packets": [
+    {
+      "path": "data/owned/poe2/3887ae68/command-damage/source-vectors.json",
+      "bytes": 1842840,
+      "sha256": "da5f56aaa5ebefd3de63eed1242b65b383b55852161d85e07d22c54e6b2e5242"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mixed-minion-damage/consumer.json",
+      "bytes": 16853,
+      "sha256": "a29320a10b1360f29b021551a35f2b04a16b0f43467bb00d62262752e1e4dded"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mixed-minion-damage/source-vectors.json",
+      "bytes": 44002,
+      "sha256": "327fab05bd165e2fcd6181db6e22ca89cfd5a3d652a2b26e5e964e9ab4d8a374"
+    }
+  ]
+}

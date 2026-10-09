@@ -2,13 +2,14 @@
 
 `owned-sniper-replay.json.gz` contains the public typed inputs of the existing
 joined Sniper test graph, exported from
-`runs/owned-mixed-minion-damage-publication-06/package`. It is test data, not a
+`runs/owned-action-minion-damage-publication-01/package`. It is test data, not a
 production release or an admitted complete build. Original05 still has four
 selected input obligations and incomplete mechanics coverage.
 
 The fixture exercises imported Crown/Solar item inputs, source preparation,
 population and intrinsic attack data, selected passive contributions, Offering
-activation and non-stacking application, and the mixed increased/MORE consumers.
+activation and non-stacking application, mixed increased/MORE consumers, and
+exact Action Command queries on Basic plus all three Gas Arrow stat sets.
 It retains two Sniper recipients and two Offering occurrences. Its explicitly
 finite contributor inventories, activation/type facts and excluded mechanics
 have the same scope as `owned_sniper_item_attack`; they do not close production
@@ -27,6 +28,10 @@ snapshot's damage consumers/queries and Gigantic/population programs against cur
 data, and exercise independent quality, source removal, inactive/missing Offering
 inputs, scratch reuse and four-worker equality of full reports. These remain
 component parity checks, not final physical damage or complete build parity.
+Fourteen retained Command vectors compare original-call results for every mode
+and branch-removal control on both recipients. Gas level projection comes from
+the same real population graph. The fixture also includes current numeric Life
+copy and its checked source membership, preserving the finite Life scope.
 
 Run the ordinary tests with:
 
@@ -53,6 +58,7 @@ backend with fixed timestamp and OS header. Decoding is bounded to 8 MiB; the CI
 test requires deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
-The October 8 fixture is 135,637 compressed bytes and 5,315,517 JSON bytes.
-Two independent exports agree byte-for-byte. Its gzip SHA-256 is
-`ca722f2f8e3e06cea205da19d23d6f277e88fb5e2494c99fa1a88157e98ea944`.
+The October 9 fixture is 138,053 compressed bytes and 5,397,012 JSON bytes.
+Two independent exports agree byte for byte, and the ordinary native test checks
+deterministic re-encoding. Its gzip SHA-256 is
+`dfebd921a4fbe54067e9d5b60553368855211a352164f9bff315c60e2e986350`.

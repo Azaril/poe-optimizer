@@ -42,7 +42,13 @@ pub(super) fn install(sniper: &mut sniper::World, endpoint: &StagedOwnedRelease)
         .programs
         .members
         .push(player_life_family::program());
-    assert_eq!(actual_owner, expected);
+    assert_eq!(actual_owner.programs.closure, expected.programs.closure);
+    for p in &expected.programs.members {
+        assert_eq!(
+            actual_owner.programs.members.iter().find(|a| a.id == p.id),
+            Some(p)
+        );
+    }
     assert!(!actual_owner.programs.is_complete());
     let registry = recipe.rules.existing_actor_rules.as_ref().unwrap();
     assert!(registry.is_complete());

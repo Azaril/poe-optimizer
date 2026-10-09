@@ -17,6 +17,64 @@ use sha2::{Digest, Sha256};
 use std::{collections::BTreeSet, path::Path};
 
 const DELIVERY: &str = "contribute-player-flat-life";
+/// Authenticate the reviewed Life changes since the original routing/query
+/// packet before admitting them to this finite graph. No historical runtime body.
+pub(super) fn check_current_packet(endpoint: &StagedOwnedRelease) {
+    life_routing_family::check_authored();
+    amulet_life_family::check_authored();
+    let deps: amulet_life_family::Dependencies = amulet_life_family::read("dependencies.json");
+    let copy = amulet_life_family::consumer();
+    let replacements = life_routing_family::replacements();
+    assert_eq!(deps.life, replacements[0].after);
+    let mut expected = deps.life;
+    expected.programs.members.push(copy.program);
+    expected.programs.closure = copy.life_closure;
+    let SchemaClosure::Partial { gaps } = &mut expected.programs.closure else {
+        panic!()
+    };
+    assert_eq!(gaps.len(), 5);
+    // This retirement was published with the unchanged canonical item admission
+    // evidence. It removes no numeric/routing/contributor obligation.
+    gaps.retain(|g| g.code != key("canonical-input-admission-unproved"));
+    assert_eq!(gaps.len(), 4);
+    let rules = &endpoint.input().recipe.rules;
+    assert_eq!(
+        rules
+            .owners
+            .iter()
+            .find(|o| o.owner == expected.owner)
+            .unwrap(),
+        &expected
+    );
+    for row in replacements.iter().skip(1) {
+        let mut expected = row.after.clone();
+        assert!(deps.templates.contains(&expected));
+        let extra = copy
+            .eligibility
+            .iter()
+            .find(|o| o.owner == expected.owner)
+            .unwrap();
+        expected
+            .programs
+            .members
+            .extend(extra.programs.members.clone());
+        assert_eq!(
+            rules
+                .owners
+                .iter()
+                .find(|o| o.owner == expected.owner)
+                .unwrap(),
+            &expected
+        );
+    }
+    life_query_family::assert_component_with_reviewed_donor(
+        endpoint,
+        &replacements[0].before,
+        &expected,
+        &deps.query,
+        &copy.query,
+    );
+}
 #[derive(Clone)]
 struct ItemSource {
     original: ItemRecord,
@@ -302,12 +360,12 @@ pub(super) fn install(
         .find(|o| o.owner == subject(d::<ModifierDefinition>(0x3100)))
         .unwrap();
     assert!(!modifier.programs.is_complete());
-    assert_eq!(modifier.programs.members.len(), 5);
+    assert_eq!(modifier.programs.members.len(), 6);
     census.actual_owners.push(modifier.clone());
     let mut finite = modifier.clone();
     finite.programs.closure = SchemaClosure::Complete;
     for p in &finite.programs.members {
-        if p.id != key(DELIVERY) {
+        if p.id != key(DELIVERY) && p.id != key(amulet_life_family::PROGRAM) {
             early.push((finite.owner.clone(), p.id.clone()));
         }
     }
@@ -326,11 +384,16 @@ pub(super) fn install(
             .members
             .iter()
             .filter(|p| {
-                p.id == key("catalyst-inputs") || p.id == key(life_routing_family::APPLICABILITY)
+                [
+                    "catalyst-inputs",
+                    life_routing_family::APPLICABILITY,
+                    "amulet-copy-eligibility",
+                ]
+                .contains(&p.id.as_str())
             })
             .cloned()
             .collect();
-        assert_eq!(programs.len(), 2);
+        assert_eq!(programs.len(), 3);
         let catalyst = programs
             .iter()
             .find(|p| p.id == key("catalyst-inputs"))

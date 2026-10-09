@@ -310,7 +310,12 @@ and Skill-declared output owners bind to exact Action selections, with separate
 permission for Direct uses and explicit generated supplies. Gem-backed skills
 retain their generated child addresses. Potential writers are checked before
 selection/value filtering; ordinary worker reductions preserve unknown coverage.
-Actual Command data adoption remains next and is not supplied by the MORE consumer.
+The [Action damage packet](../data/owned/poe2/3887ae68/action-minion-damage/README.md)
+now joins the shared Actor increase with exact Action Command contributions.
+Basic and all three Gas Arrow stat sets use the same injected programs/query;
+their containing mechanics coverage remains Partial. A checked partition of Gas
+supply separates structural activation from numerical input projection through
+the existing readiness phases, without introducing another occurrence model.
 
 The owner also approved [checked optional numeric selection](owned-numeric-selection-proposal.md).
 Its planned require-agreement result distinguishes absent, present (including

@@ -113,7 +113,78 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Latest native checkpoint: exact Action contribution queries
+## Latest native checkpoint: Command joins the Action damage consumer
+
+The accepted V26 contract now has its first real data adoption in
+[action-minion-damage](../data/owned/poe2/3887ae68/action-minion-damage/README.md).
+Two injected programs combine shared Actor increase `3353` with the checked
+exact-Action Command channel `3304`, producing subtotal `335c` and factor `335d`.
+The same programs run on Basic Attack and all three Gas Arrow stat sets, with
+separate source/recipient addresses for repeated Snipers. No game-specific
+Engine code, runtime Lua or second aggregator was added.
+
+Publication through the existing assembler passed, preserving all five original
+imports and selected obligations **107/117/109/123/4**. The current canonical
+package is **`runs/owned-action-minion-damage-publication-01/package`**, operations
+V26, 18 artifacts and 110 query rows; it has no evaluation bundle. Receipt:
+
+- Input: `53cb79e8a363e6d6fedb09a118a017c996b69896ee046513ac711a8bd7e49874`.
+- Schema: `4b10e6154b8fbab26d3253f6dd15656d99666359c77e2565c29806466bcb1cb5`.
+- Rules: `907cdfb56a86c57d686ae3974ce316c8db915f9a3c723c62139343b07c5149c3`.
+- Compiled rules: `1a34b1498c11ea5621637c599dc5b51743dfb7d40706c9362597d52a56a4e55c`.
+
+The retained Command witness supplies fourteen original-call controls, including
+all Gas modes, Basic's zero contribution and branch removals. The source increase
+factors are 2.3 for Basic and 2.85 for Gas with the Command branches; removing
+those branches returns Gas to 2.3. These are component inputs, not final DPS.
+The joined native graph now includes Gas's actual published supply and typed
+inputs. Its constant activation is separated from numerical projection by the
+existing exact offline partition checker, preserving every original fragment.
+
+The three new joined tests pass (31.32s in
+`runs/owned-sniper-action-damage-native-06.log`), including exact recipients,
+Offering non-stacking, source removal, omitted membership, premature reads,
+missing inputs and fresh/reused/four-worker equality. Authoring and five-build
+publication pass (`runs/owned-action-minion-damage-authoring-01.log`,
+`runs/owned-action-minion-damage-publication-01.log`). All **89 joined Sniper
+checks pass** in 40.69s (`runs/owned-sniper-action-damage-regression-02.log`),
+including the numerical Gas input projections. All **five ordinary Engine replay
+tests pass** in 2.58s (`runs/owned-action-damage-ci-replay-01.log`), comparing the
+new data with the source vectors without loading PoB or a local release package.
+Eight adjacent authoring/source-proof tests also pass
+(`runs/owned-action-damage-authoring-regression-01.log`). Strict all-feature
+Clippy passes for all six affected test targets
+(`runs/owned-action-damage-clippy-03.log`).
+After consolidating the activation-partition helper import, the final native-only
+authoring/replay run passes all six checks with `--no-default-features`
+(`runs/owned-action-damage-final-tests-01.log`).
+Two independent replay exports agree byte for byte
+(`runs/owned-sniper-action-replay-repeat-01.log`): 138,053 compressed bytes,
+SHA-256 `dfebd921a4fbe54067e9d5b60553368855211a352164f9bff315c60e2e986350`.
+Selective formatting and whitespace checks pass. The predecessor `4b2a6ad` GitHub
+run `37892446293` was pending when inspected; no CI completion is claimed.
+
+The integration caught stale fixture expectations for the earlier Life donor
+and operation subset. The fixture now executes the current numeric amulet-copy
+body, template eligibility and query membership. Relevant program bodies remain
+exactly checked; unrelated Mana programs on the same Actor no longer invalidate
+the Life source certificate. No production arithmetic or coverage is relaxed.
+The broader suite also caught a test-allocation ID collision and a stale
+single-output expectation for disabled Snipers; the repaired tests retain both
+Basic and Gas refusal diagnostics. The checked-in replay now contains current
+public typed inputs, with deterministic re-encoding, not a cached evaluation.
+
+**Resume:** implement the already accepted
+[optional numeric selection](owned-numeric-selection-proposal.md) through the
+same Core/Data/Engine graph. Require agreement, coherent presence/value,
+unknown/conflict refusal and scratch isolation before adopting Mana overrides.
+Continue Original05 as the closest build. Final damage, final Life/Mana, four
+selected input obligations and global mechanics coverage remain open;
+**0/5 complete native builds**. Do not wait for all five before starting D4 once
+one unchanged original is genuinely complete. Unrelated incoming-critical drafts
+remain untouched. No additional design approval is needed for this next step.
+
+## Previous native checkpoint: exact Action contribution queries
 
 The accepted [Action query contract](owned-action-contribution-queries-proposal.md)
 now runs through Core/Data/Engine operations V26. Direct Skill uses and explicit
@@ -148,22 +219,14 @@ for the four changed libraries and three affected test targets in **23.95s**
 (`runs/owned-action-queries-clippy-01.log`). Predecessor `b12fb0e` CI is pending
 (run `37890371916`); no CI completion is claimed for this checkpoint.
 
-This is a generic API checkpoint. The canonical package is still
+At that generic API checkpoint, the canonical package was
 `runs/owned-flat-life-admission-publication-01/package`, operations V25,
 18 artifacts, 110 queries and selected obligations **107/117/109/123/4**.
 No game-data publication or complete-build coverage has changed; complete native
 builds remain **0/5**. The unrelated incoming-critical drafts remain untouched.
 
-**Resume:** adopt V26 through the existing release assembler and publish a
-data-defined Action consumer of actual Command channel `3304`. Verify positive
-Gas Arrow, zero Basic Attack, source removal, repeated recipients and missing
-membership; then join it with the existing inherited/applied damage components.
-Preserve all five imports and their unresolved obligations. The accepted optional
-numeric-selection contract follows this adoption, with one require-agreement
-result and coherent presence/value projections for resource overrides. It is
-not implemented by this Action extension. Continue toward Original05 as the
-closest complete build; the separate Life, final-damage and imported-input gaps
-remain real blockers, not requests for new design approval.
+The real Command adoption requested at that checkpoint is recorded above.
+Optional numeric selection remains separate from the Action authority extension.
 
 ## Previous evidence checkpoint: canonical Life numeric boundary
 

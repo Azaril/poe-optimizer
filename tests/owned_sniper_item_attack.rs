@@ -9,6 +9,14 @@ mod accuracy_family;
 #[path = "support/owned_sniper_accuracy_native.rs"]
 mod accuracy_native;
 #[allow(dead_code)]
+#[path = "support/owned_action_minion_damage.rs"]
+mod action_damage_family;
+#[path = "support/owned_sniper_action_damage.rs"]
+mod action_damage_native;
+#[allow(dead_code)]
+#[path = "support/owned_amulet_life_copy.rs"]
+mod amulet_life_family;
+#[allow(dead_code)]
 #[path = "support/owned_attribute_base_membership.rs"]
 mod attribute_base_family;
 #[path = "support/owned_sniper_attributes_native.rs"]
@@ -181,6 +189,7 @@ struct World {
     player_life: player_life_contribution_native::Census,
     life_inputs: player_life_inputs_native::Census,
     offering: offering_application_native::Census,
+    command: action_damage_native::Census,
 }
 impl World {
     fn load() -> Self {
@@ -194,13 +203,7 @@ impl World {
         activation_family::assert_component(&endpoint);
         accuracy_family::assert_component(&endpoint);
         evidence::assert_current(&endpoint);
-        life_routing_family::assert_component(&endpoint);
-        let life_donor = life_routing_family::replacements().remove(0);
-        life_query_family::assert_component_with_reviewed_donor(
-            &endpoint,
-            &life_donor.before,
-            &life_donor.after,
-        );
+        player_life_inputs_native::check_current_packet(&endpoint);
         let recipe = &endpoint.input().recipe;
         // This loader already performs a fresh canonical Original05 item import,
         // retains all 24 roll slots and uses actual applicability/copy/snapshot.
@@ -225,7 +228,8 @@ impl World {
 
         // The retained authored reference identifies this finite dependency set;
         // every descriptor/program/table is read from the current checked release.
-        // Gas Arrow, reservation, support effects and final offence are excluded.
+        // Gas Arrow is added by the Action consumer below. Reservation, support
+        // effects and final offence remain outside this finite component.
         let mut addresses: Vec<DefinitionAddress> =
             decode::<Vec<DefinitionDescriptor>>(&historical["schema_definitions"])
                 .into_iter()
@@ -501,6 +505,7 @@ impl World {
         let life_inputs = player_life_inputs_native::install(&mut w, &endpoint, &path);
         let offering = offering_application_native::install(&mut w, &endpoint, &draft, &selection);
         mixed_damage_native::install(&mut w, &endpoint);
+        let command = action_damage_native::install(&mut w, &endpoint, &path);
         assert_eq!(before, release::inventory(&path));
         Self {
             sniper: w,
@@ -517,6 +522,7 @@ impl World {
             player_life,
             life_inputs,
             offering,
+            command,
         }
     }
     fn action(&self, index: usize) -> ActionSelection {
@@ -559,6 +565,7 @@ impl World {
             metric: def("fixture.observe"),
             target: MetricTarget::Action(Box::new(self.action(index))),
         }));
+        action_damage_native::select(self, &mut queries.requests);
         select(&mut queries.requests);
         assert!(
             !queries
@@ -578,7 +585,9 @@ impl World {
         )?;
         self.sniper.checked_plan_with_request(request, |stages| {
             for row in &mut stages.programs.members {
-                if row.program == key("basic-attack-activation") {
+                if ["basic-attack-activation", "gas-arrow-activation"]
+                    .contains(&row.program.as_str())
+                {
                     row.stage = key("source-prepare");
                 }
                 if matches!(
@@ -592,7 +601,9 @@ impl World {
             }
             let ready = stages.readiness.as_mut().unwrap();
             for row in &mut ready.programs.members {
-                if row.program == key("basic-attack-activation") {
+                if ["basic-attack-activation", "gas-arrow-activation"]
+                    .contains(&row.program.as_str())
+                {
                     let program = self
                         .sniper
                         .base
@@ -628,6 +639,14 @@ impl World {
             for parameter in &mut basic.parameters.members {
                 parameter.phase = ReadinessPhase::Execution;
             }
+            let gas = ready
+                .skills
+                .iter_mut()
+                .find(|s| s.skill == d(0x24))
+                .unwrap();
+            for parameter in &mut gas.parameters.members {
+                parameter.phase = ReadinessPhase::Execution;
+            }
             passive_damage_native::configure(stages);
             buff_effect_recipients_native::configure(stages);
             buff_sources_native::configure(stages);
@@ -637,6 +656,7 @@ impl World {
             player_life_contribution_native::configure(stages);
             offering_application_native::configure(stages);
             mixed_damage_native::configure(stages);
+            action_damage_native::configure(stages);
             configure(stages);
         })
     }
@@ -1141,7 +1161,19 @@ fn sniper_items_disabled_authored_root_retains_unavailable_query_and_restores_sc
         ))),
         reason: PlanGapReason::UnresolvedTopology,
     };
-    assert_eq!(pd.gaps(), std::slice::from_ref(&expected_gap));
+    let gas = action_damage_native::action(&disabled, 0, Some(0x32ec));
+    let expected_gaps = vec![
+        expected_gap,
+        PlanGap {
+            provider: Some(gas.action.provider),
+            subject: Some(SchemaSubject::Slot(SlotAddress::ActionOutput(
+                gas.action.output,
+            ))),
+            reason: PlanGapReason::UnresolvedTopology,
+        },
+    ];
+    // All three retained Gas modes share the same unavailable provider/output.
+    assert_eq!(pd.gaps(), expected_gaps);
     let mut scratch = pa.new_scratch();
     let baseline = pa.evaluate(&mut scratch).unwrap();
     active.check(&baseline, [original, original]);
@@ -1150,7 +1182,7 @@ fn sniper_items_disabled_authored_root_retains_unavailable_query_and_restores_sc
     // The retained child query resolves unavailable. action_programs records its
     // exact unresolved-topology gap, so support preflight refuses the whole
     // request before execution. No evaluated descendant-gating claim is made.
-    assert_eq!(stopped.gaps, vec![expected_gap]);
+    assert_eq!(stopped.gaps, expected_gaps);
     assert_eq!(
         stopped.outcome,
         SupportEffectsOutcome::Unavailable {
