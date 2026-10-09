@@ -2,7 +2,7 @@
 use super::*;
 use poe_optimizer_core::{
     owned_build::ParameterValue,
-    owned_definitions::{EquipmentSlotDefId, OwnedDefinitionKey, StatDefId},
+    owned_definitions::{EquipmentSlotDefId, OwnedDefinitionKey, SlotOwnerDefId, StatDefId},
     owned_schema::{SchemaDefinitionId, UnitDimension},
 };
 use std::collections::BTreeMap;
@@ -275,6 +275,88 @@ fn order<I: DefinitionSchemaIndex>(
             "contribution member ordering differs from its group",
         ));
     }
+    if let ContributionOrigin::Action { authored, supplies } = &producer.origin {
+        if !RuleOperationsVersion::parse(input.operations_version.as_str())
+            .is_some_and(RuleOperationsVersion::supports_action_contribution_queries)
+        {
+            return Err(invalid(
+                "Action contribution origins require owned-domain-operations-v26",
+            ));
+        }
+        if program.context != RuleEntityKind::Action
+            || member
+                .order
+                .as_ref()
+                .is_some_and(|o| !o.slot_ranks.is_empty())
+        {
+            return Err(invalid(
+                "Action contribution requires Action context and no equipment ranks",
+            ));
+        }
+        let (skill, output) = match &producer.owner {
+            SchemaSubject::Definition(DefinitionAddress::Skill(skill)) => (skill, None),
+            SchemaSubject::Slot(SlotAddress::ActionOutput(output)) => {
+                let SlotOwnerDefId::Skill(skill) = &output.declaration else {
+                    return Err(invalid(
+                        "Action output contribution requires a Skill declaration",
+                    ));
+                };
+                if !matches!(index.slot(output), SchemaLookup::Known(_)) {
+                    return Err(invalid("Action contribution requires a known output"));
+                }
+                (skill, Some(output))
+            }
+            _ => {
+                return Err(invalid(
+                    "Action contribution requires a Skill or Action-output owner",
+                ));
+            }
+        };
+        let SchemaLookup::Known(schema) = index.definition(skill) else {
+            return Err(invalid("Action contribution requires a known Skill"));
+        };
+        if *authored {
+            if !schema.directly_selectable {
+                return Err(invalid(
+                    "authored Action contribution requires a directly selectable Skill",
+                ));
+            }
+            work(usage, limits, schema.declarations.outputs.members.len())?;
+            if output.is_some_and(|o| !schema.declarations.outputs.members.contains(o)) {
+                return Err(invalid(
+                    "authored Action output is not declared by its Skill",
+                ));
+            }
+        }
+        add(&mut usage.ordered_slots, supplies.len())?;
+        work(usage, limits, supplies.len())?;
+        if !authored && supplies.is_empty() {
+            return Err(invalid(
+                "Action contribution requires authored permission or explicit supply membership",
+            ));
+        }
+        let mut seen = BTreeSet::new();
+        for slot in supplies {
+            if !seen.insert(slot) {
+                return Err(invalid("duplicate supplied Action contribution slot"));
+            }
+            let SchemaLookup::Known(supply) = index.slot(slot) else {
+                return Err(invalid("supplied Action contribution slot must be known"));
+            };
+            if &supply.skill != skill {
+                return Err(invalid(
+                    "supplied Action contribution owner differs from its Skill slot",
+                ));
+            }
+            work(usage, limits, supply.outputs.members.len())?;
+            if output.is_some_and(|o| !supply.outputs.members.contains(o)) {
+                return Err(invalid(
+                    "supplied Action output is absent from its Skill supply",
+                ));
+            }
+        }
+        return Ok(None);
+    }
     if let ContributionOrigin::Skill { authored, supplies } = &producer.origin {
         if !RuleOperationsVersion::parse(input.operations_version.as_str())
             .is_some_and(RuleOperationsVersion::supports_skill_contribution_queries)
@@ -482,7 +564,8 @@ fn order<I: DefinitionSchemaIndex>(
         ContributionOrigin::ExistingActor { .. }
         | ContributionOrigin::Reward
         | ContributionOrigin::SuppliedActor { .. }
-        | ContributionOrigin::Skill { .. } => {
+        | ContributionOrigin::Skill { .. }
+        | ContributionOrigin::Action { .. } => {
             unreachable!("extended origins checked above")
         }
     };
@@ -582,6 +665,8 @@ fn read<I: DefinitionSchemaIndex>(
     // cross-Skill relations require their own authority and remain excluded.
     let skill_allowed = RuleOperationsVersion::parse(input.operations_version.as_str())
         .is_some_and(RuleOperationsVersion::supports_skill_contribution_queries);
+    let action_allowed = RuleOperationsVersion::parse(input.operations_version.as_str())
+        .is_some_and(RuleOperationsVersion::supports_action_contribution_queries);
     let enemy_allowed = catalog.queries[query].contribution == ContributionKind::Flag
         && RuleOperationsVersion::parse(input.operations_version.as_str())
             .is_some_and(RuleOperationsVersion::supports_boolean_contributions);
@@ -595,6 +680,7 @@ fn read<I: DefinitionSchemaIndex>(
                 RuleEntityKind::Actor | RuleEntityKind::EquipmentUse
             ) || (p.context == RuleEntityKind::Enemy && enemy_allowed)
                 || (p.context == RuleEntityKind::Skill && skill_allowed)
+                || (p.context == RuleEntityKind::Action && action_allowed)
         }
         _ => false,
     };
@@ -912,6 +998,13 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                         "Skill contribution membership admits only the exact current Skill recipient",
                     ));
                 }
+                if matches!(producer.origin, ContributionOrigin::Action { .. })
+                    && *entity != RuleEntity::Current
+                {
+                    return Err(RuleStorageError::Structure(
+                        "Action contribution membership admits only the exact current Action recipient",
+                    ));
+                }
                 let target = match entity {
                     RuleEntity::Player | RuleEntity::Actor => RuleEntityKind::Actor,
                     RuleEntity::Enemy
@@ -959,6 +1052,28 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                     return Err(RuleStorageError::Structure(
                         "ordered effects of one program must share source and program ranks",
                     ));
+                }
+            }
+        }
+        if RuleOperationsVersion::parse(input.operations_version.as_str())
+            .is_some_and(RuleOperationsVersion::supports_action_contribution_queries)
+        {
+            // Potential Action writers must be reviewed even if no request
+            // selects their output, or their value/activation is neutral.
+            work(usage, limits, programs.len())?;
+            for ((owner, id), program) in &programs {
+                if program.context != RuleEntityKind::Action {
+                    continue;
+                }
+                work(usage, limits, program.effects.len())?;
+                for effect in &program.effects {
+                    if matches!(&effect.effect, RuleEffectKind::Contribute {entity: RuleEntity::Current, stat, contribution, ..} if stat == &query.stat && contribution == &query.contribution)
+                        && !members.contains(&(*owner, *id, &effect.id))
+                    {
+                        return Err(RuleStorageError::Structure(
+                            "potential Action contribution has no declared membership",
+                        ));
+                    }
                 }
             }
         }

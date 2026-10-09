@@ -14,6 +14,8 @@ pub const OWNED_RULE_PACKAGE_VERSION: u32 = 3;
 /// Baseline operation subset used when authors do not opt into newer capabilities.
 /// Package schema and content identity domains always use the current format.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+/// Exact Action self-contributions and checked current-Action query reads.
+pub const OWNED_RULE_OPERATIONS_V26: &str = "owned-domain-operations-v26";
 /// Checked membership of contributions after exact-recipient application stacking.
 pub const OWNED_RULE_OPERATIONS_V25: &str = "owned-domain-operations-v25";
 /// Checked query reads and self-contributions on exact authored/supplied Skills.
@@ -79,6 +81,7 @@ pub enum RuleOperationsVersion {
     V23,
     V24,
     V25,
+    V26,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -103,6 +106,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V23 => Self::V23,
             OWNED_RULE_OPERATIONS_V24 => Self::V24,
             OWNED_RULE_OPERATIONS_V25 => Self::V25,
+            OWNED_RULE_OPERATIONS_V26 => Self::V26,
             _ => return None,
         })
     }
@@ -128,6 +132,7 @@ impl RuleOperationsVersion {
             Self::V23 => 23,
             Self::V24 => 24,
             Self::V25 => 25,
+            Self::V26 => 26,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -187,6 +192,9 @@ impl RuleOperationsVersion {
     pub const fn supports_application_group_contributions(self) -> bool {
         self.revision() >= 25
     }
+    pub const fn supports_action_contribution_queries(self) -> bool {
+        self.revision() >= 26
+    }
     /// Current explicit Skill participation in V4 readiness metadata.
     pub const fn supports_skill_participation(self) -> bool {
         self.revision() >= 21
@@ -215,6 +223,7 @@ impl RuleOperationsVersion {
             Self::V23 => "owned-effect-plan-v20",
             Self::V24 => "owned-effect-plan-v21",
             Self::V25 => "owned-effect-plan-v22",
+            Self::V26 => "owned-effect-plan-v23",
         }
     }
 }
@@ -419,6 +428,14 @@ pub enum ContributionOrigin {
     /// both direct authored uses and these explicitly admitted generated supplies.
     /// At least one source permission is required; this grants no inheritance.
     Skill {
+        authored: bool,
+        supplies: Vec<DeclaredSlot<SkillGrantSlotDefId>>,
+    },
+    /// Self-contributions of a Skill definition or its exact Action-output
+    /// declaration. Authored Direct uses and generated Skill supplies have
+    /// separate permission. Gem-backed skills retain their explicit child
+    /// supply; other provider/delivery origins remain excluded.
+    Action {
         authored: bool,
         supplies: Vec<DeclaredSlot<SkillGrantSlotDefId>>,
     },

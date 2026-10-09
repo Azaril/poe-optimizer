@@ -1491,6 +1491,19 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 }
             };
             if contexts.is_empty() {
+                // Skill-owned Action rules run only for established selections.
+                // An unselected sibling skill has no invocation, not an invalid
+                // context. Declaration-side contribution census still checks
+                // every potential writer independently of these selections.
+                if self.operations.supports_action_contribution_queries()
+                    && program.context == RuleEntityKind::Action
+                    && matches!(
+                        subject,
+                        SchemaSubject::Definition(DefinitionAddress::Skill(_))
+                    )
+                {
+                    continue;
+                }
                 self.gap(
                     Some(key.clone()),
                     Some(subject.clone()),

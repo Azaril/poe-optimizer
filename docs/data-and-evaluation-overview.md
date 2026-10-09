@@ -119,8 +119,11 @@ actual released rule on broader canonical inputs. Sixteen controls match the
 original formatter; one extreme result differs only after PoB's number-to-text
 conversion. This is retained diagnostic evidence, not a native formatting rule,
 an accepted bug exception or complete numeric coverage. Four Life owner gaps
-remain. Exact Action queries and optional numeric selection are now approved
-extensions of the same native contribution graph, with Action authority first.
+remain. Exact Action queries are now implemented in Core/Data/Engine operations
+V26 through the same native contribution graph. Direct uses and generated Skill
+supplies retain distinct authority; each Action retains its exact output, part,
+mode and stat set. The canonical data package remains V25 pending real Command
+consumer adoption. Optional numeric selection is approved and follows that work.
 
 Support discovery now has an offline constructor census for Original05 and
 contrasting controls. It confirms that the source can share supports across
@@ -197,9 +200,11 @@ and a checked product of Gigantic contributions, deriving the admitted
 unconditional MORE factor with an explicit decimal rounding boundary. This is
 owned rule data, with no separate aggregator or Lua runtime dependency.
 Action-specific modifiers, further modifier domains and final hit damage remain
-pending, along with the broader coverage gaps. The next proposed contract is
-[checked queries on exact Actions](owned-action-contribution-queries-proposal.md);
-it awaits a design decision. The current consumer does not authorize it.
+pending, along with the broader coverage gaps.
+[Checked queries on exact Actions](owned-action-contribution-queries-proposal.md)
+were accepted on October 9 and their generic contract now runs in V26. The next
+data adoption consumes actual Command contributions, including positive Gas Arrow
+and zero Basic Attack controls. This does not yet complete the damage pipeline.
 Composed support discovery is already approved and remains
 independent implementation work. See the current [resume point](implementation.md#current-data-checkpoint-inherited-and-applied-minion-damage).
 

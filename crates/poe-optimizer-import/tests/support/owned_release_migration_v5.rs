@@ -106,6 +106,7 @@ fn contribution_contracts_preserve_membership_and_reject_downgrades() {
     for (old, new) in [
         (OWNED_RULE_OPERATIONS_V22, OWNED_RULE_OPERATIONS_V23),
         (OWNED_RULE_OPERATIONS_V23, OWNED_RULE_OPERATIONS_V24),
+        (OWNED_RULE_OPERATIONS_V25, OWNED_RULE_OPERATIONS_V26),
     ] {
         let mut input = prior().input().clone();
         input.recipe.rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
@@ -187,7 +188,7 @@ fn v5_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
         assert!(matches!(
             compile_owned_release_migration(&prior, bad, Default::default()),
             Err(OwnedReleaseError::Invalid(
-                "current migration requires schema v6 and operations v20 through v24"
+                "current migration requires schema v6 and operations v20 through v26"
             ))
         ));
     }

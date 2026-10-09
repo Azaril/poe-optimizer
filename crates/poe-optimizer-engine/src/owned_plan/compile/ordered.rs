@@ -99,6 +99,73 @@ impl Sources<'_> {
             return Err(invalid("contribution requires a reviewed provider origin"));
         };
         charge(work, provider.grant_path.len() + 1)?;
+        if let ContributionOrigin::Action { authored, supplies } = origin {
+            let ConcreteEntity::Action(action) = &effect.invocation.entity else {
+                return Err(invalid(
+                    "Action contribution requires its exact Action occurrence",
+                ));
+            };
+            if &action.action.provider != provider {
+                return Err(invalid(
+                    "Action contribution provider differs from its exact Action",
+                ));
+            }
+            let SlotOwnerDefId::Skill(definition) = &action.action.output.declaration else {
+                return Err(invalid("Action contribution requires a Skill-owned output"));
+            };
+            if member.owner != SchemaSubject::Definition(definition.address())
+                && member.owner
+                    != SchemaSubject::Slot(ActionOutputDefId::address(&action.action.output))
+            {
+                return Err(invalid(
+                    "Action contribution owner differs from its exact output",
+                ));
+            }
+            charge(work, self.skill_supplies.len())?;
+            let mut bound = self.skill_supplies.iter().filter(|(_, p)| *p == provider);
+            if let Some((skill, _)) = bound.next() {
+                if bound.next().is_some() {
+                    return Err(invalid("Action contribution has ambiguous Skill supply"));
+                }
+                charge(work, supplies.len() + skill.provider.grant_path.len() + 1)?;
+                if !supplies.contains(&skill.slot) {
+                    return Err(invalid(
+                        "Action contribution differs from its validated Skill supply membership",
+                    ));
+                }
+            } else {
+                let ProviderRoot::SkillUse(id) = provider.root else {
+                    return Err(invalid(
+                        "Action contribution has no authored or supplied Skill source",
+                    ));
+                };
+                if !authored || !provider.grant_path.is_empty() {
+                    return Err(invalid(
+                        "authored Action contribution requires permission for its exact use",
+                    ));
+                }
+                charge(work, self.build.skills.len())?;
+                let skill = self
+                    .build
+                    .skills
+                    .iter()
+                    .find(|s| s.id == id)
+                    .ok_or_else(|| invalid("contribution Action Skill use is absent"))?;
+                let AuthoredSkillSource::Direct(actual) = &skill.source else {
+                    return Err(invalid(
+                        "authored Action contribution requires a direct Skill source",
+                    ));
+                };
+                if actual != definition {
+                    return Err(invalid(
+                        "authored Action contribution Skill differs from membership",
+                    ));
+                }
+                // Gem-backed skills use their explicit generated supply above;
+                // a root selector cannot stand in for that child occurrence.
+            }
+            return Ok(Source::Provider(provider));
+        }
         if let ContributionOrigin::Skill { authored, supplies } = origin {
             let ConcreteEntity::Skill(target) = &effect.invocation.entity else {
                 return Err(invalid(
@@ -224,6 +291,7 @@ impl Sources<'_> {
             (ContributionOrigin::ExistingActor { .. }, Source::ExistingActor(_, _))
             | (ContributionOrigin::SuppliedActor { .. }, Source::Provider(_))
             | (ContributionOrigin::Skill { .. }, Source::Provider(_)) => (0, 0),
+            (ContributionOrigin::Action { .. }, Source::Provider(_)) => (0, 0),
             (_, Source::Provider(provider)) => match (origin, &provider.root) {
                 (ContributionOrigin::Character, ProviderRoot::Character)
                 | (ContributionOrigin::Allocation, ProviderRoot::Allocation(_))
@@ -415,6 +483,13 @@ impl Sources<'_> {
                 .ok_or_else(|| invalid("actual contribution has no declared membership"))?;
             let (source, origin) = match &member.producer {
                 ContributionProducer::ProgramEffect(p) => {
+                    if matches!(p.origin, ContributionOrigin::Action { .. })
+                        && invocation.entity != key.entity
+                    {
+                        return Err(invalid(
+                            "Action contribution recipient differs from its exact Action",
+                        ));
+                    }
                     (self.source(effect, p, work)?, Some(&p.origin))
                 }
                 ContributionProducer::ApplicationGroup(p) => {

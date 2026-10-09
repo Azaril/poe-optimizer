@@ -38,6 +38,15 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Exact Action queries, 2026-10-09:** the accepted V26 extension uses the existing
+checked contribution graph and worker reductions. Keep one native membership
+implementation, with explicit Skill-definition/output ownership and exact supply
+authority. Gem root selectors cannot replace generated child occurrences.
+Potential declarations remain checked even when no Action is selected; an empty
+selected set is not a false unsupported-context gap. No Lua collection behavior,
+second aggregator or game-name runtime branch is added. Real Command data
+adoption is the next consumer; this capability is not a closure certificate.
+
 **Shared Life routing, 2026-10-08:** flat Life now consumes the same injected
 Talisman exclusion as ordinary Minion-level delivery. Retain one predicate and
 one source certificate; no new runtime item-name dispatcher or Lua compatibility

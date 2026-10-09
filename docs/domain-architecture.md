@@ -303,10 +303,20 @@ quality and checked supplied-Actor contributions. Precision and grouping are
 authored semantic arithmetic, not generic Lua modifier-store behavior. The
 currently reviewed quality/Gigantic group retains its observed two-decimal
 rounding boundary; broader modifier groups need independent evidence. Actor
-factors alone do not account for action-local conditions. The proposed
+factors alone do not account for action-local conditions. The accepted
 [exact Action query extension](owned-action-contribution-queries-proposal.md)
-would add that authority to the same graph; it is awaiting the owner's decision
-and is not implemented by the MORE data consumer.
+now implements that authority in Core/Data/Engine operations V26. Skill-definition
+and Skill-declared output owners bind to exact Action selections, with separate
+permission for Direct uses and explicit generated supplies. Gem-backed skills
+retain their generated child addresses. Potential writers are checked before
+selection/value filtering; ordinary worker reductions preserve unknown coverage.
+Actual Command data adoption remains next and is not supplied by the MORE consumer.
+
+The owner also approved [checked optional numeric selection](owned-numeric-selection-proposal.md).
+Its planned require-agreement result distinguishes absent, present (including
+zero), and unavailable. Presence/value projections share one checked candidate
+set; conflicting or unknown candidates cannot choose an arbitrary winner. This
+remains unimplemented and imports no Lua database-order precedence.
 
 The [passive topology contract](owned-passive-topology.md) separates implicit roots,
 physical allocations, attached choices, scope eligibility and injected legality budgets.

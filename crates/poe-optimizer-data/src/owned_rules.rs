@@ -410,7 +410,7 @@ impl OwnedRulePackage {
         self.resources
     }
 }
-#[derive(Eq, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
 enum OwnerKey<'a> {
     Definition(&'a DefinitionAddress),
     Slot(&'a SlotAddress),

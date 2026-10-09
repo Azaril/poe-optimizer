@@ -113,7 +113,59 @@ Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
 coverage proposals have not been approved by
 these answers. Ask when one becomes the next necessary design boundary.
 
-## Latest evidence checkpoint: canonical Life numeric boundary
+## Latest native checkpoint: exact Action contribution queries
+
+The accepted [Action query contract](owned-action-contribution-queries-proposal.md)
+now runs through Core/Data/Engine operations V26. Direct Skill uses and explicit
+generated Skill supplies have separate authority; Skill-definition and
+Skill-declared Action-output programs retain exact provider, recipient, output,
+part, mode and stat-set identity. Gem-backed skills keep their generated child
+addresses. Membership cannot turn their root selectors into active child skills.
+
+Data censuses potential current-Action writers before selection or value filtering.
+Cold native planning authenticates concrete supply/owner/recipient membership and
+reuses the existing ordering, dependency stages, unknown coverage and worker
+reductions. Unselected Skill-owned Action programs no longer create false
+unsupported-context gaps in V26; their potential declarations still require
+membership. No runtime Lua, game-name dispatch, second collector or extra backend
+was introduced. The release assembler accepts V26 and invalidates affected
+compiled/effect-plan identities.
+
+The new ten-test generic suite passes, along with adjacent Action selection,
+Actor/reward/Skill/ordered contribution, application-group and preparation suites:
+**81 native tests pass** (`runs/owned-action-queries-regression-01.log`). It covers
+Direct and Gem-supplied skills, nested Actor supply, repeated occurrences,
+separate outputs and all selection axes, forged/omitted membership, zero/inactive/
+unread/unselected writers, incomplete and missing values, unsupported delivery,
+bounds, cycles, stages, round trips, permutations and fresh/reused/four-worker
+execution. Three Core capability checks and all 23 release-migration checks also
+pass (logs `runs/owned-action-queries-core-01.log` and
+`runs/owned-action-queries-migration-02.log`): **107 targeted tests total**.
+The migration run exposed and fixed a stale expected rejection message left at
+V24; contract/source preservation, repeated builds and downgrade refusal pass.
+Selective formatting and `git diff --check` pass. Strict all-feature Clippy passes
+for the four changed libraries and three affected test targets in **23.95s**
+(`runs/owned-action-queries-clippy-01.log`). Predecessor `b12fb0e` CI is pending
+(run `37890371916`); no CI completion is claimed for this checkpoint.
+
+This is a generic API checkpoint. The canonical package is still
+`runs/owned-flat-life-admission-publication-01/package`, operations V25,
+18 artifacts, 110 queries and selected obligations **107/117/109/123/4**.
+No game-data publication or complete-build coverage has changed; complete native
+builds remain **0/5**. The unrelated incoming-critical drafts remain untouched.
+
+**Resume:** adopt V26 through the existing release assembler and publish a
+data-defined Action consumer of actual Command channel `3304`. Verify positive
+Gas Arrow, zero Basic Attack, source removal, repeated recipients and missing
+membership; then join it with the existing inherited/applied damage components.
+Preserve all five imports and their unresolved obligations. The accepted optional
+numeric-selection contract follows this adoption, with one require-agreement
+result and coherent presence/value projections for resource overrides. It is
+not implemented by this Action extension. Continue toward Original05 as the
+closest complete build; the separate Life, final-damage and imported-input gaps
+remain real blockers, not requests for new design approval.
+
+## Previous evidence checkpoint: canonical Life numeric boundary
 
 The [numeric audit](owned-flat-life-numeric-audit.md) finds 16 matching controls
 and one repeatable large-value source decimal-transport discrepancy. The actual
@@ -131,11 +183,9 @@ Evidence and reproduction are linked above. Canonical package, four owner gaps,
 110 queries and selected counts **107/117/109/123/4** remain unchanged; native
 builds remain **0/5**. Predecessor `95f9e83` CI was pending at inspection.
 
-**Resume:** The newly accepted exact Action query contract is now the immediate
-implementation boundary. Add generic Core/Data/Engine ownership and membership
-through the shared query path, then consume actual Command contributions with
-positive Gas Arrow and zero Basic Attack controls. Optional numeric selection
-follows for Mana. For independent Life work, implement real ordered-magnitude
+**Follow-up:** the generic exact Action contract is implemented above; actual
+Command consumption and optional numeric selection remain the next steps.
+For independent Life work, implement real ordered-magnitude
 producers using existing `ProjectModifierTransform` and establish their reachable
 bounds; do not close numeric coverage using only fixed-integer imports or spend
 the next checkpoint recreating source string formatting. Existing routing,
