@@ -1,4 +1,4 @@
-> Historical snapshots through the implicit Ascendancy-root checkpoint on 2026-10-09.
+> Historical snapshots through the intrinsic added attack damage checkpoint on 2026-10-09.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -23656,3 +23656,124 @@ Operations remain V27; no IDs were allocated and the next free key is **336b**.
 It has eighteen artifacts, 167 provenance rows and no evaluation bundle. Complete
 native builds remain **0/5** and selected input obligations **106/117/109/123/4**.
 The full census is `runs/owned-ascendancy-owner-publication-01/validation.json`.
+
+## Archived 2026-10-09 checkpoint: intrinsic added attack damage
+
+The [intrinsic added attack damage packet](../data/owned/poe2/3887ae68/intrinsic-added-attack-damage/README.md)
+adds a missing numerical dependency to Original05 through existing owned rules.
+The admitted Actor-slot program reads injected profile scale `2537` and derives
+raw percentage `336b`. One exact Basic Action route carries it to `336c`; its
+Action program emits the individual unrounded Multiply contribution `336d`.
+The source percentage remains `14.999999999999991`, with factor 1.15. Scale one
+is inactive; zero is a real factor; missing profile/producer/route is unavailable.
+No skill-name dispatch, Lua truthiness, new evaluator API, profile DTO, table,
+query, receiver or compatibility branch was added. No owner coverage was closed.
+
+Evidence reuses the unchanged physical-damage source02 reports and complete
+intrinsic-Life profile evidence. It authenticates 24 occurrence/mode rows,
+including thirteen actual Basic calls and explicitly unobserved contexts.
+The complete profile proves `damageFixup` absence; present zero/false are rejected
+as evidence of absence. The source Attack and summon filters remain offline.
+No new source VM was needed. Broader profile eligibility and final grouped
+rounding remain separate work; tests do not construct a foreign Actor.
+
+The joined graph now executes these exact programs with actual item preparation
+and population. Its ordering is explicit: profile facts → intrinsic percentage
+→ shared Action routing → individual contribution. The fixture reuses already
+loaded definitions after checking exact equality. The publication preserves all
+existing owners, route/query closures and unrelated programs through an exact
+inverse to the checked three-Stat migration.
+
+Validation completed:
+
+- Five packet/refusal, retained-source and publication tests pass (28.56s).
+  All eighteen artifacts rebuild byte-for-byte; all five fresh imports retain
+  their local identities, original selections, 110 queries and input obligations.
+- The joined numerical check passes (29.18s), and replay export passes (29.17s).
+  Every previous definition, slot and program survives unchanged. Build,
+  scenario and queries are identical; support artifacts change dependency
+  identities only. The fixture now has 925 definitions and 618 owners.
+- All ten ordinary Engine replay tests pass (2.33s), including exact recipient
+  binding, missing profile/authorized producer/route, zero/neutral/changed input,
+  Partial refusal, early profile and route-read rejection, occurrence reordering
+  and fresh/reused/four-worker equality. No missing value becomes a neutral factor.
+- All 38 ordinary tests across the six existing replay consumers pass: Life copy,
+  Life admission/numeric transport, Intelligence/Mana, intrinsic Mana and reward
+  support. Their eight unchanged historical publication tests remain opt-in.
+- Strict Engine and all-feature CLI Clippy pass. Independent final review and
+  selective formatting/whitespace checks cover the new data and integration.
+
+This is **55 passing selected test functions**, including publication and export.
+Logs: `runs/owned-intrinsic-added-attack-publication-02.log`,
+`runs/owned-intrinsic-added-joined-03.log`,
+`runs/owned-sniper-replay-added-attack-01.log`,
+`runs/owned-intrinsic-added-native-02.log`,
+`runs/owned-added-replay-consumers-01.log`,
+`runs/owned-intrinsic-added-engine-clippy-01.log` and
+`runs/owned-intrinsic-added-cli-clippy-01.log`.
+
+The canonical package is **`runs/owned-intrinsic-added-attack-publication-02/package`**:
+
+- Input: `c4c38e18383f708bc36d4a571bb260d0afadf0e69c1e7a6881ef80b8a0098ba3`
+- Definitions: `2224be8704cc7813df061c6d675e56209a6e55cb24aa98e5cb3ccd1854cfacc9`
+- Rules: `0d61c45a3a92cce31798a1d051caa7a13e8c413d6d419cc61a0c789f8e6eb77a`
+- Compiled rules: `1a8c87bd847b2a039919dddb08a1cc8df0ecbb9900528de065f1f2dd8d4a3b33`
+
+Operations remain V27; the next free key is **336e**. There are eighteen artifacts,
+168 provenance rows and no evaluation bundle. Complete native builds remain
+**0/5**, with selected input obligations **106/117/109/123/4**. The complete
+preservation report is `runs/owned-intrinsic-added-attack-publication-02/validation.json`.
+The current 138,407-byte replay has SHA-256
+`c0aa1c70b4b5e42eba0c780d98a7b9d48acfa862825ff862644843dbe5c63614`.
+
+**Resume:** keep Original05 first. Final Mana still awaits the numeric-domain
+decision and complete conversion/addition source coverage. The review found no
+safe numerical closure for the eight selected item templates from observed zero
+resource transfers. Empty adjustment groups are not proof about untranslated
+owners. The thirteen remaining Partial passives comprise seven Puppet/Archon
+nodes, four separate granted-effect sources, one jewel socket and the distinct
+active-minion-type Command mechanic. Preserve their independent gaps.
+
+**Next implementation:** join the already-published minion Life increase into
+the shared replay as described below. It retires a deliberate fixture exclusion
+without a new public model, while the resource/configuration decisions remain
+pending. The intrinsic added-attack source above is now published and joined;
+Retained Original05 source observations have no flat-added damage, so this
+fills a dependency without supplying a new final-damage result.
+
+The following damage boundary is the pre-conversion physical base at pinned
+`CalcOffence.lua:4132–4136`: account for flat Actor/Action and Enemy additions,
+added-damage increased/MORE membership, source endpoint bonuses and the skill
+coefficient before calculating it. Source02's filtered baseline zero/empty
+records cannot close untranslated owners. Its raw filter also omits
+`DamageGainAsRandom`: `CalcSetup.lua:82` installs Faerie Fire's conditional random
+gain before later expansion. Lines 77–81 install conditional Intimidated and
+Debilitated damage sources despite their baseline inactivity. Trace these raw
+inventories and conditions in the next damage census; do not infer conversion,
+gain or complete damage coverage from final zero tables. The pending Actor-to-
+Enemy, configuration and scoped-coverage decisions remain distinct boundaries.
+
+The shared Sniper Life fixture also still excludes the already-published
+`received-minion-life-increase` producer (six sources, 44 percentage points).
+Join it next through the existing graph, then update
+the ordinary replay and preserve actual Partial refusal. This is integration
+work, not authority to declare final Life complete. Four selected Life/Damage
+sources already contribute 24 in the replay; add the actual selected `1218`/
+`0aef` and `40894`/`1372` allocations and their existing 10-point producers
+without duplicating those four. Install the canonical Actor-slot program,
+freeze Player `32e5` Increase after delivery, then schedule it before
+`life-contributions-ready`. Remove the explicit query-member exclusion in
+`tests/support/owned_sniper_life_queries.rs` and check 44 on both exact minions,
+preserving Player 1257 Add/5 Increase. Existing source controls prove 44/38/34/0;
+their tree removals have connectivity side effects and are not isolated legal
+optimizer mutations. Final Life still needs complete equipment, transformation,
+override and arithmetic coverage. A smaller item follow-up is
+Cryptic Leggings `1e0e`'s five empty intrinsic declaration facets using retained
+Crown/Leggings evidence; its real sockets and numerical gaps must remain open.
+
+Archived Firebolt `174/175` remains separate: its preset has Pending raw inputs
+and supports but Complete-empty usage. Prove genuine usage responsibility and
+exact selector correspondence before changing allocation-free source accounting;
+do not invent a Pending owner or a physical/manual root. Broader configuration,
+Actor-to-Enemy, resource-demand and scoped-coverage proposals remain unapproved.
+The Action/optional-selection approvals do not approve those later changes.

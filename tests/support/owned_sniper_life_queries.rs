@@ -1,6 +1,6 @@
 //! Checked Life reductions in the existing finite joined graph. These probes
 //! derive diagnostic test stats, never canonical/final Life. Production owners
-//! and incoming inventories remain Partial; minion INC, conversions, overrides
+//! and incoming inventories remain Partial; conversions, overrides
 //! and complete resource arithmetic are not certified by this fixture.
 use super::*;
 use poe_optimizer_core::owned_stages::{EvaluationStage, FrozenStageChannel, StageChannel};
@@ -31,19 +31,17 @@ fn world() -> World {
     let copy = amulet_life_family::consumer();
     let target = queries.iter_mut().find(|q| q.id == copy.query.id).unwrap();
     *target = copy.query;
-    // This existing finite graph has no received-minion-Life producer. Keep
-    // that one exclusion explicit rather than silently filtering by selection.
-    let excluded = queries[1].groups[1].members.members.pop().unwrap();
-    assert_eq!(
-        excluded.producer.as_program_effect().unwrap().program,
-        key("received-minion-life-increase")
-    );
-    assert!(queries[1].groups[1].members.members.is_empty());
+    // Retain the exact published minion receiver membership now that the six
+    // actual selected Life sources and that receiver share this graph.
+    assert_eq!(queries[1].groups[1].members.members.len(), 1);
+    let member = queries[1].groups[1].members.members[0]
+        .producer
+        .as_program_effect()
+        .unwrap();
+    assert_eq!(member.program, key("received-minion-life-increase"));
     assert!(
-        !f.owners
-            .iter()
-            .flat_map(|o| &o.programs.members)
-            .any(|p| p.id == excluded.producer.as_program_effect().unwrap().program)
+        f.owners.iter().any(|o| o.owner == member.owner
+            && o.programs.members.iter().any(|p| p.id == member.program))
     );
     for descriptor in life_query_family::definitions() {
         if matches!(descriptor, DefinitionDescriptor::EquipmentSlot(_))
@@ -150,6 +148,7 @@ fn configure(stages: &mut EvaluationStagesInput) {
             predecessors: vec![
                 key("player-inherent-life-contribution"),
                 key("gigantic-benefits"),
+                key(life_increase_native::RECEIVE_STAGE),
             ],
         },
         EvaluationStage {
@@ -224,6 +223,7 @@ fn actual_life_sources_reduce_on_exact_player_and_minion_recipients() {
     assert!(r.gaps.is_empty());
     player_life_contribution_native::check(&w, &r, 1120., 54.);
     player_life_inputs_native::check(&w, &r);
+    life_increase_native::check(&w, &r);
     player(&r, 1257., 5.);
     let effects = sniper::offering::effects(&r);
     for index in 0..2 {
@@ -243,7 +243,7 @@ fn actual_life_sources_reduce_on_exact_player_and_minion_recipients() {
         assert_eq!(
             value(&r, w.sniper.actor(index), CHANNELS[1].0),
             &EffectValue::Known {
-                value: quantity(0., &d(2))
+                value: quantity(44., &d(2))
             }
         );
     }
@@ -328,26 +328,34 @@ fn ring_copies_rewards_and_character_changes_flow_through_checked_life_queries()
 #[test]
 #[ignore = "requires current joined Sniper release"]
 fn unread_minion_membership_and_partial_life_queries_cannot_be_skipped() {
-    let mut w = world();
-    w.sniper
-        .receivers
-        .members
-        .retain(|r| !CHANNELS.iter().any(|(name, ..)| r.id == key(name)));
-    let q = w
-        .sniper
-        .base
-        .contribution_queries
-        .members
-        .iter_mut()
-        .find(|q| q.id == key(QUERY_IDS[0]))
-        .unwrap();
-    q.groups[0].members.members.retain(|m| {
-        m.producer.as_program_effect().unwrap().program != key("intrinsic-allied-minion-life")
-    });
-    assert!(
-        w.checked_plan_configured(configure)
-            .is_err_and(|e| e.contains("no declared membership"))
-    );
+    for (query, group, program) in [
+        (QUERY_IDS[0], 0, "intrinsic-allied-minion-life"),
+        (QUERY_IDS[1], 1, "received-minion-life-increase"),
+    ] {
+        let mut w = world();
+        w.sniper
+            .receivers
+            .members
+            .retain(|r| !CHANNELS.iter().any(|(name, ..)| r.id == key(name)));
+        let q = w
+            .sniper
+            .base
+            .contribution_queries
+            .members
+            .iter_mut()
+            .find(|q| q.id == key(query))
+            .unwrap();
+        let before = q.groups[group].members.members.len();
+        q.groups[group]
+            .members
+            .members
+            .retain(|m| m.producer.as_program_effect().unwrap().program != key(program));
+        assert_eq!(q.groups[group].members.members.len(), before - 1);
+        assert!(
+            w.checked_plan_configured(configure)
+                .is_err_and(|e| e.contains("no declared membership"))
+        );
+    }
     let mut w = world();
     let q = w
         .sniper

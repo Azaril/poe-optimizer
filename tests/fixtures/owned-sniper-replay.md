@@ -58,26 +58,36 @@ backend with fixed timestamp and OS header. Decoding is bounded to 8 MiB; the CI
 test requires deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
-The current October 9 V27 fixture has 925 definitions and 618 owners. It is
-138,407 compressed bytes and 5,405,368 JSON bytes, with SHA-256
-`c0aa1c70b4b5e42eba0c780d98a7b9d48acfa862825ff862644843dbe5c63614`.
+The current October 9 V27 fixture has 927 definitions, 620 owners and 34 stages.
+It is 138,584 compressed bytes and 5,412,816 JSON bytes, with SHA-256
+`b54d4468cb28560b32a22d87aac4135f36ec176c9aa5cf7d4a64c8e3244e2dca`.
 The exporter verifies full-report equality before writing; the ordinary native
 test checks deterministic re-encoding.
 
-The intrinsic added-attack source adds three Stats, two programs, one exact
-Basic route and their stage dependencies. Every pre-existing definition, slot
-and program is retained exactly. Build, scenario and queries are unchanged;
-support preparation/input/receiving content changes only its dependency
-identities. The snapshot retains explicit Actor-producer → routing → Action
-ordering and frozen channels.
+The prior intrinsic added-attack source contributes three Stats, two programs,
+one exact Basic route and its stage dependencies. The current refresh joins the
+published minion Life Increase receiver and the two remaining actual selected
+Life passives, preserving the four existing paired Life/Damage sources. Six
+carrier records total 44, then one received contribution reaches each exact
+Sniper. Source delivery precedes the frozen-channel read. The separate joined
+Life-query fixture retains the canonical member and runs its diagnostic probes
+afterward; it derives no canonical final Life pool.
 
-Five new ordinary checks cover exact source/route preservation, identity
-inactivity, zero and changed injected scales, missing profile/authorized
-producer/route, Partial refusal, premature reads, reordered occurrences and
-fresh/reused/four-worker equality. They do not construct a foreign Actor or
-claim a final added-damage aggregate. All ten replay tests pass.
+All fourteen ordinary replay tests pass. Four Life tests cover exact published
+sources/recipient lineage, the seven retained 44/38/34/0 source cases, missing
+and actual Partial authority, early reads, quality changes, reordered inputs
+and fresh/reused/four-worker equality. Removal controls compare the Increase
+channel only: the original tree removal of 229 also removes Gigantic 46365, and
+removal of 1218 also removes cooldown 14945. These finite projections do not prove
+legal optimizer mutations or final Life/MORE parity. The preceding ten damage,
+Command and Offering checks remain intact.
 
-Regeneration: `runs/owned-sniper-replay-added-attack-01.log` (29.17s), from
+Regeneration: `runs/owned-sniper-replay-life-increase-01.log` (30.23s), from
 input `c4c38e18383f708bc36d4a571bb260d0afadf0e69c1e7a6881ef80b8a0098ba3`.
+An independent inverse comparison verifies the two added passive definitions,
+owners, allocations and support-discovery rows; the received program and stage
+metadata; and dependent digest changes. Every previous program and unrelated
+field is unchanged. Scenario, queries, routes and source-property content are
+identical. No production artifact changed.
 The canonical publication is broader than this finite graph. Earlier refreshes
 are recorded in the implementation history; no old-format decoder is retained.

@@ -133,8 +133,9 @@ the current extractor while retaining exact source/content/catalog comparisons.
 No production coverage gate, old-format reader or runtime fallback was added.
 
 The repairs are pushed as `73d7e99`. These are local results, not a hosted-CI
-success claim. At the read-only snapshot of **11:25 UTC**, `7b50c6e` run
-`37921878787` had started all eighteen jobs, with none completed. The older
+success claim. At the read-only snapshot of **11:47 UTC**, `575a8f0` run
+`37925680163` was pending with no jobs, while `7b50c6e` run `37921878787`
+had three successful jobs and fifteen active, with no completed failures. The older
 `10d37f0` run `37900429666` finished with failure at 11:24 UTC; its final
 Windows CLI failures match already-addressed exporter receipts, reward support
 and duplicate Mana definitions. Current HEAD verifies existing Mana definitions
@@ -147,126 +148,129 @@ revision; track compilation and repeated historical-publication costs in tooling
 cleanup without removing independent coverage or displacing the first complete
 native build.
 
-## Current implementation checkpoint: intrinsic added attack damage
+## Current implementation checkpoint: shared minion Life increase
 
-The [intrinsic added attack damage packet](../data/owned/poe2/3887ae68/intrinsic-added-attack-damage/README.md)
-adds a missing numerical dependency to Original05 through existing owned rules.
-The admitted Actor-slot program reads injected profile scale `2537` and derives
-raw percentage `336b`. One exact Basic Action route carries it to `336c`; its
-Action program emits the individual unrounded Multiply contribution `336d`.
-The source percentage remains `14.999999999999991`, with factor 1.15. Scale one
-is inactive; zero is a real factor; missing profile/producer/route is unavailable.
-No skill-name dispatch, Lua truthiness, new evaluator API, profile DTO, table,
-query, receiver or compatibility branch was added. No owner coverage was closed.
+The shared Sniper graph now uses the published
+`received-minion-life-increase` producer and all six exact selected passive
+sources. The four paired Life/Damage sources remain unchanged; fresh normalization
+supplies the actual `1218`/`0aef` and `40894`/`1372` allocations and their existing
+10-point programs. Fixture lineage is remapped explicitly, and only numerical
+tree topology is projected away. This retires the deliberate query-member
+exclusion instead of adding another Life implementation.
 
-Evidence reuses the unchanged physical-damage source02 reports and complete
-intrinsic-Life profile evidence. It authenticates 24 occurrence/mode rows,
-including thirteen actual Basic calls and explicitly unobserved contexts.
-The complete profile proves `damageFixup` absence; present zero/false are rejected
-as evidence of absence. The source Attack and summon filters remain offline.
-No new source VM was needed. Broader profile eligibility and final grouped
-rounding remain separate work; tests do not construct a foreign Actor.
+Player `32e5` Increase is frozen after delivery. The admitted Actor-slot program
+runs afterward and before Life query readiness. Six source records total **44
+percentage points**; each exact Sniper receives one contribution, while Player
+Life remains **1257 Add / 5 Increase** in the joined query check. The runtime
+rule programs, public model and production package are unchanged. The Actor's
+actual Partial closure is authenticated and restored by the refusal regression.
 
-The joined graph now executes these exact programs with actual item preparation
-and population. Its ordering is explicit: profile facts → intrinsic percentage
-→ shared Action routing → individual contribution. The fixture reuses already
-loaded definitions after checking exact equality. The publication preserves all
-existing owners, route/query closures and unrelated programs through an exact
-inverse to the checked three-Stat migration.
+The ordinary portable replay now includes the same integration. Its controls
+compare the retained seven source cases, including **44/38/34/0**, by exact
+allocation and recipient. These are finite Increase-channel tests: PoB's removal
+of node 229 also removes Gigantic 46365, and removal of 1218 also removes 14945.
+They neither establish legal isolated optimizer mutations nor compare final
+Life/MORE for those projected removals. Known-empty sources produce zero;
+missing/Partial authority requires the specific coverage error. Early frozen
+reads and omitted canonical query membership are rejected.
 
 Validation completed:
 
-- Five packet/refusal, retained-source and publication tests pass (28.56s).
-  All eighteen artifacts rebuild byte-for-byte; all five fresh imports retain
-  their local identities, original selections, 110 queries and input obligations.
-- The joined numerical check passes (29.18s), and replay export passes (29.17s).
-  Every previous definition, slot and program survives unchanged. Build,
-  scenario and queries are identical; support artifacts change dependency
-  identities only. The fixture now has 925 definitions and 618 owners.
-- All ten ordinary Engine replay tests pass (2.33s), including exact recipient
-  binding, missing profile/authorized producer/route, zero/neutral/changed input,
-  Partial refusal, early profile and route-read rejection, occurrence reordering
-  and fresh/reused/four-worker equality. No missing value becomes a neutral factor.
-- All 38 ordinary tests across the six existing replay consumers pass: Life copy,
-  Life admission/numeric transport, Intelligence/Mana, intrinsic Mana and reward
-  support. Their eight unchanged historical publication tests remain opt-in.
-- Strict Engine and all-feature CLI Clippy pass. Independent final review and
-  selective formatting/whitespace checks cover the new data and integration.
+- Four joined Life-query tests pass (30.68s), including actual source/recipient
+  checks, current item/reward changes and exact unread-membership refusal.
+- Replay export passes (30.23s), including authentication of retained source
+  reports, the unchanged original XML, fresh normalized allocation lineage and
+  full-report equality. Independent review proves an exact inverse to the old
+  replay after removing only this integration's intended delta.
+- All fourteen ordinary Engine replay tests pass with `--no-default-features`
+  (2.53s). They need no local release directory or PoB execution. Existing
+  Command, intrinsic attack, Offering and damage regressions remain unchanged.
+- All 38 ordinary tests across the six existing Life/Mana/reward replay consumers
+  pass. Their eight historical publication tests remain opt-in; no publication
+  changed, so those historical rebuilds were not rerun.
+- Strict Engine and all-feature CLI Clippy, selective formatting and whitespace
+  checks pass. No unrelated implementation files were changed.
 
-This is **55 passing selected test functions**, including publication and export.
-Logs: `runs/owned-intrinsic-added-attack-publication-02.log`,
-`runs/owned-intrinsic-added-joined-03.log`,
-`runs/owned-sniper-replay-added-attack-01.log`,
-`runs/owned-intrinsic-added-native-02.log`,
-`runs/owned-added-replay-consumers-01.log`,
-`runs/owned-intrinsic-added-engine-clippy-01.log` and
-`runs/owned-intrinsic-added-cli-clippy-01.log`.
+This is **57 passing selected test functions**. Evidence:
+`runs/owned-sniper-life-queries-01.log`,
+`runs/owned-sniper-replay-life-increase-01.log`,
+`runs/owned-sniper-life-native-01.log`,
+`runs/owned-life-replay-consumers-01.log`,
+`runs/owned-life-engine-clippy-01.log` and `runs/owned-life-cli-clippy-02.log`.
 
-The canonical package is **`runs/owned-intrinsic-added-attack-publication-02/package`**:
+The canonical package remains
+**`runs/owned-intrinsic-added-attack-publication-02/package`**:
 
 - Input: `c4c38e18383f708bc36d4a571bb260d0afadf0e69c1e7a6881ef80b8a0098ba3`
 - Definitions: `2224be8704cc7813df061c6d675e56209a6e55cb24aa98e5cb3ccd1854cfacc9`
 - Rules: `0d61c45a3a92cce31798a1d051caa7a13e8c413d6d419cc61a0c789f8e6eb77a`
 - Compiled rules: `1a8c87bd847b2a039919dddb08a1cc8df0ecbb9900528de065f1f2dd8d4a3b33`
 
-Operations remain V27; the next free key is **336e**. There are eighteen artifacts,
-168 provenance rows and no evaluation bundle. Complete native builds remain
-**0/5**, with selected input obligations **106/117/109/123/4**. The complete
-preservation report is `runs/owned-intrinsic-added-attack-publication-02/validation.json`.
-The current 138,407-byte replay has SHA-256
-`c0aa1c70b4b5e42eba0c780d98a7b9d48acfa862825ff862644843dbe5c63614`.
+Operations remain V27; the next free key remains **336e**. No source VM,
+publication, new owned game definition or production coverage closure is
+introduced by this integration. The previous all-five preservation report remains
+`runs/owned-intrinsic-added-attack-publication-02/validation.json`: eighteen
+artifacts, 168 provenance rows, 110 queries, no evaluation bundle and selected
+input obligations **106/117/109/123/4**. Complete native builds remain **0/5**.
 
-**Resume:** keep Original05 first. Final Mana still awaits the numeric-domain
-decision and complete conversion/addition source coverage. The review found no
-safe numerical closure for the eight selected item templates from observed zero
-resource transfers. Empty adjustment groups are not proof about untranslated
-owners. The thirteen remaining Partial passives comprise seven Puppet/Archon
-nodes, four separate granted-effect sources, one jewel socket and the distinct
-active-minion-type Command mechanic. Preserve their independent gaps.
+The refreshed finite replay has **927 definitions, 620 owners and 34 stages**,
+138,584 compressed bytes / 5,412,816 JSON bytes, SHA-256
+`b54d4468cb28560b32a22d87aac4135f36ec176c9aa5cf7d4a64c8e3244e2dca`.
+The exporter checks decoded full-report equality and the ordinary test checks
+deterministic re-encoding. Build changes add exactly the two Life allocations;
+the replay's test coverage must not be copied into a production release.
 
-**Next implementation:** join the already-published minion Life increase into
-the shared replay as described below. It retires a deliberate fixture exclusion
-without a new public model, while the resource/configuration decisions remain
-pending. The intrinsic added-attack source above is now published and joined;
-Retained Original05 source observations have no flat-added damage, so this
-fills a dependency without supplying a new final-damage result.
+**Resume: keep Original05 first.** The next bounded Life task is to extend the
+existing offline original-consumer observation with an exact-recipient source
+census, before publishing final Life arithmetic. Current retained minion
+observations show intrinsic BASE 1615, INC 44, MORE 1.2 and final Life 2791, but the
+neutral adjustment values do not authenticate every supplying rule.
 
-The following damage boundary is the pre-conversion physical base at pinned
-`CalcOffence.lua:4132–4136`: account for flat Actor/Action and Enemy additions,
-added-damage increased/MORE membership, source endpoint bonuses and the skill
-coefficient before calculating it. Source02's filtered baseline zero/empty
-records cannot close untranslated owners. Its raw filter also omits
-`DamageGainAsRandom`: `CalcSetup.lua:82` installs Faerie Fire's conditional random
-gain before later expansion. Lines 77–81 install conditional Intimidated and
-Debilitated damage sources despite their baseline inactivity. Trace these raw
-inventories and conditions in the next damage census; do not infer conversion,
-gain or complete damage coverage from final zero tables. The pending Actor-to-
-Enemy, configuration and scoped-coverage decisions remain distinct boundaries.
+1. Extend the existing `doActorLifeManaSpirit` hook in
+   `crates/poe-optimizer-pob/tests/support/owned_minion_physical_damage_source.lua`
+   using the channel-census pattern in `player_life_source.lua`. Preserve the
+   existing historical observer bytes/receipts; new evidence identifies its
+   actual current observer. No new runtime contract is needed for acquisition.
+2. Retain raw `ExtraLife`, `LifeTotal`, all three Life conversion channels and
+   `ChaosInoculation`, including their exact actor/store, eligible records and
+   pre-cap values. Raw `Life` records already include all types and demonstrate
+   override absence at the observed call; keep that evidence and the original
+   post-return consumer result. A Player-only census does not certify a minion.
+3. Account for the existing **Strength-derived Life BASE 0** source from
+   `CalcPerform.lua:502–506`. Full source01 retains it, while the compact eligible
+   intrinsic-base projection omits the zero. Current native inherent Life targets
+   Player only. Identify its supplier and applicability before extending that
+   data to minions; do not infer that intrinsic Life is the whole BASE inventory.
+4. Map each source or evidenced exclusion into existing owned contribution and
+   numeric-selection contracts. Source observations alone cannot close Partial
+   item, passive, Actor or transformation inventories. Add required producers
+   before a final consumer; diagnostic arithmetic is not a complete-build gate.
+5. Final Mana/Life publication still needs the pending checked numeric-domain
+   decision and complete adjustment/conversion membership. Preserve the separate
+   numerical and coverage obligations; do not silently clamp or import the
+   large-number PoB rounding discrepancy into native behavior.
 
-The shared Sniper Life fixture also still excludes the already-published
-`received-minion-life-increase` producer (six sources, 44 percentage points).
-Join it next through the existing graph, then update
-the ordinary replay and preserve actual Partial refusal. This is integration
-work, not authority to declare final Life complete. Four selected Life/Damage
-sources already contribute 24 in the replay; add the actual selected `1218`/
-`0aef` and `40894`/`1372` allocations and their existing 10-point producers
-without duplicating those four. Install the canonical Actor-slot program,
-freeze Player `32e5` Increase after delivery, then schedule it before
-`life-contributions-ready`. Remove the explicit query-member exclusion in
-`tests/support/owned_sniper_life_queries.rs` and check 44 on both exact minions,
-preserving Player 1257 Add/5 Increase. Existing source controls prove 44/38/34/0;
-their tree removals have connectivity side effects and are not isolated legal
-optimizer mutations. Final Life still needs complete equipment, transformation,
-override and arithmetic coverage. A smaller item follow-up is
-Cryptic Leggings `1e0e`'s five empty intrinsic declaration facets using retained
-Crown/Leggings evidence; its real sockets and numerical gaps must remain open.
+The following damage boundary remains pre-conversion physical base at pinned
+`CalcOffence.lua:4132–4136`: flat Actor/Action and Enemy additions, added-damage
+increased/MORE membership, endpoint bonuses and skill coefficient. Source02's
+filtered baseline zero/empty records cannot close untranslated owners. Its raw
+filter omits `DamageGainAsRandom`: `CalcSetup.lua:82` installs Faerie Fire's
+conditional random gain before expansion. Lines 77–81 install conditional
+Intimidated and Debilitated sources even when inactive. Retain those raw
+inventories and conditions in the next damage census.
 
-Archived Firebolt `174/175` remains separate: its preset has Pending raw inputs
-and supports but Complete-empty usage. Prove genuine usage responsibility and
-exact selector correspondence before changing allocation-free source accounting;
-do not invent a Pending owner or a physical/manual root. Broader configuration,
-Actor-to-Enemy, resource-demand and scoped-coverage proposals remain unapproved.
-The Action/optional-selection approvals do not approve those later changes.
+The smaller Cryptic Leggings `1e0e` follow-up can authenticate five empty intrinsic
+declaration facets from retained Crown/Leggings evidence; actual sockets and
+numerical gaps stay open. Thirteen selected Partial passives still include seven
+Puppet/Archon nodes, four granted-effect sources, one jewel socket and the
+distinct-active-minion-type Command mechanic. Archived Firebolt 174/175 remains
+separate: prove real saved-usage responsibility and exact selector correspondence
+without fabricating a Pending owner or physical/manual root.
+
+Actor-to-Enemy, resource-demand, configuration/reporting and scoped-coverage
+proposals remain unapproved. The accepted Action/numeric-selection answers do
+not authorize those model changes. Ask when a proposed contract becomes the
+next necessary boundary; continue independent evidence work meanwhile.
 
 ## Unpublished final Mana arithmetic
 

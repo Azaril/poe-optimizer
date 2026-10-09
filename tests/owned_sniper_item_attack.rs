@@ -50,6 +50,8 @@ mod gigantic_family;
 mod gigantic_native;
 #[path = "support/owned_sniper_inherent_life_native.rs"]
 mod inherent_life_native;
+#[path = "support/owned_sniper_life_increase.rs"]
+mod life_increase_native;
 #[path = "support/owned_sniper_life_queries.rs"]
 mod life_queries_native;
 #[allow(dead_code)]
@@ -186,6 +188,7 @@ struct World {
     block: evidence::BlockCase,
     block_cases: Vec<evidence::BlockCase>,
     passives: passive_damage_native::Census,
+    life_increase: life_increase_native::Census,
     recipient_buffs: buff_effect_recipients_native::Census,
     source_buffs: buff_sources_native::Census,
     gigantic: gigantic_native::Census,
@@ -499,6 +502,7 @@ impl World {
             .unwrap()
             .clone();
         let passives = passive_damage_native::install(&mut w, &endpoint, &path);
+        let life_increase = life_increase_native::install(&mut w, &endpoint, &path);
         let recipient_buffs = buff_effect_recipients_native::install(&mut w, &endpoint);
         let source_buffs = buff_sources_native::install(&mut w, &endpoint);
         let gigantic = gigantic_native::install(&mut w, &endpoint, &path);
@@ -520,6 +524,7 @@ impl World {
             block,
             block_cases,
             passives,
+            life_increase,
             recipient_buffs,
             source_buffs,
             gigantic,
@@ -654,6 +659,7 @@ impl World {
                 parameter.phase = ReadinessPhase::Execution;
             }
             passive_damage_native::configure(stages);
+            life_increase_native::configure(stages);
             buff_effect_recipients_native::configure(stages);
             buff_sources_native::configure(stages);
             gigantic_native::configure(stages);

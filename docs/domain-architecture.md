@@ -329,6 +329,17 @@ aggregation must account for the admitted modifier groups, numerical order and
 rounding boundaries explicitly. Source names, Lua truthiness and modifier-store
 objects remain offline evidence, not runtime dispatch.
 
+Minion resource modifiers use the same source/recipient graph. A passive writes
+one contribution at its exact allocation; an admitted Actor relation reads the
+frozen incoming channel and emits one contribution for each exact recipient.
+The number of skill occurrences must not multiply the supplying passive census.
+An explicitly complete empty channel may yield zero, while missing or Partial
+source authority remains unavailable. Composing these resource components does
+not establish final-pool coverage: intrinsic, attribute-derived, extra, total,
+conversion and override producers all need an explicit inventory, even when a
+selected producer happens to emit zero. Numerical domain and rounding guarantees
+are separate from that source-coverage proof.
+
 The approved [checked optional numeric selection](owned-numeric-selection-proposal.md)
 now runs in Core/Data/Engine operations V27. Its require-agreement result
 distinguishes absent, present (including zero), and unavailable. Presence/value

@@ -957,6 +957,16 @@ Native checks execute the six stored bodies, preserve allocation provenance and
 verify removal, scratch reuse and parallel replay. This is injected data using
 existing operations, with no new evaluator or implicit Life reducer.
 
+The shared Sniper graph now also installs the published
+`received-minion-life-increase` program. Six exact selected passive allocations
+supply 44 percentage points on the Player carrier channel; after its freeze,
+each of the two exact Sniper Actors receives one Life Increase contribution.
+The canonical Life query keeps that member instead of excluding it from the
+fixture. This reuses existing owned programs and stages; it adds no production
+API or coverage certificate. The retained removal controls compare only this
+Increase channel, since actual tree removals also disconnect other passives.
+Final Life still needs the independent source census and checked arithmetic.
+
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference
 commands behind `--features pob`. The old native backend selector, `prepare-build`,

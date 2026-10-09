@@ -38,6 +38,21 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Joined minion Life, 2026-10-09:** remove the shared fixture's deliberate
+exclusion of the already-published received Life producer. Reuse all six actual
+passive bodies and the existing Actor-slot program through one staged native
+graph; do not duplicate the four paired Life/Damage sources or add a second
+Life aggregator. Retain the historical source witness and its original observer
+hash. The ordinary replay carries current public inputs, with no runtime format
+branch or PoB dependency. Its finite contributor coverage is test-only.
+The next census must retain zero-valued suppliers: the original minion has a
+Strength-derived Life BASE 0 record in addition to intrinsic BASE 1615. The
+compact intrinsic-base projection omits that zero. Review raw ExtraLife,
+LifeTotal, conversion and Chaos Inoculation inventories before treating neutral
+adjustments as complete absence; the current Player observer cannot certify a
+minion recipient. Preserve these as offline source questions rather than Lua
+collection semantics in native resource evaluation.
+
 **Ascendancy inventory, 2026-10-09:** the existing offline declaration-refinement
 contract now admits exact Ascendancy owners through the same checked finalizer.
 The generic compact wrapper changes publication storage, not runtime semantics.

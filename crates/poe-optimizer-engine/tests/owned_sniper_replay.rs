@@ -2,6 +2,8 @@
 //! This is not a complete build or permission to close production coverage.
 #[path = "support/owned_sniper_added_damage.rs"]
 mod added_damage;
+#[path = "support/owned_sniper_life_increase.rs"]
+mod life_increase;
 #[allow(dead_code)]
 #[path = "../../../tests/support/owned_plan_replay.rs"]
 mod replay;
