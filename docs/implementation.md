@@ -158,6 +158,17 @@ cover quality/status/coverage failures and fresh/reused A–unknown–B–A/four
 execution with independent quality values. Existing source, membership, stage,
 storage-order and duplicated-source checks also exercise the new consumer.
 
+Ordinary CI replay remains follow-up work. An attempted reuse of the older
+unstaged minion component fixture was rejected by the current checked-readiness
+gate (`operation v16 requires checked readiness stages`). That experiment was
+withdrawn from test discovery, and its shared-helper change was reverted; no
+production admission rule was relaxed. Reuse the joined graph's checked public
+inputs for a reproducible CI fixture, or provision its release in CI. Do not
+duplicate the staged orchestration or count scalar-only tests as joined coverage.
+The failed experiment is retained locally under
+`runs/owned-minion-more-ci-experiment.rs`; logs are
+`runs/owned-minion-more-ci-01.log` and `runs/owned-minion-more-ci-02.log`.
+
 Current package: `runs/owned-mixed-minion-damage-publication-06/package`.
 Input `6a365378322411f6c4864a382941bb438a90d53edcd196114b565188a515016c`;
 schema `4036bef4c8b1e3588a49748d2ba1e71f2e8e60a0f4a02c79c620b5945edcbdb2`;
@@ -185,8 +196,8 @@ configuration/reporting and scoped-coverage decisions remain independent.
 The Lua/game-semantics retirement audit now explicitly includes the MORE
 rounding boundary: deliberate in PoB, independently unconfirmed as game behavior.
 Owned data retains its observed arithmetic without importing store ancestry or
-Lua empty-table semantics. Latest checked hosted CI for prior pushed HEAD
-`36d1a1b` remains pending (run `37868775041`); it is not validation of this work.
+Lua empty-table semantics. Latest checked hosted CI for pushed HEAD
+`fa8104a` remains pending (run `37870692916`); no hosted success is claimed.
 
 ## Preceding runtime checkpoint: checked application-group producers
 

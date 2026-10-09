@@ -23,6 +23,19 @@ the four remaining Original05 imported-input obligations.
 
 ## Recommended decision
 
+In practical terms, an Actor represents the character or a particular minion;
+an Action represents one specific skill output and its selected part, mode and
+stat set. A modifier that applies to one minion's Gas Arrow must not become a
+shared Actor value that also affects its Basic Attack or another minion.
+
+The existing flow is: data-defined producers emit typed contributions, effect
+applications resolve their stacking, checked queries account for the permitted
+sources and reduce their values, and downstream formulas read those results.
+The accepted application-group extension joins results after stacking into that
+flow. This proposed Action extension preserves the same flow at Action scope.
+It changes source authority and binding, not the calculation language or worker
+execution model. Missing coverage remains unknown rather than becoming zero.
+
 Extend the existing checked contribution graph to exact Action self-contributions:
 
 - Admit a current-Action query read when its Stat explicitly targets Actions.
