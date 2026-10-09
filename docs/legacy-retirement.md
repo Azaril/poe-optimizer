@@ -711,21 +711,15 @@ records the independent full-build consumer observations and their exact scope.
 
 ### Other current compatibility investigations
 
-**Resource transformation audit (2026-10-09):** the pinned
-`CalcDefence.lua:1342–1450` pass produces the resource Extra/Total records from
-slot bases, global bases, outgoing conversion and gain-as rates. This is a
-separate mechanic from the final maximum-pool formula. Its zero-valued
-Conversion records in the five examples are not an absence certificate for
-all possible producers. Reuse typed source/recipient contributions and frozen
-inputs when authoring this family; do not import its mutable resource objects.
-
-Two source behaviors require controlled investigation before adoption. The
-over-100% branch iterates string-keyed conversion rates with `ipairs`, and slot
-base reduction occurs within the loop over each positive outgoing target.
-These are suspected normalization/order issues, not validated bug exceptions.
-Retain raw and capped rates, positive transfers to multiple recipients,
-gain-as versus conversion, slot/global/Total branches and fresh/JIT controls
-when testing them. No source discrepancy is waived by this audit.
+**Resource transformation audit (2026-10-09):** the
+[full source witness](owned-resource-transformation-evidence.md) now reproduces
+the normalization and repeated slot-depletion findings discussed
+[below](#resource-conversion-normalization-investigation-2026-10-09).
+Extra/Total production is separate from the final maximum-pool formula.
+Zero-valued records do not certify absent or completely known producers.
+Keep source/recipient contributions and frozen inputs in the owned graph;
+do not import mutable Lua resource objects or treat these controls as accepted
+bug exceptions.
 
 The [checked numeric-domain proposal](owned-numeric-domain-proposal.md) addresses
 the separate computed-range boundary for final pool rounding. It proposes an
@@ -1954,23 +1948,33 @@ those source/interpreter/snapshot dependencies, not just the optional PoB/Lua cr
 
 ## Resource conversion normalization investigation (2026-10-09)
 
-Before publishing native resource conversion producers, investigate the pinned
-`CalcDefence.lua:1354–1362` normalization branch. It fills `conversionRate` using
-resource-name keys, then uses `ipairs(conversionRate)` when combined conversion
-exceeds 100%. That appears inconsistent with the table's keys. This is a source
-inspection finding, **not yet a reproduced game discrepancy or an accepted PoB
-bug**. Establish a reachable parsed control, actual intermediate rates and
-donor/recipient outputs before classifying it. Do not copy Lua iteration behavior
-or change native semantics based on this inspection alone.
+The [resource transformation evidence](owned-resource-transformation-evidence.md)
+now reproduces both findings through accepted custom-modifier text, original
+parser/store methods and full unchanged builds. In the over-100% control, the
+original named rate table retains Evasion-to-Armour 100 and Evasion-to-ES 50
+while donor total becomes 100. Global donor 107 supplies 107 Armour and 53.5 ES.
+The `ipairs` loop at `CalcDefence.lua:1360` does not normalize the named entries.
 
-The full resource loop also mutates intermediate conversion amounts in resource
-order. Test multiple destinations, over-100% totals, conversion versus gain-as,
-chaining and any reachable cycles before treating that order as a game law.
-The new 25% Energy Shield-to-Mana full-build control proves only its own path:
-additional pre-scaling Mana 25.25 and stable final pools 665/0 with absent/zero
-override. Five neutral originals do not establish conversion-domain closure.
-Track this alongside the existing Lua-cleanup and rounding-bound investigations;
-it must not be used to defer unrelated work on the closest build.
+A separate conversion-plus-gain control reduces Boots' 161 Armour first to
+120.75, then to 90.5625 when the gain-as Ward edge runs. That edge receives
+30.1875; gain-as alone receives 40.25 and leaves the donor unchanged. Reversing
+the two authored lines does not change the result. This follows the fixed
+resource pass; it is not runtime nondeterminism or proof of intended game order.
+
+Nineteen cases across JIT modes, initial/three-rebuild snapshots, MAIN/CALCS and
+fresh/warm controls pass. Raw Evasion record positions in Original02 differ
+between fresh VMs; exact numeric results/intermediates and complete counted
+record membership agree. Raw order is retained separately, not adopted as a
+native fold law. No numerical discrepancy is hidden by sorting or tolerance.
+
+These are reproduced **source** findings. Obtainability of the synthetic mixed
+controls, intended multi-transfer/chaining semantics and positive Total-channel
+production remain open. No new game-rule authority or parity exception follows.
+Original04 already has Evasion-to-Armour conversion, so the unchanged corpus
+cannot be treated as globally conversion-free. Original05's bounded neutral
+Mana domain can be reviewed without first implementing every positive transform,
+but requires authenticated selected-source declarations and existing Partial
+gates. Do not replace missing source coverage with observed zeros.
 
 ## Amulet Life copy precision and source record order (2026-10-09)
 

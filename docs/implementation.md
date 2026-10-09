@@ -144,19 +144,50 @@ computed numeric types. No public-contract implementation or implicit approval
 is assumed. The draft must not enter the release before that decision and the
 corresponding admission checks are complete.
 
-The [resource transformation audit](legacy-retirement.md#other-current-compatibility-investigations)
-separates Extra/Total production from final-pool arithmetic and records suspected
-source normalization/order issues for controlled investigation. These are not
-accepted bug exceptions. Empty observed contributions remain insufficient to
-close unknown sources.
+The [resource transformation witness](owned-resource-transformation-evidence.md)
+now executes all five originals and contrasting controls through the unchanged
+source. **19 cases / 20 complete loads per JIT mode** pass in 77.03s, with exact
+initial/three-rebuild, MAIN/CALCS, numerical-intermediate and fresh/warm agreement.
+It reproduces unnormalized destination rates above a 100% donor total and
+repeated slot depletion when another gain-as target is added. These accepted-parser
+controls do not establish obtainable game combinations or accepted bug exceptions.
+Original04 has an active Evasion-to-Armour conversion; neutral Mana observations
+must not be described as globally conversion-free builds.
+
+Run03 exposed only raw Evasion modifier order changes between fresh VMs. The
+final witness preserves raw orders as diagnostics and compares complete counted
+source-record membership, with every numeric value/intermediate still exact.
+No native reduction order or tolerance is inferred. The retained source report
+has an ordinary Rust regression that verifies the current source/observer/driver
+pins and original XML identities. A second check rejects changed values, sources,
+tags, removed duplicates and changed numerical transformation order. Both pass
+in 0.01s; strict all-feature Clippy, selective formatting and whitespace checks
+also pass. Evidence: `runs/owned-resource-transformation-source-05.log`,
+`runs/owned-resource-transformation-retained-02.log` and
+`runs/owned-resource-transformation-clippy-02.log`. The canonical release and
+all native coverage gates remain unchanged.
 
 **Resume:** Original05 remains first. Resolve the numeric-domain decision and
-actual conversion/addition producer coverage before publishing final Mana;
-reuse this draft and the retained source witness. Keep the canonical V27 package
+authenticate its neutral transformation source domain before publishing final
+Mana; positive conversion support need not precede that bounded admission.
+Review complete source bodies and declaration inventories through the existing
+normalization/item-source data and refusal tests. The current five Complete-empty
+groups only census admitted writers; they cannot close untranslated source owners.
+There are 13 selected passive owners still Partial, all eight selected item
+templates remain Partial, and generated skills/supports need recursive accounting.
+In particular, passive `1b48`'s empty text is not proof of empty socket membership.
+Preserve all unrelated Class/Actor/item/passive/global gaps. No literal zero writer
+or build-name/identity selector should be introduced. The evidence document records
+the separate path toward positive donor-property and transformation support.
+Reuse the draft and retained source witness. Keep the canonical V27 package
 below until a checked successor is assembled, all five imports are verified and
 the ordinary replay is refreshed. Continue final damage/Life and the four selected
 input obligations toward one complete unchanged build, then begin D4. Complete
 native builds remain **0/5** and selected obligations **107/117/109/123/4**.
+
+CI snapshot at 08:50 UTC: `4146a0e` run `37905740359` was pending with no jobs,
+and predecessor `6060447` run `37903219631` was cancelled with no jobs. No failed
+job or actionable regression was found; no success is claimed for this checkpoint.
 
 ## Latest data checkpoint: actual Mana override selection
 

@@ -111,6 +111,16 @@ not in the canonical release: computed-range admission awaits the
 conversion/addition producers still need coverage. Neither the draft nor its
 scalar vector comparison completes the original build.
 
+The separate [resource transformation witness](owned-resource-transformation-evidence.md)
+now retains 19 original-source cases with actual item/global donors and multiple
+destinations. Its numeric results and original intermediates are stable across
+fresh/warm rebuilds and JIT modes. It reproduces source normalization and repeated
+slot-depletion issues; neither is adopted as a native rule or parity exception.
+Raw modifier order remains diagnostic, with complete counted membership checked.
+For the closest build, the next source step is authenticated neutral admission
+through existing declarations; positive conversion support can follow. The
+current empty adjustment groups alone do not discharge untranslated owners.
+
 The [Life-copy source witness](owned-amulet-life-copy-evidence.md) now establishes
 that numeric Life copies need their own injected arithmetic branches; the
 existing nested gem-level floor rule cannot be reused unchanged. Full source

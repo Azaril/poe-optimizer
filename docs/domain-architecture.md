@@ -603,6 +603,16 @@ rounding and caps as declared semantics, not arbitrary callback order. Reusable 
 families implement the operations; game coefficients, selectors, thresholds and effect
 composition remain data.
 
+Resource transformations preserve donor stage, exact source/recipient and the
+distinction between outgoing conversion and additional gain. They must not read
+a fully scaled Actor resource when a mechanic uses earlier item/global bases.
+The [current source investigation](owned-resource-transformation-evidence.md)
+records two reproduced PoB transformation discrepancies without adopting its
+mutable table order as a game law. A bounded neutral domain may be admitted
+through authenticated source/declaration coverage; observed zeros and empty
+inventories of only already-converted writers are insufficient. Broader transfer
+semantics and donor-property stages remain explicit adoption work.
+
 Computed numeric limits must remain distinct from game legality, mechanic
 inactivity and missing inputs. The pending
 [checked numeric-domain proposal](owned-numeric-domain-proposal.md) would express
