@@ -1,10 +1,150 @@
-> Historical snapshots through the minion Life source census checkpoint on 2026-10-09.
+> Historical snapshots through the native minion inherent-Life checkpoint on 2026-10-09.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-09 checkpoint: native minion inherent Life
+
+The [minion inherent-Life packet](../data/owned/poe2/3887ae68/minion-inherent-life/README.md)
+now extends **eight existing receiver target lists** with exact Actor slot
+`Skill0012/001f`: Strength's two steps, five inherent flags and the derived
+Life amount. Receiver IDs, Player targets and numerical programs are unchanged.
+The existing guarded Life bridge is added to the supplied Actor owner, with
+one exact member in the canonical Life BASE query's inherent group.
+
+This follows the existing receiver uniqueness contract: one Stat/program row,
+multiple explicit targets. An initial proposal to append separate receiver rows
+was rejected by publication validation and corrected to target extension.
+No runtime API or validator was widened. An earlier authoring attempt also
+caught an invalid serialized target shape before publication. Failed outputs
+are retained separately; publication03 is the accepted endpoint.
+
+The shared native graph now derives **Strength 0**, five false flags, inherent
+Life 0 and one explicit zero contribution for each of two independent Snipers.
+Player remains **Strength 27 / inherent Life 54**. These are computed from
+checked input inventories and the unchanged rules, not supplied observations.
+The zero-BASE branch does not request unused MORE factors; no neutral factor
+receiver was added. Missing minion bindings stay unresolved without changing
+Player. An admitted synthetic positive-BASE control still cannot borrow Player
+MORE or claim nonempty minion attribute parity.
+
+The existing Player fixture assertions now identify exact receiver origins and
+Actor recipients. Historical packet checks authenticate and invert only the
+eight target extensions; the Life query proof reverses both the new bridge/member
+and the earlier Amulet change before its complete original donor census.
+Attribute dependency discovery likewise uses the authenticated prior Player
+targets, preventing the new slot reference from reintroducing the finite graph's
+excluded parent output. Execution installs the actual combined target rows.
+These are evidence/fixture adaptations, not runtime compatibility branches.
+
+Validation completed:
+
+- All **five** packet/source/publication tests pass (22.78s), including unchanged
+  five-build imports and exact reconstruction of all eighteen artifacts.
+- Both focused native checks pass (30.75s), followed by **all 92** composed-graph
+  tests (41.44s). Existing damage, Command, Offering, item, attribute and Life
+  query controls pass on the successor. Life BASE probes retain the explicit
+  zero member, and unread missing membership remains an error.
+- Replay export passes (30.36s), including decoded full-report equality.
+  **All 21 ordinary Engine replay tests** pass with `--no-default-features`
+  (3.29s), without PoB or local release files. Seven new tests cover exact
+  targets, zero versus missing, potential inactive/zero/nonzero donors, unsupported
+  positive input, actual Partial authority, frozen stages and four-worker reuse.
+- **Ten ordinary historical tests** pass across the three affected flag,
+  inherent-Life and Life-query targets. Their three unchanged historical
+  publication tests remain opt-in and were not rerun.
+- Strict all-feature CLI Clippy for five affected targets and no-default-feature
+  Engine replay Clippy pass. Selective formatting and whitespace checks pass.
+- Independent review proves an exact raw-JSON inverse of the replay, including
+  all changed domain-separated hashes. Schema, routing, build, scenario and
+  queries are byte-identical; only eight target extensions, the bridge,
+  stage/program/readiness rows and nine dependent identity fields change.
+
+Evidence: `runs/owned-minion-inherent-life-tests-03.log`,
+`runs/owned-sniper-minion-inherent-native-02.log`,
+`runs/owned-sniper-minion-inherent-joined-01.log`,
+`runs/owned-sniper-replay-minion-inherent-01.log`,
+`runs/owned-sniper-minion-inherent-engine-01.log`,
+`runs/owned-minion-inherent-historical-tests-01.log`,
+`runs/owned-minion-inherent-cli-clippy-01.log` and
+`runs/owned-minion-inherent-engine-clippy-01.log`.
+
+The canonical package is now
+**`runs/owned-minion-inherent-life-publication-03/package`**:
+
+- Input: `bdfb1811f1707b493a2d2277b6ac714cc7a5b91df1a5b4b0ce07518c78948a73`
+- Definitions: `2224be8704cc7813df061c6d675e56209a6e55cb24aa98e5cb3ccd1854cfacc9` (unchanged)
+- Rules: `37728100f7de3048cf1ef7e88ad52c03e0095fd7ae737f70b6255ecc55a00a96`
+- Compiled rules: `7740c9b8b30fae336bdd90eab8e721c1b92d8322d9dadc678136b22cfe680dde`
+
+Operations remain V27; the next free key remains **336e**. Publication retains
+eighteen artifacts, **169 provenance rows**, 110 saved queries and no evaluation
+bundle. Selected input obligations remain **106/117/109/123/4**. No actual
+Actor, item, passive, resource or global coverage closure is promoted.
+**Complete native builds remain 0/5.**
+
+The refreshed portable replay has **927 definitions, 620 owners and 35 stages**,
+138,860 compressed bytes / 5,417,997 JSON bytes, SHA-256
+`e4ca40a3833deb613f391109611d54fca8e9e9c659df4994ba48b5c58809b220`.
+Its source inputs and finite coverage must not be copied into a production
+closure. Baseline Life components remain intrinsic 1615, Increase 44 and MORE
+1.2, now with an explicitly accounted inherent zero; there is still no final
+Life consumer or complete original build.
+
+**Resume: keep Original05 first.** The next bounded blocker is the source of
+generated ExtraLife/LifeTotal adjustments, followed by final arithmetic and
+complete request/owner admission.
+
+1. Extend the existing optional minion observer with a transformation-evidence
+   flag, preserving exact Actor/store identity and independent unhooked JIT
+   controls. Reuse original/repeat/warm/explicit-Sniper-CALCS cases. The existing
+   `resource_transformation_source.lua` checkpoint technique is reusable, but
+   its Player reports are not minion evidence.
+2. At pinned `CalcDefence.lua:1375`, on the first Armour source, retain the
+   initialized resource list and pre-transform LifeTotal raw inventory; Life's
+   totalBase comes from the original query at line 1372. Do not assume the current
+   local globalBase has been assigned yet. At lines 1386/1412 for target Life retain
+   original gainRate, capped conversion rate, combined rate and source/target
+   identities for all five donors: Armour, Evasion, Energy Shield, Mana and Ward.
+   Census their ten ConvertToLife/GainAsLife channels, including raw zero records.
+3. At line 1430 before emission, retain the completed resource list and Life
+   globalBase/totalBase. Observe original NewMod→AddMod at lines 1440–1441 and join
+   the exact generated records to the third Life call at line 1631. Ensure nested Life
+   hooks restore a mask that keeps these line observations active.
+4. Use that evidence to admit only the justified neutral transformation input
+   domain through existing checked queries; do not publish observed zero
+   literals or infer completeness from filtered enumeration. Positive conversion
+   formulas, game obtainability and broader donor domains remain separate.
+5. Final Mana/Life still needs the pending checked numeric-domain decision and
+   complete producer membership. Preserve actual Partial source owners; do not
+   silently clamp or reproduce the large-number PoB rounding discrepancy.
+   Nonempty/conditional minion attribute parity likewise needs original pass
+   evidence before expanding beyond this bounded empty domain.
+
+The following damage boundary remains pre-conversion physical base at pinned
+`CalcOffence.lua:4132–4136`: flat Actor/Action and Enemy additions, added-damage
+increased/MORE membership, endpoint bonuses and skill coefficient. Source02's
+filtered baseline zero/empty records cannot close untranslated owners. Its raw
+filter omits `DamageGainAsRandom`: `CalcSetup.lua:82` installs Faerie Fire's
+conditional random gain before expansion. Lines 77–81 install conditional
+Intimidated and Debilitated sources even when inactive. Retain those raw
+inventories and conditions in the next damage census.
+
+The smaller Cryptic Leggings `1e0e` follow-up can authenticate five empty intrinsic
+declaration facets from retained Crown/Leggings evidence; actual sockets and
+numerical gaps stay open. Thirteen selected Partial passives still include seven
+Puppet/Archon nodes, four granted-effect sources, one jewel socket and the
+distinct-active-minion-type Command mechanic. Archived Firebolt 174/175 remains
+separate: prove real saved-usage responsibility and exact selector correspondence
+without fabricating a Pending owner or physical/manual root.
+
+Actor-to-Enemy, resource-demand, configuration/reporting and scoped-coverage
+proposals remain unapproved. The accepted Action/numeric-selection answers do
+not authorize those model changes. Ask when a proposed contract becomes the
+next necessary boundary; continue independent evidence work meanwhile.
 
 ## Archived 2026-10-09 checkpoint: minion Life source census
 

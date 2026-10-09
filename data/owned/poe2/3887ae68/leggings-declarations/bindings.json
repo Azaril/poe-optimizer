@@ -1,0 +1,58 @@
+{
+  "base_name": "Cryptic Leggings",
+  "before": "bdfb1811f1707b493a2d2277b6ac714cc7a5b91df1a5b4b0ce07518c78948a73",
+  "closed_empty_intrinsic_declarations": [
+    "choices",
+    "grants",
+    "actors",
+    "skill_grants",
+    "outputs"
+  ],
+  "definitions": {
+    "content_sha256": "2224be8704cc7813df061c6d675e56209a6e55cb24aa98e5cb3ccd1854cfacc9",
+    "game": "poe2",
+    "release": "pob-3887ae68-intrinsic-added-attack-damage-v1",
+    "schema_version": 6,
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "mapping": "53f742503a4d4e573cce98c3b5eabe229d31bd513304a0c8b283d87db2a0ee08",
+  "normalization": "2a3bf3a01e065890c3111184794136937dd1db4733d81a159d90417d5e55c315",
+  "registry": "16a022c891f1c5cf53ba3b830cd25d9344e828abce4f2c7f254afb5f3c98e146",
+  "release": "pob-3887ae68-leggings-declarations-v1",
+  "roles": "4dac5d7f7365e4fc3895956983f868c172b42cca175d0013d313f73671752b35",
+  "rules": "37728100f7de3048cf1ef7e88ad52c03e0095fd7ae737f70b6255ecc55a00a96",
+  "schema_version": 1,
+  "scope": {
+    "incoming_contributor_inventory_closed": false,
+    "item_requirements_implemented": false,
+    "modifier_inventory_closed": false,
+    "modifier_supplied_grants_closed": false,
+    "new_definitions": 0,
+    "new_numeric_behavior": false,
+    "new_programs": 0,
+    "quality_inventory_closed": false,
+    "query_changes": 0,
+    "routing_changes": 0,
+    "socket_inventory_closed": false,
+    "template_rules_closed": false,
+    "whole_build_parity": false
+  },
+  "source_binding": {
+    "equipment_slot": "Boots",
+    "item_id": 22,
+    "original": 5,
+    "source_ordinal": 578
+  },
+  "template": {
+    "key": "def.0000000000001e0e",
+    "kind": "item_template",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    }
+  },
+  "unchanged_declarations": [
+    "parameters",
+    "sockets"
+  ]
+}

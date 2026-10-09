@@ -358,6 +358,15 @@ that Lua collection behavior. Admitting a generated result requires accounting
 for its inputs, including incoming resource transfers, even when this build's
 observed result is neutral.
 
+Preexisting resource additions and generated transformation outputs have distinct
+producer ownership and stage dependencies. A collector for the former must not
+read its own later generated output. Source acquisition must retain both the
+pre-transform inventory and the actual emitted records; a source that appends a
+new record must not be mistaken for replacing the earlier record. This preserves
+the evidence needed to decide positive transfer semantics without importing a
+mutable source store into the native model. An empty adjustment collector alone
+does not implement a generated transformation producer.
+
 The approved [checked optional numeric selection](owned-numeric-selection-proposal.md)
 now runs in Core/Data/Engine operations V27. Its require-agreement result
 distinguishes absent, present (including zero), and unavailable. Presence/value

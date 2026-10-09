@@ -100,3 +100,11 @@ data publication carries the target extensions, bridge and canonical query membe
 all production owner and global coverage gaps remain unchanged.
 The canonical publication is broader than this finite graph. Earlier refreshes
 are recorded in the implementation history; no old-format decoder is retained.
+
+The subsequent Cryptic Leggings declaration publication was checked by exporting
+from `runs/owned-leggings-declarations-publication-01/package`. All 93 composed
+native tests, including export, pass (`runs/owned-sniper-leggings-declarations-joined-01.log`).
+The new export is byte-identical to this fixture, both as gzip and decoded JSON;
+the finite fixture already declared those five intrinsic inventories complete.
+No fixture replacement is necessary. The preceding 21 Engine tests still cover
+these exact inputs; they were not repeated for this declaration-only update.

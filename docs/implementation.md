@@ -65,6 +65,44 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
+## Route to the first complete build
+
+The current Original05 package preserves **22 queries with 20 metric names**.
+The retained reference contract expects **19 finite values and three unavailable
+results**, not 22 invented numbers. The query list is
+`queries-original-05.json` in the current package; the availability manifest is
+`tests/fixtures/breadth-expectations/originals-v1.json`, case Original05.
+These reference observations are not evidence of native metric completion.
+
+| Saved query references | Native work to reuse | Remaining final producer |
+| --- | --- | --- |
+| 00: Player Life | Intrinsic/Strength/item/reward contributions and checked Life queries | Complete equipment reduction, adjustments, override/CI behavior and final arithmetic with a proved numerical domain |
+| 01: Player Mana | Intrinsic/Intelligence contributions, checked queries, adjustment collectors, override selection and unpublished consumer | Transformation supplier admission, checked numerical domain and publication |
+| 02, 18, 19: Player ES, Armour, Evasion | Selected item magnitude/local-defence intermediates and global/passive contributions | Final item properties, complete receiving, transformations and final Actor totals |
+| 03–06: four capped Player resistances | Item/passive/reward inputs and configured penalty | Complete contributor inventories, aggregation and cap/override calculations |
+| 07–12: total EHP and five maximum hits | Encounter and incoming-damage components | Complete resource/defence dependencies, mitigation and final survivability calculations |
+| 14: exact Sniper Basic Attack hit DPS | Prepared skill, intrinsic damage/rate, accuracy, inherited/Offering/Gigantic/quality factors and exact-Action Command | Pre-conversion damage assembly, remaining modifier domains, critical/speed/enemy mitigation and final DPS binding |
+| 13, 15, 16: Player hit DPS/average hit and Sniper average hit | Exact typed query identities | Reviewed unavailable results matching the reference; no fabricated numerical defaults |
+| 17: Player Spirit | Modifier and reward inputs | Final capacity and coverage; unreserved Spirit and legality are separate |
+| 20, 21: Player movement/action speed | Movement contribution channel and typed metric declarations | Complete contributors, interactions and final calculations; observed action speed 100 is not a native constant |
+
+Four selected import obligations remain: **01f2** configuration, **0505** preset
+usage, **0207** external assumptions and **0208** scenario usage. Earlier evidence
+uses `0503` for usage; the current allocator identity is `0505`. No evaluation
+bundle or complete final metric bindings are published. Selected passive rule
+owners are 42 Complete / 13 Partial; item, class/shared Actor, supplied Actor and
+global query/application coverage retain their own gaps.
+
+**Minion Life is not a saved metric or an established numerical dependency of
+these 22 queries.** Its current work advances selected-Actor coverage under the
+existing complete-plan contract. The bounded transformation witness is complete;
+do not expand positive transfers ahead of direct Player resource, Sniper damage
+or input-admission work. The configuration-accounting decision was prompted on
+October 9; numerical-domain approval remains pending separately. Other selected
+skills still require honest plan coverage; query selection cannot silently prune
+them. Once the complete unchanged request, evaluation bundle and reference
+availability/value checks pass, begin D4 immediately.
+
 ## Accepted decisions and next implementation boundary
 
 On October 8 the owner approved all three recently prompted decisions:
@@ -133,9 +171,9 @@ the current extractor while retaining exact source/content/catalog comparisons.
 No production coverage gate, old-format reader or runtime fallback was added.
 
 The repairs are pushed as `73d7e99`. These are local results, not a hosted-CI
-success claim. At the read-only snapshot of **13:00 UTC**, `09808af` run
-`37931040768` was pending with no jobs, while `7b50c6e` run `37921878787`
-had eight successful jobs and ten active, with no completed failures. The older
+success claim. At the read-only snapshot of **13:34 UTC**, `0e151a9` run
+`37934817625` was pending with no jobs, while `7b50c6e` run `37921878787`
+had eleven successful jobs and seven active, with no completed failures. The older
 `10d37f0` run `37900429666` finished with failure at 11:24 UTC; its final
 Windows CLI failures match already-addressed exporter receipts, reward support
 and duplicate Mana definitions. Current HEAD verifies existing Mana definitions
@@ -148,145 +186,119 @@ revision; track compilation and repeated historical-publication costs in tooling
 cleanup without removing independent coverage or displacing the first complete
 native build.
 
-## Current implementation checkpoint: native minion inherent Life
+## Current implementation checkpoint: resource evidence and Leggings declarations
 
-The [minion inherent-Life packet](../data/owned/poe2/3887ae68/minion-inherent-life/README.md)
-now extends **eight existing receiver target lists** with exact Actor slot
-`Skill0012/001f`: Strength's two steps, five inherent flags and the derived
-Life amount. Receiver IDs, Player targets and numerical programs are unchanged.
-The existing guarded Life bridge is added to the supplied Actor owner, with
-one exact member in the canonical Life BASE query's inherent group.
+The [minion transformation witness](../data/owned/poe2/3887ae68/minion-life-transformations/README.md)
+now follows the original pass from all ten incoming conversion/gain channels and
+pre-transform LifeTotal through the actual rates, completed resource tables,
+two original record insertions and their final Life consumer. Seven cases cover
+sixteen complete loads per configured reference mode. The two complete reports
+agree byte for byte: 3,388,303 bytes, SHA-256
+`3d0906e6614a1a83147b3a8182a0c0eafc2eb1e6b2dec7942f5514683965ac1b`.
+Eight executed Actor/mode contexts retain sixteen generated zero records and
+twenty-four Life calls; six unexecuted CALCS contexts remain unexecuted.
 
-This follows the existing receiver uniqueness contract: one Stat/program row,
-multiple explicit targets. An initial proposal to append separate receiver rows
-was rejected by publication validation and corrected to target extension.
-No runtime API or validator was widened. An earlier authoring attempt also
-caught an invalid serialized target shape before publication. Failed outputs
-are retained separately; publication03 is the accepted endpoint.
+This proves the bounded observed neutral source domain, not a native default or
+complete supplier inventory. The packet retains the full report once, with
+non-executable observer/driver hash archives. It introduces no runtime rule,
+definition, transformation kernel or positive-conversion claim. Preexisting
+LifeTotal and generated LifeTotal require distinct producer ownership and stages.
+An empty collector alone would not implement the generating mechanic.
 
-The shared native graph now derives **Strength 0**, five false flags, inherent
-Life 0 and one explicit zero contribution for each of two independent Snipers.
-Player remains **Strength 27 / inherent Life 54**. These are computed from
-checked input inventories and the unchanged rules, not supplied observations.
-The zero-BASE branch does not request unused MORE factors; no neutral factor
-receiver was added. Missing minion bindings stay unresolved without changing
-Player. An admitted synthetic positive-BASE control still cannot borrow Player
-MORE or claim nonempty minion attribute parity.
+In parallel, [Cryptic Leggings declarations](../data/owned/poe2/3887ae68/leggings-declarations/README.md)
+close five actual empty intrinsic inventories on template `1e0e`: choices,
+grants, actors, skill grants and outputs. This reuses the authenticated Crown
+evidence machinery with an exact item witness and all six existing source
+report files. It adds no source VM run, definition, numerical program or public
+API. Sockets, modifier/quality membership and the five-program numerical owner
+remain Partial. The shared checker preserves Crown's frozen evidence unchanged.
 
-The existing Player fixture assertions now identify exact receiver origins and
-Actor recipients. Historical packet checks authenticate and invert only the
-eight target extensions; the Life query proof reverses both the new bridge/member
-and the earlier Amulet change before its complete original donor census.
-Attribute dependency discovery likewise uses the authenticated prior Player
-targets, preventing the new slot reference from reintroducing the finite graph's
-excluded parent output. Execution installs the actual combined target rows.
-These are evidence/fixture adaptations, not runtime compatibility branches.
+The canonical package is now
+**`runs/owned-leggings-declarations-publication-01/package`**:
+
+- Input: `2390f617fbd22951299e68af43b780d548d46a7981152d5ac789c8914bb9a4ed`
+- Definitions: `4d7cfcdd88956dfd9b04f9727da77816006868c17d83f3cf7b821774b767790e`
+- Rules: `a71944d34ed9a1dd8e340d419ef99221e91218b5572a8ed830e32ed11a1af01d`
+- Compiled rules: `213d4a78d6cba7fc2f61d365380aebf0d05af825fb0df9cc5c49b171ace5c7db`
+
+Operations remain V27/schema6; the next free key remains **336e**. Publication
+retains eighteen artifacts, **170 provenance rows**, 110 saved queries and no
+evaluation bundle. All five imports retain selected obligations
+**106/117/109/123/4**; complete native builds remain **0/5**. The descriptor and
+whole-recipe inverses prove that only the five intrinsic facets and dependent
+identities change. Every artifact reconstructs byte for byte.
 
 Validation completed:
 
-- All **five** packet/source/publication tests pass (22.78s), including unchanged
-  five-build imports and exact reconstruction of all eighteen artifacts.
-- Both focused native checks pass (30.75s), followed by **all 92** composed-graph
-  tests (41.44s). Existing damage, Command, Offering, item, attribute and Life
-  query controls pass on the successor. Life BASE probes retain the explicit
-  zero member, and unread missing membership remains an error.
-- Replay export passes (30.36s), including decoded full-report equality.
-  **All 21 ordinary Engine replay tests** pass with `--no-default-features`
-  (3.29s), without PoB or local release files. Seven new tests cover exact
-  targets, zero versus missing, potential inactive/zero/nonzero donors, unsupported
-  positive input, actual Partial authority, frozen stages and four-worker reuse.
-- **Ten ordinary historical tests** pass across the three affected flag,
-  inherent-Life and Life-query targets. Their three unchanged historical
-  publication tests remain opt-in and were not rerun.
-- Strict all-feature CLI Clippy for five affected targets and no-default-feature
-  Engine replay Clippy pass. Selective formatting and whitespace checks pass.
-- Independent review proves an exact raw-JSON inverse of the replay, including
-  all changed domain-separated hashes. Schema, routing, build, scenario and
-  queries are byte-identical; only eight target extensions, the bridge,
-  stage/program/readiness rows and nine dependent identity fields change.
+- The full new source acquisition passes in 606.78s, with independent complete
+  off/on reports and unchanged uninstrumented results.
+- All **33 ordinary tests** in the PoB physical-damage target pass (687.56s),
+  including nine new evidence checks and the existing full physical-damage
+  reference regression. The separate full retained-report authentication passes
+  (0.15s), as does strict all-feature Clippy (0.79s).
+- Leggings authoring and full old-source authentication pass (5.66s), both
+  Crown ordinary tests and all three new Leggings tests pass, and publication
+  passes (28.03s). Strict all-feature Clippy for both CLI targets passes.
+- **All 93 composed native tests**, including replay export, pass on the new
+  package (43.45s). The exporter checks decoded full-report equality. Independent
+  review confirms that both gzip bytes and decoded JSON bytes exactly match the
+  tracked replay: 138,860 compressed / 5,417,997 JSON bytes, with unchanged
+  927 definitions, 620 owners and 35 stages. No fixture replacement or repeated
+  Engine test run is needed; the prior 21-test Engine result retains the same
+  inputs. Finite fixture declarations were already closed explicitly.
+- Independent review validates the exact five-field descriptor inverse,
+  retained report/source identities and observer non-interference. Formatting
+  and whitespace checks pass. Exact source archives have Git byte-preservation
+  attributes for cross-platform authentication.
 
-Evidence: `runs/owned-minion-inherent-life-tests-03.log`,
-`runs/owned-sniper-minion-inherent-native-02.log`,
-`runs/owned-sniper-minion-inherent-joined-01.log`,
-`runs/owned-sniper-replay-minion-inherent-01.log`,
-`runs/owned-sniper-minion-inherent-engine-01.log`,
-`runs/owned-minion-inherent-historical-tests-01.log`,
-`runs/owned-minion-inherent-cli-clippy-01.log` and
-`runs/owned-minion-inherent-engine-clippy-01.log`.
-
-The canonical package is now
-**`runs/owned-minion-inherent-life-publication-03/package`**:
-
-- Input: `bdfb1811f1707b493a2d2277b6ac714cc7a5b91df1a5b4b0ce07518c78948a73`
-- Definitions: `2224be8704cc7813df061c6d675e56209a6e55cb24aa98e5cb3ccd1854cfacc9` (unchanged)
-- Rules: `37728100f7de3048cf1ef7e88ad52c03e0095fd7ae737f70b6255ecc55a00a96`
-- Compiled rules: `7740c9b8b30fae336bdd90eab8e721c1b92d8322d9dadc678136b22cfe680dde`
-
-Operations remain V27; the next free key remains **336e**. Publication retains
-eighteen artifacts, **169 provenance rows**, 110 saved queries and no evaluation
-bundle. Selected input obligations remain **106/117/109/123/4**. No actual
-Actor, item, passive, resource or global coverage closure is promoted.
-**Complete native builds remain 0/5.**
-
-The refreshed portable replay has **927 definitions, 620 owners and 35 stages**,
-138,860 compressed bytes / 5,417,997 JSON bytes, SHA-256
+Logs: `runs/owned-minion-life-transformation-source-01.log`,
+`runs/owned-minion-life-transformations-{ordinary,retained,clippy}-01.log`,
+`runs/owned-leggings-declarations-{authoring,ordinary,publication,clippy}-01.log`
+and `runs/owned-sniper-leggings-declarations-joined-01.log`.
+The byte-identical exported replay is
+`runs/owned-sniper-replay-leggings-declarations-01.json.gz`; its SHA-256 remains
 `e4ca40a3833deb613f391109611d54fca8e9e9c659df4994ba48b5c58809b220`.
-Its source inputs and finite coverage must not be copied into a production
-closure. Baseline Life components remain intrinsic 1615, Increase 44 and MORE
-1.2, now with an explicitly accounted inherent zero; there is still no final
-Life consumer or complete original build.
 
-**Resume: keep Original05 first.** The next bounded blocker is the source of
-generated ExtraLife/LifeTotal adjustments, followed by final arithmetic and
-complete request/owner admission.
+**Resume: follow the saved-query delivery map above.** The bounded minion
+transformation acquisition is finished; do not repeat it or broaden positive
+transfers now. Minion Life is selected-Actor coverage work, not a saved metric.
+The immediate independent tracks are:
 
-1. Extend the existing optional minion observer with a transformation-evidence
-   flag, preserving exact Actor/store identity and independent unhooked JIT
-   controls. Reuse original/repeat/warm/explicit-Sniper-CALCS cases. The existing
-   `resource_transformation_source.lua` checkpoint technique is reusable, but
-   its Player reports are not minion evidence.
-2. At pinned `CalcDefence.lua:1375`, on the first Armour source, retain the
-   initialized resource list and pre-transform LifeTotal raw inventory; Life's
-   totalBase comes from the original query at line 1372. Do not assume the current
-   local globalBase has been assigned yet. At lines 1386/1412 for target Life retain
-   original gainRate, capped conversion rate, combined rate and source/target
-   identities for all five donors: Armour, Evasion, Energy Shield, Mana and Ward.
-   Census their ten ConvertToLife/GainAsLife channels, including raw zero records.
-3. At line 1430 before emission, retain the completed resource list and Life
-   globalBase/totalBase. Observe original NewMod→AddMod at lines 1440–1441 and join
-   the exact generated records to the third Life call at line 1631. Ensure nested Life
-   hooks restore a mask that keeps these line observations active.
-4. Use that evidence to admit only the justified neutral transformation input
-   domain through existing checked queries; do not publish observed zero
-   literals or infer completeness from filtered enumeration. Positive conversion
-   formulas, game obtainability and broader donor domains remain separate.
-5. Final Mana/Life still needs the pending checked numeric-domain decision and
-   complete producer membership. Preserve actual Partial source owners; do not
-   silently clamp or reproduce the large-number PoB rounding discrepancy.
-   Nonempty/conditional minion attribute parity likewise needs original pass
-   evidence before expanding beyond this bounded empty domain.
+1. Resolve the pending numeric-domain decision, then reuse the draft Player Mana
+   and retained Player Life witnesses for final pools. Complete their potential
+   adjustment/equipment supplier inventories; the new minion report cannot
+   authorize Player or whole-build coverage.
+2. Resolve configuration accounting (prompted October 9), then close the actual
+   selected input responsibilities through their real owners. Current IDs are
+   `01f2/0505/0207/0208`; configuration retains 36 source links after the eight
+   Warrior correspondences. Reporting ownership remains a separate decision.
+3. Continue Sniper's direct damage dependency at pre-conversion physical base on
+   exact Basic Action `0022`. Reuse `320f/3210 → 3212/3213` and the intrinsic
+   added-damage chain `336b → 336c → 336d`. Retained Source02 already proves
+   baseline 208–387 and flat 3–7 control 211.45–395.05; do not apply the intrinsic
+   coefficient again. Capture missing raw Enemy `SelfPhysicalMin/Max` and raw
+   zero/conditional flat/Added records, then establish endpoint bonus/coefficient
+   ownership and complete added-damage Increase/MORE inputs. Existing Action
+   authority can host this consumer. Checked numeric Enemy contribution queries
+   are a distinct unsupported contract, not covered by the pending shared-Actor
+   read proposal; discuss that extension before implementation if required.
+   Intimidated/Party:Intimidated/Debilitated already exist in the raw source
+   inventory. Faerie Fire's random gain is omitted and needs a later gain census;
+   these downstream effects must not block a correctly scoped preconversion
+   producer or be falsely included in its coverage claim.
+4. For later neutral minion adjustment adoption, bind the ten incoming domains
+   and preexisting totals to complete potential supplier authority. Preserve
+   actual Partial owners and distinguish generated outputs from their inputs.
+   A runtime zero-only capability restriction needs the numeric-domain facility
+   or a proof of the entire admitted domain, not a false effect guard.
 
-The following damage boundary remains pre-conversion physical base at pinned
-`CalcOffence.lua:4132–4136`: flat Actor/Action and Enemy additions, added-damage
-increased/MORE membership, endpoint bonuses and skill coefficient. Source02's
-filtered baseline zero/empty records cannot close untranslated owners. Its raw
-filter omits `DamageGainAsRandom`: `CalcSetup.lua:82` installs Faerie Fire's
-conditional random gain before expansion. Lines 77–81 install conditional
-Intimidated and Debilitated sources even when inactive. Retain those raw
-inventories and conditions in the next damage census.
-
-The smaller Cryptic Leggings `1e0e` follow-up can authenticate five empty intrinsic
-declaration facets from retained Crown/Leggings evidence; actual sockets and
-numerical gaps stay open. Thirteen selected Partial passives still include seven
-Puppet/Archon nodes, four granted-effect sources, one jewel socket and the
-distinct-active-minion-type Command mechanic. Archived Firebolt 174/175 remains
-separate: prove real saved-usage responsibility and exact selector correspondence
-without fabricating a Pending owner or physical/manual root.
-
-Actor-to-Enemy, resource-demand, configuration/reporting and scoped-coverage
-proposals remain unapproved. The accepted Action/numeric-selection answers do
-not authorize those model changes. Ask when a proposed contract becomes the
-next necessary boundary; continue independent evidence work meanwhile.
+Resource-demand and scoped-coverage proposals remain unapproved. Current full
+selected-plan coverage still includes other selected skills. The Leggings
+intrinsic-declaration follow-up is complete; its remaining sockets, property
+and numerical coverage are different work. Thirteen selected passive owners
+remain Partial. Archived Firebolt correspondence and reporting responsibilities
+stay live. At the first complete unchanged request/bundle/reference result,
+start D4 immediately while continuing the other four builds.
 
 ## Unpublished final Mana arithmetic
 
@@ -2952,34 +2964,37 @@ availability result rather than choosing another skill. Original source bytes
 and all 110 query identities remain unchanged. Local `runs/` files are
 reproducible evidence, not distributed game data.
 
-## Next executable work
+## Complete-build delivery gates
 
-The selected-passive, recipient-buff, Gigantic and inherent-Life joins above pass.
-The actual Player Life contributor join and independent final-Life consumer
-witness now pass. Actor/reward membership is implemented in operations V23;
-its actual Life query data and finite reductions now pass. Prove the remaining
-equipment reduction domain, then final Player Life arithmetic using the retained source witness.
-Publish complete coverage only where supplier domains and numerical bounds are
-proved. V24 now provides exact Skill query/self-membership and canonical Offering
-source scaling for checked empty domains. The typed activation/application join
-now passes in the same graph. The next combined damage consumer requires the
-new [application-group query contract](owned-application-group-contribution-queries-proposal.md),
-accepted October 8 and now the next implementation step. Composed support
-discovery remains an independent accepted path. Application-group and Actor/Skill
-membership and support composition need no repeat approval; unrelated proposals
-retain their separate review gates.
+These gates remain current; the chronological checkpoints above are evidence,
+not competing implementation queues. The top resume point names the current
+package and immediate work. Actor/reward, exact Skill, application-group and
+exact Action contribution queries, coherent numeric selection and composed
+support discovery are implemented. Offering and Command already use those
+contracts. Do not implement them again or seek repeat approval.
 
-The follow-up audit found no established final-Life shortcut: the selected saved
-Life query is Player, whose BASE/ordering and class/shared-Actor coverage remain
-open. Joining the already-published six minion-Life sources would add component
-coverage but would not close that metric. Do not replace the current dependency
-with another supplied scalar or count that test composition as a complete build.
+The remaining route is actual final metric production and complete input/owner
+admission. Reuse the checked Player Life contributors and retained final-resource
+source witnesses. Complete the equipment reduction domain, adjustment sources
+and pending numeric-domain contract before publishing final pool arithmetic.
+The Sniper damage route next needs pre-conversion base production, followed by
+the remaining downstream consumers. Complete coverage only where potential
+supplier inventories and numerical behavior are proved; source observations
+and finite component replays do not replace either requirement.
 
-The checkpoint's input audit found no existing-authority shortcut to close the
-other four obligations. `0503` retains twenty Skill/Gem source rows despite 23
-known preferences; global switches, action selection and FullDPS responsibilities
-remain. `01f2` retains 44 origins (21 Config, 23 elsewhere), including 19
-Placeholders and ten unaccounted generated Warrior/Firebolt rows. `0207`'s 17
+The selected saved Life query is Player. Its remaining equipment reduction,
+adjustment and final-consumer dependencies are independent of the now-joined six
+minion-Life sources and inherent minion zero contribution. Those joins advance
+Actor coverage; they do not close the saved Player metric. Do not replace a
+missing producer with a supplied scalar or call a finite composition a complete
+build.
+
+The current input audit found no existing-authority shortcut to close the
+four obligations. Preset usage `0505` retains unresolved global switches,
+action selection and FullDPS responsibilities despite known preferences.
+`01f2` retains 36 origins, following the eight archived Warrior correspondence
+retirements; known values and remaining Firebolt correspondence are separate.
+`0207`'s 17
 known assumptions do not prove the constructor/default catalogue complete;
 `0208`'s empty saved usage does not account for seven default child-effect enables.
 Known scalar values cannot certify these inventories. Configuration-disposition
@@ -2995,12 +3010,13 @@ selected obligation unchanged.
   now records original local products/rounding and exact Danse delivery. Use it
   to review owned group membership and support applicability; do not rerun the
   same probes or mistake an inherited source store for native ownership. The
-  additional-skeleton activation condition remains unresolved. Do not widen
-  native Skill or support-origin authority before the accepted contracts are implemented.
+  additional-skeleton activation condition remains unresolved. Exact Skill and
+  composed-support contracts are implemented; reuse their checked authority
+  without assuming an untranslated supplier or applicability domain is complete.
 - The [manual Djinn admission witness](#source-checkpoint-manual-djinn-admission-accounting)
   now records the actual Original05 global2 controls through original consumer
   admission. Next use its exact queried-empty versus not-called distinction in
-  the `0503` disposition review. All these Djinn rows already have usage-only
+  the current `0505` disposition review. All these Djinn rows already have usage-only
   responsibility; they cannot remove any further `01f2` link. Preserve unresolved
   supplier and archived responsibilities; neither unchanged numbers nor this
   finite witness certifies an entire inventory. Existing other-SkillName and
@@ -3017,7 +3033,7 @@ evaluation bundle, absent from the current package. Work in this order:
    Gems now have reviewed support domains; other owner domains remain unknown.
    Missing Command mechanics are independent of their now-proved classification;
    do not invent missing source definitions or use preset-only certificates.
-2. In parallel, account for selected preset usage (`0503`), configuration (`01f2`),
+2. In parallel, account for selected preset usage (`0505`), configuration (`01f2`),
    external assumptions (`0207`) and scenario usage (`0208`) through reviewed
    consumers, preserved responsibilities or justified non-applicability. Reuse
    retained source evidence; do not equate known values with complete inventories.
@@ -3974,7 +3990,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated source-property owners | Accepted contract implemented: exact generated Skills own properties and their exact declaring provider can project final inputs. Current native contract tests and component regressions pass. Sand incoming source evidence is captured; real numerical authoring remains downstream of Original05 request admission. Ownership support does not establish complete mechanic coverage. |
 | Effect-application breadth | General application model accepted and Maximum component implemented. Select a real contrasting stacking/grouping case and prove duplicate, cap, source and recipient semantics before extending its bounded policies. Do not replace the shared graph with effect-specific paths. |
 | Physical-input/reference separation | Design refinement pending: classify fields without requiring successful MAIN/CALCS selection or a live Pending usage issue to preserve known intrinsic facts. Preserve independent unknown-field/usage obligations. |
-| Generated selector/supply separation | [Proposal](owned-source-action-root-separation-proposal.md) pending. Archived item-only Warrior exposes physical/manual root coupling in the source-selector adapter. Separate selector interpretation from checked supply, reuse existing child topology, and preserve all unresolved owners. No 44-to-36 source-link reduction or native authority is published. |
+| Generated selector/supply separation | [Proposal](owned-source-action-root-separation-proposal.md) pending. Archived item-only Warrior exposes physical/manual root coupling in the source-selector adapter. Separate selector interpretation from checked supply, reuse existing child topology, and preserve all unresolved owners. The narrow eight archived Warrior correspondences are published, reducing configuration source links from 44 to 36; this does not implement the broader separation or confer native authority. |
 | Immutable normalization preparation | Compile existing checked policies once per exact release; separate construction/traversal budgets and prove identical outputs. Implementation pending; no storage-layer change. |
 | Scoped numerical coverage | [Proposal](owned-coverage.md) pending concrete reviewed proof contract. Unknown effect reach remains blocking; no known-edge-only pruning or relaxation of original-build acceptance. |
 | Closest complete build and native optimization | Original05 is the current first-completion target. Close its four remaining input obligations, publish its real evaluation bundle and complete its selected mechanics/metrics through the public CLI. D4 begins after this first complete build, without waiting for all five: bind objectives to owned actor/action/stat-set requests and verify one legal locked candidate mutation before expanding search. Reassess the shortest complete path at every checkpoint. |

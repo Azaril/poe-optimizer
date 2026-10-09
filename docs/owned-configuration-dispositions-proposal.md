@@ -4,6 +4,9 @@
 The narrower source-presentation precursor and final issue-integrity check are
 implemented. Neither closes an inventory; publication status and the current
 baseline are recorded in [implementation](implementation.md).
+The owner was prompted on the full accounting contract on October 9; that
+decision is pending. The current no-backward-compatibility direction below
+supersedes this proposal's earlier preservation language.
 **Date:** 2026-10-05.
 **Scope:** A reusable owned Import contract. Core ownership and native evaluation
 remain as described in the [domain architecture](domain-architecture.md).
@@ -983,10 +986,12 @@ work. This investigation does not authorize full configuration closure.
 
 ## Proposed Import contract
 
-Add an optional, versioned `ConfigurationDispositionPolicy` to the existing
-normalization policy. This is an Import-facing contract with a private checked
-proof type, not a second runtime configuration model. Its final Rust spelling and
-serialization version should follow implementation review.
+Add `ConfigurationDispositionPolicy` to the existing normalization contract.
+This is an Import-facing contract with a private checked proof type, not a second
+runtime configuration model. Update the current format in place and rebuild
+affected packages and imports; retain no old-format reader or parallel policy
+implementation. A package without a proven policy keeps the relevant obligations.
+Its final Rust spelling should follow implementation review.
 
 The policy binds the source revision, authenticated catalogue/constructor evidence
 and exact dependency identities for the existing reward, encounter, enemy-level
@@ -1054,9 +1059,10 @@ update require a new review, even if current fixture results do not change.
    selected queries and other pending issues. Never attach unresolved
    configuration to another preset's fallback issue.
 
-Omitting the optional policy retains previous normalization behavior. Successor
-and migration paths must validate old commitments before rebinding dependencies;
-a changed reward/scalar policy invalidates the old disposition proof.
+An absent policy supplies no completion authority. Publication must authenticate
+the predecessor commitments before rebinding dependencies; a changed reward or
+scalar policy invalidates the prior disposition proof. This is content-identity
+validation, not a compatibility requirement for obsolete development formats.
 
 ## Owned semantics versus source quirks
 
@@ -1108,8 +1114,8 @@ separate, concrete design decision.
   through proven dispositions or retained obligations; no orphaned source, stale issue
   reference or unrelated-inventory closure may result from local completion.
 - Publish with a minimal authenticated artifact delta and reproduce the package
-  byte-for-byte. Test inherited-policy rebinding and verify that dropping the
-  opt-in policy restores the predecessor behavior.
+  byte-for-byte. Test policy rebinding and verify that removing its authority
+  preserves unresolved obligations rather than falsely completing an inventory.
 
 New checks should be Rust tests. Reuse the existing optional PoB source witnesses
 where their assertions suffice; extend focused source controls only where a new

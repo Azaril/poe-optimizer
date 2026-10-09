@@ -38,6 +38,24 @@ Do not preserve a runtime format branch merely to replay an old checkpoint.
 
 ## Retention rule
 
+**Leggings declarations, 2026-10-09:** reuse the Crown source-evidence checker
+with exact item selection rather than copying its observer or publication
+machinery. The five empty intrinsic inventories use the existing refinement
+contract. Historical full reports and source hashes remain evidence; the native
+package gains no compatibility path, item-name dispatch or numerical special case.
+
+**Minion transformation evidence, 2026-10-09:** extend the existing optional
+observer and complete-load driver with one explicit source mode. The new packet
+retains one exact complete report and small provenance metadata, instead of a
+second projection schema. Observer/driver archives are hash witnesses only;
+they are never compiled, executed or used as an old-format runtime fallback.
+Original Lua resource tables and inserted-record identities remain offline.
+Native adoption must distinguish preexisting additions from generated outputs
+and prove potential suppliers; it must not turn observed zeros, an empty
+collector or source insertion order into a new native mechanic. This bounded
+Actor-coverage investigation must not displace the saved Player resource and
+Sniper damage dependencies in the current delivery map.
+
 **Minion inherent Life, 2026-10-09:** extend the target lists of eight existing
 Stat/program receivers; preserve one receiver identity and one numerical body.
 The guarded Player bridge is reusable typed rule data on the supplied Actor
@@ -62,9 +80,10 @@ Life calls. ExtraLife and LifeTotal Conversion records, both zero, appear only
 at the third call. PoB's `Tabulate` omits these numeric zero entries; the native
 graph must preserve their producers rather than copy that collection behavior.
 Unexecuted CALCS actors have no output, not a zero-valued result. The census
-authenticates source observations only: incoming conversion/gain channels and
-the pre-transform LifeTotal inventory still need proof before admitting the
-generated adjustments. No native transformation formula or closure is added.
+authenticates source observations only. The subsequent transformation packet
+above records incoming conversion/gain channels and pre-transform LifeTotal;
+native potential-supplier authority is still required before admitting generated
+adjustments. No native transformation formula or closure is added.
 
 The earlier Life-increase witness now authenticates its exact historical
 observer from a non-executable `evidence/` archive, matching its retained hash.

@@ -1,4 +1,4 @@
-//! Offline authentication of existing Crown witnesses, never a native data loader.
+//! Offline authentication of exact item witnesses, never a native data loader.
 use super::{hash, root};
 use serde_json::{Map, Value, json};
 use std::{collections::BTreeSet, fs};
@@ -12,6 +12,73 @@ const CONSTRUCTION_PHASES: [&str; 5] = [
     "reparsed",
     "fresh_after_reparse",
 ];
+
+/// These two exact witnesses share the same retained source reports. This is
+/// evidence selection, not a runtime item classifier or an open-ended allowlist.
+#[derive(Clone, Copy)]
+#[allow(dead_code)] // Each independent packet selects its exact source item.
+pub enum ItemWitness {
+    Crown,
+    Leggings,
+}
+impl ItemWitness {
+    fn id(self) -> u64 {
+        match self {
+            Self::Crown => 21,
+            Self::Leggings => 22,
+        }
+    }
+    fn ordinal(self) -> u64 {
+        match self {
+            Self::Crown => 576,
+            Self::Leggings => 578,
+        }
+    }
+    fn name(self) -> &'static str {
+        match self {
+            Self::Crown => "Iron Crown",
+            Self::Leggings => "Cryptic Leggings",
+        }
+    }
+    fn slot(self) -> &'static str {
+        match self {
+            Self::Crown => "Helmet",
+            Self::Leggings => "Boots",
+        }
+    }
+    fn source(self) -> String {
+        format!("Item:{}:New Item, {}", self.id(), self.name())
+    }
+    pub fn binding(self) -> Value {
+        json!({"original":5,"item_id":self.id(),"source_ordinal":self.ordinal(),"equipment_slot":self.slot()})
+    }
+    pub fn base(self) -> Value {
+        match self {
+            Self::Crown => json!({
+                "armour":{"Armour":26,"EnergyShield":13},"implicitModTypes":{},"quality":20,
+                "req":{"int":7,"level":5,"str":7},"socketLimit":3,"subType":"Armour/Energy Shield",
+                "tags":{"armour":true,"default":true,"ezomyte_basetype":true,"helmet":true,"str_int_armour":true},
+                "type":"Helmet"
+            }),
+            Self::Leggings => json!({
+                "armour":{"Armour":134,"EnergyShield":37},"implicitModTypes":{},"quality":20,
+                "req":{"int":59,"level":80,"str":59},"socketLimit":3,"subType":"Armour/Energy Shield",
+                "tags":{"armour":true,"default":true,"karui_basetype":true,"boots":true,"str_int_armour":true},
+                "type":"Boots"
+            }),
+        }
+    }
+    fn modifier(self) -> (&'static str, &'static str, Value) {
+        match self {
+            Self::Crown => (
+                "GemProperty",
+                "LIST",
+                json!({"key":"level","keyOfScaledMod":"value","keyword":"minion","value":1}),
+            ),
+            Self::Leggings => ("MovementSpeed", "INC", json!(10)),
+        }
+    }
+}
 
 // These retained reports authenticate the historical witness contents. Later
 // investigations extend the live helper; they do not rewrite this proof.
@@ -35,17 +102,17 @@ fn select(value: &Value, fields: &[&str]) -> Value {
             .collect(),
     )
 }
-fn only_crown(items: &Value) -> &Value {
+fn only_item(items: &Value, item: ItemWitness) -> &Value {
     let rows: Vec<_> = items
         .as_array()
         .unwrap()
         .iter()
-        .filter(|item| item["id"] == 21)
+        .filter(|row| row["id"] == item.id())
         .collect();
     assert_eq!(rows.len(), 1);
     rows[0]
 }
-fn catalogue(state: &Value) -> Value {
+fn catalogue(state: &Value, item: ItemWitness) -> Value {
     let mut result = select(
         state,
         &[
@@ -55,7 +122,7 @@ fn catalogue(state: &Value) -> Value {
         ],
     );
     result["item"] = select(
-        only_crown(&state["items"]),
+        only_item(&state["items"], item),
         &[
             "id",
             "base_name",
@@ -67,7 +134,7 @@ fn catalogue(state: &Value) -> Value {
     );
     result
 }
-fn construction(state: &Value) -> Value {
+fn construction(state: &Value, spec: ItemWitness) -> Value {
     let mut result = select(
         state,
         &[
@@ -81,7 +148,7 @@ fn construction(state: &Value) -> Value {
             "selected_spec",
         ],
     );
-    let source = only_crown(&state["items"]);
+    let source = only_item(&state["items"], spec);
     let mut item = select(
         source,
         &["id", "raw", "xml", "base_facts", "selected_slots"],
@@ -103,7 +170,7 @@ fn construction(state: &Value) -> Value {
     result["item"] = item;
     result
 }
-fn runtime(consumer: &Value) -> Value {
+fn runtime(consumer: &Value, spec: ItemWitness) -> Value {
     let mut result = select(
         consumer,
         &[
@@ -116,7 +183,7 @@ fn runtime(consumer: &Value) -> Value {
     result["environments"] = Value::Array(consumer["environments"].as_array().unwrap().iter().enumerate().map(|(i, env)| {
         json!({
             "environment_index":i,"mode":env["mode"],"axes":env["axes"],
-            "item":select(only_crown(&env["items"]), &[
+            "item":select(only_item(&env["items"], spec), &[
                 "id", "slot", "source", "type", "saved_object_exact", "selected_item_id", "grants",
             ])
         })
@@ -124,7 +191,21 @@ fn runtime(consumer: &Value) -> Value {
     result
 }
 
+#[allow(dead_code)] // Crown's retained proof keeps its original entry point.
 pub fn check(proof: &Value, full: bool) {
+    check_item(proof, full, ItemWitness::Crown);
+}
+
+pub fn project(state: &Value, kind: &str, spec: ItemWitness) -> Value {
+    match kind {
+        "catalogue" => catalogue(state, spec),
+        "construction" => construction(state, spec),
+        "runtime_grants" => runtime(state, spec),
+        _ => panic!("unknown retained item witness"),
+    }
+}
+
+pub fn check_item(proof: &Value, full: bool, spec: ItemWitness) {
     assert_eq!(proof["schema_version"], 1);
     assert_eq!(proof["status"], "retained-source-witnesses-passed");
     assert!(
@@ -134,10 +215,7 @@ pub fn check(proof: &Value, full: bool) {
             .values()
             .all(|value| *value == false)
     );
-    assert_eq!(
-        proof["source_binding"],
-        json!({"original":5,"item_id":21,"source_ordinal":576,"equipment_slot":"Helmet"})
-    );
+    assert_eq!(proof["source_binding"], spec.binding());
     let manifest_bytes =
         fs::read(root().join("crates/poe-optimizer-pob/data/pob-source-manifest.json")).unwrap();
     let manifest: Value = serde_json::from_slice(&manifest_bytes).unwrap();
@@ -169,7 +247,10 @@ pub fn check(proof: &Value, full: bool) {
     }
     for required in [
         "src/Classes/Item.lua",
-        "src/Data/Bases/helmet.lua",
+        match spec {
+            ItemWitness::Crown => "src/Data/Bases/helmet.lua",
+            ItemWitness::Leggings => "src/Data/Bases/boots.lua",
+        },
         "src/Modules/CalcSetup.lua",
     ] {
         assert!(paths.contains(required));
@@ -194,12 +275,7 @@ pub fn check(proof: &Value, full: bool) {
     );
     assert_eq!(
         proof["base"],
-        json!({
-            "armour":{"Armour":26,"EnergyShield":13},"implicitModTypes":{},"quality":20,
-            "req":{"int":7,"level":5,"str":7},"socketLimit":3,"subType":"Armour/Energy Shield",
-            "tags":{"armour":true,"default":true,"ezomyte_basetype":true,"helmet":true,"str_int_armour":true},
-            "type":"Helmet"
-        }),
+        spec.base(),
         "whole base record, including the nonempty socket capacity"
     );
     let witnesses = proof["witnesses"].as_array().unwrap();
@@ -209,7 +285,7 @@ pub fn check(proof: &Value, full: bool) {
         .enumerate()
     {
         assert_eq!(witnesses[i]["kind"], kind);
-        check_witness(proof, &witnesses[i], kind, full);
+        check_witness(proof, &witnesses[i], kind, full, spec);
     }
     let source = fs::read_to_string(
         root().join("crates/poe-optimizer-pob/tests/support/armour_item_input_source.rs"),
@@ -236,7 +312,7 @@ pub fn check(proof: &Value, full: bool) {
     );
 }
 
-fn check_witness(proof: &Value, witness: &Value, kind: &str, full: bool) {
+fn check_witness(proof: &Value, witness: &Value, kind: &str, full: bool, spec: ItemWitness) {
     let metadata = &witness["report_metadata"];
     let evidence = if kind == "construction" {
         &metadata["evidence"]
@@ -316,10 +392,10 @@ fn check_witness(proof: &Value, witness: &Value, kind: &str, full: bool) {
                 assert_eq!(value["method_wrappers"], false);
                 assert_eq!(
                     value["item"],
-                    json!({"id":21,"base_name":"Iron Crown","source":"Item:21:New Item, Iron Crown","exact_catalogue_base":true,"exact_registered":true,"base":proof["base"]})
+                    json!({"id":spec.id(),"base_name":spec.name(),"source":spec.source(),"exact_catalogue_base":true,"exact_registered":true,"base":proof["base"]})
                 );
             }
-            "construction" => check_construction(proof, obs),
+            "construction" => check_construction(proof, obs, spec),
             "runtime_grants" => {
                 let case = index / 3;
                 let stage = RUNTIME_STAGES[index % 3];
@@ -346,8 +422,8 @@ fn check_witness(proof: &Value, witness: &Value, kind: &str, full: bool) {
                     assert_eq!(
                         env["item"],
                         json!({
-                            "id":21,"slot":"Helmet","source":"Item:21:New Item, Iron Crown","type":"Helmet",
-                            "saved_object_exact":true,"selected_item_id":21,
+                            "id":spec.id(),"slot":spec.slot(),"source":spec.source(),"type":spec.slot(),
+                            "saved_object_exact":true,"selected_item_id":spec.id(),
                             "grants":{"kind":"raw_table","has_metatable":false,"fields":{}}
                         })
                     );
@@ -392,13 +468,14 @@ fn check_witness(proof: &Value, witness: &Value, kind: &str, full: bool) {
                     witness,
                     kind,
                     &serde_json::from_slice(&bytes).unwrap(),
+                    spec,
                 );
             }
         }
     }
 }
 
-fn check_construction(proof: &Value, obs: &Value) {
+fn check_construction(proof: &Value, obs: &Value, spec: ItemWitness) {
     assert_eq!(obs["case_index"], 0);
     assert_eq!(obs["name"], "original");
     assert_eq!(obs["pointer"], "/cases/0/state");
@@ -420,22 +497,22 @@ fn check_construction(proof: &Value, obs: &Value) {
         assert_eq!(state[field], n);
     }
     let item = &state["item"];
-    assert_eq!(item["id"], 21);
-    assert_eq!(item["xml"]["attributes"]["id"], "21");
-    assert_eq!(item["selected_slots"], json!(["Helmet"]));
+    assert_eq!(item["id"], spec.id());
+    assert_eq!(item["xml"]["attributes"]["id"], spec.id().to_string());
+    assert_eq!(item["selected_slots"], json!([spec.slot()]));
     assert_eq!(
         item["base_facts"],
         json!({
-            "armour":proof["base"]["armour"],"implicit_mod_types":{},"name":"Iron Crown",
+            "armour":proof["base"]["armour"],"implicit_mod_types":{},"name":spec.name(),
             "quality":20,"requirements":proof["base"]["req"],"socket_limit":3,
-            "subtype":"Armour/Energy Shield","type":"Helmet"
+            "subtype":"Armour/Energy Shield","type":spec.slot()
         })
     );
     for phase in CONSTRUCTION_PHASES {
         let source = &item[phase];
-        assert_eq!(source["base"], "Iron Crown");
-        assert_eq!(source["baseName"], "Iron Crown");
-        assert_eq!(source["type"], "Helmet");
+        assert_eq!(source["base"], spec.name());
+        assert_eq!(source["baseName"], spec.name());
+        assert_eq!(source["type"], spec.slot());
         assert_eq!(
             source["sockets"],
             json!([{"group":1},{"group":2},{"group":3}])
@@ -445,30 +522,37 @@ fn check_construction(proof: &Value, obs: &Value) {
         }
         let explicit = source["lists"]["explicit"].as_array().unwrap();
         assert_eq!(explicit.len(), 1);
-        assert_eq!(explicit[0]["line"], "+1 to Level of all Minion Skills");
+        assert_eq!(
+            explicit[0]["line"],
+            match spec {
+                ItemWitness::Crown => "+1 to Level of all Minion Skills",
+                ItemWitness::Leggings => "10% increased Movement Speed",
+            }
+        );
         assert_eq!(explicit[0]["field_types"]["extra"], "nil");
         assert_eq!(explicit[0]["records"], source["base_mods"]);
         let records = source["base_mods"].as_array().unwrap();
         assert_eq!(records.len(), 1);
-        assert_eq!(records[0]["name"], "GemProperty");
-        assert_eq!(records[0]["type"], "LIST");
-        assert_eq!(
-            records[0]["value"],
-            json!({"key":"level","keyOfScaledMod":"value","keyword":"minion","value":1})
-        );
+        let (name, kind, value) = spec.modifier();
+        assert_eq!(records[0]["name"], name);
+        assert_eq!(records[0]["type"], kind);
+        assert_eq!(records[0]["value"], value);
         if phase == "fresh_before_build" {
             assert_eq!(source["active"], json!({}));
         } else {
             let active = source["active"].as_array().unwrap();
             assert_eq!(active.len(), 2);
-            assert_eq!(active[0]["name"], "GemProperty");
-            assert_eq!(active[1]["name"], "Multiplier:QualityOnHelmet");
+            assert_eq!(active[0]["name"], name);
+            assert_eq!(
+                active[1]["name"],
+                format!("Multiplier:QualityOn{}", spec.slot())
+            );
             assert_eq!(*source, item["fresh"]);
         }
     }
 }
 
-fn check_report(proof: &Value, witness: &Value, kind: &str, report: &Value) {
+fn check_report(proof: &Value, witness: &Value, kind: &str, report: &Value, spec: ItemWitness) {
     let metadata: Map<_, _> = report
         .as_object()
         .unwrap()
@@ -483,13 +567,7 @@ fn check_report(proof: &Value, witness: &Value, kind: &str, report: &Value) {
     );
     for obs in witness["observations"].as_array().unwrap() {
         let state = report.pointer(obs["pointer"].as_str().unwrap()).unwrap();
-        let project = match kind {
-            "catalogue" => catalogue,
-            "construction" => construction,
-            "runtime_grants" => runtime,
-            _ => unreachable!(),
-        };
-        assert_eq!(project(state), obs["value"]);
+        assert_eq!(project(state, kind, spec), obs["value"]);
         let case = &report["cases"][obs["case_index"].as_u64().unwrap() as usize];
         assert_eq!(case["name"], obs["name"]);
         if kind == "catalogue" {
@@ -508,12 +586,15 @@ fn check_report(proof: &Value, witness: &Value, kind: &str, report: &Value) {
                     .as_array()
                     .unwrap()
                     .iter()
-                    .filter(|row| row["item_id"] == 21)
+                    .filter(|row| row["item_id"] == spec.id())
                     .collect();
                 assert_eq!(bindings.len(), 1);
-                assert_eq!(bindings[0]["ordinal"], 576);
+                assert_eq!(bindings[0]["ordinal"], spec.ordinal());
                 assert_eq!(
-                    catalogue(&case[branch]["states"][obs["stage"].as_str().unwrap()]),
+                    catalogue(
+                        &case[branch]["states"][obs["stage"].as_str().unwrap()],
+                        spec
+                    ),
                     obs["value"]
                 );
             }

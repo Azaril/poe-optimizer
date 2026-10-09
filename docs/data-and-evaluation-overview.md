@@ -24,6 +24,11 @@ The first complete native/reference result unlocks owned optimizer integration;
 we do not wait for all five. Subsequent candidate changes need their own coverage
 and fresh/reused/parallel verification. All-five regression and independent
 breadth continue through the same caller-driven model.
+The [current delivery map](implementation.md#route-to-the-first-complete-build)
+accounts for all twenty-two saved queries: nineteen finite reference values and
+three unavailable results. Recent minion Life work advances selected-Actor
+coverage; it does not close the saved Player Life metric. Final metric production
+and the four input inventories remain parallel completion gates.
 
 The current [generated-skill correspondence packet](../data/owned/poe2/3887ae68/warrior-generated-correspondence/README.md)
 reuses an exact Import selector proof across saved physical and generated records.
@@ -755,6 +760,14 @@ placement is separate from saved equipment selection, sockets, physical stock,
 requirements and numerical coverage; valid schema binding is not a complete
 evaluation.
 
+Its [intrinsic declaration packet](../data/owned/poe2/3887ae68/leggings-declarations/README.md)
+also completes five empty template inventories: choices, grants, actors, skill
+grants and outputs. The offline checker reuses the Crown evidence machinery with
+an exact Leggings witness. Modifier-provided grants, sockets, quality and
+numerical coverage retain their separate obligations; no runtime program or
+public contract changes. Export from this package is byte-identical to the
+existing finite native replay.
+
 The selected Tattered Robe, Rope Cuffs, Sapphire Ring, Fine Belt and Ashen Staff
 use that same destination model. Their reviewed Complete inventories contain
 Body Armour, Gloves, three Ring slots, Belt and loadout-scoped Weapon 1.
@@ -984,11 +997,18 @@ It reuses the Actor-relative Strength, inherent flag and Life amount programs,
 then attaches the unchanged guarded contribution bridge to that Actor slot.
 The canonical Life query gains its exact supplier membership; receiver IDs,
 Player targets, numerical bodies and Partial coverage stay unchanged. No neutral
-MORE receiver or observed-zero input is added. Later adjustment
-admission needs incoming conversion/gain channels from all five other resources
-and the original pre-transform LifeTotal inventory; observed generated zeros
-cannot replace those inputs. Positive resource transformation and final Life
-remain unfinished.
+MORE receiver or observed-zero input is added.
+
+The [transformation witness](../data/owned/poe2/3887ae68/minion-life-transformations/README.md)
+now retains all ten incoming channels from the five other resources, original
+rate locals, the pre-transform LifeTotal inventory, complete before/after tables
+and both actual generated records. Seven cases agree in independent off/on
+reference modes. Its exact report is stored once, with non-executable source
+archives and ordinary Rust authentication/negative controls; it adds no native
+rules. This establishes the observed neutral source domain, not complete native
+supplier coverage. Preexisting additions and generated outputs need distinct
+ownership/stages. Positive transformations and final Life remain unfinished;
+empty adjustment collectors alone would not implement the generating producer.
 
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference
