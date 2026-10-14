@@ -60,10 +60,12 @@ fn incomplete_inputs_and_table_domains_do_not_fabricate_ratings() {
         f.contribution(&f.evaluate(), 0),
         &EffectValue::UnsupportedDomain {
             node: OwnedDefinitionKey::new("monster-rating").unwrap(),
-            table: OwnedDefinitionKey::new("monster-armour-by-level").unwrap(),
-            key: BoundedInteger::new(82).unwrap(),
-            minimum: BoundedInteger::new(83).unwrap(),
-            maximum: BoundedInteger::new(85).unwrap(),
+            domain: UnsupportedDomainCause::IntegerTable {
+                table: OwnedDefinitionKey::new("monster-armour-by-level").unwrap(),
+                key: BoundedInteger::new(82).unwrap(),
+                minimum: BoundedInteger::new(83).unwrap(),
+                maximum: BoundedInteger::new(85).unwrap(),
+            },
         }
     );
     // An unused default branch does not demand the missing table key.

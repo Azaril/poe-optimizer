@@ -13,6 +13,9 @@ use poe_optimizer_engine::owned_rules::*;
 mod owned_rule_fixture;
 use owned_rule_fixture::{Fixture, fixture};
 
+#[path = "support/owned_numeric_domains.rs"]
+mod numeric_domains;
+
 fn key(s: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(s).unwrap()
 }

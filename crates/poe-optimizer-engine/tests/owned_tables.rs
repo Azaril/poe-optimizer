@@ -207,10 +207,12 @@ fn exact_signed_integer_domain_preserves_zero_and_reports_original_lookup_contex
             f.evaluate(&c, Some(level), &mut s),
             EffectDisposition::UnsupportedDomain {
                 node: key("lookup"),
-                table: key("curve"),
-                key: bounded(level),
-                minimum: bounded(-1),
-                maximum: bounded(1),
+                domain: UnsupportedDomainCause::IntegerTable {
+                    table: key("curve"),
+                    key: bounded(level),
+                    minimum: bounded(-1),
+                    maximum: bounded(1),
+                },
             }
         );
     }

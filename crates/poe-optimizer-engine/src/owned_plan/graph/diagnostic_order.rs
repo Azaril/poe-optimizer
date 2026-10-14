@@ -67,6 +67,58 @@ fn kind(value: &EffectValue) -> u8 {
         }
     }
 }
+fn range(a: &NumericDomain, b: &NumericDomain) -> Ordering {
+    match (a, b) {
+        (NumericDomain::Integer(a), NumericDomain::Integer(b)) => {
+            (a.minimum, a.maximum).cmp(&(b.minimum, b.maximum))
+        }
+        (NumericDomain::Quantity(a), NumericDomain::Quantity(b)) => a
+            .minimum
+            .unit()
+            .cmp(b.minimum.unit())
+            .then_with(|| a.minimum.value().total_cmp(&b.minimum.value()))
+            .then_with(|| a.maximum.unit().cmp(b.maximum.unit()))
+            .then_with(|| a.maximum.value().total_cmp(&b.maximum.value())),
+        (NumericDomain::Integer(_), NumericDomain::Quantity(_)) => Ordering::Less,
+        (NumericDomain::Quantity(_), NumericDomain::Integer(_)) => Ordering::Greater,
+    }
+}
+fn domain(a: &UnsupportedDomainCause, b: &UnsupportedDomainCause) -> Ordering {
+    match (a, b) {
+        (
+            UnsupportedDomainCause::IntegerTable {
+                table: at,
+                key: ak,
+                minimum: al,
+                maximum: ah,
+            },
+            UnsupportedDomainCause::IntegerTable {
+                table: bt,
+                key: bk,
+                minimum: bl,
+                maximum: bh,
+            },
+        ) => (at, ak, al, ah).cmp(&(bt, bk, bl, bh)),
+        (
+            UnsupportedDomainCause::NumericRange {
+                value: av,
+                domain: ad,
+            },
+            UnsupportedDomainCause::NumericRange {
+                value: bv,
+                domain: bd,
+            },
+        ) => range(ad, bd).then_with(|| value(av, bv)),
+        (
+            UnsupportedDomainCause::IntegerTable { .. },
+            UnsupportedDomainCause::NumericRange { .. },
+        ) => Ordering::Less,
+        (
+            UnsupportedDomainCause::NumericRange { .. },
+            UnsupportedDomainCause::IntegerTable { .. },
+        ) => Ordering::Greater,
+    }
+}
 pub(super) fn compare(a: &EffectValue, b: &EffectValue) -> Ordering {
     match (a, b) {
         (
@@ -86,19 +138,13 @@ pub(super) fn compare(a: &EffectValue, b: &EffectValue) -> Ordering {
         (
             EffectValue::UnsupportedDomain {
                 node: an,
-                table: at,
-                key: ak,
-                minimum: al,
-                maximum: ah,
+                domain: ad,
             },
             EffectValue::UnsupportedDomain {
                 node: bn,
-                table: bt,
-                key: bk,
-                minimum: bl,
-                maximum: bh,
+                domain: bd,
             },
-        ) => (an, at, ak, al, ah).cmp(&(bn, bt, bk, bl, bh)),
+        ) => an.cmp(bn).then_with(|| domain(ad, bd)),
         (
             EffectValue::NumericalError {
                 node: an,

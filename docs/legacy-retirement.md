@@ -900,7 +900,11 @@ The [checked numeric-domain contract](owned-numeric-domain-proposal.md) addresse
 the separate computed-range boundary for final pool rounding. It specifies an
 explicit unsupported result instead of clipping, inactivity, game illegality or
 unconditional reproduction of add-half rounding at very large magnitudes.
-The owner approved it on October 14; implementation and data adoption remain pending.
+The owner approved it on October 14. The current native rule path now implements
+it, and the unpublished Mana consumer checks its actual pre-rounding operand.
+The compiler identity is invalidated in place; no old diagnostic reader or
+alternate rounding evaluator is retained. Resource supplier coverage and final
+pool publication remain pending.
 
 The [attribute setup witness](owned-attribute-setup-evidence.md) is a concrete
 unresolved case: synthetic configuration/item inputs expose different local MORE

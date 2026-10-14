@@ -66,6 +66,7 @@ fn explicit_operation_versions_preserve_capabilities_and_plan_domains() {
             revision >= 26
         );
         assert_eq!(version.supports_numeric_selection(), revision >= 27);
+        assert_eq!(version.supports_numeric_domains(), revision >= 27);
     }
     assert_eq!(OWNED_RULE_OPERATIONS_V11, "owned-domain-operations-v11");
     assert_eq!(OWNED_RULE_OPERATIONS_V12, "owned-domain-operations-v12");

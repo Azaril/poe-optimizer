@@ -696,6 +696,16 @@ fn validate_program<'a, I: DefinitionSchemaIndex>(
     for node in &p.nodes {
         use RuleExpression::*;
         match &node.expression {
+            CheckNumericDomain { value, .. } => {
+                if !RuleOperationsVersion::parse(input.operations_version.as_str())
+                    .is_some_and(RuleOperationsVersion::supports_numeric_domains)
+                {
+                    return Err(RuleStorageError::Structure(
+                        "numeric domains require owned-domain-operations-v27",
+                    ));
+                }
+                node_ref(value)?;
+            }
             OrdinaryTiming { recipe } => {
                 for input in recipe.inputs() {
                     node_ref(input)?;

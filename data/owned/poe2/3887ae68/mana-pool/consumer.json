@@ -607,10 +607,38 @@
                 }
               },
               {
+                "id": "supported-rounding-operand",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "rounding-operand",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": -1.7976931348623157e308,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": { "game": "poe2", "version": "owned-mechanics-v1" },
+                          "key": "def.0000000000000003"
+                        }
+                      },
+                      "maximum": {
+                        "value": 4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": { "game": "poe2", "version": "owned-mechanics-v1" },
+                          "key": "def.0000000000000003"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
                 "id": "rounded",
                 "expression": {
                   "kind": "round",
-                  "value": "rounding-operand",
+                  "value": "supported-rounding-operand",
                   "quantum": {
                     "value": 1,
                     "unit": {

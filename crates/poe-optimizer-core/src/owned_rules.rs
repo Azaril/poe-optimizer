@@ -6,7 +6,9 @@ use crate::{
     data::DataIdentity,
     owned_build::{DeclaredSlot, ParameterValue},
     owned_definitions::*,
-    owned_schema::{ComputedValueType, DeclaredSet, RuleEntityKind, SchemaSubject},
+    owned_schema::{
+        ComputedValueType, DeclaredSet, IntegerRange, QuantityRange, RuleEntityKind, SchemaSubject,
+    },
 };
 use serde::{Deserialize, Serialize};
 
@@ -14,7 +16,7 @@ pub const OWNED_RULE_PACKAGE_VERSION: u32 = 3;
 /// Baseline operation subset used when authors do not opt into newer capabilities.
 /// Package schema and content identity domains always use the current format.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
-/// Coherent optional numeric selection through checked contribution queries.
+/// Coherent numeric selection and checked numeric expression domains.
 pub const OWNED_RULE_OPERATIONS_V27: &str = "owned-domain-operations-v27";
 /// Exact Action self-contributions and checked current-Action query reads.
 pub const OWNED_RULE_OPERATIONS_V26: &str = "owned-domain-operations-v26";
@@ -201,6 +203,9 @@ impl RuleOperationsVersion {
         self.revision() >= 26
     }
     pub const fn supports_numeric_selection(self) -> bool {
+        self.revision() >= 27
+    }
+    pub const fn supports_numeric_domains(self) -> bool {
         self.revision() >= 27
     }
     /// Current explicit Skill participation in V4 readiness metadata.
@@ -954,9 +959,29 @@ impl OrdinaryTimingRecipe {
     }
 }
 
+/// Inclusive supported calculation domain, distinct from game legality. Exact
+/// numeric type and quantity units must match the checked expression.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum NumericDomain {
+    Integer(IntegerRange),
+    Quantity(QuantityRange),
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum RuleExpression {
+    /// Pass through a known in-domain value unchanged. A demanded out-of-domain
+    /// value is explicitly unsupported; it is never clamped or made inactive.
+    CheckNumericDomain {
+        value: OwnedDefinitionKey,
+        domain: NumericDomain,
+    },
     /// The key is an integer expression. A known out-of-domain key is unsupported,
     /// distinct from a missing key or an arithmetic failure.
     LookupIntegerTable {

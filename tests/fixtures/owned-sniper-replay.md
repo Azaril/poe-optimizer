@@ -2,7 +2,7 @@
 
 `owned-sniper-replay.json.gz` contains the public typed inputs of the existing
 joined Sniper test graph, exported from
-`runs/owned-combined-added-attack-publication-04/package`, input
+`runs/owned-numeric-domain-publication-01/package`, input
 `690169b8e0303ca02ae9a49139a8446c6b470675c28914e7f06e69e09b4d8a54`.
 It is test data, not a production release or an admitted complete build.
 Original05 still has four selected input obligations and incomplete mechanics
@@ -64,6 +64,13 @@ and edit the exact coefficient literal in copied test data.
 They preserve missing-input refusal even with a known zero coefficient and
 publish no final damage metric or coverage closure.
 
+Six additional flat-collection tests compose the real native item-roll producers
+and exact source/recipient contributions. They authenticate source evidence and
+exercise independent rolls, explicit modifier order, missing/Partial inputs,
+early receipt and fresh/reused/four-worker equality. These tests retain the
+production supplier and input-accounting gaps documented in the
+[implementation checkpoint](../../docs/implementation.md#current-implementation-checkpoint-checked-numeric-domains).
+
 Run ordinary replay tests with:
 
 ```text
@@ -87,17 +94,22 @@ with fixed timestamp and OS header. Decoding is bounded to 8 MiB; ordinary tests
 require deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
-The October 9 V27 fixture has **928 definitions, 621 owners and 36 stages**.
+The V27 fixture has **928 definitions, 621 owners and 36 stages**.
 It is 139,113 compressed bytes and 5,423,891 JSON bytes. Gzip SHA-256:
 `2416f092732e32cf9f8d16dc97482f5c80ac294bc46189f065e6726db7b560ad`.
 Decoded JSON SHA-256:
 `42ff215d5dad6e50610d05baaff0b3dbfc712b622650babb981a140f040735ca`.
 
-At its last regeneration, **93 joined native tests** passed. The unchanged gzip
-now passes **31 ordinary Engine replay tests**, including the Enemy-port cleanup
-and proof-binding controls (`runs/owned-enemy-flat-native-01.log`).
-Current strict Engine Clippy passes
-(`runs/owned-enemy-flat-engine-clippy-01.log`). Prior regeneration and affected
+The October 14 compiler-domain rebuild exported this fixture again through the
+normal joined graph. Both compressed and decoded bytes remain identical: the
+fixture stores public inputs, not a compiled identity. Export validation passes
+(`runs/owned-numeric-domain-replay-export-01.log`), and **37 ordinary Engine
+replay tests** pass against current code
+(`runs/owned-numeric-domain-sniper-replay-01.log`). These include native flat
+collection, missing/Partial coverage and fresh/reused/parallel-worker controls.
+Strict Engine Clippy passes (`runs/owned-numeric-domain-clippy-03.log`).
+At the preceding data regeneration, **93 joined native tests** passed.
+Prior regeneration and affected
 CLI validation are retained in `runs/owned-sniper-combined-added-joined-01.log`
 and `runs/owned-sniper-combined-added-cli-clippy-01.log`.
 The separate full-JSON inverse in

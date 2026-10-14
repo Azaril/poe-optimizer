@@ -77,7 +77,7 @@ These reference observations are not evidence of native metric completion.
 | Saved query references | Native work to reuse | Remaining final producer |
 | --- | --- | --- |
 | 00: Player Life | Intrinsic/Strength/item/reward contributions and checked Life queries | Complete equipment reduction, adjustments, override/CI behavior and final arithmetic with a proved numerical domain |
-| 01: Player Mana | Intrinsic/Intelligence contributions, checked queries, adjustment collectors, override selection and unpublished consumer | Transformation supplier admission, checked numerical domain and publication |
+| 01: Player Mana | Intrinsic/Intelligence contributions, checked queries, adjustment collectors, override selection and unpublished consumer with checked numeric domain | Transformation supplier admission and publication |
 | 02, 18, 19: Player ES, Armour, Evasion | Selected item magnitude/local-defence intermediates and global/passive contributions | Final item properties, complete receiving, transformations and final Actor totals |
 | 03–06: four capped Player resistances | Item/passive/reward inputs and configured penalty | Complete contributor inventories, aggregation and cap/override calculations |
 | 07–12: total EHP and five maximum hits | Encounter and incoming-damage components | Complete resource/defence dependencies, mitigation and final survivability calculations |
@@ -98,7 +98,8 @@ these 22 queries.** Its current work advances selected-Actor coverage under the
 existing complete-plan contract. The bounded transformation witness is complete;
 do not expand positive transfers ahead of direct Player resource, Sniper damage
 or input-admission work. Checked configuration accounting and numeric domains
-were approved on October 14; implementation remains separate work. Other selected
+were approved on October 14. Numeric checks now run in the existing engine;
+configuration accounting remains the next Import phase. Other selected
 skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
@@ -195,122 +196,127 @@ revision; track compilation and repeated historical-publication costs in tooling
 cleanup without removing independent coverage or displacing the first complete
 native build.
 
-## Current implementation checkpoint: native minion Attack-flat collection
+## Current implementation checkpoint: checked numeric domains
 
-Original05 remains the closest complete-build target. The next unfinished
-physical inputs are the self-flat endpoints `3371` / `3372`. The
-[native draft](../data/owned/poe2/3887ae68/self-flat-attack-damage/README.md)
-now defines two real source-declared minion Attack-flat modifier families,
-using existing typed item rolls, contribution queries, exact Actor receivers
-and Action routes. No public contract or native execution branch is added.
+The approved range operation is implemented in the current Core/Data/Engine
+path. `CheckNumericDomain` preserves supported Integer or Quantity values,
+validates exact type/unit/range at compilation, and reports a demanded failure
+through the existing unsupported-domain diagnostic. Integer-table and numeric
+range failures remain distinguishable. Requirements, metrics, dependency stages
+and lazy branches share the same availability mechanism; there is no Lua
+behavior, fallback evaluator or resource-specific engine constant.
 
-Each exact item-modifier occurrence supplies Player-owned minion Attack grant
-channels `3373`/`3374`. Checked queries collect them in explicit order, and the
-exact Sniper Actor receives Attack subtotals `3375`/`3376`. Only the proved Basic
-output and part/mode/stat-set selection route these into its physical consumer.
-The amount is not an all-Action or universal self-flat total. Draft IDs
-`336f`-`337c` are unpublished; the canonical allocator remains `336e`.
+The active V27 contract is updated in place. Compiled rule identities use
+`owned-rule-programs-v4`, invalidating downstream private plans. Old compiled
+receipts are rebuilt from authenticated authoring inputs rather than accepted
+through a compatibility loader. The unpublished Mana program checks its actual
+pre-rounding operand against the injected inclusive Mana range
+`[-f64::MAX, 2^52]`; a known override can bypass that arithmetic. Transformation
+supplier admission and final publication remain independent gates.
 
-**Independent source validation:** the
-[affix proof](../data/owned/poe2/3887ae68/minion-attack-flat-modifier/source-review.md)
-executes the original parser, whole `addMinionModifiers` helper, and original
-ModDB/ModList `Sum` and `Tabulate`. Ten range cases cover two source declarations;
-empty, duplicate, explicit-zero and condition-off/on controls remain distinct.
-An Attack-keyword contrast preserves the raw records. Two fresh hosts exactly
-reproduce the retained evidence; disabling original keyword filtering produces
-a positive non-Attack counterexample. Three ordinary tests pass (0.79s), with
-one opt-in author ignored; author01 passes (0.48s), and strict PoB library/tests
-Clippy passes (3.33s). Logs:
-`runs/owned-minion-attack-flat-modifier-{author,tests,clippy}-01.log`.
-Evidence **178,816 bytes**, SHA-256
-`4cd007e7fb6bea22b27968aa8270eeeeb357b5cc05ac75126a800a96522bb09f`;
-review `d956e6650d9b93a48300c5858e63db3b6f6bcbac0e63d412ccce433f892f1a9f`.
+**Native validation:** the final current-code pass has **102 Engine tests**
+(63 unit, 30 rule, three numeric-plan and six identity tests), **20 Mana tests**,
+three Core capability tests and ten Data rule-storage tests passing. Mana's
+four existing publication tests remain opt-in. Other affected table, lookup,
+metric, equipment, rating, incoming-damage and quantization callers also pass.
+Range checks preserve cold-stage dependencies, missing/numerical distinctions,
+Requirement and metric unavailability, deterministic diagnostic order and
+fresh/reused/four-worker equality. Strict Core/Data/Engine test Clippy, actual
+Mana Clippy, owned-only library Clippy and owned-only wasm32 compilation pass.
+Logs: `runs/owned-numeric-domain-{native-06,mana-02,core-01,data-01,clippy-03,mana-clippy-01,owned-clippy-01,wasm-01}.log`.
 
-**Native validation:** all six flat-collection tests pass (6.79s), and the full
-ordinary Sniper component replay passes **37 tests** (10.13s). Strict target
-Clippy passes (1.03s). The tests compare 12 actual original-query subtotals and
-compose real intrinsic endpoints and the combined factor without injecting flat
-operands. Final physical arithmetic is a composition check, not new independent
-full-damage or DPS parity. Missing/zero/inactive membership, Partial coverage,
-roll ranges, staging, unrelated Actions, selector authority, repeated Actors and
-fresh/reused/four-worker Rayon behavior have explicit checks. Logs:
-`runs/owned-minion-attack-flat-native-03.log`,
-`runs/owned-minion-attack-flat-native-full-01.log` and
-`runs/owned-minion-attack-flat-native-clippy-01.log`.
+The numeric failure's immutable range is boxed to avoid inflating ordinary
+result enums. This allocates range diagnostics only on failure; successful
+values retain the existing VM's typed-value copying behavior. No per-candidate
+data loading or unbounded scan is introduced.
 
-The two initial failures were fixture assertion errors: exact occurrence
-membership is checked at plan compilation, after package rebinding; Partial
-queries produce an unavailable plan before any value lookup. The repaired
-regressions assert those exact failures, including zero/inactive sources and
-both missing-contributor subjects. Production coverage was not relaxed.
+**Release validation complete:** the current package is
+`runs/owned-numeric-domain-publication-01/package`. The authenticated authoring
+input remains `690169b8e0303ca02ae9a49139a8446c6b470675c28914e7f06e69e09b4d8a54`;
+compiled rules are now
+`fc4dff885ad1225ae3d25324a1fed183db553cd00f779ecffc9badf0f0353d4b`.
+Compared with the previous canonical package, only `manifest.json` and
+`release.json` change; all authoring endpoint bytes, the other 16 files,
+172 provenance rows and 110 saved queries remain unchanged. The existing
+publication regression passes all seven tests (39.82s), including all-five
+local-ID/value/query preservation and selected obligations **106/117/109/123/4**.
+Its reconstruction also proves byte-identical package assembly. Logs/receipts:
+`runs/owned-numeric-domain-publication-01.log`,
+`runs/owned-numeric-domain-package-identity-01.json` and
+`runs/owned-numeric-domain-prior-authentication-01.json`.
+An independent exact comparison of all fifteen regenerated draft/report/sidecar
+files found only each import's intentionally fresh document lineage and its
+dependent commitments/output path. Restoring those verified fields reproduces
+every previous byte; all five query artifacts are byte-identical. The reviewer
+also recomputed draft and sidecar commitments. This import-session identity is
+not calculation nondeterminism. Evidence:
+`runs/owned-numeric-domain-import-preservation-review-01.json`.
+The retained Sniper replay re-exports byte-identically and passes **37 ordinary
+Engine tests** (9.64s) against the current compiler. Its public-input format
+requires no compatibility path or replacement fixture. Evidence:
+`runs/owned-numeric-domain-replay-export-01.log` and
+`runs/owned-numeric-domain-sniper-replay-01.log`.
+The committed `data/owned/poe2/3887ae68/current/manifest.json` seed was rebuilt
+through the normal recipe assembler: all four stored artifacts and recipe
+`e68ee5001ae1c60345df96733d32af3442532c3654e59085a66c2de5a15fbee4`
+remain unchanged, while compiled rules become
+`f6ea1e28a93cb4ab10e04c2ab4a38fe36cc8f63dd31fbaf4e312601e68113355`.
+Its unchanged identity assertion now passes; no stale digest exception was added.
 
-**Selected-source audit completed:** the
-[bounded recipe audit](../data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain-review.md)
-reconstructs eight items/nine equipped uses, 57 saved node recipes, 40 skill
-definitions and six selected minion profiles. It includes saved Item `ModRange`
-children through the original XML parser and whole Item load branch, every
-stat-set's `baseMods`, and sixteen supplied-child definitions omitted from the
-initial draft. Both bonded states give equal lists for these exact equipped uses;
-no universal bonded-access rule is inferred. Actual source modifier, stat-set
-modifier, disabled-item and saved-range mutations are detected.
+**Parallel source checkpoint completed:** the
+[runtime gate packet](../data/owned/poe2/3887ae68/self-flat-runtime-gates/README.md)
+retains exactly six fresh unchanged Original05 loads. All six scalar snapshots
+are equal, with two plain controls covering JIT off/on. Four hooked observations
+cover parent-weapon/Hollow Palm branches, eighteen empty original Player
+ExtraAura queries per instrumented load, complete Player/child buff traversal
+and actual group delivery.
+There are no observed Aura payloads or child buff merges in this input.
 
-The author passes (0.86s); the selected suite passes five ordinary tests (2.05s),
-and the broader self-flat subtree passes nine with two opt-in authors ignored
-(12.27s). Strict PoB library/tests Clippy passes (4.82s). Logs:
-`runs/owned-self-flat-selected-author-04.log`,
-`runs/owned-self-flat-selected-tests-01.log`,
-`runs/owned-self-flat-selected-subtree-01.log` and
-`runs/owned-self-flat-selected-clippy-01.log`.
-Packet **471,969 bytes**, SHA-256
-`ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f`;
-review `63c382e93a2b65b77e3a2b34f605a3dcc854797af4e4201ace6850dccd3a115a`.
-The existing report excludes selected Rallying Cry, but does not observe the
-parent-weapon/HollowPalm flags, ExtraAura stores or minion-child buff application.
-Those dynamic observations remain next; this audit grants no native closure.
+The first comparison found 46 cross-stat Pain Offering list permutations;
+all raw reports remain preserved. Only three named inventory families allow
+stat-name bucketing, preserving full records, duplicates and same-stat order.
+Numeric outputs, contexts, actual calls and every other field stay exact. No
+load was retried and no native reduction order is inferred. Archived traversal
+flag objects were read from an absent convenience field and remain unavailable
+diagnostics; the separately corrected maintained observer was syntax checked,
+not retroactively exercised. Actual branch hooks and complete buff inventories
+support the narrower claims above.
 
-**Publication boundary:** query memberships and total-flat routes remain Partial.
-Obtainable item/template association, discrete rolls, catalyst/quality transforms
-and cross-equipment order are not proved by the one-stream affix witness. The
-finite fixture's synthetic carrier and closure cannot become production coverage.
-Do not expand nonselected affix breadth ahead of the actual selected flat-supplier
-exclusions. The original census and current native replay remain byte-identical.
+Offline retention passes; ordinary proof/source targets pass **seven tests**
+with two opt-in tests ignored, and strict target Clippy passes. Logs:
+`runs/owned-self-flat-gate-{retain,tests,clippy}-01.log`. Report: 3,589 bytes,
+SHA-256 `7b3d1971be77acfa1a9166659e7e06df26cf95e669d6b60305e7138940e51640`.
+Its thirteen durable evidence files retain exact Git/working bytes; five prior
+source/selected packets remain unchanged. The observer is standalone. The completed
+native Attack-flat draft, selected recipe audit and their exact evidence are
+preserved in [the preceding checkpoint](implementation-history.md#archived-2026-10-14-checkpoint-native-minion-attack-flat-collection).
+Neither that component nor a measured source zero supplies whole-build closure.
 
-**Canonical package remains:**
-`runs/owned-combined-added-attack-publication-04/package`, input
-`690169b8e0303ca02ae9a49139a8446c6b470675c28914e7f06e69e09b4d8a54`.
-Definitions `efa0011ada155c02318c3243315e6e93793a44dadf90e2c917651ab7113dfc20`,
-rules `6a81f88031e0f3b6b3a1e60d4cfa2edd6c9979afa49aed1d2a6857cbaf64b6d5`,
-compiled rules `ee8bf2aba8eed0b3742d848703cef87950e05ae537144d49d009f79515e583ee`,
-routing `c34584136d3bffa6f4f2124795bbcf9c99dd94a2d09f7a560a2302946a222ef1`.
-There are 172 provenance records, 110 saved queries and no evaluation bundle.
-All 5,825 Partial rule owners and route/global query gaps remain. Selected
-obligations remain **106/117/109/123/4**, complete originals **0/5**.
-The preceding all-five rerun passed seven tests and reproduced all eighteen
-package files exactly; this checkpoint has no production application change
-requiring that unchanged run to be repeated. Its evidence and the Life CI repair
-are retained in [history](implementation-history.md). Hosted CI for this checkpoint
-is not yet verified.
+**CI follow-up:** checkpoint `558cc29` failed formatting on both GitHub platforms
+(run `38651149365`). Direct checks of its eight changed Rust files isolated
+module ordering in `minion_attack_selection_evidence.rs`. Correction `0a8fa4e`
+is pushed and passes direct `rustfmt --check`; it changes no calculation or
+witness bytes. Its hosted run `38652820710` was pending at inspection;
+validation is not yet confirmed. The preceding October 9 checkpoint `7c0e8ff`
+completed all hosted jobs successfully (`37966943229`).
 
-**Resume: finish Original05 first, following the saved-query map above.**
+**Resume: finish Original05 first.**
 
-1. Use the completed selected recipe audit to establish each actual local/inherited
-   flat supplier exclusion. Extend the existing original harness with one targeted
-   unchanged-case observation of the remaining dynamic flags, raw candidates,
-   supplied-child buff applications and exact contexts. Do not replace source
-   completeness with a measured zero or build-name check.
-2. Implement the accepted numeric-domain node and diagnostic in the existing
-   Core/Data/Engine path, invalidate current compiled identity, and adopt it in
-   the actual Mana consumer. Preserve lazy override behavior, stage/readiness
-   dependencies, exact units, unavailable metrics and parallel determinism.
-   Transformation suppliers and final-resource publication remain separate gates.
-3. Implement accepted checked configuration accounting through the existing
-   normalization census, adapter receipts and final global issue-retirement gate.
-   Start with source-proved branch-inapplicable observations plus actual reward/
-   scalar receipts. Complete `01f2` only after all live origins and applicable
-   defaults are accounted for; preserve `0505/0207/0208` and their own obligations.
-4. Publish the physical consumer only with real suppliers and accounted inputs.
-   Begin D4 immediately after the first complete unchanged request, saved metrics
-   and reference availability/value checks pass. Actor-to-Enemy reads, resource
+1. Implement approved configuration accounting through existing census and
+   adapter receipts. Start with the proved branch-inapplicable placeholder and
+   exact reward/scalar correspondence. Retire shared `01f2` only after every live
+   origin and applicable default is accounted for; retain `0505/0207/0208`.
+   Preserve all 110 saved queries and selected obligations **106/117/109/123/4**
+   until the corresponding complete inventory has actually been established.
+2. Bind the completed recipe/runtime observations to exact selected source
+   occurrences and reviewed flat-damage dispositions. Keep draft queries/routes
+   Partial until native source membership and input accounting prove completeness;
+   runtime observations alone supply no production authority.
+3. Authenticate Original05's neutral Mana transformation domain, then publish
+   final resource arithmetic with real suppliers and accounted inputs. Continue
+   the saved-query dependency map above; complete builds remain **0/5**. Begin
+   D4 immediately after the first complete unchanged request and independent
+   reference availability/value checks pass. Actor-to-Enemy reads, resource
    demand, new reporting ownership and scoped coverage remain unapproved.
 
 ## Unpublished final Mana arithmetic
@@ -323,25 +329,27 @@ and preserves a selected zero override. There is no new native resource kernel,
 definition, Lua behavior or second evaluation path. This is **not published**;
 the canonical release above and complete-build count remain unchanged.
 
-The existing `owned_intelligence_mana` target passes **19 ordinary tests**
-(`runs/owned-mana-pool-draft-native-05.log`, 4.93s); its four publication tests
-remain opt-in and were not rerun because no publication changed. The four added
-tests check the joined producers, all **16** retained original-source vectors
+The existing `owned_intelligence_mana` target passes **20 ordinary tests**
+(`runs/owned-numeric-domain-mana-02.log`, 5.20s); its four publication tests
+remain opt-in and were not rerun because this fragment remains unpublished.
+The component tests check the joined producers, all **16** retained original-source vectors
 in both traversal orders, missing/Partial dependencies, premature stage reads,
 and fresh/reused/four-worker equality. Scalar source inputs are injected only
 in the formula comparison; that test does not claim native implementation of
 every producer. The premature-read control is rejected by stage validation
 before compilation, as intended.
-Strict all-feature Clippy for the same target passes
-(`runs/owned-mana-pool-draft-clippy-01.log`); selective formatting and whitespace
-checks pass. This checkpoint changes data, tests and documentation only.
+The numeric-domain regression additionally checks inclusive/adjacent bounds,
+extreme finite values, actual out-of-domain contribution results and lazy zero
+override behavior. The current checkpoint records strict Clippy and compiler
+validation; the earlier data-only draft's log is historical.
 
-**Accepted October 14; implementation pending:** the [checked numeric-domain contract](owned-numeric-domain-proposal.md)
+**Implemented October 14:** the [checked numeric-domain contract](owned-numeric-domain-proposal.md)
 extends the existing rule DAG with a range check that preserves supported
-values and reports unsupported computed values explicitly. It is needed here
+values and reports unsupported computed values explicitly. The draft checks
+its actual pre-rounding operand against `[-f64::MAX, 2^52]` in Mana units,
 because the proved native/PoB rounding domain does not follow from the current
-computed numeric types. The draft must not enter the release before the
-operator and corresponding admission checks are implemented and validated.
+computed numeric types. Its operator validation is recorded in the current
+checkpoint; transformation supplier admission still gates publication.
 
 The [resource transformation witness](owned-resource-transformation-evidence.md)
 now executes all five originals and contrasting controls through the unchanged
@@ -366,8 +374,8 @@ also pass. Evidence: `runs/owned-resource-transformation-source-05.log`,
 `runs/owned-resource-transformation-clippy-02.log`. The canonical release and
 all native coverage gates remain unchanged.
 
-**Mana resume:** Original05 remains first. Implement the accepted numeric-domain check and
-authenticate its neutral transformation source domain before publishing final
+**Mana resume:** Original05 remains first. Authenticate its neutral transformation
+source domain before publishing final
 Mana; positive conversion support need not precede that bounded admission.
 Review complete source bodies and declaration inventories through the existing
 normalization/item-source data and refusal tests. The current five Complete-empty
@@ -378,9 +386,10 @@ In particular, passive `1b48`'s empty text is not proof of empty socket membersh
 Preserve all unrelated Class/Actor/item/passive/global gaps. No literal zero writer
 or build-name/identity selector should be introduced. The evidence document records
 the separate path toward positive donor-property and transformation support.
-Reuse the draft and retained source witness. Keep the canonical V27 package
-above until a checked successor is assembled, all five imports are verified and
-the ordinary replay is refreshed. Continue final damage/Life and the four selected
+Reuse the draft and retained source witness. The compiler-only canonical V27
+rebuild above has passed all-five import and ordinary replay checks. A future
+Mana data publication still requires its own checked successor and those same
+preservation gates. Continue final damage/Life and the four selected
 input obligations toward one complete unchanged build, then begin D4. Complete
 native builds remain **0/5** and selected obligations **106/117/109/123/4**.
 
@@ -2986,9 +2995,9 @@ support discovery are implemented. Offering and Command already use those
 contracts. Do not implement them again or seek repeat approval.
 
 The remaining route is actual final metric production and complete input/owner
-admission. Reuse the checked Player Life contributors and retained final-resource
-source witnesses. Complete the equipment reduction domain, adjustment sources
-and pending numeric-domain contract before publishing final pool arithmetic.
+admission. Reuse the checked Player Life contributors, implemented numeric-domain
+operation and retained final-resource source witnesses. Complete the equipment
+reduction domain and adjustment sources before publishing final pool arithmetic.
 The Sniper damage route next needs pre-conversion base production, followed by
 the remaining downstream consumers. Complete coverage only where potential
 supplier inventories and numerical behavior are proved; source observations
@@ -3009,10 +3018,11 @@ retirements; known values and remaining Firebolt correspondence are separate.
 `0207`'s 17
 known assumptions do not prove the constructor/default catalogue complete;
 `0208`'s empty saved usage does not account for seven default child-effect enables.
-Known scalar values cannot certify these inventories. Configuration-disposition
-and reporting-ownership proposals remain decisions, not implemented authority.
-In particular, encounter identity alone cannot authorize ignoring
-`enemyDamageRollRange`. Continue numerical dependencies and source accounting
+Known scalar values cannot certify these inventories. Configuration accounting
+is accepted but not yet implemented; reporting ownership remains unapproved.
+Encounter identity alone cannot authorize ignoring `enemyDamageRollRange`:
+the accepted accounting policy must bind its actual proved branch conditions
+and the exact saved source. Continue numerical dependencies and source accounting
 without inventing completion or adding scalar-only patches that leave every
 selected obligation unchanged.
 

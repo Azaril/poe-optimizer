@@ -326,19 +326,9 @@ fn program(
         EffectDisposition::Applied { value } => known(value),
         EffectDisposition::Inactive => EffectValue::Inactive,
         EffectDisposition::UnsupportedValue { value } => EffectValue::UnsupportedValue { value },
-        EffectDisposition::UnsupportedDomain {
-            node,
-            table,
-            key,
-            minimum,
-            maximum,
-        } => EffectValue::UnsupportedDomain {
-            node,
-            table,
-            key,
-            minimum,
-            maximum,
-        },
+        EffectDisposition::UnsupportedDomain { node, domain } => {
+            EffectValue::UnsupportedDomain { node, domain }
+        }
         EffectDisposition::NumericalError { node, reason } => {
             EffectValue::NumericalError { node, reason }
         }
@@ -1145,10 +1135,12 @@ mod tests {
     fn unsupported_lookup_domain_survives_required_reads_reductions_and_demand() {
         let failure = EffectValue::UnsupportedDomain {
             node: key("lookup"),
-            table: key("levels"),
-            key: BoundedInteger::new(41).unwrap(),
-            minimum: BoundedInteger::new(1).unwrap(),
-            maximum: BoundedInteger::new(40).unwrap(),
+            domain: UnsupportedDomainCause::IntegerTable {
+                table: key("levels"),
+                key: BoundedInteger::new(41).unwrap(),
+                minimum: BoundedInteger::new(1).unwrap(),
+                maximum: BoundedInteger::new(40).unwrap(),
+            },
         };
         let values = vec![Some(failure.clone())];
         let final_read = ReadBinding::Final {

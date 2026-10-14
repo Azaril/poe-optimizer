@@ -218,7 +218,7 @@ fn boolean_any_is_idempotent_permutation_invariant_and_inspects_every_member() {
 #[test]
 fn boolean_any_preserves_failure_provenance_independent_of_member_order() {
     let node = key("query");
-    let failures = [
+    let mut failures = vec![
         EffectValue::Unresolved {
             reason: PlanGapReason::MissingInput,
             read: Some(key("a")),
@@ -232,10 +232,12 @@ fn boolean_any_preserves_failure_provenance_independent_of_member_order() {
         EffectValue::UnsupportedValue { value: integer(2) },
         EffectValue::UnsupportedDomain {
             node: key("lookup"),
-            table: key("table"),
-            key: BoundedInteger::new(0).unwrap(),
-            minimum: BoundedInteger::new(1).unwrap(),
-            maximum: BoundedInteger::new(9).unwrap(),
+            domain: UnsupportedDomainCause::IntegerTable {
+                table: key("table"),
+                key: BoundedInteger::new(0).unwrap(),
+                minimum: BoundedInteger::new(1).unwrap(),
+                maximum: BoundedInteger::new(9).unwrap(),
+            },
         },
         EffectValue::NumericalError {
             node: key("division"),
@@ -246,6 +248,31 @@ fn boolean_any_preserves_failure_provenance_independent_of_member_order() {
             reason: NumericalFailure::IntegerOverflow,
         },
     ];
+    for (maximum, rejected) in [(1, 3), (2, 3), (1, 4)] {
+        failures.push(EffectValue::UnsupportedDomain {
+            node: key("lookup"),
+            domain: UnsupportedDomainCause::NumericRange {
+                value: integer(rejected),
+                domain: Box::new(NumericDomain::Integer(IntegerRange {
+                    minimum: BoundedInteger::new(0).unwrap(),
+                    maximum: BoundedInteger::new(maximum).unwrap(),
+                })),
+            },
+        });
+        let ParameterValue::Quantity(minimum) = quantity(0.) else {
+            unreachable!()
+        };
+        let ParameterValue::Quantity(maximum) = quantity(maximum as f64) else {
+            unreachable!()
+        };
+        failures.push(EffectValue::UnsupportedDomain {
+            node: key("lookup"),
+            domain: UnsupportedDomainCause::NumericRange {
+                value: quantity(rejected as f64),
+                domain: Box::new(NumericDomain::Quantity(QuantityRange { minimum, maximum })),
+            },
+        });
+    }
     for a in &failures {
         for b in &failures {
             let values = vec![

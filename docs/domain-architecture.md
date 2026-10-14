@@ -750,13 +750,19 @@ inventories of only already-converted writers are insufficient. Broader transfer
 semantics and donor-property stages remain explicit adoption work.
 
 Computed numeric limits must remain distinct from game legality, mechanic
-inactivity and missing inputs. The accepted
+inactivity and missing inputs. The implemented
 [checked numeric-domain contract](owned-numeric-domain-proposal.md) expresses
-an admitted calculation range in the same typed DAG and make values outside it
+an admitted calculation range in the same typed DAG and makes values outside it
 explicitly unavailable, without clipping or importing incidental source rounding.
-The owner approved this extension on October 14; implementation is pending and
-the current runtime does not yet provide it. Final-resource data adoption must
-establish the actual computed domain before claiming numerical parity.
+`CheckNumericDomain` reuses inclusive Integer/Quantity ranges; compilation checks
+numeric type, exact units and endpoint ordering. A supported value passes through
+unchanged. A demanded failure carries its node, rejected value and authored range
+through the existing unsupported-domain pipeline, including metrics and game
+Requirements. Lazy branches retain their existing meaning. This is one native
+operation in the current V27 contract, with compiled-program identity domain v4;
+there is no compatibility evaluator. Final-resource data adoption must establish
+the actual computed domain and independent supplier coverage before claiming
+numerical parity.
 
 Common final-stat formulas need semantic ownership independent of a character class,
 encounter or user usage choice. The [stat-owned actor/equipment receivers](owned-stat-receivers.md)

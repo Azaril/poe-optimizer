@@ -25,6 +25,7 @@ mod support_metrics;
 mod support_outputs;
 mod support_source_properties;
 mod supports;
+pub use crate::owned_rules::UnsupportedDomainCause;
 pub use metrics::{MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport, OwnedMetricResult};
 pub use support_effects::{
     OwnedSupportEffectPlan, SupportEffectPlanInputs, SupportEffectsOutcome, SupportEffectsReport,
@@ -352,14 +353,11 @@ pub enum EffectValue {
     UnsupportedValue {
         value: ParameterValue,
     },
-    /// A demanded finite lookup key outside the package table's reviewed
-    /// domain. Preserve its cause through downstream readiness and activation.
+    /// A demanded known value outside its reviewed table or numeric range.
+    /// Preserve its cause through downstream readiness and activation.
     UnsupportedDomain {
         node: OwnedDefinitionKey,
-        table: OwnedDefinitionKey,
-        key: BoundedInteger,
-        minimum: BoundedInteger,
-        maximum: BoundedInteger,
+        domain: UnsupportedDomainCause,
     },
     NumericalError {
         node: OwnedDefinitionKey,

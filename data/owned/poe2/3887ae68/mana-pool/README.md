@@ -1,10 +1,10 @@
 # Draft Player Mana consumer
 
-**Not published.** This arithmetic fragment is being validated using existing
-typed rules. It must not enter the canonical release before the
-[numeric-domain contract](../../../../../docs/owned-numeric-domain-proposal.md),
-approved October 14, and its admission checks are implemented. It establishes no complete-build
-coverage and adds no acquisition or runtime backend.
+**Not published.** This arithmetic fragment uses the existing typed rule engine,
+including the [checked numeric-domain operation](../../../../../docs/owned-numeric-domain-proposal.md)
+approved October 14. Transformation supplier admission and complete source
+coverage still gate publication. It establishes no complete-build coverage and
+adds no acquisition or runtime backend.
 
 The program reads the existing intrinsic/inherent Mana groups, reward/passive
 increase groups, MORE group, five typed adjustment collectors and coherent
@@ -18,16 +18,18 @@ The arithmetic order is:
    at 100%; do not introduce a lower clamp.
 3. Retain that fraction of base Mana, then add pre-scaling additional Mana.
 4. Apply the increased/reduced factor, then the MORE/less multiplier.
-5. Add post-scaling Mana, round, then apply the ordinary minimum of one.
+5. Add post-scaling Mana, check the actual operand against the injected inclusive
+   range `[-f64::MAX, 2^52]` in Mana units, round, then apply the ordinary minimum
+   of one. An operand outside the proved range is explicitly unsupported.
 6. A known override, including zero, bypasses ordinary arithmetic. Unknown
    override presence remains unavailable, and whole-request source coverage
    remains mandatory even when a scalar branch is unused.
 
-The formula uses ordinary `Add`, `Scale`, percentage conversion, `Round`,
-`Maximum` and lazy `Select` operations. It does not copy a Lua callback or add
-a resource-specific Rust kernel. The pending domain check must sit on the
-actual pre-rounding operand, with an explicit unsupported result outside the
-proved range; it cannot be an effect-inactivity guard or game Requirement.
+The formula uses ordinary `Add`, `Scale`, percentage conversion,
+`CheckNumericDomain`, `Round`, `Maximum` and lazy `Select` operations. It does
+not copy a Lua callback or add a resource-specific Rust kernel. The domain
+check is neither an effect-inactivity guard nor a game Requirement. Its bounds
+are calculation data; the engine has no Mana-specific numeric limit.
 
 `tests/owned_intelligence_mana.rs` composes this fragment with the real native
 level, attributes, reward and override producers in the existing finite
@@ -35,16 +37,21 @@ component fixture. A separate scalar-boundary test injects all retained
 original-source operands and compares source results; that test does not
 claim those supplied aggregates are native producer implementations.
 
-Validation: all **19 ordinary tests** in that existing target pass. The joined
+Validation: all **20 ordinary tests** in that existing target pass; its four
+existing publication tests remain opt-in. The joined
 fixture derives **638 Mana** from its real producers, responds to level and
 attribute changes, and retains a present zero override. All **16** retained
 source vectors match in forward/reverse order. Missing and Partial dependencies,
-stage ordering and fresh/reused/four-worker comparisons remain checked. Evidence:
-`runs/owned-mana-pool-draft-native-05.log`. These finite controls do not prove the
-unbounded computed domain or turn the draft into a production release.
+stage ordering and fresh/reused/four-worker comparisons remain checked. The
+new controls cover inclusive and adjacent rounding bounds, extreme finite
+operands, explicit unsupported results through the real contribution graph,
+and a zero override that bypasses ordinary operands while retaining coverage
+requirements. Evidence: `runs/owned-numeric-domain-mana-02.log` (5.20s).
+These controls do not prove transformation suppliers or turn the draft into a
+production release.
 
 Resource transformations into the Extra/Total channels, item-granted origins,
 global Partial closures and the original build's outstanding input obligations
 remain separate work. The canonical package is
-`runs/owned-combined-added-attack-publication-04/package`; this draft has not
+`runs/owned-numeric-domain-publication-01/package`; this draft has not
 entered that release. The implementation plan records its current identity.

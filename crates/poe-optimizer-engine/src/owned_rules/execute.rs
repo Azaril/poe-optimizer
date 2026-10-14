@@ -178,6 +178,23 @@ fn rounded_count(original: f64, quantum: f64, mode: RuleRounding) -> Option<f64>
 }
 fn compute(op: &Op, s: &RuleScratch, node: usize) -> NodeValue {
     match op {
+        Op::CheckNumericDomain { value, domain } => {
+            let value = val(s, *value);
+            let inside = match (value, domain) {
+                (ParameterValue::Integer(value), NumericDomain::Integer(range)) => {
+                    range.minimum <= *value && *value <= range.maximum
+                }
+                (ParameterValue::Quantity(value), NumericDomain::Quantity(range)) => {
+                    range.minimum.value() <= value.value() && value.value() <= range.maximum.value()
+                }
+                _ => unreachable!("compiled numeric domain matches input"),
+            };
+            if inside {
+                Ok(value.clone())
+            } else {
+                Err(NodeFailure::UnsupportedDomain(node, value.clone()))
+            }
+        }
         Op::LookupIntegerTable { key, table } => {
             let ParameterValue::Integer(key) = val(s, *key) else {
                 unreachable!("compiled integer table key")
@@ -188,8 +205,10 @@ fn compute(op: &Op, s: &RuleScratch, node: usize) -> NodeValue {
                 .checked_sub(table.minimum.get())
                 .and_then(|n| usize::try_from(n).ok())
                 .and_then(|n| table.rows.get(n));
-            row.cloned()
-                .ok_or(NodeFailure::UnsupportedDomain(node, *key))
+            row.cloned().ok_or(NodeFailure::UnsupportedDomain(
+                node,
+                ParameterValue::Integer(*key),
+            ))
         }
         Op::OrdinaryTiming(recipe) => ordinary_timing(recipe, s, node),
         Op::Literal(v) => Ok(v.clone()),
@@ -239,6 +258,7 @@ fn compute(op: &Op, s: &RuleScratch, node: usize) -> NodeValue {
 }
 fn dependency(op: &Op, next: usize) -> Option<usize> {
     match op {
+        Op::CheckNumericDomain { value, .. } => (next == 0).then_some(*value),
         Op::OrdinaryTiming(recipe) => recipe.inputs.get(next).copied(),
         Op::LookupIntegerTable { key, .. } => (next == 0).then_some(*key),
         Op::Binary(_, a, b) | Op::Ratio(a, b, _) | Op::Compare(_, a, b) => match next {
@@ -333,16 +353,28 @@ fn node(
 fn disposition(p: &CompiledProgram, value: NodeValue) -> EffectDisposition {
     match value {
         Ok(value) => EffectDisposition::Applied { value },
-        Err(NodeFailure::UnsupportedDomain(i, key)) => {
-            let Op::LookupIntegerTable { table, .. } = &p.nodes[i].expression else {
-                unreachable!("lookup failure carries original lookup node")
+        Err(NodeFailure::UnsupportedDomain(i, value)) => {
+            let domain = match &p.nodes[i].expression {
+                Op::LookupIntegerTable { table, .. } => {
+                    let ParameterValue::Integer(key) = value else {
+                        unreachable!("compiled table key is integer")
+                    };
+                    UnsupportedDomainCause::IntegerTable {
+                        table: table.id.clone(),
+                        key,
+                        minimum: table.minimum,
+                        maximum: table.maximum,
+                    }
+                }
+                Op::CheckNumericDomain { domain, .. } => UnsupportedDomainCause::NumericRange {
+                    value,
+                    domain: Box::new(domain.clone()),
+                },
+                _ => unreachable!("domain failure carries its original checked node"),
             };
             EffectDisposition::UnsupportedDomain {
                 node: p.nodes[i].id.clone(),
-                table: table.id.clone(),
-                key,
-                minimum: table.minimum,
-                maximum: table.maximum,
+                domain,
             }
         }
         Err(NodeFailure::Missing(i)) => EffectDisposition::Unresolved {

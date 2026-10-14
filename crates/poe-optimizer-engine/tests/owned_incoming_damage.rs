@@ -131,7 +131,7 @@ fn missing_raw_presence_category_and_table_keys_remain_distinct() {
     table.minimum = BoundedInteger::new(83).unwrap();
     let report = f.evaluate();
     assert!(
-        matches!(f.value(&report, &f.inputs.damage[0].output_stat), EffectValue::UnsupportedDomain { key, minimum, .. }
+        matches!(f.value(&report, &f.inputs.damage[0].output_stat), EffectValue::UnsupportedDomain { domain: UnsupportedDomainCause::IntegerTable { key, minimum, .. }, .. }
         if key.get() == 82 && minimum.get() == 83)
     );
     // Overriding all five damage lanes makes the out-of-domain default unused.

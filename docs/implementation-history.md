@@ -1,10 +1,128 @@
-> Historical snapshots through the flat-supplier census and Life CI repair checkpoint on 2026-10-09.
+> Historical snapshots through the native Attack-flat collection checkpoint on 2026-10-14.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-14 checkpoint: native minion Attack-flat collection
+
+Original05 remains the closest complete-build target. The next unfinished
+physical inputs are the self-flat endpoints `3371` / `3372`. The
+[native draft](../data/owned/poe2/3887ae68/self-flat-attack-damage/README.md)
+now defines two real source-declared minion Attack-flat modifier families,
+using existing typed item rolls, contribution queries, exact Actor receivers
+and Action routes. No public contract or native execution branch is added.
+
+Each exact item-modifier occurrence supplies Player-owned minion Attack grant
+channels `3373`/`3374`. Checked queries collect them in explicit order, and the
+exact Sniper Actor receives Attack subtotals `3375`/`3376`. Only the proved Basic
+output and part/mode/stat-set selection route these into its physical consumer.
+The amount is not an all-Action or universal self-flat total. Draft IDs
+`336f`-`337c` are unpublished; the canonical allocator remains `336e`.
+
+**Independent source validation:** the
+[affix proof](../data/owned/poe2/3887ae68/minion-attack-flat-modifier/source-review.md)
+executes the original parser, whole `addMinionModifiers` helper, and original
+ModDB/ModList `Sum` and `Tabulate`. Ten range cases cover two source declarations;
+empty, duplicate, explicit-zero and condition-off/on controls remain distinct.
+An Attack-keyword contrast preserves the raw records. Two fresh hosts exactly
+reproduce the retained evidence; disabling original keyword filtering produces
+a positive non-Attack counterexample. Three ordinary tests pass (0.79s), with
+one opt-in author ignored; author01 passes (0.48s), and strict PoB library/tests
+Clippy passes (3.33s). Logs:
+`runs/owned-minion-attack-flat-modifier-{author,tests,clippy}-01.log`.
+Evidence **178,816 bytes**, SHA-256
+`4cd007e7fb6bea22b27968aa8270eeeeb357b5cc05ac75126a800a96522bb09f`;
+review `d956e6650d9b93a48300c5858e63db3b6f6bcbac0e63d412ccce433f892f1a9f`.
+
+**Native validation:** all six flat-collection tests pass (6.79s), and the full
+ordinary Sniper component replay passes **37 tests** (10.13s). Strict target
+Clippy passes (1.03s). The tests compare 12 actual original-query subtotals and
+compose real intrinsic endpoints and the combined factor without injecting flat
+operands. Final physical arithmetic is a composition check, not new independent
+full-damage or DPS parity. Missing/zero/inactive membership, Partial coverage,
+roll ranges, staging, unrelated Actions, selector authority, repeated Actors and
+fresh/reused/four-worker Rayon behavior have explicit checks. Logs:
+`runs/owned-minion-attack-flat-native-03.log`,
+`runs/owned-minion-attack-flat-native-full-01.log` and
+`runs/owned-minion-attack-flat-native-clippy-01.log`.
+
+The two initial failures were fixture assertion errors: exact occurrence
+membership is checked at plan compilation, after package rebinding; Partial
+queries produce an unavailable plan before any value lookup. The repaired
+regressions assert those exact failures, including zero/inactive sources and
+both missing-contributor subjects. Production coverage was not relaxed.
+
+**Selected-source audit completed:** the
+[bounded recipe audit](../data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain-review.md)
+reconstructs eight items/nine equipped uses, 57 saved node recipes, 40 skill
+definitions and six selected minion profiles. It includes saved Item `ModRange`
+children through the original XML parser and whole Item load branch, every
+stat-set's `baseMods`, and sixteen supplied-child definitions omitted from the
+initial draft. Both bonded states give equal lists for these exact equipped uses;
+no universal bonded-access rule is inferred. Actual source modifier, stat-set
+modifier, disabled-item and saved-range mutations are detected.
+
+The author passes (0.86s); the selected suite passes five ordinary tests (2.05s),
+and the broader self-flat subtree passes nine with two opt-in authors ignored
+(12.27s). Strict PoB library/tests Clippy passes (4.82s). Logs:
+`runs/owned-self-flat-selected-author-04.log`,
+`runs/owned-self-flat-selected-tests-01.log`,
+`runs/owned-self-flat-selected-subtree-01.log` and
+`runs/owned-self-flat-selected-clippy-01.log`.
+Packet **471,969 bytes**, SHA-256
+`ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f`;
+review `63c382e93a2b65b77e3a2b34f605a3dcc854797af4e4201ace6850dccd3a115a`.
+The existing report excludes selected Rallying Cry, but does not observe the
+parent-weapon/HollowPalm flags, ExtraAura stores or minion-child buff application.
+Those dynamic observations remain next; this audit grants no native closure.
+
+**Publication boundary:** query memberships and total-flat routes remain Partial.
+Obtainable item/template association, discrete rolls, catalyst/quality transforms
+and cross-equipment order are not proved by the one-stream affix witness. The
+finite fixture's synthetic carrier and closure cannot become production coverage.
+Do not expand nonselected affix breadth ahead of the actual selected flat-supplier
+exclusions. The original census and current native replay remain byte-identical.
+
+**Canonical package remains:**
+`runs/owned-combined-added-attack-publication-04/package`, input
+`690169b8e0303ca02ae9a49139a8446c6b470675c28914e7f06e69e09b4d8a54`.
+Definitions `efa0011ada155c02318c3243315e6e93793a44dadf90e2c917651ab7113dfc20`,
+rules `6a81f88031e0f3b6b3a1e60d4cfa2edd6c9979afa49aed1d2a6857cbaf64b6d5`,
+compiled rules `ee8bf2aba8eed0b3742d848703cef87950e05ae537144d49d009f79515e583ee`,
+routing `c34584136d3bffa6f4f2124795bbcf9c99dd94a2d09f7a560a2302946a222ef1`.
+There are 172 provenance records, 110 saved queries and no evaluation bundle.
+All 5,825 Partial rule owners and route/global query gaps remain. Selected
+obligations remain **106/117/109/123/4**, complete originals **0/5**.
+The preceding all-five rerun passed seven tests and reproduced all eighteen
+package files exactly; this checkpoint has no production application change
+requiring that unchanged run to be repeated. Its evidence and the Life CI repair
+are retained in [history](implementation-history.md). Hosted CI for this checkpoint
+is not yet verified.
+
+**Resume: finish Original05 first, following the saved-query map above.**
+
+1. Use the completed selected recipe audit to establish each actual local/inherited
+   flat supplier exclusion. Extend the existing original harness with one targeted
+   unchanged-case observation of the remaining dynamic flags, raw candidates,
+   supplied-child buff applications and exact contexts. Do not replace source
+   completeness with a measured zero or build-name check.
+2. Implement the accepted numeric-domain node and diagnostic in the existing
+   Core/Data/Engine path, invalidate current compiled identity, and adopt it in
+   the actual Mana consumer. Preserve lazy override behavior, stage/readiness
+   dependencies, exact units, unavailable metrics and parallel determinism.
+   Transformation suppliers and final-resource publication remain separate gates.
+3. Implement accepted checked configuration accounting through the existing
+   normalization census, adapter receipts and final global issue-retirement gate.
+   Start with source-proved branch-inapplicable observations plus actual reward/
+   scalar receipts. Complete `01f2` only after all live origins and applicable
+   defaults are accounted for; preserve `0505/0207/0208` and their own obligations.
+4. Publish the physical consumer only with real suppliers and accounted inputs.
+   Begin D4 immediately after the first complete unchanged request, saved metrics
+   and reference availability/value checks pass. Actor-to-Enemy reads, resource
+   demand, new reporting ownership and scoped coverage remain unapproved.
 
 ## Archived 2026-10-09 checkpoint: real flat-damage suppliers and CI repair
 

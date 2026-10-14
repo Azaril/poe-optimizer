@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-09. The owned path imports an external build into explicit
+Snapshot: 2026-10-14. The owned path imports an external build into explicit
 occurrences, validates it against injected definitions and rules, and executes
 the resulting graph in Rust. The CLI, future UI and optimizer share those public
 contracts. Native calculation has no Lua state or PoB subprocess. Optional
@@ -119,12 +119,13 @@ adds no resource-specific native engine behavior and does not finish Mana.
 The [draft final Mana program](../data/owned/poe2/3887ae68/mana-pool/README.md)
 joins those native inputs using ordinary typed arithmetic and lazy override
 selection. Its finite component fixture calculates 638 Mana; the scalar
-consumer matches all 16 retained source vectors. Nineteen ordinary native tests
-pass, including missing/Partial refusal and four-worker reuse. The program is
-not in the canonical release: computed-range admission awaits the
-[numeric-domain decision](owned-numeric-domain-proposal.md), and actual
-conversion/addition producers still need coverage. Neither the draft nor its
-scalar vector comparison completes the original build.
+consumer compares all 16 retained source vectors. The approved
+[numeric-domain operation](owned-numeric-domain-proposal.md) now checks the
+actual pre-rounding operand against an injected range, producing explicit
+unavailability outside it. Exact units, missing/Partial refusal, lazy overrides
+and worker reuse remain part of the same engine. The program is still absent
+from the canonical release because actual conversion/addition producers need
+coverage. Neither the draft nor its scalar comparison completes the build.
 
 The separate [resource transformation witness](owned-resource-transformation-evidence.md)
 now retains 19 original-source cases with actual item/global donors and multiple

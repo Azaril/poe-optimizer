@@ -76,6 +76,85 @@ fn input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
         }],
     }
 }
+
+#[test]
+fn numeric_domain_storage_preserves_typed_bounds_and_checked_dependency() {
+    let s = schema();
+    let mut i = input(&s);
+    i.operations_version = key(OWNED_RULE_OPERATIONS_V27);
+    i.contribution_queries = Some(DeclaredSet::complete(vec![]));
+    i.effect_applications = Some(DeclaredSet::complete(vec![]));
+    i.owners[0].programs.members[0].nodes.push(RuleNode {
+        id: key("checked"),
+        expression: RuleExpression::CheckNumericDomain {
+            value: key("value"),
+            domain: NumericDomain::Integer(IntegerRange {
+                minimum: BoundedInteger::new(0).unwrap(),
+                maximum: BoundedInteger::new(3).unwrap(),
+            }),
+        },
+    });
+    let limits = RuleStorageLimits::default();
+    let p = OwnedRulePackage::new(i.clone(), &s, limits).unwrap();
+    let bytes = encode_rule_package(&p, limits).unwrap();
+    let restored = decode_rule_package(&bytes, &s, limits).unwrap();
+    assert_eq!(p.input(), restored.input());
+    assert_eq!(p.identity(), restored.identity());
+    let mut missing = i.clone();
+    let RuleExpression::CheckNumericDomain { value, .. } =
+        &mut missing.owners[0].programs.members[0].nodes[1].expression
+    else {
+        panic!()
+    };
+    *value = key("absent");
+    assert!(matches!(
+        OwnedRulePackage::new(missing, &s, limits),
+        Err(RuleStorageError::Structure("missing expression node"))
+    ));
+    let mut small = limits;
+    small.max_edges = 1;
+    assert!(
+        OwnedRulePackage::new(i.clone(), &s, small).is_err(),
+        "the range input consumes an edge in addition to the effect input"
+    );
+    i.operations_version = key(OWNED_RULE_OPERATIONS_V26);
+    assert!(matches!(
+        OwnedRulePackage::new(i, &s, limits),
+        Err(RuleStorageError::Structure(
+            "numeric domains require owned-domain-operations-v27"
+        ))
+    ));
+}
+
+#[test]
+fn numeric_domain_wire_refuses_non_numeric_domains_and_malformed_endpoints() {
+    let range = NumericDomain::Integer(IntegerRange {
+        minimum: BoundedInteger::new(-1).unwrap(),
+        maximum: BoundedInteger::new(1).unwrap(),
+    });
+    let valid = serde_json::to_value(&range).unwrap();
+    assert_eq!(
+        serde_json::from_value::<NumericDomain>(valid.clone()).unwrap(),
+        range
+    );
+    for kind in ["boolean", "option", "absent"] {
+        let mut bad = valid.clone();
+        bad["kind"] = kind.into();
+        assert!(serde_json::from_value::<NumericDomain>(bad).is_err());
+    }
+    for value in [
+        serde_json::json!(9007199254740992_i64),
+        serde_json::json!(0.5),
+        serde_json::json!("NaN"),
+    ] {
+        let mut bad = valid.clone();
+        bad["value"]["maximum"] = value;
+        assert!(serde_json::from_value::<NumericDomain>(bad).is_err());
+    }
+    let mut bad = valid;
+    bad["value"]["extra"] = true.into();
+    assert!(serde_json::from_value::<NumericDomain>(bad).is_err());
+}
 #[test]
 fn support_domains_preserve_unknown_coverage_and_charge_gap_payloads() {
     let s = schema();

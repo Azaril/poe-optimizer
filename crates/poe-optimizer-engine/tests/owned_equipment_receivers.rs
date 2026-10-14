@@ -383,7 +383,7 @@ fn actor_wire_and_v6_v7_v8_subsets_roundtrip_current_contract_identities() {
         assert_eq!(
             compiled.identity(),
             digest_owned(
-                "owned-rule-programs-v3",
+                "owned-rule-programs-v4",
                 &canonical,
                 RuleLimits::default().max_wire_bytes
             )

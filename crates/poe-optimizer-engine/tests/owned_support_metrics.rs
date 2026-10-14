@@ -292,10 +292,12 @@ fn preparation_failure_keeps_exact_scalar_and_domain_provenance_for_all_rows() {
     let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
     let expected = EffectValue::UnsupportedDomain {
         node: key("effective"),
-        table: key("effective-level-domain"),
-        key: BoundedInteger::new(2).unwrap(),
-        minimum: one,
-        maximum: one,
+        domain: UnsupportedDomainCause::IntegerTable {
+            table: key("effective-level-domain"),
+            key: BoundedInteger::new(2).unwrap(),
+            minimum: one,
+            maximum: one,
+        },
     };
     assert_eq!(
         report.support,

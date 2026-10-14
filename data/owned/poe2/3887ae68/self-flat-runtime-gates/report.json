@@ -1,0 +1,113 @@
+{
+  "archived_witnesses": [
+    {
+      "bytes": 10034,
+      "path": "evidence/driver.rs",
+      "sha256": "ad28b27dd14193bfd97cd114e0906f16eeecccbcc06c7386a0a5c3cd42f8a9c1"
+    },
+    {
+      "bytes": 11780,
+      "path": "evidence/observer.lua",
+      "sha256": "e915fc456a4c932bd77a6bb2bfc89680755034a02d0461f4901f48e8a262e65a"
+    },
+    {
+      "bytes": 81347,
+      "path": "evidence/shared-helper.lua",
+      "sha256": "9c6af9dd3261cf196dbd5182cce05e7eb87a9c2033090d96047fad7d4feeb7f0"
+    },
+    {
+      "bytes": 14535,
+      "path": "evidence/bootstrap.rs",
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9"
+    }
+  ],
+  "comparison": {
+    "all_other_observation_fields": "exact",
+    "cross_mode_reordered_lists": 0,
+    "inventory_paths": [
+      "group_deliveries[*].modifiers",
+      "player_buff_visits[*].buff.modifiers",
+      "player_visits[*].buffs[*].modifiers"
+    ],
+    "off_repeat_reordered_lists": 46,
+    "on_repeat_reordered_lists": 0,
+    "policy": "stable stat-name buckets; preserve full records, multiplicity and within-stat order"
+  },
+  "instrumented_fresh_loads": 4,
+  "instrumented_jit_enabled": false,
+  "kind": "unchanged-selected-self-flat-runtime-gates",
+  "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "observed_counts": {
+    "actual_extra_aura_effect_queries": 0,
+    "actual_extra_aura_queries": 18,
+    "actual_hollow_flag_calls": 0,
+    "actual_parent_flag_calls": 2,
+    "child_buff_visits": 18,
+    "child_merges": 0,
+    "child_unique_effect_ids": 16,
+    "child_unique_profiles": 6,
+    "child_visits": 432,
+    "group_deliveries": 28,
+    "hollow_palm_visits": 18,
+    "parent_weapon_visits": 4,
+    "player_visits": 288
+  },
+  "original_acquisition_report": {
+    "bytes": 768031,
+    "path": "acquisition-jit-on.json",
+    "sha256": "ba4f7af0e465fc6dba4796c028696ce92f66670b44115cf050091523bd34d818"
+  },
+  "plain_controls": {
+    "jit_off": 1,
+    "jit_on": 1
+  },
+  "raw_runs": [
+    {
+      "bytes": 774183,
+      "path": "jit-off-observed-raw.json",
+      "sha256": "4a96e13f81f915f962611efc77dd31e974a82b6756ef793d6b09d424369a4170"
+    },
+    {
+      "bytes": 774181,
+      "path": "jit-off-repeat-raw.json",
+      "sha256": "3e0083d3d1690d340f27fa097d6d2c8ee470c498859c27e1df73047267963c87"
+    },
+    {
+      "bytes": 136085,
+      "path": "jit-off-plain-raw.json",
+      "sha256": "4ba40065b5f34a14d170a83d953a55b8b7298ba7d8799f60093a2e598c6b69fa"
+    },
+    {
+      "bytes": 774191,
+      "path": "jit-on-observed-raw.json",
+      "sha256": "8da8338c02a784fa7beab244f342272ed790b6969b95c5980229abe929b36883"
+    },
+    {
+      "bytes": 774183,
+      "path": "jit-on-repeat-raw.json",
+      "sha256": "242b981c297714d717c1f28baa3862e304be94fa29437c57ea0812680e0db457"
+    },
+    {
+      "bytes": 136085,
+      "path": "jit-on-plain-raw.json",
+      "sha256": "b3c61d61c98a483c597233f0e484fada809d74069585fb591d1be470b995265d"
+    }
+  ],
+  "schema_version": 1,
+  "scope": {
+    "actual_list_returns_observed": true,
+    "native_coverage_authorized": false,
+    "query_probes_are_supplemental": true,
+    "raw_order_retained": true,
+    "scalar_comparison": "exact across all six loads",
+    "traversal_flags_available": false,
+    "unchanged_build_only": true,
+    "whole_build_parity": false
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "total_fresh_loads": 6,
+  "xml": {
+    "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+    "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+  }
+}

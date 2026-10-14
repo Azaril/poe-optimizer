@@ -1,6 +1,10 @@
 # Proposal: checked numeric domains in typed rules
 
-**Status:** Accepted by the owner on 2026-10-14; implementation and data adoption pending.
+**Status:** Accepted by the owner on 2026-10-14; implemented in the current
+Core/Data/Engine contract and adopted in the unpublished Mana consumer.
+Validation and current release identities are recorded in the
+[implementation checkpoint](implementation.md). Final-resource supplier coverage
+and publication remain separate work.
 **Date:** 2026-10-09.
 **Decision owner:** Project owner.
 
@@ -68,7 +72,7 @@ This proposal changes no global rounding mode or game-legality rule. It does
 not require a generic theorem prover or range optimizer. Static proofs can later
 remove redundant checks while preserving the declared semantics.
 
-## Implementation and acceptance after approval
+## Implementation and acceptance
 
 1. Extend the current contract in place, invalidating affected plan identities;
    do not add a historical reader or parallel rule path.

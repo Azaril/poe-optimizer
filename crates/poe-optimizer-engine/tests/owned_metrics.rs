@@ -249,10 +249,12 @@ fn finite_domain_failure_retains_original_node_table_key_and_bounds() {
         report.results[0].value,
         EffectValue::UnsupportedDomain {
             node: key("measurement"),
-            table: key("reviewed-domain"),
-            key: poe_optimizer_core::owned_definitions::BoundedInteger::new(11).unwrap(),
-            minimum: bound,
-            maximum: bound
+            domain: UnsupportedDomainCause::IntegerTable {
+                table: key("reviewed-domain"),
+                key: poe_optimizer_core::owned_definitions::BoundedInteger::new(11).unwrap(),
+                minimum: bound,
+                maximum: bound
+            },
         }
     );
     assert_eq!(number(&report.results[1]), 16.0);

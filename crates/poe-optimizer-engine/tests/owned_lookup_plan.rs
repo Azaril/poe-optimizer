@@ -79,10 +79,12 @@ fn lookup(node_id: &str, table: &str) -> RuleNode {
 fn domain(node: &str, table: &str, requested: i64) -> EffectValue {
     EffectValue::UnsupportedDomain {
         node: key(node),
-        table: key(table),
-        key: bounded(requested),
-        minimum: bounded(20),
-        maximum: bounded(20),
+        domain: UnsupportedDomainCause::IntegerTable {
+            table: key(table),
+            key: bounded(requested),
+            minimum: bounded(20),
+            maximum: bounded(20),
+        },
     }
 }
 fn table(id: &str, value_type: ComputedValueType, row: ParameterValue) -> IntegerRuleTable {
@@ -315,10 +317,11 @@ fn domain_cause_survives_actor_reads_required_skill_readiness_and_action_routes(
     let diagnostic = serde_json::to_value(&expected).unwrap();
     assert_eq!(diagnostic["status"], "unsupported_domain");
     assert_eq!(diagnostic["node"], "lookup-level");
-    assert_eq!(diagnostic["table"], "levels");
-    assert_eq!(diagnostic["key"], 11);
-    assert_eq!(diagnostic["minimum"], 20);
-    assert_eq!(diagnostic["maximum"], 20);
+    assert_eq!(diagnostic["domain"]["kind"], "integer_table");
+    assert_eq!(diagnostic["domain"]["table"], "levels");
+    assert_eq!(diagnostic["domain"]["key"], 11);
+    assert_eq!(diagnostic["domain"]["minimum"], 20);
+    assert_eq!(diagnostic["domain"]["maximum"], 20);
 }
 
 #[test]

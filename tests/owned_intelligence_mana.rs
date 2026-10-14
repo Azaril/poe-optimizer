@@ -1111,8 +1111,8 @@ fn publish_mana_override_preserving_all_five_originals() {
     );
 }
 
-// Draft formula integration. The consumer is not published until numeric-domain
-// admission is implemented; these tests certify only the stated input domain.
+// Draft formula integration. Numeric-domain checks preserve availability; they
+// do not close source coverage or publish this finite component fixture.
 fn pool_world() -> replay::ReplayInput {
     #[derive(serde::Deserialize)]
     struct Consumer {
@@ -1263,9 +1263,14 @@ fn draft_mana_pool_retains_coverage_and_frozen_adjustment_dependencies() {
     }))
     .unwrap();
     assert!(matches!(
-        report(i).outcome,
+        report(i.clone()).outcome,
         SupportEffectsOutcome::Unavailable { .. }
     ));
+    allocate_override(&mut i);
+    assert!(
+        matches!(report(i).outcome, SupportEffectsOutcome::Unavailable { .. }),
+        "a lazy override cannot bypass complete source coverage"
+    );
     let mut i = pool_world();
     i.stages
         .programs
@@ -1279,6 +1284,197 @@ fn draft_mana_pool_retains_coverage_and_frozen_adjustment_dependencies() {
         error.contains("frozen channel read occurs before or outside frozen stage"),
         "a consumer cannot run before the stage that freezes its contributions: {error}"
     );
+}
+
+#[test]
+fn mana_rounding_domain_checks_actual_operand_and_override_remains_lazy() {
+    use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
+    use poe_optimizer_engine::owned_rules::{CompiledRulePackage, EffectDisposition, RuleFact};
+    let i = pool_world();
+    let schema = OwnedDefinitionSchemaPackage::new(i.schema.clone(), Default::default()).unwrap();
+    let compiled = CompiledRulePackage::compile(&i.rules, &schema, Default::default()).unwrap();
+    let p = i
+        .rules
+        .owners
+        .iter()
+        .find(|o| o.owner == subject(0x29f9))
+        .unwrap()
+        .programs
+        .members
+        .first()
+        .unwrap();
+    let RuleExpression::CheckNumericDomain { value, domain } = &p
+        .nodes
+        .iter()
+        .find(|n| n.id == key("supported-rounding-operand"))
+        .unwrap()
+        .expression
+    else {
+        panic!()
+    };
+    assert_eq!(value, &key("rounding-operand"));
+    let expected_domain = NumericDomain::Quantity(QuantityRange {
+        minimum: FiniteQuantity::new(-f64::MAX, def(3)).unwrap(),
+        maximum: FiniteQuantity::new(4503599627370496., def(3)).unwrap(),
+    });
+    assert_eq!(domain, &expected_domain);
+    let mut scratch = compiled.new_scratch();
+    for operand in [
+        -f64::MAX,
+        -0.,
+        0.,
+        1.5_f64.next_down(),
+        1.5,
+        4503599627370496.,
+        4503599627370497.,
+        f64::MAX,
+    ] {
+        // Scalar consumer evidence; producer-level composition is covered below.
+        let mut facts: Vec<_> = [
+            ("intrinsic", 0., 3),
+            ("inherent", 0., 3),
+            ("reward-increase", 0., 2),
+            ("passive-increase", 0., 2),
+            ("more", 1., 1),
+            ("to-energy-shield", 0., 2),
+            ("to-armour", 0., 2),
+            ("to-evasion", 0., 2),
+            ("extra", 0., 3),
+            ("total", operand, 3),
+        ]
+        .into_iter()
+        .map(|(name, value, u)| RuleFact {
+            read: key(name),
+            value: ParameterValue::Quantity(FiniteQuantity::new(value, def(u)).unwrap()),
+        })
+        .collect();
+        facts.push(RuleFact {
+            read: key("override-present"),
+            value: ParameterValue::Boolean(false),
+        });
+        let result = compiled
+            .evaluate(
+                &subject(0x29f9),
+                &key("resolve-player-mana"),
+                &facts,
+                &schema,
+                &mut scratch,
+            )
+            .unwrap();
+        let expected = if operand > 4503599627370496. {
+            EffectDisposition::UnsupportedDomain {
+                node: key("supported-rounding-operand"),
+                domain: UnsupportedDomainCause::NumericRange {
+                    value: ParameterValue::Quantity(FiniteQuantity::new(operand, def(3)).unwrap()),
+                    domain: Box::new(expected_domain.clone()),
+                },
+            }
+        } else {
+            let n = if operand < 1.5 {
+                1.
+            } else if operand == 1.5 {
+                2.
+            } else {
+                operand
+            };
+            EffectDisposition::Applied {
+                value: ParameterValue::Quantity(FiniteQuantity::new(n, def(3)).unwrap()),
+            }
+        };
+        assert_eq!(result.effects[0].disposition, expected);
+        assert_eq!(
+            result,
+            compiled
+                .evaluate(
+                    &subject(0x29f9),
+                    &key("resolve-player-mana"),
+                    &facts,
+                    &schema,
+                    &mut compiled.new_scratch()
+                )
+                .unwrap()
+        );
+    }
+    // An explicit zero override does not demand any ordinary operands.
+    let bypass = [
+        RuleFact {
+            read: key("override-present"),
+            value: ParameterValue::Boolean(true),
+        },
+        RuleFact {
+            read: key("override-value"),
+            value: ParameterValue::Quantity(FiniteQuantity::new(0., def(3)).unwrap()),
+        },
+    ];
+    assert_eq!(
+        compiled
+            .evaluate(
+                &subject(0x29f9),
+                &key("resolve-player-mana"),
+                &bypass,
+                &schema,
+                &mut scratch
+            )
+            .unwrap()
+            .effects[0]
+            .disposition,
+        EffectDisposition::Applied {
+            value: ParameterValue::Quantity(FiniteQuantity::new(0., def(3)).unwrap())
+        }
+    );
+
+    // The existing explicitly synthetic adjustment source exercises a real
+    // checked contribution -> collector -> final Mana graph path.
+    let mut outside = pool_world();
+    adjustment_sources(&mut outside);
+    let source = outside
+        .rules
+        .owners
+        .iter_mut()
+        .find(|o| o.owner == actor())
+        .unwrap()
+        .programs
+        .members
+        .iter_mut()
+        .find(|p| p.id == key("test-mana-adjustment-sources"))
+        .unwrap();
+    for e in &mut source.effects {
+        e.when = None;
+    }
+    for n in &mut source.nodes {
+        if n.id.as_str().starts_with("value-") {
+            let RuleExpression::Literal {
+                value: ParameterValue::Quantity(v),
+            } = &mut n.expression
+            else {
+                panic!()
+            };
+            *v = FiniteQuantity::new(
+                if n.id == key("value-4") {
+                    4503599627370497.
+                } else {
+                    0.
+                },
+                v.unit().clone(),
+            )
+            .unwrap();
+        }
+    }
+    outside.rebind_test_edit().unwrap();
+    let plan = outside.compile().unwrap();
+    let mut worker = plan.new_scratch();
+    let failed = plan.evaluate(&mut worker).unwrap();
+    assert!(
+        matches!(adjustment_value(&failed, 0x29f9), EffectValue::UnsupportedDomain { node, domain: UnsupportedDomainCause::NumericRange { value: ParameterValue::Quantity(v), .. } }
+        if node == key("supported-rounding-operand") && v.value() > 4503599627370496.)
+    );
+    allocate_override(&mut outside);
+    let bypass = outside.compile().unwrap();
+    assert_eq!(
+        adjustment_value(&bypass.evaluate(&mut worker).unwrap(), 0x29f9),
+        query_quantity(0., 3)
+    );
+    assert_eq!(plan.evaluate(&mut worker).unwrap(), failed);
 }
 
 #[test]

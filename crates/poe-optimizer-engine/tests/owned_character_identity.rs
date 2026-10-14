@@ -494,7 +494,7 @@ fn current_snapshot_preserves_v6_semantics_and_refuses_retired_wire_version() {
     assert_eq!(
         compiled.identity(),
         digest_owned(
-            "owned-rule-programs-v3",
+            "owned-rule-programs-v4",
             compiled.input(),
             RuleLimits::default().max_wire_bytes
         )

@@ -44,6 +44,96 @@ fn empty_caches(s: &RuleScratch) {
     assert!(s.facts.is_empty());
     assert!(s.stack.is_empty());
 }
+
+#[test]
+fn checked_numeric_domains_use_constant_worker_work_and_recover_after_budget_failure() {
+    let mut f = fixture::fixture();
+    let stat = StatDefId::parse(f.rules.namespace.clone(), "stat.effective-attribute").unwrap();
+    let domain = NumericDomain::Integer(IntegerRange {
+        minimum: BoundedInteger::new(-5).unwrap(),
+        maximum: BoundedInteger::new(5).unwrap(),
+    });
+    f.rules.operations_version = key(OWNED_RULE_OPERATIONS_V27);
+    f.rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
+    f.rules.effect_applications = Some(DeclaredSet::complete(vec![]));
+    f.rules.owners.truncate(1);
+    let owner = f.rules.owners[0].owner.clone();
+    f.rules.owners[0].programs = DeclaredSet::complete(vec![RuleProgram {
+        id: key("domain"),
+        context: RuleEntityKind::Actor,
+        reads: vec![RuleRead {
+            id: key("input"),
+            value_type: ComputedValueType::Integer,
+            source: RuleReadSource::Stat {
+                entity: RuleEntity::Current,
+                stat: stat.clone(),
+            },
+        }],
+        nodes: vec![
+            RuleNode {
+                id: key("input"),
+                expression: RuleExpression::Read {
+                    input: key("input"),
+                },
+            },
+            RuleNode {
+                id: key("checked"),
+                expression: RuleExpression::CheckNumericDomain {
+                    value: key("input"),
+                    domain: domain.clone(),
+                },
+            },
+        ],
+        effects: vec![RuleEffect {
+            id: key("result"),
+            when: None,
+            effect: RuleEffectKind::Derive {
+                entity: RuleEntity::Current,
+                stat,
+                value: key("checked"),
+            },
+        }],
+    }]);
+    let c = compile(&f);
+    let prepared = c.prepare_program(&owner, &key("domain")).unwrap();
+    assert_eq!(prepared.effect_read_indices(0).unwrap(), &[0]);
+    let mut scratch = c.new_scratch();
+    let mut expected_work = None;
+    for v in [0, -5, 5, -6, 6, BoundedInteger::MIN, BoundedInteger::MAX, 0] {
+        let input = [Some(integer(v))];
+        let result = prepared
+            .evaluate_effect_indexed(0, &input, &mut scratch, 100)
+            .unwrap();
+        let used = scratch.work_used();
+        assert_eq!(used, *expected_work.get_or_insert(used));
+        assert_eq!(
+            result,
+            if (-5..=5).contains(&v) {
+                EffectDisposition::Applied { value: integer(v) }
+            } else {
+                EffectDisposition::UnsupportedDomain {
+                    node: key("checked"),
+                    domain: UnsupportedDomainCause::NumericRange {
+                        value: integer(v),
+                        domain: Box::new(domain.clone()),
+                    },
+                }
+            }
+        );
+        assert!(
+            prepared
+                .evaluate_effect_indexed(0, &input, &mut scratch, used - 1)
+                .is_err()
+        );
+        empty_caches(&scratch);
+        assert_eq!(
+            prepared
+                .evaluate_effect_indexed(0, &input, &mut scratch, 100)
+                .unwrap(),
+            result
+        );
+    }
+}
 #[test]
 fn prepared_and_public_paths_match_all_existing_component_cases() {
     let f = fixture::fixture();

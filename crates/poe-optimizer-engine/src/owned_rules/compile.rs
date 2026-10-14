@@ -898,6 +898,10 @@ fn lower(
             .ok_or_else(|| fail(path, "unknown node reference"))
     };
     Ok(match e {
+        RuleExpression::CheckNumericDomain { value, domain } => Op::CheckNumericDomain {
+            value: n(value)?,
+            domain: domain.clone(),
+        },
         RuleExpression::LookupIntegerTable { table, key } => Op::LookupIntegerTable {
             key: n(key)?,
             table: Arc::clone(
@@ -984,6 +988,45 @@ fn infer<I: DefinitionSchemaIndex>(
         )
     };
     Ok(match op {
+        Op::CheckNumericDomain { value, domain } => {
+            let expected = match domain {
+                NumericDomain::Integer(range) => {
+                    check(
+                        range.minimum <= range.maximum,
+                        path,
+                        "reversed numeric integer domain",
+                    )?;
+                    ComputedValueType::Integer
+                }
+                NumericDomain::Quantity(range) => {
+                    validate_value(
+                        &ParameterValue::Quantity(range.minimum.clone()),
+                        index,
+                        path,
+                    )?;
+                    validate_value(
+                        &ParameterValue::Quantity(range.maximum.clone()),
+                        index,
+                        path,
+                    )?;
+                    check(
+                        range.minimum.unit() == range.maximum.unit()
+                            && range.minimum.value() <= range.maximum.value(),
+                        path,
+                        "invalid numeric quantity domain",
+                    )?;
+                    ComputedValueType::Quantity {
+                        unit: range.minimum.unit().clone(),
+                    }
+                }
+            };
+            check(
+                t(*value) == &expected,
+                path,
+                "numeric domain type/unit differs from input",
+            )?;
+            expected
+        }
         Op::LookupIntegerTable { key, table } => {
             check(
                 t(*key) == &ComputedValueType::Integer,
@@ -1344,6 +1387,13 @@ fn program<I: DefinitionSchemaIndex>(
     let mut indegree = vec![0usize; p.nodes.len()];
     let mut consumers = vec![Vec::new(); p.nodes.len()];
     for (i, n) in p.nodes.iter().enumerate() {
+        if matches!(n.expression, RuleExpression::CheckNumericDomain { .. }) {
+            check(
+                operations.supports_numeric_domains(),
+                path,
+                "numeric domains require owned-domain-operations-v27",
+            )?;
+        }
         let op = lower(&n.expression, &node_index, &read_index, tables, path)?;
         let deps = op.dependencies();
         add(
@@ -2128,7 +2178,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             );
         }
     }
-    let identity = digest_owned("owned-rule-programs-v3", &input, l.max_wire_bytes)
+    let identity = digest_owned("owned-rule-programs-v4", &input, l.max_wire_bytes)
         .map_err(|e| RuleError::new("wire", e.to_string()))?;
     Ok(CompiledRulePackage {
         input,

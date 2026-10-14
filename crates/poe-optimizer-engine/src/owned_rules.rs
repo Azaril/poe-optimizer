@@ -6,7 +6,7 @@ use poe_optimizer_core::{
     owned_build::ParameterValue,
     owned_content::{MAX_OWNED_CONTENT_BYTES, OwnedContentDigest, digest_owned},
     owned_definitions::{BoundedInteger, GameVersionNamespace, OwnedDefinitionKey},
-    owned_rules::{RuleEffectKind, RulePackageInput},
+    owned_rules::{NumericDomain, RuleEffectKind, RulePackageInput},
     owned_schema::{
         ComputedValueType, DefinitionAddress, DefinitionSchemaIndex, SchemaClosure, SchemaSubject,
         SlotAddress, ValueSchema,
@@ -150,13 +150,10 @@ pub enum EffectDisposition {
     UnsupportedValue {
         value: ParameterValue,
     },
-    /// A demanded lookup key lies outside the table's explicit supported domain.
+    /// A demanded known value lies outside its explicit supported domain.
     UnsupportedDomain {
         node: OwnedDefinitionKey,
-        table: OwnedDefinitionKey,
-        key: BoundedInteger,
-        minimum: BoundedInteger,
-        maximum: BoundedInteger,
+        domain: UnsupportedDomainCause,
     },
     Inactive,
     Unresolved {
@@ -165,6 +162,23 @@ pub enum EffectDisposition {
     NumericalError {
         node: OwnedDefinitionKey,
         reason: NumericalFailure,
+    },
+}
+/// Preserve the exact failed domain without confusing it with a missing value,
+/// a gameplay Requirement, or an arithmetic failure.
+#[derive(Clone, Debug, PartialEq, Serialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum UnsupportedDomainCause {
+    IntegerTable {
+        table: OwnedDefinitionKey,
+        key: BoundedInteger,
+        minimum: BoundedInteger,
+        maximum: BoundedInteger,
+    },
+    NumericRange {
+        value: ParameterValue,
+        // Keep worker result enums compact; this payload is only built on failure.
+        domain: Box<NumericDomain>,
     },
 }
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
@@ -209,6 +223,10 @@ struct CompiledTiming {
 }
 #[derive(Clone, Debug)]
 enum Op {
+    CheckNumericDomain {
+        value: usize,
+        domain: NumericDomain,
+    },
     LookupIntegerTable {
         key: usize,
         table: Arc<poe_optimizer_core::owned_rules::IntegerRuleTable>,
@@ -256,6 +274,7 @@ enum Binary {
 impl Op {
     fn dependencies(&self) -> Vec<usize> {
         match self {
+            Self::CheckNumericDomain { value, .. } => vec![*value],
             Self::OrdinaryTiming(recipe) => recipe.inputs.to_vec(),
             Self::LookupIntegerTable { key, .. } => vec![*key],
             Self::Literal(_) | Self::Read(_) => vec![],
@@ -437,7 +456,7 @@ impl PreparedRuleProgram {
 enum NodeFailure {
     Missing(usize),
     Numerical(usize, NumericalFailure),
-    UnsupportedDomain(usize, BoundedInteger),
+    UnsupportedDomain(usize, ParameterValue),
 }
 type NodeValue = Result<ParameterValue, NodeFailure>;
 #[derive(Clone, Copy, Debug)]
