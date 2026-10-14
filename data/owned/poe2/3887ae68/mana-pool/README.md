@@ -2,8 +2,8 @@
 
 **Not published.** This arithmetic fragment is being validated using existing
 typed rules. It must not enter the canonical release before the
-[numeric-domain decision](../../../../../docs/owned-numeric-domain-proposal.md)
-and its admission checks are implemented. It establishes no complete-build
+[numeric-domain contract](../../../../../docs/owned-numeric-domain-proposal.md),
+approved October 14, and its admission checks are implemented. It establishes no complete-build
 coverage and adds no acquisition or runtime backend.
 
 The program reads the existing intrinsic/inherent Mana groups, reward/passive
@@ -45,5 +45,6 @@ unbounded computed domain or turn the draft into a production release.
 
 Resource transformations into the Extra/Total channels, item-granted origins,
 global Partial closures and the original build's outstanding input obligations
-remain separate work. The canonical package remains the preceding Mana override
-publication until a checked successor is deliberately assembled.
+remain separate work. The canonical package is
+`runs/owned-combined-added-attack-publication-04/package`; this draft has not
+entered that release. The implementation plan records its current identity.

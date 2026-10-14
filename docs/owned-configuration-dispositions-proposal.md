@@ -1,11 +1,12 @@
 # Proposal: checked configuration dispositions
 
-**Status:** Full configuration-disposition authority proposed; not implemented.
+**Status:** Full configuration-disposition authority accepted on 2026-10-14;
+implementation and data adoption pending.
 The narrower source-presentation precursor and final issue-integrity check are
 implemented. Neither closes an inventory; publication status and the current
 baseline are recorded in [implementation](implementation.md).
-The owner was prompted on the full accounting contract on October 9; that
-decision is pending. The current no-backward-compatibility direction below
+The owner approved checked accounting for each setting's actual semantic owner.
+The current no-backward-compatibility direction below
 supersedes this proposal's earlier preservation language.
 **Date:** 2026-10-05.
 **Scope:** A reusable owned Import contract. Core ownership and native evaluation
@@ -24,7 +25,7 @@ justify completing scenario usage or assumptions.
 obligations: configuration `01f2` with 36 linked source origins, preset usage
 `0505` with 23 known preferences, external assumptions `0207` with 17 known
 members, and scenario usage `0208` with an empty Pending list. Known members
-do not certify complete inventories. The proposed configuration authority is
+do not certify complete inventories. The accepted configuration authority is
 still unimplemented; retiring shared `01f2` requires accounting for every
 remaining Config and outside-Config origin, including Party.
 
@@ -1010,7 +1011,32 @@ obligations likewise cannot be closed by this leaf proof. Follow the
 the next numerical and input-admission work. This investigation does not
 authorize full configuration closure.
 
-## Proposed Import contract
+## Accepted Import contract
+
+**October 14 implementation review:** the current Original05 fallback has
+36 live origins: 21 inside Config (two containers and nineteen placeholders)
+and fifteen outside; all fifteen outside origins currently have only that
+issue link. Add the accepted policy to the existing compiled normalization
+policies, reuse `fresh_config_sets` and private adapter receipts, and perform
+global retirement only after generated-source/support accounting. A successful
+scalar subset must not become a complete configuration certificate.
+
+The first source-backed branch disposition is the `enemyDamageRollRange`
+placeholder discussed above. The retained twelve-case, both-JIT witness is
+339,448 bytes, SHA-256
+`c20f9c8992fa062f59b42bcc1da77abc17581bf9e1a7133c6fef20251e27d2b6`.
+Use the accepted general policy and the encounter adapter's exact proved
+preconditions; do not add a parallel field-specific permission path. Exercise
+the same receipt model with existing reward and scalar/default inputs. This
+can account for one leaf while leaving the shared inventory Pending.
+
+The outside-origin review must retain the actual responsibilities of Build,
+TimelessData, Tree, Skills, Items, the archived Firebolt pair, trade-weight
+records, Calcs settings, Party and Import. Search intent and reference selection
+must not be relabelled presentation without evidence that they add no relevant
+owned input. Preserve an unresolved responsibility where the current model
+cannot yet account for it. Constructor defaults without saved XML rows are
+also part of the required catalogue census.
 
 Add `ConfigurationDispositionPolicy` to the existing normalization contract.
 This is an Import-facing contract with a private checked proof type, not a second

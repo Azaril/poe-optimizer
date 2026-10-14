@@ -1,0 +1,1778 @@
+[
+  {
+    "id": "minion-attack-flat-minimum",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003373"
+    },
+    "contribution": "add",
+    "groups": [
+      {
+        "id": "equipment",
+        "reduction": "sum",
+        "ordering": "ordered",
+        "empty": {
+          "kind": "quantity",
+          "value": {
+            "value": 0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001d3a"
+            }
+          }
+        },
+        "members": {
+          "members": [
+            {
+              "producer": {
+                "kind": "program_effect",
+                "owner": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "modifier",
+                    "value": {
+                      "kind": "modifier",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003377"
+                    }
+                  }
+                },
+                "program": "grant-minion-attack-flat",
+                "effect": "minimum",
+                "origin": {
+                  "kind": "item_modifier",
+                  "slots": [
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000064"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000065"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000066"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000067"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000068"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000069"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006a"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006b"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006c"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006d"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006e"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006f"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000070"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000071"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000072"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000073"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000074"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000075"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000076"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000077"
+                    }
+                  ]
+                }
+              },
+              "order": {
+                "source_rank": 0,
+                "program_rank": 0,
+                "effect_rank": 0,
+                "slot_ranks": [
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000064"
+                    },
+                    "rank": 0
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000065"
+                    },
+                    "rank": 1
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000066"
+                    },
+                    "rank": 2
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000067"
+                    },
+                    "rank": 3
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000068"
+                    },
+                    "rank": 4
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000069"
+                    },
+                    "rank": 5
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006a"
+                    },
+                    "rank": 6
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006b"
+                    },
+                    "rank": 7
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006c"
+                    },
+                    "rank": 8
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006d"
+                    },
+                    "rank": 9
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006e"
+                    },
+                    "rank": 10
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006f"
+                    },
+                    "rank": 11
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000070"
+                    },
+                    "rank": 12
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000071"
+                    },
+                    "rank": 13
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000072"
+                    },
+                    "rank": 14
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000073"
+                    },
+                    "rank": 15
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000074"
+                    },
+                    "rank": 16
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000075"
+                    },
+                    "rank": 17
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000076"
+                    },
+                    "rank": 18
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000077"
+                    },
+                    "rank": 19
+                  }
+                ]
+              }
+            },
+            {
+              "producer": {
+                "kind": "program_effect",
+                "owner": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "modifier",
+                    "value": {
+                      "kind": "modifier",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000337a"
+                    }
+                  }
+                },
+                "program": "grant-minion-attack-flat",
+                "effect": "minimum",
+                "origin": {
+                  "kind": "item_modifier",
+                  "slots": [
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000064"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000065"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000066"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000067"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000068"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000069"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006a"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006b"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006c"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006d"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006e"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006f"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000070"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000071"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000072"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000073"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000074"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000075"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000076"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000077"
+                    }
+                  ]
+                }
+              },
+              "order": {
+                "source_rank": 0,
+                "program_rank": 0,
+                "effect_rank": 0,
+                "slot_ranks": [
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000064"
+                    },
+                    "rank": 0
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000065"
+                    },
+                    "rank": 1
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000066"
+                    },
+                    "rank": 2
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000067"
+                    },
+                    "rank": 3
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000068"
+                    },
+                    "rank": 4
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000069"
+                    },
+                    "rank": 5
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006a"
+                    },
+                    "rank": 6
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006b"
+                    },
+                    "rank": 7
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006c"
+                    },
+                    "rank": 8
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006d"
+                    },
+                    "rank": 9
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006e"
+                    },
+                    "rank": 10
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006f"
+                    },
+                    "rank": 11
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000070"
+                    },
+                    "rank": 12
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000071"
+                    },
+                    "rank": 13
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000072"
+                    },
+                    "rank": 14
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000073"
+                    },
+                    "rank": 15
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000074"
+                    },
+                    "rank": 16
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000075"
+                    },
+                    "rank": 17
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000076"
+                    },
+                    "rank": 18
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000077"
+                    },
+                    "rank": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "stat",
+                      "value": {
+                        "kind": "stat",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003373"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "minion-attack-flat-selected-source-domain-unproved"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "minion-attack-flat-maximum",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003374"
+    },
+    "contribution": "add",
+    "groups": [
+      {
+        "id": "equipment",
+        "reduction": "sum",
+        "ordering": "ordered",
+        "empty": {
+          "kind": "quantity",
+          "value": {
+            "value": 0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001d3a"
+            }
+          }
+        },
+        "members": {
+          "members": [
+            {
+              "producer": {
+                "kind": "program_effect",
+                "owner": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "modifier",
+                    "value": {
+                      "kind": "modifier",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003377"
+                    }
+                  }
+                },
+                "program": "grant-minion-attack-flat",
+                "effect": "maximum",
+                "origin": {
+                  "kind": "item_modifier",
+                  "slots": [
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000064"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000065"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000066"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000067"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000068"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000069"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006a"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006b"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006c"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006d"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006e"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006f"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000070"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000071"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000072"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000073"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000074"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000075"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000076"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000077"
+                    }
+                  ]
+                }
+              },
+              "order": {
+                "source_rank": 0,
+                "program_rank": 0,
+                "effect_rank": 1,
+                "slot_ranks": [
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000064"
+                    },
+                    "rank": 0
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000065"
+                    },
+                    "rank": 1
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000066"
+                    },
+                    "rank": 2
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000067"
+                    },
+                    "rank": 3
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000068"
+                    },
+                    "rank": 4
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000069"
+                    },
+                    "rank": 5
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006a"
+                    },
+                    "rank": 6
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006b"
+                    },
+                    "rank": 7
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006c"
+                    },
+                    "rank": 8
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006d"
+                    },
+                    "rank": 9
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006e"
+                    },
+                    "rank": 10
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006f"
+                    },
+                    "rank": 11
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000070"
+                    },
+                    "rank": 12
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000071"
+                    },
+                    "rank": 13
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000072"
+                    },
+                    "rank": 14
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000073"
+                    },
+                    "rank": 15
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000074"
+                    },
+                    "rank": 16
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000075"
+                    },
+                    "rank": 17
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000076"
+                    },
+                    "rank": 18
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000077"
+                    },
+                    "rank": 19
+                  }
+                ]
+              }
+            },
+            {
+              "producer": {
+                "kind": "program_effect",
+                "owner": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "modifier",
+                    "value": {
+                      "kind": "modifier",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000337a"
+                    }
+                  }
+                },
+                "program": "grant-minion-attack-flat",
+                "effect": "maximum",
+                "origin": {
+                  "kind": "item_modifier",
+                  "slots": [
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000064"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000065"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000066"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000067"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000068"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000069"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006a"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006b"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006c"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006d"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006e"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006f"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000070"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000071"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000072"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000073"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000074"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000075"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000076"
+                    },
+                    {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000077"
+                    }
+                  ]
+                }
+              },
+              "order": {
+                "source_rank": 0,
+                "program_rank": 0,
+                "effect_rank": 1,
+                "slot_ranks": [
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000064"
+                    },
+                    "rank": 0
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000065"
+                    },
+                    "rank": 1
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000066"
+                    },
+                    "rank": 2
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000067"
+                    },
+                    "rank": 3
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000068"
+                    },
+                    "rank": 4
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000069"
+                    },
+                    "rank": 5
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006a"
+                    },
+                    "rank": 6
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006b"
+                    },
+                    "rank": 7
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006c"
+                    },
+                    "rank": 8
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006d"
+                    },
+                    "rank": 9
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006e"
+                    },
+                    "rank": 10
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000006f"
+                    },
+                    "rank": 11
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000070"
+                    },
+                    "rank": 12
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000071"
+                    },
+                    "rank": 13
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000072"
+                    },
+                    "rank": 14
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000073"
+                    },
+                    "rank": 15
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000074"
+                    },
+                    "rank": 16
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000075"
+                    },
+                    "rank": 17
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000076"
+                    },
+                    "rank": 18
+                  },
+                  {
+                    "slot": {
+                      "kind": "equipment_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000077"
+                    },
+                    "rank": 19
+                  }
+                ]
+              }
+            }
+          ],
+          "closure": {
+            "kind": "partial",
+            "value": {
+              "gaps": [
+                {
+                  "subject": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "stat",
+                      "value": {
+                        "kind": "stat",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003374"
+                      }
+                    }
+                  },
+                  "facet": "game_rules",
+                  "code": "minion-attack-flat-selected-source-domain-unproved"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,498 @@
+[
+  {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "modifier",
+        "value": {
+          "kind": "modifier",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003377"
+        }
+      }
+    },
+    "programs": {
+      "members": [
+        {
+          "id": "grant-minion-attack-flat",
+          "context": "equipment_use",
+          "reads": [
+            {
+              "id": "minimum",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d3a"
+                  }
+                }
+              },
+              "source": {
+                "kind": "parameter",
+                "value": {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003377"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003378"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "maximum",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d3a"
+                  }
+                }
+              },
+              "source": {
+                "kind": "parameter",
+                "value": {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003377"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003379"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "minimum",
+              "expression": {
+                "kind": "read",
+                "input": "minimum"
+              }
+            },
+            {
+              "id": "maximum",
+              "expression": {
+                "kind": "read",
+                "input": "maximum"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "minimum",
+              "when": null,
+              "effect": {
+                "kind": "contribute",
+                "entity": "player",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003373"
+                },
+                "contribution": "add",
+                "value": "minimum"
+              }
+            },
+            {
+              "id": "maximum",
+              "when": null,
+              "effect": {
+                "kind": "contribute",
+                "entity": "player",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003374"
+                },
+                "contribution": "add",
+                "value": "maximum"
+              }
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "complete"
+      }
+    }
+  },
+  {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "modifier",
+        "value": {
+          "kind": "modifier",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000337a"
+        }
+      }
+    },
+    "programs": {
+      "members": [
+        {
+          "id": "grant-minion-attack-flat",
+          "context": "equipment_use",
+          "reads": [
+            {
+              "id": "minimum",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d3a"
+                  }
+                }
+              },
+              "source": {
+                "kind": "parameter",
+                "value": {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000337a"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000337b"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "maximum",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d3a"
+                  }
+                }
+              },
+              "source": {
+                "kind": "parameter",
+                "value": {
+                  "slot": {
+                    "declaration": {
+                      "kind": "modifier",
+                      "definition": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000337a"
+                      }
+                    },
+                    "slot": {
+                      "kind": "parameter_slot",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000337c"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "minimum",
+              "expression": {
+                "kind": "read",
+                "input": "minimum"
+              }
+            },
+            {
+              "id": "maximum",
+              "expression": {
+                "kind": "read",
+                "input": "maximum"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "minimum",
+              "when": null,
+              "effect": {
+                "kind": "contribute",
+                "entity": "player",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003373"
+                },
+                "contribution": "add",
+                "value": "minimum"
+              }
+            },
+            {
+              "id": "maximum",
+              "when": null,
+              "effect": {
+                "kind": "contribute",
+                "entity": "player",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003374"
+                },
+                "contribution": "add",
+                "value": "maximum"
+              }
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "complete"
+      }
+    }
+  },
+  {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003375"
+        }
+      }
+    },
+    "programs": {
+      "members": [
+        {
+          "id": "receive-minion-attack-flat-minimum",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "granted",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d3a"
+                  }
+                }
+              },
+              "source": {
+                "kind": "contribution_query",
+                "value": {
+                  "entity": "player",
+                  "query": "minion-attack-flat-minimum",
+                  "group": "equipment"
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "granted",
+              "expression": {
+                "kind": "read",
+                "input": "granted"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "received",
+              "when": null,
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003375"
+                },
+                "value": "granted"
+              }
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "complete"
+      }
+    }
+  },
+  {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003376"
+        }
+      }
+    },
+    "programs": {
+      "members": [
+        {
+          "id": "receive-minion-attack-flat-maximum",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "granted",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d3a"
+                  }
+                }
+              },
+              "source": {
+                "kind": "contribution_query",
+                "value": {
+                  "entity": "player",
+                  "query": "minion-attack-flat-maximum",
+                  "group": "equipment"
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "granted",
+              "expression": {
+                "kind": "read",
+                "input": "granted"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "received",
+              "when": null,
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003376"
+                },
+                "value": "granted"
+              }
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "complete"
+      }
+    }
+  }
+]

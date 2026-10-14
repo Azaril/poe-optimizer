@@ -6,6 +6,9 @@ use super::*;
 use poe_optimizer_core::{owned_readiness::*, owned_routing::*, owned_schema::*, owned_stages::*};
 use sha2::{Digest, Sha256};
 
+#[path = "owned_sniper_flat_collection.rs"]
+mod flat_collection;
+
 const PROGRAM: &str = "physical-base-damage";
 const OPERANDS: &str = "finite-physical-base-operands";
 const INPUT_STAGE: &str = "finite-physical-base-inputs";

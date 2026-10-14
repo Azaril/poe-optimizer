@@ -874,6 +874,18 @@ records the independent full-build consumer observations and their exact scope.
 
 ### Other current compatibility investigations
 
+**Action-routing format (identified 2026-10-09):** Core still exposes V1 without
+source selectors alongside V2, and Data branches on both validation and identity
+domains (`owned_routing.rs`). This is a format-retention path, not a minion or
+attack mechanic. Before removal, inventory current publication, import and test
+consumers; migrate useful callers to the single current representation with
+explicit selector coverage, then delete obsolete readers and exclusive fixture
+scaffolding. Preserve independent source evidence and verify all-five package
+reproduction plus native routing/refusal tests. Do not simply convert omitted
+selectors to Complete-empty where their coverage is unknown. This cleanup is
+recorded for the next relevant format pass and does not displace completing the
+selected flat-damage producers.
+
 **Resource transformation audit (2026-10-09):** the
 [full source witness](owned-resource-transformation-evidence.md) now reproduces
 the normalization and repeated slot-depletion findings discussed
@@ -884,11 +896,11 @@ Keep source/recipient contributions and frozen inputs in the owned graph;
 do not import mutable Lua resource objects or treat these controls as accepted
 bug exceptions.
 
-The [checked numeric-domain proposal](owned-numeric-domain-proposal.md) addresses
-the separate computed-range boundary for final pool rounding. It proposes an
+The [checked numeric-domain contract](owned-numeric-domain-proposal.md) addresses
+the separate computed-range boundary for final pool rounding. It specifies an
 explicit unsupported result instead of clipping, inactivity, game illegality or
 unconditional reproduction of add-half rounding at very large magnitudes.
-Public-contract implementation awaits the owner's decision.
+The owner approved it on October 14; implementation and data adoption remain pending.
 
 The [attribute setup witness](owned-attribute-setup-evidence.md) is a concrete
 unresolved case: synthetic configuration/item inputs expose different local MORE

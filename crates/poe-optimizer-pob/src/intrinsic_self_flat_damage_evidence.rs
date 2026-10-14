@@ -3,6 +3,8 @@
 use super::*;
 #[path = "../../../tests/support/owned_self_flat_damage_evidence.rs"]
 mod evidence;
+#[path = "intrinsic_self_flat_selection_evidence.rs"]
+mod selected_domain;
 const SELF_PACKET: &str = "data/owned/poe2/3887ae68/self-flat-attack-damage/source-evidence.json";
 
 fn fingerprint(value: &Json) -> String {

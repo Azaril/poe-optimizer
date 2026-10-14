@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-09 (EDT).
+Updated: 2026-10-14 (EDT).
 
 This is the active delivery plan. The [design](domain-architecture.md) defines
 the end state; the [execution overview](data-and-evaluation-overview.md) explains
@@ -97,8 +97,8 @@ global query/application coverage retain their own gaps.
 these 22 queries.** Its current work advances selected-Actor coverage under the
 existing complete-plan contract. The bounded transformation witness is complete;
 do not expand positive transfers ahead of direct Player resource, Sniper damage
-or input-admission work. The configuration-accounting decision was prompted on
-October 9; numerical-domain approval remains pending separately. Other selected
+or input-admission work. Checked configuration accounting and numeric domains
+were approved on October 14; implementation remains separate work. Other selected
 skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
@@ -147,9 +147,13 @@ Both extend the existing graph; they authorize neither unrelated delivery
 origins nor arbitrary override precedence. Later references below to these two
 decisions as pending are historical.
 
-Actor-to-Enemy reads, resource demand, configuration/reporting and scoped
-coverage proposals have not been approved by
-these answers. Ask when one becomes the next necessary design boundary.
+On October 14 the owner approved [checked numeric domains](owned-numeric-domain-proposal.md)
+and [checked configuration accounting](owned-configuration-dispositions-proposal.md).
+Implement both in the existing rule/import paths, keeping unsupported numeric
+domains distinct from game legality and preserving every unresolved setting's
+actual semantic responsibility. These approvals do not themselves complete
+resource supplier coverage or any import inventory. Actor-to-Enemy reads,
+resource demand, new reporting ownership and scoped coverage remain unapproved.
 
 ## CI repair checkpoint (2026-10-09)
 
@@ -191,86 +195,85 @@ revision; track compilation and repeated historical-publication costs in tooling
 cleanup without removing independent coverage or displacing the first complete
 native build.
 
-## Current implementation checkpoint: real flat-damage suppliers and CI repair
+## Current implementation checkpoint: native minion Attack-flat collection
 
 Original05 remains the closest complete-build target. The next unfinished
-physical inputs are the self-flat endpoints `3371` / `3372`. The new
-[offline supplier census](../data/owned/poe2/3887ae68/self-flat-attack-damage/source-review.md)
-shows that this domain is nonempty: an observed zero in the unchanged build
-cannot replace source membership or applicability. No native rule, public API,
-input disposition or coverage closure is added by this checkpoint.
+physical inputs are the self-flat endpoints `3371` / `3372`. The
+[native draft](../data/owned/poe2/3887ae68/self-flat-attack-damage/README.md)
+now defines two real source-declared minion Attack-flat modifier families,
+using existing typed item rolls, contribution queries, exact Actor receivers
+and Action routes. No public contract or native execution branch is added.
 
-Original constructors and ModCache contain **256 unique physical-endpoint
-modifier objects**, 128 minimum and 128 maximum. The census retains 23 mapping
-rows, 42 resolved consumer rows across 19 definitions, and three relevant alias
-groups. These are object/recipe counts, not eligible occurrence counts. The
-existing shared traversal now serializes target bodies and bounded enclosing
-wrappers without retaining thousands of extra Lua handles. Canonical paths and
-alias routes remain distinct; the audit does not claim every delivery occurrence.
-Stat-map metadata backlinks require exact owner identity before exclusion.
+Each exact item-modifier occurrence supplies Player-owned minion Attack grant
+channels `3373`/`3374`. Checked queries collect them in explicit order, and the
+exact Sniper Actor receives Attack subtotals `3375`/`3376`. Only the proved Basic
+output and part/mode/stat-set selection route these into its physical consumer.
+The amount is not an all-Action or universal self-flat total. Draft IDs
+`336f`-`337c` are unpublished; the canonical allocator remains `336e`.
 
-The two actual support consumers scale physical additions from Ward cost;
-active skills stored in support files are classified from their real metadata.
-Cached minion Attack additions remain distinct from the parser's unqualified
-3-7 and Full-Life controls. Nine executed source03 calls retain raw zero/inactive
-records; seven unexecuted CALCS rows remain unobserved. Existing independent
-reference reports are reused, without a fresh expensive whole-build acquisition.
+**Independent source validation:** the
+[affix proof](../data/owned/poe2/3887ae68/minion-attack-flat-modifier/source-review.md)
+executes the original parser, whole `addMinionModifiers` helper, and original
+ModDB/ModList `Sum` and `Tabulate`. Ten range cases cover two source declarations;
+empty, duplicate, explicit-zero and condition-off/on controls remain distinct.
+An Attack-keyword contrast preserves the raw records. Two fresh hosts exactly
+reproduce the retained evidence; disabling original keyword filtering produces
+a positive non-Attack counterexample. Three ordinary tests pass (0.79s), with
+one opt-in author ignored; author01 passes (0.48s), and strict PoB library/tests
+Clippy passes (3.33s). Logs:
+`runs/owned-minion-attack-flat-modifier-{author,tests,clippy}-01.log`.
+Evidence **178,816 bytes**, SHA-256
+`4cd007e7fb6bea22b27968aa8270eeeeb357b5cc05ac75126a800a96522bb09f`;
+review `d956e6650d9b93a48300c5858e63db3b6f6bcbac0e63d412ccce433f892f1a9f`.
 
-**Native direction:** first prove a bounded source family and the complete
-selected-source domain. For Action-invariant amounts and eligibility, reuse the
-existing exact-Actor contributions, checked queries and ordinary Action routing.
-A FullLife subset additionally needs a typed receiving-Actor condition and proof
-that Action-specific overrides cannot change it; no owned production binding
-exists yet. Keep local and inherited numeric folds separate. Source ownership,
-zero/inactive membership and unknown coverage survive aggregation. PoB parent
-storage alone does not justify a new transport API. Review additional exact-Action
-delivery only when an actually required Action-sensitive supplier needs it.
+**Native validation:** all six flat-collection tests pass (6.79s), and the full
+ordinary Sniper component replay passes **37 tests** (10.13s). Strict target
+Clippy passes (1.03s). The tests compare 12 actual original-query subtotals and
+compose real intrinsic endpoints and the combined factor without injecting flat
+operands. Final physical arithmetic is a composition check, not new independent
+full-damage or DPS parity. Missing/zero/inactive membership, Partial coverage,
+roll ranges, staging, unrelated Actions, selector authority, repeated Actors and
+fresh/reused/four-worker Rayon behavior have explicit checks. Logs:
+`runs/owned-minion-attack-flat-native-03.log`,
+`runs/owned-minion-attack-flat-native-full-01.log` and
+`runs/owned-minion-attack-flat-native-clippy-01.log`.
 
-Artifact: **209,378 bytes**, SHA-256
-`2a07ddefddd45cdd01a8593c506412428997eff3c618ba2fc365b6e0d93c5ba8`.
-Review SHA-256:
-`c600fe33b75f693dc77962f70968b6e8a015efceeb90a77cd6eb7b7b90d15252`.
-The retained prior Enemy-port cleanup is in [history](implementation-history.md);
-its proof remains valid and its removed ports stay removed.
+The two initial failures were fixture assertion errors: exact occurrence
+membership is checked at plan compilation, after package rebinding; Partial
+queries produce an unavailable plan before any value lookup. The repaired
+regressions assert those exact failures, including zero/inactive sources and
+both missing-contributor subjects. Production coverage was not relaxed.
 
-**Source validation:** author04 passes (2.09s). All **19 ordinary source-subtree
-tests** pass (18.65s), with five opt-in acquisitions ignored. This includes real
-constructor/consumer mutations, zero and nested-alias records, exact backlink
-identity, constructor order and artifact scope refusals. Strict optional-PoB
-library/tests Clippy passes (3.09s). Logs:
-`runs/owned-self-flat-author-04.log`,
-`runs/owned-self-flat-source-tests-01.log` and
-`runs/owned-self-flat-source-clippy-02.log`. Source and native-contract reviews
-found no remaining issue. No native-engine change requires replay regeneration.
-After the final mechanical lint edit, a fresh focused reconstruction also
-reproduces the retained artifact exactly (one test, 2.07s):
-`runs/owned-self-flat-final-reconstruction-01.log`.
+**Selected-source audit completed:** the
+[bounded recipe audit](../data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain-review.md)
+reconstructs eight items/nine equipped uses, 57 saved node recipes, 40 skill
+definitions and six selected minion profiles. It includes saved Item `ModRange`
+children through the original XML parser and whole Item load branch, every
+stat-set's `baseMods`, and sixteen supplied-child definitions omitted from the
+initial draft. Both bonded states give equal lists for these exact equipped uses;
+no universal bonded-access rule is inferred. Actual source modifier, stat-set
+modifier, disabled-item and saved-range mutations are detected.
 
-**CI repair validation:** the Amulet Life target passes **nine ordinary tests**
-with one opt-in publication ignored in both profiles: all features (2.66s) and
-no default features (2.64s). Strict all-feature target Clippy passes (0.47s).
-Logs: `runs/owned-amulet-life-ci-repair-all-features-01.log`,
-`runs/owned-amulet-life-ci-repair-no-default-features-01.log` and
-`runs/owned-amulet-life-ci-repair-clippy-01.log`.
+The author passes (0.86s); the selected suite passes five ordinary tests (2.05s),
+and the broader self-flat subtree passes nine with two opt-in authors ignored
+(12.27s). Strict PoB library/tests Clippy passes (4.82s). Logs:
+`runs/owned-self-flat-selected-author-04.log`,
+`runs/owned-self-flat-selected-tests-01.log`,
+`runs/owned-self-flat-selected-subtree-01.log` and
+`runs/owned-self-flat-selected-clippy-01.log`.
+Packet **471,969 bytes**, SHA-256
+`ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f`;
+review `63c382e93a2b65b77e3a2b34f605a3dcc854797af4e4201ace6850dccd3a115a`.
+The existing report excludes selected Rallying Cry, but does not observe the
+parent-weapon/HollowPalm flags, ExtraAura stores or minion-child buff application.
+Those dynamic observations remain next; this audit grants no native closure.
 
-The existing all-five publication binary was independently rerun against unchanged
-current application code: **seven tests pass** (43.26s), including all-five
-normalization, selected requests and Party controls. All 18 generated package
-artifacts are byte-identical to the canonical package. Logs:
-`runs/owned-self-flat-current-package-regression-01.log`, its `validation.json`
-and `runs/owned-self-flat-current-package-identity-01.log`.
-
-An older Linux CI shard exposed a stale Amulet Life fixture: its historical query
-omitted the now-present supplied-Actor inherent Life contributor. The isolated
-test repair reuses the published query and authenticates its exact added member
-and real producer body. The Partial-equipment refusal restores only that group's
-coverage; a separate control still rejects an omitted zero-valued contributor.
-Production rules and coverage are unchanged. The failed hosted job was
-`113895577595` (`ubuntu-latest, cli-2`) in run `37951954336` at `83c7e81`;
-its public annotations identify this target in both profiles, and local execution
-reproduced the exact missing-membership error. At the checkpoint's status read,
-`91f7bc7` run `37963058187` remained queued without jobs. These local repair
-results do not establish a successful hosted run for the forthcoming commit.
+**Publication boundary:** query memberships and total-flat routes remain Partial.
+Obtainable item/template association, discrete rolls, catalyst/quality transforms
+and cross-equipment order are not proved by the one-stream affix witness. The
+finite fixture's synthetic carrier and closure cannot become production coverage.
+Do not expand nonselected affix breadth ahead of the actual selected flat-supplier
+exclusions. The original census and current native replay remain byte-identical.
 
 **Canonical package remains:**
 `runs/owned-combined-added-attack-publication-04/package`, input
@@ -280,35 +283,35 @@ rules `6a81f88031e0f3b6b3a1e60d4cfa2edd6c9979afa49aed1d2a6857cbaf64b6d5`,
 compiled rules `ee8bf2aba8eed0b3742d848703cef87950e05ae537144d49d009f79515e583ee`,
 routing `c34584136d3bffa6f4f2124795bbcf9c99dd94a2d09f7a560a2302946a222ef1`.
 There are 172 provenance records, 110 saved queries and no evaluation bundle.
-All 5,825 Partial rule owners and route/global query gaps remain. The allocator
-is still `336e`; unpublished physical endpoint declarations reserve nothing.
-Selected obligations remain **106/117/109/123/4**, complete originals **0/5**.
+All 5,825 Partial rule owners and route/global query gaps remain. Selected
+obligations remain **106/117/109/123/4**, complete originals **0/5**.
+The preceding all-five rerun passed seven tests and reproduced all eighteen
+package files exactly; this checkpoint has no production application change
+requiring that unchanged run to be repeated. Its evidence and the Life CI repair
+are retained in [history](implementation-history.md). Hosted CI for this checkpoint
+is not yet verified.
 
 **Resume: finish Original05 first, following the saved-query map above.**
 
-1. Authenticate the actual selected item/tree/skill/support and external-input
-   domains for the two flat endpoints, using this nonempty census and its dynamic
-   path ledger. Do not turn catalog counts, absence in one observed call, or the
-   114 unqualified inner records into a universal empty/invariant certificate.
-   Tactician, Rallying Cry, Hollow Palm, conditional overrides and Party each need
-   an explicit disposition in the admitted source domain.
-2. Implement the first proved family through existing Actor queries and Action
-   routing, retaining real source ownership, typed conditions and ordered local/
-   inherited groups. Exercise absent/present-zero/3-7/condition-false-true-unknown,
-   repeated Actors, missing membership and fresh/reused/Rayon equality against
-   retained evidence. Publish the physical consumer only with actual suppliers
-   and accounted inputs; finite component fixtures cannot close production gaps.
-3. Resolve the re-prompted numerical-domain and configuration-accounting decisions
-   before their dependent resource/admission work. Continue final Player Mana/Life
-   and input inventories `01f2/0505/0207/0208`. The configuration proposal now
-   distinguishes implemented participation/support discovery from its own pending
-   authority; numerical-domain wording respects existing positive-zero
-   canonicalization. Actor-to-Enemy reads, resource demand and scoped coverage
-   remain unapproved. No broader Action-delivery model is inferred from prior
-   approval of Action self-queries.
-4. Begin D4 immediately after the first complete unchanged request, saved metrics
-   and reference availability/value checks pass. Keep the other four originals
-   as regressions without developing every build in lockstep.
+1. Use the completed selected recipe audit to establish each actual local/inherited
+   flat supplier exclusion. Extend the existing original harness with one targeted
+   unchanged-case observation of the remaining dynamic flags, raw candidates,
+   supplied-child buff applications and exact contexts. Do not replace source
+   completeness with a measured zero or build-name check.
+2. Implement the accepted numeric-domain node and diagnostic in the existing
+   Core/Data/Engine path, invalidate current compiled identity, and adopt it in
+   the actual Mana consumer. Preserve lazy override behavior, stage/readiness
+   dependencies, exact units, unavailable metrics and parallel determinism.
+   Transformation suppliers and final-resource publication remain separate gates.
+3. Implement accepted checked configuration accounting through the existing
+   normalization census, adapter receipts and final global issue-retirement gate.
+   Start with source-proved branch-inapplicable observations plus actual reward/
+   scalar receipts. Complete `01f2` only after all live origins and applicable
+   defaults are accounted for; preserve `0505/0207/0208` and their own obligations.
+4. Publish the physical consumer only with real suppliers and accounted inputs.
+   Begin D4 immediately after the first complete unchanged request, saved metrics
+   and reference availability/value checks pass. Actor-to-Enemy reads, resource
+   demand, new reporting ownership and scoped coverage remain unapproved.
 
 ## Unpublished final Mana arithmetic
 
@@ -333,13 +336,12 @@ Strict all-feature Clippy for the same target passes
 (`runs/owned-mana-pool-draft-clippy-01.log`); selective formatting and whitespace
 checks pass. This checkpoint changes data, tests and documentation only.
 
-**Pending owner decision:** the [checked numeric-domain proposal](owned-numeric-domain-proposal.md)
-would extend the existing rule DAG with a range check that preserves supported
+**Accepted October 14; implementation pending:** the [checked numeric-domain contract](owned-numeric-domain-proposal.md)
+extends the existing rule DAG with a range check that preserves supported
 values and reports unsupported computed values explicitly. It is needed here
 because the proved native/PoB rounding domain does not follow from the current
-computed numeric types. No public-contract implementation or implicit approval
-is assumed. The draft must not enter the release before that decision and the
-corresponding admission checks are complete.
+computed numeric types. The draft must not enter the release before the
+operator and corresponding admission checks are implemented and validated.
 
 The [resource transformation witness](owned-resource-transformation-evidence.md)
 now executes all five originals and contrasting controls through the unchanged
@@ -364,7 +366,7 @@ also pass. Evidence: `runs/owned-resource-transformation-source-05.log`,
 `runs/owned-resource-transformation-clippy-02.log`. The canonical release and
 all native coverage gates remain unchanged.
 
-**Mana resume:** Original05 remains first. Resolve the numeric-domain decision and
+**Mana resume:** Original05 remains first. Implement the accepted numeric-domain check and
 authenticate its neutral transformation source domain before publishing final
 Mana; positive conversion support need not precede that bounded admission.
 Review complete source bodies and declaration inventories through the existing
@@ -3989,7 +3991,7 @@ plan. Details and evidence live in the linked design/debt documents; completion
 requires their gates, not merely adding the task here.
 
 Reconciled against the recent owner decisions and implementation audit on
-2026-10-05. Accepted direction, implemented components, pending integration and
+2026-10-09. Accepted direction, implemented components, pending integration and
 unresolved design contracts are distinct states. The [retirement inventory](legacy-retirement.md)
 remains the single cleanup register; the historical checkpoint text in other
 documents must not reopen accepted decisions or promote unvalidated work.
@@ -4010,6 +4012,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Saved allocations and effective connectivity | The retained Sniper removal95 control keeps8737 in the saved tree, while PoB prunes8737 from its active set. Current Import preserves that occurrence with Pending allocation access; it does not silently repair the build. Preserve this refusal and test explicit candidate repairs separately. Before admitting passive-tree optimizer mutations, validate connectivity against injected roots, pools, scopes and exceptional access after each mutation; import-time path proof and legacy candidate checks are not a native post-mutation legality gate. |
 | Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases. Ordinary CI now executes the current accuracy rule laws, but the joined Sniper graph and its import/membership/staging checks are ignored without their published package. Provision the exact current package and retained source controls reproducibly in CI, run that joined subset explicitly, and fail on missing artifacts; do not treat component tests as an equivalent gate. |
 | Historical replay retirement | Reimport with the one current implementation and retain useful stored source evidence. Seventeen older ignored publication harnesses need consumer review: rebase useful assertions to current semantics or remove obsolete scaffolding, rather than add compatibility paths. Declaration integrity and source parity remain required. [Retirement/migration inventory](legacy-retirement.md#historical-publication-replay-migration-2026-10-05). |
+| Action-routing format retirement | Inventory the remaining V1/V2 readers and publication/test consumers, migrate useful callers to one current format with explicit selector coverage, then remove obsolete branches. Do not convert unknown selector coverage to Complete-empty. Preserve source witnesses and all-five/routing regressions; this cleanup follows the selected flat-damage work. [Retirement scope](legacy-retirement.md#other-current-compatibility-investigations). |
 | Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. Shared exact-provider proof now serves raw quality and requested-count import independently. Same-definition allocations in different presets remain distinct. Enabled/global/reporting dispositions and usage inventory closure remain open. [Contract and gates](owned-generated-skill-usage-proposal.md). |
 | Requested participation | [Common gate](owned-skill-participation-proposal.md), unified typed Import and first Sniper packet are validated. All-five/source/native checks preserve count, effect controls and mechanical availability. Next close genuine parameter inventories for remaining skills before readiness publication; no PoB preview bypass or default is imported. Full-original coverage remains open. |
 | Resource ownership and demand | [Resource-obligation proposal](owned-resource-obligations-proposal.md) awaits owner review. Ordinary sustained reservation should be independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Define Skill support recipients and contrast cost conversion, mines and stance/toggle selection; then migrate the current Action reservation bodies and validate query invariance. Gigantic's producer/status and isolated Life/Damage-factor packets are published; final reservation delivery remains open. |
@@ -4021,7 +4024,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Application-group contribution queries | Accepted and implemented October 8 in Core/Data/Engine V25. Typed program-effect/application-group addresses preserve exact recipients, potential-source census, stacking, unknowns and explicit numeric order in one checked reduction path. Current artifacts are rebuilt with no old-format compatibility. Mixed inherited/applied damage data now adopts this capability; MORE and final hit consumers remain next. [Accepted contract](owned-application-group-contribution-queries-proposal.md). |
 | Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |
-| Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 21 Config-local and 23 non-Config origins after selected/generated accounting, cached-Buffs, archived responsibility and overwritten-placeholder proofs. Fourteen archived rows retain their exact existing raw-input, usage and support-origin Pending owners; they gain no provider or known value. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Typed constructor defaults now reach Player/Enemy/Environment inputs; the real Player resistance-penalty consumer is published, but no global inventory closes. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
+| Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` currently retains 36 source origins after the eight archived Warrior correspondences; the earlier 44-origin breakdown is historical. Preset usage `0505` has 23 known preferences, assumptions `0207` has 17 known members, and scenario usage `0208` remains empty/Pending. Known members do not complete an inventory. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Typed constructor defaults now reach Player/Enemy/Environment inputs; the real Player resistance-penalty consumer is published, but no global inventory closes. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). The owner approved full checked disposition authority on October 14; implementation and data adoption remain pending. [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
 | Selected passive receiving | Growing Swarm's complete default two-effect owner and Sniper receiving are published through existing contracts. Conditional/unconditional cooldown sums stay distinct; final duration, area/radius, other minion receivers and complete contributor coverage remain open. [Packet and limits](../data/owned/poe2/3887ae68/growing-swarm/README.md). |

@@ -1,0 +1,5898 @@
+{
+  "cases": [
+    {
+      "input": {
+        "admitted_roll": true,
+        "family": "UniqueAddedPhysicalToMinionAttacks1",
+        "full_life": false,
+        "id": "UniqueAddedPhysicalToMinionAttacks1-lower",
+        "lines": [
+          "Minions deal 5 to 10 additional Attack Physical Damage"
+        ],
+        "maximum": 10,
+        "minimum": 5,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 10,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 10
+              },
+              "value": 10
+            }
+          },
+          "minimum": 5,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              },
+              "value": 5
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 10,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 10
+              },
+              "value": 10
+            }
+          },
+          "minimum": 5,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              },
+              "value": 5
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 5
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 10
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 5
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 10
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 10
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 10
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": true,
+        "family": "UniqueAddedPhysicalToMinionAttacks1",
+        "full_life": false,
+        "id": "UniqueAddedPhysicalToMinionAttacks1-cross-a",
+        "lines": [
+          "Minions deal 5 to 12 additional Attack Physical Damage"
+        ],
+        "maximum": 12,
+        "minimum": 5,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 12,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              },
+              "value": 12
+            }
+          },
+          "minimum": 5,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              },
+              "value": 5
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 12,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              },
+              "value": 12
+            }
+          },
+          "minimum": 5,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              },
+              "value": 5
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 5
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 12
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 5
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 12
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": true,
+        "family": "UniqueAddedPhysicalToMinionAttacks1",
+        "full_life": false,
+        "id": "UniqueAddedPhysicalToMinionAttacks1-cross-b",
+        "lines": [
+          "Minions deal 8 to 10 additional Attack Physical Damage"
+        ],
+        "maximum": 10,
+        "minimum": 8,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 10,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 10
+              },
+              "value": 10
+            }
+          },
+          "minimum": 8,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              },
+              "value": 8
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 10,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 10
+              },
+              "value": 10
+            }
+          },
+          "minimum": 8,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              },
+              "value": 8
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 8
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 10
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 8
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 10
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 10
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 10
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": true,
+        "family": "UniqueAddedPhysicalToMinionAttacks1",
+        "full_life": false,
+        "id": "UniqueAddedPhysicalToMinionAttacks1-upper",
+        "lines": [
+          "Minions deal 8 to 12 additional Attack Physical Damage"
+        ],
+        "maximum": 12,
+        "minimum": 8,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 12,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              },
+              "value": 12
+            }
+          },
+          "minimum": 8,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              },
+              "value": 8
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 12,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              },
+              "value": 12
+            }
+          },
+          "minimum": 8,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              },
+              "value": 8
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 8
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 12
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 8
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 12
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": true,
+        "family": "UniqueAddedPhysicalToMinionAttacks1",
+        "full_life": false,
+        "id": "UniqueAddedPhysicalToMinionAttacks1-interior",
+        "lines": [
+          "Minions deal 7 to 11 additional Attack Physical Damage"
+        ],
+        "maximum": 11,
+        "minimum": 7,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 11,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              },
+              "value": 11
+            }
+          },
+          "minimum": 7,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              },
+              "value": 7
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 11,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              },
+              "value": 11
+            }
+          },
+          "minimum": 7,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              },
+              "value": 7
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 7
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 11
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 7
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 11
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": true,
+        "family": "AddedPhysicalToMinionAttacksUnique__1",
+        "full_life": false,
+        "id": "AddedPhysicalToMinionAttacksUnique__1-lower",
+        "lines": [
+          "Minions deal 5 to 12 additional Attack Physical Damage"
+        ],
+        "maximum": 12,
+        "minimum": 5,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 12,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              },
+              "value": 12
+            }
+          },
+          "minimum": 5,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              },
+              "value": 5
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 12,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              },
+              "value": 12
+            }
+          },
+          "minimum": 5,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              },
+              "value": 5
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 5
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 12
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 5
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 12
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": true,
+        "family": "AddedPhysicalToMinionAttacksUnique__1",
+        "full_life": false,
+        "id": "AddedPhysicalToMinionAttacksUnique__1-cross-a",
+        "lines": [
+          "Minions deal 5 to 16 additional Attack Physical Damage"
+        ],
+        "maximum": 16,
+        "minimum": 5,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 16,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 16
+              },
+              "value": 16
+            }
+          },
+          "minimum": 5,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              },
+              "value": 5
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 16,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 16
+              },
+              "value": 16
+            }
+          },
+          "minimum": 5,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              },
+              "value": 5
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 5
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 16
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 5
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 16
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 16
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 5
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 16
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": true,
+        "family": "AddedPhysicalToMinionAttacksUnique__1",
+        "full_life": false,
+        "id": "AddedPhysicalToMinionAttacksUnique__1-cross-b",
+        "lines": [
+          "Minions deal 8 to 12 additional Attack Physical Damage"
+        ],
+        "maximum": 12,
+        "minimum": 8,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 12,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              },
+              "value": 12
+            }
+          },
+          "minimum": 8,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              },
+              "value": 8
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 12,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              },
+              "value": 12
+            }
+          },
+          "minimum": 8,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              },
+              "value": 8
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 8
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 12
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 8
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 12
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 12
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": true,
+        "family": "AddedPhysicalToMinionAttacksUnique__1",
+        "full_life": false,
+        "id": "AddedPhysicalToMinionAttacksUnique__1-upper",
+        "lines": [
+          "Minions deal 8 to 16 additional Attack Physical Damage"
+        ],
+        "maximum": 16,
+        "minimum": 8,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 16,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 16
+              },
+              "value": 16
+            }
+          },
+          "minimum": 8,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              },
+              "value": 8
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 16,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 16
+              },
+              "value": 16
+            }
+          },
+          "minimum": 8,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              },
+              "value": 8
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 8
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 16
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 8
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 16
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 16
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 8
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 16
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": true,
+        "family": "AddedPhysicalToMinionAttacksUnique__1",
+        "full_life": false,
+        "id": "AddedPhysicalToMinionAttacksUnique__1-interior",
+        "lines": [
+          "Minions deal 7 to 14 additional Attack Physical Damage"
+        ],
+        "maximum": 14,
+        "minimum": 7,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 14,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 14
+              },
+              "value": 14
+            }
+          },
+          "minimum": 7,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              },
+              "value": 7
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 14,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 14
+              },
+              "value": 14
+            }
+          },
+          "minimum": 7,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              },
+              "value": 7
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 7
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 14
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 7
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 14
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 14
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 14
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": false,
+        "family": null,
+        "full_life": false,
+        "id": "empty",
+        "lines": [],
+        "maximum": 0,
+        "minimum": 0,
+        "raw_count": 0
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {},
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [],
+        "records_after": {},
+        "records_before": {}
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": false,
+        "family": null,
+        "full_life": false,
+        "id": "explicit-zero",
+        "lines": [
+          "Minions deal 0 to 0 additional Attack Physical Damage"
+        ],
+        "maximum": 0,
+        "minimum": 0,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 0
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 0
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 0
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 0
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 0
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 0
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 0
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": false,
+        "family": null,
+        "full_life": false,
+        "id": "conditional-disabled",
+        "lines": [
+          "Minions deal 7 to 11 additional Attack Physical Damage while on Full Life"
+        ],
+        "maximum": 0,
+        "minimum": 0,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "[1]": {
+                "type": "Condition",
+                "var": "FullLife"
+              },
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 7
+            }
+          },
+          "[2]": {
+            "mod": {
+              "[1]": {
+                "type": "Condition",
+                "var": "FullLife"
+              },
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 11
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "[1]": {
+              "type": "Condition",
+              "var": "FullLife"
+            },
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 7
+          },
+          {
+            "[1]": {
+              "type": "Condition",
+              "var": "FullLife"
+            },
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 11
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": false,
+        "family": null,
+        "full_life": true,
+        "id": "conditional-enabled",
+        "lines": [
+          "Minions deal 7 to 11 additional Attack Physical Damage while on Full Life"
+        ],
+        "maximum": 11,
+        "minimum": 7,
+        "raw_count": 2
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 11,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              },
+              "value": 11
+            }
+          },
+          "minimum": 7,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              },
+              "value": 7
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 11,
+          "maximum_count": 1,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              },
+              "value": 11
+            }
+          },
+          "minimum": 7,
+          "minimum_count": 1,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              },
+              "value": 7
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "[1]": {
+                "type": "Condition",
+                "var": "FullLife"
+              },
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 7
+            }
+          },
+          "[2]": {
+            "mod": {
+              "[1]": {
+                "type": "Condition",
+                "var": "FullLife"
+              },
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 11
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "[1]": {
+              "type": "Condition",
+              "var": "FullLife"
+            },
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 7
+          },
+          {
+            "[1]": {
+              "type": "Condition",
+              "var": "FullLife"
+            },
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 11
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "[1]": {
+                  "type": "Condition",
+                  "var": "FullLife"
+                },
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "admitted_roll": false,
+        "family": null,
+        "full_life": false,
+        "id": "duplicate",
+        "lines": [
+          "Minions deal 7 to 11 additional Attack Physical Damage",
+          "Minions deal 7 to 11 additional Attack Physical Damage"
+        ],
+        "maximum": 22,
+        "minimum": 14,
+        "raw_count": 4
+      },
+      "result": {
+        "context_after": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "context_before": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 330752,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "direct": {
+          "maximum": 22,
+          "maximum_count": 2,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              },
+              "value": 11
+            },
+            "[2]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              },
+              "value": 11
+            }
+          },
+          "minimum": 14,
+          "minimum_count": 2,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              },
+              "value": 7
+            },
+            "[2]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              },
+              "value": 7
+            }
+          },
+          "original_record_identity": true
+        },
+        "inherited": {
+          "maximum": 22,
+          "maximum_count": 2,
+          "maximum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              },
+              "value": 11
+            },
+            "[2]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              },
+              "value": 11
+            }
+          },
+          "minimum": 14,
+          "minimum_count": 2,
+          "minimum_records": {
+            "[1]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              },
+              "value": 7
+            },
+            "[2]": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              },
+              "value": 7
+            }
+          },
+          "original_record_identity": true
+        },
+        "non_attack_context": {
+          "flags": 42949813253,
+          "grantedEffect": {
+            "id": "MinionMeleeBow",
+            "name": "Basic Attack"
+          },
+          "keywordFlags": 265216,
+          "skillCond": {
+            "MainHandAttack": true
+          },
+          "skillDist": 20,
+          "skillGem": {},
+          "skillGemTags": {},
+          "skillName": "Basic Attack",
+          "skillStats": {
+            "Accuracy": 0,
+            "AccuracyHitChance": 100,
+            "AncestralCallDamageEffect": 1,
+            "AncestralEmpowermentCombinedDamageEffect": 1,
+            "AncestralEmpowermentDamageEffect": 1,
+            "BonusCritDotMultiplier": 0,
+            "CastRate": 0.8666666666666667,
+            "CritChance": 5,
+            "CritEffect": 1.05,
+            "CritMultiplier": 2,
+            "DoubleDamageChance": 0,
+            "DoubleDamageChanceOnCrit": 0,
+            "DoubleDamageEffect": 0,
+            "DpsMultiplier": 1,
+            "FistOfWarDamageEffect": 1,
+            "HitChance": 100,
+            "PreBifurcateCritChance": 5,
+            "PreEffectiveCritChance": 5,
+            "PreEffectiveCritMultiplier": 2,
+            "Repeats": 1,
+            "ScaledDamageEffect": 1,
+            "Speed": 0.8666666666666667,
+            "Time": 1.1538461538461537,
+            "TripleDamageChance": 0,
+            "TripleDamageChanceOnCrit": 0,
+            "TripleDamageEffect": 0,
+            "enemyBlockChance": 0
+          },
+          "skillTypes": {
+            "[1]": true,
+            "[20]": true,
+            "[21]": true,
+            "[3]": true,
+            "[41]": true,
+            "[57]": true,
+            "[58]": true,
+            "[83]": true
+          },
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "non_attack_direct": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "non_attack_inherited": {
+          "maximum": 0,
+          "maximum_count": 0,
+          "maximum_records": {},
+          "minimum": 0,
+          "minimum_count": 0,
+          "minimum_records": {},
+          "original_record_identity": true
+        },
+        "original_payload_identity": true,
+        "outer_list": {
+          "[1]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 7
+            }
+          },
+          "[2]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 11
+            }
+          },
+          "[3]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMin",
+              "type": "BASE",
+              "value": 7
+            }
+          },
+          "[4]": {
+            "mod": {
+              "flags": 0,
+              "keywordFlags": 65536,
+              "name": "PhysicalMax",
+              "type": "BASE",
+              "value": 11
+            }
+          }
+        },
+        "parent_identity": true,
+        "query_repeat_equal": true,
+        "raw": [
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 7
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 11
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMin",
+            "type": "BASE",
+            "value": 7
+          },
+          {
+            "flags": 0,
+            "keywordFlags": 65536,
+            "name": "PhysicalMax",
+            "type": "BASE",
+            "value": 11
+          }
+        ],
+        "records_after": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              }
+            }
+          },
+          "[3]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[4]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              }
+            }
+          }
+        },
+        "records_before": {
+          "[1]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[2]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              }
+            }
+          },
+          "[3]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMin",
+                "type": "BASE",
+                "value": 7
+              }
+            }
+          },
+          "[4]": {
+            "flags": 0,
+            "keywordFlags": 0,
+            "name": "MinionModifier",
+            "type": "LIST",
+            "value": {
+              "mod": {
+                "flags": 0,
+                "keywordFlags": 65536,
+                "name": "PhysicalMax",
+                "type": "BASE",
+                "value": 11
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "declarations": [
+    {
+      "body": {
+        "[1]": "Minions deal (5-8) to (10-12) additional Attack Physical Damage",
+        "affix": "",
+        "group": "AddedPhysicalToMinionAttacks",
+        "level": 1,
+        "modTags": {
+          "[1]": "minion_damage",
+          "[2]": "physical_damage",
+          "[3]": "damage",
+          "[4]": "physical",
+          "[5]": "minion"
+        },
+        "statOrder": {
+          "[1]": 3442
+        },
+        "tradeHashes": {
+          "[797833282]": {
+            "[1]": "Minions deal (5-8) to (10-12) additional Attack Physical Damage"
+          }
+        },
+        "weightKey": {},
+        "weightVal": {}
+      },
+      "bounds": [
+        5,
+        8,
+        10,
+        12
+      ],
+      "id": "UniqueAddedPhysicalToMinionAttacks1"
+    },
+    {
+      "body": {
+        "[1]": "Minions deal (5-8) to (12-16) additional Attack Physical Damage",
+        "affix": "",
+        "group": "AddedPhysicalToMinionAttacks",
+        "level": 1,
+        "modTags": {
+          "[1]": "minion_damage",
+          "[2]": "physical_damage",
+          "[3]": "damage",
+          "[4]": "physical",
+          "[5]": "minion"
+        },
+        "statOrder": {
+          "[1]": 3442
+        },
+        "tradeHashes": {
+          "[797833282]": {
+            "[1]": "Minions deal (5-8) to (12-16) additional Attack Physical Damage"
+          }
+        },
+        "weightKey": {},
+        "weightVal": {}
+      },
+      "bounds": [
+        5,
+        8,
+        12,
+        16
+      ],
+      "id": "AddedPhysicalToMinionAttacksUnique__1"
+    }
+  ],
+  "delivery_helper": {
+    "body": "local function addMinionModifiers(modList, skillCfg, minion)\n\tfor _, value in ipairs(modList:List(skillCfg, \"MinionModifier\")) do\n\t\tif not value.type or minion.type == value.type then\n\t\t\tminion.modDB:AddMod(value.mod)\n\t\tend\n\tend\nend\n",
+    "first_line": 1161,
+    "path": "src/Modules/CalcPerform.lua",
+    "sha256": "50257f2b58a59f976fc5d60106c8d76abf481b2da22f5a820b58c481c6c8a97c"
+  },
+  "dependency": {
+    "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/source-evidence.json",
+    "sha256": "2a07ddefddd45cdd01a8593c506412428997eff3c618ba2fc365b6e0d93c5ba8"
+  },
+  "files": {
+    "runtime/lua/base64.lua": "deea708ee8aa785874e7e3ac7e3dae864d63f71e3108c6967daf7e865b45b01f",
+    "runtime/lua/sha1/bit_ops.lua": "47546f147c3dd942d913bbbc9a9c736d07610e2f97c1822f54cc9e36b35de218",
+    "runtime/lua/sha1/common.lua": "5f86c1944b851b9e962a12aa664b34d8a62826fd062d461ef27039cc1ba60ac5",
+    "runtime/lua/sha1/init.lua": "42c14310ce03c015f5608472c4e57903b7f2a4d5c9316b11b4fc14397b7453ec",
+    "runtime/lua/xml.lua": "832b6bb31f1f0e79e3ed6346113691b36ace29ed964e332530eef8b3b63af0e2",
+    "src/Classes/Item.lua": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534",
+    "src/Classes/ModDB.lua": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6",
+    "src/Classes/ModList.lua": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d",
+    "src/Classes/ModStore.lua": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62",
+    "src/Data/Assets.lua": "d57230441d6205f001466a1c3a0d4458ddda0a1ccf9f685345f0f0fa2d5154ba",
+    "src/Data/Bases/amulet.lua": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3",
+    "src/Data/Bases/axe.lua": "285b9cca5c877ff55d4863e9a02432ea5ddecf85063ecfdda1ff84bc9ba1656e",
+    "src/Data/Bases/belt.lua": "74f5846300ea7cb88f5589e62cb73affe147d7870411efcd885090d9c1ea850e",
+    "src/Data/Bases/body.lua": "0d3156d893bcfca1eb8c9b299f2a28c62a1d4c9f1d3a39f3a087cac18d23e9cd",
+    "src/Data/Bases/boots.lua": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8",
+    "src/Data/Bases/bow.lua": "6bd10dbe0dbfea1638ea8f15f828cfa99d294dbf832bcab8f8472990154f725e",
+    "src/Data/Bases/claw.lua": "fc771b343199a85505401868fd34320dc6117266d6672637e1757430262c18cb",
+    "src/Data/Bases/crossbow.lua": "e9988fbc6b482c36bfc0865afc441952df3de4013061629952377472723590a6",
+    "src/Data/Bases/dagger.lua": "a3b81d4868f7d556bd4ba412e1edabb931f5a4240283e6e351dacd9419b50c8e",
+    "src/Data/Bases/fishing.lua": "53f70fb8e80c64f593152b3b12504ab9320ad188dc8753003ac6e751d50c40bb",
+    "src/Data/Bases/flail.lua": "1fa7b45de89051684ccd534b96866279ebb7290be2e49e7421e6702a269a75d9",
+    "src/Data/Bases/flask.lua": "ed025daab24f4964874296c5e5eb0855f1b90a4063b4a69cc8a65fef7c293cc7",
+    "src/Data/Bases/focus.lua": "b5a315245cc0f9f11657f7fdab751e5ed5306166df54c2c19ef83295b876820e",
+    "src/Data/Bases/gloves.lua": "05b91c71f9292f120482355447566db285cb513f6b506e349e9a29efa0b329f2",
+    "src/Data/Bases/helmet.lua": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8",
+    "src/Data/Bases/incursionlimb.lua": "1df6a73c327b7ccbbb9172ec4fdec905015aeb168084e53ef0f00544a16c6763",
+    "src/Data/Bases/jewel.lua": "b9fe5096276439717b9f24e7e389279f2ef88c3f518ee2443cfbf73494e7d442",
+    "src/Data/Bases/mace.lua": "d3bb896069429fcff68d4e04ff517e49ad290cfc70b26fdbe8db3406c8392fec",
+    "src/Data/Bases/quiver.lua": "7d100d232b052507f734256f36625552e4cdccff963a690b643af5d35e552721",
+    "src/Data/Bases/ring.lua": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382",
+    "src/Data/Bases/sceptre.lua": "3a232d7eff8ed199a7c738623de52fd1bd6540051283fda174472fd4295d9ae0",
+    "src/Data/Bases/shield.lua": "d4628eed0450bdeaeec8ea10b4960aa0e5e5705829b6c53500069ebfcef478ef",
+    "src/Data/Bases/spear.lua": "8cb6acac3e44d924ffe3ac5522fae408697fa322f02f99896edfca8f49e62268",
+    "src/Data/Bases/staff.lua": "6b04f45c0763088f865b8902733cecc6126829871a6766955a953a54cd657bf7",
+    "src/Data/Bases/sword.lua": "8bb14bdafc5fa6c243f7bc0b7b8d611183b629828f361e84c3e64e72a071df06",
+    "src/Data/Bases/talisman.lua": "4e721181ba512ab359a9b1b5e5afa4a8c6666332dbbad1d2f3432243fe8d8191",
+    "src/Data/Bases/wand.lua": "6549a279abfc376d3efc90458cefe45857ad5129f6a848c401a5d614f6d6535c",
+    "src/Data/BossSkills.lua": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d",
+    "src/Data/Bosses.lua": "831a328c0c554687b5f3c40e1ff8a4ee905457f8b940baab236fab9281415ed3",
+    "src/Data/Costs.lua": "bccd61c9124166faffa172658179c15710450ceea8567d139f132f483f417b71",
+    "src/Data/Essence.lua": "950219488fed20cc3ca1bad17953f577c4361c6b65e371ce9ae3f9cbbae95f74",
+    "src/Data/FlavourText.lua": "37d36cbeebacef4f4f5c26b9b1141d228b7635b765d415f729eac2e4371236f2",
+    "src/Data/Gems.lua": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1",
+    "src/Data/Global.lua": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c",
+    "src/Data/InventorySlots.lua": "b5acdb83dc79e81047131c12281617a8527830a9814abbcd7ca0921197ea15e4",
+    "src/Data/LiquidEmotions.lua": "bd84fc74696da3367ea4ea45a18bd44c354e8852d513fc1e11cffdba135a7c02",
+    "src/Data/Minions.lua": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639",
+    "src/Data/Misc.lua": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9",
+    "src/Data/ModCharm.lua": "ef31de790278940ab584f83c52a64091f2af8824715da84f07c6754fe2bc9d8d",
+    "src/Data/ModCorrupted.lua": "cc02bd2f3a0c68441f57275b64de694a6ed53124db62e26015cd0f9cb7c126af",
+    "src/Data/ModFlask.lua": "d50d074c1b7e0a57c164b7c49add1670d90ba806a25d946467e4ca7af9feb350",
+    "src/Data/ModIncursionLimb.lua": "64148281ba2f6d0e734719a278e19b2ca31990f9274c10dc79d3954d1bc56f10",
+    "src/Data/ModItem.lua": "019c586b060d6992b693d8372e0fdb0ac6b067d41037869d344094d739b26dde",
+    "src/Data/ModItemExclusive.lua": "cf62173964e66206fcd8c9dd66225c5f363a64b171f3eed292330508dfcd7e58",
+    "src/Data/ModJewel.lua": "090c3dbdefc0d7716456b8641d6bf222fe2e261159f9c5b3a59448b3872910c2",
+    "src/Data/ModMap.lua": "59edce1c76a269f1a2eb596e67574d38e0b338ec1f69612a6dfeb27460eb919d",
+    "src/Data/ModRunes.lua": "aa7840843369c84796a82bb0d6034fd217e255a7eebf9b5d1df75e652833bace",
+    "src/Data/ModScalability.lua": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c",
+    "src/Data/ModVeiled.lua": "4b09198be50fea1f32486dacb13613e2f8bcee308c4af05e07bf8666a9b213cf",
+    "src/Data/QuestRewards.lua": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af",
+    "src/Data/Rares.lua": "f58e0032acadc05a40ed5bdc8339a46031a6e03c0c79390688df9480f1eef927",
+    "src/Data/SkillStatMap.lua": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675",
+    "src/Data/Skills/SkillAssets.lua": "6fab71e4a5f07e04bd363472374fe059f8ae1cdd77c126357f3adceff8f145ed",
+    "src/Data/Skills/act_dex.lua": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e",
+    "src/Data/Skills/act_int.lua": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d",
+    "src/Data/Skills/act_str.lua": "7da86ad169055e234fcfdd82ded89c2b4cf883ed3d1b217ef25533ad64ebeeed",
+    "src/Data/Skills/minion.lua": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca",
+    "src/Data/Skills/other.lua": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962",
+    "src/Data/Skills/spectre.lua": "3bc57d7abee172364977c174884cdf3d2d94980c70e3b12b7ae65c62bd726603",
+    "src/Data/Skills/sup_dex.lua": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac",
+    "src/Data/Skills/sup_int.lua": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b",
+    "src/Data/Skills/sup_str.lua": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3",
+    "src/Data/Spectres.lua": "7a75425de6161ab52719d3ac8e5205dac1ac4194c994ff20eae5e99cb535416d",
+    "src/Data/Uniques/Special/Generated.lua": "f14364cade57829fd3e38c1c6f1b123f4d4bad3d186f89a0b1e71c2594da2b26",
+    "src/Data/Uniques/Special/New.lua": "9e2c4c00a0f49a698c75ab4a06923bd66df3c5e97bf34b9361152cf8ca51749d",
+    "src/Data/Uniques/Special/race.lua": "abe69841f84f304ce0cb5cc960c107aa6ed3cd9c169ee783da053f8e6c19bb95",
+    "src/Data/Uniques/amulet.lua": "733cb032ef8efcff49fbe0863c424e3947aad2ca9bd8828267bd6962a9c21c65",
+    "src/Data/Uniques/axe.lua": "bce0f10bfe13f583dd83df68ffa48f29892c05302422c86f86105dbc86cad58d",
+    "src/Data/Uniques/belt.lua": "4f1050dc4a7ac721e4cf0035574f00cc079c96dd2b14a1c3517f06c18464db5c",
+    "src/Data/Uniques/body.lua": "62a4f4ae7685f7a299d87eb3393e3faf38ca3f503cca6ebcce8092fdb2c4df65",
+    "src/Data/Uniques/boots.lua": "8983b511ebf73f5fcbd30abd52a44077c33ecadc903729294c266227e6527035",
+    "src/Data/Uniques/bow.lua": "bb971a14babb972ac8bbde6494caa881716935b344876a409eaf7ca5b5474c83",
+    "src/Data/Uniques/claw.lua": "c08587a82e8e51e4a9b720a2d490a8111c19e4f6ec1c0070c1e614597cf0ef06",
+    "src/Data/Uniques/crossbow.lua": "81a39754058fbfceeb88c3ebd72b8848fe389e3d752885e49de4ee06781459bb",
+    "src/Data/Uniques/dagger.lua": "85d561ff65fe805248834fdc9dc961e41ca02294f6a5f50dfb5a0a88985d6e9c",
+    "src/Data/Uniques/fishing.lua": "09ec2f8ef23a37dc2fdee146dc4dda764de6cdb44c2ae5025bf2c67a12a9138a",
+    "src/Data/Uniques/flail.lua": "b720fe9876a27bcd8606dbae910f490d81d6b56a9998f9beff7419f1d75282c3",
+    "src/Data/Uniques/flask.lua": "18296399fe7efb033087e46b20dd3e26fa94d3a33ec8e817de2488bf5ea974cf",
+    "src/Data/Uniques/focus.lua": "9d351ce29e479ca474914af833f84fff74717d8e68387595c73c56d98999a860",
+    "src/Data/Uniques/gloves.lua": "626da04d72736e826789f600c332936bebab4e9369514d098e9177e3c9a67b39",
+    "src/Data/Uniques/helmet.lua": "139ece059e07d554dd68c23c84914eec39b431833143af78be99df169cbbb9f0",
+    "src/Data/Uniques/incursionlimb.lua": "2611aba6c8ab4cd33cf9ca6a4411464ac36d0675a8cd284e52f97e73c1a0497a",
+    "src/Data/Uniques/jewel.lua": "7b564d0bff6d6d93583ef8d00b48a1fe8253b93585686f023de58199802d9d1b",
+    "src/Data/Uniques/mace.lua": "50c5adaaead9dc21b9df0271dfcb67ba67e52be5617a7ebc233b1b19a9eab532",
+    "src/Data/Uniques/quiver.lua": "b2cac7a008da6e821d974927f0185872a2b0f7eaaf41e6e650a934182a574146",
+    "src/Data/Uniques/ring.lua": "deb1e74b74b312fdaef48d112e061654c64df1db2da635ce231aaf60c9d8571e",
+    "src/Data/Uniques/sceptre.lua": "c08e6fa99cdc943fa0698c599ff016e17f9fbb12bd7e4e9c8bc903aba30ec387",
+    "src/Data/Uniques/shield.lua": "b308c284182324c7bea3b3b149b747f7f42044c2b8c6b5c6dc33352501dd9b5b",
+    "src/Data/Uniques/spear.lua": "db246334741bc140b87ed24a9d2a2831b32184e22f714ec15cbda27a832da731",
+    "src/Data/Uniques/staff.lua": "8f6ba2a96ee877ae8fb73634a9f9c3b7351063657e25387cbdbf0b3bd0d52289",
+    "src/Data/Uniques/sword.lua": "dd81a9410b042301d1b1d875ae7aecf94a74ba4203903d03ac1ef194c84f859b",
+    "src/Data/Uniques/talisman.lua": "3812457fd3fcaafad5020ab1afb6ff1c5788485e1da22db1e658775f04bd46c1",
+    "src/Data/Uniques/wand.lua": "2c6ee5ceaaa726c7aa8791a03cad4442e056fa572c1b7ea5793caef56554f9bc",
+    "src/Data/WorldAreas.lua": "18a1cd77711a72f121d35ec37247b29a622cfb6e7b0edade3caeefa51b169549",
+    "src/GameVersions.lua": "7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e",
+    "src/Modules/CalcFormat.lua": "c81a0148071e9691929d8360077d33fefa5232a5e78bf2eaa030ff3c37ddb71e",
+    "src/Modules/CalcPerform.lua": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae",
+    "src/Modules/CalcTools.lua": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c",
+    "src/Modules/Common.lua": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8",
+    "src/Modules/Data.lua": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4",
+    "src/Modules/ItemTools.lua": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973",
+    "src/Modules/ModParser.lua": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+    "src/Modules/ModTools.lua": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246",
+    "src/Modules/StatDescriber.lua": "f7698f0127a32f38fe03272f6b88416238a154b668a79aabc1f9114687dedc3e",
+    "src/TreeData/0_5/tree.lua": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+  },
+  "kind": "original-minion-attack-flat-affix-queries",
+  "module_order": [
+    "src/GameVersions.lua",
+    "src/Modules/Common.lua",
+    "runtime/lua/xml.lua",
+    "runtime/lua/base64.lua",
+    "runtime/lua/sha1/init.lua",
+    "runtime/lua/sha1/common.lua",
+    "runtime/lua/sha1/bit_ops.lua",
+    "src/Modules/CalcFormat.lua",
+    "src/Modules/Data.lua",
+    "src/Data/Global.lua",
+    "src/Data/Misc.lua",
+    "src/Data/ModScalability.lua",
+    "src/Modules/StatDescriber.lua",
+    "src/Data/ModItem.lua",
+    "src/Data/ModFlask.lua",
+    "src/Data/ModCharm.lua",
+    "src/Data/ModIncursionLimb.lua",
+    "src/Data/ModJewel.lua",
+    "src/Data/ModCorrupted.lua",
+    "src/Data/ModRunes.lua",
+    "src/Data/ModItemExclusive.lua",
+    "src/Data/ModVeiled.lua",
+    "src/Data/Essence.lua",
+    "src/Data/LiquidEmotions.lua",
+    "src/Data/Costs.lua",
+    "src/Data/InventorySlots.lua",
+    "src/Data/ModMap.lua",
+    "src/Data/Bosses.lua",
+    "src/Data/BossSkills.lua",
+    "src/Data/SkillStatMap.lua",
+    "src/Data/Skills/act_str.lua",
+    "src/Data/Skills/act_dex.lua",
+    "src/Data/Skills/act_int.lua",
+    "src/Data/Skills/other.lua",
+    "src/Data/Skills/minion.lua",
+    "src/Data/Skills/spectre.lua",
+    "src/Data/Skills/sup_str.lua",
+    "src/Data/Skills/sup_dex.lua",
+    "src/Data/Skills/sup_int.lua",
+    "src/Data/Gems.lua",
+    "src/Data/Assets.lua",
+    "src/Data/Skills/SkillAssets.lua",
+    "src/Data/Minions.lua",
+    "src/Data/Spectres.lua",
+    "src/Data/Bases/axe.lua",
+    "src/Data/Bases/bow.lua",
+    "src/Data/Bases/claw.lua",
+    "src/Data/Bases/crossbow.lua",
+    "src/Data/Bases/dagger.lua",
+    "src/Data/Bases/fishing.lua",
+    "src/Data/Bases/flail.lua",
+    "src/Data/Bases/focus.lua",
+    "src/Data/Bases/mace.lua",
+    "src/Data/Bases/spear.lua",
+    "src/Data/Bases/staff.lua",
+    "src/Data/Bases/sceptre.lua",
+    "src/Data/Bases/sword.lua",
+    "src/Data/Bases/talisman.lua",
+    "src/Data/Bases/wand.lua",
+    "src/Data/Bases/body.lua",
+    "src/Data/Bases/gloves.lua",
+    "src/Data/Bases/helmet.lua",
+    "src/Data/Bases/boots.lua",
+    "src/Data/Bases/shield.lua",
+    "src/Data/Bases/quiver.lua",
+    "src/Data/Bases/amulet.lua",
+    "src/Data/Bases/ring.lua",
+    "src/Data/Bases/belt.lua",
+    "src/Data/Bases/jewel.lua",
+    "src/Data/Bases/flask.lua",
+    "src/Data/Bases/incursionlimb.lua",
+    "src/Data/Rares.lua",
+    "src/Data/Uniques/axe.lua",
+    "src/Data/Uniques/bow.lua",
+    "src/Data/Uniques/claw.lua",
+    "src/Data/Uniques/crossbow.lua",
+    "src/Data/Uniques/dagger.lua",
+    "src/Data/Uniques/fishing.lua",
+    "src/Data/Uniques/flail.lua",
+    "src/Data/Uniques/focus.lua",
+    "src/Data/Uniques/mace.lua",
+    "src/Data/Uniques/spear.lua",
+    "src/Data/Uniques/staff.lua",
+    "src/Data/Uniques/sceptre.lua",
+    "src/Data/Uniques/sword.lua",
+    "src/Data/Uniques/talisman.lua",
+    "src/Data/Uniques/wand.lua",
+    "src/Data/Uniques/body.lua",
+    "src/Data/Uniques/gloves.lua",
+    "src/Data/Uniques/helmet.lua",
+    "src/Data/Uniques/boots.lua",
+    "src/Data/Uniques/shield.lua",
+    "src/Data/Uniques/quiver.lua",
+    "src/Data/Uniques/amulet.lua",
+    "src/Data/Uniques/ring.lua",
+    "src/Data/Uniques/belt.lua",
+    "src/Data/Uniques/jewel.lua",
+    "src/Data/Uniques/flask.lua",
+    "src/Data/Uniques/incursionlimb.lua",
+    "src/Data/Uniques/Special/race.lua",
+    "src/Data/Uniques/Special/Generated.lua",
+    "src/TreeData/0_5/tree.lua",
+    "src/Data/ModVeiled.lua",
+    "src/Data/Uniques/Special/New.lua",
+    "src/Data/QuestRewards.lua",
+    "src/Data/FlavourText.lua",
+    "src/Data/WorldAreas.lua",
+    "src/Modules/ModTools.lua",
+    "src/Modules/ModParser.lua",
+    "src/Modules/ItemTools.lua",
+    "src/Modules/CalcTools.lua",
+    "src/Classes/Item.lua",
+    "src/Classes/ModList.lua",
+    "src/Classes/ModStore.lua",
+    "src/Classes/ModDB.lua"
+  ],
+  "schema_version": 1,
+  "scope": {
+    "complete_selected_input_coverage": false,
+    "declared_affix_semantics_only": true,
+    "full_build_execution": false,
+    "game_obtainability": false,
+    "jit": "off",
+    "native_total_flat_coverage": false,
+    "original_helper_and_queries": true,
+    "query_context": "reviewed-source03-Basic-scalar-projection",
+    "zero_and_condition_controls_are_outside_admitted_family": true
+  },
+  "source_context": {
+    "case": "original-05",
+    "cfg": {
+      "fields": {
+        "flags": 42949813253,
+        "keywordFlags": 330752,
+        "skillDist": 20,
+        "skillName": "Basic Attack",
+        "summonSkillName": "Skeletal Sniper Minion"
+      },
+      "granted_effect": {
+        "id": "MinionMeleeBow",
+        "name": "Basic Attack"
+      },
+      "granted_effect_is_source": true,
+      "present": true,
+      "skill_conditions": {
+        "MainHandAttack": true
+      },
+      "skill_gem": {},
+      "skill_gem_is_source": true,
+      "skill_gem_tags": {},
+      "skill_stats": {
+        "Accuracy": 0,
+        "AccuracyHitChance": 100,
+        "AncestralCallDamageEffect": 1,
+        "AncestralEmpowermentCombinedDamageEffect": 1,
+        "AncestralEmpowermentDamageEffect": 1,
+        "BonusCritDotMultiplier": 0,
+        "CastRate": 0.8666666666666667,
+        "CritChance": 5,
+        "CritEffect": 1.05,
+        "CritMultiplier": 2,
+        "DoubleDamageChance": 0,
+        "DoubleDamageChanceOnCrit": 0,
+        "DoubleDamageEffect": 0,
+        "DpsMultiplier": 1,
+        "FistOfWarDamageEffect": 1,
+        "HitChance": 100,
+        "PreBifurcateCritChance": 5,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "Repeats": 1,
+        "ScaledDamageEffect": 1,
+        "Speed": 0.8666666666666667,
+        "Time": 1.1538461538461537,
+        "TripleDamageChance": 0,
+        "TripleDamageChanceOnCrit": 0,
+        "TripleDamageEffect": 0,
+        "enemyBlockChance": 0
+      },
+      "skill_types": [
+        {
+          "id": 1,
+          "value": true
+        },
+        {
+          "id": 3,
+          "value": true
+        },
+        {
+          "id": 20,
+          "value": true
+        },
+        {
+          "id": 21,
+          "value": true
+        },
+        {
+          "id": 41,
+          "value": true
+        },
+        {
+          "id": 57,
+          "value": true
+        },
+        {
+          "id": 58,
+          "value": true
+        },
+        {
+          "id": 83,
+          "value": true
+        }
+      ]
+    },
+    "maximum": {
+      "names": [
+        "PhysicalMax"
+      ],
+      "records": {},
+      "value": 0
+    },
+    "minimum": {
+      "names": [
+        "PhysicalMin"
+      ],
+      "records": {},
+      "value": 0
+    },
+    "mode": "main",
+    "observed": true,
+    "original_added_max": 0,
+    "original_added_min": 0,
+    "query_state_preserved": true,
+    "raw_flat_records": [],
+    "source_occurrence": {
+      "matches": [
+        {
+          "enable_global_1": true,
+          "enable_global_2": true,
+          "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+          "gem_index": 1,
+          "group_enabled": true,
+          "group_index": 3,
+          "group_is_active_socket_group": true,
+          "group_label": "",
+          "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+          "raw_level": 20,
+          "raw_quality": 0,
+          "source_enabled": true
+        }
+      ],
+      "source_present": true
+    },
+    "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+  },
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+}

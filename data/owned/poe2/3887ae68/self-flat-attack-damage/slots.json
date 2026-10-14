@@ -1,0 +1,250 @@
+[
+  {
+    "kind": "parameter",
+    "value": {
+      "id": {
+        "declaration": {
+          "kind": "modifier",
+          "definition": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003377"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003378"
+        }
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "minimum": {
+                "value": 5,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d3a"
+                }
+              },
+              "maximum": {
+                "value": 8,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d3a"
+                }
+              }
+            }
+          },
+          "presence": "required_once",
+          "sites": [
+            "modifier_roll"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "parameter",
+    "value": {
+      "id": {
+        "declaration": {
+          "kind": "modifier",
+          "definition": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003377"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003379"
+        }
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "minimum": {
+                "value": 10,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d3a"
+                }
+              },
+              "maximum": {
+                "value": 12,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d3a"
+                }
+              }
+            }
+          },
+          "presence": "required_once",
+          "sites": [
+            "modifier_roll"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "parameter",
+    "value": {
+      "id": {
+        "declaration": {
+          "kind": "modifier",
+          "definition": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000337a"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000337b"
+        }
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "minimum": {
+                "value": 5,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d3a"
+                }
+              },
+              "maximum": {
+                "value": 8,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d3a"
+                }
+              }
+            }
+          },
+          "presence": "required_once",
+          "sites": [
+            "modifier_roll"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "parameter",
+    "value": {
+      "id": {
+        "declaration": {
+          "kind": "modifier",
+          "definition": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000337a"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000337c"
+        }
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "minimum": {
+                "value": 12,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d3a"
+                }
+              },
+              "maximum": {
+                "value": 16,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d3a"
+                }
+              }
+            }
+          },
+          "presence": "required_once",
+          "sites": [
+            "modifier_roll"
+          ]
+        }
+      }
+    }
+  }
+]

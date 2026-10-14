@@ -1,0 +1,217 @@
+{
+  "kind": "unpublished-native-minion-attack-flat-family",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "families": [
+    {
+      "source": "UniqueAddedPhysicalToMinionAttacks1",
+      "text": "Minions deal (5-8) to (10-12) additional Attack Physical Damage",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003377"
+      },
+      "parameters": [
+        {
+          "declaration": {
+            "kind": "modifier",
+            "definition": {
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000003377"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003378"
+          }
+        },
+        {
+          "declaration": {
+            "kind": "modifier",
+            "definition": {
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000003377"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003379"
+          }
+        }
+      ],
+      "ranges": [
+        [
+          5,
+          8
+        ],
+        [
+          10,
+          12
+        ]
+      ]
+    },
+    {
+      "source": "AddedPhysicalToMinionAttacksUnique__1",
+      "text": "Minions deal (5-8) to (12-16) additional Attack Physical Damage",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000337a"
+      },
+      "parameters": [
+        {
+          "declaration": {
+            "kind": "modifier",
+            "definition": {
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000337a"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000337b"
+          }
+        },
+        {
+          "declaration": {
+            "kind": "modifier",
+            "definition": {
+              "kind": "modifier",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000337a"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000337c"
+          }
+        }
+      ],
+      "ranges": [
+        [
+          5,
+          8
+        ],
+        [
+          12,
+          16
+        ]
+      ]
+    }
+  ],
+  "player_grants": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003373"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003374"
+    }
+  ],
+  "actor_attack_subtotals": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003375"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003376"
+    }
+  ],
+  "action": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000021"
+      }
+    },
+    "slot": {
+      "kind": "action_output",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000022"
+    }
+  },
+  "scope": {
+    "published": false,
+    "obtainable_items_proved": false,
+    "template_admission_proved": false,
+    "discrete_roll_legality_proved": false,
+    "other_self_flat_sources_complete": false,
+    "conditioned_sources_admitted": false,
+    "custom_xml_import_admitted": false,
+    "finite_fixture_only_total_route": true,
+    "cross_equipment_order_proved": false,
+    "item_roll_transformations_proved": false
+  },
+  "source_proof": {
+    "evidence": {
+      "path": "data/owned/poe2/3887ae68/minion-attack-flat-modifier/source-evidence.json",
+      "sha256": "4cd007e7fb6bea22b27968aa8270eeeeb357b5cc05ac75126a800a96522bb09f"
+    },
+    "review": {
+      "path": "data/owned/poe2/3887ae68/minion-attack-flat-modifier/source-review.md",
+      "sha256": "d956e6650d9b93a48300c5858e63db3b6f6bcbac0e63d412ccce433f892f1a9f"
+    }
+  }
+}

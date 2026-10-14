@@ -11,6 +11,8 @@ mod coefficient;
 mod enemy_flat;
 #[path = "formatted_party_source_evidence.rs"]
 mod formatted_party;
+#[path = "minion_attack_flat_modifier_evidence.rs"]
+mod flat_modifier;
 #[path = "intrinsic_self_flat_damage_evidence.rs"]
 mod self_flat;
 

@@ -1,6 +1,6 @@
 # Proposal: checked numeric domains in typed rules
 
-**Status:** Proposed; owner decision required before public-contract implementation.
+**Status:** Accepted by the owner on 2026-10-14; implementation and data adoption pending.
 **Date:** 2026-10-09.
 **Decision owner:** Project owner.
 
@@ -22,7 +22,7 @@ capability limits as build illegality, or reproduce floating-point accidents as
 new native rounding semantics. Missing conversion sources remain a separate
 coverage question; numerical-domain validation cannot close them.
 
-## Recommended decision
+## Accepted decision
 
 Add one reusable **checked numeric-domain expression** to the existing typed
 rule DAG. It accepts an expression and an explicit inclusive numeric range,

@@ -67,7 +67,7 @@ not by itself a complete combined multiplier; this fixture retains the separate
 checked combined-factor producer.
 This fragment adds no unchecked Enemy fold or new public query contract.
 
-The two unpublished Enemy input ports and Stats `3373` / `3374` are removed,
+The two former unpublished Enemy input ports are removed,
 along with their internal addition nodes. `bindings.json` pins the separate
 `enemy-flat-attack-damage` evidence and review. The finite composition checks
 their exact revision, selected source identity, selection-proof dependency and
@@ -119,11 +119,24 @@ the affected endpoint stays unresolved, including when a known coefficient
 is zero. No complete build, final hit, average hit, DPS, conversion or defence
 result is claimed.
 
-All seven fragment tests pass within the **31-test** ordinary Engine replay
-(5.29s). These include the exact Enemy proof binding and scope refusals, all 13
-retained source comparisons, required missing inputs, signed-zero normalization
-and parallel worker reuse. Strict target Clippy passes (0.41s). Evidence:
-`runs/owned-enemy-flat-native-01.log` and
-`runs/owned-enemy-flat-engine-clippy-01.log`. The separate original-source subtree
-passes 15 ordinary tests, including seven actual writer mutations and artifact
-refusals (`runs/owned-enemy-flat-source-regressions-01.log`).
+An additional unpublished `self-flat-attack-damage` component now exercises a
+source-defined item modifier family through checked Player grants, exact minion
+receivers and Basic Attack routes. It uses the existing `3371`/`3372` ports only
+in a finite test world that explicitly admits the item/template and closes other
+flat families. Its production memberships and total routes stay Partial. This
+composed path retains the real factor and intrinsic endpoints and injects no
+scalar flat operands. It does not replace the separate arithmetic-only tests
+or establish complete selected-build input coverage. Draft IDs `3373` onward
+now belong to that distinct semantic family, not the retired Enemy ports.
+
+The seven arithmetic-fragment tests and six flat-collection regressions pass
+within the **37-test** ordinary Engine replay (10.13s). These retain the exact
+Enemy proof binding and scope refusals, all 13 original final-arithmetic
+comparisons, required missing inputs, signed-zero normalization and parallel
+worker reuse; the new collection tests add 12 original-query subtotal
+comparisons. Strict target Clippy passes (1.03s). Evidence:
+`runs/owned-minion-attack-flat-native-full-01.log` and
+`runs/owned-minion-attack-flat-native-clippy-01.log`. The earlier separate Enemy
+original-source subtree passed 15 ordinary tests, including seven actual writer
+mutations and artifact refusals
+(`runs/owned-enemy-flat-source-regressions-01.log`).

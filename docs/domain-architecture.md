@@ -380,6 +380,16 @@ selection, hand, part, mode or stat set does not. Prove the admitted family and
 its source coverage before aggregating away individual eligibility. Keep local
 and inherited numeric groups separate where their reduction order matters.
 
+A restricted family can also keep its applicability in the meaning of its
+channel. For example, flat damage granted to minion Attacks can be collected
+once for the receiving minion, then routed only to explicitly proved Attack
+outputs and selections. That channel is not the Actor's universal flat damage.
+The source amount must remain independent within the admitted family; arbitrary
+skill conditions cannot be erased into an Attack subtotal. This uses the existing
+typed channel, checked membership and Action-route contracts. Partial source or
+route coverage must still prevent a claim that the subtotal is the complete
+input for final damage.
+
 Source-conditional controls do not automatically establish obtainable item or
 support mechanics. Keep their provenance, external-input obligations and actual
 recipient binding explicit. The accepted Action self-contribution contract does
@@ -740,12 +750,12 @@ inventories of only already-converted writers are insufficient. Broader transfer
 semantics and donor-property stages remain explicit adoption work.
 
 Computed numeric limits must remain distinct from game legality, mechanic
-inactivity and missing inputs. The pending
-[checked numeric-domain proposal](owned-numeric-domain-proposal.md) would express
+inactivity and missing inputs. The accepted
+[checked numeric-domain contract](owned-numeric-domain-proposal.md) expresses
 an admitted calculation range in the same typed DAG and make values outside it
 explicitly unavailable, without clipping or importing incidental source rounding.
-This is a proposed public-contract extension awaiting owner decision; the current
-runtime does not yet provide that expression. Final-resource data adoption must
+The owner approved this extension on October 14; implementation is pending and
+the current runtime does not yet provide it. Final-resource data adoption must
 establish the actual computed domain before claiming numerical parity.
 
 Common final-stat formulas need semantic ownership independent of a character class,

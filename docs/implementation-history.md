@@ -1,10 +1,129 @@
-> Historical snapshots through the Enemy damage-input cleanup checkpoint on 2026-10-09.
+> Historical snapshots through the flat-supplier census and Life CI repair checkpoint on 2026-10-09.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-09 checkpoint: real flat-damage suppliers and CI repair
+
+Original05 remains the closest complete-build target. The next unfinished
+physical inputs are the self-flat endpoints `3371` / `3372`. The new
+[offline supplier census](../data/owned/poe2/3887ae68/self-flat-attack-damage/source-review.md)
+shows that this domain is nonempty: an observed zero in the unchanged build
+cannot replace source membership or applicability. No native rule, public API,
+input disposition or coverage closure is added by this checkpoint.
+
+Original constructors and ModCache contain **256 unique physical-endpoint
+modifier objects**, 128 minimum and 128 maximum. The census retains 23 mapping
+rows, 42 resolved consumer rows across 19 definitions, and three relevant alias
+groups. These are object/recipe counts, not eligible occurrence counts. The
+existing shared traversal now serializes target bodies and bounded enclosing
+wrappers without retaining thousands of extra Lua handles. Canonical paths and
+alias routes remain distinct; the audit does not claim every delivery occurrence.
+Stat-map metadata backlinks require exact owner identity before exclusion.
+
+The two actual support consumers scale physical additions from Ward cost;
+active skills stored in support files are classified from their real metadata.
+Cached minion Attack additions remain distinct from the parser's unqualified
+3-7 and Full-Life controls. Nine executed source03 calls retain raw zero/inactive
+records; seven unexecuted CALCS rows remain unobserved. Existing independent
+reference reports are reused, without a fresh expensive whole-build acquisition.
+
+**Native direction:** first prove a bounded source family and the complete
+selected-source domain. For Action-invariant amounts and eligibility, reuse the
+existing exact-Actor contributions, checked queries and ordinary Action routing.
+A FullLife subset additionally needs a typed receiving-Actor condition and proof
+that Action-specific overrides cannot change it; no owned production binding
+exists yet. Keep local and inherited numeric folds separate. Source ownership,
+zero/inactive membership and unknown coverage survive aggregation. PoB parent
+storage alone does not justify a new transport API. Review additional exact-Action
+delivery only when an actually required Action-sensitive supplier needs it.
+
+Artifact: **209,378 bytes**, SHA-256
+`2a07ddefddd45cdd01a8593c506412428997eff3c618ba2fc365b6e0d93c5ba8`.
+Review SHA-256:
+`c600fe33b75f693dc77962f70968b6e8a015efceeb90a77cd6eb7b7b90d15252`.
+The retained prior Enemy-port cleanup is in [history](implementation-history.md);
+its proof remains valid and its removed ports stay removed.
+
+**Source validation:** author04 passes (2.09s). All **19 ordinary source-subtree
+tests** pass (18.65s), with five opt-in acquisitions ignored. This includes real
+constructor/consumer mutations, zero and nested-alias records, exact backlink
+identity, constructor order and artifact scope refusals. Strict optional-PoB
+library/tests Clippy passes (3.09s). Logs:
+`runs/owned-self-flat-author-04.log`,
+`runs/owned-self-flat-source-tests-01.log` and
+`runs/owned-self-flat-source-clippy-02.log`. Source and native-contract reviews
+found no remaining issue. No native-engine change requires replay regeneration.
+After the final mechanical lint edit, a fresh focused reconstruction also
+reproduces the retained artifact exactly (one test, 2.07s):
+`runs/owned-self-flat-final-reconstruction-01.log`.
+
+**CI repair validation:** the Amulet Life target passes **nine ordinary tests**
+with one opt-in publication ignored in both profiles: all features (2.66s) and
+no default features (2.64s). Strict all-feature target Clippy passes (0.47s).
+Logs: `runs/owned-amulet-life-ci-repair-all-features-01.log`,
+`runs/owned-amulet-life-ci-repair-no-default-features-01.log` and
+`runs/owned-amulet-life-ci-repair-clippy-01.log`.
+
+The existing all-five publication binary was independently rerun against unchanged
+current application code: **seven tests pass** (43.26s), including all-five
+normalization, selected requests and Party controls. All 18 generated package
+artifacts are byte-identical to the canonical package. Logs:
+`runs/owned-self-flat-current-package-regression-01.log`, its `validation.json`
+and `runs/owned-self-flat-current-package-identity-01.log`.
+
+An older Linux CI shard exposed a stale Amulet Life fixture: its historical query
+omitted the now-present supplied-Actor inherent Life contributor. The isolated
+test repair reuses the published query and authenticates its exact added member
+and real producer body. The Partial-equipment refusal restores only that group's
+coverage; a separate control still rejects an omitted zero-valued contributor.
+Production rules and coverage are unchanged. The failed hosted job was
+`113895577595` (`ubuntu-latest, cli-2`) in run `37951954336` at `83c7e81`;
+its public annotations identify this target in both profiles, and local execution
+reproduced the exact missing-membership error. At the checkpoint's status read,
+`91f7bc7` run `37963058187` remained queued without jobs. These local repair
+results do not establish a successful hosted run for the forthcoming commit.
+
+**Canonical package remains:**
+`runs/owned-combined-added-attack-publication-04/package`, input
+`690169b8e0303ca02ae9a49139a8446c6b470675c28914e7f06e69e09b4d8a54`.
+Definitions `efa0011ada155c02318c3243315e6e93793a44dadf90e2c917651ab7113dfc20`,
+rules `6a81f88031e0f3b6b3a1e60d4cfa2edd6c9979afa49aed1d2a6857cbaf64b6d5`,
+compiled rules `ee8bf2aba8eed0b3742d848703cef87950e05ae537144d49d009f79515e583ee`,
+routing `c34584136d3bffa6f4f2124795bbcf9c99dd94a2d09f7a560a2302946a222ef1`.
+There are 172 provenance records, 110 saved queries and no evaluation bundle.
+All 5,825 Partial rule owners and route/global query gaps remain. The allocator
+is still `336e`; unpublished physical endpoint declarations reserve nothing.
+Selected obligations remain **106/117/109/123/4**, complete originals **0/5**.
+
+**Resume: finish Original05 first, following the saved-query map above.**
+
+1. Authenticate the actual selected item/tree/skill/support and external-input
+   domains for the two flat endpoints, using this nonempty census and its dynamic
+   path ledger. Do not turn catalog counts, absence in one observed call, or the
+   114 unqualified inner records into a universal empty/invariant certificate.
+   Tactician, Rallying Cry, Hollow Palm, conditional overrides and Party each need
+   an explicit disposition in the admitted source domain.
+2. Implement the first proved family through existing Actor queries and Action
+   routing, retaining real source ownership, typed conditions and ordered local/
+   inherited groups. Exercise absent/present-zero/3-7/condition-false-true-unknown,
+   repeated Actors, missing membership and fresh/reused/Rayon equality against
+   retained evidence. Publish the physical consumer only with actual suppliers
+   and accounted inputs; finite component fixtures cannot close production gaps.
+3. Resolve the re-prompted numerical-domain and configuration-accounting decisions
+   before their dependent resource/admission work. Continue final Player Mana/Life
+   and input inventories `01f2/0505/0207/0208`. The configuration proposal now
+   distinguishes implemented participation/support discovery from its own pending
+   authority; numerical-domain wording respects existing positive-zero
+   canonicalization. Actor-to-Enemy reads, resource demand and scoped coverage
+   remain unapproved. No broader Action-delivery model is inferred from prior
+   approval of Action self-queries.
+4. Begin D4 immediately after the first complete unchanged request, saved metrics
+   and reference availability/value checks pass. Keep the other four originals
+   as regressions without developing every build in lockstep.
 
 ## Archived 2026-10-09 checkpoint: retire unused Enemy damage inputs
 
