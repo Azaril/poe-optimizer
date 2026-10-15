@@ -1,0 +1,93 @@
+{
+  "bodies_sha256": "4135bdc54032242addb41942ec79d93b8557cb9b71e5d223db7c90f769badab5",
+  "inherited_review_sha256": "a02bb22eb2d5a0ade8b9c4be9551e047d9c976d249d615e9d8b8616b9239814f",
+  "initialization": {
+    "affected_by_aura_mod_candidates_in_captured_inputs": 0,
+    "captured_keystone_candidates": 0,
+    "constructed_buff_names": [
+      "Frost Bomb",
+      "Pain Offering",
+      "Rage"
+    ],
+    "constructed_curse_buffs": 0,
+    "environment_inputs": 21,
+    "extra_skill_mod_candidates": 0,
+    "initializer_formula_values_not_evaluated": true,
+    "literal_initializer_writes": [
+      84,
+      24
+    ],
+    "profile_modifiers": 0,
+    "selected_item_uses": 9,
+    "selected_nodes_per_environment": 57,
+    "summoner_construction_rows": 42
+  },
+  "inputs_sha256": "d7df2cde5648ee00354c80f70f50285f12851070d31b16677777b2d7b1c08faf",
+  "kind": "finite-selected-minion-store-suppliers",
+  "receiving_gates": {
+    "gate_probe_values_not_relabelled_as_original_consumers": true,
+    "hollow_palm_visits": 18,
+    "original_extra_aura_lists": 18,
+    "original_parent_flag_calls": 2,
+    "parent_weapon_line_visits": 4,
+    "selected_sniper_direct_buffs": 2
+  },
+  "remaining": [
+    {
+      "boundary": "Flask-to-minion payloads",
+      "missing": "Exact active env.flasks and computed non-Player flask payload inventory at these recipients; nine captured ordinary item uses do not alone prove it empty",
+      "next": "Reconcile existing selected equipment/XML flask enablement and complete calcFlaskMods/dispatch bodies; observe only if active payload authority is still missing",
+      "sites": "CalcPerform.lua:1584-1759 (AddList at 1751/1759)"
+    },
+    {
+      "boundary": "Keystone expansion after inherited modifiers",
+      "missing": "Complete call-time Keystone candidates, including possible earlier flask delivery; the captured construction/inherited records contain no Keystone",
+      "next": "After flask closure, join the exact inherited return/append proof and complete Keystone source map; keep the secondary life-pool recipient distinct",
+      "sites": "CalcPerform.lua:1855-1857,3378-3380"
+    },
+    {
+      "boundary": "Party extraAura and AffectedByAuraMod delivery",
+      "missing": "Exact allyBuffs.extraAura and later Player List/recipient authority; captured Party inputs and AffectedByAuraMod candidates are empty but this latter call was not observed",
+      "next": "Reuse accepted empty Party accounting and complete allyBuffs construction; trace later Player-store writers before deciding whether an original List/recipient observation is necessary",
+      "sites": "CalcPerform.lua:3204-3223 (writes at 3213/3221)"
+    },
+    {
+      "boundary": "Actor attribute/charge/misc helpers and defence/trigger call edges before offence",
+      "missing": "A complete destination-name/Actor-relation proof for these helper bodies, including applyEnemyModifiers at 565-579; fixed-name searches alone are not that proof",
+      "next": "Reuse pinned complete bodies and exact selected Actor relations to exclude PhysicalMin/PhysicalMax and generic transports; no new scalar observation is indicated",
+      "sites": "CalcPerform.lua:1861,3243-3244,3495-3500"
+    },
+    {
+      "boundary": "Action-local added-damage factories and preDamageFunc",
+      "missing": "Same-selection joins for spell-only applicability, parent-weapon gate, skillData weapon factories and the exact selected callback identity",
+      "next": "Reuse source-backed Basic Attack flags/recipe, empty callback inventory and original parent Flag evidence; authenticate full factory bodies and filter semantics",
+      "sites": "CalcOffence.lua:793-834,1234-1271,2401-2407"
+    },
+    {
+      "boundary": "Publication after source closure",
+      "missing": "Current native writer census/selection admission and non-colliding final endpoint identities",
+      "next": "Publish checked selected flat membership and direct-query final physical consumer together only after all source paths are accounted; do not reuse colliding historical draft IDs",
+      "sites": "native checked contribution membership and final physical endpoint"
+    }
+  ],
+  "schema_version": 1,
+  "scope": {
+    "all_temporal_minion_writers_accounted": false,
+    "arbitrary_affected_by_aura_mod_filtering_proved": false,
+    "initializer_and_selected_receiving_inputs_reviewed": true,
+    "native_coverage_authorized": false,
+    "native_membership_complete": false,
+    "new_source_execution": false,
+    "numeric_order_authority": false
+  },
+  "source_deductions": {
+    "captured_extra_skill_mod_source_inventory_empty": true,
+    "constructed_curse_buff_branch_inapplicable": true,
+    "iron_mass_other_profile_branch_inapplicable": true,
+    "selected_summoner_bow_copy_input_absent": true,
+    "selected_summoner_has_no_item_set_or_uses_declaration": true,
+    "selected_talisman_source_absent": true,
+    "shared_and_minion_literal_writers_exclude_self_flat_and_gate_names": true,
+    "sniper_profile_modifier_list_empty": true
+  }
+}

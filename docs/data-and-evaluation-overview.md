@@ -1316,8 +1316,17 @@ deduction over authenticated bodies, without another VM run or native coverage
 promotion. It preserves all earlier evidence bytes and does not generalize to
 Player/summoner expansion or other recipes.
 
-Direct/local source completeness, dynamic factories, extra-stat expansion and
-final source-to-native membership remain separate admission work. These
+The [selected minion-store proof](../data/owned/poe2/3887ae68/self-flat-minion-store/README.md)
+then connects the shared/minion initializer, exact profile and equipment
+exclusions, constructed records, direct Pain Offering buffs and original dynamic
+gates. Seven ordinary tests and strict Clippy pass; no source VM or native data
+change is involved. Its remaining supplier inventory names flask/Keystone paths,
+later Party/aura delivery, Actor helper edges and Action factory/filter
+applicability before final native membership. It deliberately provides no
+complete flat-damage query from a zero observation.
+
+Direct/local source completeness, remaining dynamic factories, other extra-stat
+expansion and final source-to-native membership remain admission work. These
 authenticated Lua observations stay offline; the
 native runtime gains no Lua record type or interpreter. The older unpublished
 flat-damage drafts retain useful arithmetic/parity tests, but their IDs now

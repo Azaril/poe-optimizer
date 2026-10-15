@@ -1,10 +1,82 @@
-> Historical snapshots through the Player activity input checkpoint on 2026-10-15.
+> Historical snapshots through the inherited-delivery and child-construction checkpoint on 2026-10-15.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-15 checkpoint: inherited delivery and child construction
+
+The [inherited-delivery packet](../data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/README.md)
+joins the existing complete selected constructors to actual temporal receiving.
+Each observed trace contains **18 completed performs, 144 gate events, ten
+original List/AddMod deliveries and 307 appended records**. Eight exact receiving
+occurrences include two Sniper observations. Each Sniper receives the 29 selected
+passive wrappers and one configured repeat wrapper; seven additional local Skill
+wrappers occur across other recipients. Source pointers, full bodies, ancestry,
+filters, recipient identity, ordered List results and original append counts are
+checked, rather than inferring source identity from equal values.
+
+Complete observed gates establish that this unchanged selection has no Player
+buff-loop delivery, secondary minion Life-pool call or direct Spectre bypass.
+Direct `minionBuffs` AddList delivery remains the separate construction/runtime
+proof; an empty Player `buffs` list does not exclude that path. The preceding
+[construction checkpoint](implementation-history.md#archived-2026-10-15-checkpoint-selected-skill-construction)
+retains its original authenticated artifacts and finite recipe scope.
+
+The fixed four-load acquisition's original strict raw-trace assertion failed
+(107.23s). Its original driver, observer, helpers, bootstrap, four reports,
+43-field difference report and failure log remain immutable. **All four complete
+MAIN/CALCS scalar snapshots agree exactly**, including unhooked JIT-off/on loads.
+The later offline proof checks each trace's exact source-pointer/List/AddMod
+correspondence, then compares complete per-stat sequences. Only incidental
+positions between different keyed stat buckets vary. It preserves same-stat
+order and multiplicity; it introduces no numeric reassociation, retry-until-pass
+protocol, native ordering law or source-bug exception.
+
+The maintained optional acquisition driver now seals raw captures and code
+identities before assessment. Its capture-only contract still requires this
+separate semantic receiving proof. It has been compiled and its pure assessment
+exercised on the retained loads, including ten coherently erased-output controls;
+it has **not** repeated PoB acquisition or reclassified the original failure.
+
+Offline retention passes (9.96s), all nine ordinary proof/mutation tests pass
+(11.88s), and the optional driver's parser test passes. Strict Clippy passes for
+the root target (0.82s) and PoB target (41.88s). Independent review is clear.
+Logs: `runs/owned-inherited-minion-{retain-02,ordinary-02,source-parser-02,clippy-01,source-clippy-01}.log`.
+Review SHA-256:
+`a02bb22eb2d5a0ade8b9c4be9551e047d9c976d249d615e9d8b8616b9239814f`.
+No canonical package, allocator ID, query, runtime API or native coverage changed.
+
+The separate [child lifecycle proof](../data/owned/poe2/3887ae68/self-flat-skill-construction/README.md#sniper-child-extraskillstat-lifecycle)
+now closes `ExtraSkillStat` at the direct Sniper child merge. Both reviewed
+callers reset a parentless modifier store. Eighteen exact child pairs have no
+supports or source instance; the complete prefix, selected recipe and resolved
+mappings cannot supply an extra-stat record before that merge. This is an
+authenticated source deduction, not a new observed List call or a claim about
+Player/summoner expansion. The original construction artifacts stay byte-identical.
+Offline retention passes (9.19s), all fourteen ordinary tests pass (21.47s), and
+strict Clippy passes (0.82s):
+`runs/owned-self-flat-child-lifecycle-{retain,tests,clippy}-01.log`.
+Child review SHA-256:
+`40e23023267135a3c23a2a6f3bf71140f6209ca554e0123edab3c187605dacb1`.
+
+**Resume:** join the original minion store/profile initialization and direct
+`minionBuffs` payloads with the inherited proof to the actual dynamic
+parent-weapon and Hollow Palm gates. Explicitly account for later curse-slot and
+affected-by-aura receivers; the four inherited call sites do not cover them.
+Other child selections, Player/summoner extra-stat expansion and arbitrary future
+sources retain their own obligations. Do not acquire another VM observation
+until a concrete missing boundary requires one.
+
+Once selected source admission is complete, publish freshly allocated self-flat
+queries and the final pre-conversion consumer together. Reuse intrinsic ranges,
+the combined added-damage factor and the reviewed coefficient/Enemy exclusions;
+Action consumers can read checked Player queries directly. The old drafts retain
+useful arithmetic controls, but their IDs overlap current allocations. Do not
+publish absent positive item families or recreate obsolete forwarding collectors
+merely to claim progress. Complete native builds remain **0/5**.
 
 ## Archived 2026-10-15 checkpoint: Player activity inputs
 
