@@ -77,7 +77,7 @@ These reference observations are not evidence of native metric completion.
 | Saved query references | Native work to reuse | Remaining final producer |
 | --- | --- | --- |
 | 00: Player Life | Intrinsic/Strength/item/reward contributions, checked Life queries, bounded equipment accumulation and guarded final consumer with conversion/override/CI precedence | Complete supplier/magnitude admission, prove cross-group/conversion accumulation domains, finalize plan and evaluation binding |
-| 01: Player Mana | Intrinsic/Intelligence contributions, checked queries, adjustment collectors, override selection and published guarded consumer with checked numeric domain | Transformation supplier admission, whole-plan completion and evaluation binding |
+| 01: Player Mana | Intrinsic/Intelligence contributions, direct checked adjustment queries, override selection and published guarded consumer with checked numeric domain | Transformation supplier admission, whole-plan completion and evaluation binding |
 | 02, 18, 19: Player ES, Armour, Evasion | Selected item magnitude/local-defence intermediates and global/passive contributions | Final item properties, complete receiving, transformations and final Actor totals |
 | 03–06: four capped Player resistances | Item/passive/reward inputs and configured penalty | Complete contributor inventories, aggregation and cap/override calculations |
 | 07–12: total EHP and five maximum hits | Encounter and incoming-damage components | Complete resource/defence dependencies, mitigation and final survivability calculations |
@@ -105,89 +105,60 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: guarded Player Life consumer
+## Current checkpoint: direct Mana queries
 
-The [Player Life packet](../data/owned/poe2/3887ae68/player-life-pool/README.md)
-publishes one data-defined program and Player receiver for existing Life Stat
-`311a`. Six new typed contribution channels (`3383`–`3388`) and seven checked
-queries represent outgoing conversions, pre-/post-scaling additions, the CI
-flag and coherent optional override. The consumer reads these queries directly;
-there are no intermediate pass-through receiver programs or new engine APIs.
+The [Mana cleanup](../data/owned/poe2/3887ae68/mana-direct-queries/README.md)
+removes five one-query pass-through programs and their Player receivers on
+`3357`–`335b`. Final Mana reads the same checked contribution queries directly.
+Typed channels, query memberships/coverage, every arithmetic node, the rounding
+guard and optional-override precedence remain unchanged. Exact reader census
+checks reject any additional computed-value dependency before removal.
 
-Final-value precedence is CI → present override, including zero → ordinary
-arithmetic. The ordinary path uses the actual operand's checked rounding domain,
-native rounding and minimum one. Source PoB computes its ordinary resource loop
-before applying CI; native lazy selection preserves the final value without
-copying that execution history. Whole-request coverage remains mandatory. The
-source's FullLife side effect and lowest-Life/Mana result are separate work.
+Current native fixtures construct this graph directly; the obsolete collector
+installer is deleted. Meaningful inactive, unknown, unlisted-source, freeze and
+override controls exercise the final consumer. Historical packets retain only
+authenticated authoring/source-evidence responsibilities. No runtime compatibility
+branch, public API, game-data ID or resource limit is added.
 
-The final owner's program inventory remains Partial for cross-group and
-conversion-order proof. All seven new supplier queries remain Partial; empty
-membership does not establish absence. The published equipment bound alone does
-not prove arbitrary regrouping with inherent, intrinsic or reward contributions.
-No existing owner, source inventory or complete-build gate closes.
+The current package is **`runs/owned-mana-direct-queries-publication-01/package`**:
 
-The current package is **`runs/owned-player-life-pool-publication-02/package`**:
+- Input: `c0bccf10cee8a70027e1bcfd923961dfd26766d56cb31bff419833cbe3244dfc`.
+- Definitions: `cf65959955725dde2758ea79cb5542dca1fe9a9601a352344f8f3fad24ad837b` (unchanged).
+- Rules: `a4fb59e215ea9b0be03abcd4da815f15810a49ae83f7229a9cc0033869d425fa`.
+- Compiled: `914189c13e24bd25f11789ab2efc1f98d09dec62d7e237010e3c405e6b794e83`.
+- Registry: `6e97db58bec5855fa1a5b8e0b5253fc3ab74c3192a48e29262cce59cd47b076a`, last issued `3388` (unchanged).
 
-- Input: `aedc17306523ec3c513f6e04c2d1937774705585b9c33c9c1cc9006b0c6452a1`.
-- Definitions: `cf65959955725dde2758ea79cb5542dca1fe9a9601a352344f8f3fad24ad837b`.
-- Rules: `c36478c0cd0d232d24363c4a30dfe0ac12764213720c7119417112335be6acdd`.
-- Compiled: `6dc31559ebdb6dfa9875ca1e7aa0a1ab6fe8708845db66956518431488460e3e`.
-- Registry: `6e97db58bec5855fa1a5b8e0b5253fc3ab74c3192a48e29262cce59cd47b076a`, last issued `3388`.
+All **24 focused tests**, strict Clippy and independent review pass. Publication
+passes in 26.21s and rebuilds all eighteen artifacts identically. Every saved
+query (110), local ID and selected issue count **106/117/109/123/4** is preserved;
+only rules, manifest and release files change. Evidence uses
+`runs/owned-mana-direct-queries-{tests-03,clippy-01,publication-01}.log`.
+Complete native builds remain **0/5**.
 
-The all-five publication passes in 35.56s, preserves all 110 saved queries and
-exact local identities, and rebuilds all eighteen files identically. Input issues
-remain **106/117/109/123/4** and configuration origins **46/81/37/32/30**.
-Complete native builds remain **0/5**. Two ordinary authoring/source tests and
-all 101 joined native tests pass, including eight new Life tests. The actual
-component derives 1320 from BASE 1257, INC 5 and MORE 1; level and robe-roll
-changes, fresh/reused/four-worker execution, the saved Player Life metric and
-explicit unavailable paths are checked. Finite test fixtures alone close the
-unproved supplier/order domains. Strict Clippy passes for both targets. Evidence:
-`runs/owned-player-life-pool-joined-05.log` (101 joined tests, 65.06s),
-`runs/owned-player-life-pool-authoring-02.log` (two source tests, 0.33s),
-`runs/owned-player-life-pool-publication-02.log` and
-`runs/owned-player-life-pool-clippy-02.log`. Independent data/source review
-passes; earlier rejected setup and budget attempts remain diagnostic logs.
-
-Retained evidence contains eleven source-control cases with repeated observed
-loads and uninstrumented JIT-off/on references (66 historical loads). Each compact
-vector is reconstructed from 72 original consumer invocations per acquisition;
-all archive bytes, source metadata and the complete formula body are checked.
-These are aggregate formula controls, not eleven independently supported builds.
-Positive transformation/override controls remain synthetic. No new PoB process
-was run. The packet keeps the original failures as diagnostics.
-
-**Next:** remove the five reviewed Mana pass-through receivers, then add the
-missing bound on the existing shared-Player Strength-to-Life contribution. A
-union proof can use unique concrete contributors and the global effect ceiling
-to cover BASE regrouping across intrinsic, inherent, equipment and reward groups.
-Authenticate each source bound and the Player INC census before refining the
-final Life gap; conversion-order proof and all supplier/admission gaps remain
-separate. These changes reuse current contracts and preserve the four selected
-import obligations.
-The rejected seven-program draft exceeded 8192:
-the predecessor has 8188 owner programs plus one application. Direct query reads
-remove six redundant receivers; this publication uses 8190 budget slots and
-changes no limit. The remaining passive blockers are unchanged.
+**Next:** bound the existing shared-Player Strength-to-Life contribution and
+prove BASE regrouping over the union of intrinsic, inherent, equipment and
+reward effects. Authenticate each bound and unique producer plus the Player INC
+census before refining the final Life gap. Conversion-order proof, all supplier
+coverage and the four selected input obligations remain separate. This is an
+owned-data change using the accepted numeric-domain operation.
 
 ### Measured catalog capacity and next cleanup
 
-Read-only compilation of this exact endpoint reproduces its compiled identity.
-Programs are the only nearly exhausted compiler collection: **8190/8192**,
-including the one effect application. Owners are 6548/8192; effects
-23517/65536; reads 4249/65536; nodes 32814/262144; edges 41600/1048576.
-The complete release is **64,388,037/67,108,864 bytes**, leaving 2,720,827
-bytes; its input is 64,376,489 bytes. These are separate limits. The common
+The Life predecessor's read-only capacity audit found programs to be the only
+nearly exhausted compiler collection, at 8190/8192 including one application.
+The Mana cleanup reduces that to **8185/8192**, leaving seven slots; receivers
+decrease from 60 to 55. Other measured Life-predecessor compiler counts are
+6548 owners, 23517 effects, 4249 reads, 32814 nodes and 41600 edges, comfortably
+within their separate caps.
+The current complete release is **64,382,445/67,108,864 bytes**, leaving
+2,726,419 bytes. These are separate limits. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
 
-Review the five Mana adjustment receivers (`3357`–`335b`) next: the current
-catalog has only the final Mana program reading their computed values. Replacing
-these single-query pass-throughs with direct checked queries could recover five
-program slots, preserving typed contribution channels, Partial coverage,
-execution stages and numerical behavior. Verify all readers and saved metric
-references before removal. Do not split catalogs by the selected build or remove
+The five Mana adjustment receivers (`3357`–`335b`) have now been removed after
+checking all rule/application readers, saved metrics and retained query contracts.
+Their existing guarded Complete-empty membership is unchanged; broader supplier
+and whole-plan coverage remains open. Do not split catalogs by the selected build or remove
 legitimate per-item programs to meet a budget.
 
 Track compiler/schema validation work and release byte totals at subsequent
@@ -199,6 +170,30 @@ catalog-capacity adjustment with boundary tests. **Keep the independent
 into result identities, so a changed numerical domain requires an explicit
 proof and artifact/cache invalidation rather than relying on a limit change to
 invalidate results.
+
+## Previous checkpoint: guarded Player Life consumer
+
+[Archived publication and validation](implementation-history.md#archived-2026-10-15-checkpoint-guarded-player-life-consumer):
+actual joined producers calculate Player Life 1320; all 101 joined tests, two
+source tests, all-five publication and strict Clippy pass. Supplier and numerical
+domain gaps remain explicit. Pushed as `ba33003d`.
+
+## CI receipt repair (2026-10-15)
+
+Hosted run `38675971601` for older revision `c4a62464` exposed another stale
+derived receipt in `owned_catalog_recipe`. The compiler-domain change updated
+the active tree seed but missed `import/compiled/manifest.json`. The existing
+`extend-owned-skill-catalog` CLI reproduces all nine artifacts from unchanged
+inputs: seven are identical, while the manifest's compiled identity and its
+transition hash change. The expected compiled identity is
+`18ac3accd9995e8006a11707adbdd11827d0bb8b039b7814fb0232c515fa722f`.
+No source mechanics, test expectations or allocation code change. Independent
+inverse review confirms exactly those two digest changes and unchanged LF bytes.
+All five Import `owned_catalog_recipe` tests pass (0.35s), using the unchanged
+strict artifact comparisons. Hosted success is not yet confirmed.
+Evidence: `runs/ci-import-c4a62464-job116230401602.log` and
+`runs/ci-catalog-republication-01-diff.json`; validation:
+`runs/ci-owned-catalog-recipe-receipts-01.log`.
 
 ## Previous checkpoint: configured Player Withered input
 
@@ -1513,7 +1508,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
 | Attribute grouping and source caches | Six ordinary attribute receivers and guarded complete-empty MORE producers are published. Every potential Multiply effect rejects that bounded domain before activation. Six INC and six bounded Class/Passive BASE memberships are Complete; unlisted BASE donors reject before activation. The global query inventory and Class/Actor owners remain Partial. The BASE audit proves a signed-scaling counterexample, real post-passive bonus copies and missing socket-origin ordering; supporting those item/copy donors still needs these domain gaps resolved. Typed Boolean flag aggregation is implemented separately and does not close final attributes. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | At 23:26 UTC on 2026-10-07, [37646478601](https://github.com/Azaril/poe-optimizer/actions/runs/37646478601) at `47f3560` had passed all fourteen jobs. [37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252) at `f93d551` had seven successful/five active matrix jobs and no failed steps; Sand checkpoint [37702132448](https://github.com/Azaril/poe-optimizer/actions/runs/37702132448) was pending. The preceding successful Windows native CLI step took 314 minutes: separately profile/shard that critical path while retaining coverage. Job logs require authenticated access, so current compilation versus test progress is unverified. Pending revisions may coalesce; duration alone does not establish a hung test. No hosted success for the latest checkpoint is claimed. |
+| CI regression, timeout and infrastructure | The complete native CLI target partitioning is implemented; retained source-oracle costs still warrant profiling without dropping coverage. Current repair evidence is in the [CI receipt checkpoint](#ci-receipt-repair-2026-10-15). Compiler-domain changes must regenerate both maintained manifest families and dependent receipts. Local passes and hosted completion remain separate; pending main revisions can coalesce while an older run finishes. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 | Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |
@@ -1696,6 +1691,10 @@ checkpoint:
    dependent numerical artifact is unchanged. A rule-admission change also needs
    the downstream test suites that construct those rules; Clippy alone cannot
    verify which boundary rejects a malformed fixture.
+   Compiler-domain changes must rebuild both maintained manifest families
+   (`current` and `import/compiled`) and their transitive receipts. Run the
+   existing Import `owned_catalog_recipe` target and allocation-export checks;
+   do not update only the latest canonical release's identity.
 4. Update this compact current state and next action. Append detailed completed
    checkpoints to history; do not accumulate competing current plans here.
    Reconcile new discussion findings with the session register and the existing

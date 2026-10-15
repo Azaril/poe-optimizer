@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "kind": "mana-direct-queries",
+  "before": "aedc17306523ec3c513f6e04c2d1937774705585b9c33c9c1cc9006b0c6452a1",
+  "release": "pob-3887ae68-mana-direct-queries-v1",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v27",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "scope": {
+    "removed_programs": 5,
+    "removed_receivers": 5,
+    "preserved_channels": 5,
+    "new_definitions": 0,
+    "new_queries": 0,
+    "closed_existing_owners": 0,
+    "supplier_admission": false,
+    "complete_mana": false,
+    "evaluation_bundle": false,
+    "whole_build": false
+  },
+  "artifacts": {
+    "consumer.json": {
+      "bytes": 19737,
+      "sha256": "f1e283af42690935b673f177b12da2a9bcc0c5f4db6db3e4d87b0703735bde04"
+    },
+    "dependencies.json": {
+      "bytes": 45322,
+      "sha256": "76c1f6b989aeaf28c66dc1852fa37565e226036dd1137b968d01be0e19d85442"
+    }
+  }
+}

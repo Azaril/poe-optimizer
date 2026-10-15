@@ -1,10 +1,76 @@
-> Historical snapshots preceding the guarded Player Life checkpoint on 2026-10-15.
+> Historical snapshots through the guarded Player Life checkpoint on 2026-10-15.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-15 checkpoint: guarded Player Life consumer
+
+The [Player Life packet](../data/owned/poe2/3887ae68/player-life-pool/README.md)
+publishes one data-defined program and Player receiver for existing Life Stat
+`311a`. Six new typed contribution channels (`3383`–`3388`) and seven checked
+queries represent outgoing conversions, pre-/post-scaling additions, the CI
+flag and coherent optional override. The consumer reads these queries directly;
+there are no intermediate pass-through receiver programs or new engine APIs.
+
+Final-value precedence is CI → present override, including zero → ordinary
+arithmetic. The ordinary path uses the actual operand's checked rounding domain,
+native rounding and minimum one. Source PoB computes its ordinary resource loop
+before applying CI; native lazy selection preserves the final value without
+copying that execution history. Whole-request coverage remains mandatory. The
+source's FullLife side effect and lowest-Life/Mana result are separate work.
+
+The final owner's program inventory remains Partial for cross-group and
+conversion-order proof. All seven new supplier queries remain Partial; empty
+membership does not establish absence. The published equipment bound alone does
+not prove arbitrary regrouping with inherent, intrinsic or reward contributions.
+No existing owner, source inventory or complete-build gate closes.
+
+The current package is **`runs/owned-player-life-pool-publication-02/package`**:
+
+- Input: `aedc17306523ec3c513f6e04c2d1937774705585b9c33c9c1cc9006b0c6452a1`.
+- Definitions: `cf65959955725dde2758ea79cb5542dca1fe9a9601a352344f8f3fad24ad837b`.
+- Rules: `c36478c0cd0d232d24363c4a30dfe0ac12764213720c7119417112335be6acdd`.
+- Compiled: `6dc31559ebdb6dfa9875ca1e7aa0a1ab6fe8708845db66956518431488460e3e`.
+- Registry: `6e97db58bec5855fa1a5b8e0b5253fc3ab74c3192a48e29262cce59cd47b076a`, last issued `3388`.
+
+The all-five publication passes in 35.56s, preserves all 110 saved queries and
+exact local identities, and rebuilds all eighteen files identically. Input issues
+remain **106/117/109/123/4** and configuration origins **46/81/37/32/30**.
+Complete native builds remain **0/5**. Two ordinary authoring/source tests and
+all 101 joined native tests pass, including eight new Life tests. The actual
+component derives 1320 from BASE 1257, INC 5 and MORE 1; level and robe-roll
+changes, fresh/reused/four-worker execution, the saved Player Life metric and
+explicit unavailable paths are checked. Finite test fixtures alone close the
+unproved supplier/order domains. Strict Clippy passes for both targets. Evidence:
+`runs/owned-player-life-pool-joined-05.log` (101 joined tests, 65.06s),
+`runs/owned-player-life-pool-authoring-02.log` (two source tests, 0.33s),
+`runs/owned-player-life-pool-publication-02.log` and
+`runs/owned-player-life-pool-clippy-02.log`. Independent data/source review
+passes; earlier rejected setup and budget attempts remain diagnostic logs.
+
+Retained evidence contains eleven source-control cases with repeated observed
+loads and uninstrumented JIT-off/on references (66 historical loads). Each compact
+vector is reconstructed from 72 original consumer invocations per acquisition;
+all archive bytes, source metadata and the complete formula body are checked.
+These are aggregate formula controls, not eleven independently supported builds.
+Positive transformation/override controls remain synthetic. No new PoB process
+was run. The packet keeps the original failures as diagnostics.
+
+**Next:** remove the five reviewed Mana pass-through receivers, then add the
+missing bound on the existing shared-Player Strength-to-Life contribution. A
+union proof can use unique concrete contributors and the global effect ceiling
+to cover BASE regrouping across intrinsic, inherent, equipment and reward groups.
+Authenticate each source bound and the Player INC census before refining the
+final Life gap; conversion-order proof and all supplier/admission gaps remain
+separate. These changes reuse current contracts and preserve the four selected
+import obligations.
+The rejected seven-program draft exceeded 8192:
+the predecessor has 8188 owner programs plus one application. Direct query reads
+remove six redundant receivers; this publication uses 8190 budget slots and
+changes no limit. The remaining passive blockers are unchanged.
 
 ## Archived 2026-10-15: Previous checkpoint: bounded equipment Life reduction
 

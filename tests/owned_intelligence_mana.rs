@@ -1,6 +1,9 @@
 //! Joined native resource dependencies and explicit source-control fixtures.
 #[path = "support/owned_mana_pool_adjustments.rs"]
 mod adjustments;
+#[allow(dead_code)]
+#[path = "support/owned_mana_direct_queries.rs"]
+mod direct_mana;
 #[path = "support/owned_intelligence_mana.rs"]
 mod family;
 #[path = "support/owned_mana_override.rs"]
@@ -399,8 +402,7 @@ fn missing_input_and_incomplete_or_unlisted_flags_cannot_become_zero() {
 }
 #[test]
 fn mana_replays_match_across_fresh_reused_unknown_and_parallel_workers() {
-    let mut a = mana_query_world();
-    adjustments::install(&mut a);
+    let a = pool_world();
     let mut b = a.clone();
     flags(&mut b, &[(0x3318, true)]);
     b.rebind_test_edit().unwrap();
@@ -432,12 +434,12 @@ fn mana_replays_match_across_fresh_reused_unknown_and_parallel_workers() {
     assert_eq!(mana(&expected[2]), &amount(420.));
     assert_eq!(mana(&expected[3]), &EffectValue::Inactive);
     assert_eq!(
-        adjustment_value(&expected[0], 0x335a),
-        query_quantity(0., 3)
+        adjustment_value(&expected[0], 0x29f9),
+        query_quantity(638., 3)
     );
     assert_eq!(
-        adjustment_value(&expected[3], 0x335a),
-        query_quantity(25.25, 3)
+        adjustment_value(&expected[3], 0x29f9),
+        query_quantity(305., 3)
     );
     assert!(matches!(
         expected[1].outcome,
@@ -708,7 +710,33 @@ fn publish_mana_queries_preserving_all_five_originals() {
 
 fn adjustment_world() -> replay::ReplayInput {
     let mut i = mana_query_world();
-    adjustments::install(&mut i);
+    let template = i.stages.frozen_channels.iter().find(|f| matches!(&f.channel, StageChannel::Contributions { stat, .. } if *stat == def(0x3355))).unwrap().clone();
+    for channel in direct_mana::dependencies().channels {
+        assert!(i.schema.definitions.contains(&channel.definition));
+        assert!(
+            !i.rules
+                .owners
+                .iter()
+                .any(|o| o.owner == channel.owner.owner)
+        );
+        let mut row = template.clone();
+        let StageChannel::Contributions {
+            stat, contribution, ..
+        } = &mut row.channel
+        else {
+            unreachable!()
+        };
+        *stat = channel.query.stat.clone();
+        *contribution = channel.query.contribution;
+        i.stages.frozen_channels.push(row);
+        i.rules
+            .contribution_queries
+            .as_mut()
+            .unwrap()
+            .members
+            .push(channel.query);
+    }
+    i.rebind_test_edit().unwrap();
     i
 }
 fn adjustment_value(r: &SupportEffectsReport, stat: u64) -> EffectValue {
@@ -739,8 +767,8 @@ fn adjustment_sources(i: &mut replay::ReplayInput) {
         "reads":[{"id":"active","value_type":{"kind":"boolean"},"source":{"kind":"stat","value":{"entity":"current","stat":def::<StatDefinition>(0x3355)}}}],
         "nodes":std::iter::once(json!({"id":"active","expression":{"kind":"read","input":"active"}})).chain(rows.iter().enumerate().map(|(n,(_,u,v))|json!({"id":format!("value-{n}"),"expression":{"kind":"literal","value":{"kind":"quantity","value":{"unit":def::<UnitDefinition>(*u),"value":v}}}}))).collect::<Vec<_>>(),
         "effects":rows.iter().enumerate().map(|(n,(stat,_,_))|json!({"id":format!("source-{n}"),"when":"active","effect":{"kind":"contribute","entity":"current","stat":def::<StatDefinition>(*stat),"contribution":"add","value":format!("value-{n}")}})).collect::<Vec<_>>() })).unwrap();
-    // This controlled producer needs the resolved flag. Move its channel freeze
-    // and receivers after it; retain explicit stages rather than skipping checks.
+    // This controlled producer needs the resolved flag. Freeze its channels
+    // after it; retain explicit stages rather than skipping checks.
     stage(i, actor(), &p, "contribute-inherent-strength-life");
     i.rules
         .owners
@@ -750,7 +778,11 @@ fn adjustment_sources(i: &mut replay::ReplayInput) {
         .programs
         .members
         .push(p);
-    for q in adjustments::consumer().queries {
+    for q in direct_mana::dependencies()
+        .channels
+        .into_iter()
+        .map(|c| c.query)
+    {
         let index = rows
             .iter()
             .position(|(stat, _, _)| def::<StatDefinition>(*stat) == q.stat)
@@ -767,13 +799,6 @@ fn adjustment_sources(i: &mut replay::ReplayInput) {
             .groups[0];
         g.members.members.push(serde_json::from_value(json!({"producer":{"kind":"program_effect","owner":actor(),"program":"test-mana-adjustment-sources","effect":format!("source-{index}"),"origin":{"kind":"existing_actor","application":"shared-player-initialization"}},"order":{"source_rank":0,"program_rank":0,"effect_rank":index,"slot_ranks":[]}})).unwrap());
     }
-    for o in adjustments::consumer().owners {
-        for row in &mut i.stages.programs.members {
-            if row.owner == o.owner {
-                row.stage = key("test-mana-queries");
-            }
-        }
-    }
     for row in &mut i.stages.frozen_channels {
         if matches!(&row.channel,StageChannel::Contributions{stat,..} if rows.iter().any(|(n,_,_)|*stat==def(*n)))
         {
@@ -783,55 +808,69 @@ fn adjustment_sources(i: &mut replay::ReplayInput) {
 }
 #[test]
 fn mana_adjustments_preserve_units_recipients_and_inactive_zero() {
-    let i = adjustment_world();
+    let i = pool_world();
     let r = report(i.clone());
-    for (stat, unit) in [
-        (0x3357, 2),
-        (0x3358, 2),
-        (0x3359, 2),
-        (0x335a, 3),
-        (0x335b, 3),
-    ] {
-        assert_eq!(adjustment_value(&r, stat), query_quantity(0., unit));
-        assert!(!effects(&r).values.iter().any(|v|matches!(&v.key,PlanValueKey::Stat{entity,stat:s} if *s==def(stat)&&*entity!=ConcreteEntity::Actor(ActorKey::Player))));
-    }
+    assert_eq!(adjustment_value(&r, 0x29f9), query_quantity(638., 3));
     let mut inactive = i.clone();
     adjustment_sources(&mut inactive);
     assert_eq!(
-        adjustment_value(&report(inactive.clone()), 0x335a),
-        query_quantity(0., 3)
+        adjustment_value(&report(inactive.clone()), 0x29f9),
+        query_quantity(638., 3)
     );
     let mut active = inactive;
     flags(&mut active, &[(0x3355, true)]);
     let r = report(active);
-    for (stat, unit, value) in [
+    assert_eq!(adjustment_value(&r, 0x29f9), query_quantity(305., 3));
+    for (index, (stat, unit, value)) in [
         (0x3357, 2, 25.),
         (0x3358, 2, 10.),
         (0x3359, 2, 0.),
         (0x335a, 3, 25.25),
         (0x335b, 3, 7.),
-    ] {
-        assert_eq!(adjustment_value(&r, stat), query_quantity(value, unit));
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let effect = effects(&r)
+            .effects
+            .iter()
+            .find(|e| {
+                e.key.invocation.program.as_str() == "test-mana-adjustment-sources"
+                    && e.key.effect.as_str() == format!("source-{index}")
+            })
+            .unwrap();
+        assert_eq!(effect.value, query_quantity(value, unit));
+        assert_eq!(
+            effect.target,
+            BoundEffectTarget::Contribution {
+                key: ContributionKey {
+                    entity: ConcreteEntity::Actor(ActorKey::Player),
+                    stat: def(stat),
+                    kind: ContributionKind::Add
+                }
+            }
+        );
+        assert!(!effects(&r).values.iter().any(|v| matches!(&v.key, PlanValueKey::Stat { stat: actual, .. } if *actual == def(stat))), "an adjustment channel is not a computed receiver");
     }
     assert!(
         !effects(&r)
             .values
             .iter()
-            .any(|v| matches!(&v.key,PlanValueKey::Stat{stat,..} if *stat==def(0x29f9))),
-        "input collectors do not claim final Mana"
+            .any(|v| matches!(&v.key,PlanValueKey::Stat{stat,entity} if *stat==def(0x29f9) && *entity != ConcreteEntity::Actor(ActorKey::Player))),
+        "final Mana belongs to the exact Player"
     );
 }
 #[test]
 fn mana_adjustments_refuse_unknown_partial_and_unlisted_sources() {
-    let mut i = adjustment_world();
+    let mut i = pool_world();
     adjustment_sources(&mut i);
     i.rules.receivers.members.retain(|r| r.stat != def(0x3355));
     let r = report(i);
     assert!(matches!(
-        adjustment_value(&r, 0x335a),
+        adjustment_value(&r, 0x29f9),
         EffectValue::Unresolved { .. }
     ));
-    let mut i = adjustment_world();
+    let mut i = pool_world();
     adjustment_sources(&mut i);
     i.rules
         .contribution_queries
@@ -850,7 +889,7 @@ fn mana_adjustments_refuse_unknown_partial_and_unlisted_sources() {
         i.compile().is_err(),
         "an inactive source still requires membership"
     );
-    let mut i = adjustment_world();
+    let mut i = pool_world();
     i.rules.contribution_queries.as_mut().unwrap().members.iter_mut().find(|q|q.stat==def(0x335a)).unwrap().groups[0].members.closure=serde_json::from_value(json!({"kind":"partial","value":{"gaps":[{"subject":subject(0x335a),"facet":"game_rules","code":"unreviewed-conversion-sources"}]}})).unwrap();
     assert!(matches!(
         report(i).outcome,
@@ -1113,19 +1152,34 @@ fn publish_mana_override_preserving_all_five_originals() {
     );
 }
 
-// Draft formula integration. Numeric-domain checks preserve availability; they
-// do not close source coverage or publish this finite component fixture.
+// Current direct-query formula integration. Historical packets authenticate
+// publication and source evidence; no obsolete collector graph is installed.
 fn pool_world() -> replay::ReplayInput {
-    let c = mana_pool::consumer();
     let mut i = override_world();
-    for o in &c.owners {
-        assert!(!i.rules.owners.iter().any(|r| r.owner == o.owner));
-        for p in &o.programs.members {
-            stage(&mut i, o.owner.clone(), p, "test-observe-mana-queries");
-        }
+    direct_mana::check_authored();
+    let d = direct_mana::dependencies();
+    for channel in &d.channels {
+        assert!(
+            !i.rules
+                .owners
+                .iter()
+                .any(|o| o.owner == channel.owner.owner)
+        );
+        assert!(
+            !i.rules
+                .receivers
+                .members
+                .iter()
+                .any(|r| r.stat == channel.query.stat)
+        );
     }
-    i.rules.owners.extend(c.owners);
-    i.rules.receivers.members.extend(c.receivers);
+    let owner = direct_mana::consumer().owner;
+    assert!(!i.rules.owners.iter().any(|o| o.owner == owner.owner));
+    for p in &owner.programs.members {
+        stage(&mut i, owner.owner.clone(), p, "test-observe-mana-queries");
+    }
+    i.rules.owners.push(owner);
+    i.rules.receivers.members.push(d.receiver);
     i.rebind_test_edit().unwrap();
     i
 }
@@ -1249,14 +1303,48 @@ fn draft_mana_pool_matches_every_retained_original_source_vector() {
 #[test]
 fn draft_mana_pool_retains_coverage_and_frozen_adjustment_dependencies() {
     let mut i = pool_world();
-    i.rules.receivers.members.retain(|r| r.stat != def(0x335a));
+    adjustment_sources(&mut i);
+    // One actual listed supplier has a missing operand. Removing an obsolete
+    // collector no longer describes an unknown channel in the current graph.
+    let source = i
+        .rules
+        .owners
+        .iter_mut()
+        .find(|o| o.owner == actor())
+        .unwrap()
+        .programs
+        .members
+        .iter_mut()
+        .find(|p| p.id == key("test-mana-adjustment-sources"))
+        .unwrap();
+    source.reads.push(RuleRead {
+        id: key("missing-extra"),
+        value_type: ComputedValueType::Quantity { unit: def(3) },
+        source: RuleReadSource::Stat {
+            entity: RuleEntity::Current,
+            stat: def(0x335a),
+        },
+    });
+    source
+        .nodes
+        .iter_mut()
+        .find(|n| n.id == key("value-3"))
+        .unwrap()
+        .expression = RuleExpression::Read {
+        input: key("missing-extra"),
+    };
+    for effect in &mut source.effects {
+        effect.when = None;
+    }
     assert!(
         matches!(
-            adjustment_value(&report(i), 0x29f9),
+            adjustment_value(&report(i.clone()), 0x29f9),
             EffectValue::Unresolved { .. }
         ),
         "missing extra Mana is not zero"
     );
+    allocate_override(&mut i);
+    assert_eq!(adjustment_value(&report(i), 0x29f9), query_quantity(0., 3));
     let mut i = pool_world();
     let query = i
         .rules
@@ -1297,6 +1385,29 @@ fn draft_mana_pool_retains_coverage_and_frozen_adjustment_dependencies() {
     assert!(
         error.contains("frozen channel read occurs before or outside frozen stage"),
         "a consumer cannot run before the stage that freezes its contributions: {error}"
+    );
+    let mut i = pool_world();
+    let final_stage = i
+        .stages
+        .programs
+        .members
+        .iter()
+        .find(|p| p.program == key("resolve-player-mana"))
+        .unwrap()
+        .stage
+        .clone();
+    let late = key("test-mana-adjustments-too-late");
+    i.stages.stages.push(EvaluationStage {
+        id: late.clone(),
+        predecessors: vec![final_stage],
+    });
+    i.stages.frozen_channels.iter_mut().find(|row| matches!(&row.channel,
+        StageChannel::Contributions { stat,contribution:ContributionKind::Add,.. } if *stat == def(0x335a)))
+        .unwrap().stage = late;
+    let error = i.rebind_test_edit().unwrap_err();
+    assert!(
+        error.contains("frozen channel read occurs before or outside frozen stage"),
+        "the direct Extra Mana query must respect its own frozen contribution channel: {error}"
     );
 }
 
@@ -1438,7 +1549,7 @@ fn mana_rounding_domain_checks_actual_operand_and_override_remains_lazy() {
     );
 
     // The existing explicitly synthetic adjustment source exercises a real
-    // checked contribution -> collector -> final Mana graph path.
+    // checked contribution -> final Mana graph path.
     let mut outside = pool_world();
     adjustment_sources(&mut outside);
     let source = outside

@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-10-14 for the owner's aggressive retirement direction. This is a living companion to
+Updated 2026-10-15 for the owner's aggressive retirement direction. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -54,6 +54,30 @@ and retain its useful component/source checks. Do not waive receipt fields,
 modify authenticated history in place or add a compatibility reader. The active
 path consumes the current authenticated authoring endpoint directly; replaying
 every historical publication is not a production prerequisite.
+
+The October 15 CI follow-up also identifies the two maintained seed-manifest
+families that must be rebuilt after a compiler-domain change: `current` and
+`import/compiled`. Their outer transition receipts, and allocation source facts
+when affected, must follow the generated artifact bytes. Reproduction uses the
+existing production assemblers; changing an expected digest in a test or ignoring
+receipt fields is not a repair. The latest evidence and validation status are in
+the [CI checkpoint](implementation.md#ci-receipt-repair-2026-10-15).
+
+## Redundant resource receivers (2026-10-15)
+
+The Player Life and Mana consumers now read their checked adjustment queries
+directly. Mana's five one-query pass-through programs and Player receivers are
+removed. Typed channels, query memberships/coverage and contribution freezes
+remain; the exact reader census prevents removal while another computed-value
+dependency exists. There is no replacement collector abstraction or runtime
+compatibility branch.
+
+Historical authoring packets are retained only for authenticated reconstruction
+and source evidence. Current native fixtures construct the direct-query graph;
+the obsolete collector installer is deleted. Input, unknown, membership, freeze,
+override and numerical controls exercise the current final consumer. All 24
+focused tests, all-five publication/rebuild and strict Clippy pass. Validation and
+the active endpoint are recorded in the implementation checkpoint.
 
 ## Retention rule
 

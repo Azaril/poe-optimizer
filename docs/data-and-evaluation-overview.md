@@ -107,8 +107,17 @@ pass, including input changes, source vectors, fresh/reused/parallel agreement
 and unavailable paths. Only the finite test graph closes the remaining proof
 domains; the production endpoint keeps them Partial. The
 [capacity review](implementation.md#measured-catalog-capacity-and-next-cleanup)
-tracks the compiler's remaining two program slots and roughly 2.7 MB release
+tracks the compiler's remaining seven program slots and roughly 2.7 MB release
 headroom before additional catalog growth.
+
+The [Mana cleanup](../data/owned/poe2/3887ae68/mana-direct-queries/README.md)
+removes five forwarding programs and Player receivers. The final Mana program
+reads the same checked contribution queries directly; all typed channels,
+memberships, coverage, arithmetic and override semantics are preserved. The old
+collector fixture installer is deleted, and current numerical tests construct
+the direct-query graph. All 24 focused tests, all-five publication/rebuild and
+strict Clippy pass. Historical authoring/source packets remain evidence, without
+a runtime compatibility path or a new collector abstraction.
 
 Archived generated skills now retain unfinished preset usage even when no
 supported manual sibling initializes it. A generic source-discovery producer
@@ -161,7 +170,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-guarded-player-life-consumer).
+[implementation checkpoint](implementation.md#current-checkpoint-direct-mana-queries).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -242,9 +251,11 @@ agreement. Final rounding now has a published guarded consumer; actual conversio
 and extra/total suppliers still need complete coverage. Neither reference output
 nor a subtotal is a substitute for an admitted complete build.
 
-The [Mana adjustment packet](../data/owned/poe2/3887ae68/mana-pool-adjustments/README.md)
-now gives the conversion percentages and pre/post-scaling additions explicit
-typed collectors. Their admitted source domains are guarded empty groups;
+The historical [Mana adjustment packet](../data/owned/poe2/3887ae68/mana-pool-adjustments/README.md)
+introduced explicit typed channels for conversion percentages and pre/post-scaling
+additions. Their redundant computed collectors are now removed; the final Mana
+consumer reads the retained checked queries directly. Their admitted source
+domains remain guarded empty groups;
 unconverted mechanics remain blocking. The independent source controls include
 a real nonzero fractional conversion input and its interaction with a zero
 override. Native conversion supplier admission and complete-build Mana evaluation
@@ -266,7 +277,7 @@ refusal. The passive's cost-conversion effect, item-granted origins, other resou
 suppliers and complete-plan admission remain separate coverage obligations.
 Data adoption adds no resource-specific native engine behavior and does not finish Mana.
 
-The [published final Mana program](../data/owned/poe2/3887ae68/mana-pool/README.md)
+The [current final Mana program](../data/owned/poe2/3887ae68/mana-direct-queries/README.md)
 joins those native inputs using ordinary typed arithmetic and lazy override
 selection. Its finite component fixture calculates 638 Mana; the scalar
 consumer compares all 16 retained source vectors. The approved
@@ -1321,7 +1332,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-guarded-player-life-consumer),
+live in the [implementation plan](implementation.md#current-checkpoint-direct-mana-queries),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.

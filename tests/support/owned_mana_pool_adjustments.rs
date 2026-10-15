@@ -1,5 +1,5 @@
-//! Data-only Player Mana adjustment inputs. Empty domains guard the published
-//! source inventory; they do not establish complete conversion mechanics.
+//! Historical Mana adjustment publication and evidence reconstruction only.
+//! Current native fixtures use checked queries without these collector programs.
 use poe_optimizer_core::{owned_content::digest_owned, owned_rules::*, owned_schema::*};
 use poe_optimizer_import::{
     owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
@@ -168,56 +168,6 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     next
 }
 
-/// Extend only the explicitly finite replay. No production coverage is repaired.
-pub fn install(i: &mut super::replay::ReplayInput) {
-    use poe_optimizer_core::owned_stages::*;
-    use poe_optimizer_import::owned_recipe_extension::SchemaExtensionEntry;
-    for row in migration().schema {
-        let SchemaExtensionEntry::Definition(d) = row else {
-            panic!()
-        };
-        assert!(i.schema.definitions.contains(&d));
-    }
-    let c = consumer();
-    for o in &c.owners {
-        for p in &o.programs.members {
-            super::stage(
-                i,
-                o.owner.clone(),
-                p,
-                "resolve-intelligence-inherent-disabled",
-            );
-        }
-        i.rules.support_discovery.as_mut().unwrap().providers.push(
-            SupportSourceDomainDeclaration {
-                owner: o.owner.clone(),
-                domain: SchemaState::Known(SupportSourceDomain::AuthoredAssignmentsOnly),
-            },
-        );
-    }
-    let template=i.stages.frozen_channels.iter().find(|f|matches!(&f.channel,StageChannel::Contributions{stat,..} if *stat==super::def(0x3355))).unwrap().clone();
-    for q in &c.queries {
-        let mut row = template.clone();
-        let StageChannel::Contributions {
-            stat, contribution, ..
-        } = &mut row.channel
-        else {
-            unreachable!()
-        };
-        *stat = q.stat.clone();
-        *contribution = q.contribution;
-        i.stages.frozen_channels.push(row);
-    }
-    i.rules.owners.extend(c.owners);
-    i.rules.receivers.members.extend(c.receivers);
-    i.rules
-        .contribution_queries
-        .as_mut()
-        .unwrap()
-        .members
-        .extend(c.queries);
-    i.rebind_test_edit().unwrap();
-}
 #[test]
 fn mana_adjustment_data_preserves_five_guarded_empty_domains() {
     check_authored();
