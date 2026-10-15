@@ -15,6 +15,7 @@ fn enabled_policy(a: &Artifacts) -> NormalizationPolicy {
         tree_view: true,
         empty_notes: true,
         cached_build_buffs: true,
+        empty_party: false,
     });
     p
 }

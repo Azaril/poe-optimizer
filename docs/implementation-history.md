@@ -1,10 +1,51 @@
-> Historical snapshots through the direct Mana queries checkpoint on 2026-10-15.
+> Historical snapshots through the Critical Weakness checkpoint on 2026-10-15.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-15 checkpoint: Critical Weakness input
+
+The [Critical Weakness input packet](../data/owned/poe2/3887ae68/configuration-enemy-critical-weakness-input/README.md)
+publishes external input `3390` on the scenario Enemy, using existing Count unit
+`295a` and the shared checked configuration adapter. The configured candidate is
+preserved before activation, clamping and critical-chance calculations. No new
+native operation, gameplay program, receiver or completed supplier inventory is
+introduced. This is actual imported build data, not a fixture value in evaluation.
+
+Nonzero authored Input takes precedence over Placeholder, with constructor 20
+only when neither supplies the candidate. Zero Placeholder remains known input;
+it does not imply callback emission. Negative, fractional and above-cap values
+remain raw within the explicit import domain. Original callback bodies and both
+retained constructor observations authenticate these separate meanings.
+
+The production CLI publishes and exactly rebuilds all 18 files, then preserves
+all five originals and all 110 saved queries. Original05's configuration-linked
+origins fall **30 → 29** (14 inside Config, 15 outside); known scenario assumptions
+increase **23 → 24**. Its 35 preset preferences and all four selected input
+obligations remain unchanged. Selected issue counts stay **106/117/109/123/4**;
+complete native evaluations remain **0/5**. Activation, clamp/effect delivery and
+the complete configuration census remain separate blockers.
+
+Predecessor package:
+**`runs/owned-configuration-critical-weakness-publication-02/package`**.
+
+- Input: `1084b2615f8ec4b8d5960077b6dda429d5220dc2a27628f32b1121ec2a23cf05`.
+- Registry: `7c575fefb36d34241783cd01f483ca240d0e4700e7b7b974ff8aa3a8b0f43878` (last `3390`).
+- Definitions: `0122fed74a6e554c6c1020ed6d448f2bd31ef980dad7e119cb38dc9cf48716fa`.
+- Rules: `d47241e98ff7214470c06637e617b56d469d0262e2b84a08156045ff29d84fcf`.
+- Compiled: `0bf62d5976442cd682f66d90dae992d1786d66a22d0c8e0c9c707c6179700c81`.
+
+The package has **64,435,356 bytes**, 188 provenance rows and unchanged
+8187/8192 program use. Three ordinary source/data tests pass, followed by the
+explicit all-five publication and 22 input/encounter/duplicate controls (61.74s).
+Strict target Clippy and independent review pass. Evidence:
+`runs/owned-configuration-critical-weakness-{ordinary-03,publication-02,clippy-01}.log`
+and the publication's `validation.json`. Publication01 is superseded: publication02
+authenticates the original immutable constructor review, preserving historical
+publication receipts. Its compiled semantics are identical to publication01.
 
 ## Archived 2026-10-15: Warrior selector preflight from October 8
 

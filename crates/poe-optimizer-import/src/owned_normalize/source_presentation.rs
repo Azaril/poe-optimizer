@@ -19,6 +19,9 @@ pub enum SourcePresentationPolicy {
         /// preserves inherited policies and their existing content identities.
         #[serde(default, skip_serializing_if = "is_false")]
         cached_build_buffs: bool,
+        /// A childless Party frame stores future import and display preferences.
+        #[serde(default, skip_serializing_if = "is_false")]
+        empty_party: bool,
     },
 }
 
@@ -32,6 +35,7 @@ pub(super) struct CompiledSourcePresentation {
     tree_view: bool,
     empty_notes: bool,
     cached_build_buffs: bool,
+    empty_party: bool,
 }
 
 pub(super) fn compile(
@@ -46,6 +50,7 @@ pub(super) fn compile(
         tree_view,
         empty_notes,
         cached_build_buffs,
+        empty_party,
     }) = &policy.source_presentation
     else {
         return Ok(None);
@@ -65,6 +70,7 @@ pub(super) fn compile(
         tree_view: *tree_view,
         empty_notes: *empty_notes,
         cached_build_buffs: *cached_build_buffs,
+        empty_party: *empty_party,
     }))
 }
 
@@ -159,6 +165,7 @@ pub(super) fn apply(
         policy.tree_view,
         policy.empty_notes,
         policy.cached_build_buffs,
+        policy.empty_party,
     )?);
     if candidates.len() > b.limits.draft.input.max_collection_entries {
         return Err(NormalizationError::Limit("source presentation rows"));

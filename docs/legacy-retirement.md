@@ -55,6 +55,16 @@ modify authenticated history in place or add a compatibility reader. The active
 path consumes the current authenticated authoring endpoint directly; replaying
 every historical publication is not a production prerequisite.
 
+The empty Party checkpoint exposes the same boundary in the historical
+cached-Buffs publication: its old endpoint still contains retired
+`ordered_contributions`, so the current assembler rejects it before receipt
+validation. That obsolete test orchestration is now replaced by an authenticated
+current-data disable/re-enable control through the same policy transition and
+CLI publisher. The old source packet and failed reproduction log are preserved;
+the exact restored input, all-five draft/sidecar preservation and unchanged
+native rules pass. Do not migrate an obsolete rule payload merely to retain a test,
+or add an old-format reader. The shared current transition remains one path.
+
 The October 15 CI follow-up also identifies the two maintained seed-manifest
 families that must be rebuilt after a compiler-domain change: `current` and
 `import/compiled`. Their outer transition receipts, and allocation source facts

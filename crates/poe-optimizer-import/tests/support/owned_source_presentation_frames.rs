@@ -283,3 +283,125 @@ fn omitted_cached_buffs_switch_authorizes_nothing_and_preserves_policy_wire() {
     .unwrap();
     assert_eq!(presentation_count(&result, CACHED_BUFFS), 0);
 }
+const EMPTY_PARTY: &str = "source-empty-party";
+
+fn party_policy(a: &Artifacts) -> NormalizationPolicy {
+    let mut policy = enabled_policy(a);
+    let SourcePresentationPolicy::PobFreshPresentationV1 { empty_party, .. } =
+        policy.source_presentation.as_mut().unwrap();
+    *empty_party = true;
+    policy
+}
+
+fn party_count(body: &str) -> usize {
+    let a = artifacts(false);
+    let result = normalize(&wrap(body), &a, &party_policy(&a), Default::default()).unwrap();
+    presentation_count(&result, EMPTY_PARTY)
+}
+
+#[test]
+fn empty_party_admits_only_fresh_import_and_display_preferences() {
+    for destination in [
+        "All",
+        "Party Member Stats",
+        "Aura",
+        "Curse",
+        "Warcry Skills",
+        "Link Skills",
+        "EnemyConditions",
+        "EnemyMods",
+    ] {
+        for append in ["true", "false"] {
+            for advanced in ["true", "false"] {
+                let body = format!(
+                    r#"<Party destination="{destination}" append="{append}" ShowAdvanceTools="{advanced}"/>"#
+                );
+                assert_eq!(party_count(&body), 1, "{body}");
+            }
+        }
+    }
+    for body in [
+        "<Party/>",
+        "<Party> \n\t </Party>",
+        "<Party append='true'/>",
+        "<Party ShowAdvanceTools='true'/>",
+    ] {
+        assert_eq!(party_count(body), 1, "{body}");
+    }
+}
+
+#[test]
+fn empty_party_refuses_payload_aliases_and_unknown_saved_shapes() {
+    for body in [
+        "<Party destination=''/>",
+        "<Party destination='all'/>",
+        "<Party destination='Future'/>",
+        "<Party append='1'/>",
+        "<Party ShowAdvanceTools='nil'/>",
+        "<Party append='TRUE'/>",
+        "<Party future='x'/>",
+        "<Party enableExportBuffs='true'/>",
+        "<Party><ImportedBuffs name='Aura'/></Party>",
+        "<Party><ExportedBuffs name='Aura'/></Party>",
+        "<Party><Future/></Party>",
+        "<Party>authored</Party>",
+        "<Party><!-- unknown --></Party>",
+        "<Party><![CDATA[]]></Party>",
+        "<Party xmlns='urn:other'/>",
+        "<Party/><Party/>",
+        "<Items><Party/></Items>",
+    ] {
+        assert_eq!(party_count(body), 0, "{body}");
+    }
+    assert!(decode_build(wrap("<Party append='true' append='false'/>").as_bytes()).is_err());
+    let a = artifacts(false);
+    let xml = wrap("<Party/>").replace("<PathOfBuilding2>", "<PathOfBuilding2 future='x'>");
+    let result = normalize(&xml, &a, &party_policy(&a), Default::default()).unwrap();
+    assert_eq!(presentation_count(&result, EMPTY_PARTY), 0);
+}
+
+#[test]
+fn omitted_party_opt_in_preserves_wire_and_all_five_native_drafts() {
+    let a = artifacts(false);
+    let old_policy = enabled_policy(&a);
+    let wire = serde_json::to_value(old_policy.source_presentation.as_ref().unwrap()).unwrap();
+    assert!(wire.get("empty_party").is_none());
+    let restored: SourcePresentationPolicy = serde_json::from_value(wire.clone()).unwrap();
+    assert_eq!(serde_json::to_value(restored).unwrap(), wire);
+    for xml in [
+        include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-01.xml"),
+        include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-02.xml"),
+        include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-03.xml"),
+        include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-04.xml"),
+        include_str!("../../../../tests/fixtures/builds/breadth-20260908/build-05.xml"),
+    ] {
+        let before = normalize(xml, &a, &old_policy, Default::default()).unwrap();
+        let after = normalize(xml, &a, &party_policy(&a), Default::default()).unwrap();
+        assert_eq!(before.draft().input(), after.draft().input());
+        assert_eq!(before.allocator_after(), after.allocator_after());
+        assert_eq!(presentation_count(&before, EMPTY_PARTY), 0);
+        assert_eq!(presentation_count(&after, EMPTY_PARTY), 1);
+        let changed: Vec<_> = before
+            .sidecar()
+            .origins
+            .iter()
+            .zip(&after.sidecar().origins)
+            .filter(|(old, new)| old != new)
+            .collect();
+        assert_eq!(changed.len(), 1);
+        let (old, new) = changed[0];
+        assert_eq!(old.source, new.source);
+        assert_eq!(
+            new.disposition,
+            SourceDisposition::SourceOnly(key(EMPTY_PARTY))
+        );
+        assert!(matches!(old.disposition, SourceDisposition::Contributes));
+        assert!(!old.links.is_empty());
+        assert!(
+            old.links
+                .iter()
+                .all(|link| matches!(link, OwnedOriginTarget::Issue(_)))
+        );
+        assert!(new.links.is_empty());
+    }
+}

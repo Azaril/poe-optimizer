@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "archives": [
+    {
+      "path": "src/Classes/PartyTab.lua",
+      "archive": "evidence/PartyTab.lua.gz",
+      "sha256": "6ad023b873077d3c48eef65214a4076762f9dc304967459ef96d8422e0a32189",
+      "bytes": 45505,
+      "compressed_sha256": "492ff2a00840651de6bf8696644cad812035829966eb9c2f115f889a64061570",
+      "compressed_bytes": 7646
+    },
+    {
+      "path": "src/Classes/DropDownControl.lua",
+      "archive": "evidence/DropDownControl.lua.gz",
+      "sha256": "a20fe837f44f8ca028b4cc3447fee72e6f6f102224e9b8331edbdcafa8601a8f",
+      "bytes": 17071,
+      "compressed_sha256": "f811cdf5c39b15c0fb3d9dd08759685531b49fe6e0a388456eed0575f72a65b6",
+      "compressed_bytes": 4148
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "archive": "evidence/Build.lua.gz",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d",
+      "bytes": 116017,
+      "compressed_sha256": "3f6a44249269eeb28cde364af74eadcc293d28aa3e2807f321cf3382aef8e0b6",
+      "compressed_bytes": 26180
+    }
+  ],
+  "excerpts": [
+    {
+      "path": "src/Classes/PartyTab.lua",
+      "first": 16,
+      "last": 514,
+      "role": "fresh_constructor_and_explicit_import_controls",
+      "sha256": "6f1e61eacd1e59572ac104fc2418ea66afb0cafd0af20f9a390c2dbd757edab9"
+    },
+    {
+      "path": "src/Classes/PartyTab.lua",
+      "first": 516,
+      "last": 573,
+      "role": "load",
+      "sha256": "8e8e732a71b679fd91d45d80446e9b866360bac0c19f84eb005f91ad59e97f74"
+    },
+    {
+      "path": "src/Classes/PartyTab.lua",
+      "first": 575,
+      "last": 716,
+      "role": "save_and_display",
+      "sha256": "173d6bc185442fd9b0e2976e213f8ee0430094992a50371c520409747fa915f0"
+    },
+    {
+      "path": "src/Classes/DropDownControl.lua",
+      "first": 20,
+      "last": 65,
+      "role": "dropdown_constructor",
+      "sha256": "79eb8980bd4c42dc8de84d7be7a24f57095c8b65568384ec8049b766cdd7b182"
+    },
+    {
+      "path": "src/Classes/DropDownControl.lua",
+      "first": 142,
+      "last": 157,
+      "role": "selection_without_callback",
+      "sha256": "04c56b7c45ade0827ff9f186b1a366af9d28b886e1c046122593c0a696eef672"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "first": 34,
+      "last": 635,
+      "role": "fresh_build_construction_and_saver_load",
+      "sha256": "2cb5cb8e2cc4efc889a92a0e29d1c4355286f2477de667603e884faeb53fd1e1"
+    }
+  ],
+  "destinations": [
+    "All",
+    "Party Member Stats",
+    "Aura",
+    "Curse",
+    "Warcry Skills",
+    "Link Skills",
+    "EnemyConditions",
+    "EnemyMods"
+  ],
+  "defaults": {
+    "destination": "All",
+    "append": false,
+    "ShowAdvanceTools": false
+  },
+  "runtime_observations": "none",
+  "scope": {
+    "unique_ordinary_root_leaf": true,
+    "child_records": false,
+    "native_inventory_completion": false,
+    "party_payload_delivery": false,
+    "import_exportParty": false,
+    "future_explicit_user_actions": false
+  },
+  "upstream_license": {
+    "path": "../configuration-accounting/evidence/pob/LICENSE.md",
+    "sha256": "22d2d075c1d361971764fbbd1e12e1485bdf35f0769ffac4eca8a79afc60dda8"
+  }
+}

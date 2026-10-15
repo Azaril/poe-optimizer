@@ -139,14 +139,42 @@ fn cached_build_buffs(
         .unwrap_or_default())
 }
 
+fn empty_party(row: &SourceEvidenceRow<'_>) -> bool {
+    // Fresh PartyTab construction clears imported state. Load:516-573 only
+    // invokes ParseBuffs for child records; these three leaf attributes select
+    // future import/display controls. SelByValue has no callback.
+    plain_row(row, &["destination", "append", "ShowAdvanceTools"], true)
+        && value(row, "destination").is_none_or(|destination| {
+            [
+                "All",
+                "Party Member Stats",
+                "Aura",
+                "Curse",
+                "Warcry Skills",
+                "Link Skills",
+                "EnemyConditions",
+                "EnemyMods",
+            ]
+            .contains(&destination)
+        })
+        && value(row, "append").is_none_or(|v| boolean(Some(v)))
+        && value(row, "ShowAdvanceTools").is_none_or(|v| boolean(Some(v)))
+}
+
 pub(super) fn collect(
     b: &mut Builder<'_, '_>,
     calcs_sections: bool,
     tree_view_enabled: bool,
     empty_notes: bool,
     cached_build_buffs_enabled: bool,
+    empty_party_enabled: bool,
 ) -> Result<Vec<(SourceOccurrenceId, OwnedDefinitionKey)>> {
-    if !calcs_sections && !tree_view_enabled && !empty_notes && !cached_build_buffs_enabled {
+    if !calcs_sections
+        && !tree_view_enabled
+        && !empty_notes
+        && !cached_build_buffs_enabled
+        && !empty_party_enabled
+    {
         return Ok(vec![]);
     }
     let evidence = b.evidence;
@@ -167,6 +195,7 @@ pub(super) fn collect(
             || (name == "TreeView" && tree_view_enabled)
             || (name == "Notes" && empty_notes)
             || (name == "Build" && cached_build_buffs_enabled)
+            || (name == "Party" && empty_party_enabled)
         {
             let frame = frames.entry(name).or_insert((*source, 0));
             frame.1 = frame.1.saturating_add(1);
@@ -186,6 +215,9 @@ pub(super) fn collect(
         }
         match name {
             "Build" => result.extend(cached_build_buffs(b, source)?),
+            "Party" if empty_party(row) => {
+                result.push((source, key("source-empty-party")));
+            }
             "Calcs" => result.extend(sections(b, source)?),
             "TreeView" if tree_view(row) => {
                 result.push((source, key("source-tree-view-layout")));
