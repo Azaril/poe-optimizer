@@ -171,6 +171,35 @@ triage must preserve its direct reader's explicit-zero semantics separately from
 the configuration callback's zero-to-Placeholder fallback. Do not remove source
 links or invent neutral contributors merely to reduce blocker counts.
 
+The post-publication source review found no critical supplier ready for closure.
+Original05 observes zero for the six numeric dependencies and empty flag/override
+buckets, but this does not prove complete producer exclusions. Configured evasion
+also depends on accuracy, avoidance and category composition. Keep those gaps;
+do not add an observed-zero receiver. The smallest possible critical exclusion,
+optional override absence, still needs a complete source-name/transport proof.
+
+**Next implementation in progress:** bounded equipment-Life reduction using the
+existing checked-domain operation. The engine enforces a non-raisable ceiling of
+65,536 effects, and checked query binding rejects duplicate effect indices.
+Guarding each integral direct/copy contribution to `[-2^37, 2^37]` bounds every
+signed partial sum by `2^53`, independently of source order. Copying also needs a
+guard on its effective input so a tiny factor cannot hide a large source numeric
+transport discrepancy. This is a proposed data-bound proof, not yet published
+coverage. Preserve the shared effective-value diagnostic and all four flat-Life
+owner gaps. Final resource assembly needs its own bounds; this proof would apply
+only to the equipment query group. Test the hard limit, actual producer graphs,
+boundary failures, duplicate occurrences, lazy branches and exact publication
+before retiring that group's existing numeric-order gap.
+
+**Pending owner decision:** [multiple configuration projections](owned-configuration-projections-proposal.md).
+One saved enemy-distance control can yield range 0 and distance-modifier candidate
+80 from Input 0 / Placeholder 80. Current adapters cannot represent both roles.
+The proposal extends the existing Import selection/receipt path while reusing
+typed Scenario inputs and common configuration accounting; it creates no native
+UI or Lua behavior. The alternative investigates intended game semantics before
+classifying one source interpretation as a defect. This public policy decision
+has been prompted; no dependent implementation is authorized yet.
+
 ## Previous checkpoint: archived generated usage responsibilities
 
 The importer now discovers unresolved usage on a recognized archived generated
@@ -3361,7 +3390,7 @@ It must preserve participation, reference-selection and FullDPS responsibilities
 Do not repeat the same source capture, reinterpret a guard as that authority or
 infer a complete inventory from unchanged final metrics.
 
-## Retained incoming-critical proof and pending final-result ownership
+## Retained incoming-critical proof and superseded ownership draft
 
 The independent complete-PoB witness now **passes 26 cases under both JIT modes**,
 including MAIN/CALCS agreement, a separate fresh replay and a changed-to-original
@@ -3382,16 +3411,14 @@ evidence, not permission to ignore a future real override mechanic or arbitrary
 direct modifier injection. The native draft deliberately has no Lua-shaped
 override-presence/value model; it retains a resolved configured-chance dependency.
 
-**The native draft is not published or usable yet.** Its shared Player owner
-reads Enemy computed Stats and Boolean queries, which the current shared-Actor
-contract refuses. The October 14 review found a better existing ownership path:
-stat-owned Player receivers are intended for final Actor results and already
-support these exact typed Enemy dependencies. The
-[revised proposal](owned-actor-enemy-reads-proposal.md) recommends one receiver
-per final Stat, preserving shared Actor source/intrinsic ownership and its
-Partial inventory. This revised direction has been prompted and remains pending.
-Neither widening shared-Actor reads nor removing a binding just to make a test
-pass is authorized. Support-origin composition was separately accepted October 8.
+**The old shared-Actor draft is superseded.** Its owner reads Enemy computed
+Stats and Boolean queries, which the shared-Actor contract refuses. The owner
+accepted the October 14 [revision](owned-actor-enemy-reads-proposal.md): existing
+stat-owned Player receivers own final Actor results and already support these
+exact typed Enemy dependencies. The current checkpoint publishes and tests that
+replacement while preserving shared Actor source/intrinsic ownership and its
+Partial inventory. No broader shared-Actor authority was added. Support-origin
+composition was separately accepted October 8.
 
 Uncommitted preparatory files are `incoming-critical-effect/{extension,policy,
 native-inputs,queries,README}` and the two new root critical test targets and
@@ -4577,7 +4604,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Composed support discovery | Accepted October 8. The common native gate, current authored-order DTO and source-input accounting are implemented; Original05 `01de` is retired. The Gem packet publishes 937 Known and 29 Unmapped domains with all-five preservation; all 23 selected physical Gem domains are covered. Existing typed identities fixed 111 false stat-set blockers. Pinned generated export metadata classifies eight missing runtime effects as active without implementing their Command mechanics. Continue other owner domains and exact provider exclusions; keep Command action/usage gaps separate. Unsupported positive and archived source relationships remain blocking. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Application-group contribution queries | Accepted and implemented October 8 in Core/Data/Engine V25. Typed program-effect/application-group addresses preserve exact recipients, potential-source census, stacking, unknowns and explicit numeric order in one checked reduction path. Current artifacts are rebuilt with no old-format compatibility. Mixed inherited/applied damage data now adopts this capability; MORE and final hit consumers remain next. [Accepted contract](owned-application-group-contribution-queries-proposal.md). |
-| Final incoming-critical ownership | Revised October 14: recommend existing stat-owned Player receivers for final results, preserving exact Enemy Stat/Flag reads and own-Stat writes through the current graph. Keep shared Actor intrinsic/source contributions and Partial inventory unchanged. The revised choice is prompted and pending; no new authority is approved. Rebase old provisional IDs and reuse published raw inputs before native data adoption. [Proposal](owned-actor-enemy-reads-proposal.md). |
+| Final incoming-critical ownership | Accepted and implemented October 14 through existing stat-owned Player receivers. Three final formulas reuse configured inputs and preserve exact Enemy reads, own-Stat writes and shared Actor Partial coverage. All 52 source vectors, native/CLI checks and all-five publication pass. Six numeric producers, four Partial supplier queries and complete-build/EHP binding remain open. [Decision](owned-actor-enemy-reads-proposal.md). |
 | Configuration/source dispositions | Presentation, exact item-range ownership and common checked leaf accounting are implemented; full semantic closure is not. Original05 issue `01f2` now retains 32 source origins after damage-roll accounting and three default-input publications; older origin counts are historical. Preset usage `0505` has 23 known preferences, assumptions `0207` has 20 known members, and scenario usage `0208` remains empty/Pending. Known members do not complete an inventory. The owner approved full checked disposition authority on October 14; complete catalogue/default and outside-origin accounting remain pending. Partial scalar success or local Config proof cannot clear global fallback. Typed defaults reach Player/Enemy/Environment inputs and the real Player resistance penalty is published. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
