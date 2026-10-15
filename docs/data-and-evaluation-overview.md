@@ -105,6 +105,12 @@ transport bodies: 57 keyed nodes match 2,394 anonymous returns without inventing
 per-return identities. Full record bodies, duplicates and order commitments are
 retained. Arbitrary parsing, empty-parsed effects, generated-skill/support
 delivery and native completeness remain open.
+The same packet now reconciles eight equipment loads and nine exact uses through
+their original construction recipes, owned bindings and actual slot selections.
+Six uses have directly observed active lists; three slot-specific lists retain
+separate recipe evidence without inventing a later delivery observation. Seven
+ordinary mutation tests and strict Clippy pass. This narrows source construction
+uncertainty while preserving native source/delivery and complete-build gates.
 
 The [guarded Player Life consumer](../data/owned/poe2/3887ae68/player-life-pool/README.md)
 now publishes the final formula on the existing Life Stat using direct checked

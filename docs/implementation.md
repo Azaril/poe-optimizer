@@ -283,12 +283,9 @@ owners and does not revoke separate intrinsic proofs. The two exact `ExtraSkill`
 roots, generated/support descendant delivery, later transformations, numeric
 ordering and all twelve Partial passive owners remain open. It changes no native
 package, query, input obligation or complete-build count. The next bounded source
-step is selected equipment recipe and constructed-list reconciliation: reuse
-the eight authenticated Item loads, nine exact uses, owned bindings and actual
-slot selections. Review complete Item/ItemsTab construction bodies before
-addressing item-to-store delivery, scaling and copy/replacement branches. Exact
-native source dispositions remain required; another zero aggregate or
-completeness-label change is insufficient.
+step was selected equipment recipe and constructed-list reconciliation, now
+recorded below. Exact native source dispositions remain required; another zero
+aggregate or completeness-label change is insufficient.
 
 Explicit retention passes (16.20s). All seven new ordinary tests (17.21s) and
 seven affected radius tests (20.87s) pass; strict Clippy passes for both targets
@@ -298,6 +295,41 @@ authenticated supplier module. No production API changed. Evidence uses
 `runs/owned-mana-passive-{retain-01,ordinary-01,clippy-01,radius-ordinary-02,radius-clippy-02}.log`.
 Retained review SHA-256:
 `007e491a5188ecd36d9673839b3fd382e7bffa0c746ff1b5d7604548ad85d2f1`.
+
+### Selected equipment constructor reconciliation
+
+The same [supplier packet](../data/owned/poe2/3887ae68/mana-supplier-sources/README.md)
+now authenticates eight Item loads, nine exact uses and eighteen active-list
+recipes across the two bonded settings. It joins retained raw XML, ranges,
+variants and complete parsed/base/buff records through exact owned bindings,
+actual radius-capture slot selections and source02 item inventories. Complete
+Item, ItemsTab and ItemTools bodies remain offline evidence; no new source VM
+run or runtime adapter is introduced.
+
+Each independent source02 report has 189 exact item/base/buff joins and 126
+direct active-list joins across 21 environments. Both ring uses and Weapon 1
+have slot-specific active lists absent from that capture. Their retained
+original construction recipes are checked separately; absent `item.modList`
+is never treated as an empty active list or a delivery observation. The actual
+jewel-data key is omitted, not JSON null; zero socket count is separately
+observed. The three source archives add 67,639 compressed bytes.
+
+Recursive checks exclude the fifteen Mana adjustment names from this finite
+construction domain. A generated-skill declaration remains an explicit
+boundary. Item-to-store delivery/scaling, focus/Amulet-copy/replacement paths,
+inherited stores, generic parsing, numerical order, generated/support delivery
+and native/global coverage are unproved. No package, input issue or whole-build
+gate changes.
+
+Retention passes (22.34s), all seven ordinary tests pass (21.18s), and strict
+Clippy passes (1.10s); independent review is clean. The first two retention failures identified incorrect
+verifier assumptions about omitted jewel-data fields; the exact immutable
+capture is now checked without null/absence equivalence. The first Clippy run
+identified a helper type alias simplification. Failed logs remain; no source
+capture was repeated. Evidence uses
+`runs/owned-mana-equipment-{retain-01,retain-02,retain-03,ordinary-01,clippy-01,clippy-02}.log`.
+Review SHA-256:
+`240521343222f840c91a129126ff5b630fc04917da66cc5de30ab2a64a7d495b`.
 
 The final Spirit component is now published above. Its source suppression,
 supplier and numeric-order admission remain explicit gaps. Capacity is distinct
@@ -402,6 +434,10 @@ pending run `38688262637`;
 main concurrency preserves the running older revision and coalesces pending revisions. Recent
 jobs have completed, but live job logs are unavailable, so individual long steps
 have not been diagnosed as hung. Do not report the queued revision as green.
+The subsequent Windows cli-2 job repeats only the already-repaired item-base
+manifest receipt failure in both profiles (`runs/ci-job-116230401646.log`).
+The older revision's Windows PoB job has completed successfully; this is not a
+hosted result for the current main revision.
 Evidence: `runs/ci-import-c4a62464-job116230401602.log` and
 `runs/ci-catalog-republication-01-diff.json`, plus
 `runs/ci-job-116230401634.log` and `runs/ci-job-116230401669.log`; validation:

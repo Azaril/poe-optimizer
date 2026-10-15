@@ -156,9 +156,15 @@ and three generated input bindings.
 Continue the selected neutral-domain review before positive transfer mechanics.
 The selected passive parsed-record transport is now reconciled; its arbitrary
 parser domains, generated-skill roots, later delivery and numerical scaling/order
-stay separate. The next bounded source step is the eight authenticated equipment
-loads and nine exact uses: reconcile complete construction bodies and existing
-owned/slot bindings before item-to-store delivery and native dispositions. The
+stay separate. Selected equipment construction is also now reconciled: eight
+authenticated loads, nine exact uses and eighteen original active-list recipes
+cover the finite parsed/base/buff/bonded records. Exact owned and actual slot
+bindings join 189 item/base/buff observations per report. Six direct active lists
+supply 126 runtime joins; the two ring uses and Weapon 1 have only separate
+slot-specific recipe evidence, not captured active-list delivery. Their missing
+raw `item.modList` fields do not imply empty active lists. Seven ordinary tests,
+retention and strict Clippy pass. Item-to-store delivery/scaling, copy/replacement
+paths, inherited stores and generated descendants remain open. The
 [implementation plan](implementation.md) owns the next delivery step.
 Preserve all four Original05 input obligations, prior Partial owners and global
 query/plan gates until their own proofs and native implementations are complete.

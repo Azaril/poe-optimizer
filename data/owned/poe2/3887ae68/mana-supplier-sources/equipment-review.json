@@ -1,0 +1,335 @@
+{
+  "authority": {
+    "fixture_sha256": "8973459cb7537a45b3a9c252e2301c0fb61185c6db0b9392a5be7274049a74cd",
+    "historical_publication": "3ee48944d26b5351ecc267cc2e87637b68a8b6153b7ab2bbc5c906f11e4bd702",
+    "radius_report_sha256": "8784718a733d10878da117724b3dff69e97d380c0140bfbab1cc02ffbf11a2da",
+    "recipe_value_sha256": "abc764c4728687f465ffea2ea8b16e597e2a91121ee7e2e37a5bbe7d2c90e213",
+    "source02_comparison_sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155",
+    "source_bodies_sha256": "4c4faa38d002d98a5f88d1b9ce4a3e382cad3e13db3796ccaca3971154d1879a"
+  },
+  "bindings": [
+    {
+      "item": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000290"
+      },
+      "preset": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002aa"
+      },
+      "recipe_sha256": "f2696d18064453450229a57902a185aaf04f5188ca8bcad1cfde444548c7c904",
+      "slot": "Amulet",
+      "source_item": {
+        "ordinal": 580,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "source_item_id": "23",
+      "source_use": {
+        "ordinal": 600,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "use": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002ca"
+      },
+      "use_recipe_sha256": "687c3edf78b05213e6fb55eb4384a066d9c9ce2f75b1ab8b3d0284a516f59d84"
+    },
+    {
+      "item": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "000000000000028a"
+      },
+      "preset": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002aa"
+      },
+      "recipe_sha256": "df505addbea90d7c4e6aa0eccf3b476c01e4f836b4aa5227a2173d2ba2c5597e",
+      "slot": "Gloves",
+      "source_item": {
+        "ordinal": 574,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "source_item_id": "20",
+      "source_use": {
+        "ordinal": 601,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "use": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002cb"
+      },
+      "use_recipe_sha256": "f2f368bfa99b37aa9374096863575f181c386bbd2067c17c0d1218f237632ca8"
+    },
+    {
+      "item": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "000000000000028e"
+      },
+      "preset": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002aa"
+      },
+      "recipe_sha256": "3f2fac863dd518c4089e45f3f7445dc1a74301b62c5c1c9b97de5c59fc5e03c6",
+      "slot": "Boots",
+      "source_item": {
+        "ordinal": 578,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "source_item_id": "22",
+      "source_use": {
+        "ordinal": 602,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "use": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002cc"
+      },
+      "use_recipe_sha256": "e5c9e42ce043cbd3835b9356721fd50eac5c92f7521b2188238262d917350499"
+    },
+    {
+      "item": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002a0"
+      },
+      "preset": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002aa"
+      },
+      "recipe_sha256": "586545780e20f4094e9c0c5a27248e5f195e88c996da16e9be5081f6a0a9c259",
+      "slot": "Ring 1",
+      "source_item": {
+        "ordinal": 587,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "source_item_id": "26",
+      "source_use": {
+        "ordinal": 603,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "use": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002cd"
+      },
+      "use_recipe_sha256": "162564256b8ae4e76979005949512a159942aa1c5b63d23135a244ae7cee274a"
+    },
+    {
+      "item": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002a3"
+      },
+      "preset": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002aa"
+      },
+      "recipe_sha256": "55a271d86b82143c27271f32824dfd44124c282afd360c6dcf0c8499d3cf826e",
+      "slot": "Belt",
+      "source_item": {
+        "ordinal": 590,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "source_item_id": "27",
+      "source_use": {
+        "ordinal": 616,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "use": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002ce"
+      },
+      "use_recipe_sha256": "c4db3552f325b2f2dd78edfca036e4fd46cdf99b882065e51fc561ebc631847a"
+    },
+    {
+      "item": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002a0"
+      },
+      "preset": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002aa"
+      },
+      "recipe_sha256": "586545780e20f4094e9c0c5a27248e5f195e88c996da16e9be5081f6a0a9c259",
+      "slot": "Ring 2",
+      "source_item": {
+        "ordinal": 587,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "source_item_id": "26",
+      "source_use": {
+        "ordinal": 617,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "use": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002cf"
+      },
+      "use_recipe_sha256": "fe69a48dcd1a0828a1c2ae7be887b4b7ce235d936fb6074ce8006f0ac30461b6"
+    },
+    {
+      "item": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "0000000000000288"
+      },
+      "preset": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002aa"
+      },
+      "recipe_sha256": "eb81c487958a74a4d12fec0e04954accfbe1ef07a58cdb77e8d7a88b0f12da8c",
+      "slot": "Body Armour",
+      "source_item": {
+        "ordinal": 572,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "source_item_id": "19",
+      "source_use": {
+        "ordinal": 618,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "use": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002d0"
+      },
+      "use_recipe_sha256": "9305c2caca29723fe6daf2c8a822245e5d5ff06dc42116bd7d1f0acd2629607b"
+    },
+    {
+      "item": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "000000000000028c"
+      },
+      "preset": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002aa"
+      },
+      "recipe_sha256": "f5c6adc16e50ef59ecca2835b91fa3617710f4be1f8a6c686bc539ea7ebe3da4",
+      "slot": "Helmet",
+      "source_item": {
+        "ordinal": 576,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "source_item_id": "21",
+      "source_use": {
+        "ordinal": 619,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "use": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002d1"
+      },
+      "use_recipe_sha256": "d4c01c51874a907d5e10f2b39d3887a2251a6d176ef9cb5288ef32ce85391751"
+    },
+    {
+      "item": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002a7"
+      },
+      "preset": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002aa"
+      },
+      "recipe_sha256": "524ba54d6f5b9bc5bac97488fa679a0cc499c106295b8da6593358d5c315658a",
+      "slot": "Weapon 1",
+      "source_item": {
+        "ordinal": 594,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "source_item_id": "28",
+      "source_use": {
+        "ordinal": 620,
+        "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      },
+      "use": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002d2"
+      },
+      "use_recipe_sha256": "03d195f4a000bb4e7f84a06f0c6b73ebdf80fa289207816dbffb508ba2d90099"
+    }
+  ],
+  "generated_skill_boundaries": [
+    {
+      "descendant_delivery_covered": false,
+      "record": {
+        "flags": 0,
+        "keywordFlags": 0,
+        "name": "ExtraSkill",
+        "source": "Item:28:New Item, Ashen Staff",
+        "sourceSlot": "Weapon 1",
+        "type": "LIST",
+        "value": {
+          "level": 11,
+          "skillId": "FireboltPlayer"
+        }
+      },
+      "slot": "Weapon 1",
+      "source_item": "28"
+    }
+  ],
+  "kind": "selected-equipment-construction-review",
+  "mana_adjustment_names": [
+    "ArmourConvertToMana",
+    "ArmourGainAsMana",
+    "EnergyShieldConvertToMana",
+    "EnergyShieldGainAsMana",
+    "EvasionConvertToMana",
+    "EvasionGainAsMana",
+    "ExtraMana",
+    "LifeConvertToMana",
+    "LifeGainAsMana",
+    "ManaConvertToArmour",
+    "ManaConvertToEnergyShield",
+    "ManaConvertToEvasion",
+    "ManaTotal",
+    "WardConvertToMana",
+    "WardGainAsMana"
+  ],
+  "observed": {
+    "bonded_active_recipe_lists": 18,
+    "equipment_uses": 9,
+    "item_records": 8,
+    "parsed_lines": 13,
+    "per_radius_observation": {
+      "candidate_census": 2352,
+      "invocations": 21,
+      "selected_uses": 189
+    },
+    "per_source02_report": {
+      "base_and_buff_joins": 189,
+      "direct_list_joins": 126,
+      "environments": 21,
+      "inventory": {
+        "direct_lists": 6,
+        "item_inventory_sha256": "daf20bafdccdbf4758d521fd5453576c4b460cd3a71a7ac6a0e00ae131861d72",
+        "slot_specific_unobserved": [
+          {
+            "reason": "item.modList absent; slot-specific list not captured by source02",
+            "slot": "Ring 1",
+            "source_item": 26
+          },
+          {
+            "reason": "item.modList absent; slot-specific list not captured by source02",
+            "slot": "Ring 2",
+            "source_item": 26
+          },
+          {
+            "reason": "item.modList absent; slot-specific list not captured by source02",
+            "slot": "Weapon 1",
+            "source_item": 28
+          }
+        ]
+      }
+    }
+  },
+  "schema_version": 1,
+  "scope": {
+    "current_native_package_changed": false,
+    "finite_original_item_construction_reconciled": true,
+    "focus_amulet_copy_replacement_covered": false,
+    "generated_support_delivery_covered": false,
+    "generic_parsing_or_numeric_order_covered": false,
+    "inherited_store_covered": false,
+    "item_to_store_delivery_covered": false,
+    "native_coverage_authorized": false,
+    "native_partial_owners_closed": 0,
+    "source02_slot_specific_active_lists_observed": false
+  },
+  "source_manifest": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+}

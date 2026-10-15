@@ -96,6 +96,39 @@ is clean. Logs use `runs/owned-mana-passive-` with suffixes `retain-01.log`,
 repair; no source capture was repeated. Retained review SHA-256:
 `007e491a5188ecd36d9673839b3fd382e7bffa0c746ff1b5d7604548ad85d2f1`.
 
+## Selected equipment constructor transport
+
+`equipment-bodies.json` seals complete Item, ItemsTab and ItemTools construction
+bodies against the independent source manifest. Their three bounded archives
+total 67,639 compressed bytes. Existing raw XML, ranges, variants, parsed/base/buff
+lists and both bonded recipes cover eight loaded items and nine exact equipment
+uses. Original active-slot recipes supply eighteen lists across the two bonded
+settings; exact owned bindings and actual slot selections retain source identity.
+
+Each source02 report joins 189 item/base/buff inventories and 126 directly
+observed active lists over 21 environments. Ring 1, Ring 2 and Weapon 1 use
+slot-specific lists that source02 did not capture. Their original recipes are
+authenticated separately; absent raw `item.modList` never means an empty active
+list or observed later delivery. Source02 omits `jewel_data`; the exact six-key
+item shape and separately observed zero socket count are checked. Explicit null,
+unknown socket/rune fields and missing graph values cannot replace that shape.
+
+`equipment-review.json` excludes all fifteen Mana adjustment names recursively
+from this finite construction domain, including zero/inactive/nested/bonded
+records. It retains the exact generated-skill boundary. Item-to-store transport,
+scaling, focus/Amulet-copy/replacement paths, inherited stores, generic parsing,
+numeric ordering, generated/support delivery and native/global coverage remain
+unproved. No native package or input issue changes.
+
+The Rust target `owned_mana_equipment_sources` passes seven ordinary mutation
+tests, explicit retention and strict Clippy. Logs use the prefix
+`runs/owned-mana-equipment-` and suffixes `retain-01.log`, `retain-02.log`,
+`retain-03.log`, `ordinary-01.log`, `clippy-01.log` and `clippy-02.log`.
+The failed early verifiers assumed a different jewel-data encoding; the unchanged
+capture now enforces omission without null equivalence. No source run was repeated.
+Retained review SHA-256:
+`240521343222f840c91a129126ff5b630fc04917da66cc5de30ab2a64a7d495b`.
+
 ## Exact source and owned identities
 
 The bound import checkpoint is `owned-configuration-accounting-publication-02`, input
