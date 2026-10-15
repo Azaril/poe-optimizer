@@ -703,6 +703,13 @@ missing ownership proof. Keep these external source checks inside Import.
 
 Requested count, reporting inclusion, skill activation and actor population are
 different semantic responsibilities. A count parameter does not grant all four.
+Reporting inclusion can be immutable typed intent on an exact preset Skill,
+with the usual explicit scenario override. A declared Complete-empty gameplay
+program inventory may retain that intent without creating a mechanical effect;
+it does not close reporting execution or the preset's usage inventory. Import
+owns source spellings and missing-value accounting. The native model receives
+only the Boolean and its exact source applicability. Adding this preference
+must not activate a Skill, change its population or alter requested metrics.
 The [damage-reporting investigation](owned-full-dps-aggregation-proposal.md)
 proposes exact contributors and explicit aggregate metrics without changing
 selected-action DPS. The [configuration-disposition proposal](owned-configuration-dispositions-proposal.md)

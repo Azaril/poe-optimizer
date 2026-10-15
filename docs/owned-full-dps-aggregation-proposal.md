@@ -8,12 +8,15 @@ damage parity or complete usage inventories.
 
 **October 15 clarification:** preserving saved inclusion intent is an independent
 input task under accepted exact skill-preset preference ownership. It need not
-wait for a new aggregate metric. The current preflight checks typed Boolean
-transport, source/provider applicability and scenario replacement through the
-existing usage/import contracts. It must not create a fake numeric producer,
-activate a skill, mutate requested metrics or complete the whole usage inventory.
-If metadata-only intent needs a public contract change, that specific change
-requires review before implementation. Full aggregate execution remains proposed.
+wait for a new aggregate metric. The
+[reporting-inclusion packet](../data/owned/poe2/3887ae68/reporting-inclusion/README.md)
+uses the existing usage/import contracts for typed Boolean transport, exact
+source applicability and scenario replacement. Its explicit Complete-empty
+ordinary-gameplay owner requires no public API change and creates no fake
+numeric producer, activation, query or inventory completion. Literal source
+`nil` decodes to false; absent or unreviewed values remain Pending. Validation
+and the published endpoint belong in the implementation plan. Full aggregate
+execution remains proposed.
 
 Use exact native occurrence and action identities to build a checked contribution
 inventory, then evaluate explicitly declared reductions in the existing rule

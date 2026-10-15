@@ -17,6 +17,15 @@ build support.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
 
+The current reporting-inclusion publication adds only typed preset intent through
+existing Import/Core contracts. Exact eligible occurrences retain a Boolean;
+scenario overrides remain explicit. A Complete-empty gameplay owner creates no
+effect or aggregate metric. All five imports preserve their earlier fields,
+queries, IDs and unresolved inventories, with 49 exact preferences added across
+original and archived presets. Aggregate reporting is still unimplemented.
+See the [packet](../data/owned/poe2/3887ae68/reporting-inclusion/README.md) and
+[current endpoint](implementation.md#current-checkpoint-reporting-inclusion-intent).
+
 Delivery now explicitly prioritizes the closest complete unchanged build,
 currently Original05 (Skeletal Sniper). Its four selected input obligations
 still block request finalization, and complete native builds remain 0/5.
@@ -213,7 +222,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-player-spirit-pool).
+[implementation checkpoint](implementation.md#current-checkpoint-reporting-inclusion-intent).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -1383,7 +1392,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-player-spirit-pool),
+live in the [implementation plan](implementation.md#current-checkpoint-reporting-inclusion-intent),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.
@@ -1879,9 +1888,10 @@ empty contributor inventory produces zero; missing or Partial coverage stays
 unresolved. This uses existing typed operations without a new runtime contract.
 The real Actor owner remains Partial, and final Life is not yet published.
 
-The [resource-obligation proposal](owned-resource-obligations-proposal.md) remains
-pending. It addresses the current reservation component's dependence on requested
-Actions: a sustained skill must consume its resource independently of which
+The [resource-obligation proposal](owned-resource-obligations-proposal.md) was
+accepted on October 15; implementation remains pending. It addresses the current
+reservation component's dependence on requested Actions: a sustained skill must
+consume its resource independently of which
 metric is displayed. The proposed Skill obligations, explicit Action dependencies
 and Skill support recipients are not yet public runtime contracts.
 

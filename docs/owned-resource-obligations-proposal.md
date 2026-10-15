@@ -63,6 +63,49 @@ relaxation of selected-build coverage. It is not yet implemented.
 
 ## Implementation gates
 
+### Existing contracts to reuse
+
+Keep `SkillTarget`, `ActorKey` and `ActionSelection` as the occurrence identities.
+An obligation is identified by its exact Skill occurrence and declaration; it
+does not create another Skill or Actor. Skill programs already instantiate from
+the discovered build independently of requested metrics. Extend that binding
+with a checked census of potential obligations, explicit payer relations and
+named Action dependencies rather than adding a separate evaluator.
+
+Use the canonical Actor pool Stat as the resource identity, validated for Actor
+applicability and the resource-points unit. Life, Mana and Spirit remain distinct
+by definition identity even though they share a unit. Reserved and unreserved
+results retain their own Stat definitions. This does not require a parallel
+resource catalogue or authorize an arbitrary Skill to write to any Actor.
+
+Bind declared Action dependencies before owner-program instantiation, using the
+existing discovery, readiness, value-channel and cycle checks. An explicit read
+must name the bound dependency; scheduling an Action alone does not grant a
+Skill access to its values. Action part/mode/stat-set predicates remain in Action
+context. Unknown or ambiguous selections remain unresolved.
+
+Extend the existing support-receiving endpoint with an exact Skill recipient in
+both preparation and execution. The authored physical Gem container and the
+generated Skill it exposes are distinct targets: an empty path must not alias
+one to the other. Use checked grant paths for generated effects, and preserve
+assigned-source identity, receiving-provider readiness, participation and
+complete role inventories. Test a Gem exposing two different Skills as well as
+repeated and independently generated sources.
+
+The payer aggregate must preserve every admitted obligation occurrence exactly
+once. Reuse checked contribution membership with an explicit obligation-to-payer
+relation; existing Skill self-contribution permission is insufficient. Numeric
+aggregation requires semantic ordering or a proven exact-sum domain, never a
+tie-break using local IDs or discovery order. A counted summon has one
+obligation whose amount uses its count, not one duplicate Actor per summon.
+
+Implement and validate Skill support recipients first, then the obligation
+declaration/binding and payer aggregation, then migrate the current Sniper
+reservation data. Each checkpoint must state which of these is live; a support
+endpoint alone does not make reservation query-independent.
+
+### Delivery checks
+
 1. Define one bounded dependency contract using existing occurrence identities,
    with explicit activation, selection authority, phase and cycle checks. Review
    contrasting shapes: a counted summon, a sustained buff, an Action-dependent
@@ -83,6 +126,6 @@ relaxation of selected-build coverage. It is not yet implemented.
    reuse and parallel replay, and preserve all five unchanged imports.
 
 Gigantic Following's independent status and owner-side efficiency contributions
-can be published while this decision is pending. Its Life/Damage consumers and
-resource delivery remain separate work. This proposal grants no source-bug
+can be published while the accepted migration is being implemented. Its
+Life/Damage consumers and resource delivery remain separate work. This proposal grants no source-bug
 exception and no new numerical closure.

@@ -3,6 +3,12 @@
 Status: native component, source replay and five-original publication validation passed. The checked baseline
 and completed validation are recorded in [the implementation plan](implementation.md).
 
+The current component is Action-owned. On October 15 the owner accepted
+[Skill-owned obligations with explicit Action dependencies](owned-resource-obligations-proposal.md).
+That migration is not implemented yet; the existing component must not be
+presented as query-independent reservation. Its useful arithmetic and source
+evidence will be retained while the superseded live Action path is replaced.
+
 The native model stores an occurrence's count as a typed usage preference on its
 skill preset. Request composition applies a scenario override to that exact
 target. Count does not change the reusable Skill definition, create one actor

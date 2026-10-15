@@ -1,0 +1,57 @@
+{
+  "policy": {
+    "kind": "usage_policy",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000338e"
+  },
+  "parameter": {
+    "declaration": {
+      "kind": "usage_policy",
+      "definition": {
+        "kind": "usage_policy",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000338e"
+      }
+    },
+    "slot": {
+      "kind": "parameter_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000338f"
+    }
+  },
+  "support": {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "usage_policy",
+        "value": {
+          "kind": "usage_policy",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000338e"
+        }
+      }
+    },
+    "domain": {
+      "kind": "known",
+      "value": "authored_assignments_only"
+    }
+  },
+  "scope": {
+    "ordinary_gameplay_effects": false,
+    "report_execution": false,
+    "aggregate_metric": false,
+    "preset_complete": false
+  }
+}

@@ -105,7 +105,53 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: Player Spirit pool
+## Current checkpoint: reporting inclusion intent
+
+The [reporting-inclusion packet](../data/owned/poe2/3887ae68/reporting-inclusion/README.md)
+preserves saved group inclusion as a typed Boolean on each eligible exact Skill
+occurrence. It reuses preset ownership, source applicability and scenario
+replacement. UsagePolicy `338e` and required parameter `338f` add an explicitly
+Complete-empty ordinary-gameplay owner and checked support-source domain. There
+is no new runtime API, mechanical program, aggregate metric or evaluation bundle.
+True/false changes request identity without changing ordinary damage, activation,
+population or query selection. Literal `nil` maps to false at Import; absent or
+unreviewed values remain Pending.
+
+The actual CLI publication and byte-identical rebuild pass for all five original
+imports and every archived preset. The only new preferences number **8/0/0/1/40**,
+each joined to its exact original group, source, eligible rule and existing
+target/applicability. The inverse preserves all prior values, local IDs, source
+dispositions, 110 query bytes and selected issue counts **106/117/109/123/4**.
+No issue closes; complete native originals remain **0/5**. Reporting aggregation,
+global switches, Action choices and full usage accounting remain separate work.
+
+Published package: **`runs/owned-reporting-inclusion-publication-01/package`**.
+
+- Input: `e1c2abd299aead48ff1da38aa517c4fcbcaacd2671f754deb921364c0cad4b39`.
+- Registry: `0936f8f33162aafecf52011a70d971fbf9c1e325d50fe8aba0fd2e63b4f5babd` (last `338f`).
+- Definitions: `86764ee48af08a18ca08ad7eac3e2443f38b66ff948021a3b6ef673ff1d24211`.
+- Rules: `7d7ecf94119f30cb6209f0c3a91b3e167f5088efb96285944d88350b4b3049ce`.
+- Compiled: `6401dc0a0122ae43414c52051c70acc83361c4edaab7b9c2a775f93523fa21a1`.
+
+The package contains 18 files / **64,432,702 bytes**, 187 provenance entries and
+110 queries. Its source archives remain offline evidence. No mechanical programs
+or receiver declarations were added; the program cap remains 8187/8192.
+
+Focused Engine tests pass **15/15**, Import tests **349/349**, ordinary CLI checks
+**3/3**, and explicit all-five publication **1/1** (45.32s). Native checks include
+scratch reuse/Rayon, exact generated targets, scenario replacement and missing
+support-domain refusal. Strict targeted Clippy passes for Engine, Import and CLI;
+independent review is clean. Final ordinary CLI checks pass again on the exact
+publication helper. Evidence:
+`runs/owned-reporting-inclusion-{native-04,import-02,cli-02,publication-01}.log`
+and the publication's `validation.json`.
+
+**Resume:** implement the accepted exact Skill support-receiving endpoint in
+Core/Data/Engine, then the checked resource-obligation contract, payer aggregation
+and reservation migration described below. The current live reservation consumer
+remains Action-owned; metadata publication does not make it query-independent.
+
+## Previous checkpoint: Player Spirit pool
 
 The [Spirit packet](../data/owned/poe2/3887ae68/player-spirit-pool/README.md)
 adds two injected data programs: an Amulet-copy contribution on the existing
@@ -337,7 +383,7 @@ from reservation. The owner accepted
 [Skill-owned resource obligations](owned-resource-obligations-proposal.md) on
 October 15: explicit payer/resource identity, exact Action dependencies only
 where mechanically required, and checked Skill support recipients. After the
-current equipment-source and reporting-intent checkpoints, implement the bounded
+completed equipment-source and reporting-intent checkpoints, implement the bounded
 contract and migrate existing reservation data, removing the superseded live
 Action-owned path. Prove invariance to unrelated metric-query changes alongside
 participation, repeated sources, counts, payer identity, dependency cycles and
@@ -364,8 +410,8 @@ Spirit component now uses **8187/8192**, leaving five program slots, with 56
 receivers. Other measured Life-predecessor compiler counts are
 6548 owners, 23517 effects, 4249 reads, 32814 nodes and 41600 edges, comfortably
 within their separate caps.
-The current release package is **64,418,739/67,108,864 bytes**, leaving
-2,690,125 bytes. These are separate limits. The common
+The current reporting-intent release package is **64,432,702/67,108,864 bytes**,
+leaving 2,676,162 bytes. These are separate limits. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
 
@@ -727,11 +773,11 @@ accounting steps; known values and remaining Firebolt correspondence are separat
 known assumptions do not prove the constructor/default catalogue complete;
 `0208`'s empty saved usage does not account for seven default child-effect enables.
 Known scalar values cannot certify these inventories. Checked configuration
-accounting and per-consumer projections are implemented. Preserving reporting
-inclusion can reuse accepted exact preset preferences; it does not require a new
-aggregate metric or a change to selected-action DPS. The next input preflight
-checks whether the existing usage/import contracts can retain this typed Boolean
-intent without a fake mechanical producer. Actual aggregate execution, any new
+accounting and per-consumer projections are implemented. Reporting inclusion
+uses accepted exact preset preferences and a Complete-empty gameplay owner;
+it requires no new runtime API, aggregate metric or change to selected-action
+DPS. The packet retains typed Boolean intent without a mechanical producer.
+Actual aggregate execution, any new
 report target and origin-sensitive tie semantics remain separate design gates.
 The damage-roll packet accounts for the exact numeric
 Placeholder only under its proved absent-boss guards; broader encounter branches
@@ -1413,7 +1459,7 @@ numerical outputs when game intent remains unresolved.
    checkpoint and the item-ownership retirement audit. Physical
    final-input programs exist; unresolved selected providers and incoming coverage
    still prevent a real complete request. Query-independent resource demand is
-   a separate pending design decision.
+   a separate accepted migration that remains to be implemented.
 
    Before final damage aggregation, settle the concrete precision/grouping
    question: Source02's Gigantic plus quality-one factors yield 1.21, while
@@ -1442,6 +1488,14 @@ numerical outputs when game intent remains unresolved.
    it on October 15; implementation must not manufacture Action demand from
    metric queries. Validate contrasting reservation/cost shapes,
    migrate the existing live consumer, and prove query-independent results.
+   Implement the exact Skill support endpoint first in the existing Core/Data/
+   Engine receiving contract, retaining preparation, participation and provider
+   checks. Then add the checked obligation census, exact payer/Action bindings
+   and aggregation before migrating the live reservation data. Reuse canonical
+   Actor pool Stat identities and the existing occurrence/value graph; no new
+   resource catalogue, second evaluator or compatibility path is required.
+   Authored Gem containers must remain distinct from their generated Skill
+   recipients. See the proposal's implementation contract for concrete checks.
 
    PoB applies the derived Gigantic Life/Damage bonuses only in its full combat
    calculation scope. Existing buffed/unbuffed diagnostic frames can retain the

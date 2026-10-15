@@ -1,0 +1,47 @@
+{
+  "kind": "reporting-inclusion",
+  "before": "dc3371b68bc3ce5f870b6b0c44efe3dad16a0f1c37d2cb39a63492050f9d0d56",
+  "registry_last": 13197,
+  "release": "pob-3887ae68-reporting-inclusion-v1",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v27",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "artifacts": [
+    {
+      "path": "extension.json",
+      "bytes": 4323,
+      "sha256": "9d0526574e90f58847079439f92d73b8d52cd39e9940a319d9a0539323797c52"
+    },
+    {
+      "path": "usage.json",
+      "bytes": 1896,
+      "sha256": "b64da5658822392d281384e778f413d39e838c3553491b8c36c4bf0873b23c35"
+    },
+    {
+      "path": "changes.json",
+      "bytes": 392412,
+      "sha256": "3f643b03ce5dfd3bae31d6b00a90fa5afcbf0bebbfd265b6fa98d7db0ea96ff6"
+    },
+    {
+      "path": "native.json",
+      "bytes": 1211,
+      "sha256": "0868807ac3cb8d3b4cb0f516a3b40413dc14c015e49c47104adf4b0662a01651"
+    },
+    {
+      "path": "source-evidence.json",
+      "bytes": 3502,
+      "sha256": "0a34eab7f2a83f681951354fa37456b8c2916f310b8c1fd96f83248acef1c84d"
+    }
+  ],
+  "scope": {
+    "new_definition": 1,
+    "new_parameter": 1,
+    "new_programs": 0,
+    "new_queries": 0,
+    "report_execution": false,
+    "complete_usage_inventory": false
+  }
+}

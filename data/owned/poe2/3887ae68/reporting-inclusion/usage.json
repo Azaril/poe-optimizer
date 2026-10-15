@@ -1,0 +1,81 @@
+{
+  "policy": {
+    "kind": "usage_policy",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000338e"
+  },
+  "parameters": [
+    {
+      "slot": {
+        "declaration": {
+          "kind": "usage_policy",
+          "definition": {
+            "kind": "usage_policy",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000338e"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000338f"
+        }
+      },
+      "source": {
+        "kind": "containing_group",
+        "value": {
+          "id": "requested-report-inclusion",
+          "codec": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "boolean",
+              "value": {
+                "tokens": [
+                  {
+                    "token": "true",
+                    "value": true
+                  },
+                  {
+                    "token": "false",
+                    "value": false
+                  },
+                  {
+                    "token": "nil",
+                    "value": false
+                  }
+                ]
+              }
+            }
+          },
+          "tiers": [
+            {
+              "selectors": [
+                {
+                  "lane": "attribute",
+                  "name": "includeInFullDPS"
+                }
+              ],
+              "duplicates": "reject"
+            }
+          ],
+          "missing": {
+            "kind": "pending"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 //! Synthetic occurrence/preset correspondence, independent of game identities.
 use super::*;
+#[path = "owned_reporting_inclusion_inputs.rs"]
+mod reporting_inclusion;
 
 fn group(gems: &str) -> String {
     super::group(gems).replace("<Skills>", "<Skills activeSkillSet=\"7\">")

@@ -1,0 +1,109 @@
+{
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "archives": [
+    {
+      "source": {
+        "path": "src/Classes/SkillsTab.lua",
+        "bytes": 69652,
+        "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+      },
+      "archive": "SkillsTab.lua.gz",
+      "raw_bytes": 69652,
+      "compressed_bytes": 14532,
+      "compressed_sha256": "ba6c03535d271f8293588cc1ddc1e59ee6f46cc26e9336257d0d91bbd52558e2"
+    },
+    {
+      "source": {
+        "path": "src/Modules/Calcs.lua",
+        "bytes": 35868,
+        "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+      },
+      "archive": "Calcs.lua.gz",
+      "raw_bytes": 35868,
+      "compressed_bytes": 8318,
+      "compressed_sha256": "7b90df1e4e63d65e14be2d272fc7800fc3a512c1e8380c6c277ee25f510bc1f6"
+    }
+  ],
+  "attribution": {
+    "archive": "source-attribution.json.gz",
+    "raw_bytes": 16334100,
+    "raw_sha256": "c25597169569bbc08d57d5043b296cfd67327ae9855e9638e55cb73296d95018",
+    "compressed_bytes": 1184167,
+    "compressed_sha256": "4641c80b8a5c2e069790a66500a1f8b4fffcfa983f8676f9278c80f67d60ed73",
+    "acquisition_paths": [
+      "runs/owned-full-dps-attribution-source-03/source-jit-off.json",
+      "runs/owned-full-dps-attribution-source-03/source-jit-on.json"
+    ],
+    "cases": [
+      "original-01",
+      "original-02",
+      "original-03",
+      "original-04",
+      "original-05",
+      "generated-sand-count-one",
+      "generated-sand-count-three",
+      "generated-sand-group-zero",
+      "generated-sand-group-four",
+      "generated-sand-excluded",
+      "generated-sand-disabled-source",
+      "generated-sand-disabled-group",
+      "generated-water-count-one",
+      "generated-water-count-three",
+      "generated-water-group-zero",
+      "generated-water-group-four",
+      "generated-water-excluded",
+      "generated-water-disabled-source",
+      "generated-water-disabled-group",
+      "generated-firebolt-count-one",
+      "generated-firebolt-count-three",
+      "generated-firebolt-group-zero",
+      "generated-firebolt-group-four",
+      "generated-firebolt-excluded",
+      "generated-firebolt-disabled-source",
+      "generated-firebolt-disabled-group",
+      "manual-sand-count-one",
+      "manual-sand-count-three",
+      "manual-sand-group-zero",
+      "manual-sand-group-four",
+      "manual-sand-excluded",
+      "manual-sand-disabled-source",
+      "manual-sand-disabled-group",
+      "manual-water-count-one",
+      "manual-water-count-three",
+      "manual-water-group-zero",
+      "manual-water-group-four",
+      "manual-water-excluded",
+      "manual-water-disabled-source",
+      "manual-water-disabled-group",
+      "manual-and-generated-sand",
+      "manual-and-generated-water",
+      "same-label-manual-firebolt-tie",
+      "repeat-original-05"
+    ]
+  },
+  "semantics": {
+    "true": true,
+    "false": false,
+    "nil": false,
+    "absent_import": "pending",
+    "reporting_only": true,
+    "ordinary_gameplay_effects": false,
+    "aggregate_execution": false,
+    "complete_usage_inventory": false
+  },
+  "source_spans": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "first": 303,
+      "last": 315,
+      "role": "load-inclusion-literal"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "first": 251,
+      "last": 312,
+      "role": "explicit-full-dps-inclusion-and-count"
+    }
+  ]
+}

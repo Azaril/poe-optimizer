@@ -3,6 +3,8 @@
 #[allow(dead_code)]
 #[path = "support/owned_plan_fixture.rs"]
 mod fixture;
+#[path = "support/owned_reporting_inclusion_native.rs"]
+mod reporting_inclusion;
 use fixture::*;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_project::*, owned_routing::*, owned_rules::*,
