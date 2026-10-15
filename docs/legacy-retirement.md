@@ -63,6 +63,18 @@ existing production assemblers; changing an expected digest in a test or ignorin
 receipt fields is not a repair. The latest evidence and validation status are in
 the [CI checkpoint](implementation.md#ci-receipt-repair-2026-10-15).
 
+## Ailment calculation and display separation (2026-10-15)
+
+The ailment-input source review found a possible display-only discrepancy:
+`CalcPerform.lua:3258` uses Shock stack names for a Chill breakdown, while the
+actual preceding Chill calculation reads Chill stacks. Keep this as an explicit
+investigation when admitting ailment effects. Compare the calculation and display
+readers against independent game evidence before deciding whether any source
+behavior belongs in native rules. It is not a confirmed mechanics bug or an
+accepted parity exception. Likewise, absence of a direct Scorch-stack reader in
+the bounded review is not an absence proof. The [input packet](../data/owned/poe2/3887ae68/configuration-enemy-ailment-stack-inputs/README.md)
+retains the source boundary; raw input transport does not import those readers.
+
 ## Redundant resource receivers (2026-10-15)
 
 The Player Life and Mana consumers now read their checked adjustment queries

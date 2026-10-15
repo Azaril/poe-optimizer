@@ -153,16 +153,91 @@ pub struct Expectations {
     pub default: f64,
     pub controls: Vec<Control>,
 }
-pub struct Publication {
+pub struct Publication<E = Expectations> {
     pub directory: PathBuf,
     pub stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
     pub prior: PathBuf,
     pub output: PathBuf,
     pub original05_before: (usize, usize, usize),
     pub new_definitions: usize,
-    pub expectations: Expectations,
+    pub expectations: E,
 }
 pub fn run(spec: Publication) {
+    let inputs = crate::configuration_stage::inputs(read(spec.directory.join("input.json")));
+    let source_name = inputs[0].source_name.clone();
+    assert!(inputs.iter().all(|input| input.source_name == source_name));
+    run_sources(Publication {
+        directory: spec.directory,
+        stage: spec.stage,
+        prior: spec.prior,
+        output: spec.output,
+        original05_before: spec.original05_before,
+        new_definitions: spec.new_definitions,
+        expectations: vec![SourceExpectations {
+            source_name,
+            expected: spec.expectations,
+        }],
+    });
+}
+pub struct SourceExpectations {
+    pub source_name: String,
+    pub expected: Expectations,
+}
+pub fn checked_group_ranges(
+    inputs: &[Value],
+    groups: &[SourceExpectations],
+) -> Vec<std::ops::Range<usize>> {
+    let mut group_ranges = vec![];
+    let mut cursor = 0;
+    let mut seen = std::collections::BTreeSet::new();
+    let mut seen_ids = std::collections::BTreeSet::new();
+    for group in groups {
+        assert!(
+            seen.insert(group.source_name.as_str()),
+            "duplicate expected source"
+        );
+        let end = cursor + group.expected.outputs.len();
+        assert!(
+            end > cursor && end <= inputs.len(),
+            "exact nonempty source group"
+        );
+        let first = &inputs[cursor];
+        assert_eq!(
+            first["constructor_default"]["value"]["value"].as_f64(),
+            Some(group.expected.default)
+        );
+        for (input, output) in inputs[cursor..end].iter().zip(&group.expected.outputs) {
+            assert_eq!(input["source_name"], group.source_name);
+            assert_eq!(input["constructor_default"], first["constructor_default"]);
+            assert!(
+                seen_ids.insert(input["value_input"]["key"].as_str().unwrap()),
+                "distinct outputs across all source groups"
+            );
+            assert_eq!(input["target"], output.policy_target);
+            assert_eq!(
+                input.get("selection").and_then(Value::as_str),
+                output.selection
+            );
+            assert_eq!(
+                input
+                    .get("ignore_numeric_placeholder")
+                    .and_then(Value::as_bool)
+                    .unwrap_or(false),
+                output.ignore_placeholder
+            );
+        }
+        group_ranges.push(cursor..end);
+        cursor = end;
+    }
+    assert!(!groups.is_empty());
+    assert_eq!(
+        cursor,
+        inputs.len(),
+        "every authored output has exactly one expectation"
+    );
+    group_ranges
+}
+pub fn run_sources(spec: Publication<Vec<SourceExpectations>>) {
     let inputs: Vec<Value> =
         crate::configuration_stage::inputs(read(spec.directory.join("input.json")))
             .into_iter()
@@ -170,36 +245,18 @@ pub fn run(spec: Publication) {
             .collect();
     // Test expectations are explicit. Neither source name nor vector length
     // selects semantics, target ownership or source-accounting outcomes.
-    let expectation = spec.expectations;
-    assert_eq!(inputs.len(), expectation.outputs.len());
-    for (input, output) in inputs.iter().zip(&expectation.outputs) {
-        assert_eq!(input["target"], output.policy_target);
-        assert_eq!(
-            input.get("selection").and_then(Value::as_str),
-            output.selection
-        );
-        assert_eq!(
-            input
-                .get("ignore_numeric_placeholder")
-                .and_then(Value::as_bool)
-                .unwrap_or(false),
-            output.ignore_placeholder
-        );
-    }
-    let input = &inputs[0];
-    let source_name = input["source_name"].as_str().unwrap();
-    let input_ids: Vec<_> = inputs
+    let groups = spec.expectations;
+    let group_ranges = checked_group_ranges(&inputs, &groups);
+    let defaults: Vec<_> = groups
         .iter()
-        .map(|i| i["value_input"]["key"].clone())
+        .zip(&group_ranges)
+        .flat_map(|(g, r)| {
+            inputs[r.clone()]
+                .iter()
+                .zip(&g.expected.outputs)
+                .map(|(i, o)| expected(i, &o.draft_target, g.expected.default))
+        })
         .collect();
-    let default = input["constructor_default"]["value"]["value"]
-        .as_f64()
-        .unwrap();
-    assert_eq!(default, expectation.default);
-    for i in &inputs {
-        assert_eq!(i["source_name"], input["source_name"]);
-        assert_eq!(i["constructor_default"], input["constructor_default"]);
-    }
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let prior_path = spec.prior;
     let out = spec.output;
@@ -242,11 +299,7 @@ pub fn run(spec: Publication) {
                 let assumptions = assumptions(&mut b);
                 assumptions.split_off(assumptions.len() - inputs.len())
             },
-            inputs
-                .iter()
-                .zip(&expectation.outputs)
-                .map(|(i, o)| expected(i, &o.draft_target, default))
-                .collect::<Vec<_>>()
+            defaults
         );
         let oldlineage = a["draft"]["allocator"]["lineage"].clone();
         let newlineage = b["draft"]["allocator"]["lineage"].clone();
@@ -273,39 +326,53 @@ pub fn run(spec: Publication) {
         );
         let imported = source(&bytes);
         let evidence = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
-        let at = leaf(&evidence, "Placeholder", source_name);
         let issue = json!({"kind":"issue","value":a["draft"]["choice_presets"]["members"][0]["choices"]["completion"]["id"]});
         let scenario = json!({"kind":"scenario_preset","value":read(new.join("draft.json"))["draft"]["scenario_presets"]["members"][0]["id"]});
-        assert_eq!(
-            sa["origins"][at]["disposition"],
-            json!({"kind":"contributes"})
-        );
-        assert_eq!(sa["origins"][at]["links"], json!([issue]));
-        assert_eq!(
-            sb["origins"][at]["disposition"],
-            expectation.original_placeholder.disposition()
-        );
-        assert_eq!(sb["origins"][at]["links"], json!([scenario]));
+        let mut changed_leaves = vec![];
+        for group in &groups {
+            let at = leaf(&evidence, "Placeholder", &group.source_name);
+            assert!(
+                !changed_leaves.contains(&at),
+                "source leaf expectations may not overlap"
+            );
+            changed_leaves.push(at);
+            assert_eq!(
+                sa["origins"][at]["disposition"],
+                json!({"kind":"contributes"})
+            );
+            assert_eq!(sa["origins"][at]["links"], json!([issue]));
+            assert_eq!(
+                sb["origins"][at]["disposition"],
+                group.expected.original_placeholder.disposition()
+            );
+            assert_eq!(sb["origins"][at]["links"], json!([scenario]));
+        }
         let counts_before = census(&sa, &evidence, &issue);
         let new_issue = json!({"kind":"issue","value":read(new.join("draft.json"))["draft"]["choice_presets"]["members"][0]["choices"]["completion"]["id"]});
         let counts_after = census(&sb, &evidence, &new_issue);
         assert_eq!(
             counts_after,
-            (counts_before.0 - 1, counts_before.1 - 1, counts_before.2)
+            (
+                counts_before.0 - groups.len(),
+                counts_before.1 - groups.len(),
+                counts_before.2
+            )
         );
         if case == 5 {
             assert_eq!(counts_before, spec.original05_before);
             assert_eq!(
                 counts_after,
                 (
-                    spec.original05_before.0 - 1,
-                    spec.original05_before.1 - 1,
+                    spec.original05_before.0 - groups.len(),
+                    spec.original05_before.1 - groups.len(),
                     spec.original05_before.2
                 )
             );
         }
-        sb["origins"][at]["disposition"] = sa["origins"][at]["disposition"].clone();
-        sb["origins"][at]["links"] = json!([new_issue]);
+        for &at in &changed_leaves {
+            sb["origins"][at]["disposition"] = sa["origins"][at]["disposition"].clone();
+            sb["origins"][at]["links"] = json!([new_issue]);
+        }
         let old_items = sa["item_texts"].as_array().unwrap();
         let new_items = sb["item_texts"].as_array_mut().unwrap();
         assert_eq!(old_items.len(), new_items.len());
@@ -368,128 +435,165 @@ pub fn run(spec: Publication) {
             fs::read(prior_path.join(&queries)).unwrap(),
             fs::read(package.join(&queries)).unwrap()
         );
-        results.push(json!({"original":case,"added_assumptions":inputs.len(),"changed_leaf":at,"configuration_before":counts_before,"configuration_after":counts_after,"whole_draft_inverse":true,"whole_sidecar_inverse":true,"local_ids_unchanged":true,"selected_issues":issues.as_array().unwrap().len()}));
+        results.push(json!({"original":case,"added_assumptions":inputs.len(),"changed_leaves":changed_leaves,"configuration_before":counts_before,"configuration_after":counts_after,"whole_draft_inverse":true,"whole_sidecar_inverse":true,"local_ids_unchanged":true,"selected_issues":issues.as_array().unwrap().len()}));
     }
     let original =
         fs::read_to_string(root.join("tests/fixtures/builds/breadth-20260908/build-05.xml"))
             .unwrap();
-    let mut controls = vec![];
-    for case in expectation.controls {
-        let Control {
-            name,
-            input,
-            placeholder,
-            values,
-            roles,
-        } = case;
-        assert_eq!(roles[0].is_some(), values.is_some() && input.is_some());
-        assert_eq!(
-            roles[1].is_some(),
-            values.is_some() && placeholder.is_some()
-        );
-        if let Some(values) = &values {
-            assert_eq!(values.len(), inputs.len());
-        }
-        let xml = edits::field(
-            &edits::field(
-                &original,
-                "Placeholder",
-                source_name,
-                placeholder.map(|v| ("number", v)),
-            ),
-            "Input",
-            source_name,
-            input.map(|v| ("number", v)),
-        );
-        controls.push((name, xml, values, roles));
-    }
-    for (name, key) in [
-        ("explicit-none", "presetBossSkills"),
-        ("boss-write", "enemyIsBoss"),
-        ("size-write", "enemySizePreset"),
-    ] {
-        controls.push((
-            name,
-            edits::field(&original, "Input", key, Some(("string", "None"))),
-            None,
-            [None, None],
-        ));
-    }
-    for (name, xml, value, roles) in &controls {
-        let path = out.join(format!("probe-{name}.xml"));
-        fs::write(&path, xml).unwrap();
-        let target = out.join(format!("probe-{name}"));
-        release::normalize(&package, &path, 5, &target);
-        let mut draft = read(target.join("draft.json"));
-        let values: Vec<_> = assumptions(&mut draft)
+    let mut control_count = 0;
+    for (group, range) in groups.into_iter().zip(group_ranges) {
+        let source_name = group.source_name.as_str();
+        let inputs = &inputs[range.clone()];
+        let input_ids: Vec<_> = inputs
             .iter()
-            .filter(|a| input_ids.contains(&a["input"]["value"]["key"]))
-            .cloned()
+            .map(|i| i["value_input"]["key"].clone())
             .collect();
-        assert_eq!(
-            values,
-            value
-                .as_ref()
-                .map(|values| inputs
-                    .iter()
-                    .zip(&expectation.outputs)
-                    .zip(values)
-                    .map(|((i, o), v)| expected(i, &o.draft_target, *v))
-                    .collect::<Vec<_>>())
-                .unwrap_or_default(),
-            "{name}"
-        );
-        let imported = source(xml.as_bytes());
-        let e = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
-        let sidecar = read(target.join("sidecar.json"));
-        let scenario = json!({"kind":"scenario_preset","value":draft["draft"]["scenario_presets"]["members"][0]["id"]});
-        for (lane, element) in ["Input", "Placeholder"].into_iter().enumerate() {
-            let rows: Vec<_> = e
-                .rows()
-                .iter()
-                .filter(|r| {
-                    r.occurrence().name() == element
-                        && r.attribute("name")
-                            .is_some_and(|a| a.decoded().ok() == Some(source_name))
-                })
-                .collect();
-            assert!(rows.len() <= 1);
-            if value.is_some() {
-                assert_eq!(
-                    rows.len(),
-                    usize::from(roles[lane].is_some()),
-                    "{name}: saved lane inventory"
-                );
+        let expectation = group.expected;
+        let mut controls = vec![];
+        for case in expectation.controls {
+            let Control {
+                name,
+                input,
+                placeholder,
+                values,
+                roles,
+            } = case;
+            assert_eq!(roles[0].is_some(), values.is_some() && input.is_some());
+            assert_eq!(
+                roles[1].is_some(),
+                values.is_some() && placeholder.is_some()
+            );
+            if let Some(values) = &values {
+                assert_eq!(values.len(), inputs.len());
             }
-            for row in rows {
-                let origin = &sidecar["origins"][row.occurrence().id().ordinal() as usize];
-                if value.is_none() {
-                    assert!(
-                        origin["links"]
-                            .as_array()
-                            .unwrap()
-                            .iter()
-                            .any(|l| l["kind"] == "issue"),
-                        "{name}: every saved lane stays pending"
-                    );
-                } else {
+            let xml = edits::field(
+                &edits::field(
+                    &original,
+                    "Placeholder",
+                    source_name,
+                    placeholder.map(|v| ("number", v)),
+                ),
+                "Input",
+                source_name,
+                input.map(|v| ("number", v)),
+            );
+            controls.push((name, xml, values, roles));
+        }
+        for (name, key) in [
+            ("explicit-none", "presetBossSkills"),
+            ("boss-write", "enemyIsBoss"),
+            ("size-write", "enemySizePreset"),
+        ] {
+            controls.push((
+                name,
+                edits::field(&original, "Input", key, Some(("string", "None"))),
+                None,
+                [None, None],
+            ));
+        }
+        for (name, xml, value, roles) in &controls {
+            let qualified = format!("{}-{name}", group.source_name);
+            let path = out.join(format!("probe-{qualified}.xml"));
+            fs::write(&path, xml).unwrap();
+            let target = out.join(format!("probe-{qualified}"));
+            release::normalize(&package, &path, 5, &target);
+            let mut draft = read(target.join("draft.json"));
+            let values: Vec<_> = assumptions(&mut draft)
+                .iter()
+                .filter(|a| input_ids.contains(&a["input"]["value"]["key"]))
+                .cloned()
+                .collect();
+            assert_eq!(
+                values,
+                value
+                    .as_ref()
+                    .map(|values| inputs
+                        .iter()
+                        .zip(&expectation.outputs)
+                        .zip(values)
+                        .map(|((i, o), v)| expected(i, &o.draft_target, *v))
+                        .collect::<Vec<_>>())
+                    .unwrap_or_default(),
+                "{name}"
+            );
+            // An ordinary source mutation may remove only this source's outputs.
+            // The three Encounter guard probes intentionally invalidate all of them.
+            let unrelated: Vec<_> = assumptions(&mut draft)
+                .iter()
+                .filter(|a| {
+                    defaults.iter().any(|d| d["input"] == a["input"])
+                        && !input_ids.contains(&a["input"]["value"]["key"])
+                })
+                .cloned()
+                .collect();
+            let guards = ["explicit-none", "boss-write", "size-write"];
+            let expected_unrelated = if guards.contains(name) {
+                vec![]
+            } else {
+                defaults
+                    .iter()
+                    .enumerate()
+                    .filter(|(index, _)| !range.contains(index))
+                    .map(|(_, d)| d.clone())
+                    .collect()
+            };
+            assert_eq!(
+                unrelated, expected_unrelated,
+                "{qualified}: unrelated input projections remain exact"
+            );
+            let imported = source(xml.as_bytes());
+            let e = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
+            let sidecar = read(target.join("sidecar.json"));
+            let scenario = json!({"kind":"scenario_preset","value":draft["draft"]["scenario_presets"]["members"][0]["id"]});
+            for (lane, element) in ["Input", "Placeholder"].into_iter().enumerate() {
+                let rows: Vec<_> = e
+                    .rows()
+                    .iter()
+                    .filter(|r| {
+                        r.occurrence().name() == element
+                            && r.attribute("name")
+                                .is_some_and(|a| a.decoded().ok() == Some(source_name))
+                    })
+                    .collect();
+                assert!(rows.len() <= 1);
+                if value.is_some() {
                     assert_eq!(
-                        origin["links"],
-                        json!([scenario]),
-                        "{name}: one exact link per leaf"
+                        rows.len(),
+                        usize::from(roles[lane].is_some()),
+                        "{name}: saved lane inventory"
                     );
-                    assert_eq!(
-                        origin["disposition"],
-                        roles[lane].unwrap().disposition(),
-                        "{name}: exact checked source role"
-                    );
+                }
+                for row in rows {
+                    let origin = &sidecar["origins"][row.occurrence().id().ordinal() as usize];
+                    if value.is_none() {
+                        assert!(
+                            origin["links"]
+                                .as_array()
+                                .unwrap()
+                                .iter()
+                                .any(|l| l["kind"] == "issue"),
+                            "{name}: every saved lane stays pending"
+                        );
+                    } else {
+                        assert_eq!(
+                            origin["links"],
+                            json!([scenario]),
+                            "{name}: one exact link per leaf"
+                        );
+                        assert_eq!(
+                            origin["disposition"],
+                            roles[lane].unwrap().disposition(),
+                            "{name}: exact checked source role"
+                        );
+                    }
                 }
             }
         }
+        control_count += controls.len();
     }
     assert_eq!(release::inventory(&prior_path), prior_files);
     write(
         out.join("validation.json"),
-        &json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":results,"mutation_controls":controls.len(),"queries":110,"new_definitions":spec.new_definitions,"new_programs":0,"rebuild_byte_identical":true,"inventory_completed":false,"complete_original_builds":0}),
+        &json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":results,"mutation_controls":control_count,"queries":110,"new_definitions":spec.new_definitions,"new_programs":0,"rebuild_byte_identical":true,"inventory_completed":false,"complete_original_builds":0}),
     );
 }

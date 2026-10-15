@@ -1,0 +1,212 @@
+[
+  {
+    "source_name": "ShockStacks",
+    "value_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003391"
+    },
+    "target": "enemy",
+    "recipe": {
+      "id": "configured-enemy-shock-stack-count",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "quantity",
+          "value": {
+            "syntax": "scientific",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            },
+            "scale": {
+              "numerator": 1,
+              "denominator": 1
+            }
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "input_number",
+              "name": "ShockStacks"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    },
+    "constructor_default": {
+      "kind": "quantity",
+      "value": {
+        "value": 1,
+        "unit": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000295a"
+        }
+      }
+    },
+    "ignore_numeric_placeholder": false,
+    "selection": "nonzero_input_then_placeholder"
+  },
+  {
+    "source_name": "ScorchStacks",
+    "value_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003392"
+    },
+    "target": "enemy",
+    "recipe": {
+      "id": "configured-enemy-scorch-stack-count",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "quantity",
+          "value": {
+            "syntax": "scientific",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            },
+            "scale": {
+              "numerator": 1,
+              "denominator": 1
+            }
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "input_number",
+              "name": "ScorchStacks"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    },
+    "constructor_default": {
+      "kind": "quantity",
+      "value": {
+        "value": 1,
+        "unit": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000295a"
+        }
+      }
+    },
+    "ignore_numeric_placeholder": false,
+    "selection": "input_then_placeholder"
+  },
+  {
+    "source_name": "ChillStacks",
+    "value_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003393"
+    },
+    "target": "enemy",
+    "recipe": {
+      "id": "configured-enemy-chill-stack-count",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "quantity",
+          "value": {
+            "syntax": "scientific",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            },
+            "scale": {
+              "numerator": 1,
+              "denominator": 1
+            }
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "input_number",
+              "name": "ChillStacks"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    },
+    "constructor_default": {
+      "kind": "quantity",
+      "value": {
+        "value": 1,
+        "unit": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000295a"
+        }
+      }
+    },
+    "ignore_numeric_placeholder": false,
+    "selection": "nonzero_input_then_placeholder"
+  }
+]

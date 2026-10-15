@@ -1,0 +1,140 @@
+[
+  {
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003391"
+          }
+        }
+      }
+    ],
+    "selector": {
+      "lane": "input_number",
+      "name": "ShockStacks"
+    },
+    "id": "checked-enemy-shock-stacks-input_number"
+  },
+  {
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003391"
+          }
+        }
+      }
+    ],
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "ShockStacks"
+    },
+    "id": "checked-enemy-shock-stacks-placeholder_number"
+  },
+  {
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003392"
+          }
+        }
+      }
+    ],
+    "selector": {
+      "lane": "input_number",
+      "name": "ScorchStacks"
+    },
+    "id": "checked-enemy-scorch-stacks-input_number"
+  },
+  {
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003392"
+          }
+        }
+      }
+    ],
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "ScorchStacks"
+    },
+    "id": "checked-enemy-scorch-stacks-placeholder_number"
+  },
+  {
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003393"
+          }
+        }
+      }
+    ],
+    "selector": {
+      "lane": "input_number",
+      "name": "ChillStacks"
+    },
+    "id": "checked-enemy-chill-stacks-input_number"
+  },
+  {
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003393"
+          }
+        }
+      }
+    ],
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "ChillStacks"
+    },
+    "id": "checked-enemy-chill-stacks-placeholder_number"
+  }
+]

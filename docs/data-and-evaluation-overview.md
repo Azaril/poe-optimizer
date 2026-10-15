@@ -17,15 +17,23 @@ build support.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
 
-The current [Critical Weakness input packet](../data/owned/poe2/3887ae68/configuration-enemy-critical-weakness-input/README.md)
-preserves the configured raw count on the scenario Enemy. Existing import rules
-select a nonzero Input, then Placeholder, then constructor 20, with exact
-accounting of both saved lanes. Activation, clamping and the critical-chance
-effect remain separate calculations. All five imports and 110 queries survive
-the production CLI publication/rebuild and negative controls. Original05 has
-29 remaining configuration origins and 24 known assumptions; its four complete
-input inventories are still Pending. See the
-[current endpoint](implementation.md#current-checkpoint-critical-weakness-input).
+The current [ailment-count packet](../data/owned/poe2/3887ae68/configuration-enemy-ailment-stack-inputs/README.md)
+preserves raw Shock, Scorch and Chill counts on the scenario Enemy. Existing
+injected import selectors preserve their different treatment of authored zero;
+all three use constructor candidate one. Activation, stack limits and actual
+effects remain separate calculations. All five imports and 110 queries survive
+the production CLI publication/rebuild and 66 controls. Original05 has 26
+remaining configuration origins and 27 known assumptions; its four complete
+input inventories are still Pending. Historical singleton and distance-output
+publications also reproduce exactly after the shared test harness change. See
+the [current endpoint](implementation.md#current-checkpoint-enemy-ailment-inputs).
+
+The preceding [Critical Weakness input](../data/owned/poe2/3887ae68/configuration-enemy-critical-weakness-input/README.md)
+uses nonzero Input, then Placeholder, then constructor 20. Its source accounting
+and downstream effect responsibilities remain separate in the same native path.
+The ailment review also identifies a possible Chill display inconsistency in
+the pinned source; investigation is scheduled with ailment effects, without
+adopting a native compatibility rule or a numerical parity exception.
 
 The preceding reporting-inclusion publication adds only typed preset intent through
 existing Import/Core contracts. Exact eligible occurrences retain a Boolean;
@@ -242,7 +250,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-critical-weakness-input).
+[implementation checkpoint](implementation.md#current-checkpoint-enemy-ailment-inputs).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -1436,7 +1444,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-critical-weakness-input),
+live in the [implementation plan](implementation.md#current-checkpoint-enemy-ailment-inputs),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.
