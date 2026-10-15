@@ -123,8 +123,19 @@ Conversion accumulation, untranslated suppliers and complete input/plan coverage
 remain unresolved. The current joined tests use these guarded bodies; only the
 finite test graph closes the remaining domains. The
 [capacity review](implementation.md#measured-catalog-capacity-and-next-cleanup)
-tracks the compiler's remaining seven program slots and roughly 2.7 MB release
+tracks the compiler's remaining five program slots and roughly 2.69 MB release
 headroom before additional catalog growth.
+
+The [Player Spirit component](../data/owned/poe2/3887ae68/player-spirit-pool/README.md)
+now supplies the guarded final formula and an explicit Amulet-copy contribution
+through the same checked graph. Actual selected Amulet and reward inputs produce
+113 Spirit, with retained range controls of 110 and 115. All 106 joined tests,
+all-five publication and strict Clippy pass. Nine supplier queries and the final
+owner remain Partial: source suppression, routing, magnitude transforms and
+numeric ordering still require admission. This is a verified component, not a
+complete unchanged-build result. Resource capacity is separate from reservation
+and the source's negative unreserved Spirit; the proposed resource-obligation
+ownership change still awaits a decision.
 
 The [Mana cleanup](../data/owned/poe2/3887ae68/mana-direct-queries/README.md)
 removes five forwarding programs and Player receivers. The final Mana program
@@ -187,7 +198,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-bounded-player-life-base-accumulation).
+[implementation checkpoint](implementation.md#current-checkpoint-player-spirit-pool).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -1357,7 +1368,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-bounded-player-life-base-accumulation),
+live in the [implementation plan](implementation.md#current-checkpoint-player-spirit-pool),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.

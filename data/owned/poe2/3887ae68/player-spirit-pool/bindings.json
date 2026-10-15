@@ -1,0 +1,83 @@
+{
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "channels": [
+    {
+      "source": "SpiritConvertToEnergyShield",
+      "owned": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003389"
+      }
+    },
+    {
+      "source": "SpiritConvertToArmour",
+      "owned": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000338a"
+      }
+    },
+    {
+      "source": "SpiritConvertToEvasion",
+      "owned": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000338b"
+      }
+    },
+    {
+      "source": "ExtraSpirit",
+      "owned": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000338c"
+      }
+    },
+    {
+      "source": "SpiritTotal",
+      "owned": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000338d"
+      }
+    }
+  ],
+  "final": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003166"
+  },
+  "saved_metric": {
+    "kind": "metric",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000313c"
+  },
+  "scope": {
+    "player_stat_only": true,
+    "reservation_legality": false,
+    "supplier_completeness": false,
+    "item_spirit_suppression": false,
+    "native_whole_build": false
+  }
+}

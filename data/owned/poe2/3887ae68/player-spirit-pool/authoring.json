@@ -1,0 +1,44 @@
+{
+  "kind": "player-spirit-pool",
+  "before": "121dc6bf9980fef3301d18e6f6cb4148884f50a792e38b7599f1db60318ab748",
+  "release": "pob-3887ae68-player-spirit-pool-v1",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v27",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "artifacts": {
+    "extension.json": {
+      "bytes": 4745,
+      "sha256": "960b9f6c22a88b8d7f7033def51ee06674e540bf6c320e62ca772b4fc4e9acfe"
+    },
+    "consumer.json": {
+      "bytes": 165176,
+      "sha256": "8a1a094e7d0dc9bd32306fc35690cf9fcda023ed2aaad258d098339d021b4f80"
+    },
+    "dependencies.json": {
+      "bytes": 109005,
+      "sha256": "2dcf2f10c41010709d2cb11aaa52f87fcf7f0caffd7e6f411246ada7134ddb16"
+    },
+    "bindings.json": {
+      "bytes": 1804,
+      "sha256": "57cf4b012be3fabb257a200a752000a53243e56626a372c31f75890545fe10e7"
+    },
+    "source-vectors.json": {
+      "bytes": 11548,
+      "sha256": "f4b66f21c230d56b7b733612508b88e15adfa9d189a3e10e1eb0d0847c3f103a"
+    }
+  },
+  "scope": {
+    "new_definitions": 5,
+    "new_programs": 2,
+    "new_receivers": 1,
+    "new_queries": 9,
+    "closed_existing_owners": 0,
+    "supplier_admission": false,
+    "complete_spirit": false,
+    "evaluation_bundle": false,
+    "whole_build": false
+  }
+}

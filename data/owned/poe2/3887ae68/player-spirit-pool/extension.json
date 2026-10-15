@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "owners": [],
+  "operations_version": "owned-domain-operations-v27",
+  "version": "player-spirit-pool",
+  "receivers": [],
+  "schema": [
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "id": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003389"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "targets": [
+                "actor"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "id": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000338a"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "targets": [
+                "actor"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "id": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000338b"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "targets": [
+                "actor"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "id": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000338c"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000004"
+                  }
+                }
+              },
+              "targets": [
+                "actor"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "id": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000338d"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000004"
+                  }
+                }
+              },
+              "targets": [
+                "actor"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "tables": []
+}

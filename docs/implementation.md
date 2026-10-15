@@ -83,7 +83,7 @@ These reference observations are not evidence of native metric completion.
 | 07–12: total EHP and five maximum hits | Encounter and incoming-damage components | Complete resource/defence dependencies, mitigation and final survivability calculations |
 | 14: exact Sniper Basic Attack hit DPS | Prepared skill, intrinsic damage/rate, accuracy, inherited/Offering/Gigantic/quality factors and exact-Action Command | Pre-conversion damage assembly, remaining modifier domains, critical/speed/enemy mitigation and final DPS binding |
 | 13, 15, 16: Player hit DPS/average hit and Sniper average hit | Exact typed query identities | Reviewed unavailable results matching the reference; no fabricated numerical defaults |
-| 17: Player Spirit | Modifier and reward inputs | Final capacity and coverage; unreserved Spirit and legality are separate |
+| 17: Player Spirit | Actual Amulet/reward inputs, explicit Amulet-copy contribution and guarded final Player consumer | Supplier, suppression and numeric-order admission plus complete-plan binding; unreserved Spirit and legality are separate |
 | 20, 21: Player movement/action speed | Movement contribution channel and typed metric declarations | Complete contributors, interactions and final calculations; observed action speed 100 is not a native constant |
 
 Four selected import obligations remain: **01f2** configuration, **0505** preset
@@ -105,7 +105,50 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: bounded Player Life BASE accumulation
+## Current checkpoint: Player Spirit pool
+
+The [Spirit packet](../data/owned/poe2/3887ae68/player-spirit-pool/README.md)
+adds two injected data programs: an Amulet-copy contribution on the existing
+modifier and a final consumer on Player Stat `3166`. Five adjustment channels,
+nine checked queries and one Player receiver use existing native contracts.
+The consumer handles conversions, Extra/Total, Increase/More, the accepted
+rounding domain and a present override, including zero. It adds no runtime API,
+Lua behavior or native source dependency.
+
+The joined component imports the actual Amulet modifier's 24 rolls and the three
+selected reward occurrences. It binds saved `reference-17` / metric `313c` to
+final Spirit **113** and matches the retained range controls **110/115**. The
+separate zero Amulet-copy contribution remains present. Source initialization
+zero is represented by the native sum's additive identity, without claiming
+identical source provenance. Four retained copy probes belong to the original
+case only; positive conversion/override controls are explicitly synthetic.
+Fresh/reused/Rayon results agree. Missing contributors, incomplete inventories,
+conflicting overrides and invalid freeze order remain blocking.
+
+All nine supplier inventories and the relevant owner gaps remain Partial.
+Equipment suppression, untranslated suppliers and numeric-order domains are
+unproved. Reservation and the observed **-67** unreserved Spirit are separate.
+The finite component graph does not make this metric admitted in a complete
+original request. All five imports preserve their 110 queries, exact local IDs
+and selected issue counts **106/117/109/123/4**; no issue or whole build closes.
+
+The published package is **`runs/owned-player-spirit-pool-publication-02/package`**:
+
+- Input: `dc3371b68bc3ce5f870b6b0c44efe3dad16a0f1c37d2cb39a63492050f9d0d56`.
+- Definitions: `05c469e54550ae6853a9b69feaea98eacca196f966681c68a7a5077a5c61a56f`.
+- Rules: `5e6cb4dc31c83ceec9450672d4898bf0d49cd7c267d8d93588b18dce950d2ce1`.
+- Compiled: `3afba22c8b49ce8fbb6c126bde5419e566348b9c3412fabe12ac3d20c0232e2b`.
+- Registry: `2b54cb7610709f9101b0b2560e9efa8a23c648c9f7c220b23c9a3fadd73e4ad1`, last issued `338d`.
+
+All eighteen artifacts rebuild identically. All-five publication and two ordinary
+source/authoring tests pass (34.84s); five focused joined tests pass (52.31s).
+All 95 joined component tests pass (65.15s), followed by the eleven ordinary
+joined tests and two ordinary Spirit source-proof tests. The separate explicit
+replay exporter was not run. Strict Clippy passes for both affected targets
+(4.73s); independent review is clean. Evidence uses
+`runs/owned-player-spirit-pool-{publication-02,joined-01,joined-02,ordinary-01,clippy-01}.log`.
+
+## Previous checkpoint: bounded Player Life BASE accumulation
 
 The [Life BASE packet](../data/owned/poe2/3887ae68/life-base-domain/README.md)
 bounds the existing shared-Player Strength-to-Life contribution using the
@@ -133,7 +176,7 @@ Actor and global coverage and the four selected input obligations are unchanged.
 A local two-owner inverse authenticates older component evidence; current
 native fixtures execute the guarded programs without rebuilding an old release.
 
-The current package is **`runs/owned-life-base-domain-publication-01/package`**:
+Its published package is **`runs/owned-life-base-domain-publication-01/package`**:
 
 - Input: `121dc6bf9980fef3301d18e6f6cb4148884f50a792e38b7599f1db60318ab748`.
 - Definitions: `cf65959955725dde2758ea79cb5542dca1fe9a9601a352344f8f3fad24ad837b` (unchanged).
@@ -152,7 +195,9 @@ targets passes (4.21s), as does the existing engine hard-effect-ceiling regressi
 `runs/owned-life-base-domain-{authoring-04,final-ordinary-01,joined-02,publication-01,clippy-02,hard-limit-01}.log`.
 Complete native builds remain **0/5**.
 
-### Source checkpoint: selected quest/reward reconciliation
+## Source admission checkpoints
+
+### Selected quest/reward reconciliation
 
 The [configuration source review](../data/owned/poe2/3887ae68/mana-supplier-sources/configuration-review.md)
 now reconciles all **34 selected quest callbacks per independent observation**
@@ -224,13 +269,9 @@ needs a checked declaration/transport proof. Generated-skill roots, later delive
 numerical scaling/order, twelve Partial passive owners and runtime inventories
 remain separate. No new API or source acquisition is presently indicated.
 
-In parallel, the next saved-metric slice is final **Player Spirit**. Reuse the
-actual Solar modifier, its separate Amulet-copy contribution (including the
-observed zero) and the three exact reward occurrences. The retained full-build
-controls expect 113, 110 and 115. Two data programs can implement the copy and
-final consumer under existing contracts; source suppression, supplier and
-numeric-order admission remain explicit gaps. Capacity is distinct from
-reservation. The resource-obligation ownership proposal is awaiting the owner's
+The final Spirit component is now published above. Its source suppression,
+supplier and numeric-order admission remain explicit gaps. Capacity is distinct
+from reservation. The resource-obligation ownership proposal is awaiting the owner's
 answer; no dependent support-recipient or reservation migration is authorized
 yet. Sniper physical-base assembly remains behind its missing self-flat supplier
 authority, and its unpublished draft IDs must be reconciled before adoption.
@@ -245,16 +286,17 @@ conversion-order proof explicit; zero observations cannot establish any of these
 absence claims. Query-scoped coverage would be a separate design decision, not
 an implicit way around the current complete-plan contract.
 
-### Measured catalog capacity and next cleanup
+## Measured catalog capacity and next cleanup
 
 The Life predecessor's read-only capacity audit found programs to be the only
 nearly exhausted compiler collection, at 8190/8192 including one application.
-The Mana cleanup reduces that to **8185/8192**, leaving seven slots; receivers
-decrease from 60 to 55. Other measured Life-predecessor compiler counts are
+The Mana cleanup reduced that to 8185/8192 and receivers from 60 to 55. The
+Spirit component now uses **8187/8192**, leaving five program slots, with 56
+receivers. Other measured Life-predecessor compiler counts are
 6548 owners, 23517 effects, 4249 reads, 32814 nodes and 41600 edges, comfortably
 within their separate caps.
-The current complete release is **64,383,063/67,108,864 bytes**, leaving
-2,725,801 bytes. These are separate limits. The common
+The current release package is **64,418,739/67,108,864 bytes**, leaving
+2,690,125 bytes. These are separate limits. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
 

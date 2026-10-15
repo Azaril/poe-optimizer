@@ -1,0 +1,341 @@
+{
+  "archives": [
+    {
+      "path": "source-jit-off.json.gz",
+      "raw": {
+        "bytes": 269948,
+        "sha256": "9ea3244256c7ccba838c8f1317c07bb6f428d8d605907e749c7515dc67f57b29"
+      },
+      "compressed": {
+        "bytes": 19495,
+        "sha256": "7e76869d90d5bd0c8f3dd1598a5e26487ecf772583e11a94e37ca7000a1cf74d"
+      }
+    },
+    {
+      "path": "source-jit-on.json.gz",
+      "raw": {
+        "bytes": 269948,
+        "sha256": "9ea3244256c7ccba838c8f1317c07bb6f428d8d605907e749c7515dc67f57b29"
+      },
+      "compressed": {
+        "bytes": 19495,
+        "sha256": "7e76869d90d5bd0c8f3dd1598a5e26487ecf772583e11a94e37ca7000a1cf74d"
+      }
+    }
+  ],
+  "source_metadata": {
+    "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "vectors": [
+    {
+      "name": "original",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "base_records": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Base",
+          "tags": {},
+          "type": "BASE",
+          "value": 0
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Quest:Act 1: Freythorn",
+          "tags": {},
+          "type": "BASE",
+          "value": 30
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Quest:Act 3: Azak Bog",
+          "tags": {},
+          "type": "BASE",
+          "value": 30
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Quest:Interlude 3: Kriar Village",
+          "tags": {},
+          "type": "BASE",
+          "value": 40
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Item:23:New Item, Solar Amulet",
+          "source_slot": "Amulet",
+          "tags": {},
+          "type": "BASE",
+          "value": 13
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Many Sources:^x88FFFF0% Amulet Bonus Effect",
+          "source_slot": "Amulet",
+          "tags": {},
+          "type": "BASE",
+          "value": 0
+        }
+      ],
+      "copy_probes": [
+        {
+          "factor": 0,
+          "records": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Item:23:New Item, Solar Amulet",
+              "source_slot": "Amulet",
+              "tags": {},
+              "type": "BASE",
+              "value": 0
+            }
+          ]
+        },
+        {
+          "factor": 0.25,
+          "records": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Item:23:New Item, Solar Amulet",
+              "source_slot": "Amulet",
+              "tags": {},
+              "type": "BASE",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "factor": 0.5,
+          "records": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Item:23:New Item, Solar Amulet",
+              "source_slot": "Amulet",
+              "tags": {},
+              "type": "BASE",
+              "value": 6
+            }
+          ]
+        },
+        {
+          "factor": 1,
+          "records": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Item:23:New Item, Solar Amulet",
+              "source_slot": "Amulet",
+              "tags": {},
+              "type": "BASE",
+              "value": 13
+            }
+          ]
+        }
+      ],
+      "final_spirit": 113,
+      "unreserved_spirit": -67
+    },
+    {
+      "name": "legacy-zero",
+      "xml_sha256": "ced763b3c2185c775f9b552b03368941819b2534403a11beaca278f6e30ac087",
+      "base_records": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Base",
+          "tags": {},
+          "type": "BASE",
+          "value": 0
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Quest:Act 1: Freythorn",
+          "tags": {},
+          "type": "BASE",
+          "value": 30
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Quest:Act 3: Azak Bog",
+          "tags": {},
+          "type": "BASE",
+          "value": 30
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Quest:Interlude 3: Kriar Village",
+          "tags": {},
+          "type": "BASE",
+          "value": 40
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Item:23:New Item, Solar Amulet",
+          "source_slot": "Amulet",
+          "tags": {},
+          "type": "BASE",
+          "value": 10
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Many Sources:^x88FFFF0% Amulet Bonus Effect",
+          "source_slot": "Amulet",
+          "tags": {},
+          "type": "BASE",
+          "value": 0
+        }
+      ],
+      "copy_probes": [],
+      "final_spirit": 110,
+      "unreserved_spirit": -70
+    },
+    {
+      "name": "legacy-one",
+      "xml_sha256": "0a95f242ecf88425a5e45107babc86bb3d6e5131f519a838ccd36125a71c4571",
+      "base_records": [
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Base",
+          "tags": {},
+          "type": "BASE",
+          "value": 0
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Quest:Act 1: Freythorn",
+          "tags": {},
+          "type": "BASE",
+          "value": 30
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Quest:Act 3: Azak Bog",
+          "tags": {},
+          "type": "BASE",
+          "value": 30
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Quest:Interlude 3: Kriar Village",
+          "tags": {},
+          "type": "BASE",
+          "value": 40
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Item:23:New Item, Solar Amulet",
+          "source_slot": "Amulet",
+          "tags": {},
+          "type": "BASE",
+          "value": 15
+        },
+        {
+          "flags": 0,
+          "keyword_flags": 0,
+          "name": "Spirit",
+          "source": "Many Sources:^x88FFFF0% Amulet Bonus Effect",
+          "source_slot": "Amulet",
+          "tags": {},
+          "type": "BASE",
+          "value": 0
+        }
+      ],
+      "copy_probes": [],
+      "final_spirit": 115,
+      "unreserved_spirit": -65
+    }
+  ],
+  "scope": {
+    "observed_full_build_cases": 3,
+    "observed_copy_controls": 4,
+    "native_supplier_proof": false,
+    "positive_transform_source_proof": false,
+    "reservation_legality": false,
+    "whole_build_parity": false
+  },
+  "formula_source": {
+    "path": "src/Modules/CalcDefence.lua",
+    "archive": "../configuration-enemy-speed-inputs/CalcDefence.lua.gz",
+    "first": 74,
+    "last": 130,
+    "raw": {
+      "bytes": 239878,
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    "body": "function calcs.doActorLifeManaSpirit(actor, skipBreakdown)\n\tlocal modDB = actor.modDB\n\tlocal output = actor.output\n\tlocal breakdown = (not skipBreakdown) and actor.breakdown\n\tlocal condList = modDB.conditions\n\n\tlocal lowLifePerc = modDB:Sum(\"BASE\", nil, \"LowLifePercentage\")\n\toutput.LowLifePercentage = 100.0 * (lowLifePerc > 0 and lowLifePerc or data.misc.LowPoolThreshold)\n\tlocal fullLifePerc = modDB:Sum(\"BASE\", nil, \"FullLifePercentage\")\n\toutput.FullLifePercentage = 100.0 * (fullLifePerc > 0 and fullLifePerc or 1.0)\n\n\toutput.ChaosInoculation = modDB:Flag(nil, \"ChaosInoculation\")\n\n\tfor _, res in ipairs({ \"Life\", \"Mana\", \"Spirit\" }) do\n\t\tlocal base = modDB:Sum(\"BASE\", nil, res)\n\t\tlocal extra = modDB:Sum(\"BASE\", nil, \"Extra\" .. res)\n\t\tlocal total = modDB:Sum(\"BASE\", nil, res .. \"Total\")\n\t\tlocal inc = modDB:Sum(\"INC\", nil, res)\n\t\tlocal more = modDB:More(nil, res)\n\t\tlocal conv = m_min(modDB:Sum(\"BASE\", nil, res .. \"ConvertToEnergyShield\", res .. \"ConvertToArmour\", res .. \"ConvertToEvasion\"), 100)\n\t\tlocal override = modDB:Override(nil, res)\n\t\toutput[res..\"HasOverride\"] = override ~= nil\n\t\toutput[res] = override or m_max(round((base * (1 - conv/100) + extra) * (1 + inc/100) * more + total), 1)\n\t\tif breakdown then\n\t\t\tif inc ~= 0 or more ~= 1 or conv ~= 0 or extra ~= 0 or total ~= 0 then\n\t\t\t\tbreakdown[res][1] = s_format(\"%g ^8(base)\", base)\n\t\t\t\tif conv ~= 0 then\n\t\t\t\t\tt_insert(breakdown[res], s_format(\"x %.2f ^8(converted from)\", 1 - conv/100))\n\t\t\t\tend\n\t\t\t\tif extra ~= 0 then\n\t\t\t\t\tt_insert(breakdown[res], s_format(\"+ %g ^8(converted to)\", extra))\n\t\t\t\tend\n\t\t\t\tif conv ~= 0 or extra ~= 0 then\n\t\t\t\t\tt_insert(breakdown[res], s_format(\"= %g\", round(base * (1 - conv/100) + extra)))\n\t\t\t\tend\n\t\t\t\tif inc ~= 0 then\n\t\t\t\t\tt_insert(breakdown[res], s_format(\"x %.2f ^8(increased/reduced)\", 1 + inc/100))\n\t\t\t\tend\n\t\t\t\tif more ~= 1 then\n\t\t\t\t\tt_insert(breakdown[res], s_format(\"x %.2f ^8(more/less)\", more))\n\t\t\t\tend\n\t\t\t\tif total ~= 0 then\n\t\t\t\t\tt_insert(breakdown[res], s_format(\"+ %g ^8(total)\", total))\n\t\t\t\tend\n\t\t\t\tif inc ~= 0 or more ~= 1 or total ~= 0 then\n\t\t\t\t\tt_insert(breakdown[res], s_format(\"= %g\", output[res]))\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif output.ChaosInoculation then\n\t\toutput.Life = 1\n\t\tcondList[\"FullLife\"] = true\n\tend\n\toutput.LowestOfMaximumLifeAndMaximumMana = m_min(output.Life, output.Mana)\nend\n"
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Data/Bases/amulet.lua",
+      "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+    }
+  ]
+}
