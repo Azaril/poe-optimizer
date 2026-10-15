@@ -217,14 +217,26 @@ Review SHA-256:
 `a02bb22eb2d5a0ade8b9c4be9551e047d9c976d249d615e9d8b8616b9239814f`.
 No canonical package, allocator ID, query, runtime API or native coverage changed.
 
+The separate [child lifecycle proof](../data/owned/poe2/3887ae68/self-flat-skill-construction/README.md#sniper-child-extraskillstat-lifecycle)
+now closes `ExtraSkillStat` at the direct Sniper child merge. Both reviewed
+callers reset a parentless modifier store. Eighteen exact child pairs have no
+supports or source instance; the complete prefix, selected recipe and resolved
+mappings cannot supply an extra-stat record before that merge. This is an
+authenticated source deduction, not a new observed List call or a claim about
+Player/summoner expansion. The original construction artifacts stay byte-identical.
+Offline retention passes (9.19s), all fourteen ordinary tests pass (21.47s), and
+strict Clippy passes (0.82s):
+`runs/owned-self-flat-child-lifecycle-{retain,tests,clippy}-01.log`.
+Child review SHA-256:
+`40e23023267135a3c23a2a6f3bf71140f6209ca554e0123edab3c187605dacb1`.
+
 **Resume:** join the original minion store/profile initialization and direct
-`minionBuffs` payloads with this inherited proof to the actual dynamic
-parent-weapon and Hollow Palm gates. Separately finish the bounded direct-child
-`ExtraSkillStat` proof from existing construction evidence: both child callers
-reset a parentless minion store, and the Skill list reads it before later
-inherited delivery. That cannot prove absence in Player/summoner expansion or
-arbitrary future sources. Do not acquire another VM observation until a concrete
-missing boundary requires one.
+`minionBuffs` payloads with the inherited proof to the actual dynamic
+parent-weapon and Hollow Palm gates. Explicitly account for later curse-slot and
+affected-by-aura receivers; the four inherited call sites do not cover them.
+Other child selections, Player/summoner extra-stat expansion and arbitrary future
+sources retain their own obligations. Do not acquire another VM observation
+until a concrete missing boundary requires one.
 
 Once selected source admission is complete, publish freshly allocated self-flat
 queries and the final pre-conversion consumer together. Reuse intrinsic ranges,

@@ -1,0 +1,47 @@
+{
+  "acquisition_sha256": "d7df2cde5648ee00354c80f70f50285f12851070d31b16677777b2d7b1c08faf",
+  "bodies_sha256": "8fc5ce308afa368538212d66a4f489a955250c4bbeca10fbe3f3fb10f3b5be3b",
+  "construction": {
+    "child_level": 1,
+    "child_pairs": 18,
+    "child_quality": 0,
+    "modes": {
+      "CALCS": 1,
+      "CALCULATOR": 1,
+      "MAIN": 16
+    },
+    "profile": "RaisedSkeletonSniper",
+    "recipe": "MinionMeleeBow",
+    "recipe_sha256": "abc764c4728687f465ffea2ea8b16e597e2a91121ee7e2e37a5bbe7d2c90e213",
+    "selected_bindings_sha256": "e2089f9e8487b75ad46f708255a1bc157c4b004129842d7f245f06dccd36570e",
+    "support_effects": 0
+  },
+  "kind": "finite-sniper-child-extra-stat-lifecycle",
+  "prior_authority_sha256": "105b36b7a75e02cb33a5882c1d2fcc5ba75661399702f5cac815cf6592045ef9",
+  "remaining": [
+    "Later direct and inherited minion-store writers and dynamic factories",
+    "Source-to-native contributor membership and final checked self-flat queries",
+    "Other child recipes, supports, Party inputs or future construction paths require new review"
+  ],
+  "schema_version": 1,
+  "scope": {
+    "arbitrary_extra_stat_keys_proved": false,
+    "direct_list_call_observed": false,
+    "later_store_delivery_complete": false,
+    "native_contributor_membership_complete": false,
+    "native_coverage_authorized": false,
+    "new_source_execution": false
+  },
+  "source_deductions": {
+    "child_actor_store_replaced_before_construction": true,
+    "extra_skill_stat_list_empty_at_direct_child_merge": true,
+    "fresh_actor_store_has_no_store_parent": true,
+    "fresh_skill_list_parent_is_only_child_actor_store": true,
+    "no_selected_supports_or_source_gem_property_inputs": true,
+    "pre_merge_fixed_names_cannot_supply_extra_skill_stat": true,
+    "reviewed_call_paths": [
+      "calcs.perform",
+      "calcs.copyActiveSkill"
+    ]
+  }
+}

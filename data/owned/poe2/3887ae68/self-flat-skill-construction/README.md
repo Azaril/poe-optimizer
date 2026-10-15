@@ -7,6 +7,52 @@ preserve the complete local records while accounting for records moved into
 global-effect buff lists. It does not complete a native contribution query or
 make the full build evaluable.
 
+## Sniper child ExtraSkillStat lifecycle
+
+The separate `child-review.json` extends this packet with a source-level
+deduction for the 18 unchanged Sniper Basic Attack constructor pairs. It keeps
+the original `authority.json`, `bodies.json` and `review.json` byte-for-byte,
+because other proofs authenticate those artifacts. No new PoB load or query
+observation was performed.
+
+Both reviewed construction paths, `calcs.perform` and `calcs.copyActiveSkill`,
+replace the minion's modifier database with a fresh `ModDB()` before calling
+`createMinionSkills`. The complete database/store constructors establish an
+empty local database with no store parent. The child's new modifier list
+inherits only that database. The Actor's parent relationship to the Player
+does not establish a modifier-store parent.
+
+The exact retained Basic Attack calls have one active effect, no supports, no
+source instance or socket group, quality zero, and level one. The complete
+construction prefix through the active merge at line 795 writes only reviewed
+fixed names on this path. The source-gem property guard cannot enter without a
+source instance. The selected recipe and its resolved mappings contain no
+`ExtraSkillStat`, `PhysicalMin` or `PhysicalMax` writer. The original List
+implementations therefore have no matching local or parent record to return
+at that direct child merge. This deduction uses the lifecycle and full source
+bodies; it does not interpret a later empty observation as an earlier absence.
+
+`child-bodies.json` authenticates 17 spans in seven complete files, including
+the constructors, both callers, the entire pre-merge prefix, stat preparation,
+List traversal and the later inherited-delivery boundary. The complete
+`CalcTools.lua` archive is normalized to the exact LF bytes authenticated by the
+existing upstream manifest. The other six archives are reused. The existing
+upstream license is retained at
+`../configuration-accounting/evidence/pob/LICENSE.md`.
+
+The original global stat-map fallback remains capable of resolving additional
+keys. This proof excludes their input at the reviewed child merge; it does not
+claim that arbitrary additional keys are harmless. Later minion-store writes,
+parent-weapon factories, Party inputs, other skill/support selections and
+source-to-native contributor membership remain separate obligations. No native
+query membership or final build coverage is promoted.
+
+The new ordinary tests reject coherently rehashed parent-store inheritance,
+changed caller bodies, substituted child identities, source instances or
+support effects, changed recipes, and coherent but unauthenticated observations.
+The optional `retain_sniper_child_extra_stat_lifecycle` test only reconstructs
+the new offline report from existing evidence.
+
 The proof reuses the authenticated selected-domain recipes, exact typed source
 bindings, Mana supplier source-02 acquisitions, and self-flat runtime-gate
 observations. It stores small authority/body/review documents rather than copying
@@ -60,11 +106,12 @@ child-buff visit list does not receive this relaxation.
 
 ## Explicitly unfinished
 
-`ExtraSkillStat` suppliers and arbitrary Party inputs, inherited
-Player/item/passive/configuration stores, dynamic child and parent-weapon
-factories, additional global recipients and activation branches remain separate
-obligations. In particular, a complete captured local record is not proof that
-an inherited store or an unexecuted factory cannot later supply flat damage.
+The bounded child lifecycle above excludes `ExtraSkillStat` only at the direct
+Sniper construction merge. Arbitrary Party inputs, other child/support selections,
+later direct minion-store writers, dynamic parent-weapon factories, additional
+global recipients and activation branches remain separate obligations. A complete
+captured local record does not prove that an unexecuted factory or later store
+write cannot supply flat damage.
 Current native owner inventories, supplier completeness, Action contribution
 queries and all build/request coverage are unchanged.
 
@@ -74,12 +121,13 @@ recipe-value calculation parity. The supplied complete acquisition is sealed
 after the semantic checks; a coherent edited before/after value can satisfy the
 transport law but still fails this evidence seal.
 
-The next useful boundary is the complete inherited-store input to the actual
-`MinionModifier` receiving calls, joined to exact source occurrences and recipient
-filters (`CalcPerform` calls at 1854, 3123, 3377 and 3384). That requires
-source/delivery authority beyond the finite local construction proof here. No
-positive native producer or empty-query completion is justified by this packet
-alone.
+The separate [inherited delivery proof](../self-flat-inherited-minion-delivery/README.md)
+now checks the actual `MinionModifier` receiving calls and skipped gates at
+`CalcPerform` 1854, 3123, 3377 and 3384, with exact source/recipient and original
+List/AddMod correspondence. That proof does not complete every minion-store
+writer. The remaining native work must join the reviewed direct, inherited and
+dynamic source domains to exact contributor membership; neither packet alone
+authorizes an empty native query or a complete build.
 
 ## Validation
 
@@ -89,7 +137,20 @@ requires `POE_SELF_FLAT_SKILL_RETAIN=1`; it runs no PoB VM and writes only this
 packet's reviewed projection. A test-only mutex bounds simultaneous large-report
 clones during the mutation checks.
 
-Final validation:
+Child lifecycle validation:
+
+- Offline retention: one passed in 9.19 seconds,
+  `runs/owned-self-flat-child-lifecycle-retain-01.log`.
+- Current ordinary target: fourteen passed, two intentional retention-only
+  ignores, in 21.47 seconds, `runs/owned-self-flat-child-lifecycle-tests-01.log`.
+- Strict target Clippy: passed in 0.82 seconds,
+  `runs/owned-self-flat-child-lifecycle-clippy-01.log`.
+
+The child report retains 16 MAIN, one CALCS and one CALCULATOR construction pair
+in each of the two independent observed traces. Use
+`POE_SELF_FLAT_CHILD_RETAIN=1` for its explicit offline retention test.
+
+Original constructor proof validation (unchanged evidence):
 
 - Offline retention: one passed in 9.27 seconds,
   `runs/owned-self-flat-skill-retain-03.log`.

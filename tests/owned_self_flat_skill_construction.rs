@@ -368,3 +368,180 @@ fn retain_selected_skill_construction_proof() {
     let _lane = source_lane();
     proof::retain();
 }
+
+#[test]
+fn sniper_extra_stat_input_is_excluded_by_fresh_child_lifecycle() {
+    let _lane = source_lane();
+    proof::check_child().unwrap();
+    let p = proof::read("child-review.json");
+    assert_eq!(p["construction"]["child_pairs"], 18);
+    assert_eq!(p["construction"]["support_effects"], 0);
+    assert_eq!(
+        p["source_deductions"]["fresh_actor_store_has_no_store_parent"],
+        true
+    );
+    assert_eq!(
+        p["source_deductions"]["extra_skill_stat_list_empty_at_direct_child_merge"],
+        true
+    );
+    for key in [
+        "direct_list_call_observed",
+        "new_source_execution",
+        "arbitrary_extra_stat_keys_proved",
+        "later_store_delivery_complete",
+        "native_contributor_membership_complete",
+        "native_coverage_authorized",
+    ] {
+        assert_eq!(p["scope"][key], false, "{key}");
+    }
+}
+
+#[test]
+fn parent_inheritance_and_changed_original_child_callers_are_refused() {
+    use sha2::{Digest, Sha256};
+    let _lane = source_lane();
+    for (role, old, new) in [
+        (
+            "copied-summoner-fresh-child-store",
+            ":ModDB()",
+            ":ModDB(env.player.modDB)",
+        ),
+        (
+            "perform-fresh-child-store",
+            ":ModDB()",
+            ":ModDB(activeSkill.actor.modDB)",
+        ),
+        (
+            "fresh-store-parent-constructor",
+            "parent or false",
+            "parent or env.player.modDB",
+        ),
+        (
+            "complete-pre-extra-stat-construction",
+            "ModList(activeSkill.actor.modDB)",
+            "ModList(env.player.modDB)",
+        ),
+        ("complete-child-construction", "quality = 0", "quality = 20"),
+    ] {
+        let mut bodies = proof::read("child-bodies.json");
+        let span = bodies["spans"]
+            .as_array_mut()
+            .unwrap()
+            .iter_mut()
+            .find(|s| s["role"] == role)
+            .unwrap();
+        let before = span["body"].as_str().unwrap();
+        assert!(before.contains(old));
+        let altered = before.replace(old, new);
+        span["sha256"] = json!(format!("{:x}", Sha256::digest(altered.as_bytes())));
+        span["body"] = json!(altered);
+        assert!(proof::review_child_bodies(&bodies).is_err(), "{role}");
+    }
+    let mut bodies = proof::read("child-bodies.json");
+    bodies["spans"].as_array_mut().unwrap().remove(1);
+    assert!(proof::review_child_bodies(&bodies).is_err());
+}
+
+#[test]
+fn child_sources_supports_and_call_return_identity_cannot_be_substituted() {
+    let _lane = source_lane();
+    let f = proof::fixture();
+    for case in 0..7 {
+        let mut run = f["off"].clone();
+        let rows = run["skill_construction"].as_array_mut().unwrap();
+        let at = rows
+            .iter()
+            .position(|r| r["active_effect"]["id"] == "MinionMeleeBow")
+            .unwrap();
+        let row = &mut rows[at];
+        let expected = match case {
+            0 => {
+                row["active_effect"]["source_instance"] = json!({"level":1});
+                "source instance"
+            }
+            1 => {
+                row["supports"] = json!([row["active_effect"].clone()]);
+                "no child support"
+            }
+            2 => {
+                row["active_effect"]["fields"]["quality"] = json!(20);
+                "level and quality"
+            }
+            3 => {
+                row["summoner"]["matches"][0]["gem_index"] = json!(999);
+                "exact supplied source"
+            }
+            4 => {
+                row["actor_parent_is_player"] = json!(false);
+                "child Actor relationship"
+            }
+            5 => {
+                row["supports"] = Value::Null;
+                "captured sequence"
+            }
+            _ => {
+                rows[at + 1]["active_effect"]["id"] = json!("MinionMelee");
+                "exact supplied source"
+            }
+        };
+        refused(
+            proof::review_child_run(&run, &f["recipes"], &f["selected"]),
+            expected,
+        );
+    }
+}
+
+#[test]
+fn changed_recipe_or_coherent_child_observation_is_not_a_new_source_proof() {
+    let _lane = source_lane();
+    let f = proof::fixture();
+    let mut recipes = f["recipes"].clone();
+    let recipe = recipes["skills"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|r| r["id"] == "MinionMeleeBow")
+        .unwrap();
+    recipe["metadata"]["name"] = json!("Changed source recipe");
+    refused(
+        proof::review_child_run(&f["off"], &recipes, &f["selected"]),
+        "authenticated child recipes",
+    );
+    recipe_placeholder_control(f);
+    let mut changed = f.clone();
+    for mode in ["off", "on"] {
+        for row in changed[mode]["skill_construction"].as_array_mut().unwrap() {
+            if row["active_effect"]["id"] == "MinionMeleeBow" {
+                row["records"][0]["body"]["value"] = json!(16);
+            }
+        }
+    }
+    proof::review_child_run(&changed["off"], &changed["recipes"], &changed["selected"]).unwrap();
+    refused(
+        proof::reconstruct_child(&changed, &proof::read("child-bodies.json")),
+        "authenticated acquisition",
+    );
+}
+
+fn recipe_placeholder_control(f: &Value) {
+    let mut recipes = f["recipes"].clone();
+    let recipe = recipes["skills"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|r| r["id"] == "MinionMeleeBow")
+        .unwrap();
+    recipe["base_mods"]["value"] = json!({"name":"ExtraSkillStat","type":"LIST",
+        "value":{"key":"new_key","value":0}});
+    refused(
+        proof::review_child_run(&f["off"], &recipes, &f["selected"]),
+        "external-stat source",
+    );
+}
+
+#[test]
+#[ignore = "retain bounded child lifecycle deduction from existing authenticated source only"]
+fn retain_sniper_child_extra_stat_lifecycle() {
+    let _lane = source_lane();
+    proof::retain_child();
+}

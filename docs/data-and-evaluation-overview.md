@@ -117,6 +117,18 @@ remain incomplete. Source calculation-view
 flags such as `Effective` are not gameplay states and will not enter the native
 model. Their treatment must be reconciled to actual scenario semantics separately.
 
+Remaining saved controls demonstrate why input ownership is separate from the
+source modifier-list destination. Demonflame is Player transformation state;
+current Energy Shield is a Player percentage whose callback also enables a
+condition. Campaign-boss progress has no authenticated constructor default, so
+Import must preserve absence rather than substitute zero. Sigil and Corrupting
+Cry stages belong to exact Skill usage. That runtime contract already exists,
+but the Config-to-occurrence import join is unfinished; Skill-targeted external
+assumptions cannot bypass it because the engine rejects those reads. Propagation
+across repeated occurrences and independently selected presets requires complete
+source-consumer and composition evidence before a policy is chosen. These are
+remaining admission tasks, not new implemented runtime behavior.
+
 The [empty intrinsic socket packet](../data/owned/poe2/3887ae68/empty-passive-socket-intrinsics/README.md)
 now closes one selected passive's intrinsic rules and seven declaration
 inventories, preserving its exact socket and all external jewel/radius
@@ -1278,6 +1290,15 @@ changes between separate keyed stat buckets, preserving bodies, duplicates and
 within-stat order. This creates no native sorting rule, numerical reassociation
 or tolerance for differing results. The maintained optional driver seals raw
 captures before assessment and still requires the separate semantic proof.
+
+The [child lifecycle follow-up](../data/owned/poe2/3887ae68/self-flat-skill-construction/README.md#sniper-child-extraskillstat-lifecycle)
+proves the direct Sniper child merge has no `ExtraSkillStat` input: both callers
+create a parentless store before construction, and the exact recipe, absent
+supports/source instance and complete pre-merge writers exclude that record.
+Eighteen retained child pairs establish the selected inputs. This is a source
+deduction over authenticated bodies, without another VM run or native coverage
+promotion. It preserves all earlier evidence bytes and does not generalize to
+Player/summoner expansion or other recipes.
 
 Direct/local source completeness, dynamic factories, extra-stat expansion and
 final source-to-native membership remain separate admission work. These

@@ -57,6 +57,40 @@ const SPANS: [(&str, usize, usize, usize); 19] = [
     ("copy-list-add", 4, 121, 125),
     ("scaled-list-add", 4, 127, 135),
 ];
+const CHILD_FILES: [(&str, &str); 7] = [
+    FILES[0],
+    FILES[1],
+    FILES[2],
+    FILES[3],
+    FILES[4],
+    (
+        "src/Modules/CalcTools.lua",
+        "self-flat-skill-construction/child-CalcTools.lua.gz",
+    ),
+    (
+        "src/Modules/Data.lua",
+        "configuration-enemy-critical-damage-inputs/Data.lua.gz",
+    ),
+];
+const CHILD_SPANS: [(&str, usize, usize, usize); 17] = [
+    ("copied-summoner-fresh-child-store", 0, 279, 298),
+    ("perform-fresh-child-store", 1, 1193, 1212),
+    ("complete-child-construction", 0, 1116, 1185),
+    ("complete-active-construction", 0, 144, 234),
+    ("source-gem-property-guard", 0, 236, 263),
+    ("complete-pre-extra-stat-construction", 0, 426, 795),
+    ("complete-active-stat-merge", 0, 80, 141),
+    ("fresh-list-constructor", 2, 24, 27),
+    ("fresh-database-constructor", 3, 25, 29),
+    ("fresh-store-parent-constructor", 4, 65, 71),
+    ("list-dispatch", 4, 321, 339),
+    ("list-local-and-parent-traversal", 2, 309, 326),
+    ("database-local-and-parent-traversal", 3, 391, 411),
+    ("level-validation", 5, 60, 76),
+    ("declared-skill-stat-construction", 5, 161, 231),
+    ("global-map-fallback-and-installation", 6, 910, 966),
+    ("later-minion-modifier-delivery", 1, 1844, 1855),
+];
 fn ensure(ok: bool, why: &str) -> Result<(), String> {
     if ok { Ok(()) } else { Err(why.into()) }
 }
@@ -129,6 +163,21 @@ pub fn buff_payload_corresponds(left: &Value, right: &Value) -> Result<bool, Str
 
 /// This seal authenticates full original files independently of the retained excerpts.
 pub fn review_bodies(bodies: &Value) -> Result<(), String> {
+    review_source_bodies(
+        bodies,
+        "selected-self-flat-skill-constructor-bodies",
+        &FILES,
+        &SPANS,
+    )
+    .map(|_| ())
+}
+
+fn review_source_bodies(
+    bodies: &Value,
+    kind: &str,
+    expected_files: &[(&str, &str)],
+    expected_spans: &[(&str, usize, usize, usize)],
+) -> Result<Vec<String>, String> {
     let mb = bytes(
         "crates/poe-optimizer-pob/data/pob-source-manifest.json",
         1024 * 1024,
@@ -137,15 +186,18 @@ pub fn review_bodies(bodies: &Value) -> Result<(), String> {
     let manifest: Value = serde_json::from_slice(&mb).map_err(|e| e.to_string())?;
     ensure(
         bodies["schema_version"] == 1
-            && bodies["kind"] == "selected-self-flat-skill-constructor-bodies"
+            && bodies["kind"] == kind
             && bodies["source_manifest"] == MANIFEST
             && bodies["source_revision"] == manifest["upstream_revision"],
         "body identity",
     )?;
     let files = array(&bodies["files"])?;
-    ensure(files.len() == FILES.len(), "complete source file census")?;
+    ensure(
+        files.len() == expected_files.len(),
+        "complete source file census",
+    )?;
     let mut texts = Vec::new();
-    for (row, (path, archive)) in files.iter().zip(FILES) {
+    for (row, (path, archive)) in files.iter().zip(expected_files.iter().copied()) {
         let archive = format!("{BASE}/{archive}");
         ensure(
             row["path"] == path && row["archive"] == archive,
@@ -176,8 +228,11 @@ pub fn review_bodies(bodies: &Value) -> Result<(), String> {
         texts.push(String::from_utf8(raw).map_err(|e| e.to_string())?);
     }
     let spans = array(&bodies["spans"])?;
-    ensure(spans.len() == SPANS.len(), "complete reviewed body census")?;
-    for (row, (role, file, first, last)) in spans.iter().zip(SPANS) {
+    ensure(
+        spans.len() == expected_spans.len(),
+        "complete reviewed body census",
+    )?;
+    for (row, (role, file, first, last)) in spans.iter().zip(expected_spans.iter().copied()) {
         let body = texts[file]
             .lines()
             .skip(first - 1)
@@ -187,7 +242,7 @@ pub fn review_bodies(bodies: &Value) -> Result<(), String> {
             + "\n";
         ensure(
             row["role"] == role
-                && row["path"] == FILES[file].0
+                && row["path"] == expected_files[file].0
                 && row["first"] == first
                 && row["last"] == last
                 && row["body"] == body
@@ -195,7 +250,7 @@ pub fn review_bodies(bodies: &Value) -> Result<(), String> {
             "exact reviewed source body",
         )?;
     }
-    Ok(())
+    Ok(texts)
 }
 
 /// Recursive names include nested MinionModifier payloads, zero/inactive records
@@ -643,6 +698,179 @@ pub fn retain() {
     let proof = reconstruct(fixture(), &read("bodies.json")).unwrap();
     fs::write(
         supplier::root().join(DIR).join("review.json"),
+        serde_json::to_string_pretty(&proof).unwrap() + "\n",
+    )
+    .unwrap();
+}
+
+/// Authenticate the reviewed lifecycle without changing the older constructor
+/// proof consumed by other packets. These are source deductions, not new VM
+/// observations of the List call at line 795.
+pub fn review_child_bodies(bodies: &Value) -> Result<(), String> {
+    let texts = review_source_bodies(
+        bodies,
+        "selected-sniper-child-extra-stat-lifecycle-bodies",
+        &CHILD_FILES,
+        &CHILD_SPANS,
+    )?;
+    for (file, expected) in [(0, vec![294, 1116]), (1, vec![1209])] {
+        let actual: Vec<_> = texts[file]
+            .lines()
+            .enumerate()
+            .filter(|(_, line)| line.contains("calcs.createMinionSkills("))
+            .map(|(index, _)| index + 1)
+            .collect();
+        ensure(
+            actual == expected,
+            "reviewed complete-file child construction call sites",
+        )?;
+    }
+    Ok(())
+}
+
+/// Join the source-level fresh-store argument to the precise retained child
+/// occurrences. The Player parent relationship is an Actor relationship; the
+/// original ModStore constructor independently establishes no store parent.
+pub fn review_child_run(run: &Value, recipes: &Value, selected: &Value) -> Result<Value, String> {
+    review_record_domain(&recipes["skills"])?;
+    ensure(
+        recipes == &fixture()["recipes"],
+        "exact independently authenticated child recipes",
+    )?;
+    ensure(
+        selected == &fixture()["selected"],
+        "exact independently authenticated child source bindings",
+    )?;
+    let rows = array(&run["skill_construction"])?;
+    ensure(rows.len() == 1536, "complete child call/return inventory")?;
+    let mut census = BTreeMap::<String, usize>::new();
+    let mut pairs = 0;
+    for pair in rows.as_chunks::<2>().0 {
+        let (before, after) = (&pair[0], &pair[1]);
+        if before["active_effect"]["id"] != "MinionMeleeBow" {
+            ensure(
+                after["active_effect"]["id"] != "MinionMeleeBow",
+                "matching child call/return identity",
+            )?;
+            continue;
+        }
+        ensure(
+            before["phase"] == "before-effect-routing" && after["phase"] == "after-construction",
+            "complete child call/return phase",
+        )?;
+        for row in pair {
+            occurrence(row, selected)?;
+            let active = &row["active_effect"];
+            ensure(
+                row["actor_is_player"] == false
+                    && row["actor_parent_is_player"] == true
+                    && row["actor_profile"] == "RaisedSkeletonSniper"
+                    && active["id"] == "MinionMeleeBow",
+                "exact Sniper child identity and Actor relationship",
+            )?;
+            ensure(
+                row["source"]["source_present"] == false
+                    && array(&row["source"]["matches"])?.is_empty()
+                    && active["source"] == row["source"]
+                    && active["source_instance"]
+                        .as_object()
+                        .is_some_and(serde_json::Map::is_empty)
+                    && row["socket_group"]
+                        .as_object()
+                        .is_some_and(serde_json::Map::is_empty),
+                "child has no authored source instance or socket group",
+            )?;
+            ensure(
+                active["fields"]["level"] == 1 && active["fields"]["quality"] == 0,
+                "reviewed child level and quality inputs",
+            )?;
+            ensure(
+                array(&row["supports"])?.is_empty()
+                    && array(&row["effects"])?.len() == 1
+                    && row["effects"][0] == *active,
+                "no child support recipe or additional effect at this boundary",
+            )?;
+            records(&row["records"])?;
+        }
+        let mut before_context = before.clone();
+        let mut after_context = after.clone();
+        for key in ["phase", "records", "buffs"] {
+            before_context.as_object_mut().unwrap().remove(key);
+            after_context.as_object_mut().unwrap().remove(key);
+        }
+        ensure(
+            before_context == after_context,
+            "matching child call/return identity",
+        )?;
+        ensure(
+            before["records"] == after["records"]
+                && array(&before["buffs"])?.is_empty()
+                && array(&after["buffs"])?.is_empty(),
+            "child local records and empty buff routing retained",
+        )?;
+        let mode = before["mode"].as_str().ok_or("child mode")?;
+        ensure(
+            matches!(mode, "MAIN" | "CALCS" | "CALCULATOR"),
+            "reviewed child mode",
+        )?;
+        *census.entry(mode.to_owned()).or_default() += 1;
+        pairs += 1;
+    }
+    ensure(
+        pairs == 18 && census.len() == 3,
+        "complete eighteen child pairs",
+    )?;
+    Ok(json!({"child_pairs":pairs,"modes":census,
+        "recipe":"MinionMeleeBow","profile":"RaisedSkeletonSniper",
+        "recipe_sha256":digest(recipes),"selected_bindings_sha256":digest(selected),
+        "support_effects":0,"child_quality":0,"child_level":1}))
+}
+
+pub fn reconstruct_child(input: &Value, bodies: &Value) -> Result<Value, String> {
+    review_child_bodies(bodies)?;
+    let a = review_child_run(&input["off"], &input["recipes"], &input["selected"])?;
+    let b = review_child_run(&input["on"], &input["recipes"], &input["selected"])?;
+    ensure(a == b, "independent child lifecycle correspondence")?;
+    ensure(
+        input == fixture(),
+        "complete child proof authenticated acquisition",
+    )?;
+    Ok(
+        json!({"schema_version":1,"kind":"finite-sniper-child-extra-stat-lifecycle",
+        "prior_authority_sha256":AUTHORITY,"bodies_sha256":digest(bodies),
+        "acquisition_sha256":digest(input),"construction":a,
+        "source_deductions":{
+            "reviewed_call_paths":["calcs.perform","calcs.copyActiveSkill"],
+            "child_actor_store_replaced_before_construction":true,
+            "fresh_actor_store_has_no_store_parent":true,
+            "fresh_skill_list_parent_is_only_child_actor_store":true,
+            "no_selected_supports_or_source_gem_property_inputs":true,
+            "pre_merge_fixed_names_cannot_supply_extra_skill_stat":true,
+            "extra_skill_stat_list_empty_at_direct_child_merge":true},
+        "scope":{"direct_list_call_observed":false,"new_source_execution":false,
+            "arbitrary_extra_stat_keys_proved":false,"later_store_delivery_complete":false,
+            "native_contributor_membership_complete":false,"native_coverage_authorized":false},
+        "remaining":["Later direct and inherited minion-store writers and dynamic factories",
+            "Source-to-native contributor membership and final checked self-flat queries",
+            "Other child recipes, supports, Party inputs or future construction paths require new review"]}),
+    )
+}
+
+pub fn check_child() -> Result<(), String> {
+    ensure(
+        reconstruct_child(fixture(), &read("child-bodies.json"))? == read("child-review.json"),
+        "retained child lifecycle proof differs",
+    )
+}
+
+pub fn retain_child() {
+    assert_eq!(
+        std::env::var("POE_SELF_FLAT_CHILD_RETAIN").as_deref(),
+        Ok("1")
+    );
+    let proof = reconstruct_child(fixture(), &read("child-bodies.json")).unwrap();
+    fs::write(
+        supplier::root().join(DIR).join("child-review.json"),
         serde_json::to_string_pretty(&proof).unwrap() + "\n",
     )
     .unwrap();
