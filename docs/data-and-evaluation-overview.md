@@ -17,12 +17,21 @@ build support.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
 
-The current [Player activity packet](../data/owned/poe2/3887ae68/configuration-player-activity-inputs/README.md)
+The current [Demonflame input](../data/owned/poe2/3887ae68/configuration-demonflame/README.md)
+preserves Player transformation state through the existing Scenario-input model.
+Authenticated skill description and consumer bodies establish ownership;
+activation, stack limits and buff effects remain separate. All-five publication,
+exact rebuild and 22 controls pass. Original05 now has **20 remaining
+configuration origins and 32 known assumptions**; its four complete input
+inventories remain Pending. See the
+[current endpoint](implementation.md#current-checkpoint-configuration-admission).
+
+The preceding [Player activity packet](../data/owned/poe2/3887ae68/configuration-player-activity-inputs/README.md)
 adds raw Warcry-use, recent-stun, distinct-ammunition and distinct-grenade counts
 through the existing Player Scenario-input contract. Source selection and exact
 saved-lane accounting remain separate from activation, clamps, time windows and
 modifier delivery. All-five publication/rebuild and 88 controls pass. Original05
-now has **21 remaining configuration origins and 31 known assumptions**; all
+then had **21 remaining configuration origins and 31 known assumptions**; all
 four complete input inventories are still Pending. See the
 [current endpoint](implementation.md#current-checkpoint-configuration-admission).
 

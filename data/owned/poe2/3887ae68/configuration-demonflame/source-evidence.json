@@ -1,0 +1,118 @@
+{
+  "spans": [
+    {
+      "role": "demon-form-activation-and-counter-callback",
+      "body": "\t{ label = \"Demon Form:\", ifSkill = \"Demon Form\" },\n\t{ var = \"inDemonForm\", type = \"check\", label = \"Are you in Demon Form?\", ifSkill = \"Demon Form\", defaultState = true, tooltip = \"Players need a minimum of 2 ^xE05030Life ^7to enter Demon Form, so you cannot use it with Chaos Inoculation\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Condition:DemonForm\", \"FLAG\", true, \"Config\", { type = \"StatThreshold\", stat = \"Life\", threshold = 2 })\n\tend },\n\t{ var = \"demonFormStacks\", type = \"count\", label = \"Demonflame Stacks\", ifSkill = \"Demon Form\", defaultPlaceholderState = 10, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:DemonFlameStacks\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"DemonForm\" } )\n\tend },",
+      "sha256": "dce36485e305ecc514c8e6c63bbb973dcf9cbc3fe73afb1da499c064f2cf4594",
+      "first": 355,
+      "last": 361,
+      "path": "src/Modules/ConfigOptions.lua"
+    },
+    {
+      "role": "saved-placeholder-loading",
+      "body": "\t\telseif node.elem == \"Placeholder\" then\n\t\t\tif not node.attrib.name then\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Placeholder' element missing name attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\t\tif node.attrib.number then\n\t\t\t\tself.configSets[configSetId].placeholder[node.attrib.name] = tonumber(node.attrib.number)",
+      "sha256": "b7c5aa65e5c776a6fd9d775002cfe72a272ac0d726505b27c112933ebe77e6b9",
+      "first": 907,
+      "last": 913,
+      "path": "src/Classes/ConfigTab.lua"
+    },
+    {
+      "role": "numeric-callback-dispatch",
+      "body": "\tlocal input = self.configSets[self.activeConfigSetId].input\n\tlocal placeholder = self.configSets[self.activeConfigSetId].placeholder\n\tself:UpdateLevel() -- enemy level handled here because it's needed to correctly set boss stats\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.apply then\n\t\t\tif varData.type == \"check\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(true, modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"count\" or varData.type == \"integer\" or varData.type == \"countAllowZero\" or varData.type == \"float\" then\n\t\t\t\tif input[varData.var] and (input[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\telseif placeholder[varData.var] and (placeholder[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(placeholder[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"list\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"text\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\t-- Apply Custom Modifier groups",
+      "sha256": "fd243cb8fac97cc84d0e8804c1d0ddef80ff44310943e482d35ba93e1961c098",
+      "first": 1174,
+      "last": 1200,
+      "path": "src/Classes/ConfigTab.lua"
+    },
+    {
+      "role": "fresh-placeholder-constructor",
+      "body": "function ConfigTabClass:CreateConfigSet(configSetId, title)\n\tlocal configSet = { id = configSetId, title = title, input = {}, placeholder = {}, customModsList = { { title = \"Default\", enabled = true, text = \"\" } } }\n\tif not configSetId then\n\t\tconfigSet.id = #self.configSets + 1\n\tend\n\t-- there are default values for input and placeholder that every new config set needs to have\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.var then\n\t\t\tconfigSet.input[varData.var] = varData.defaultState\n\t\t\tconfigSet.placeholder[varData.var] = varData.defaultPlaceholderState\n\t\t\tif varData.defaultIndex then\n\t\t\t\tconfigSet.input[varData.var] = varData.list[varData.defaultIndex].val\n\t\t\tend\n\t\tend\n\tend\n\tself.configSets[configSet.id] = configSet\n\treturn configSet",
+      "sha256": "eecdb417eac994f9ab210f213aa7fe2e99740c3988cc2318ad452cb6e20de2a5",
+      "first": 1317,
+      "last": 1333,
+      "path": "src/Classes/ConfigTab.lua"
+    },
+    {
+      "role": "player-transformation-description",
+      "body": "skills[\"DemonFormPlayer\"] = {\n\tname = \"Demon Form\",\n\tbaseTypeName = \"Demon Form\",\n\ticon = \"Art/2DArt/SkillIcons/WitchTransformDemon.dds\",\n\tfromTree = true,\n\tcolor = 4,\n\tdescription = \"Shapeshift into a demon, vastly boosting the power of your Spells. You gain Demonflame every second you remain in demon form, causing your Life to be lost at an ever-increasing rate. Maximum 10 Demonflame. Revert to human form if you reach 1 Life, use a Skill that isn't a Spell, or reactivate this Skill.\",\n\tskillTypes = { [SkillType.Buff] = true, [SkillType.Cooldown] = true, [SkillType.Shapeshift] = true, [SkillType.ManualCooldownConsumption] = true, },",
+      "sha256": "45d5665d8945fde5cd5b91031c84437a91342321b81d405f0afee6af27212391",
+      "first": 4386,
+      "last": 4393,
+      "path": "src/Data/Skills/other.lua"
+    },
+    {
+      "role": "player-transformation-buff-consumer-boundary",
+      "body": "\tstatSets = {\n\t\t[1] = {\n\t\t\tlabel = \"Demon Form\",\n\t\t\tincrementalEffectiveness = 0.054999999701977,\n\t\t\tstatDescriptionScope = \"demon_form\",\n\t\t\tstatMap = {\n\t\t\t\t[\"demon_form_spell_damage_+%_final_per_stack\"] = {\n\t\t\t\t\tmod(\"Damage\", \"MORE\", nil, 0, KeywordFlag.Spell, { type = \"Condition\", var = \"DemonForm\" }, { type = \"GlobalEffect\", effectType = \"Buff\", effectName = \"Demon Form\"}, { type = \"Multiplier\", var = \"DemonFlameStacks\", limitVar = \"DemonFlameMaximum\" } ),\n\t\t\t\t},\n\t\t\t\t[\"demon_form_grants_cast_speed_+%\"] = {\n\t\t\t\t\tmod(\"Speed\", \"INC\", nil, ModFlag.Cast, 0, { type = \"Condition\", var = \"DemonForm\" }, { type = \"GlobalEffect\", effectType = \"Buff\", effectName = \"Demon Form\" } ),\n\t\t\t\t},\n\t\t\t\t[\"demon_form_life_loss_per_minute_per_stack\"] = {\n\t\t\t\t\tmod(\"LifeDegen\", \"BASE\", nil, 0, 0, { type = \"Condition\", var = \"DemonForm\" }, { type = \"GlobalEffect\", effectType = \"Buff\", effectName = \"Demon Form\" }, { type = \"Multiplier\", var = \"DemonFlameStacks\", limitVar = \"DemonFlameMaximum\" } ),\n\t\t\t\t\tdiv = 60,\n\t\t\t\t},\n\t\t\t},\n\t\t\tbaseFlags = {\n\t\t\t},\n\t\t\tbaseMods = {\n\t\t\t\tflag(\"Condition:Shapeshifted\", { type = \"GlobalEffect\", effectType = \"Buff\" }, { type = \"Condition\", var = \"DemonForm\" }),\n\t\t\t},\n\t\t\tconstantStats = {\n\t\t\t\t{ \"demon_form_spell_damage_+%_final_per_stack\", 3 },\n\t\t\t},",
+      "sha256": "7bf2c6fda6e5c35df6da65fb77fb07dcac634d696c13fbfee4884fb4b4de27d3",
+      "first": 4442,
+      "last": 4466,
+      "path": "src/Data/Skills/other.lua"
+    }
+  ],
+  "constructor_dependencies": [
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/source-comparison.json",
+      "sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-review.json",
+      "sha256": "d8f7abf2202ace98318d9c3c80be31ea77c3d9d17a307a174e866fc9c44fa9d5"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-bodies.json",
+      "sha256": "1b470cb8f843655071fe8fe38d7075b974085debf683581813f20ea286a92d20"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-auxiliary-bodies.json",
+      "sha256": "b0e1f431cc964c38040abdab36618401e5f3e77407020b58df364ff31574e1a2"
+    }
+  ],
+  "kind": "configured-player-demonflame-input",
+  "license": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/LICENSE.md",
+  "schema_version": 1,
+  "archives": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "encoding": "utf8",
+      "artifact_sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "encoding": "utf8",
+      "artifact_sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf",
+      "file": "data\\owned\\poe2\\3887ae68\\configuration-demonflame\\other.lua.gz",
+      "artifact_sha256": "7f56e9ed93f98f55afd1d69ec4a9bd982b0a499db0207235eb3a737160f5fa33",
+      "bytes": 1172527,
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962",
+      "path": "src/Data/Skills/other.lua"
+    }
+  ],
+  "scope": {
+    "coverage_completed": false,
+    "target": "player",
+    "admitted_range": [
+      -1000000,
+      1000000
+    ],
+    "mutation_source_observations": false,
+    "raw_configured_amount": true,
+    "new_source_execution": false,
+    "native_effect": false,
+    "count_allows_zero": false,
+    "zero_candidate_is_emission": false,
+    "constructor": 10
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+}

@@ -66,6 +66,14 @@ pub fn check(
 pub fn acquisition() -> suppliers::SupplierAcquisition {
     suppliers::acquisition_fixture().unwrap()
 }
+/// One complete skill catalogue exceeds the ordinary source-file allowance.
+/// This is an offline evidence bound, independent of native package limits.
+pub fn archive_limit(path: &str) -> usize {
+    match path {
+        "src/Data/Skills/other.lua" => 2 * 1024 * 1024,
+        _ => 1024 * 1024,
+    }
+}
 /// Authenticate source identity, complete archived bytes, exact body spans and
 /// shared constructor dependencies. Individual controls retain separate dispatch
 /// checks rather than weakening the countAllowZero checks above.
@@ -127,11 +135,12 @@ pub fn authenticate(
     );
     assert!(root().join(e["license"].as_str().unwrap()).is_file());
     for archive in e["archives"].as_array().unwrap() {
+        let limit = archive_limit(archive["path"].as_str().unwrap());
         let stored = fs::read(root().join(archive["file"].as_str().unwrap())).unwrap();
         assert_eq!(hash(&stored), archive["artifact_sha256"]);
         let bytes = match archive["encoding"].as_str().unwrap() {
             "utf8" => stored,
-            "gzip" => retained_gzip(archive, 1024 * 1024),
+            "gzip" => retained_gzip(archive, limit),
             "source_collection" => {
                 let collection: Value = serde_json::from_slice(&stored).unwrap();
                 let matching: Vec<_> = collection["sources"]
@@ -145,7 +154,7 @@ pub fn authenticate(
             }
             _ => panic!("reviewed source encoding"),
         };
-        assert!(bytes.len() <= 1024 * 1024);
+        assert!(bytes.len() <= limit);
         assert_eq!(bytes.len(), archive["bytes"]);
         assert_eq!(hash(&bytes), archive["sha256"]);
         assert!(

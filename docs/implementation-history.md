@@ -1,10 +1,48 @@
-> Historical snapshots through the selected skill-construction checkpoint on 2026-10-15.
+> Historical snapshots through the Player activity input checkpoint on 2026-10-15.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-15 checkpoint: Player activity inputs
+
+The [Player activity packet](../data/owned/poe2/3887ae68/configuration-player-activity-inputs/README.md)
+publishes four raw Scenario inputs on Player: Warcry use `3394`, recent stuns
+`3395`, distinct ammunition `3396` and distinct grenades `3397`. Existing Count
+unit `295a`, explicit Actor ownership and the shared checked import policy are
+reused. Each selects nonzero Input, then Placeholder, then constructor one.
+A zero Placeholder remains a known candidate without inventing callback output.
+Raw negative, fractional and above-cap inputs remain unchanged within the
+explicit transport domain. No gameplay program, receiver or completed supplier
+inventory is added.
+
+The production CLI preserves all five originals, all 110 saved queries, existing
+IDs, values and preferences, and exactly rebuilds all eighteen artifacts.
+Original05's configuration-linked origins fall **25 → 21** (11 → 7 inside Config,
+14 outside unchanged), and known assumptions increase **27 → 31**. Its 35 usage
+preferences, 20 usage links and four selected input obligations remain unchanged.
+Selected issue counts stay **106/117/109/123/4**; complete native builds remain
+**0/5**. The preceding ailment and empty Party checkpoints are preserved in
+[history](implementation-history.md#archived-2026-10-15-checkpoint-ailment-inputs-and-empty-party).
+
+Current package:
+**`runs/owned-configuration-player-activity-publication-01/package`**.
+
+- Input: `2582adba98346ce8c6e7fd5b25c7bf97bf61269fd3eebba7764926d7ac694cae`.
+- Registry: `eae6cbe102151b7d34bf0c674110bb64e4d88503f6b249f2231a7022a4ffcf0f` (last `3397`).
+- Definitions: `3924e86b0b459b7f26a67c13b3749503ecd1004136182819e19ad1acb46849d7`.
+- Rules: `2d366b089a3ccdcb1b5ee7cb71a4c202c141964bcb38af92918bf9c3a81bd00f`.
+- Compiled: `517f3302f1fd132cb6f1d6d208695e85ea7038efb6fc6dac7dbe8d0447646c65`.
+
+The package has **64,452,721 bytes**, 191 provenance rows and unchanged
+8187/8192 program use. All four ordinary source/data checks pass (2.31s), strict
+target Clippy passes (1.14s), and all-five publication/rebuild with 88
+source/Encounter/duplicate controls passes (125.33s). The first compile found a
+test-only JSON macro expression error, fixed before these runs; source and data
+were unchanged. Logs:
+`runs/owned-configuration-player-activity-{ordinary-02,clippy-01,publication-01}.log`.
 
 ## Archived 2026-10-15 checkpoint: selected skill construction
 

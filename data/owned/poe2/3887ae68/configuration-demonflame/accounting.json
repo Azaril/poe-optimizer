@@ -1,0 +1,48 @@
+[
+  {
+    "selector": {
+      "name": "demonFormStacks",
+      "lane": "input_number"
+    },
+    "id": "checked-player-demonflame-input_number",
+    "destinations": [
+      {
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003398"
+          }
+        },
+        "kind": "adapter"
+      }
+    ]
+  },
+  {
+    "selector": {
+      "name": "demonFormStacks",
+      "lane": "placeholder_number"
+    },
+    "id": "checked-player-demonflame-placeholder_number",
+    "destinations": [
+      {
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003398"
+          }
+        },
+        "kind": "adapter"
+      }
+    ]
+  }
+]

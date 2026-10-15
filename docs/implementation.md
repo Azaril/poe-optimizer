@@ -107,47 +107,45 @@ availability/value checks pass, begin D4 immediately.
 
 ## Current checkpoint: configuration admission
 
-The [Player activity packet](../data/owned/poe2/3887ae68/configuration-player-activity-inputs/README.md)
-publishes four raw Scenario inputs on Player: Warcry use `3394`, recent stuns
-`3395`, distinct ammunition `3396` and distinct grenades `3397`. Existing Count
-unit `295a`, explicit Actor ownership and the shared checked import policy are
-reused. Each selects nonzero Input, then Placeholder, then constructor one.
-A zero Placeholder remains a known candidate without inventing callback output.
-Raw negative, fractional and above-cap inputs remain unchanged within the
-explicit transport domain. No gameplay program, receiver or completed supplier
-inventory is added.
+The [Demonflame packet](../data/owned/poe2/3887ae68/configuration-demonflame/README.md)
+publishes Player transformation-state input `3398` using the existing Count
+unit and checked import projection. Nonzero Input wins, then Placeholder, then
+authenticated constructor 10. Raw values remain unchanged within the declared
+transport domain. The Player owns the counter; the Skill still owns activation,
+buff values and delivery. No native effect, cap, Life loss or completed inventory
+is implied. Full original description/consumer bodies establish ownership beyond
+the source's choice of modifier-list destination.
 
-The production CLI preserves all five originals, all 110 saved queries, existing
-IDs, values and preferences, and exactly rebuilds all eighteen artifacts.
-Original05's configuration-linked origins fall **25 → 21** (11 → 7 inside Config,
-14 outside unchanged), and known assumptions increase **27 → 31**. Its 35 usage
-preferences, 20 usage links and four selected input obligations remain unchanged.
-Selected issue counts stay **106/117/109/123/4**; complete native builds remain
-**0/5**. The preceding ailment and empty Party checkpoints are preserved in
-[history](implementation-history.md#archived-2026-10-15-checkpoint-ailment-inputs-and-empty-party).
+The production CLI preserves all five originals, all 110 queries, earlier IDs,
+values and preferences, and exactly rebuilds all eighteen artifacts. Original05
+configuration origins fall **21 → 20** (7 → 6 inside Config; 14 outside unchanged),
+and known assumptions rise **31 → 32**. Its 35 usage preferences, 20 usage links
+and four selected input obligations remain unchanged. Selected issue counts stay
+**106/117/109/123/4**, and complete native builds remain **0/5**.
+The preceding [Player activity checkpoint](implementation-history.md#archived-2026-10-15-checkpoint-player-activity-inputs)
+and earlier source/input publications remain preserved in history.
 
-Current package:
-**`runs/owned-configuration-player-activity-publication-01/package`**.
+Current package: **`runs/owned-configuration-demonflame-publication-01/package`**.
 
-- Input: `2582adba98346ce8c6e7fd5b25c7bf97bf61269fd3eebba7764926d7ac694cae`.
-- Registry: `eae6cbe102151b7d34bf0c674110bb64e4d88503f6b249f2231a7022a4ffcf0f` (last `3397`).
-- Definitions: `3924e86b0b459b7f26a67c13b3749503ecd1004136182819e19ad1acb46849d7`.
-- Rules: `2d366b089a3ccdcb1b5ee7cb71a4c202c141964bcb38af92918bf9c3a81bd00f`.
-- Compiled: `517f3302f1fd132cb6f1d6d208695e85ea7038efb6fc6dac7dbe8d0447646c65`.
+- Input: `3b3e135ec63ce4abb92105efe56ad1bb7cb802759f8473070a11811f2d1a6e7d`.
+- Registry: `16d6787e70ccc19fa66be2f6d2e1f76356c5056375c8eb54052aa6905162d90c` (last `3398`).
+- Definitions: `9555a59e5ef17379c86f9e0a87654b607b985edb338fbe69ca36907f5f6c0f3a`.
+- Rules: `9a0cdb5c4da2e340c0faccea8658fe45fcd06efe9fe68eb1218098c464611022`.
+- Compiled: `b0d428cbdbe8441b709456d908024d30a15c27881b5d7bdc34da62d2ec23fcd5`.
 
-The package has **64,452,721 bytes**, 191 provenance rows and unchanged
-8187/8192 program use. All four ordinary source/data checks pass (2.31s), strict
-target Clippy passes (1.14s), and all-five publication/rebuild with 88
-source/Encounter/duplicate controls passes (125.33s). The first compile found a
-test-only JSON macro expression error, fixed before these runs; source and data
-were unchanged. Logs:
-`runs/owned-configuration-player-activity-{ordinary-02,clippy-01,publication-01}.log`.
+The package has **64,455,304 bytes**, 192 provenance rows and unchanged
+8187/8192 program use. Four new ordinary tests pass (2.02s), as do four existing
+Player activity tests for the shared source authenticator (2.22s). Strict Clippy
+passes for both targets (1.09s); the all-five publication/rebuild and 22 controls
+pass (62.83s). Logs: `runs/owned-configuration-demonflame-{ordinary,clippy,publication}-01.log`.
+The exact `other.lua` offline archive alone now has a 2 MiB decompression bound;
+other source paths retain 1 MiB. Native package/evaluator limits are unchanged,
+and no source VM was run for this checkpoint.
 
 **Next input blockers:** the remaining saved controls have distinct responsibilities:
 
 | Control | Next bounded step |
 | --- | --- |
-| Demonflame stacks | Reuse the Player Scenario Count input and authenticated constructor 10. Transformation activation, Life threshold and stack cap remain separate mechanics. |
 | Current Energy Shield | Preserve percentage points on Player, constructor 100, and the callback's separate `UseCurrentEnergyShield` Boolean dependency. A raw input cannot silently discard that second responsibility; overflow limits and native condition production remain separate. |
 | Campaign bosses defeated | Player progression, with no constructor value in the pinned source. Extend checked selection to preserve proven absence before publishing; neither saved Placeholder 56 nor zero is a default. |
 | Sigil and Corrupting Cry stages | Exact Skill usage, with all applicable consumers and preset/Scenario scope accounted for. The runtime supports usage, but Import cannot yet join a Config control to an exact occurrence. Establish the complete consumer census before deciding propagation across repeated sources or independent presets. |
@@ -646,8 +644,8 @@ Spirit component now uses **8187/8192**, leaving five program slots, with 56
 receivers. Other measured Life-predecessor compiler counts are
 6548 owners, 23517 effects, 4249 reads, 32814 nodes and 41600 edges, comfortably
 within their separate caps.
-The current Player activity release is **64,452,721/67,108,864 bytes**,
-leaving 2,656,143 bytes. These are separate limits. The common
+The current Demonflame release is **64,455,304/67,108,864 bytes**,
+leaving 2,653,560 bytes. These are separate limits. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
 
@@ -723,8 +721,9 @@ as do Ubuntu CLI shards 1 and 3. The newly failed Ubuntu CLI shard 0
 Withered failing the same overwritten evidence hash in both feature profiles.
 The immutable evidence repair below, pushed in `4f4445d0`, already corrects all
 four failures; no additional code change is needed. The complete job log is
-`runs/ci-job-116297674792.log`. Other CLI/PoB jobs remain active, and main revision
-`a07c6064` has pending run `38712322558`. Pending revisions may coalesce;
+`runs/ci-job-116297674792.log`. A subsequent status check still has the other
+CLI/PoB jobs active; main revision `0b736c0c` has pending run `38714126047`,
+superseding the coalesced pending `a07c6064` run. Pending revisions may coalesce;
 local repair validation is not a completed hosted run of the repaired revision.
 
 The new input's source checks also exposed overwritten historical evidence:

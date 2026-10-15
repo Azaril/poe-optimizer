@@ -1,0 +1,70 @@
+{
+  "source_name": "demonFormStacks",
+  "value_input": {
+    "kind": "external_input",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003398"
+  },
+  "target": "player",
+  "recipe": {
+    "id": "configured-player-demonflame-count",
+    "codec": {
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "whitespace": "exact",
+      "codec": {
+        "kind": "quantity",
+        "value": {
+          "syntax": "scientific",
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000295a"
+          },
+          "scale": {
+            "numerator": 1,
+            "denominator": 1
+          }
+        }
+      }
+    },
+    "tiers": [
+      {
+        "selectors": [
+          {
+            "lane": "input_number",
+            "name": "demonFormStacks"
+          }
+        ],
+        "duplicates": "reject"
+      }
+    ],
+    "missing": {
+      "kind": "pending"
+    }
+  },
+  "constructor_default": {
+    "kind": "quantity",
+    "value": {
+      "value": 10,
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000295a"
+      }
+    }
+  },
+  "ignore_numeric_placeholder": false,
+  "selection": "nonzero_input_then_placeholder"
+}
