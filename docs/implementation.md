@@ -731,10 +731,18 @@ as do Ubuntu CLI shards 1 and 3. The newly failed Ubuntu CLI shard 0
 Withered failing the same overwritten evidence hash in both feature profiles.
 The immutable evidence repair below, pushed in `4f4445d0`, already corrects all
 four failures; no additional code change is needed. The complete job log is
-`runs/ci-job-116297674792.log`. A subsequent status check still has the other
-CLI/PoB jobs active; main revision `0b736c0c` has pending run `38714126047`,
-superseding the coalesced pending `a07c6064` run. Pending revisions may coalesce;
-local repair validation is not a completed hosted run of the repaired revision.
+`runs/ci-job-116297674792.log`. The later October 15 check adds passing Ubuntu
+PoB and two failed jobs: Windows CLI shard 0 (`116297674677`, the same four
+source tests) and Ubuntu CLI shard 2 (`116297675064`, the distance-input source
+test). Their complete logs independently confirm only the same overwritten
+`configuration-review.json` hash in both feature profiles. Current bytes match
+the expected `d8f7abf2…`; `4f4445d0` already fixes every observed failure in
+those two jobs. No additional implementation or test rerun was needed.
+Logs: `runs/ci-job-116297674677.log` and `runs/ci-job-116297675064.log`.
+Remaining Windows CLI/PoB jobs were still active. The latest inspected queued
+revision was `0c8f61c8`, run `38717516697`; intervening pending revisions were
+coalesced. Newer pushes can replace that pending run. Local repair validation is
+not a completed hosted run of the repaired revision.
 
 The new input's source checks also exposed overwritten historical evidence:
 quest reconciliation had replaced `configuration-review.json`, which five
