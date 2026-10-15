@@ -1651,6 +1651,17 @@ This is source evidence handling, not native Lua compatibility, numerical
 reassociation or permission to accept nondeterministic results. Future updates
 must fail when a within-stat sequence or result changes.
 
+The subsequent [later-aura acquisition](../data/owned/poe2/3887ae68/self-flat-later-aura-delivery/README.md)
+retains another important boundary: the source's `affectedByAura` recipient
+global is nil in the exact captured calls, while the original query has no raw
+candidates and no returned values. This is not a native nil rule, a repaired
+recipient table or a new upstream-bug exception. Any future nonempty candidate
+needs recipient authority. All four fresh-load numerical snapshots agree.
+The original post-capture validator expected a relative function path and
+failed on the actual absolute path. Its raw captures, exact acquisition code
+and failure log remain sealed; the corrected offline validator joins the
+observed original function identity and pinned suffix without a source rerun.
+
 ### Shared generated-source import cleanup (2026-10-05)
 
 The occurrence-count checkpoint moves the generated-source matcher out of the

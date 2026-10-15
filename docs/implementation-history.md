@@ -1,10 +1,92 @@
-> Historical snapshots through the Demonflame input checkpoint on 2026-10-15.
+> Historical snapshots through the selected minion-store checkpoint on 2026-10-15.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-15 checkpoint: selected minion-store suppliers
+
+The [minion-store packet](../data/owned/poe2/3887ae68/self-flat-minion-store/README.md)
+connects the actual Sniper initializer to complete selected source inventories,
+profile/equipment metadata, direct buffs and original dynamic-gate observations.
+The reviewed shared/minion initializers have 84/24 literal writes; all 42
+summoner constructor rows exclude equipment-copy data. The exact profile has no
+modifier list, selected nodes exclude the Talisman source, and the Iron Mass
+branch requires a different profile. Complete selected records also exclude
+nested zero/inactive flat or reviewed generic factory candidates at those
+captured boundaries. That does not prove absence at every later write.
+
+Two exact direct Sniper buff deliveries retain Pain Offering's distinct Speed
+and Damage payloads. Original parent-weapon, Hollow Palm and ExtraAura gates keep
+source/recipient identity and distinguish absent conditions from false. These
+joins reuse the preceding [inherited delivery and child-construction proofs](implementation-history.md#archived-2026-10-15-checkpoint-inherited-delivery-and-child-construction)
+without changing sealed evidence or executing another PoB process. The inherited
+capture's original raw-order failure remains archived; all four numerical
+snapshots agreed, and only independently checked cross-stat inventory ordering
+was variable. Native determinism is unchanged.
+
+Offline retention passes (10.37s), all seven ordinary tests pass (16.42s), and
+strict Clippy passes (0.88s). Independent review is clear. Logs:
+`runs/owned-self-flat-minion-store-{retain-02,ordinary-02,clippy-01}.log`.
+Review SHA-256:
+`743bf794c227a577ae97a92e3823541f734af31046788b9f04db35e988f38b0d`.
+No canonical package, allocator ID, program, query or native coverage changes.
+
+**Resume: complete the enumerated selected supplier path before publishing.**
+The packet records exact source sites and missing authority for each remaining
+edge, rather than an open-ended generic-writer task:
+
+1. Reconcile active flask/Charm inputs and dispatch, then Keystone expansion
+   after flask/inherited delivery. Ordinary equipment counts alone are insufficient.
+2. Join empty Party authority and intervening Player writers to later extraAura
+   and AffectedByAuraMod delivery. An unobserved List call is not an absence proof.
+3. Prove destination names and Actor relationships through attribute, charge,
+   misc, defence and trigger helpers. A literal-name scan alone is insufficient.
+4. Bind Basic Attack's actual flags and callback inventory to complete Action
+   factories and original filters. Spell-only producers can be inapplicable
+   without being absent; parent-weapon Attack delivery has separate authority.
+5. Reconcile the native selected writer census, then publish freshly allocated
+   self-flat queries and the final pre-conversion consumer together. Reuse the
+   intrinsic ranges, combined factor and reviewed coefficient/Enemy exclusions.
+   Current Action consumers can read checked Player queries directly. Old draft
+   IDs collide; do not publish absent positive item families or recreate unused
+   forwarding collectors.
+
+Reuse authenticated evidence before acquiring another observation. None of these
+checks closes all selected-build mechanics or the four input inventories.
+Complete native builds remain **0/5**.
+
+**Read-only preflight for the next checkpoint (not a published proof):** reuse
+`tests/support/owned_mana_radius_sources.rs::{check, acquisition, fixture}` and
+its `radius::supplier` module. The authenticated `radius-acquisition.json` and
+`radius-review.json` under `mana-supplier-sources` retain both observed traces,
+their complete selected-slot inventories and fresh-environment/override state.
+They identify selected ItemSet 2 independently of SkillSet 4; archived ItemSets
+with actual flasks are not selected evidence. Validate every candidate's type,
+not merely the five named Flask/Charm slots. Then seal complete constructor and
+dispatch bodies in `CalcSetup.lua` 717–801, 1040–1291 and 1566–1579, and complete
+flask/Charm merges in `CalcPerform.lua` 1580–1840 and 2919–2923. This can exclude
+payload delivery through empty source maps without assuming flags are false.
+
+Primary Keystone expansion at `CalcPerform.lua` 1855 still needs the full
+1193–1859 selected-store transition: fresh parentless child, initializer,
+intervening writers, exact inherited payloads and helper destination authority.
+Review the helper bodies at 147–180, 203–260, 264–528 and 565–579, with Actor
+relations in `CalcSetup.lua` 752–764 and `CalcActiveSkill.lua` 904–1031. Secondary
+Keystone 3378–3380 instead uses the existing absent life-pool-call authority;
+retain its complete 3365–3412 gate body and do not invent a queried recipient
+store. A complete Keystone catalogue is unnecessary if call-time candidate
+absence is proved. Reuse the existing full source archives for these spans.
+
+For the later Action checkpoint, the inspected spell factories emit Spell-only
+flags; establish exact Basic Attack configuration and original filter semantics
+before declaring them inapplicable. Review `ModStore.lua` 202–225,
+`ModList.lua` 125–160, `ModDB.lua` 137–160 and `runSkillFunc` at
+`CalcOffence.lua` 701–724, together with the exact recipe callback inventory.
+This is a concrete review queue, not native coverage or permission to skip
+earlier supplier boundaries.
 
 ## Archived 2026-10-15 checkpoint: Demonflame input
 

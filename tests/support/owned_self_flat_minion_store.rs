@@ -2,7 +2,7 @@
 //! This is an offline proof; it adds no runtime exclusions or native membership.
 #[allow(dead_code)]
 #[path = "owned_inherited_minion_delivery.rs"]
-mod inherited;
+pub(crate) mod inherited;
 
 use flate2::read::GzDecoder;
 use serde_json::{Value, json};

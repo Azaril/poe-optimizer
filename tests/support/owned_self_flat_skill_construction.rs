@@ -1,8 +1,9 @@
 //! Offline, finite Skill/support record construction and observed buff transport.
 //! No native source inventory, inherited store or unobserved factory is completed.
 #[allow(dead_code)]
-#[path = "owned_mana_supplier_sources.rs"]
-mod supplier;
+#[path = "owned_mana_radius_sources.rs"]
+pub(crate) mod radius;
+use radius::supplier;
 
 use flate2::read::GzDecoder;
 use serde_json::{Value, json};

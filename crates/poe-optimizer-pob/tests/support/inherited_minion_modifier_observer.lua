@@ -86,8 +86,20 @@ return function(h)
   end
   return out
  end
- local result={schema_version=1,kind="original-inherited-minion-modifier-delivery",perform_calls={},deliveries={},gates={},life_pool_calls={}}
- local performFrames,deliveryFrames,listFrames,addFrames,poolFrames={},{},{},{},{}
+ local result={schema_version=1,kind="original-inherited-minion-modifier-delivery",perform_calls={},deliveries={},gates={},life_pool_calls={},later_aura_queries={},party_aura_gates={},later_aura_adds={}}
+ local performFrames,deliveryFrames,listFrames,addFrames,poolFrames,auraFrames={},{},{},{},{},{}
+ local function auraRecipients(env)
+  local actors=getfenv(calcs.perform).affectedByAura
+  if actors==nil then return {kind="nil"} end
+  assert(type(actors)=="table","unreviewed aura recipient domain")
+  local entries={}
+  for actor,value in pairs(actors) do
+   assert(type(actor)=="table","aura recipient is an Actor")
+   entries[#entries+1]={store_id=storeId(actor.modDB),value=raw(value),is_player=actor==env.player,is_enemy=actor==env.enemy,minion=recipient(env,actor)}
+  end
+  table.sort(entries,function(a,b)return a.store_id<b.store_id end)
+  return {kind="table",entries=entries}
+ end
  local failure
  local function append(name,row)
   local list=result[name];assert(#list<32768,"bounded observation count");list[#list+1]=row
@@ -97,7 +109,7 @@ return function(h)
   local info=debug.getinfo(2,"fS");local f=info.func
   local pool=info.what=="Lua" and info.linedefined==3365 and info.source:gsub("\\","/"):sub(-#"Modules/CalcPerform.lua")=="Modules/CalcPerform.lua"
   local interesting=(event=="call" or event=="return") and (f==calcs.perform or f==deliver or f==common.classes.ModStore.List or f==common.classes.ModDB.AddMod or pool)
-   or event=="line" and ((f==calcs.perform and (line==1844 or line==2037 or line==2038 or line==3117 or line==3397 or line==3398 or line==3406 or line==3407)) or (pool and (line==3372 or line==3373 or line==3374 or line==3383)))
+   or event=="line" and ((f==calcs.perform and (line==1844 or line==2037 or line==2038 or line==3117 or line==3204 or line==3397 or line==3398 or line==3406 or line==3407)) or (pool and (line==3372 or line==3373 or line==3374 or line==3383)))
   if failure or not interesting then return end
   local vars={};for i=1,192 do local n,v=debug.getlocal(2,i);if not n then break end;vars[n]=v end
   local caller=debug.getinfo(3,"fSl");local outer={}
@@ -114,7 +126,11 @@ return function(h)
      frame.row.returned=true;performFrames[#performFrames]=nil
     else
      local frame=assert(performFrames[#performFrames]);assert(frame.env==vars.env)
-     if line==2038 then
+     if line==3204 then
+      assert(vars.allyBuffs==vars.env.partyMembers.Aura and vars.env.partyMembers==vars.env.build.partyTab.actor,"exact Party aura owner")
+      append("party_aura_gates",{perform_id=frame.row.perform_id,env_id=envId(vars.env),line=line,mode=vars.env.mode,
+       exact_party_aura_owner=true,party_aura=raw(vars.allyBuffs),extra_aura=raw(vars.allyBuffs.extraAura),recipient=recipient(vars.env,vars.env.minion)})
+     elseif line==2038 then
       assert(frame.spectre_gate,"Spectre gate must be observed first").branch_entered=true
      elseif line==3398 or line==3407 then
       assert(frame.pool_gates[line-1],"pool gate must be observed first").branch_entered=true
@@ -179,6 +195,25 @@ return function(h)
      local frame=assert(deliveryFrames[#deliveryFrames]);assert(frame.store==vars.modList and frame.minion==vars.minion and frame.row.original_list_return_observed)
      frame.row.source_stores_after=candidates(vars.modList);frame.row.returned=true;deliveryFrames[#deliveryFrames]=nil
     end
+   elseif f==common.classes.ModStore.List and caller and caller.func==calcs.perform and caller.currentline==3219 then
+    local frame=assert(performFrames[#performFrames]);local env=frame.env
+    assert(vars.self==env.modDB and vars.self==env.player.modDB and vars.cfg==nil,"exact later aura Player query")
+    if event=="call" then
+     local row={query_id=#result.later_aura_queries+1,perform_id=frame.row.perform_id,env_id=envId(env),mode=env.mode,line=3219,
+      name_from_pinned_callsite="AffectedByAuraMod",caller=functionRef(caller.func),exact_player_store=true,cfg={kind="nil"},
+      source_stores=candidates(vars.self,{AffectedByAuraMod=true}),recipient_state=auraRecipients(env),selected_recipient=recipient(env,env.minion),returned=false}
+     append("later_aura_queries",row);auraFrames[#auraFrames+1]={row=row,store=vars.self,env=env}
+    else
+     local q=assert(auraFrames[#auraFrames]);assert(q.env==env and q.store==vars.self and vars.n==1)
+     q.row.list_return={};for index,value in ipairs(assert(vars.result)) do q.row.list_return[#q.row.list_return+1]={position=index,body=raw(value)} end
+     q.row.source_stores_after=candidates(vars.self,{AffectedByAuraMod=true});q.row.recipient_state_after=auraRecipients(env)
+     q.row.returned=true;q.row.original_list_return_observed=true;auraFrames[#auraFrames]=nil
+    end
+   elseif f==common.classes.ModDB.AddMod and caller and caller.func==calcs.perform and caller.currentline==3221 then
+    local frame=assert(performFrames[#performFrames]);local env=frame.env
+    local locals={};for i=1,192 do local n,v=debug.getlocal(3,i);if not n then break end;locals[n]=v end
+    assert(locals.env==env and locals.actor and vars.self==locals.actor.modDB and vars.mod==locals.value.mod,"original later aura recipient append")
+    append("later_aura_adds",{perform_id=frame.row.perform_id,env_id=envId(env),mode=env.mode,line=3221,event=event,recipient=recipient(env,locals.actor),store_id=storeId(vars.self),body=raw(vars.mod)})
    elseif f==common.classes.ModStore.List and caller and caller.func==deliver then
     local frame=assert(deliveryFrames[#deliveryFrames]);assert(vars.self==frame.store and vars.cfg==frame.cfg)
     if event=="call" then
@@ -216,7 +251,7 @@ return function(h)
  debug.sethook(hook,"crl")
  return function()
   assert(debug.gethook()==hook);debug.sethook();assert(not failure,failure)
-  assert(#performFrames==0 and #deliveryFrames==0 and #listFrames==0 and #addFrames==0 and #poolFrames==0,"unmatched observed call")
+  assert(#performFrames==0 and #deliveryFrames==0 and #listFrames==0 and #addFrames==0 and #poolFrames==0 and #auraFrames==0,"unmatched observed call")
   for _,r in ipairs(refs) do assert(r[1][r[2]]==r[5]) end
   assert(h.upvalue(calcs.perform,"addMinionModifiers")==deliver)
   result.original_methods={};for _,r in ipairs(refs) do result.original_methods[#result.original_methods+1]=functionRef(r[5]) end
@@ -225,7 +260,7 @@ return function(h)
   result.snapshot=h.offeringOutputSnapshot()
   result.scope={native_coverage_authorized=false,all_minion_store_writers_accounted=false,
    original_list_and_addmod_observed=true,queries_added=false,raw_parent_chains_retained=true,
-   direct_spectre_and_hostile_enemy_writes_accounted=false}
+   direct_spectre_and_hostile_enemy_writes_accounted=false,later_aura_original_calls_observed=true}
   inheritedMinionModifierObservation=result
  end
 end

@@ -1,0 +1,42 @@
+{
+  "assessment": {
+    "inherited": {
+      "all_scalar_outputs_exact": true,
+      "comparison": {
+        "all_trace_fields_exact": true,
+        "native_order_authority": false,
+        "offline_receiving_proof_required": true,
+        "raw_list_and_addmod_order_retained": true,
+        "semantic_receiving_proof_executed": false
+      },
+      "counts": {
+        "deliveries": 10,
+        "gates": 144,
+        "life_pool_calls": 0,
+        "perform_calls": 18
+      }
+    },
+    "later_aura": {
+      "future_input_or_native_coverage_authorized": false,
+      "independent_observations_exact": true,
+      "original_player_queries": 18,
+      "party_gates": 18,
+      "raw_candidates": 0,
+      "recipient_adds": 0,
+      "recipient_global_absence_not_repaired": true,
+      "returned_candidates": 0
+    }
+  },
+  "kind": "finite-selected-later-aura-consumers",
+  "prior_minion_store_review_sha256": "743bf794c227a577ae97a92e3823541f734af31046788b9f04db35e988f38b0d",
+  "schema_version": 1,
+  "scope": {
+    "all_later_helpers_accounted": false,
+    "future_inputs_proved": false,
+    "native_coverage_authorized": false,
+    "numeric_order_authority": false,
+    "source_recipient_global_repaired": false,
+    "unchanged_input_and_exact_consumers_only": true
+  },
+  "source_evidence_sha256": "73b49ea936730bdbc322576fca970eb01cd8946a2000a6f5758ef45005367931"
+}

@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "seal": {
+    "name": "capture-seal.json",
+    "archive": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/capture-seal.json.gz",
+    "bytes": 1301,
+    "sha256": "21a994afeb889f64afad71ea5f645d5387efaab3163f67caad551f50e586a590",
+    "compressed_bytes": 748,
+    "compressed_sha256": "97c23029c3abcb07710b02e2e0d6b080a77a9853d692ab47669b47a8d71e1066"
+  },
+  "captures": [
+    {
+      "name": "observed-a.json",
+      "archive": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/observed-a.json.gz",
+      "bytes": 1417374,
+      "sha256": "ac4755c51f450f465c11766979de44598203fe0a9a9de9e2ed660787f57a0fda",
+      "compressed_bytes": 58339,
+      "compressed_sha256": "851f89d170c5b68bddc04e670bdcbc8bed87891503dce99b8aa93e27e9fc40ea"
+    },
+    {
+      "name": "observed-b.json",
+      "archive": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/observed-b.json.gz",
+      "bytes": 1417374,
+      "sha256": "c3decf5e507e4161879ee06795b38a006bd100b3339e22ca86aa6745d7c4bbe3",
+      "compressed_bytes": 58340,
+      "compressed_sha256": "167999cd16fa08af98b4197c5c81d5ae5f4e3bcac03f90e67f86d276f588e64e"
+    },
+    {
+      "name": "plain-off.json",
+      "archive": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/plain-off.json.gz",
+      "bytes": 136085,
+      "sha256": "eef998e4dff0797c71bb2de17e3232f3a76742eb9a1f8e4e7e8a794fb3ce09c8",
+      "compressed_bytes": 13379,
+      "compressed_sha256": "d8c1c5cb4e95815ec016861f6282f2fc664ed7a1a83fc7acbd9d74c90b04dd5b"
+    },
+    {
+      "name": "plain-on.json",
+      "archive": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/plain-on.json.gz",
+      "bytes": 136085,
+      "sha256": "8b7afd00db8a81da56954cefaa537f49f124d74cb21a22fda2e8bb779318cac6",
+      "compressed_bytes": 13380,
+      "compressed_sha256": "2f895ab195ce4a1e4ac551e792937961a7e910586aa659241caf8b76adf3c8e9"
+    }
+  ],
+  "scripts": [
+    {
+      "name": "acquisition-driver.rs",
+      "archive": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-driver.rs.gz",
+      "bytes": 8383,
+      "sha256": "0b787a4d72f63943e7b590f0a9bf549d738c0ea31fafb46fae0a8ad90172a653",
+      "compressed_bytes": 3006,
+      "compressed_sha256": "bbdbc5d2d35c70208b71d89125ac4ba763ba2e31ed8790c54b25ef0047cdaafc"
+    },
+    {
+      "name": "acquisition-observer.lua",
+      "archive": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-observer.lua.gz",
+      "bytes": 17658,
+      "sha256": "c946317aed9a43cf8d0f1a707f740598eb9a6a9cf6c787a6c4db53b0363d4522",
+      "compressed_bytes": 4801,
+      "compressed_sha256": "9e9a3ef17085a7bc039ca3b710fe899bf8aa8d12bc21f9888981167332484026"
+    },
+    {
+      "name": "acquisition-helpers.lua",
+      "archive": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-helpers.lua.gz",
+      "bytes": 81347,
+      "sha256": "9c6af9dd3261cf196dbd5182cce05e7eb87a9c2033090d96047fad7d4feeb7f0",
+      "compressed_bytes": 19230,
+      "compressed_sha256": "8d59530ec3b8341a68ad5a2081568059e1e5d67ef8da95873d0bed23f9736b34"
+    },
+    {
+      "name": "acquisition-bootstrap.rs",
+      "archive": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-bootstrap.rs.gz",
+      "bytes": 14535,
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9",
+      "compressed_bytes": 4202,
+      "compressed_sha256": "56914cc879d8db78d2e65ac02e51dbbf4241060208a585f5a9ac83466db57ee6"
+    },
+    {
+      "name": "acquisition-assessment.rs",
+      "archive": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-assessment.rs.gz",
+      "bytes": 12890,
+      "sha256": "b7b5818948fb3d2019390e4ef7596de1801c79f115242a37b3b5e682a1cf3a09",
+      "compressed_bytes": 3428,
+      "compressed_sha256": "bcf027910a35d48d4340f89c38bbbe445f460b2d8926072853d2280cb7027017"
+    }
+  ],
+  "original_assessment_passed": false,
+  "original_failure": "Absolute original source path rejected by relative-path-only assessment; fixed offline using same four sealed captures.",
+  "failure_log": {
+    "name": "acquisition-failure.log",
+    "archive": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-failure.log.gz",
+    "bytes": 1452,
+    "sha256": "63865acb5bfe8a3f8a4046ba183d495bd6c9a9f8d4f696df8f16a3559a86dc1f",
+    "compressed_bytes": 711,
+    "compressed_sha256": "414907d3747314c2a5106ba15678a521f7a3f09c1097e8079d42c07ccc0cdfe7"
+  },
+  "new_source_retry": false,
+  "consumer_source": {
+    "path": "src/Modules/CalcPerform.lua",
+    "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+    "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae",
+    "bytes": 181097,
+    "spans": [
+      {
+        "first": 1193,
+        "last": 1231,
+        "body": "function calcs.perform(env, skipEHP)\n\t---@type ModDB\n\tlocal modDB = env.modDB\n\t---@type ModDB\n\tlocal enemyDB = env.enemyDB\n\n\t-- Merge keystone modifiers\n\tenv.keystonesAdded = { }\n\tmergeKeystones(env)\n\n\t-- Build minion skills\n\tfor _, activeSkill in ipairs(env.player.activeSkillList) do\n\t\tactiveSkill.skillModList = new(\"ModList\"):ModList(activeSkill.baseSkillModList)\n\t\tif activeSkill.minion then\n\t\t\tactiveSkill.minion.modDB = new(\"ModDB\"):ModDB()\n\t\t\tactiveSkill.minion.modDB.actor = activeSkill.minion\n\t\t\tcalcs.createMinionSkills(env, activeSkill)\n\t\t\tactiveSkill.skillPartName = activeSkill.minion.mainSkill.activeEffect.grantedEffect.name\n\t\tend\n\tend\n\n\tenv.player.output = { }\n\tenv.enemy.output = {}\n\t---@class Output\n\tlocal output = env.player.output\n\n\tenv.partyMembers = env.build.partyTab.actor\n\tenv.player.partyMembers = env.partyMembers\n\tlocal partyTabEnableExportBuffs = env.build.partyTab.enableExportBuffs and env.mode ~= \"CALCULATOR\"\n\n\tenv.minion = env.player.mainSkill.minion\n\tif env.minion then\n\t\t-- Initialise minion modifier database\n\t\toutput.Minion = { }\n\t\tenv.minion.output = output.Minion\n\t\tinitMinionModDB(env, env.player.mainSkill)\n\tend\n\tif env.talismanModList then\n\t\t-- Accounting for \"Necromantic Talisman\"\n"
+      },
+      {
+        "first": 3204,
+        "last": 3223,
+        "body": "\tif allyBuffs[\"extraAura\"] then\n\t\tfor _, buff in pairs(allyBuffs[\"extraAura\"]) do\n\t\t\tlocal modList = buff.modList\n\t\t\tlocal inc = modDB:Sum(\"INC\", nil, \"BuffEffectOnSelf\", \"AuraEffectOnSelf\")\n\t\t\tlocal more = modDB:More(nil, \"BuffEffectOnSelf\", \"AuraEffectOnSelf\")\n\t\t\tmodDB:ScaleAddList(modList, (1 + inc / 100) * more)\n\t\t\tif env.minion and not env.minion.modDB:Flag(nil, \"HiddenMonster\") then\n\t\t\t\tlocal inc = env.minion.modDB:Sum(\"INC\", nil, \"BuffEffectOnSelf\", \"AuraEffectOnSelf\")\n\t\t\t\tlocal more = env.minion.modDB:More(nil, \"BuffEffectOnSelf\", \"AuraEffectOnSelf\")\n\t\t\t\tenv.minion.modDB:ScaleAddList(modList, (1 + inc / 100) * more)\n\t\t\tend\n\t\tend\n\tend\n\n\t-- Check for modifiers to apply to actors affected by player auras or curses\n\tfor _, value in ipairs(modDB:List(nil, \"AffectedByAuraMod\")) do\n\t\tfor actor in pairs(affectedByAura) do\n\t\t\tactor.modDB:AddMod(value.mod)\n\t\tend\n\tend\n"
+      }
+    ]
+  }
+}

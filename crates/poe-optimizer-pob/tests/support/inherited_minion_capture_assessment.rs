@@ -205,3 +205,89 @@ pub fn assess(loads: &[Json]) -> Json {
             "deliveries":rows(&a["deliveries"]).len(),"gates":rows(&a["gates"]).len(),
             "life_pool_calls":rows(&a["life_pool_calls"]).len()}})
 }
+
+/// Current fixed capture extends the original witness at two later consumer
+/// boundaries. Historical captures remain immutable and use `assess` above.
+#[allow(dead_code)] // Also included by the original immutable-capture regression.
+pub fn assess_later_auras(loads: &[Json]) -> Json {
+    let inherited = assess(loads);
+    for load in &loads[..2] {
+        let trace = &load["additional_observation"];
+        let calls = rows(&trace["perform_calls"]);
+        let queries = rows(&trace["later_aura_queries"]);
+        let party = rows(&trace["party_aura_gates"]);
+        assert_eq!(calls.len(), 18, "complete unchanged perform census");
+        assert_eq!(queries.len(), calls.len());
+        assert_eq!(party.len(), calls.len());
+        assert!(rows(&trace["later_aura_adds"]).is_empty());
+        assert_eq!(trace["scope"]["later_aura_original_calls_observed"], true);
+        for (index, call) in calls.iter().enumerate() {
+            let q = &queries[index];
+            let p = &party[index];
+            for row in [q, p] {
+                for key in ["perform_id", "env_id", "mode"] {
+                    assert_eq!(row[key], call[key], "exact original call identity");
+                }
+            }
+            assert_eq!(q["query_id"], index + 1);
+            assert_eq!(q["line"], 3219);
+            assert_eq!(q["name_from_pinned_callsite"], "AffectedByAuraMod");
+            assert_eq!(q["exact_player_store"], true);
+            assert_eq!(q["cfg"], json!({"kind":"nil"}));
+            assert_eq!(q["caller"]["first_line"], 1193);
+            assert_eq!(q["caller"], trace["original_methods"][0]);
+            assert!(
+                q["caller"]["path"]
+                    .as_str()
+                    .unwrap()
+                    .ends_with("/Modules/CalcPerform.lua")
+            );
+            assert_eq!(q["returned"], true);
+            assert_eq!(q["original_list_return_observed"], true);
+            assert!(
+                rows(&q["list_return"]).is_empty(),
+                "filtered return is nonempty"
+            );
+            assert_eq!(q["source_stores"], q["source_stores_after"]);
+            let stores = rows(&q["source_stores"]);
+            assert!(!stores.is_empty(), "raw ancestry is required");
+            for (at, store) in stores.iter().enumerate() {
+                assert!(store["store_id"].as_u64().is_some_and(|v| v > 0));
+                assert!(matches!(store["kind"].as_str(), Some("keyed" | "list")));
+                assert!(
+                    rows(&store["records"]).is_empty(),
+                    "raw candidate requires review even if filtered out"
+                );
+                assert!(
+                    store["names"]
+                        .as_object()
+                        .unwrap()
+                        .get("AffectedByAuraMod")
+                        .is_none()
+                );
+                assert_eq!(
+                    store["parent_store_id"],
+                    stores
+                        .get(at + 1)
+                        .map_or(json!(false), |s| s["store_id"].clone())
+                );
+            }
+            assert_eq!(q["recipient_state"], json!({"kind":"nil"}));
+            assert_eq!(q["recipient_state_after"], q["recipient_state"]);
+            assert_eq!(p["line"], 3204);
+            assert_eq!(p["exact_party_aura_owner"], true);
+            assert!(p["party_aura"].as_object().unwrap().is_empty());
+            assert_eq!(p["extra_aura"], json!({"kind":"nil"}));
+            assert_eq!(p["recipient"], q["selected_recipient"]);
+        }
+    }
+    let a = &loads[0]["additional_observation"];
+    let b = &loads[1]["additional_observation"];
+    for key in ["later_aura_queries", "party_aura_gates", "later_aura_adds"] {
+        assert_eq!(a[key], b[key], "independent later aura observations");
+    }
+    json!({"inherited":inherited,"later_aura":{"original_player_queries":18,"party_gates":18,
+        "raw_candidates":0,"returned_candidates":0,"recipient_adds":0,
+        "independent_observations_exact":true,"recipient_global_absence_not_repaired":true,
+        "future_input_or_native_coverage_authorized":false}})
+}

@@ -1,0 +1,255 @@
+{
+  "bodies_sha256": "737a4b750c6f1d8e41bd771676b0e06af552f02c2cc1c6556bd4b228e3782546",
+  "flasks_and_charms": {
+    "actual_candidates": 2352,
+    "actual_candidates_per_environment": 112,
+    "empty_charm_slots": 3,
+    "empty_flask_slots": 2,
+    "flask_and_charm_maps_empty_by_complete_construction": true,
+    "flask_flags_assumed_false": false,
+    "fresh_environments": 21,
+    "modes": {
+      "CALCS": 1,
+      "CALCULATOR": 4,
+      "MAIN": 16
+    },
+    "ordered_slots_per_environment": 113,
+    "positive_payload_evaluation_proved": false,
+    "selected_item_records": 8,
+    "selected_item_set_source_ordinal": 597,
+    "selected_item_uses": 9
+  },
+  "inherited_acquisition_sha256": "9ee45bbca0a4d54f07d40895bb702fe7dbb478aef881f0f743a7775a8f30cc88",
+  "keystones": {
+    "keystone_map_evaluation_required": false,
+    "numeric_reduction_order_inferred": false,
+    "primary": [
+      {
+        "env_id": 1,
+        "mode": "MAIN",
+        "ordered_original_appends": 30,
+        "ordered_payload_sha256": "e1c6e896f034f7d7f65246e0def24f33072b40facc8f9269c893cd34c8dc9ab5",
+        "perform_id": 1,
+        "recipient": {
+          "children": [
+            {
+              "effect_id": "MinionMeleeBow",
+              "owns_actor": true,
+              "summoner_owns_actor": true
+            },
+            {
+              "effect_id": "GasShotSkeletonSniperMinion",
+              "owns_actor": true,
+              "summoner_owns_actor": true
+            }
+          ],
+          "is_selected_minion": true,
+          "parent_is_player": true,
+          "present": true,
+          "profile": "RaisedSkeletonSniper",
+          "source": {
+            "matches": [
+              {
+                "effect_id": "SummonSkeletalSnipersPlayer",
+                "ordinal": 4,
+                "source": {
+                  "matches": [
+                    {
+                      "enable_global_1": true,
+                      "enable_global_2": true,
+                      "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                      "gem_index": 1,
+                      "group_enabled": true,
+                      "group_index": 3,
+                      "group_is_active_socket_group": true,
+                      "group_label": "",
+                      "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                      "raw_level": 20,
+                      "raw_quality": 0,
+                      "source_enabled": true
+                    }
+                  ],
+                  "source_present": true
+                }
+              }
+            ]
+          }
+        },
+        "recipient_store_id": 4
+      },
+      {
+        "env_id": 18,
+        "mode": "CALCULATOR",
+        "ordered_original_appends": 30,
+        "ordered_payload_sha256": "e1c6e896f034f7d7f65246e0def24f33072b40facc8f9269c893cd34c8dc9ab5",
+        "perform_id": 18,
+        "recipient": {
+          "children": [
+            {
+              "effect_id": "MinionMeleeBow",
+              "owns_actor": true,
+              "summoner_owns_actor": true
+            },
+            {
+              "effect_id": "GasShotSkeletonSniperMinion",
+              "owns_actor": true,
+              "summoner_owns_actor": true
+            }
+          ],
+          "is_selected_minion": true,
+          "parent_is_player": true,
+          "present": true,
+          "profile": "RaisedSkeletonSniper",
+          "source": {
+            "matches": [
+              {
+                "effect_id": "SummonSkeletalSnipersPlayer",
+                "ordinal": 4,
+                "source": {
+                  "matches": [
+                    {
+                      "enable_global_1": true,
+                      "enable_global_2": true,
+                      "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                      "gem_index": 1,
+                      "group_enabled": true,
+                      "group_index": 3,
+                      "group_is_active_socket_group": true,
+                      "group_label": "",
+                      "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+                      "raw_level": 20,
+                      "raw_quality": 0,
+                      "source_enabled": true
+                    }
+                  ],
+                  "source_present": true
+                }
+              }
+            ]
+          }
+        },
+        "recipient_store_id": 48
+      }
+    ],
+    "primary_query_result_deduced_not_observed": true,
+    "secondary_perform_census": 18,
+    "secondary_query_executed": false,
+    "secondary_unexecuted_store_labelled_empty": false
+  },
+  "kind": "finite-selected-flask-charm-keystone-suppliers",
+  "primary_transition": [
+    {
+      "first": 1193,
+      "last": 1213,
+      "reason": "Player/Enemy aliases are fixed; every supplied child receives a fresh parentless ModDB before the authenticated child constructor. Only exact Sniper construction is admitted.",
+      "role": "fresh-child-construction"
+    },
+    {
+      "first": 1214,
+      "last": 1233,
+      "reason": "Selected mainSkill minion is initialized by the independently sealed initializer. Talisman removes a Player item; selected Talisman input is absent.",
+      "role": "selected-child-initialization"
+    },
+    {
+      "first": 1234,
+      "last": 1257,
+      "reason": "Flask/Warcry/Banner writes and multipliers target the Player alias. They do not target its friendly child.",
+      "role": "player-only-fixed-writes"
+    },
+    {
+      "first": 1258,
+      "last": 1262,
+      "reason": "The complete helper writes actor.enemy.modDB. Player and friendly Sniper target Enemy; Enemy targets Player.",
+      "role": "enemy-relative-delivery"
+    },
+    {
+      "first": 1263,
+      "last": 1277,
+      "reason": "Abyssal condition names may be dynamic, but both possible recipients are explicitly Player or Enemy, not Sniper.",
+      "role": "player-or-enemy-dynamic-condition-writes"
+    },
+    {
+      "first": 1278,
+      "last": 1443,
+      "reason": "Writes target Player/Enemy, Player Skill-local lists, outputs or counters. The only direct child Actor modifier is literal DealNoDamage at1365. getActiveSkillCount is read-only. Later inherited payloads are authenticated at the actual1854 call.",
+      "role": "player-skill-loop"
+    },
+    {
+      "first": 1444,
+      "last": 1462,
+      "reason": "DamageGainAsChaos writes Player; remaining work writes Player output/conditions.",
+      "role": "player-output-and-fixed-writes"
+    },
+    {
+      "first": 1463,
+      "last": 1471,
+      "reason": "The fixed CalcBreakdown factory creates closures and a fresh table; it does not invoke these closures or mutate the supplied modifier database.",
+      "role": "breakdown-factory"
+    },
+    {
+      "first": 1472,
+      "last": 1578,
+      "reason": "Conversion and arbitrary item ScaleAddMod/legacy entry.stat writes target only the Player alias. No claim of absent dynamic names is used.",
+      "role": "player-item-and-legacy-writes"
+    },
+    {
+      "first": 1579,
+      "last": 1840,
+      "reason": "Complete helper bodies initialize fresh payload maps; only iterating env.flasks/env.charms can populate them. Complete selected candidate proof and no override establish empty inputs for both flask call sites.",
+      "role": "empty-flask-charm-dispatch"
+    },
+    {
+      "first": 1841,
+      "last": 1843,
+      "reason": "The complete helper and callees use the passed Actor. Here it is explicitly Player; no child database destination exists.",
+      "role": "player-attribute-helper"
+    },
+    {
+      "first": 1844,
+      "last": 1853,
+      "reason": "Exact captured Sniper gate is present and hostile=false. The alternate EnemyModifier-to-hostile-minion branch is not taken.",
+      "role": "friendly-recipient-branch"
+    },
+    {
+      "first": 1854,
+      "last": 1854,
+      "reason": "Original List result and each original AddMod append are joined to the exact Sniper source and receiving store, preserving complete bodies/order; every nested record excludes Keystone.",
+      "role": "actual-inherited-append"
+    },
+    {
+      "first": 1855,
+      "last": 1859,
+      "reason": "Fresh parentless store, initializer and all intervening possible destinations establish no Keystone candidates before List. No Keystone map evaluation is necessary. This query result is deduced, not directly observed.",
+      "role": "primary-keystone-query"
+    }
+  ],
+  "radius_acquisition_sha256": "8784718a733d10878da117724b3dff69e97d380c0140bfbab1cc02ffbf11a2da",
+  "remaining": [
+    "Later Party extraAura and original AffectedByAuraMod delivery",
+    "Later Actor helpers, defence/trigger call edges and Action-local factories",
+    "Exact source-to-native contributor census and final pre-conversion publication",
+    "Changed equipment, overrides/reuse, recipients or source bodies require new review"
+  ],
+  "schema_version": 1,
+  "scope": {
+    "all_temporal_minion_writers_accounted": false,
+    "arbitrary_flasks_or_charms_covered": false,
+    "cross_acquisition_runtime_ids_joined": false,
+    "current_native_package_changed": false,
+    "global_flags_assumed_false": false,
+    "native_coverage_authorized": false,
+    "native_membership_complete": false,
+    "new_source_execution": false,
+    "selected_source_boundary_closed": true,
+    "unobserved_override_or_reuse_covered": false
+  },
+  "selected_bindings_sha256": "e2089f9e8487b75ad46f708255a1bc157c4b004129842d7f245f06dccd36570e",
+  "source_deductions": {
+    "all_intervening_destinations_through_primary_query_reviewed": true,
+    "flask_or_charm_payload_before_either_flask_call_absent": true,
+    "fresh_parentless_sniper_store": true,
+    "initializer_contains_no_keystone": true,
+    "primary_keystone_candidates_empty": true,
+    "secondary_keystone_call_unreachable_in_retained_runs": true
+  }
+}

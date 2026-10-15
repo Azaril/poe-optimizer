@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "kind": "selected-basic-attack-factory-filter-bodies",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "files": [
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcOffence.lua.gz",
+      "archive_bytes": 64248,
+      "archive_sha256": "3ee439d6209cd88adbca368dd7b3e741e9ed537531a37fcc0a8f4b1863e56147",
+      "bytes": 364029,
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+      "archive_bytes": 7158,
+      "archive_sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "archive": "data/owned/poe2/3887ae68/mana-supplier-sources/passive-ModList.lua.gz",
+      "archive_bytes": 2020,
+      "archive_sha256": "7b1b25081e088b45c6a28ba5449faf44409641ad0d6688518ba07bc2b36dc815",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "archive": "data/owned/poe2/3887ae68/life-base-domain/ModDB.lua.gz",
+      "archive_bytes": 2575,
+      "archive_sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "archive": "data/owned/poe2/3887ae68/self-flat-action-factories/Global.lua.gz",
+      "archive_bytes": 6786,
+      "archive_sha256": "4ee175ea53486f4330b619638828937636a5cebc352dc7c57e5c57929542b05b",
+      "bytes": 18651,
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "archive": "data/owned/poe2/3887ae68/self-flat-action-factories/minion.lua.gz",
+      "archive_bytes": 13323,
+      "archive_sha256": "d9230f161fc09142f4e79e0e30d65a7dbff0b6c079caf6472e4324841b8c58ae",
+      "bytes": 103080,
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Data.lua.gz",
+      "archive_bytes": 10599,
+      "archive_sha256": "38cd62af46c9f291240d5a33f20779bd101766d9f62b2165b929737380586c46",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    }
+  ],
+  "spans": [
+    {
+      "role": "callback-dispatch",
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 701,
+      "last": 726,
+      "body": "\tlocal function runSkillFunc(name)\n\t\tlocal func = activeSkill.activeEffect.grantedEffect[name]\n\t\tif func then\n\t\t\tfunc(activeSkill, output, breakdown)\n\t\tend\n\tend\n\n\tlocal function modHasSkillType(mod, skillType)\n\t\tfor _, tag in ipairs(mod) do\n\t\t\tif tag.type == \"SkillType\" then\n\t\t\t\tif tag.skillType == skillType then\n\t\t\t\t\treturn true\n\t\t\t\tend\n\t\t\t\tif tag.skillTypeList then\n\t\t\t\t\tfor _, listedSkillType in ipairs(tag.skillTypeList) do\n\t\t\t\t\t\tif listedSkillType == skillType then\n\t\t\t\t\t\t\treturn true\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\treturn false\n\tend\n\n\trunSkillFunc(\"initialFunc\")\n",
+      "sha256": "5672520f043f435b777657735484bacd3343464704eb84b0ef70214db3ac006c"
+    },
+    {
+      "role": "battlemage-spell",
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 791,
+      "last": 800,
+      "body": "\t-- account for Battlemage\n\t-- Note: we check conditions of Main Hand weapon using actor.itemList as actor.weaponData1 is populated with unarmed values when no weapon slotted.\n\tif skillModList:Flag(nil, \"Battlemage\") and actor.itemList[\"Weapon 1\"] and actor.itemList[\"Weapon 1\"].weaponData and actor.itemList[\"Weapon 1\"].weaponData[1] then\n\n\t\tlocal multiplier = (skillModList:Max(skillCfg, \"MainHandWeaponDamageAppliesToSpells\") or 100) / 100\n\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\tskillModList:NewMod(damageType..\"Min\", \"BASE\", m_floor((actor.weaponData1[damageType..\"Min\"] or 0) * multiplier), \"Battlemage\", ModFlag.Spell)\n\t\t\tskillModList:NewMod(damageType..\"Max\", \"BASE\", m_floor((actor.weaponData1[damageType..\"Max\"] or 0) * multiplier), \"Battlemage\", ModFlag.Spell)\n\t\tend\n\tend\n",
+      "sha256": "40483f6006e0f6c08cb3b3b3a9e7ec5fa93a86bd43e6b808e6b5879a026aebea"
+    },
+    {
+      "role": "spellblade-spell",
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 801,
+      "last": 818,
+      "body": "\tlocal weapon1info = env.data.weaponTypeInfo[actor.weaponData1.type]\n\tlocal weapon2info = env.data.weaponTypeInfo[actor.weaponData2.type]\n\t-- -- account for Spellblade\n\t-- Note: we check conditions of Main Hand weapon using actor.itemList as actor.weaponData1 is populated with unarmed values when no weapon slotted.\n\tlocal spellbladeMulti = skillModList:Max(skillCfg, \"OneHandWeaponDamageAppliesToSpells\")\n\tif spellbladeMulti and actor.itemList[\"Weapon 1\"] and actor.itemList[\"Weapon 1\"].weaponData and actor.itemList[\"Weapon 1\"].weaponData[1] and weapon1info.melee and weapon1info.oneHand then\n\t\tlocal multiplier = spellbladeMulti / 100 * (weapon2info and 0.6 or 1)\n\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\tskillModList:NewMod(damageType..\"Min\", \"BASE\", m_floor((actor.weaponData1[damageType..\"Min\"] or 0) * multiplier), \"Spellblade Main Hand\", ModFlag.Spell)\n\t\t\tskillModList:NewMod(damageType..\"Max\", \"BASE\", m_floor((actor.weaponData1[damageType..\"Max\"] or 0) * multiplier), \"Spellblade Main Hand\", ModFlag.Spell)\n\t\tend\n\t\tif weapon2info then\n\t\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\t\tskillModList:NewMod(damageType..\"Min\", \"BASE\", m_floor((actor.weaponData2[damageType..\"Min\"] or 0) * multiplier), \"Spellblade Off Hand\", ModFlag.Spell)\n\t\t\t\tskillModList:NewMod(damageType..\"Max\", \"BASE\", m_floor((actor.weaponData2[damageType..\"Max\"] or 0) * multiplier), \"Spellblade Off Hand\", ModFlag.Spell)\n\t\t\tend\n\t\tend\n\tend\n",
+      "sha256": "6fa614d8a9c30dbd92626f1414ab354625319860024fbcb9be8041db44673007"
+    },
+    {
+      "role": "parent-weapon-attack",
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 819,
+      "last": 834,
+      "body": "\t-- Add bonus mods for Tactician's \"Watch How I Do It\" (technically this could be done in ModParser, but it would always add 10 mods instead of just the necessary ones)\n\tif actor.parent and modDB:Flag(nil, \"GainMainHandDmgFromParent\") and actor.parent.itemList[\"Weapon 1\"] then\n\t\tlocal modSource = \"\"\n\t\tfor i, value in ipairs(modDB:Tabulate(\"FLAG\", nil, \"GainMainHandDmgFromParent\")) do\n\t\t\tmodSource = value.mod.source\n\t\tend\n\t\tlocal modValue = actor.parent.modDB:Sum(\"BASE\", { source = modSource }, \"Multiplier:MainHandDamageToAllies\")\n\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\tif actor.parent.weaponData1[damageType .. \"Min\"] then\n\t\t\t\tskillModList:NewMod(damageType .. \"Min\", \"BASE\", 1, modSource, { type = \"PercentStat\", stat = damageType .. \"MinOnWeapon 1\", percent = modValue, actor = \"parent\" }, { type = \"SkillType\", skillType = SkillType.Attack })\n\t\t\tend\n\t\t\tif actor.parent.weaponData1[damageType .. \"Max\"] then\n\t\t\t\tskillModList:NewMod(damageType .. \"Max\", \"BASE\", 1, modSource, { type = \"PercentStat\", stat = damageType .. \"MaxOnWeapon 1\", percent = modValue, actor = \"parent\" }, { type = \"SkillType\", skillType = SkillType.Attack })\n\t\t\tend\n\t\tend\n\tend\n",
+      "sha256": "3bd1c21ffe6d3bc70edf39763c5ca8ea963dbbd086a8311f520a3a2739e9c1e8"
+    },
+    {
+      "role": "spellslinger-spell",
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 1234,
+      "last": 1252,
+      "body": "\tif skillData.gainPercentBaseWandDamageToSpells then\n\t\tlocal mult = skillData.gainPercentBaseWandDamageToSpells / 100\n\t\tif actor.weaponData1.type == \"Wand\" and actor.weaponData2.type == \"Wand\" then\n\t\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\t\tskillModList:NewMod(damageType..\"Min\", \"BASE\", m_floor(((actor.weaponData1[damageType..\"Min\"] or 0) + (actor.weaponData2[damageType..\"Min\"] or 0)) / 2 * mult), \"Spellslinger\", ModFlag.Spell)\n\t\t\t\tskillModList:NewMod(damageType..\"Max\", \"BASE\", m_floor(((actor.weaponData1[damageType..\"Max\"] or 0) + (actor.weaponData2[damageType..\"Max\"] or 0)) / 2 * mult), \"Spellslinger\", ModFlag.Spell)\n\t\t\tend\n\t\telseif actor.weaponData1.type == \"Wand\" then\n\t\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\t\tskillModList:NewMod(damageType..\"Min\", \"BASE\", m_floor((actor.weaponData1[damageType..\"Min\"] or 0) * mult), \"Spellslinger\", ModFlag.Spell)\n\t\t\t\tskillModList:NewMod(damageType..\"Max\", \"BASE\", m_floor((actor.weaponData1[damageType..\"Max\"] or 0) * mult), \"Spellslinger\", ModFlag.Spell)\n\t\t\tend\n\t\telseif actor.weaponData2.type == \"Wand\" then\n\t\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\t\tskillModList:NewMod(damageType..\"Min\", \"BASE\", m_floor((actor.weaponData2[damageType..\"Min\"] or 0) * mult), \"Spellslinger\", ModFlag.Spell)\n\t\t\t\tskillModList:NewMod(damageType..\"Max\", \"BASE\", m_floor((actor.weaponData2[damageType..\"Max\"] or 0) * mult), \"Spellslinger\", ModFlag.Spell)\n\t\t\tend\n\t\tend\n\tend\n",
+      "sha256": "59d6961e450da76df5793511105aacc07aa1d8ea8cdc540b520c22f321ec1e40"
+    },
+    {
+      "role": "dagger-spell",
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 1253,
+      "last": 1271,
+      "body": "\tif skillData.gainPercentBaseDaggerDamageToSpells then\n\t\tlocal mult = skillData.gainPercentBaseDaggerDamageToSpells / 100\n\t\tif actor.weaponData1.type == \"Dagger\" and actor.weaponData2.type == \"Dagger\" then\n\t\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\t\tskillModList:NewMod(damageType..\"Min\", \"BASE\", m_floor(((actor.weaponData1[damageType..\"Min\"] or 0) + (actor.weaponData2[damageType..\"Min\"] or 0)) / 2 * mult), \"Blade Blast of Dagger Detonation\", ModFlag.Spell)\n\t\t\t\tskillModList:NewMod(damageType..\"Max\", \"BASE\", m_floor(((actor.weaponData1[damageType..\"Max\"] or 0) + (actor.weaponData2[damageType..\"Max\"] or 0)) / 2 * mult), \"Blade Blast of Dagger Detonation\", ModFlag.Spell)\n\t\t\tend\n\t\telseif actor.weaponData1.type == \"Dagger\" then\n\t\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\t\tskillModList:NewMod(damageType..\"Min\", \"BASE\", m_floor((actor.weaponData1[damageType..\"Min\"] or 0) * mult), \"Blade Blast of Dagger Detonation\", ModFlag.Spell)\n\t\t\t\tskillModList:NewMod(damageType..\"Max\", \"BASE\", m_floor((actor.weaponData1[damageType..\"Max\"] or 0) * mult), \"Blade Blast of Dagger Detonation\", ModFlag.Spell)\n\t\t\tend\n\t\telseif actor.weaponData2.type == \"Dagger\" then\n\t\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\t\tskillModList:NewMod(damageType..\"Min\", \"BASE\", m_floor((actor.weaponData2[damageType..\"Min\"] or 0) * mult), \"Blade Blast of Dagger Detonation\", ModFlag.Spell)\n\t\t\t\tskillModList:NewMod(damageType..\"Max\", \"BASE\", m_floor((actor.weaponData2[damageType..\"Max\"] or 0) * mult), \"Blade Blast of Dagger Detonation\", ModFlag.Spell)\n\t\t\tend\n\t\tend\n\tend\n",
+      "sha256": "2d38aa9bdb9a4c8dd92146bcadcc1268331f1abc9a36acfec097b9d518f24552"
+    },
+    {
+      "role": "pre-skill-type-dispatch",
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 1414,
+      "last": 1416,
+      "body": "\n\trunSkillFunc(\"preSkillTypeFunc\")\n\n",
+      "sha256": "18e592af9754bd896ed0cba980ffaf565aff0d90207a018296f4c3eff35e702e"
+    },
+    {
+      "role": "sacrificial-zeal-spell",
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 2399,
+      "last": 2407,
+      "body": "\t-- account for Sacrificial Zeal\n\t-- Note: Sacrificial Zeal grants Added Spell Physical Damage equal to 25% of the Skill's Mana Cost, and causes you to take Physical Damage over Time, for 4 seconds\n\tif skillModList:Flag(nil, \"Condition:SacrificialZeal\") and output.ManaHasCost then\n\t\tlocal multiplier = 0.25\n\t\tskillModList:NewMod(\"PhysicalMin\", \"BASE\", m_floor(output.ManaCost * multiplier), \"Sacrificial Zeal\", ModFlag.Spell)\n\t\tskillModList:NewMod(\"PhysicalMax\", \"BASE\", m_floor(output.ManaCost * multiplier), \"Sacrificial Zeal\", ModFlag.Spell)\n\tend\n\n\trunSkillFunc(\"preDamageFunc\")\n",
+      "sha256": "ab83b70afd51a718d513cd197dbe2117a858564897886636279b62b0e75dcef4"
+    },
+    {
+      "role": "physical-base-query",
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 4127,
+      "last": 4137,
+      "body": "\t\t-- Calculate base hit damage\n\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\tlocal damageTypeMin = damageType..\"Min\"\n\t\t\tlocal damageTypeMax = damageType..\"Max\"\n\t\t\tlocal baseMultiplier = activeSkill.activeEffect.grantedEffectLevel.baseMultiplier or skillData.baseMultiplier or 1\n\t\t\tlocal addedMin = skillModList:Sum(\"BASE\", cfg, damageTypeMin) + enemyDB:Sum(\"BASE\", cfg, \"Self\"..damageTypeMin)\n\t\t\tlocal addedMax = skillModList:Sum(\"BASE\", cfg, damageTypeMax) + enemyDB:Sum(\"BASE\", cfg, \"Self\"..damageTypeMax)\n\t\t\tlocal addedMult = calcLib.mod(skillModList, cfg, \"Added\"..damageType..\"Damage\", \"AddedDamage\")\n\t\t\tlocal baseMin = ((source[damageTypeMin] or 0) + (source[damageType..\"BonusMin\"] or 0) + (addedMin * addedMult)) * baseMultiplier\n\t\t\tlocal baseMax = ((source[damageTypeMax] or 0) + (source[damageType..\"BonusMax\"] or 0) + (addedMax * addedMult)) * baseMultiplier\n\t\t\toutput[damageTypeMin..\"Base\"] = baseMin\n",
+      "sha256": "75b080ee65c86072e4bd10a6f57cd77260a9cd839a0318fc8f1cf504f3e824c6"
+    },
+    {
+      "role": "sum-dispatch",
+      "path": "src/Classes/ModStore.lua",
+      "first": 202,
+      "last": 217,
+      "body": "function ModStoreClass:Sum(modType, cfg, ...)\n\tlocal flags, keywordFlags = 0, 0\n\tlocal source\n\tif cfg then\n\t\tflags = cfg.flags or 0\n\t\tkeywordFlags = cfg.keywordFlags or 0\n\t\tsource = cfg.source\n\tend\n\tlocal n = select('#', ...)\n\tif n == 1 then\n\t\tlocal arg = ...\n\t\treturn self:SumInternal(self, modType, cfg, flags, keywordFlags, source, arg)\n\tend\n\tlocal n1, n2, n3, n4, n5, n6, n7, n8 = ...\n\treturn self:SumInternalMulti(self, modType, cfg, flags, keywordFlags, source, n, n1, n2, n3, n4, n5, n6, n7, n8)\nend\n",
+      "sha256": "5c98c91378ded12ff614c3599c02d13b03b99ef31c93d528cfb329e0c6377be4"
+    },
+    {
+      "role": "flat-list-filters",
+      "path": "src/Classes/ModList.lua",
+      "first": 125,
+      "last": 162,
+      "body": "function ModListClass:SumInternal(context, modType, cfg, flags, keywordFlags, source, modName)\n\tlocal result = 0\n\tfor i = 1, #self do\n\t\tlocal mod = self[i]\n\t\tif mod.name == modName and mod.type == modType and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\tif mod[1] then\n\t\t\t\tresult = result + (context:EvalMod(mod, cfg) or 0)\n\t\t\telse\n\t\t\t\tresult = result + mod.value\n\t\t\tend\n\t\tend\n\tend\n\tif self.parent then\n\t\tresult = result + self.parent:SumInternal(context, modType, cfg, flags, keywordFlags, source, modName)\n\tend\n\treturn result\nend\n\nfunction ModListClass:SumInternalMulti(context, modType, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tlocal result = 0\n\tfor nameIndex = 1, argCount do\n\t\tlocal modName = nameAt(nameIndex, n1, n2, n3, n4, n5, n6, n7, n8)\n\t\tfor i = 1, #self do\n\t\t\tlocal mod = self[i]\n\t\t\tif mod.name == modName and mod.type == modType and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\t\tif mod[1] then\n\t\t\t\t\tresult = result + (context:EvalMod(mod, cfg) or 0)\n\t\t\t\telse\n\t\t\t\t\tresult = result + mod.value\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif self.parent then\n\t\tresult = result + self.parent:SumInternalMulti(context, modType, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tend\n\treturn result\nend\n",
+      "sha256": "901113ead3a62813319a11b1c21ab96f2d3a2bc78f3ce272ac53da4f30cf4e2c"
+    },
+    {
+      "role": "keyed-store-filters",
+      "path": "src/Classes/ModDB.lua",
+      "first": 137,
+      "last": 212,
+      "body": "function ModDBClass:SumInternal(context, modType, cfg, flags, keywordFlags, source, modName)\n\tlocal result = 0\n\tlocal globalLimits\n\tlocal modList = self.mods[modName]\n\tif modList then\n\t\tfor i = 1, #modList do\n\t\t\tlocal mod = modList[i]\n\t\t\tif mod.type == modType and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or (mod.source and (mod.source:match(\"[^:]+\") == source or mod.source == source))) then\n\t\t\t\tif mod[1] then\n\t\t\t\t\tif not globalLimits then\n\t\t\t\t\t\tglobalLimits = {}\n\t\t\t\t\tend\n\t\t\t\t\tlocal value = context:EvalMod(mod, cfg, globalLimits) or 0\n\t\t\t\t\tresult = result + value\n\t\t\t\telse\n\t\t\t\t\tresult = result + mod.value\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif self.parent then\n\t\tresult = result + self.parent:SumInternal(context, modType, cfg, flags, keywordFlags, source, modName)\n\tend\n\treturn result\nend\n\n-- essentially select(i, ...), except this will not abort JIT traces\nlocal function nameAt(i, n1, n2, n3, n4, n5, n6, n7, n8)\n\tif i == 1 then\n\t\treturn n1\n\telseif i == 2 then\n\t\treturn n2\n\telseif i == 3 then\n\t\treturn n3\n\telseif i == 4 then\n\t\treturn n4\n\telseif i == 5 then\n\t\treturn n5\n\telseif i == 6 then\n\t\treturn n6\n\telseif i == 7 then\n\t\treturn n7\n\telseif i == 8 then\n\t\treturn n8\n\tend\n\terror(\"mod queries support at most 8 names\")\nend\n\nfunction ModDBClass:SumInternalMulti(context, modType, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tlocal result = 0\n\tlocal globalLimits\n\tfor nameIndex = 1, argCount do\n\t\tlocal modName = nameAt(nameIndex, n1, n2, n3, n4, n5, n6, n7, n8)\n\t\tlocal modList = self.mods[modName]\n\t\tif modList then\n\t\t\tfor i = 1, #modList do\n\t\t\t\tlocal mod = modList[i]\n\t\t\t\tif mod.type == modType and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or ( mod.source and (mod.source:match(\"[^:]+\") == source or mod.source == source))) then\n\t\t\t\t\tif mod[1] then\n\t\t\t\t\t\tif not globalLimits then\n\t\t\t\t\t\t\tglobalLimits = {}\n\t\t\t\t\t\tend\n\t\t\t\t\t\tlocal value = context:EvalMod(mod, cfg, globalLimits) or 0\n\t\t\t\t\t\tresult = result + value\n\t\t\t\t\telse\n\t\t\t\t\t\tresult = result + mod.value\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif self.parent then\n\t\tresult = result + self.parent:SumInternalMulti(context, modType, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tend\n\treturn result\nend\n",
+      "sha256": "8c134afd8083dd731d2d15dc936e5bb654fbf0a90415f8393412f9cd6fe68e2e"
+    },
+    {
+      "role": "wide-flag-operation",
+      "path": "src/Data/Global.lua",
+      "first": 122,
+      "last": 184,
+      "body": "-- they would be boxed.\nlocal HIGH_MASK_53 = 0x1FFFFF\n-- Combining two 53-bit halves is done in an odd way as we have to do it while avoiding breaking\n-- LuaJIT traces and pointless allocations. This code is often called in very hot loops.\nlocal bit_band, bit_bor, bit_bxor = bit.band, bit.bor, bit.bxor\nlocal m_floor = math.floor\n\nlocal function or2(a, b)\n\t-- Split into high and low 32-bit parts and perform OR operation on both parts\n\tlocal high = bit_bor(m_floor(a / 0x100000000), m_floor(b / 0x100000000))\n\tlocal low = bit_bor(a % 0x100000000, b % 0x100000000)\n\t-- Combine the results\n\treturn bit_band(high, HIGH_MASK_53) * 0x100000000 + low\nend\n\nlocal function and2(a, b)\n\t-- Split into high and low 32-bit parts and perform AND operation on both parts\n\tlocal high = bit_band(m_floor(a / 0x100000000), m_floor(b / 0x100000000))\n\tlocal low = bit_band(a % 0x100000000, b % 0x100000000)\n\t-- Combine the results\n\treturn bit_band(high, HIGH_MASK_53) * 0x100000000 + low\nend\n\nlocal function xor2(a, b)\n\t-- Split into high and low 32-bit parts and perform XOR operation on both parts\n\tlocal high = bit_bxor(m_floor(a / 0x100000000), m_floor(b / 0x100000000))\n\tlocal low = bit_bxor(a % 0x100000000, b % 0x100000000)\n\t-- Combine the results\n\treturn bit_band(high, HIGH_MASK_53) * 0x100000000 + low\nend\n\nfunction OR64(a, b, c, d, e, f, g, h)\n\tif b == nil then return a or 0 end\n\tlocal r = or2(a, b)\n\tif c == nil then return r end\n\tr = or2(r, c)\n\tif d == nil then return r end\n\tr = or2(r, d)\n\tif e == nil then return r end\n\tr = or2(r, e)\n\tif f == nil then return r end\n\tr = or2(r, f)\n\tif g == nil then return r end\n\tr = or2(r, g)\n\tif h == nil then return r end\n\treturn or2(r, h)\nend\n\nfunction AND64(a, b, c, d, e, f, g, h)\n\tif b == nil then return a or 0 end\n\tlocal r = and2(a, b)\n\tif c == nil then return r end\n\tr = and2(r, c)\n\tif d == nil then return r end\n\tr = and2(r, d)\n\tif e == nil then return r end\n\tr = and2(r, e)\n\tif f == nil then return r end\n\tr = and2(r, f)\n\tif g == nil then return r end\n\tr = and2(r, g)\n\tif h == nil then return r end\n\treturn and2(r, h)\n",
+      "sha256": "3632964fdd0de5f0304b8a874e88e5c0b40cbef4a632956e700e873726cab37c"
+    },
+    {
+      "role": "modifier-flag-definitions",
+      "path": "src/Data/Global.lua",
+      "first": 231,
+      "last": 286,
+      "body": "ModFlag = { }\n-- Damage modes\nModFlag.Attack =\t 0x0000000000000001\nModFlag.Spell =\t\t 0x0000000000000002\nModFlag.Hit =\t\t 0x0000000000000004\nModFlag.Dot =\t\t 0x0000000000000008\nModFlag.Cast =\t\t 0x0000000000000010\nModFlag.Thorns =\t 0x0000000000000020\n-- Damage sources\nModFlag.Melee =\t\t 0x0000000000000100\nModFlag.Area =\t\t 0x0000000000000200\nModFlag.Projectile = 0x0000000000000400\nModFlag.SourceMask = 0x0000000000000600\nModFlag.Ailment =\t 0x0000000000000800\nModFlag.MeleeHit =\t 0x0000000000001000\nModFlag.Weapon =\t 0x0000000000002000\n-- Weapon types\nModFlag.Axe =\t\t 0x0000000000010000\nModFlag.Bow =\t\t 0x0000000000020000\nModFlag.Claw =\t\t 0x0000000000040000\nModFlag.Dagger =\t 0x0000000000080000\nModFlag.Mace =\t\t 0x0000000000100000\nModFlag.Staff =\t\t 0x0000000000200000\nModFlag.Sword =\t\t 0x0000000000400000\nModFlag.Wand =\t\t 0x0000000000800000\nModFlag.Unarmed =\t 0x0000000001000000\nModFlag.Fishing =\t 0x0000000002000000\nModFlag.Crossbow =\t 0x0000000004000000\nModFlag.Flail =\t\t 0x0000000008000000\nModFlag.Spear =\t\t 0x0000000010000000\nModFlag.Warstaff =\t 0x0000000020000000\nModFlag.Talisman =\t 0x0000000040000000\n-- Weapon classes\nModFlag.WeaponMelee =0x0000000100000000\nModFlag.WeaponRanged=0x0000000200000000\nModFlag.Weapon1H =\t 0x0000000400000000\nModFlag.Weapon2H =\t 0x0000000800000000\nModFlag.WeaponMask = 0x0000000F5FFF0000\n\nKeywordFlag = { }\n-- Skill keywords\nKeywordFlag.Aura =\t\t0x00000001\nKeywordFlag.Curse =\t\t0x00000002\nKeywordFlag.Warcry =\t0x00000004\nKeywordFlag.Movement =\t0x00000008\nKeywordFlag.Physical =\t0x00000010\nKeywordFlag.Fire =\t\t0x00000020\nKeywordFlag.Cold =\t\t0x00000040\nKeywordFlag.Lightning =\t0x00000080\nKeywordFlag.Chaos =\t\t0x00000100\nKeywordFlag.Vaal =\t\t0x00000200\nKeywordFlag.Bow =\t\t0x00000400\nKeywordFlag.Arrow =\t\t0x00000800\n-- Skill types\nKeywordFlag.Trap =\t\t0x00001000\nKeywordFlag.Mine =\t\t0x00002000\n",
+      "sha256": "aa2d1b87e34dc05ed5a6a02abdb4c8e017982d862cc0c1d9cf1566dcdaa78b88"
+    },
+    {
+      "role": "main-hand-pass-binding",
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 2515,
+      "last": 2551,
+      "body": "\tlocal passList = { }\n\tif isAttack then\n\t\toutput.MainHand = { }\n\t\toutput.OffHand = { }\n\t\toutput.PreciseTechnique = env.keystonesAdded[\"Precise Technique\"]\n\t\tlocal critOverride = skillModList:Override(skillCfg, \"WeaponBaseCritChance\")\n\t\tif skillFlags.weapon1Attack then\n\t\t\tif breakdown then\n\t\t\t\tbreakdown.MainHand = LoadModule(calcs.breakdownModule)(skillModList, output.MainHand)\n\t\t\tend\n\t\t\tactiveSkill.weapon1Cfg.skillStats = output.MainHand\n\t\t\tlocal source = copyTable(actor.weaponData1)\n\t\t\t-- Unarmed override for Concoction skills\n\t\t\tif skillFlags.unarmed then\n\t\t\t\tsource = copyTable(data.unarmedWeaponData[env.classId])\n\t\t\tend\n\t\t\tif source.FacebreakerItemDamage and activeSkill.activeEffect.grantedEffect.weaponTypes and activeSkill.activeEffect.grantedEffect.weaponTypes[\"One Hand Mace\"] then\n\t\t\t\tfor _, damageType in ipairs(dmgTypeList) do\n\t\t\t\t\tsource[damageType..\"Min\"] = source[\"Facebreaker\"..damageType..\"Min\"] or 0\n\t\t\t\t\tsource[damageType..\"Max\"] = source[\"Facebreaker\"..damageType..\"Max\"] or 0\n\t\t\t\tend\n\t\t\tend\n\t\t\tif critOverride and source.type and source.type ~= \"None\" then\n\t\t\t\tsource.CritChance = critOverride\n\t\t\tend\n\t\t\tif skillData.CritChance then\n\t\t\t\tsource.CritChance = skillData.CritChance\n\t\t\tend\n\t\t\tt_insert(passList, {\n\t\t\t\tlabel = \"Main Hand\",\n\t\t\t\tsource = source,\n\t\t\t\tcfg = activeSkill.weapon1Cfg,\n\t\t\t\toutput = output.MainHand,\n\t\t\t\tbreakdown = breakdown and breakdown.MainHand,\n\t\t\t})\n\t\tend\n\t\tif skillFlags.weapon2Attack then\n",
+      "sha256": "a1b3e3668a60699bb925e83486e31c0c636797516870589183e55e9960e8a61d"
+    },
+    {
+      "role": "base-pass-cfg-binding",
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 3435,
+      "last": 3445,
+      "body": "\tfor _, pass in ipairs(passList) do\n\t\tglobalOutput, globalBreakdown = output, breakdown\n\t\tlocal source = pass.source\n\t\t---@class Output\n\t\tlocal output = pass.output\n\t\tlocal cfg = pass.cfg\n\t\t---@class Breakdown\n\t\tlocal breakdown = pass.breakdown\n\n\t\t-- Exerted Attack members\n\t\tlocal exertedDoubleDamage = env.modDB:Sum(\"BASE\", cfg, \"ExertDoubleDamageChance\")\n",
+      "sha256": "b0adb0c269ea13cdee4f2a5338fca3719afa00dd38a0901024a0b4f79f9aef4e"
+    },
+    {
+      "role": "complete-basic-definition",
+      "path": "src/Data/Skills/minion.lua",
+      "first": 116,
+      "last": 154,
+      "body": "skills[\"MinionMeleeBow\"] = {\n\tname = \"Basic Attack\",\n\thidden = true,\n\ticon = \"Art/2DArt/SkillIcons/iconbasicattack.dds\",\n\tskillTypes = { [SkillType.Attack] = true, [SkillType.RangedAttack] = true, [SkillType.MirageArcherCanUse] = true, [SkillType.Projectile] = true, [SkillType.MeleeSingleTarget] = true, [SkillType.Melee] = true, [SkillType.ProjectilesFromUser] = true, [SkillType.AttackInPlace] = true, },\n\tcastTime = 1,\n\tqualityStats = {\n\t},\n\taltQualityStats = {\n\t},\n\tlevels = {\n\t\t[1] = { levelRequirement = 0, },\n\t},\n\tstatSets = {\n\t\t[1] = {\n\t\t\tlabel = \"Basic Attack\",\n\t\t\tincrementalEffectiveness = 0.054999999701977,\n\t\t\tstatDescriptionScope = \"skill_stat_descriptions\",\n\t\t\tbaseFlags = {\n\t\t\t\tattack = true,\n\t\t\t\tprojectile = true,\n\t\t\t},\n\t\t\tconstantStats = {\n\t\t\t\t{ \"arrow_projectile_variation\", 1002 },\n\t\t\t},\n\t\t\tstats = {\n\t\t\t\t\"skill_can_fire_arrows\",\n\t\t\t\t\"skill_can_fire_wand_projectiles\",\n\t\t\t\t\"projectile_uses_contact_position\",\n\t\t\t\t\"use_scaled_contact_offset\",\n\t\t\t\t\"maintain_projectile_direction_when_using_contact_position\",\n\t\t\t\t\"check_for_targets_between_initiator_and_projectile_source\",\n\t\t\t},\n\t\t\tlevels = {\n\t\t\t\t[1] = { actorLevel = 1, },\n\t\t\t},\n\t\t},\n\t}\n}\n",
+      "sha256": "73c3be0a7ad4d912b44cf50897dbf73e1b0186a29ddfebbee5354d30eeee75c4"
+    },
+    {
+      "role": "skill-table-loader",
+      "path": "src/Modules/Data.lua",
+      "first": 910,
+      "last": 966,
+      "body": "-- Load skills\ndata.skills = { }\ndata.skillStatMap = LoadModule(\"Data/SkillStatMap\")(makeSkillMod, makeFlagMod, makeSkillDataMod)\ndata.skillStatMapMeta = {\n\t__index = function(t, key)\n\t\tlocal map = data.skillStatMap[key]\n\t\tif map then\n\t\t\tmap = copyTable(map)\n\t\t\tt[key] = map\n\t\t\tfor _, mod in ipairs(map) do\n\t\t\t\tprocessMod(t._grantedEffect, mod, key)\n\t\t\tend\n\t\t\treturn map\n\t\tend\n\tend\n}\nfor _, type in pairs(skillTypes) do\n\tLoadModule(\"Data/Skills/\" .. type)(data.skills, makeSkillMod, makeFlagMod, makeSkillDataMod)\nend\nfor skillId, grantedEffect in pairs(data.skills) do\n\tgrantedEffect.name = sanitiseText(grantedEffect.name)\n\tgrantedEffect.id = skillId\n\tgrantedEffect.modSource = \"Skill:\"..skillId\n\tgrantedEffect.statSets = grantedEffect.statSets or {}\n\t-- Add sources for skill mods, and check for global effects\n\tfor _, skillPart in pairs(tableConcat({grantedEffect}, grantedEffect.statSets)) do\n\t\tfor _, list in pairs({skillPart.baseMods, skillPart.qualityMods, skillPart.levelMods}) do\n\t\t\tfor _, mod in pairs(list) do\n\t\t\t\tif mod.name then\n\t\t\t\t\tprocessMod(grantedEffect, mod)\n\t\t\t\telse\n\t\t\t\t\tfor _, mod in ipairs(mod) do\n\t\t\t\t\t\tprocessMod(grantedEffect, mod)\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\t-- Install stat map metatable\n\tfor _, statSet in pairs(tableConcat({grantedEffect}, grantedEffect.statSets)) do\n\t\tstatSet.statMap = statSet.statMap or { }\n\t\tsetmetatable(statSet.statMap, data.skillStatMapMeta)\n\t\tstatSet.statMap._grantedEffect = grantedEffect\n\t\tfor name, map in pairs(statSet.statMap) do\n\t\t\t-- Some mods need different scalars for different stats, but the same value.  Putting them in a group allows this\n\t\t\tfor _, modOrGroup in ipairs(map) do\n\t\t\t\tif modOrGroup.name then\n\t\t\t\t\tprocessMod(grantedEffect, modOrGroup, name)\n\t\t\t\telse\n\t\t\t\t\tfor _, mod in ipairs(modOrGroup) do\n\t\t\t\t\t\tprocessMod(grantedEffect, mod, name)\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\nend\n",
+      "sha256": "86dc27a5772c5b9a26bea1c76a1776dd1cd8bdfa55ef65050d020afe84086ddd"
+    },
+    {
+      "role": "skill-mod-postprocessing",
+      "path": "src/Modules/Data.lua",
+      "first": 72,
+      "last": 97,
+      "body": "local function processMod(grantedEffect, mod, statName)\n\tmod.source = grantedEffect.modSource\n\tif type(mod.value) == \"table\" and mod.value.mod then\n\t\tmod.value.mod.source = \"Skill:\"..grantedEffect.id\n\tend\n\n\tfor _, tag in ipairs(mod) do\n\t\tif tag.type == \"GlobalEffect\" then\n\t\t\tgrantedEffect.hasGlobalEffect = true\n\t\t\tbreak\n\t\tend\n\tend\n\n\tlocal notMinionStat = false\n\tfor _, statStet in ipairs(grantedEffect.statSets) do\n\t\tif statStet.notMinionStat and statName and (grantedEffect.support or grantedEffect.skillTypes and grantedEffect.skillTypes[SkillType.Buff]) then\n\t\t\tfor _, notMinionStatName in ipairs(statStet.notMinionStat) do\n\t\t\t\tif notMinionStatName == statName then\n\t\t\t\t\tnotMinionStat = true\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif notMinionStat then\n\t\tt_insert(mod, { type = \"ActorCondition\", actor = \"parent\", neg = true })\n\tend\n",
+      "sha256": "50f842f17edda5b042976e9ed4de2714148030e87d990e2a194c73ede30f2020"
+    }
+  ],
+  "spell_factories": [
+    {
+      "role": "battlemage-spell",
+      "writes": 2,
+      "required_flag": "Spell"
+    },
+    {
+      "role": "spellblade-spell",
+      "writes": 4,
+      "required_flag": "Spell"
+    },
+    {
+      "role": "spellslinger-spell",
+      "writes": 6,
+      "required_flag": "Spell"
+    },
+    {
+      "role": "dagger-spell",
+      "writes": 6,
+      "required_flag": "Spell"
+    },
+    {
+      "role": "sacrificial-zeal-spell",
+      "writes": 2,
+      "required_flag": "Spell"
+    }
+  ]
+}

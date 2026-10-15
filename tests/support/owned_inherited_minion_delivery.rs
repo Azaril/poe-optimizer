@@ -1,7 +1,7 @@
 //! Original inherited List and nested AddMod correspondence; no native coverage.
 #[allow(dead_code)]
 #[path = "owned_self_flat_skill_construction.rs"]
-mod construction;
+pub(crate) mod construction;
 
 use flate2::read::GzDecoder;
 use serde_json::{Value, json};

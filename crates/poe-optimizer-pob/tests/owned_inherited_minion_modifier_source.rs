@@ -134,7 +134,7 @@ fn unchanged_inherited_minion_modifiers_are_captured_with_stable_scalars() {
         serde_json::to_vec(&seal).unwrap(),
     )
     .unwrap();
-    let assessed = assessment::assess(&loads);
+    let assessed = assessment::assess_later_auras(&loads);
     let report = json!({"schema_version":1,"kind":"original-inherited-minion-capture-assessment",
         "capture_seal":seal,"complete_loads":4,"instrumented_loads":2,
         "instrumented_jit_enabled":false,"plain_jit_modes":[false,true],

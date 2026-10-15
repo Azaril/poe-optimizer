@@ -1335,6 +1335,32 @@ later Party/aura delivery, Actor helper edges and Action factory/filter
 applicability before final native membership. It deliberately provides no
 complete flat-damage query from a zero observation.
 
+The [Flask/Keystone follow-up](../data/owned/poe2/3887ae68/self-flat-flask-keystone/README.md)
+authenticates every selected candidate in 21 fresh environments, including
+ordinary slots, and proves empty Flask/Charm source maps. The complete dispatch
+and early minion-store transition then exclude primary Keystone candidates;
+the secondary query is unexecuted, not an observed empty query. Exact inherited
+payloads, Actor destinations, repeated items and absent-versus-unknown inputs
+remain part of this proof.
+
+The [later-aura capture](../data/owned/poe2/3887ae68/self-flat-later-aura-delivery/README.md)
+adds the original Party gate and actual `AffectedByAuraMod` query to all 18
+completed performs. Raw ancestry and original returns are empty, with no
+recipient delivery. Four fresh-load numerical snapshots agree. Its initial
+offline assessment rejected an absolute source path; the unchanged raw capture,
+original assessment and failure log remain archived. Correcting that validator
+required no source retry. The observed nil recipient global stays diagnostic;
+native rules do not inherit it. The final shared source suite passes 48 tests
+and strict Clippy. These packets do not change native coverage or package data.
+
+The [Action-factory proof](../data/owned/poe2/3887ae68/self-flat-action-factories/README.md)
+then binds the actual physical Main Hand configuration to the original filters.
+Twenty Spell-only source write sites fail the necessary flag predicate for this
+Attack. They are inapplicable, not declared absent. Exact loaded recipe and
+complete loader bodies exclude the reviewed callbacks; parent-weapon delivery
+keeps its independent original Flag-call authority. Seven tests and strict
+Clippy pass. No source interpreter or Lua flag type enters native evaluation.
+
 Direct/local source completeness, remaining dynamic factories, other extra-stat
 expansion and final source-to-native membership remain admission work. These
 authenticated Lua observations stay offline; the

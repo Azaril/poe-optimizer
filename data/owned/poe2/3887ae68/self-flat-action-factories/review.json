@@ -1,0 +1,34 @@
+{
+  "actual_pass_report_sha256": "7a723a4eece7b297737006b08d1dc61ec0047d13cfd2b9fbfeaee94eb52397cb",
+  "bodies_sha256": "0dc1667f104bb5d88409e00142642fd5855ab3f6a624540757b632991e85c6a8",
+  "inputs_sha256": "d7df2cde5648ee00354c80f70f50285f12851070d31b16677777b2d7b1c08faf",
+  "kind": "exact-basic-attack-factory-applicability",
+  "remaining": [
+    "Complete minion-store source/delivery inventory (flasks, Keystone and later helper routes) remains separately gated",
+    "Native complete selected flat membership and current-ID final preconversion consumer require publication after all source boundaries close"
+  ],
+  "schema_version": 1,
+  "scope": {
+    "all_minion_store_writers_closed": false,
+    "all_spell_suppliers_absent": false,
+    "general_numeric_order_authority": false,
+    "native_coverage_authorized": false,
+    "native_membership_complete": false,
+    "new_source_execution": false,
+    "reviewed_action_factories_closed_for_exact_basic_attack": true,
+    "source_tag_evaluator_reimplemented": false
+  },
+  "selection": {
+    "actual_main_hand_flags": 42949813253,
+    "attack_bit": 1,
+    "factory_runtime_invocation_counts_not_inferred": true,
+    "parent_weapon_provenance": "separate original Flag calls and exact source gate; not Spell filtering",
+    "selected_recipe_callbacks": 0,
+    "selected_recipe_mapping_keys": 7,
+    "spell_bit": 2,
+    "spell_factory_write_sites": 20,
+    "spell_writes_absent_not_asserted": true,
+    "spell_writes_inapplicable": true,
+    "supplemental_channel_values_not_used_for_absence": true
+  }
+}
