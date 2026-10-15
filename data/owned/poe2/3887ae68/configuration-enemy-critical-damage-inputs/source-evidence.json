@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "kind": "configured-enemy-extra-critical-damage-input-evidence",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "archives": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "encoding": "utf8",
+      "artifact_sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/CalcDefence.lua.gz",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 239878,
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2",
+      "encoding": "gzip",
+      "artifact_sha256": "9e232710732a7223b87b7174c7bd8a0531309675b76c605e07df55b0f72d6bf3"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "encoding": "utf8",
+      "artifact_sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/EditControl.lua",
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-auxiliary-bodies.json",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 24662,
+      "sha256": "6af3f270ec07ddf2e3594effd868332c76c9e3039e6a49309965a51419dcf2d4",
+      "encoding": "source_collection",
+      "artifact_sha256": "b0e1f431cc964c38040abdab36618401e5f3e77407020b58df364ff31574e1a2"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Misc.lua.gz",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 24010,
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9",
+      "encoding": "gzip",
+      "artifact_sha256": "bdc486e956dfde075166d88c612d2c527df2543567ae39da56e7f48090ec50c1"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Data.lua.gz",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4",
+      "encoding": "gzip",
+      "artifact_sha256": "38cd62af46c9f291240d5a33f20779bd101766d9f62b2165b929737380586c46"
+    }
+  ],
+  "spans": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "first": 1982,
+      "last": 2139,
+      "role": "unconditional-placeholder-reset",
+      "body": "\t{ var = \"enemyIsBoss\", type = \"list\", label = \"Is the enemy a Boss?\", defaultIndex = 3, tooltip = data.enemyIsBossTooltip, list = {{val=\"None\",label=\"No\"},{val=\"Boss\",label=\"Standard Boss\"},{val=\"Pinnacle\",label=\"Guardian/Pinnacle Boss\"},{val=\"Uber\",label=\"Uber Pinnacle Boss\"}}, apply = function(val, modList, enemyModList, build)\n\t\t-- These defaults are here so that the placeholders get reset correctly\n\t\tbuild.configTab.varControls['enemySpeed']:SetPlaceholder(700, true)\n\t\tbuild.configTab.varControls['enemyCritChance']:SetPlaceholder(5, true)\n\t\tbuild.configTab.varControls['enemyCritDamage']:SetPlaceholder(data.monsterConstants[\"base_critical_hit_damage_bonus\"], true)\n\t\tif val == \"None\" then\n\t\t\tlocal defaultResist = \"\"\n\t\t\tbuild.configTab.varControls['enemyLightningResist']:SetPlaceholder(defaultResist, true)\n\t\t\tbuild.configTab.varControls['enemyColdResist']:SetPlaceholder(defaultResist, true)\n\t\t\tbuild.configTab.varControls['enemyFireResist']:SetPlaceholder(defaultResist, true)\n\t\t\tbuild.configTab.varControls['enemyChaosResist']:SetPlaceholder(defaultResist, true)\n\n\t\t\tlocal defaultLevel = 82\n\t\t\tbuild.configTab.varControls['enemyLevel']:SetPlaceholder(build.characterLevel, true)\n\t\t\tbuild.configTab:UpdateLevel()\n\t\t\tif build.configTab.enemyLevel then\n\t\t\t\tdefaultLevel = build.configTab.enemyLevel\n\t\t\tend\n\n\t\t\tlocal defaultDamage = round(data.monsterDamageTable[defaultLevel] * 1.5 * data.misc.normalEnemyDPSMult)\n\t\t\tbuild.configTab.varControls['enemyPhysicalDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyLightningDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyColdDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyFireDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyChaosDamage']:SetPlaceholder(round(defaultDamage / 2.5), true)\n\n\t\t\tlocal defaultPen = \"\"\n\t\t\tbuild.configTab.varControls['enemyPhysicalOverwhelm']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyLightningPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyColdPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyFirePen']:SetPlaceholder(defaultPen, true)\n\n\t\t\tbuild.configTab.varControls['enemyArmour']:SetPlaceholder(data.monsterArmourTable[defaultLevel], true)\n\t\t\tbuild.configTab.varControls['enemyEvasion']:SetPlaceholder(data.monsterEvasionTable[defaultLevel], true)\n\t\telseif val == \"Boss\" then\n\t\t\tenemyModList:NewMod(\"Condition:Unique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"Condition:RareOrUnique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"CurseEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique13\n\t\t\tenemyModList:NewMod(\"ExposureEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique14\n\t\t\tenemyModList:NewMod(\"KnockbackDistanceOnSelf\", \"MORE\", -75, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique12\n\t\t\tenemyModList:NewMod(\"SlowEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique11\n\t\t\tenemyModList:NewMod(\"MinimumMovementSpeed\", \"BASE\", 20, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique9\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 500, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique2\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 213, \"Map Boss\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tmodList:NewMod(\"WarcryPower\", \"BASE\", 20, \"Boss\")\n\t\t\tmodList:NewMod(\"Multiplier:EnemyPower\", \"BASE\", 20, \"Boss\")\n\n\t\t\tlocal defaultEleResist = 30\n\t\t\tbuild.configTab.varControls['enemyLightningResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyColdResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyFireResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyChaosResist']:SetPlaceholder(0, true)\n\n\t\t\tlocal defaultLevel = 82\n\t\t\tbuild.configTab.varControls['enemyLevel']:SetPlaceholder(build.characterLevel, true)\n\t\t\tbuild.configTab:UpdateLevel()\n\t\t\tif build.configTab.enemyLevel then\n\t\t\t\tdefaultLevel = build.configTab.enemyLevel\n\t\t\tend\n\n\t\t\tlocal defaultDamage = round(data.monsterDamageTable[defaultLevel] * 1.5  * data.misc.stdBossDPSMult)\n\t\t\tbuild.configTab.varControls['enemyPhysicalDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyLightningDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyColdDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyFireDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyChaosDamage']:SetPlaceholder(round(defaultDamage / 2.5), true)\n\n\t\t\tlocal defaultPen = \"\"\n\t\t\tbuild.configTab.varControls['enemyPhysicalOverwhelm']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyLightningPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyColdPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyFirePen']:SetPlaceholder(defaultPen, true)\n\n\t\t\tbuild.configTab.varControls['enemyArmour']:SetPlaceholder(data.monsterArmourTable[defaultLevel], true)\n\t\t\tbuild.configTab.varControls['enemyEvasion']:SetPlaceholder(data.monsterEvasionTable[defaultLevel], true)\n\t\telseif val == \"Pinnacle\" then\n\t\t\tenemyModList:NewMod(\"Condition:Unique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"Condition:RareOrUnique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"Condition:PinnacleBoss\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"CurseEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique13\n\t\t\tenemyModList:NewMod(\"ExposureEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique14\n\t\t\tenemyModList:NewMod(\"KnockbackDistanceOnSelf\", \"MORE\", -75, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique12\n\t\t\tenemyModList:NewMod(\"SlowEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique11\n\t\t\tenemyModList:NewMod(\"MinimumMovementSpeed\", \"BASE\", 20, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique9\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 500, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique2\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 838, \"Xesht\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tmodList:NewMod(\"WarcryPower\", \"BASE\", 20, \"Boss\")\n\t\t\tmodList:NewMod(\"Multiplier:EnemyPower\", \"BASE\", 20, \"Boss\")\n\n\t\t\tlocal defaultEleResist = 50\n\t\t\tbuild.configTab.varControls['enemyLightningResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyColdResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyFireResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyChaosResist']:SetPlaceholder(0, true)\n\n\t\t\tlocal defaultLevel = 82\n\t\t\tbuild.configTab.varControls['enemyLevel']:SetPlaceholder(defaultLevel, true)\n\t\t\tbuild.configTab:UpdateLevel()\n\t\t\tif build.configTab.enemyLevel then\n\t\t\t\tdefaultLevel = m_max(build.configTab.enemyLevel, defaultLevel)\n\t\t\tend\n\n\t\t\tlocal defaultDamage = round(data.monsterDamageTable[defaultLevel] * 1.5  * data.misc.pinnacleBossDPSMult)\n\t\t\tbuild.configTab.varControls['enemyPhysicalDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyLightningDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyColdDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyFireDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyChaosDamage']:SetPlaceholder(round(defaultDamage / 2.5), true)\n\n\t\t\tbuild.configTab.varControls['enemyLightningPen']:SetPlaceholder(data.misc.pinnacleBossPen, true)\n\t\t\tbuild.configTab.varControls['enemyColdPen']:SetPlaceholder(data.misc.pinnacleBossPen, true)\n\t\t\tbuild.configTab.varControls['enemyFirePen']:SetPlaceholder(data.misc.pinnacleBossPen, true)\n\n\t\t\tbuild.configTab.varControls['enemyArmour']:SetPlaceholder(round(data.monsterArmourTable[defaultLevel] * (data.bossStats.PinnacleArmourMean/100)), true)\n\t\t\tbuild.configTab.varControls['enemyEvasion']:SetPlaceholder(round(data.monsterEvasionTable[defaultLevel] * (data.bossStats.PinnacleEvasionMean/100)), true)\n\t\telseif val == \"Uber\" then\n\t\t\tenemyModList:NewMod(\"Condition:Unique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"Condition:RareOrUnique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"Condition:PinnacleBoss\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"CurseEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique13\n\t\t\tenemyModList:NewMod(\"ExposureEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique14\n\t\t\tenemyModList:NewMod(\"KnockbackDistanceOnSelf\", \"MORE\", -75, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique12\n\t\t\tenemyModList:NewMod(\"SlowEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique11\n\t\t\tenemyModList:NewMod(\"MinimumMovementSpeed\", \"BASE\", 20, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique9\n\t\t\tenemyModList:NewMod(\"DamageTaken\", \"MORE\", -70, \"Boss\")\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 500, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique2\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 838, \"Xesht\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tmodList:NewMod(\"WarcryPower\", \"BASE\", 20, \"Boss\")\n\t\t\tmodList:NewMod(\"Multiplier:EnemyPower\", \"BASE\", 20, \"Boss\")\n\n\t\t\tlocal defaultEleResist = 50\n\t\t\tbuild.configTab.varControls['enemyLightningResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyColdResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyFireResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyChaosResist']:SetPlaceholder(0, true)\n\n\t\t\tlocal defaultLevel = 82\n\t\t\tbuild.configTab.varControls['enemyLevel']:SetPlaceholder(defaultLevel, true)\n\t\t\tbuild.configTab:UpdateLevel()\n\t\t\tif build.configTab.enemyLevel then\n\t\t\t\tdefaultLevel = m_max(build.configTab.enemyLevel, defaultLevel)\n\t\t\tend\n\n\t\t\tlocal defaultDamage = round(data.monsterDamageTable[defaultLevel] * 1.5  * data.misc.uberBossDPSMult)\n\t\t\tbuild.configTab.varControls['enemyPhysicalDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyLightningDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyColdDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyFireDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyChaosDamage']:SetPlaceholder(round(defaultDamage / 4), true)\n\n\t\t\tbuild.configTab.varControls['enemyLightningPen']:SetPlaceholder(data.misc.uberBossPen, true)\n\t\t\tbuild.configTab.varControls['enemyColdPen']:SetPlaceholder(data.misc.uberBossPen, true)\n\t\t\tbuild.configTab.varControls['enemyFirePen']:SetPlaceholder(data.misc.uberBossPen, true)\n\n\t\t\tbuild.configTab.varControls['enemyArmour']:SetPlaceholder(round(data.monsterArmourTable[defaultLevel] * (data.bossStats.UberArmourMean/100)), true)\n\t\t\tbuild.configTab.varControls['enemyEvasion']:SetPlaceholder(round(data.monsterEvasionTable[defaultLevel] * (data.bossStats.UberEvasionMean/100)), true)\n\t\tend\n\tend },",
+      "sha256": "4b4568bd7ea629e326d21e5b7301f03002d6a59bffaadff5970d282021aff7e9"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "first": 2189,
+      "last": 2268,
+      "role": "boss-branch-and-modifier-boundary",
+      "body": "\t{ var = \"presetBossSkills\", type = \"list\", defaultIndex = 1, label = \"Boss Skill Preset\", tooltipFunc = bossSkillsTooltip, list = data.bossSkillsList, apply = function(val, modList, enemyModList, build)\n\t\tif not (val == \"None\") then\n\t\t\tlocal bossData = data.bossSkills[val]\n\t\t\tlocal isUber = build.configTab.varControls['enemyIsBoss'].list[build.configTab.varControls['enemyIsBoss'].selIndex].val == \"Uber\"\n\t\t\tif bossData.earlierUber and build.configTab.varControls['enemyIsBoss'].list[build.configTab.varControls['enemyIsBoss'].selIndex].val == \"Pinnacle\" then\n\t\t\t\tisUber = true\n\t\t\tend\n\t\t\tlocal defaultDamage = \"\"\n\t\t\tbuild.configTab.varControls['enemyPhysicalDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyLightningDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyColdDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyFireDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyChaosDamage']:SetPlaceholder(defaultDamage, true)\n\n\t\t\tlocal rollRangeMult = m_min(m_max(build.configTab.input['enemyDamageRollRange'] or build.configTab.varControls['enemyDamageRollRange'].placeholder, 0), 100)\n\t\t\tfor damageType, damageMult in pairs(bossData.DamageMultipliers) do\n\t\t\t\tif isUber and bossData.UberDamageMultiplier then\n\t\t\t\t\tbuild.configTab.varControls['enemy'..damageType..'Damage']:SetPlaceholder(round(data.monsterDamageTable[build.configTab.enemyLevel] * (damageMult[1] + rollRangeMult * damageMult[2]) * bossData.UberDamageMultiplier), true)\n\t\t\t\telse\n\t\t\t\t\tbuild.configTab.varControls['enemy'..damageType..'Damage']:SetPlaceholder(round(data.monsterDamageTable[build.configTab.enemyLevel] * (damageMult[1] + rollRangeMult * damageMult[2])), true)\n\t\t\t\tend\n\t\t\tend\n\n\t\t\tlocal defaultPen = \"\"\n\t\t\tbuild.configTab.varControls['enemyPhysicalOverwhelm']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyLightningPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyColdPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyFirePen']:SetPlaceholder(defaultPen, true)\n\n\t\t\tif bossData.DamagePenetrations then\n\t\t\t\tfor penType, pen in pairs(bossData.DamagePenetrations) do\n\t\t\t\t\tif isUber and bossData.UberDamagePenetrations and bossData.UberDamagePenetrations[penType] then\n\t\t\t\t\t\tbuild.configTab.varControls['enemy'..penType]:SetPlaceholder(bossData.UberDamagePenetrations[penType], true)\n\t\t\t\t\telse\n\t\t\t\t\t\tbuild.configTab.varControls['enemy'..penType]:SetPlaceholder(pen, true)\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\n\t\t\tif bossData.DamageType then\n\t\t\t\tbuild.configTab.varControls['enemyDamageType']:SelByValue(bossData.DamageType, \"val\")\n\t\t\t\tbuild.configTab.input['enemyDamageType'] = bossData.DamageType\n\t\t\tend\n\t\t\tbuild.configTab.varControls['enemyDamageType'].enabled = false\n\n\t\t\tif isUber and bossData.UberSpeed then\n\t\t\t\tbuild.configTab.varControls['enemySpeed']:SetPlaceholder(bossData.UberSpeed, true)\n\t\t\telseif bossData.speed then\n\t\t\t\tbuild.configTab.varControls['enemySpeed']:SetPlaceholder(bossData.speed, true)\n\t\t\tend\n\t\t\tif bossData.critChance then\n\t\t\t\tbuild.configTab.varControls['enemyCritChance']:SetPlaceholder(bossData.critChance, true)\n\t\t\tend\n\n\t\t\tmodList:NewMod(\"BossSkillActive\", \"FLAG\", true, \"Config\")\n\n\t\t\t-- boss specific mods\n\t\t\tif val == \"Atziri Flameblast\" and isUber then\n\t\t\t\tenemyModList:NewMod(\"Damage\", \"INC\", 60, \"Alluring Abyss Map Mod\")\n\t\t\tend\n\t\t\tif bossData.additionalStats then\n\t\t\t\tlocal additionalStats = isUber and bossData.additionalStats.uber or bossData.additionalStats.base\n\t\t\t\tif additionalStats then\n\t\t\t\t\tfor k, v in pairs(additionalStats) do\n\t\t\t\t\t\tif tostring(v) == \"flag\" then\n\t\t\t\t\t\t\tenemyModList:NewMod(k, \"FLAG\", true, \"BossSkillAdditionalData\")\n\t\t\t\t\t\telse\n\t\t\t\t\t\t\tenemyModList:NewMod(k, \"BASE\", v, \"BossSkillAdditionalData\")\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\telse\n\t\t\tif build.configTab.varControls['enemyDamageType'].enabled == false then\n\t\t\t\tbuild.configTab.input['enemyDamageType'] = \"Average\"\n\t\t\t\tbuild.configTab.varControls['enemyDamageType']:SelByValue(\"Average\", \"val\")\n\t\t\tend\n\t\t\tbuild.configTab.varControls['enemyDamageType'].enabled = true\n\t\tend\n\tend },",
+      "sha256": "48cf43dd75d570744387fac3ed350f22df5c756b8c54494e932c3d03045d5fa0"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "first": 2284,
+      "last": 2284,
+      "role": "critical-damage-bonus-default-declaration",
+      "body": "\t{ var = \"enemyCritDamage\", type = \"countAllowZero\", label = \"Enemy critical strike multiplier:\", defaultPlaceholderState = data.monsterConstants[\"base_critical_hit_damage_bonus\"] },",
+      "sha256": "6f8fe9f0c94223db0c7bf16f62cdad6f29c58bab412a8f8620328aa93bb65ead"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "first": 2266,
+      "last": 2275,
+      "role": "percentage-input-before-downstream-transforms",
+      "body": "\t\t\t}\n\t\tend\n\t\tlocal enemyCritChance = enemyDB:Flag(nil, \"NeverCrit\") and 0 or enemyDB:Flag(nil, \"AlwaysCrit\") and 100 or (m_max(m_min((modDB:Override(nil, \"enemyCritChance\") or env.configInput[\"enemyCritChance\"] or env.configPlaceholder[\"enemyCritChance\"] or 0) * (1 + modDB:Sum(\"INC\", nil, \"EnemyCritChance\") / 100 + enemyDB:Sum(\"INC\", nil, \"CritChance\") / 100) * (1 - output[\"ConfiguredEvadeChance\"] / 100), 100), 0))\n\t\tif modDB:Flag(nil, \"EnemyUnluckyCrit\") then\n\t\t\tenemyCritChance = enemyCritChance / 100 * enemyCritChance\n\t\tend\n\t\toutput[\"EnemyCritChance\"] = enemyCritChance\n\t\tlocal enemyCritDamage = m_max(((env.configInput[\"enemyCritDamage\"] or env.configPlaceholder[\"enemyCritDamage\"] or 0) + enemyDB:Sum(\"BASE\", nil, \"CritMultiplier\")) * (1 + enemyDB:Sum(\"INC\", { flags = ModFlag.Hit }, \"CritMultiplier\") / 100), 0)\n\t\toutput[\"EnemyCritEffect\"] = 1 + enemyCritChance / 100 * (enemyCritDamage / 100) * (1 - output.CritExtraDamageReduction / 100)\n\t\tlocal enemyCfg = {keywordFlags = NOT64(KeywordFlag.MatchAll)} -- Match all keywordFlags parameter for enemy min-max damage mods",
+      "sha256": "f126b94bc95d89f39cc1f9153d19c19ba1c612bbae56391e068beae349680cd4"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 315,
+      "last": 324,
+      "role": "numeric-placeholder-notification",
+      "body": "\t\t\t\tcontrol = new(\"EditControl\"):EditControl({ \"TOPLEFT\", lastSection, \"TOPLEFT\" }, { 234, 0, 90, 18 }, \"\", nil, ((varData.type == \"integer\" or varData.type == \"countAllowZero\") and \"^%-%d\") or (varData.type == \"float\" and \"^%d.\") or \"%D\", 7, function(buf, placeholder)\n\t\t\t\t\tif placeholder then\n\t\t\t\t\t\tself.configSets[self.activeConfigSetId].placeholder[varData.var] = tonumber(buf)\n\t\t\t\t\telse\n\t\t\t\t\t\tself.configSets[self.activeConfigSetId].input[varData.var] = tonumber(buf)\n\t\t\t\t\t\tself:AddUndoState()\n\t\t\t\t\t\tself:BuildModList()\n\t\t\t\t\tend\n\t\t\t\t\tself.build.buildFlag = true\n\t\t\t\tend)",
+      "sha256": "0f320ef06b187c97506794b994f2be458272c8a6945157e4d27f57722ae09aa6"
+    },
+    {
+      "path": "src/Classes/EditControl.lua",
+      "first": 110,
+      "last": 115,
+      "role": "placeholder-change-callback",
+      "body": "function EditClass:SetPlaceholder(text, notify)\n\tself.placeholder = tostring(text)\n\tif notify and self.changeFunc then\n\t\tself.changeFunc(self.placeholder, true)\n\tend\nend",
+      "sha256": "956e72e8e409062f41617b0264eafef6eb5b8bc0607833bd58fdf35e68b6faf4"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "first": 1,
+      "last": 4,
+      "role": "misc-export-initialization",
+      "body": "-- This file is automatically generated, do not edit!\n\n---@class MiscDataExport\nlocal data = {}",
+      "sha256": "a397b8bf3315ce2917a8d8862ae9d8de30c150fee71f5ae6681be86b3aa09add"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "first": 247,
+      "last": 281,
+      "role": "monster-critical-damage-constant-table",
+      "body": "data.monsterConstants = {\n\t[\"item_drop_slots\"] = 1,\n\t[\"energy_shield_recharge_rate_per_minute_%\"] = 750,\n\t[\"base_maximum_mana\"] = 200,\n\t[\"maximum_physical_damage_reduction_%\"] = 75,\n\t[\"base_maximum_all_resistances_%\"] = 75,\n\t[\"monster_base_flask_charges_percent_of_monster_power\"] = 50,\n\t[\"base_critical_hit_damage_bonus\"] = 30,\n\t[\"max_endurance_charges\"] = 3,\n\t[\"max_frenzy_charges\"] = 3,\n\t[\"max_power_charges\"] = 3,\n\t[\"object_inherent_base_maximum_block_%_from_ot\"] = 50,\n\t[\"movement_velocity_cap\"] = 128,\n\t[\"max_azurite_debuff_stacks\"] = 10,\n\t[\"ignore_skill_weapon_restrictions\"] = 1,\n\t[\"melee_hit_damage_stun_multiplier_+%_final_from_ot\"] = 33,\n\t[\"physical_hit_damage_stun_multiplier_+%_final_from_ot\"] = 100,\n\t[\"scale_melee_range_to_actor_scale\"] = 1,\n\t[\"use_melee_pattern_range\"] = 1,\n\t[\"melee_swing_not_scaled_by_area_modifiers\"] = 1,\n\t[\"actor_scale_+%_limit\"] = 200,\n\t[\"base_heavy_stun_duration_ms\"] = 2000,\n\t[\"melee_defer_damage_prediction\"] = 1,\n\t[\"poise_decay_delay_ms\"] = 8000,\n\t[\"poise_decay_%_per_second\"] = 5,\n\t[\"base_block_angle_degrees\"] = 180,\n\t[\"action_attack_or_cast_time_uses_animation_length\"] = 1,\n\t[\"slow_potency_+%_final_per_additional_player\"] = -10,\n\t[\"check_for_targets_between_initiator_and_projectile_source\"] = 1,\n\t[\"maximum_life_+%_final_per_additional_player\"] = 50,\n\t[\"maximum_energy_shield_+%_final_per_additional_player\"] = 50,\n\t[\"poise_threshold_+%_final_per_additional_player\"] = 50,\n\t[\"stun_base_duration_override_ms\"] = 500,\n\t[\"bleeding_moving_damage_%_of_base_override\"] = 1,\n}",
+      "sha256": "598566bf71aebc35cd559dbec7ae84aad27efab65630bc87dc1d5ae11fa0d923"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "first": 381,
+      "last": 381,
+      "role": "misc-export-return",
+      "body": "return data",
+      "sha256": "b62e446b968274ada6f6d8dbfed8a82dbb332c90fe55e55bbd6af4dc2931a1f3"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "first": 112,
+      "last": 118,
+      "role": "misc-data-merge",
+      "body": "data = { }\n\n-- Misc data tables\nlocal miscData = LoadModule(\"Data/Misc\")\nfor k, v in pairs(miscData) do\n\tdata[k] = v\nend",
+      "sha256": "1d0a92925cb76e2001f861eb9fde3a15a078601ffa590e30bf653f32a7cee695"
+    }
+  ],
+  "constructor_fixture": "data/owned/poe2/3887ae68/mana-supplier-sources",
+  "scope": {
+    "fresh_no_boss_skill_encounter": true,
+    "raw_placeholder_overwritten": true,
+    "explicit_zero_preserved": true,
+    "monster_constant_default": 30,
+    "raw_extra_critical_damage_bonus": true,
+    "final_enemy_critical_damage_bonus": false,
+    "enemy_modifiers": false,
+    "critical_chance": false,
+    "damage_reduction": false,
+    "final_critical_effect": false,
+    "native_coverage": false,
+    "publication_complete": false
+  },
+  "constructor_dependencies": [
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/source-comparison.json",
+      "sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-review.json",
+      "sha256": "d8f7abf2202ace98318d9c3c80be31ea77c3d9d17a307a174e866fc9c44fa9d5"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-bodies.json",
+      "sha256": "1b470cb8f843655071fe8fe38d7075b974085debf683581813f20ea286a92d20"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-auxiliary-bodies.json",
+      "sha256": "b0e1f431cc964c38040abdab36618401e5f3e77407020b58df364ff31574e1a2"
+    }
+  ],
+  "license": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/LICENSE.md"
+}

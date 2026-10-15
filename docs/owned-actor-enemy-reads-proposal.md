@@ -1,6 +1,51 @@
-# Shared Actor reads of the scenario Enemy
+# Final critical-result ownership and scenario Enemy reads
 
-Status: proposed, not implemented. 2026-10-07.
+Status: revised recommendation awaiting review, 2026-10-14. The October 7
+shared-Actor authority extension below remains unapproved and unimplemented.
+
+## Revised recommendation: use existing stat-owned Player receivers
+
+The current architecture already has an owner for common final results:
+[stat-owned receivers](owned-stat-receivers.md). Use one explicitly Player-bound
+receiver per final incoming-critical Stat, with explicit Stat dependencies
+between results. Keep intrinsic/source contributions on the shared Player Actor.
+This preserves the actual defending Player; it does not move the calculation to
+the Encounter or copy Enemy values onto Player fields.
+
+This is an ownership correction to the unpublished data draft, not an extension
+of shared-Actor read permissions. Existing receiver programs can read resolved
+scenario Enemy Stats and declared Enemy Boolean Flag queries through the normal
+typed dependency graph. Each receiver writes exactly its own final Stat on its
+bound Player. Arbitrary cross-Actor writes, numeric Enemy queries and direct
+Boolean reductions gain no authority. The alternative is the previously
+proposed extension below, which adds a broader shared-Actor read contract.
+
+The static review checked Data's receiver validation and Enemy Flag-query
+restriction, Engine's exact Player applicability and Enemy binding, producer
+registration, stage/cycle checks and rule/plan identities. This is consistent
+with the existing distinction between shared Actor intrinsic contributions and
+stat-owned final formulas. Runtime verification of this particular combined
+path is still required; the review is not evidence that critical effect works.
+
+Before implementation, confirm this revised ownership direction. Then:
+
+1. Move only final-result programs to their Stat owners, with explicit Player
+   receiver rows. Preserve shared Actor `332a`'s existing Partial inventory and
+   every untranslated source/numeric-contributor gap.
+2. Rebase the unpublished draft against the current release and allocate new
+   IDs from its actual registry. Historical provisional IDs are no longer free.
+   Reuse the published configured critical inputs instead of a parallel import
+   policy or duplicate presence/value model.
+3. Test real Player receivers reading exact Enemy Stats and declared Flag
+   queries. Cover wrong type/scope, missing producers, Partial membership,
+   competing producers, stages/cycles, lazy branches and unchanged write limits.
+   Include ordinary/prepared execution and fresh/reused/Rayon equality.
+4. Validate against retained original-source controls and preserve all five
+   imports through checked publication. Keep whole-plan, source and final-metric
+   completion distinct; receiver ownership alone closes none of those gates.
+
+The following records the original proposal and its trade-off. It is not an
+instruction to implement the broader authority as well.
 
 ## Concrete blocker
 
@@ -18,7 +63,7 @@ ContributionQuery reads are restricted to their own Actor. The accepted Boolean
 contribution change admits Enemy Flag queries in ordinary contexts; it did not
 extend this separate shared-Actor restriction.
 
-## Recommended decision
+## Original alternative: extend shared-Actor read authority
 
 Allow an explicitly bound existing Player Actor program to read **resolved
 Stats on the scenario's Enemy**, and **declared Boolean Flag queries on that
@@ -44,7 +89,7 @@ need for a compatibility implementation or another import mode. Review cache
 identity implications with the implementation: previously forbidden new data
 must not borrow an existing compiled-plan identity.
 
-## Alternative
+## Original rejected alternative: Encounter ownership
 
 An Encounter program could perform the calculation and project its result to
 the Player. That avoids this read extension, but makes defender-specific
@@ -54,7 +99,7 @@ later use for minions or multiple defenders. Copying Enemy values onto Player
 Stats solely to pass the existing validator would hide the relationship and
 duplicate data.
 
-## Implementation and validation gate
+## Validation requirements if the original extension is chosen
 
 1. Extend only the explicit existing-Player read allowlist; validate all declared
    readers, including unused owners. Preserve output and numeric query limits.

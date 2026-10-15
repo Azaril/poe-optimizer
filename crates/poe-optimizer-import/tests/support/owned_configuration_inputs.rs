@@ -1,12 +1,12 @@
 //! Injected raw overrides: absence is a Boolean fact, never a numeric default.
 #[path = "owned_configuration_accounting.rs"]
 mod accounting_tests;
+#[path = "owned_configuration_default_input_data.rs"]
+mod default_input_data_tests;
 #[path = "owned_configuration_defaults.rs"]
 mod default_tests;
 #[path = "owned_configuration_dispositions.rs"]
 mod disposition_tests;
-#[path = "owned_configuration_enemy_speed_data.rs"]
-mod enemy_speed_data_tests;
 #[path = "owned_configuration_fallbacks.rs"]
 mod fallback_tests;
 #[path = "owned_configuration_options.rs"]

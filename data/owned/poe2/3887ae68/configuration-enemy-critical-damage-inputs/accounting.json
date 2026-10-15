@@ -1,0 +1,48 @@
+[
+  {
+    "id": "authored-enemy-critical-strike-damage",
+    "selector": {
+      "lane": "input_number",
+      "name": "enemyCritDamage"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003372"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "overwritten-enemy-critical-strike-damage-placeholder",
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "enemyCritDamage"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003372"
+          }
+        }
+      }
+    ]
+  }
+]

@@ -1,21 +1,16 @@
-//! Explicit current-package publication; ordinary behavior uses committed fixtures.
+//! Shared all-five exact preservation and real-input mutation checks.
+use crate::selected;
+use poe_optimizer_import::owned_release::StagedOwnedRelease;
 #[allow(dead_code)]
-#[path = "support/owned_configuration_accounting.rs"]
+#[path = "owned_configuration_accounting.rs"]
 mod edits;
-#[path = "support/owned_identity_correspondence.rs"]
+#[path = "owned_identity_correspondence.rs"]
 mod identity;
 #[allow(dead_code)]
-#[path = "support/owned_configuration_enemy_speed_inputs.rs"]
-mod packet;
-#[allow(dead_code)]
-#[path = "support/owned_physical_inventory_preservation.rs"]
+#[path = "owned_physical_inventory_preservation.rs"]
 mod preservation;
-#[path = "support/owned_release_fixture.rs"]
+#[path = "owned_release_fixture.rs"]
 mod release;
-#[allow(dead_code)]
-#[path = "support/owned_selected_request.rs"]
-mod selected;
-
 use poe_optimizer_core::build_identity::BuildLineage;
 use poe_optimizer_import::{
     build_instance::ImportedBuildInstance, decode_build, owned_source::SourceProjectEvidence,
@@ -58,8 +53,7 @@ fn assumptions(draft: &mut Value) -> &mut Vec<Value> {
         .as_array_mut()
         .unwrap()
 }
-fn expected(v: f64) -> Value {
-    let input: Value = packet::read("input.json");
+fn expected(input: &Value, v: f64) -> Value {
     let mut value = input["constructor_default"].clone();
     value["value"]["value"] = json!(v);
     json!({"input":{"kind":"known","value":input["value_input"]},"target":{"kind":"enemy"},"value":{"kind":"known","value":value}})
@@ -72,14 +66,14 @@ fn source(xml: &[u8]) -> ImportedBuildInstance {
     )
     .unwrap()
 }
-fn leaf(e: &SourceProjectEvidence, element: &str) -> usize {
+fn leaf(e: &SourceProjectEvidence, element: &str, source_name: &str) -> usize {
     let rows: Vec<_> = e
         .rows()
         .iter()
         .filter(|r| {
             r.occurrence().name() == element
                 && r.attribute("name")
-                    .is_some_and(|a| a.decoded().ok() == Some("enemySpeed"))
+                    .is_some_and(|a| a.decoded().ok() == Some(source_name))
         })
         .collect();
     assert_eq!(rows.len(), 1);
@@ -117,19 +111,28 @@ fn census(sidecar: &Value, e: &SourceProjectEvidence, issue: &Value) -> (usize, 
     (total, inside, total - inside)
 }
 
-#[test]
-#[ignore = "requires ENEMY_SPEED_PRIOR current package and fresh ENEMY_SPEED_OUTPUT; no source runtime"]
-fn publish_configured_enemy_interval_preserving_all_five_originals() {
-    let prior_path = PathBuf::from(
-        std::env::var_os("POE_OPTIMIZER_TEST_ENEMY_SPEED_PRIOR").expect("prior package"),
-    );
-    let out = PathBuf::from(
-        std::env::var_os("POE_OPTIMIZER_TEST_ENEMY_SPEED_OUTPUT").expect("fresh output"),
-    );
+pub struct Publication {
+    pub directory: PathBuf,
+    pub stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
+    pub prior: PathBuf,
+    pub output: PathBuf,
+    pub original05_before: (usize, usize, usize),
+    pub new_definitions: usize,
+}
+pub fn run(spec: Publication) {
+    let input: Value = read(spec.directory.join("input.json"));
+    let source_name = input["source_name"].as_str().unwrap();
+    let input_id = input["value_input"]["key"].clone();
+    let default = input["constructor_default"]["value"]["value"]
+        .as_f64()
+        .unwrap();
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let prior_path = spec.prior;
+    let out = spec.output;
     assert!(!out.exists());
     let prior_files = release::inventory(&prior_path);
     let prior = release::load(&prior_path);
-    let next = packet::stage(&prior);
+    let next = (spec.stage)(&prior);
     fs::create_dir_all(&out).unwrap();
     write(out.join("endpoint.json"), next.input());
     write(out.join("receipt.json"), next.receipt());
@@ -150,7 +153,7 @@ fn publish_configured_enemy_interval_preserving_all_five_originals() {
     assert_eq!(next.receipt().query_rows, 110);
     let mut results = vec![];
     for case in 1..=5 {
-        let xml = packet::root().join(format!(
+        let xml = root.join(format!(
             "tests/fixtures/builds/breadth-20260908/build-{case:02}.xml"
         ));
         let bytes = fs::read(&xml).unwrap();
@@ -160,7 +163,10 @@ fn publish_configured_enemy_interval_preserving_all_five_originals() {
         release::normalize(&package, &xml, case, &new);
         let a = read(old.join("draft.json"));
         let mut b = read(new.join("draft.json"));
-        assert_eq!(assumptions(&mut b).pop().unwrap(), expected(700.));
+        assert_eq!(
+            assumptions(&mut b).pop().unwrap(),
+            expected(&input, default)
+        );
         let oldlineage = a["draft"]["allocator"]["lineage"].clone();
         let newlineage = b["draft"]["allocator"]["lineage"].clone();
         assert_ne!(oldlineage, newlineage);
@@ -186,7 +192,7 @@ fn publish_configured_enemy_interval_preserving_all_five_originals() {
         );
         let imported = source(&bytes);
         let evidence = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
-        let at = leaf(&evidence, "Placeholder");
+        let at = leaf(&evidence, "Placeholder", source_name);
         let issue = json!({"kind":"issue","value":a["draft"]["choice_presets"]["members"][0]["choices"]["completion"]["id"]});
         let scenario = json!({"kind":"scenario_preset","value":read(new.join("draft.json"))["draft"]["scenario_presets"]["members"][0]["id"]});
         assert_eq!(
@@ -207,8 +213,15 @@ fn publish_configured_enemy_interval_preserving_all_five_originals() {
             (counts_before.0 - 1, counts_before.1 - 1, counts_before.2)
         );
         if case == 5 {
-            assert_eq!(counts_before, (35, 20, 15));
-            assert_eq!(counts_after, (34, 19, 15));
+            assert_eq!(counts_before, spec.original05_before);
+            assert_eq!(
+                counts_after,
+                (
+                    spec.original05_before.0 - 1,
+                    spec.original05_before.1 - 1,
+                    spec.original05_before.2
+                )
+            );
         }
         sb["origins"][at]["disposition"] = sa["origins"][at]["disposition"].clone();
         sb["origins"][at]["links"] = json!([new_issue]);
@@ -276,27 +289,28 @@ fn publish_configured_enemy_interval_preserving_all_five_originals() {
         );
         results.push(json!({"original":case,"added_assumptions":1,"changed_leaf":at,"configuration_before":counts_before,"configuration_after":counts_after,"whole_draft_inverse":true,"whole_sidecar_inverse":true,"local_ids_unchanged":true,"selected_issues":issues.as_array().unwrap().len()}));
     }
-    let original = fs::read_to_string(
-        packet::root().join("tests/fixtures/builds/breadth-20260908/build-05.xml"),
-    )
-    .unwrap();
+    let original =
+        fs::read_to_string(root.join("tests/fixtures/builds/breadth-20260908/build-05.xml"))
+            .unwrap();
     let mut controls = vec![];
     for (name, input, placeholder, expected_value) in [
-        ("changed-placeholder", None, Some("999"), Some(700.)),
+        ("changed-placeholder", None, Some("999"), Some(default)),
         ("zero", Some("0"), Some("999"), Some(0.)),
         ("fraction", Some("-12.5"), Some("999"), Some(-12.5)),
-        ("absent", None, None, Some(700.)),
+        ("above-probability", Some("150"), Some("999"), Some(150.)),
+        ("zero-placeholder", None, Some("0"), Some(default)),
+        ("absent", None, None, Some(default)),
         ("bad-placeholder", Some("0"), Some("NaN"), None),
     ] {
         let xml = edits::field(
             &edits::field(
                 &original,
                 "Placeholder",
-                "enemySpeed",
+                source_name,
                 placeholder.map(|v| ("number", v)),
             ),
             "Input",
-            "enemySpeed",
+            source_name,
             input.map(|v| ("number", v)),
         );
         controls.push((name, xml, expected_value));
@@ -320,12 +334,12 @@ fn publish_configured_enemy_interval_preserving_all_five_originals() {
         let mut draft = read(target.join("draft.json"));
         let values: Vec<_> = assumptions(&mut draft)
             .iter()
-            .filter(|a| a["input"]["value"]["key"] == packet::INPUT)
+            .filter(|a| a["input"]["value"]["key"] == input_id)
             .cloned()
             .collect();
         assert_eq!(
             values,
-            value.map(|v| vec![expected(v)]).unwrap_or_default(),
+            value.map(|v| vec![expected(&input, v)]).unwrap_or_default(),
             "{name}"
         );
         if value.is_none() {
@@ -333,7 +347,7 @@ fn publish_configured_enemy_interval_preserving_all_five_originals() {
             let e = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
             let sidecar = read(target.join("sidecar.json"));
             assert!(
-                sidecar["origins"][leaf(&e, "Placeholder")]["links"]
+                sidecar["origins"][leaf(&e, "Placeholder", source_name)]["links"]
                     .as_array()
                     .unwrap()
                     .iter()
@@ -345,6 +359,6 @@ fn publish_configured_enemy_interval_preserving_all_five_originals() {
     assert_eq!(release::inventory(&prior_path), prior_files);
     write(
         out.join("validation.json"),
-        &json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":results,"mutation_controls":controls.len(),"queries":110,"new_definitions":2,"new_programs":0,"rebuild_byte_identical":true,"inventory_completed":false,"complete_original_builds":0}),
+        &json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":results,"mutation_controls":controls.len(),"queries":110,"new_definitions":spec.new_definitions,"new_programs":0,"rebuild_byte_identical":true,"inventory_completed":false,"complete_original_builds":0}),
     );
 }

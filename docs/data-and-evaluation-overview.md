@@ -34,9 +34,9 @@ Checked numeric ranges now run in the existing Rust rule engine, with explicit
 unsupported-domain results. The first checked configuration-accounting
 publication also passes the all-five import regression: it removes one proven
 source-only Placeholder obligation per build and preserves all 110 queries.
-The subsequent configured enemy interval publication removes one more source
-link per build. Original05 now retains 34 configuration source links and its four
-Pending inventories.
+The subsequent configured enemy interval and two critical-input publications
+remove three more source links per build. Original05 now retains 32 configuration
+source links and its four Pending inventories.
 The common accounting owner replaces the older scalar-only leaf mutator; full
 catalogue/default and outside-Config accounting remain unfinished.
 
@@ -49,6 +49,16 @@ differ. This uses the current import adapters and accounting owner, adding no
 native operation or final enemy-speed/survivability calculation. All five imports,
 local IDs and 110 query rows remain covered by exact regression checks.
 
+Configured critical chance and extra critical damage use the same injected
+default-input path. Their constructor defaults are 5 and 30 percentage points;
+explicit zero, fractions, negative and above-100 inputs remain raw values for
+later calculations. The damage default comes from the pinned monster-constant
+table, with its loader authenticated offline. Each exact overwritten Placeholder
+is accounted for; final critical formulas and complete contributor coverage are
+not supplied by this import work. Shared source/publication test helpers now
+cover all three inputs, with two CLI test binaries instead of separate binaries
+per input.
+
 The final Player Mana formula is now published as injected rules with its exact
 Player receiver. The existing Rust engine executes its arithmetic, range check
 and optional override; no resource-specific Rust implementation was added.
@@ -57,7 +67,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-configured-enemy-attackcast-interval).
+[implementation checkpoint](implementation.md#current-checkpoint-configured-enemy-critical-inputs).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -536,15 +546,16 @@ scratch. See the [packet](../data/owned/poe2/3887ae68/life-contribution-queries/
 
 The next critical-hit slice has passed an independent PoB witness: 26 cases in
 each JIT mode, byte-identical reports, and 52 measured MAIN/CALCS vectors. The
-native data draft is **unpublished** because the shared Actor contract currently
-forbids computed Enemy reads. The
-[read-authority proposal](owned-actor-enemy-reads-proposal.md) asks to reuse the
-scenario Enemy for typed Stat and Boolean query reads while retaining Actor-only
-writes; no authority or runtime change has been made. This is separate from
-the already accepted Boolean contribution representation. The draft introduces
-no Lua-shaped override model for a dormant source lookup. The implementation
-plan records the exact failed admission check and pending work; current package
-identities and all five build results are unchanged.
+native data draft is **unpublished**: its selected shared-Actor ownership forbids
+computed Enemy reads. The October 14
+[revised ownership proposal](owned-actor-enemy-reads-proposal.md) instead recommends
+existing stat-owned Player receivers for final results, with exact Enemy Stat
+and declared Boolean Flag-query dependencies. That follows the existing
+source-contribution versus final-result ownership split and preserves the
+shared Actor's permissions and Partial coverage. The choice has been prompted
+and remains pending; combined receiver/Enemy-read execution still needs tests.
+No authority change or final critical formula is published. Source evidence and
+separate raw-input adoption do not complete contributor or whole-build coverage.
 
 An independent source witness also proves that the saved damage-roll setting is
 inactive in the exact no-boss encounter: 26 complete loads pass with identical
@@ -1217,7 +1228,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-configured-enemy-attackcast-interval),
+live in the [implementation plan](implementation.md#current-checkpoint-configured-enemy-critical-inputs),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.

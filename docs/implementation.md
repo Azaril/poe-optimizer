@@ -99,15 +99,108 @@ existing complete-plan contract. The bounded transformation witness is complete;
 do not expand positive transfers ahead of direct Player resource, Sniper damage
 or input-admission work. Checked configuration accounting and numeric domains
 were approved on October 14. Numeric checks now run in the existing engine;
-configuration has a common checked leaf-accounting implementation and its first
-source-backed publication. Complete inventory proof remains pending. Other selected
+configuration has common checked leaf accounting and multiple source-backed
+input publications. Complete inventory proof remains pending. Other selected
 skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: configured enemy attack/cast interval
+## Current checkpoint: configured enemy critical inputs
 
-The canonical package is **`runs/owned-configuration-enemy-speed-publication-03/package`**,
+The canonical package is **`runs/owned-configuration-enemy-critical-damage-publication-01/package`**,
+input `1b7cc8d01e7b54a698240ca6fbf6f628b590b161df41ac2a909542af58c9de90`.
+The [chance packet](../data/owned/poe2/3887ae68/configuration-enemy-critical-chance-inputs/README.md)
+and [extra-damage packet](../data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/README.md)
+each add one typed Enemy input through the existing constructor-default adapter
+and checked configuration accounting. There are no new production Rust paths,
+public operations, native programs or receivers.
+
+Both inputs use the existing percentage-points unit and an injected raw range
+of -1,000,000 to 1,000,000. Authored numeric Inputs win, including zero, negative,
+fractional and above-100 values. Otherwise the constructor defaults are 5 for
+critical chance and 30 for extra critical damage. The latter is a bonus, not a
+total multiplier of 130 or a fraction of 0.30. Saved numeric Placeholders are
+overwritten under the same exact absence guards for boss/preset settings. Final
+critical chance, modifiers, clamping, incoming-critical effect and EHP remain
+separate numerical work. No PoB VM runs during import or these offline checks.
+
+The damage proof authenticates the full monster-constant table and its actual
+loader, distinguishing its value 30 from character 100 and minion 70. The four
+existing configuration archives are reused; only the exact Misc/Data source
+archives are newly retained. Every packet seals its required archive/span
+inventory and constructor evidence, with raw observations retained unchanged.
+
+The chance predecessor is
+`runs/owned-configuration-enemy-critical-chance-publication-01/package`, input
+`c23fd9af759e9d7564f9c2cd54568e1810dfaac551c69e13f0414e655862fef5`.
+Current definitions are
+`002505a1dccb624afb7f92490a6466ea08ce769a1543c41932e4609bd0f7342a`;
+rules `ac237188586026e4bd1e716a80573e8a0240e101d7a984b1de24c43d3b28599d`;
+compiled rules `507638b59765bd6a3c9eaca868fdaa6412b1cf94ac71c7d07731be57f77709bc`.
+The release has seventeen manifest artifacts, eighteen package files and 177
+provenance rows; all files rebuild byte-identically. Exact release, draft and
+sidecar inverses preserve prior rule contents, values, local IDs, all 110 queries
+and unrelated obligations. Only the two new assumptions and their exact
+overwritten-Placeholder accounting are added.
+
+Across these two publications, configuration-linked origins fall
+**50→48 / 85→83 / 41→39 / 36→34 / 34→32**. Original05 now retains two Config
+containers, fifteen Config settings and fifteen outside-Config origins. Its
+assumptions have twenty known members but remain Pending; usage and all other
+completion gates are unchanged. Selected issue counts remain
+**106/117/109/123/4** and complete native builds remain **0/5**.
+
+The repeated test machinery is consolidated: one portable Import fixture covers
+all three default-input families; one CLI target authenticates their source/data;
+one separate target contains the three ignored all-five publication entry points.
+Old per-input test binaries are removed. Shared source authentication and exact
+publication inverses replace duplicated helpers. The interval republication
+reproduces its existing eighteen package files byte for byte (39.03s).
+Nine Import behavior tests pass (0.03s); chance and damage publications pass
+(39.97s and 38.96s), each with ten real changed-input controls. Three consolidated
+source/data tests pass (1.61s), with all three explicit publication entry points
+compiled and ignored in the ordinary run. Strict Import and consolidated CLI
+Clippy pass. Logs:
+`runs/owned-configuration-enemy-critical-{chance,damage}-{import-01,import-clippy-01,publication-01}.log`.
+The final consolidated targets use
+`runs/owned-configuration-default-inputs-{cli-02,clippy-02}.log`.
+
+**Resume:** keep Original05 first. The remaining final-critical ownership choice
+is now [revised and prompted](owned-actor-enemy-reads-proposal.md): prefer existing
+stat-owned Player receivers for final results, preserving shared Actor permissions
+and Partial source coverage. Do not implement either ownership change until the
+decision arrives. Once approved, rebase the obsolete draft IDs from the actual
+registry and reuse these inputs instead of recreating its presence/value policy.
+Meanwhile continue exact accounting of the fifteen outside-Config origins and
+remaining saved settings through already accepted contracts. Do not force the
+count-callback fields into this overwritten-placeholder family: their zero,
+delivery and direct-reader semantics differ. Whole-plan coverage and final native
+metrics still gate the first complete unchanged request and optimizer integration.
+
+**Outside-Config audit:** all fifteen retained origins were joined to the actual
+799-element source preorder. They are Build `1`, TimelessData `123`, Tree `124`,
+Skills `166`, archived Firebolt Skill/Gem `174–175`, Items `467`, TradeSearchWeights
+and two Stats `741–743`, Calcs and its two Inputs `744–746`, Party `796` and
+Import `797`. The implemented disposition pass accepts direct ConfigSet leaves;
+all implemented presentation families are already enabled. No further retirement
+follows from another disposition data row alone. The Calcs children are actual
+`skill_number=1` and `misc_buffMode=EFFECTIVE` inputs consumed by CalcsTab.Load;
+they must not be treated as unknown/ignored tags. Saved trade weights also have
+real objective meaning (FullDPS 1, TotalEHP 0.5).
+
+**Next independent investigation:** archived Firebolt `174–175` has a Pending
+generated-input owner `067c` and support-origin owner `01d4` on preset `01d3`,
+but its usage inventory is Complete-empty. Archived accounting currently requires
+all three same-preset Pending owners, so these leaves correctly remain blocking
+under that contract. Trace whether usage-completeness construction omitted an
+actual saved responsibility; do not manufacture an issue, downgrade Complete or
+weaken the accounting precondition merely to retire the links. Exact archived
+syntax is already reviewed. Preserve unresolved provider identity and independent
+selection across skill/equipment presets; matching set IDs are not provider proof.
+
+## Previous input checkpoint: configured enemy attack/cast interval
+
+The preceding interval package is **`runs/owned-configuration-enemy-speed-publication-03/package`**,
 input `d314f839090f5a414ed5f9f97b12cac082ba66a004deea3a15a145bd865f3658`.
 The [data packet](../data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/README.md)
 adds one typed Enemy scenario input and its milliseconds unit through the
@@ -149,21 +242,13 @@ Publication attempts 01 and 02 remain diagnostic: they exposed an omitted
 identity restoration in the test inverse and an incorrect expected Enemy wire
 shape, respectively. Neither changed source evidence or relaxed a runtime gate.
 
-**Resume:** keep Original05 first. The next concrete input is configured enemy
-critical chance: the reviewed constructor overwrites its Placeholder to 5, and
-the downstream reader preserves explicit Input zero. Adopt it through the same
-typed default-input/accounting path under the existing absent-encounter guards;
-authenticate the complete source chain before retiring its exact leaf. This
-transports an input, not a final critical-effect calculation, and needs no
-Actor-to-Enemy read. Critical damage needs its own pinned monster-constant proof.
-Keep the separate unfinished incoming-critical work untouched. Review the other
-remaining Config settings against their actual consumers. Keep the two Config containers, fifteen outside
-origins and three other selected inventories unresolved until their responsibilities
-are proved. Pair further supplier review with an actual input, producer or
-inventory change; the rejected Class and equipment-Life shortcuts below remain
-blocked. Final native metric production and whole-plan completion are still
-required before optimizer integration. Pending Actor-to-Enemy reads and resource
-demand are design decisions, not implied by this input publication.
+The subsequent critical-input checkpoint above completes this input family's
+next two steps. Keep the Config containers, outside origins and other selected
+inventories unresolved until their responsibilities are proved. Pair further
+supplier review with an actual input, producer or inventory change; the rejected
+Class and equipment-Life shortcuts below remain blocked. Neither interval nor
+critical-input publication authorizes a change to shared-Actor reads or resource
+demand.
 
 ## Previous numerical checkpoint: guarded Player Mana publication
 
@@ -285,11 +370,12 @@ No new acquisition is implied by this backlog. The next successful source
 exclusion must identify its exact covered body/domain and preserve all remaining
 gaps; avoid another observation-only packet with no admission progress.
 
-GitHub CI for source commit `c86cfa6` is pending in run `38661700029`, with no jobs
-or reported failure at the latest October 14 check. The earlier
-pending main runs were coalesced by workflow concurrency. Older active-run
-formatting failures are already repaired in `0a8fa4e`; current CI is not claimed
-green. No workflow was cancelled by an agent.
+The October 14 CI check found parent commit `0eb9ab5` pending in run
+`38665025991`, with no jobs started. The older active `558cc29` run had ten
+successful jobs, six running and the two known formatting failures already
+repaired in `0a8fa4e`; current formatting passes. Intermediate pending runs were
+coalesced by workflow concurrency. This is a commit-specific snapshot, not a
+green result for later revisions. No workflow was cancelled by an agent.
 
 ## Accepted decisions and next implementation boundary
 
@@ -3131,7 +3217,7 @@ It must preserve participation, reference-selection and FullDPS responsibilities
 Do not repeat the same source capture, reinterpret a guard as that authority or
 infer a complete inventory from unchanged final metrics.
 
-## In progress: incoming critical source proof and Actor read decision
+## Retained incoming-critical proof and pending final-result ownership
 
 The independent complete-PoB witness now **passes 26 cases under both JIT modes**,
 including MAIN/CALCS agreement, a separate fresh replay and a changed-to-original
@@ -3153,37 +3239,37 @@ direct modifier injection. The native draft deliberately has no Lua-shaped
 override-presence/value model; it retains a resolved configured-chance dependency.
 
 **The native draft is not published or usable yet.** Its shared Player owner
-reads Enemy computed Stats and Boolean queries. Native tests expose an existing
-contract restriction: `existing actor read requires unsupported provider
-authority`. Shared Actor rules currently admit Enemy external inputs but not
-these computed reads. The [Actor-to-Enemy read proposal](owned-actor-enemy-reads-proposal.md)
-is awaiting the owner's decision; do not relocate the formula, copy Enemy facts
-onto Player Stats, remove the real Actor binding from tests, or change validation
-to get around that decision. Support-origin composition was separately accepted
-October 8; it does not authorize Actor-to-Enemy reads.
+reads Enemy computed Stats and Boolean queries, which the current shared-Actor
+contract refuses. The October 14 review found a better existing ownership path:
+stat-owned Player receivers are intended for final Actor results and already
+support these exact typed Enemy dependencies. The
+[revised proposal](owned-actor-enemy-reads-proposal.md) recommends one receiver
+per final Stat, preserving shared Actor source/intrinsic ownership and its
+Partial inventory. This revised direction has been prompted and remains pending.
+Neither widening shared-Actor reads nor removing a binding just to make a test
+pass is authorized. Support-origin composition was separately accepted October 8.
 
 Uncommitted preparatory files are `incoming-critical-effect/{extension,policy,
 native-inputs,queries,README}` and the two new root critical test targets and
-their helpers. They now provisionally reserve `3353`–`3364` for 18 definitions
-(moved after the independent Sand packet's five IDs), preserve Partial
-Actor/Encounter ownership, add three Partial flag inventories, and leave six
-numeric dependencies unresolved. The normal native target currently has one
-passing authoring test and five tests stopped by the explicit authority guard;
-the measured replay has not run. Keep those unapproved native drafts out of a
+their helpers. At the original checkpoint they provisionally used `3353`–`3364`
+for 18 definitions. Those IDs have since been allocated by published work;
+the draft must be rebased and freshly allocated before any adoption. Its Partial
+Actor/Encounter ownership, three Partial flag inventories and six unresolved
+numeric dependencies do not become complete through that rebase. The historical
+native run had one passing authoring test and five stopped by the authority guard;
+the measured replay did not run. Keep these unapproved native drafts out of a
 published green checkpoint. No production format, validation or runtime code
 was changed in this source-evidence checkpoint.
 
-Resume after the design decision: extend only the approved shared-Actor read
-authority and its storage/raw-compiler guards, prove wrong scope/type, missing
-producers, Partial membership, stages/cycles and unchanged write boundaries;
-then execute the seven actual authored native tests, authenticate the compact
-vectors against the full reports, and run the prepared all-five publication
-inverse. First rebase the draft's predecessor expectations from the Boolean
-package to the current checked baseline; its reserved `3353`–`3364` IDs remain free.
-The draft's input policy should add two absence/value channels and
-account for exactly two overwritten placeholders per original; **these changes
-have not been published or counted as progress in input closure**. Current
-package identities, issue counts and 0/5 completion remain unchanged.
+Resume after the ownership decision: use the approved owner and exact Player
+binding, prove wrong scope/type, missing producers, Partial membership,
+stages/cycles and unchanged write boundaries. Authenticate compact vectors
+against the full reports before executing the rebased authored native tests and
+all-five publication inverse. Rebase predecessor expectations against the actual
+current package/registry. Reuse the separately published configured critical
+inputs and their checked default/accounting recipes; do not recreate the draft's
+older absence/value policy. Input transport does not complete final critical
+effect, contributor coverage or any build.
 
 Evidence: `runs/owned-critical-source-test-01.log`,
 `runs/owned-incoming-critical-source-01/source-jit-{off,on}.json`,
@@ -3198,8 +3284,8 @@ no failed steps. No new hosted success is claimed.
 
 ## Independent progress: default-encounter damage-roll evidence
 
-While the Actor-read and support-origin decisions remain pending, the next
-configuration source investigation passed. The optional Rust target
+At that earlier source checkpoint the Actor-read and support-origin decisions
+were pending. The next configuration source investigation passed; its optional Rust target
 `owned_damage_roll_source` performs twelve cases per JIT mode, including one
 extra warm-up load per mode: **26 complete loads in 133.31s**. Ten no-boss cases
 cover the original, raw Input zero/100/fractional values, changed/missing numeric
@@ -3234,10 +3320,11 @@ records a narrow injected permission for future review. Even after that proof,
 only one source leaf would be accounted for; all five selected obligations remain.
 Do not prioritize this bookkeeping over a ready numerical consumer.
 
-The approved Sand preparation remains in the current package after this
-source-only investigation. It retains Partial contributor/readiness coverage and removes no
-selected input obligations. The unapproved incoming-critical packet provisionally
-uses `3353`–`3364`, after Sand's five allocations; its source evidence is unchanged.
+At that source-only checkpoint the package retained approved Sand preparation,
+Partial contributor/readiness coverage and all selected input obligations. The
+unapproved incoming-critical draft then provisionally used `3353`–`3364`; those
+identities have since been allocated elsewhere and must not be reused. Its
+retained source evidence is independent of that obsolete allocation plan.
 
 CI snapshot during this checkpoint: `f93d551` run
 [37684118252](https://github.com/Azaril/poe-optimizer/actions/runs/37684118252)
@@ -4146,14 +4233,15 @@ numerical outputs when game intent remains unresolved.
    Classify Lua-specific behavior by domain purpose and evidence using the debt
    inventory, with reviewed numerical changes and the five-build gates intact.
 
-The remaining enemy critical chance, critical bonus and attack/cast-time inputs
-can reuse the checked numeric-override seam. Source `ConfigOptions.lua:1984–1986`
-resets their placeholders, and boss selection at `2235–2240` can overwrite them.
-They therefore need injected encounter defaults and explicit override presence,
-not saved-placeholder fallback. Before delivery, test stale placeholders, zero,
-fractional values and boss changes against the actual consumers at
-`CalcDefence.lua:2268`, `2273` and `3412`. This is input work, not completed EHP or
-configuration-inventory coverage; no public model change is currently needed.
+Enemy critical chance, critical bonus and attack/cast-time inputs use the existing
+typed constructor-default recipe, with one effective raw value per setting.
+Source `ConfigOptions.lua:1984–1986` resets their placeholders; excluded boss
+selection branches can replace defaults. Do not recreate the older draft's
+separate presence/value model. Explicit authored zero wins, overwritten saved
+Placeholders do not supply the value, and actual source consumers remain at
+`CalcDefence.lua:2268`, `2273` and `3412`. The current checkpoint records each
+publication and its mutation controls. This is input work, not completed critical
+effect, EHP or configuration-inventory coverage; no public model change is needed.
 
 Enemy distance is a distinct future input: its count-style zero fallback differs
 from the raw override lane. More numeric controls alone cannot close the current
@@ -4345,8 +4433,8 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Composed support discovery | Accepted October 8. The common native gate, current authored-order DTO and source-input accounting are implemented; Original05 `01de` is retired. The Gem packet publishes 937 Known and 29 Unmapped domains with all-five preservation; all 23 selected physical Gem domains are covered. Existing typed identities fixed 111 false stat-set blockers. Pinned generated export metadata classifies eight missing runtime effects as active without implementing their Command mechanics. Continue other owner domains and exact provider exclusions; keep Command action/usage gaps separate. Unsupported positive and archived source relationships remain blocking. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Application-group contribution queries | Accepted and implemented October 8 in Core/Data/Engine V25. Typed program-effect/application-group addresses preserve exact recipients, potential-source census, stacking, unknowns and explicit numeric order in one checked reduction path. Current artifacts are rebuilt with no old-format compatibility. Mixed inherited/applied damage data now adopts this capability; MORE and final hit consumers remain next. [Accepted contract](owned-application-group-contribution-queries-proposal.md). |
-| Shared Actor reads of Enemy results | Proposed after the incoming-critical native draft exposed the existing same-Actor read restriction. Allow resolved Enemy Stats and checked Boolean Flag queries, while preserving Actor-only writes and refusing numeric Enemy queries. No new runtime path or compatibility branch. Source controls pass, but the authority change and native execution remain pending the owner's decision. [Proposal](owned-actor-enemy-reads-proposal.md). |
-| Configuration/source dispositions | Presentation, exact item-range ownership and common checked leaf accounting are implemented; full semantic closure is not. Original05 issue `01f2` now retains 35 source origins after the first branch-inapplicable Placeholder publication; the earlier 36/44-origin breakdowns are historical. Preset usage `0505` has 23 known preferences, assumptions `0207` has 17 known members, and scenario usage `0208` remains empty/Pending. Known members do not complete an inventory. The owner approved full checked disposition authority on October 14; complete catalogue/default and outside-origin accounting remain pending. Partial scalar success or local Config proof cannot clear global fallback. Typed defaults reach Player/Enemy/Environment inputs and the real Player resistance penalty is published. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
+| Final incoming-critical ownership | Revised October 14: recommend existing stat-owned Player receivers for final results, preserving exact Enemy Stat/Flag reads and own-Stat writes through the current graph. Keep shared Actor intrinsic/source contributions and Partial inventory unchanged. The revised choice is prompted and pending; no new authority is approved. Rebase old provisional IDs and reuse published raw inputs before native data adoption. [Proposal](owned-actor-enemy-reads-proposal.md). |
+| Configuration/source dispositions | Presentation, exact item-range ownership and common checked leaf accounting are implemented; full semantic closure is not. Original05 issue `01f2` now retains 32 source origins after damage-roll accounting and three default-input publications; older origin counts are historical. Preset usage `0505` has 23 known preferences, assumptions `0207` has 20 known members, and scenario usage `0208` remains empty/Pending. Known members do not complete an inventory. The owner approved full checked disposition authority on October 14; complete catalogue/default and outside-origin accounting remain pending. Partial scalar success or local Config proof cannot clear global fallback. Typed defaults reach Player/Enemy/Environment inputs and the real Player resistance penalty is published. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
 | Selected passive receiving | Growing Swarm's complete default two-effect owner and Sniper receiving are published through existing contracts. Conditional/unconditional cooldown sums stay distinct; final duration, area/radius, other minion receivers and complete contributor coverage remain open. [Packet and limits](../data/owned/poe2/3887ae68/growing-swarm/README.md). |

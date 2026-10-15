@@ -1,0 +1,48 @@
+[
+  {
+    "id": "authored-enemy-critical-strike-chance",
+    "selector": {
+      "lane": "input_number",
+      "name": "enemyCritChance"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003371"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "overwritten-enemy-critical-strike-chance-placeholder",
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "enemyCritChance"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003371"
+          }
+        }
+      }
+    ]
+  }
+]
