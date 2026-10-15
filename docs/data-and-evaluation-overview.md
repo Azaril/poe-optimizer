@@ -17,7 +17,16 @@ build support.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
 
-The [ailment-count packet](../data/owned/poe2/3887ae68/configuration-enemy-ailment-stack-inputs/README.md)
+The current [Player activity packet](../data/owned/poe2/3887ae68/configuration-player-activity-inputs/README.md)
+adds raw Warcry-use, recent-stun, distinct-ammunition and distinct-grenade counts
+through the existing Player Scenario-input contract. Source selection and exact
+saved-lane accounting remain separate from activation, clamps, time windows and
+modifier delivery. All-five publication/rebuild and 88 controls pass. Original05
+now has **21 remaining configuration origins and 31 known assumptions**; all
+four complete input inventories are still Pending. See the
+[current endpoint](implementation.md#current-checkpoint-configuration-admission).
+
+The preceding [ailment-count packet](../data/owned/poe2/3887ae68/configuration-enemy-ailment-stack-inputs/README.md)
 preserves raw Shock, Scorch and Chill counts on the scenario Enemy. Existing
 injected import selectors preserve their different treatment of authored zero;
 all three use constructor candidate one. Activation, stack limits and actual
@@ -25,9 +34,8 @@ effects remain separate calculations. All five imports and 110 queries survive
 the production CLI publication/rebuild and 66 controls. The subsequent
 [empty Party accounting](../data/owned/poe2/3887ae68/source-empty-party/README.md)
 proves a unique childless fresh-load frame is source-only presentation intent,
-without classifying any actual Party payload. Original05 now has 25 remaining
-configuration origins and 27 known assumptions; its four complete input
-inventories are still Pending. Historical singleton and distance-output
+without classifying any actual Party payload. That predecessor has 25 remaining
+configuration origins and 27 known assumptions. Historical singleton and distance-output
 publications also reproduce exactly after the shared test harness change. See
 the [current endpoint](implementation.md#current-checkpoint-configuration-admission).
 

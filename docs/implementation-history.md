@@ -1,10 +1,86 @@
-> Historical snapshots through the Critical Weakness checkpoint on 2026-10-15.
+> Historical snapshots through the empty Party checkpoint on 2026-10-15.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-15 checkpoint: ailment inputs and empty Party
+
+The [ailment-count packet](../data/owned/poe2/3887ae68/configuration-enemy-ailment-stack-inputs/README.md)
+publishes three raw Enemy Scenario inputs: Shock `3391`, Scorch `3392` and Chill
+`3393`, using existing Count unit `295a`. Their injected constructor candidate is
+one. Shock and Chill select nonzero Input before Placeholder; Scorch preserves
+Input zero. Raw candidates remain distinct from callback emission, activation,
+stack limits and the resulting ailment effects. No gameplay program, receiver or
+completed supplier inventory is added.
+
+The ailment publication preserves all five originals, all 110 queries and selected
+issue counts **106/117/109/123/4**, and exactly rebuilds all eighteen artifacts.
+Original05's configuration-linked origins fall **29 → 26** (11 inside Config,
+15 outside), and known assumptions increase **24 → 27**. Its 35 usage preferences,
+20 usage links and four selected input obligations remain unchanged. Complete
+native evaluations remain **0/5**.
+
+The subsequent [empty Party packet](../data/owned/poe2/3887ae68/source-empty-party/README.md)
+accounts for one unique, ordinary childless root Party frame. Complete pinned
+construction/load/control bodies prove that its destination and Boolean fields
+only configure future import and display actions for this fresh-load domain.
+Unknown attributes, children, malformed tokens, namespaces and duplicate frames
+remain unresolved. Existing semantic links cannot be taken over. No numerical
+input, rule, allocator identity, native inventory or issue changes.
+
+That final production publication/rebuild passes for all five originals in 32.03s,
+with exact draft/sidecar inverses. Original05 now has **25 configuration-linked
+origins** (11 inside Config, 14 outside), **27 known assumptions**, 35 usage
+preferences and all four selected input obligations. Arbitrary Party payloads,
+`Import.exportParty` and later explicit user actions are outside this proof.
+
+Current package:
+**`runs/owned-empty-party-publication-02/package`**.
+
+- Input: `34ba87395f5fa7fdaa2c89fd9eb653b2e064f63e6b693b29b303e9c15b7bae2d`.
+- Registry: `f2eeace4e8c0a7f4f0452b2f5f981ab54f6eae6e90414017195d8b6d88c89b0a` (last `3393`).
+- Definitions: `ad2fc18e6bd61a446f28f655b4a544c563a7d5a8608759a93af15be3d5374fc5`.
+- Rules: `4b59f9dd49004986b45f1227724e289ef3cd92d3b5f51dd450ffbbc16cc50f30`.
+- Compiled: `1ffc6341e470df1063a4fb3ba0c47d20d5421e7f6893ed2e93b69f2b9b598d3b`.
+
+The package has **64,442,852 bytes**, 190 provenance rows and unchanged
+8187/8192 program use. The ailment predecessor has 64,442,635 bytes and input
+`3ceae31848fd5c1b2c0c67532a440a8f95f0666b2333cdc0ac7dcb77717e8843`.
+Four new ailment ordinary checks plus six historical source checks
+pass; strict Clippy passes for all four targets. The all-five publication and
+66 source/Encounter/duplicate controls pass in 104.54s. The earlier ordinary
+failure identified missing accounting-row IDs, corrected before publication.
+Original source evidence is unchanged. Logs:
+`runs/owned-configuration-ailment-stack-{ordinary-02,clippy-01,publication-01}.log`.
+The shared publication harness now validates explicit source/output partitions.
+Historical singleton and two-output distance publications pass in 62.10s and
+56.10s, reproducing all eighteen original package files byte for byte. Logs:
+`runs/owned-configuration-ailment-stack-{singleton,distance}-regression-01.log`.
+
+Party validation passes sixteen Import tests, four CLI ordinary checks and
+strict Clippy for both targets. Publication02 reproduces all eighteen files from
+publication01 exactly. The current-data cached-Buffs disable/re-enable regression
+also passes (51.82s), restoring the full release input and preserving all five
+imports. Its obsolete historical orchestration is removed: the earlier endpoint
+contains retired `ordered_contributions` and is not supported by the current
+parser. Source witnesses remain immutable; no compatibility reader is added.
+The first current-data replay exposed a missing test baseline directory, restored
+before the successful run. Logs:
+`runs/owned-empty-party-{import-01,cli-03,cached-regression-02,publication-02,cli-clippy-01}.log`.
+
+**Follow-up:** when implementing ailment effects, investigate the pinned Chill
+breakdown branch's use of Shock stack names at `CalcPerform.lua:3258`, while
+the preceding calculation uses Chill stacks. This is an apparent display
+inconsistency, not an accepted mechanics exception. The bounded review found no
+direct Scorch-stack runtime reader; that is not proof of an absent game effect.
+The next input slice is the four raw Player activity counts. Preflight confirms
+the existing Player Scenario binding and nonzero-Input/Placeholder selector,
+with constructor one. Warcry and Stunned callback clamps and conditions, and
+Ammo/Grenade applicability and inventory limits, remain separate downstream
+mechanics. Do not clamp imported candidates or import the source's preview mode.
 
 ## Archived 2026-10-15 checkpoint: Critical Weakness input
 

@@ -1,0 +1,161 @@
+{
+  "spans": [
+    {
+      "first": 1498,
+      "sha256": "4cd6b266bfdfd0fe9d5d533f0da051e510f7315b9912fe202316b573181d0d8c",
+      "last": 1505,
+      "path": "src/Modules/ConfigOptions.lua",
+      "body": "\t{ var = \"conditionUsedWarcryRecently\", type = \"check\", label = \"Have you used a Warcry Recently?\", ifFlag = \"warcry\", implyCondList = {\"UsedWarcryInPast8Seconds\", \"UsedSkillRecently\"}, tooltip = \"This also implies that you have used a Skill Recently.\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Condition:UsedWarcryRecently\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Combat\" })\n\t\tmodList:NewMod(\"Condition:UsedWarcryInPast8Seconds\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Combat\" })\n\t\tmodList:NewMod(\"Condition:UsedSkillRecently\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Combat\" })\n\tend },\n\t{ var = \"multiplierWarcryUsedRecently\", type = \"count\", label = \"# of Warcries Used Recently:\", defaultPlaceholderState = 1, ifOption = \"conditionUsedWarcryRecently\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:WarcryUsedRecently\", \"BASE\", m_min(val, 100), \"Config\", { type = \"Condition\", var = \"Combat\" }, { type = \"Condition\", var = \"UsedWarcryRecently\" } )\n\tend },",
+      "role": "warcry-condition-and-count-callback"
+    },
+    {
+      "first": 1277,
+      "sha256": "d9ffc116950bb97c67d5dad81bc4d4713113de995572337482abfc59c15263d0",
+      "last": 1283,
+      "path": "src/Modules/ConfigOptions.lua",
+      "body": "\t{ var = \"conditionStunnedRecently\", type = \"check\", label = \"Have you been Stunned Recently?\", ifCond = \"StunnedRecently\", implyCond = \"BeenHitRecently\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Condition:StunnedRecently\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Combat\" })\n\t\tmodList:NewMod(\"Condition:BeenHitRecently\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Combat\" })\n\tend },\n\t{ var = \"multiplierStunnedRecently\", type = \"count\", label = \"# of times Stunned Recently:\", ifOption = \"conditionStunnedRecently\", defaultPlaceholderState = 1, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:StunnedRecently\", \"BASE\", m_min(val, 100), \"Config\", { type = \"Condition\", var = \"Combat\" }, { type = \"Condition\", var = \"StunnedRecently\" } )\n\tend },",
+      "role": "stunned-condition-and-count-callback"
+    },
+    {
+      "first": 1657,
+      "sha256": "97e51e2e65ab592cdd961197bb78ff1fcfb3f4b761aad2a8457b7dbb9921c357",
+      "last": 1662,
+      "path": "src/Modules/ConfigOptions.lua",
+      "body": "\t{ var = \"multiplierDifferentAmmoFired\", type = \"count\", label = \"# different Ammo Types Shot past 10s\", tooltip = \"Number of different Ammunition types used in tha past 10s\", ifMult = \"DifferentAmmoFired\", defaultPlaceholderState = 1, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:DifferentAmmoFired\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },\n\t{ var = \"multiplierDifferentGrenadeFired\", type = \"count\", label = \"# different Grenade Types Shot past 10s\", tooltip = \"Number of different Grenade types used in tha past 10s\", ifMult = \"DifferentGrenadeFired\", defaultPlaceholderState = 1, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:DifferentGrenadeFired\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },",
+      "role": "ammunition-and-grenade-count-callbacks"
+    },
+    {
+      "first": 907,
+      "sha256": "b7c5aa65e5c776a6fd9d775002cfe72a272ac0d726505b27c112933ebe77e6b9",
+      "last": 913,
+      "path": "src/Classes/ConfigTab.lua",
+      "body": "\t\telseif node.elem == \"Placeholder\" then\n\t\t\tif not node.attrib.name then\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Placeholder' element missing name attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\t\tif node.attrib.number then\n\t\t\t\tself.configSets[configSetId].placeholder[node.attrib.name] = tonumber(node.attrib.number)",
+      "role": "saved-placeholder-loading"
+    },
+    {
+      "first": 1174,
+      "sha256": "fd243cb8fac97cc84d0e8804c1d0ddef80ff44310943e482d35ba93e1961c098",
+      "last": 1200,
+      "path": "src/Classes/ConfigTab.lua",
+      "body": "\tlocal input = self.configSets[self.activeConfigSetId].input\n\tlocal placeholder = self.configSets[self.activeConfigSetId].placeholder\n\tself:UpdateLevel() -- enemy level handled here because it's needed to correctly set boss stats\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.apply then\n\t\t\tif varData.type == \"check\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(true, modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"count\" or varData.type == \"integer\" or varData.type == \"countAllowZero\" or varData.type == \"float\" then\n\t\t\t\tif input[varData.var] and (input[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\telseif placeholder[varData.var] and (placeholder[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(placeholder[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"list\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"text\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\t-- Apply Custom Modifier groups",
+      "role": "numeric-callback-dispatch"
+    },
+    {
+      "first": 1317,
+      "sha256": "eecdb417eac994f9ab210f213aa7fe2e99740c3988cc2318ad452cb6e20de2a5",
+      "last": 1333,
+      "path": "src/Classes/ConfigTab.lua",
+      "body": "function ConfigTabClass:CreateConfigSet(configSetId, title)\n\tlocal configSet = { id = configSetId, title = title, input = {}, placeholder = {}, customModsList = { { title = \"Default\", enabled = true, text = \"\" } } }\n\tif not configSetId then\n\t\tconfigSet.id = #self.configSets + 1\n\tend\n\t-- there are default values for input and placeholder that every new config set needs to have\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.var then\n\t\t\tconfigSet.input[varData.var] = varData.defaultState\n\t\t\tconfigSet.placeholder[varData.var] = varData.defaultPlaceholderState\n\t\t\tif varData.defaultIndex then\n\t\t\t\tconfigSet.input[varData.var] = varData.list[varData.defaultIndex].val\n\t\t\tend\n\t\tend\n\tend\n\tself.configSets[configSet.id] = configSet\n\treturn configSet",
+      "role": "fresh-placeholder-constructor"
+    },
+    {
+      "first": 1554,
+      "sha256": "4326f3eaf4e1a567d3677c79f532378630d088869fa001fa43e4a31490b17b8e",
+      "last": 1555,
+      "path": "src/Modules/ModParser.lua",
+      "body": "\t[\"for each type of ammunition fired in the past (%d+) seconds\"] = { tag = { type = \"Multiplier\", var = \"DifferentAmmoFired\", limitVar = \"AmmoTypes\" } },\n\t[\"for every different grenade fired in the past (%d+) seconds\"] = { tag = { type = \"Multiplier\", var = \"DifferentGrenadeFired\", limitVar = \"GrenadeTypes\" } },",
+      "role": "ammunition-and-grenade-multiplier-limits"
+    },
+    {
+      "first": 2010,
+      "sha256": "1a0644f5c6f799377b2a9254eb6e7a138ab47932dabb47dbb9feec1e35e7780c",
+      "last": 2011,
+      "path": "src/Modules/ModParser.lua",
+      "body": "\t[\"for each time you[' ]h?a?ve warcried recently\"] = { tag = { type = \"Multiplier\", var = \"WarcryUsedRecently\" } },\n\t[\"for each time you[' ]h?a?ve been stunned recently\"] = { tag = { type = \"Multiplier\", var = \"StunnedRecently\" } },",
+      "role": "warcry-and-stunned-multiplier-tags"
+    },
+    {
+      "first": 421,
+      "sha256": "06b3a32cacf28e379a78ea16fa831b5736ded10c6fad3806b89b3ad500abc2a0",
+      "last": 423,
+      "path": "src/Classes/ModStore.lua",
+      "body": "function ModStoreClass:GetMultiplier(var, cfg, noMod)\n\treturn (not noMod and self:Override(cfg, multiplierName[var])) or (self.multipliers[var] or 0) + (self.parent and self.parent:GetMultiplier(var, cfg, true) or 0) + (not noMod and self:Sum(\"BASE\", cfg, multiplierName[var]) or 0)\nend",
+      "role": "generic-multiplier-lookup-boundary"
+    },
+    {
+      "first": 490,
+      "sha256": "2e51de2030919cbfaa1cba9d2c347595015f07801e0812d18a48bebddbf028c7",
+      "last": 573,
+      "path": "src/Classes/ModStore.lua",
+      "body": "function ModStoreClass:EvalMod(mod, cfg, globalLimits)\n\tlocal value = mod.value\n\tlocal GetStat = self.GetStat\n\tlocal GetMultiplier = self.GetMultiplier\n\tlocal GetCondition = self.GetCondition\n\tfor _, tag in ipairs(mod) do\n\t\tif tag.type == \"Multiplier\" then\n\t\t\tlocal target = self\n\t\t\tlocal limitTarget = self\n\n\t\t\t-- Allow limiting a self multiplier on a parent multiplier (eg. Agony Crawler on player virulence)\n\t\t\t-- This explicit target is necessary because even though the GetMultiplier method does call self.parent.GetMultiplier, it does so with noMod = true,\n\t\t\t-- disabling the summation (3rd part): (not noMod and self:Sum(\"BASE\", cfg, multiplierName[var]) or 0)\n\t\t\tif tag.limitActor then\n\t\t\t\tlocal limitActor = getActor(self, tag.limitActor)\n\t\t\t\tif limitActor then\n\t\t\t\t\tlimitTarget = limitActor.modDB\n\t\t\t\telse\n\t\t\t\t\treturn\n\t\t\t\tend\n\t\t\tend\n\t\t\tif tag.actor then\n\t\t\t\tlocal actor = getActor(self, tag.actor)\n\t\t\t\tif actor then\n\t\t\t\t\ttarget = actor.modDB\n\t\t\t\telse\n\t\t\t\t\treturn\n\t\t\t\tend\n\t\t\tend\n\t\t\tlocal base = 0\n\t\t\tif tag.varList then\n\t\t\t\tfor _, var in pairs(tag.varList) do\n\t\t\t\t\tbase = base + GetMultiplier(target, var, cfg)\n\t\t\t\tend\n\t\t\telse\n\t\t\t\tbase = GetMultiplier(target, tag.var, cfg)\n\t\t\tend\n\t\t\tif tag.divVar then\n\t\t\t\ttag.div = GetMultiplier(self, tag.divVar, cfg)\n\t\t\tend\n\t\t\tlocal mult = m_floor(base / (tag.div or 1) + 0.0001)\n\t\t\tlocal limitTotal\n\t\t\tlocal limitNegTotal\n\t\t\tif tag.limit or tag.limitVar then\n\t\t\t\tlocal limit = tag.limit or GetMultiplier(limitTarget, tag.limitVar, cfg)\n\t\t\t\tif tag.limitTotal then\n\t\t\t\t\tlimitTotal = limit\n\t\t\t\telseif tag.limitNegTotal then\n\t\t\t\t\tlimitNegTotal = limit\n\t\t\t\telse\n\t\t\t\t\tmult = m_min(mult, limit)\n\t\t\t\tend\n\t\t\tend\n\t\t\tif tag.invert and mult ~= 0 then\n\t\t\t\tmult = 1 / mult\n\t\t\tend\n\t\t\tif type(value) == \"table\" then\n\t\t\t\tvalue = copyTable(value)\n\t\t\t\tif value.mod then\n\t\t\t\t\tvalue.mod.value = value.mod.value * mult + (tag.base or 0)\n\t\t\t\t\tif limitTotal then\n\t\t\t\t\t\tvalue.mod.value = m_min(value.mod.value, limitTotal)\n\t\t\t\t\tend\n\t\t\t\t\tif limitNegTotal then\n\t\t\t\t\t\tvalue.mod.value = m_max(value.mod.value, limitNegTotal)\n\t\t\t\t\tend\n\t\t\t\telse\n\t\t\t\t\tvalue.value = value.value * mult + (tag.base or 0)\n\t\t\t\t\tif limitTotal then\n\t\t\t\t\t\tvalue.value = m_min(value.value, limitTotal)\n\t\t\t\t\tend\n\t\t\t\t\tif limitNegTotal then\n\t\t\t\t\t\tvalue.value = m_max(value.value, limitNegTotal)\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\telse\n\t\t\t\tvalue = value * mult + (tag.base or 0)\n\t\t\t\tif limitTotal then\n\t\t\t\t\tvalue = m_min(value, limitTotal)\n\t\t\t\tend\n\t\t\t\tif limitNegTotal then\n\t\t\t\t\tvalue = m_max(value, limitNegTotal)\n\t\t\t\tend\n\t\t\tend",
+      "role": "generic-multiplier-consumption-boundary"
+    }
+  ],
+  "constructor_dependencies": [
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/source-comparison.json",
+      "sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-review.json",
+      "sha256": "d8f7abf2202ace98318d9c3c80be31ea77c3d9d17a307a174e866fc9c44fa9d5"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-bodies.json",
+      "sha256": "1b470cb8f843655071fe8fe38d7075b974085debf683581813f20ea286a92d20"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-auxiliary-bodies.json",
+      "sha256": "b0e1f431cc964c38040abdab36618401e5f3e77407020b58df364ff31574e1a2"
+    }
+  ],
+  "kind": "configured-player-activity-inputs",
+  "license": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/LICENSE.md",
+  "schema_version": 1,
+  "archives": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "encoding": "utf8",
+      "artifact_sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "encoding": "utf8",
+      "artifact_sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "artifact_sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466",
+      "bytes": 677245,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModParser.lua.gz",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "artifact_sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b",
+      "bytes": 36471,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    }
+  ],
+  "scope": {
+    "target": "player",
+    "native_clamp": false,
+    "coverage_completed": false,
+    "admitted_range": [
+      -1000000,
+      1000000
+    ],
+    "constructor": 1,
+    "skip_input_zero": true,
+    "native_modifier_delivery": false,
+    "candidate_is_activated_effect": false,
+    "mutation_source_observations": false,
+    "raw_configured_amounts": true,
+    "new_source_execution": false,
+    "native_conditions": false
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+}

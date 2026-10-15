@@ -1,0 +1,282 @@
+[
+  {
+    "source_name": "multiplierWarcryUsedRecently",
+    "value_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003394"
+    },
+    "target": "player",
+    "recipe": {
+      "id": "configured-player-warcry-count",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "quantity",
+          "value": {
+            "syntax": "scientific",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            },
+            "scale": {
+              "numerator": 1,
+              "denominator": 1
+            }
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "input_number",
+              "name": "multiplierWarcryUsedRecently"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    },
+    "constructor_default": {
+      "kind": "quantity",
+      "value": {
+        "value": 1,
+        "unit": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000295a"
+        }
+      }
+    },
+    "ignore_numeric_placeholder": false,
+    "selection": "nonzero_input_then_placeholder"
+  },
+  {
+    "source_name": "multiplierStunnedRecently",
+    "value_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003395"
+    },
+    "target": "player",
+    "recipe": {
+      "id": "configured-player-stunned-count",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "quantity",
+          "value": {
+            "syntax": "scientific",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            },
+            "scale": {
+              "numerator": 1,
+              "denominator": 1
+            }
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "input_number",
+              "name": "multiplierStunnedRecently"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    },
+    "constructor_default": {
+      "kind": "quantity",
+      "value": {
+        "value": 1,
+        "unit": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000295a"
+        }
+      }
+    },
+    "ignore_numeric_placeholder": false,
+    "selection": "nonzero_input_then_placeholder"
+  },
+  {
+    "source_name": "multiplierDifferentAmmoFired",
+    "value_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003396"
+    },
+    "target": "player",
+    "recipe": {
+      "id": "configured-player-ammunition-count",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "quantity",
+          "value": {
+            "syntax": "scientific",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            },
+            "scale": {
+              "numerator": 1,
+              "denominator": 1
+            }
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "input_number",
+              "name": "multiplierDifferentAmmoFired"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    },
+    "constructor_default": {
+      "kind": "quantity",
+      "value": {
+        "value": 1,
+        "unit": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000295a"
+        }
+      }
+    },
+    "ignore_numeric_placeholder": false,
+    "selection": "nonzero_input_then_placeholder"
+  },
+  {
+    "source_name": "multiplierDifferentGrenadeFired",
+    "value_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003397"
+    },
+    "target": "player",
+    "recipe": {
+      "id": "configured-player-grenade-count",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "quantity",
+          "value": {
+            "syntax": "scientific",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            },
+            "scale": {
+              "numerator": 1,
+              "denominator": 1
+            }
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "input_number",
+              "name": "multiplierDifferentGrenadeFired"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    },
+    "constructor_default": {
+      "kind": "quantity",
+      "value": {
+        "value": 1,
+        "unit": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000295a"
+        }
+      }
+    },
+    "ignore_numeric_placeholder": false,
+    "selection": "nonzero_input_then_placeholder"
+  }
+]

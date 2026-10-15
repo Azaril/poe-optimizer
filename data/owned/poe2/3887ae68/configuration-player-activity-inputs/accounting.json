@@ -1,0 +1,186 @@
+[
+  {
+    "id": "checked-player-warcry-input_number",
+    "selector": {
+      "name": "multiplierWarcryUsedRecently",
+      "lane": "input_number"
+    },
+    "destinations": [
+      {
+        "control": {
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003394"
+          },
+          "kind": "scalar_input"
+        },
+        "kind": "adapter"
+      }
+    ]
+  },
+  {
+    "id": "checked-player-warcry-placeholder_number",
+    "selector": {
+      "name": "multiplierWarcryUsedRecently",
+      "lane": "placeholder_number"
+    },
+    "destinations": [
+      {
+        "control": {
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003394"
+          },
+          "kind": "scalar_input"
+        },
+        "kind": "adapter"
+      }
+    ]
+  },
+  {
+    "id": "checked-player-stunned-input_number",
+    "selector": {
+      "name": "multiplierStunnedRecently",
+      "lane": "input_number"
+    },
+    "destinations": [
+      {
+        "control": {
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003395"
+          },
+          "kind": "scalar_input"
+        },
+        "kind": "adapter"
+      }
+    ]
+  },
+  {
+    "id": "checked-player-stunned-placeholder_number",
+    "selector": {
+      "name": "multiplierStunnedRecently",
+      "lane": "placeholder_number"
+    },
+    "destinations": [
+      {
+        "control": {
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003395"
+          },
+          "kind": "scalar_input"
+        },
+        "kind": "adapter"
+      }
+    ]
+  },
+  {
+    "id": "checked-player-ammunition-input_number",
+    "selector": {
+      "name": "multiplierDifferentAmmoFired",
+      "lane": "input_number"
+    },
+    "destinations": [
+      {
+        "control": {
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003396"
+          },
+          "kind": "scalar_input"
+        },
+        "kind": "adapter"
+      }
+    ]
+  },
+  {
+    "id": "checked-player-ammunition-placeholder_number",
+    "selector": {
+      "name": "multiplierDifferentAmmoFired",
+      "lane": "placeholder_number"
+    },
+    "destinations": [
+      {
+        "control": {
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003396"
+          },
+          "kind": "scalar_input"
+        },
+        "kind": "adapter"
+      }
+    ]
+  },
+  {
+    "id": "checked-player-grenade-input_number",
+    "selector": {
+      "name": "multiplierDifferentGrenadeFired",
+      "lane": "input_number"
+    },
+    "destinations": [
+      {
+        "control": {
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003397"
+          },
+          "kind": "scalar_input"
+        },
+        "kind": "adapter"
+      }
+    ]
+  },
+  {
+    "id": "checked-player-grenade-placeholder_number",
+    "selector": {
+      "name": "multiplierDifferentGrenadeFired",
+      "lane": "placeholder_number"
+    },
+    "destinations": [
+      {
+        "control": {
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003397"
+          },
+          "kind": "scalar_input"
+        },
+        "kind": "adapter"
+      }
+    ]
+  }
+]
