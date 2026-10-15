@@ -56,6 +56,9 @@ mod gigantic_family;
 mod gigantic_native;
 #[path = "support/owned_sniper_inherent_life_native.rs"]
 mod inherent_life_native;
+#[allow(dead_code)]
+#[path = "support/owned_life_equipment_domain.rs"]
+mod life_equipment_domain_family;
 #[path = "support/owned_sniper_life_increase.rs"]
 mod life_increase_native;
 #[path = "support/owned_sniper_life_queries.rs"]

@@ -227,6 +227,60 @@ fn census(rules: &RulePackageInput, guarded: bool) {
             "an application Life writer needs separately reviewed membership");
     }
 }
+/// Authenticate this component within a later release without requiring it to
+/// be the final provenance entry. Unrelated schema additions may follow it.
+pub fn assert_component(endpoint: &StagedOwnedRelease) {
+    check_component_rules(&endpoint.input().recipe.rules);
+    let d = dependencies();
+    let digest = digest_owned(KIND, &FILES.map(read::<Value>), 1024 * 1024).unwrap();
+    assert_eq!(
+        endpoint
+            .receipt()
+            .provenance
+            .iter()
+            .filter(|p| p.kind.as_str() == KIND
+                && p.prior_input == d.before
+                && p.authoring_input == digest)
+            .count(),
+        1
+    );
+}
+pub fn check_component_rules(rules: &RulePackageInput) {
+    check_authored();
+    let d = dependencies();
+    assert_eq!(rules.operations_version, d.operations_version);
+    let mut expected = d.owner.clone();
+    for program in programs() {
+        let id = program.id.clone();
+        *expected
+            .programs
+            .members
+            .iter_mut()
+            .find(|p| p.id == id)
+            .unwrap() = program;
+    }
+    assert_eq!(
+        rules
+            .owners
+            .iter()
+            .filter(|o| o.owner == expected.owner)
+            .collect::<Vec<_>>(),
+        [&expected]
+    );
+    let query = query();
+    assert_eq!(
+        rules
+            .contribution_queries
+            .as_ref()
+            .unwrap()
+            .members
+            .iter()
+            .filter(|q| q.id == query.id)
+            .collect::<Vec<_>>(),
+        [&query]
+    );
+    census(rules, true);
+}
 pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     check_authored();
     let d = dependencies();

@@ -20,9 +20,22 @@ const DELIVERY: &str = "contribute-player-flat-life";
 /// Authenticate the reviewed Life changes since the original routing/query
 /// packet before admitting them to this finite graph. No historical runtime body.
 pub(super) fn check_current_packet(endpoint: &StagedOwnedRelease) {
+    // Authenticate once before any joined component installs current programs.
+    // Unrelated later releases may add schema or normalization without changing
+    // this exact guarded owner, potential-writer census or contribution query.
+    life_equipment_domain_family::assert_component(endpoint);
+    check_prior_components(endpoint);
+}
+fn check_prior_components(endpoint: &StagedOwnedRelease) {
     life_routing_family::check_authored();
     amulet_life_family::check_authored();
-    minion_inherent_family::assert_component(endpoint);
+    let equipment = life_equipment_domain_family::dependencies();
+    let current_query = life_equipment_domain_family::query();
+    minion_inherent_family::assert_component_with_reviewed_query(
+        endpoint,
+        &equipment.query,
+        &current_query,
+    );
     let minion = minion_inherent_family::dependencies();
     let minion_after = minion_inherent_family::owner_after();
     let minion_query = minion_inherent_family::query();
@@ -41,6 +54,17 @@ pub(super) fn check_current_packet(endpoint: &StagedOwnedRelease) {
     // evidence. It removes no numeric/routing/contributor obligation.
     gaps.retain(|g| g.code != key("canonical-input-admission-unproved"));
     assert_eq!(gaps.len(), 4);
+    assert_eq!(expected, equipment.owner);
+    let mut guarded = expected.clone();
+    for program in life_equipment_domain_family::programs() {
+        let id = program.id.clone();
+        *guarded
+            .programs
+            .members
+            .iter_mut()
+            .find(|p| p.id == id)
+            .unwrap() = program;
+    }
     let rules = &endpoint.input().recipe.rules;
     assert_eq!(
         rules
@@ -48,7 +72,7 @@ pub(super) fn check_current_packet(endpoint: &StagedOwnedRelease) {
             .iter()
             .find(|o| o.owner == expected.owner)
             .unwrap(),
-        &expected
+        &guarded
     );
     for row in replacements.iter().skip(1) {
         let mut expected = row.after.clone();
@@ -75,6 +99,7 @@ pub(super) fn check_current_packet(endpoint: &StagedOwnedRelease) {
     life_query_family::assert_component_with_reviewed_donors(
         endpoint,
         &[
+            (&equipment.owner, &guarded, &equipment.query, &current_query),
             (
                 &minion.owner_before,
                 &minion_after,
@@ -84,6 +109,73 @@ pub(super) fn check_current_packet(endpoint: &StagedOwnedRelease) {
             (&replacements[0].before, &expected, &deps.query, &copy.query),
         ],
     );
+}
+
+#[test]
+#[ignore = "requires current joined Sniper release"]
+fn current_life_component_allows_later_provenance_but_rejects_guard_or_query_drift() {
+    use poe_optimizer_import::owned_release::{OwnedReleaseProvenance, assemble_owned_release};
+    let endpoint = release::load(&path());
+    check_current_packet(&endpoint);
+    let mut input = endpoint.input().clone();
+    input.provenance.push(OwnedReleaseProvenance {
+        kind: key("fixture-unrelated-later-publication"),
+        prior_input: endpoint.receipt().input,
+        authoring_input: endpoint.receipt().input,
+    });
+    let later = assemble_owned_release(input, Default::default()).unwrap();
+    assert_ne!(later.receipt().input, endpoint.receipt().input);
+    check_current_packet(&later);
+    for mutation in 0..3 {
+        let mut rules = later.input().recipe.rules.clone();
+        if mutation == 2 {
+            rules
+                .contribution_queries
+                .as_mut()
+                .unwrap()
+                .members
+                .iter_mut()
+                .find(|q| q.id == key("life-base-contributions"))
+                .unwrap()
+                .groups
+                .iter_mut()
+                .find(|g| g.id == key("equipment"))
+                .unwrap()
+                .members
+                .members
+                .pop();
+        } else {
+            let owner = rules
+                .owners
+                .iter_mut()
+                .find(|o| o.owner == subject(d::<ModifierDefinition>(0x3100)))
+                .unwrap();
+            if mutation == 0 {
+                let program = owner
+                    .programs
+                    .members
+                    .iter_mut()
+                    .find(|p| p.id == key(DELIVERY))
+                    .unwrap();
+                let RuleEffectKind::Contribute { value, .. } = &mut program.effects[0].effect
+                else {
+                    panic!()
+                };
+                *value = key("life-points");
+            } else {
+                owner
+                    .programs
+                    .members
+                    .retain(|p| p.id != key("effective-amount"));
+            }
+        }
+        assert!(
+            std::panic::catch_unwind(|| life_equipment_domain_family::check_component_rules(
+                &rules
+            ))
+            .is_err()
+        );
+    }
 }
 #[derive(Clone)]
 struct ItemSource {

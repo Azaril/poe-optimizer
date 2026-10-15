@@ -107,6 +107,11 @@ dependency of this proof; increasing it requires new proof and affected identity
 invalidation. Upstream magnitude/routing coverage, four flat-Life owner gaps,
 cross-group arithmetic and final Player Life remain incomplete. Native/CLI tests
 and checked all-five publication pass without changing queries or input issues.
+The joined Sniper graph also uses those exact published programs and membership,
+with 93 tests passing. Its former fixture-only equipment closure and three
+redundant historical assertions are removed. Component checks retain exact
+owners, writers, queries and receivers while permitting unrelated later release
+changes; they no longer rebuild an old full release solely for these checks.
 See the [current checkpoint](implementation.md#current-checkpoint-bounded-equipment-life-reduction).
 
 The final Player Mana formula is now published as injected rules with its exact

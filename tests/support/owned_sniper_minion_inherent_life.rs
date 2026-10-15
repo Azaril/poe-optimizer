@@ -13,7 +13,8 @@ fn owner() -> SchemaSubject {
 }
 
 pub(super) fn install(sniper: &mut sniper::World, endpoint: &StagedOwnedRelease) {
-    minion_inherent_family::assert_component(endpoint);
+    // World::load has authenticated the reviewed current Life query and its
+    // predecessor; keep the runtime values bound to this current endpoint.
     let program = minion_inherent_family::program();
     assert_eq!(program, player_life_family::program());
     let f = &mut sniper.base.source.base.inner;

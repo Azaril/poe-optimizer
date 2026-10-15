@@ -26,9 +26,9 @@ fn world() -> World {
             .supports_actor_reward_contributions()
     );
     let mut queries = life_query_family::queries();
-    // The current canonical query accounts for numeric Amulet copy and the
-    // supplied Actor's inherent Life. World::load authenticates both inverses.
-    let current = minion_inherent_family::query();
+    // The current canonical query includes Amulet copy, supplied Actor Life and
+    // the proved equipment domain. World::load authenticates every inverse.
+    let current = life_equipment_domain_family::query();
     let target = queries.iter_mut().find(|q| q.id == current.id).unwrap();
     *target = current;
     // Retain the exact published minion receiver membership now that the six
@@ -55,13 +55,9 @@ fn world() -> World {
             f.schema.definitions.push(descriptor);
         }
     }
-    for ((name, kind, unit), mut query) in CHANNELS.into_iter().zip(queries) {
+    for ((name, kind, unit), query) in CHANNELS.into_iter().zip(queries) {
         assert_eq!(query.contribution, kind);
-        // Only this finite diagnostic graph closes equipment's remaining gap.
-        // The packet retains that gap, all donor bodies and no final pool.
-        for group in &mut query.groups {
-            group.members.closure = SchemaClosure::Complete;
-        }
+        assert!(query.groups.iter().all(|group| group.members.is_complete()));
         let stat: StatDefId = def(name);
         let ty = ComputedValueType::Quantity { unit: d(unit) };
         f.schema

@@ -38,7 +38,8 @@ pub(super) fn install(
     endpoint: &StagedOwnedRelease,
     package: &Path,
 ) -> Census {
-    minion_inherent_family::assert_component(endpoint);
+    // World::load authenticates the current Life packet, including its exact
+    // predecessor, before any finite component is installed.
     attribute_flag_family::assert_component_with_reviewed_receivers(
         endpoint,
         &minion_inherent_family::dependencies().receiver_before,

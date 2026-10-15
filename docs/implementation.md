@@ -147,6 +147,20 @@ Logs: `runs/owned-life-equipment-domain-native-05.log`,
 `runs/owned-life-equipment-domain-native-clippy-01.log` and
 `runs/owned-life-equipment-domain-clippy-02.log`.
 
+The subsequent joined Sniper adoption passes **93 tests** against this package
+(the explicit replay-export test is excluded) and strict Clippy for the joined
+and packet targets. It executes the published guarded programs and Complete
+equipment membership; the fixture no longer promotes that group itself.
+Current-component authentication checks the exact owner, seven potential
+writers, query, receivers and relevant provenance without requiring this packet
+to be the last release change. A regression accepts unrelated later provenance
+and rejects a bypassed guard, changed effective producer or removed query member.
+Three redundant historical checks were removed from joined installers; the
+central checked component path retains their coverage. No historical program
+body executes in the joined graph. Logs:
+`runs/owned-life-equipment-domain-joined-04.log` (59.41s) and
+`runs/owned-life-equipment-domain-joined-clippy-01.log`.
+
 **Next blocker selection:** keep Original05 first. Recheck actual selected Life
 suppliers and final resource assembly against this bounded subtotal; do not
 equate component fixtures or a closed query group with complete Player Life.
@@ -155,6 +169,12 @@ reuse existing stat receivers and checked numeric selection, but adjustment,
 override and CI suppliers still need evidence. The six critical numeric
 dependencies and four critical query memberships remain open; observed zero or
 empty source buckets do not establish complete exclusions.
+The selected ordinary jewel socket `7960` / Passive `1b48` is a smaller candidate
+for intrinsic owner/declaration closure: its complete source constructor has no
+intrinsic modifier. Review and publish only that intrinsic domain, preserving
+the separate jewel/radius providers and allocation bookkeeping; an empty
+runtime observation alone is insufficient. Source preparation is in progress
+and will bind the next distance-input endpoint before publication.
 
 The owner's accepted
 [configuration projection contract](owned-configuration-projections-proposal.md)

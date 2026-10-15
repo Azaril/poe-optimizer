@@ -389,6 +389,13 @@ pub fn check_authored() {
     check_source(false);
 }
 fn check_dependencies(endpoint: &StagedOwnedRelease, after: bool) {
+    check_dependencies_with_query(endpoint, after, None);
+}
+fn check_dependencies_with_query(
+    endpoint: &StagedOwnedRelease,
+    after: bool,
+    reviewed: Option<(&ContributionQuery, &ContributionQuery)>,
+) {
     let d = dependencies();
     let recipe = &endpoint.input().recipe;
     let rules = &recipe.rules;
@@ -440,7 +447,13 @@ fn check_dependencies(endpoint: &StagedOwnedRelease, after: bool) {
     let registry = rules.contribution_queries.as_ref().unwrap();
     assert_eq!(registry.closure, d.query_registry_closure);
     assert!(!registry.is_complete());
-    let expected = if after { query() } else { d.query_before };
+    let mut expected = if after { query() } else { d.query_before };
+    if let Some((before, current)) = reviewed {
+        assert!(after);
+        assert_eq!(*before, expected, "reviewed query starts at this packet");
+        assert_eq!(before.id, current.id);
+        expected = current.clone();
+    }
     for row in d.queries.iter().chain([&expected]) {
         assert_eq!(
             registry
@@ -455,6 +468,20 @@ fn check_dependencies(endpoint: &StagedOwnedRelease, after: bool) {
 pub fn assert_component(endpoint: &StagedOwnedRelease) {
     check_authored();
     check_dependencies(endpoint, true);
+    check_provenance(endpoint);
+}
+/// The caller first authenticates the later query change through its own
+/// packet. All original owners, receivers and other queries remain exact.
+pub fn assert_component_with_reviewed_query(
+    endpoint: &StagedOwnedRelease,
+    before: &ContributionQuery,
+    after: &ContributionQuery,
+) {
+    check_authored();
+    check_dependencies_with_query(endpoint, true, Some((before, after)));
+    check_provenance(endpoint);
+}
+fn check_provenance(endpoint: &StagedOwnedRelease) {
     let b: Value = read("bindings.json");
     assert_eq!(
         endpoint
