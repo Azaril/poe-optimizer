@@ -1,10 +1,10 @@
-# Draft Player Mana consumer
+# Guarded Player Mana consumer
 
-**Not published.** This arithmetic fragment uses the existing typed rule engine,
+**Published as a guarded component.** This arithmetic fragment uses the existing typed rule engine,
 including the [checked numeric-domain operation](../../../../../docs/owned-numeric-domain-proposal.md)
 approved October 14. Transformation supplier admission and complete source
-coverage still gate publication. It establishes no complete-build coverage and
-adds no acquisition or runtime backend.
+coverage still gate a production result. Publication establishes no complete-build
+coverage and adds no acquisition or runtime backend.
 
 The program reads the existing intrinsic/inherent Mana groups, reward/passive
 increase groups, MORE group, five typed adjustment collectors and coherent
@@ -37,8 +37,9 @@ component fixture. A separate scalar-boundary test injects all retained
 original-source operands and compares source results; that test does not
 claim those supplied aggregates are native producer implementations.
 
-Validation: all **20 ordinary tests** in that existing target pass; its four
-existing publication tests remain opt-in. The joined
+Validation: all **21 ordinary tests** in that existing target pass; five
+publication tests remain opt-in. The current guarded publication also passes
+explicitly against all five originals. The joined
 fixture derives **638 Mana** from its real producers, responds to level and
 attribute changes, and retains a present zero override. All **16** retained
 source vectors match in forward/reverse order. Missing and Partial dependencies,
@@ -46,12 +47,23 @@ stage ordering and fresh/reused/four-worker comparisons remain checked. The
 new controls cover inclusive and adjacent rounding bounds, extreme finite
 operands, explicit unsupported results through the real contribution graph,
 and a zero override that bypasses ordinary operands while retaining coverage
-requirements. Evidence: `runs/owned-numeric-domain-mana-02.log` (5.20s).
-These controls do not prove transformation suppliers or turn the draft into a
-production release.
+requirements. Evidence: `runs/owned-mana-pool-tests-01.log` (5.19s),
+`runs/owned-mana-pool-publication-01.log` (20.98s), and strict target Clippy in
+`runs/owned-mana-pool-clippy-01.log`. These controls do not prove complete
+transformation suppliers or make the original request executable.
 
 Resource transformations into the Extra/Total channels, item-granted origins,
 global Partial closures and the original build's outstanding input obligations
 remain separate work. The canonical package is
-`runs/owned-numeric-domain-publication-01/package`; this draft has not
-entered that release. The implementation plan records its current identity.
+`runs/owned-mana-pool-publication-01/package`, input
+`fa2829dc2d699ff8aaa0cf5d1e9e13209c466d6d0e979b0bf8450483196dc200`.
+
+The existing full-release assembler adds exactly this owner, its Player receiver,
+a rule-release label and one provenance row. Removing those additions restores
+the complete predecessor authoring input. This is an explicitly reviewed release,
+not a monotonic successor: adding a receiver to an existing complete receiver
+inventory needs explicit review. No previous owner, contribution membership or
+input inventory becomes Complete. No evaluation/stage bundle is added. Only
+`rules.json`, `manifest.json` and `release.json` change; all eighteen artifacts
+rebuild identically. All 110 query rows and selected issue counts
+106/117/109/123/4 survive. The authoring/dependency packets stay offline.

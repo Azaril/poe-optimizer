@@ -1,0 +1,32 @@
+{
+  "kind": "mana-pool",
+  "before": "3ee48944d26b5351ecc267cc2e87637b68a8b6153b7ab2bbc5c906f11e4bd702",
+  "release": "pob-3887ae68-mana-pool-v1",
+  "reason": "guarded-player-mana-arithmetic",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v27",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "artifacts": {
+    "consumer.json": {
+      "bytes": 22167,
+      "sha256": "7f0a3de36840031b6f8268affd4e0612fddda5c314e9e76df7ede44a10131db4"
+    },
+    "dependencies.json": {
+      "bytes": 22640,
+      "sha256": "bbb236c83469fa61324e9484f5dfcfb975f0e875214a06dfabfed8a762c840bc"
+    }
+  },
+  "scope": {
+    "new_programs": 1,
+    "new_receivers": 1,
+    "new_queries": 0,
+    "closed_existing_owners": 0,
+    "supplier_admission": false,
+    "complete_mana": false,
+    "evaluation_bundle": false,
+    "whole_build": false
+  }
+}

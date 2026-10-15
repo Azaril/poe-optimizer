@@ -5,6 +5,8 @@ mod adjustments;
 mod family;
 #[path = "support/owned_mana_override.rs"]
 mod mana_override;
+#[path = "support/owned_mana_pool_publication.rs"]
+mod mana_pool;
 #[path = "support/owned_mana_contribution_queries.rs"]
 mod mana_queries;
 #[path = "support/owned_release_migration_preservation.rs"]
@@ -1114,15 +1116,7 @@ fn publish_mana_override_preserving_all_five_originals() {
 // Draft formula integration. Numeric-domain checks preserve availability; they
 // do not close source coverage or publish this finite component fixture.
 fn pool_world() -> replay::ReplayInput {
-    #[derive(serde::Deserialize)]
-    struct Consumer {
-        owners: Vec<DefinitionRules>,
-        receivers: Vec<StatReceiver>,
-    }
-    let c: Consumer = serde_json::from_slice(
-        &fs::read(family::root().join("data/owned/poe2/3887ae68/mana-pool/consumer.json")).unwrap(),
-    )
-    .unwrap();
+    let c = mana_pool::consumer();
     let mut i = override_world();
     for o in &c.owners {
         assert!(!i.rules.owners.iter().any(|r| r.owner == o.owner));
@@ -1134,6 +1128,26 @@ fn pool_world() -> replay::ReplayInput {
     i.rules.receivers.members.extend(c.receivers);
     i.rebind_test_edit().unwrap();
     i
+}
+#[test]
+fn mana_pool_publication_authenticates_the_same_native_formula_and_dependencies() {
+    mana_pool::check_authored();
+}
+
+#[test]
+#[ignore = "explicit current-package publication; no supplier or request coverage is granted"]
+fn publish_guarded_mana_pool_preserving_all_five_originals() {
+    publication::run_with_expected_selected_counts(
+        PathBuf::from(std::env::var_os("POE_OPTIMIZER_TEST_MANA_POOL_PRIOR").unwrap()),
+        PathBuf::from(std::env::var_os("POE_OPTIMIZER_TEST_MANA_POOL_OUTPUT").unwrap()),
+        &mana_pool::data(),
+        &[],
+        &["authoring.json", "dependencies.json"],
+        mana_pool::stage,
+        json!({"new_programs":1,"new_receivers":1,"new_queries":0,
+            "supplier_admission":false,"complete_mana":false,"whole_build_parity":false}),
+        [106, 117, 109, 123, 4],
+    );
 }
 #[test]
 fn draft_mana_pool_uses_real_level_attributes_reward_and_override_queries() {

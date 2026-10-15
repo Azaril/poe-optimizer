@@ -38,6 +38,16 @@ Original05 retains 35 configuration source links and its four Pending inventorie
 The common accounting owner replaces the older scalar-only leaf mutator; full
 catalogue/default and outside-Config accounting remain unfinished.
 
+The final Player Mana formula is now published as injected rules with its exact
+Player receiver. The existing Rust engine executes its arithmetic, range check
+and optional override; no resource-specific Rust implementation was added.
+Its joined component derives 638 Mana and matches all sixteen retained source
+vectors. Publication preserves all five imports and every previous coverage
+declaration. Source-supplier admission, whole-plan completeness and the production
+evaluation bundle remain pending, so this is not a complete Mana result for an
+unchanged imported build. The current endpoint is recorded in the
+[implementation checkpoint](implementation.md#current-checkpoint-guarded-player-mana-publication).
+
 The current [generated-skill correspondence packet](../data/owned/poe2/3887ae68/warrior-generated-correspondence/README.md)
 reuses an exact Import selector proof across saved physical and generated records.
 That reuse does not transfer physical assignment or provider authority. Eight

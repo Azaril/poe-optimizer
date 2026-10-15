@@ -115,4 +115,7 @@ cargo test --locked -p poe-optimizer-pob --test owned_resource_transformation or
 
 The optional PoB crate owns the witness. No production Core/Data/Engine code,
 runtime package or definition ID changes here. Complete native builds remain
-0/5; the numeric-domain decision and selected-owner completion work remain open.
+0/5. Checked numeric ranges were approved and implemented October 14; the Mana
+formula now uses them in its native component tests. Transformation supplier
+admission and selected-owner completion remain open. This source witness does
+not grant either authority.

@@ -77,7 +77,7 @@ These reference observations are not evidence of native metric completion.
 | Saved query references | Native work to reuse | Remaining final producer |
 | --- | --- | --- |
 | 00: Player Life | Intrinsic/Strength/item/reward contributions and checked Life queries | Complete equipment reduction, adjustments, override/CI behavior and final arithmetic with a proved numerical domain |
-| 01: Player Mana | Intrinsic/Intelligence contributions, checked queries, adjustment collectors, override selection and unpublished consumer with checked numeric domain | Transformation supplier admission and publication |
+| 01: Player Mana | Intrinsic/Intelligence contributions, checked queries, adjustment collectors, override selection and published guarded consumer with checked numeric domain | Transformation supplier admission, whole-plan completion and evaluation binding |
 | 02, 18, 19: Player ES, Armour, Evasion | Selected item magnitude/local-defence intermediates and global/passive contributions | Final item properties, complete receiving, transformations and final Actor totals |
 | 03–06: four capped Player resistances | Item/passive/reward inputs and configured penalty | Complete contributor inventories, aggregation and cap/override calculations |
 | 07–12: total EHP and five maximum hits | Encounter and incoming-damage components | Complete resource/defence dependencies, mitigation and final survivability calculations |
@@ -104,6 +104,40 @@ source-backed publication. Complete inventory proof remains pending. Other selec
 skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
+
+## Current checkpoint: guarded Player Mana publication
+
+The canonical package is **`runs/owned-mana-pool-publication-01/package`**, input
+`fa2829dc2d699ff8aaa0cf5d1e9e13209c466d6d0e979b0bf8450483196dc200`.
+It adds one data-defined final Mana program and one Player receiver through the
+existing full-release assembler. This is an explicit authored release, not a
+monotonic successor: the prior complete receiver inventory needs an explicitly
+reviewed addition. No migration or runtime contract was weakened. An exact
+full-input inverse proves there are no changes beyond the two new rows, the
+rule-release label and one provenance row.
+
+Definitions remain `efa0011ada155c02318c3243315e6e93793a44dadf90e2c917651ab7113dfc20`;
+rules are `ddcaa9908feb626631d9daad4fc428a5c3e71cd51ecb02e1a41e77b2516b4452`;
+compiled rules are `8ce6d75fe957cb2b85ab89ba00603f348b913a66242919854863fad640aaef32`.
+Routing is unchanged. There are eighteen artifacts and 174 provenance rows;
+only `rules.json`, `manifest.json` and `release.json` differ from the configuration
+predecessor. All artifacts rebuild byte-identically. No evaluation bundle is added.
+The five original imports retain all values/local IDs, all 110 query rows and
+selected issue counts **106/117/109/123/4**. Zero prior owner or input inventories
+close, supplier admission remains unproved, and complete builds remain **0/5**.
+
+Validation passes **21 ordinary native tests** (5.19s), the explicit all-five
+publication (20.98s), and strict target Clippy. The native tests use the same
+consumer bytes as publication, derive 638 Mana from real component producers,
+compare sixteen retained source vectors, and check availability, bounds,
+override behavior, stage ordering and fresh/reused/parallel equality. Evidence:
+`runs/owned-mana-pool-{tests-01,publication-01,clippy-01}.log`.
+
+**Resume:** finish the exact selected Mana supplier dispositions below. Formula
+publication is complete; neutral source admission is not. Preserve existing
+whole-plan/registry/input gates and add no zero writers to fill gaps. Continue
+with the closest complete build, Original05, and begin optimizer integration
+only after the complete unchanged request and its reference checks pass.
 
 ## Accepted decisions and next implementation boundary
 
@@ -195,8 +229,8 @@ the policy recipes passes four library and fifty-three configuration tests
 (`runs/owned-configuration-accounting-tests-05.log`).
 
 **First data adoption is published:**
-`runs/owned-configuration-accounting-publication-02/package` is the current
-canonical package, input
+`runs/owned-configuration-accounting-publication-02/package` is the predecessor
+to the guarded Mana publication, input
 `3ee48944d26b5351ecc267cc2e87637b68a8b6153b7ab2bbc5c906f11e4bd702`.
 The [accounting packet](../data/owned/poe2/3887ae68/configuration-accounting/README.md)
 authenticates the twelve-case both-JIT witness, exact pinned source blobs and
@@ -444,19 +478,20 @@ completed all hosted jobs successfully (`37966943229`).
    reference availability/value checks pass. Actor-to-Enemy reads, resource
    demand, new reporting ownership and scoped coverage remain unapproved.
 
-## Unpublished final Mana arithmetic
+## Final Mana arithmetic and remaining supplier admission
 
-The [draft Mana consumer](../data/owned/poe2/3887ae68/mana-pool/README.md)
+The [guarded Mana consumer](../data/owned/poe2/3887ae68/mana-pool/README.md)
 now connects the existing native level, attribute, reward, adjustment and
 override producers through one data-defined rule program. The finite component
 fixture calculates **638 Mana**, changes with level and Intelligence inputs,
 and preserves a selected zero override. There is no new native resource kernel,
-definition, Lua behavior or second evaluation path. This is **not published**;
-the canonical release above and complete-build count remain unchanged.
+definition, Lua behavior or second evaluation path. It is published as a
+component at the current checkpoint above; supplier admission and complete-build
+coverage remain unresolved.
 
-The existing `owned_intelligence_mana` target passes **20 ordinary tests**
-(`runs/owned-numeric-domain-mana-02.log`, 5.20s); its four publication tests
-remain opt-in and were not rerun because this fragment remains unpublished.
+The existing `owned_intelligence_mana` target now passes **21 ordinary tests**
+(`runs/owned-mana-pool-tests-01.log`, 5.19s); the current guarded all-five
+publication also passes. The four historical publication tests remain opt-in.
 The component tests check the joined producers, all **16** retained original-source vectors
 in both traversal orders, missing/Partial dependencies, premature stage reads,
 and fresh/reused/four-worker equality. Scalar source inputs are injected only
@@ -470,11 +505,11 @@ validation; the earlier data-only draft's log is historical.
 
 **Implemented October 14:** the [checked numeric-domain contract](owned-numeric-domain-proposal.md)
 extends the existing rule DAG with a range check that preserves supported
-values and reports unsupported computed values explicitly. The draft checks
+values and reports unsupported computed values explicitly. The consumer checks
 its actual pre-rounding operand against `[-f64::MAX, 2^52]` in Mana units,
 because the proved native/PoB rounding domain does not follow from the current
 computed numeric types. Its operator validation is recorded in the current
-checkpoint; transformation supplier admission still gates publication.
+checkpoint; transformation supplier admission still gates production evaluation.
 
 The [resource transformation witness](owned-resource-transformation-evidence.md)
 now executes all five originals and contrasting controls through the unchanged
