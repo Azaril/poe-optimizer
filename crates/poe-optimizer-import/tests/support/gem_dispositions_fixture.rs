@@ -285,6 +285,7 @@ impl Fixture {
             encounter: None,
             character_reward_inventory: None,
             configuration_inputs: None,
+            configuration_dispositions: None,
             source_presentation: None,
         };
         let mut group_count = quantity("group-count", "groupCount", count.clone());

@@ -1,6 +1,8 @@
 //! Publication records the real prior normalization identity before replacement.
 #[path = "support/owned_character_reward_policy.rs"]
 mod character_reward_inventory;
+#[path = "support/owned_configuration_disposition_policy.rs"]
+mod configuration_dispositions;
 #[path = "support/owned_configuration_reward_policy.rs"]
 mod configuration_rewards;
 #[path = "support/owned_enemy_level_policy.rs"]
@@ -40,8 +42,13 @@ fn reward_inventory_install_is_exact_and_schema_successor_rebinds_only_dependenc
         prior.mapping(),
         prior.rewards(),
     ));
+    replacement.configuration_dispositions = Some(configuration_dispositions::policy(
+        &replacement,
+        prior.mapping(),
+        prior.rewards(),
+    ));
     let before = serde_json::to_vec(prior.normalization()).unwrap();
-    for case in 0..3 {
+    for case in 0..5 {
         let mut stale = replacement.clone();
         let ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 {
             mapping_source,
@@ -53,6 +60,22 @@ fn reward_inventory_install_is_exact_and_schema_successor_rebinds_only_dependenc
             1 => *mapping_source = digest_owned("wrong-reward-source", &0, 100).unwrap(),
             2 => {
                 controls.pop();
+            }
+            3 => {
+                stale
+                    .configuration_dispositions
+                    .as_mut()
+                    .unwrap()
+                    .dependencies
+                    .rewards = digest_owned("wrong-actual-reward-policy", &0, 100).unwrap()
+            }
+            4 => {
+                stale
+                    .configuration_dispositions
+                    .as_mut()
+                    .unwrap()
+                    .dependencies
+                    .reward_inventory = None
             }
             _ => unreachable!(),
         }
@@ -103,6 +126,15 @@ fn reward_inventory_install_is_exact_and_schema_successor_rebinds_only_dependenc
     assert_ne!(
         successor.rewards().identity(),
         installed.rewards().identity()
+    );
+    configuration_dispositions::assert_rebound(
+        installed
+            .normalization()
+            .configuration_dispositions
+            .as_ref()
+            .unwrap(),
+        successor.normalization(),
+        successor.rewards(),
     );
     configuration_rewards::assert_rebound(
         installed

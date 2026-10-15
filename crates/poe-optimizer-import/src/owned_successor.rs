@@ -14,12 +14,13 @@ use crate::{
         ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemQualityPolicy,
         ImportQueryTemplate, ItemParameterInputsPolicy, NormalizationError, NormalizationLimits,
         NormalizationPolicy, PassiveSocketMembershipPolicy, equipment_membership_identity,
-        rebind_direct_skill_inputs, rebind_gem_inventory, rebind_generated_skill_inputs,
-        rebind_payload_inventory_roles, rebind_skill_inventory, rebind_support_inventory_roles,
-        rebind_usage_inputs, validate_configuration_reward_inventory,
-        validate_item_modifier_membership, validate_item_parameter_inputs,
-        validate_normalization_inputs, validate_normalization_queries,
-        validate_passive_socket_placement, validate_role_bound_normalization,
+        rebind_configuration_dispositions, rebind_direct_skill_inputs, rebind_gem_inventory,
+        rebind_generated_skill_inputs, rebind_payload_inventory_roles, rebind_skill_inventory,
+        rebind_support_inventory_roles, rebind_usage_inputs,
+        validate_configuration_reward_inventory, validate_item_modifier_membership,
+        validate_item_parameter_inputs, validate_normalization_inputs,
+        validate_normalization_queries, validate_passive_socket_placement,
+        validate_role_bound_normalization,
     },
     owned_recipe::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
@@ -1538,6 +1539,9 @@ fn finalize_successor_operation(
         // checked above. Only their dependent digest follows the new bindings;
         // source authority and an explicitly supplied replacement are never repaired.
         *reward_policy = *rewards.identity();
+    }
+    if !replacing_normalization {
+        rebind_configuration_dispositions(&mut normalization, &rewards, limits.normalization)?;
     }
     validate_configuration_reward_inventory(
         &normalization,

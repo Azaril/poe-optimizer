@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "reports": [
+    {
+      "path": "evidence/source-jit-off.json",
+      "bytes": 339448,
+      "sha256": "c20f9c8992fa062f59b42bcc1da77abc17581bf9e1a7133c6fef20251e27d2b6"
+    },
+    {
+      "path": "evidence/source-jit-on.json",
+      "bytes": 339448,
+      "sha256": "c20f9c8992fa062f59b42bcc1da77abc17581bf9e1a7133c6fef20251e27d2b6"
+    }
+  ],
+  "producers": [
+    {
+      "path": "evidence/owned_damage_roll_source.rs",
+      "source_path": "crates/poe-optimizer-pob/tests/owned_damage_roll_source.rs",
+      "bytes": 19778,
+      "sha256": "e93d699c4ad05cf6a65c0e4d1f68f246151fb03160ec4040f2dec7c8079f82d3",
+      "acquisition_authenticated": false
+    },
+    {
+      "path": "evidence/owned_damage_roll_source.lua",
+      "source_path": "crates/poe-optimizer-pob/tests/support/owned_damage_roll_source.lua",
+      "bytes": 5633,
+      "sha256": "5061d1e69f96a8c9ddea36db67294ef24467ecf495337d2fd445de8170728b7a",
+      "acquisition_authenticated": true
+    },
+    {
+      "path": "evidence/configuration_preparation_source.rs",
+      "source_path": "crates/poe-optimizer-pob/tests/support/configuration_preparation_source.rs",
+      "bytes": 14535,
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9",
+      "acquisition_authenticated": false
+    },
+    {
+      "path": "evidence/configuration_preparation_source.lua",
+      "source_path": "crates/poe-optimizer-pob/tests/support/configuration_preparation_source.lua",
+      "bytes": 9580,
+      "sha256": "04a5f7235a7a6f15e63bfce02ca0f716256e7fb89c9bed2262795588212a73c3",
+      "acquisition_authenticated": false
+    },
+    {
+      "path": "evidence/source_module_observation.lua",
+      "source_path": "crates/poe-optimizer-pob/tests/support/source_module_observation.lua",
+      "bytes": 958,
+      "sha256": "0eba78de36b72933b5fd030fb465118f4823137f8d40192c142a8c6895bac44f",
+      "acquisition_authenticated": false
+    },
+    {
+      "path": "evidence/json_evidence.rs",
+      "source_path": "crates/poe-optimizer-pob/tests/support/json_evidence.rs",
+      "bytes": 4597,
+      "sha256": "55175219a711f968167eb2b12c19efbdef9442992f07954a508ec32bd40ba95a",
+      "acquisition_authenticated": false
+    },
+    {
+      "path": "evidence/host.lua",
+      "source_path": "crates/poe-optimizer-pob/src/host.lua",
+      "bytes": 1765,
+      "sha256": "bc419d5ace6af628ddee62d389e3052f92667fa9624127c798b68acd177b6161",
+      "acquisition_authenticated": false
+    },
+    {
+      "path": "evidence/initialization.lua",
+      "source_path": "crates/poe-optimizer-pob/src/initialization.lua",
+      "bytes": 944,
+      "sha256": "48d2a4cd33118508b328f349b9e52e9927b3de179fbacc55bbc0de7aa72a6e8c",
+      "acquisition_authenticated": false
+    }
+  ],
+  "original": {
+    "name": "build-05.xml",
+    "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+  },
+  "producer_pin_scope": "The acquisition report authenticates the exact observer. Other producer snapshots were retained at adoption and are not retroactive acquisition attestations.",
+  "source_archives": [
+    {
+      "path": "evidence/pob/src/Modules/ConfigOptions.lua",
+      "source_path": "src/Modules/ConfigOptions.lua",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "checkout_sha256": "5a77f18ea6c71834a182555e40f1e616ce24e01ee9265c6ed01c789101a6473d",
+      "storage": "exact pinned Git blob bytes"
+    },
+    {
+      "path": "evidence/pob/src/Classes/ConfigTab.lua",
+      "source_path": "src/Classes/ConfigTab.lua",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "checkout_sha256": "34eb28ed67e75963071283844ef1a040d39362e090a57a1f76e9eff0765f34cb",
+      "storage": "exact pinned Git blob bytes"
+    },
+    {
+      "path": "evidence/pob/src/Data/BossSkills.lua",
+      "source_path": "src/Data/BossSkills.lua",
+      "bytes": 5605,
+      "sha256": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d",
+      "checkout_sha256": "21a1cc730aef4a430f4ff11f5b4fd878fd2c7245cffefc839a7e83071f1bf7b4",
+      "storage": "exact pinned Git blob bytes"
+    }
+  ],
+  "source_byte_contract": "Source manifest hashes normalize CRLF to LF (poe-optimizer-pob/src/source.rs:8,239-257,307-311). These archives retain exact pinned Git blobs, which independently match those hashes. checkout_sha256 records adoption working files only, not acquisition raw-byte identity."
+}

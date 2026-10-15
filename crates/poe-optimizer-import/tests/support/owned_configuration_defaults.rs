@@ -183,6 +183,76 @@ fn rows(p: &mut NormalizationPolicy) -> &mut Vec<ConfigurationDefaultInput> {
     default_inputs
 }
 
+#[test]
+fn configuration_receipts_distinguish_authored_values_constructor_defaults_and_ignored_observations()
+ {
+    let fixture = default_fixture();
+    let f = &fixture.f;
+    let mut p = default_policy(&fixture);
+    rows(&mut p)[0].ignore_numeric_placeholder = true;
+    let rules = [ValueLane::InputNumber, ValueLane::PlaceholderNumber]
+        .into_iter()
+        .enumerate()
+        .map(|(i, lane)| ConfigurationDispositionRule {
+            id: key(&format!("integer-role-{i}")),
+            selector: ValueSelector {
+                lane,
+                name: NAMES[0].into(),
+            },
+            destinations: vec![ConfigurationDestination::Adapter {
+                control: ConfigurationAdapterControl::ScalarInput {
+                    input: fixture.inputs[0].clone(),
+                },
+            }],
+        })
+        .collect();
+    let p = accounting_tests::bind(f, p, rules);
+    for (body, expected) in [
+        (r#"<Placeholder name="integer-control" number="999"/>"#, 7),
+        (
+            r#"<Input name="integer-control" number="0"/><Placeholder name="integer-control" number="999"/>"#,
+            0,
+        ),
+    ] {
+        let source = source(&xml(body), 0x8b);
+        let result = normalize(&source, f, &p, Default::default()).unwrap();
+        let ignored = accounting_tests::leaf(&source, &result, NAMES[0], "Placeholder");
+        assert_eq!(
+            ignored.disposition,
+            SourceDisposition::SourceOnly(key("unused-config-placeholder"))
+        );
+        assert_eq!(
+            ignored.links,
+            vec![OwnedOriginTarget::ScenarioPreset(
+                result.draft().input().scenario_presets.members[0].id
+            )]
+        );
+        assert!(assumptions(&result, 0).contains(&(
+            fixture.inputs[0].clone(),
+            DraftAssumptionTarget::Enemy,
+            ParameterValue::Integer(BoundedInteger::new(expected).unwrap())
+        )));
+        if expected == 0 {
+            let authored = accounting_tests::leaf(&source, &result, NAMES[0], "Input");
+            assert_eq!(authored.disposition, SourceDisposition::Contributes);
+            assert_eq!(authored.links, ignored.links);
+        }
+    }
+    let source = source(
+        &xml(
+            r#"<Input name="integer-control" string="bad"/><Placeholder name="integer-control" number="999"/>"#,
+        ),
+        0x8b,
+    );
+    let result = normalize(&source, f, &p, Default::default()).unwrap();
+    accounting_tests::pending(accounting_tests::leaf(
+        &source,
+        &result,
+        NAMES[0],
+        "Placeholder",
+    ));
+}
+
 fn assumptions(
     result: &NormalizedImport,
     index: usize,

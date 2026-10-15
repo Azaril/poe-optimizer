@@ -707,6 +707,22 @@ accounts for saved controls, source defaults and independent owned destinations
 without replicating a UI. Both retain their separate implementation and coverage
 gates; neither introduces a new native source-language contract.
 
+Configuration accounting belongs to Import. Existing reward, encounter,
+enemy-level and scalar-input adapters produce private checked receipts; one
+accounting owner verifies exact source scope, destination and emitted output.
+An injected disposition policy binds those adapter identities and the reviewed
+catalogue/constructor evidence. Every applicable destination must be proved;
+an unresolved responsibility preserves the obligation. Authored values, explicit
+None, saved placeholders, constructor defaults and absence remain distinguishable
+at this boundary, without becoming native evaluator types.
+
+The first implementation permits partial leaf accounting only. A proven
+branch-inapplicable observation can lose its configuration issue link while the
+containing inventory stays Pending. Complete inventory authority additionally
+requires the whole control/default catalogue and every live outside-Config
+origin to be accounted for. No leaf receipt, successful adapter subset or
+deferred destination supplies that authority.
+
 Known raw inputs do not prove either complete input membership or final numeric authority.
 A modifier with Partial parameter declarations may retain validated known rolls, including
 all known required slots, while its imported roll collection remains Pending. Missing or

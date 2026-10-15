@@ -1,0 +1,54 @@
+{
+  "files": [
+    {
+      "bytes": 1188831,
+      "compressed_sha256": "2d6c255036855ce7b3e627378df3db83f6dbfeef005171f8ec95df41ecd2ab05",
+      "name": "draft.json",
+      "sha256": "2041059dfc660bcf3d90d8dca47c2e53fdde719897ee821c5bd0e713630db701",
+      "source": "runs/owned-numeric-domain-publication-01/original-05/draft.json"
+    },
+    {
+      "bytes": 951533,
+      "compressed_sha256": "d0fa57435f66ab2584eff79e64a5e25c0177020573d1eb0225a87e611f153ae2",
+      "name": "sidecar.json",
+      "sha256": "15068a61709dc121621df4dc8f87e376448f14a2386c580f05aa08dee42299f3",
+      "source": "runs/owned-numeric-domain-publication-01/original-05/sidecar.json"
+    },
+    {
+      "bytes": 3947039,
+      "compressed_sha256": "721f99dc73b5e94190f41e1e1e6d16872acc7c4aa440566e3cd7e7ad32e40eec",
+      "name": "mapping.json",
+      "sha256": "07e96d7047e0cf463c4e25201b3f3ae6c706af3c05abdf1d9bcab5a1b859ee9e",
+      "source": "runs/owned-numeric-domain-publication-01/package/mapping.json"
+    },
+    {
+      "bytes": 705,
+      "compressed_sha256": "f431b0fd608ed975fa81a5d5c075c6de50717bb084aeadf2d8da2fc7b6b9d7ea",
+      "name": "selection.json",
+      "sha256": "5e8bc88bd9f5fe423a3682b265a0d491c68b8d5e9534f07d682715ace244a355",
+      "source": "runs/owned-numeric-domain-publication-01/selected-05.json"
+    },
+    {
+      "bytes": 1513,
+      "compressed_sha256": "4bf3dae992442f90a4e23c5b60b728feed7d1948446f7ff9181bc68b0782c1c3",
+      "name": "manifest.json",
+      "sha256": "e2e54294c364e34efb92bf2fad18ab151be040cb9f23677b436a7bb29916bc4a",
+      "source": "runs/owned-numeric-domain-publication-01/package/manifest.json"
+    },
+    {
+      "bytes": 2475,
+      "compressed_sha256": "87a15ffcbdf91910159dc2c40291eda200671c4d90f66933436a91b3f7c9e29b",
+      "name": "import-report.json",
+      "sha256": "46e74c9ae8532bf619ba96b3fafa56b176aefa211ebc7122b5b8377e6b611184",
+      "source": "runs/owned-numeric-domain-publication-01/original-05/report.json"
+    },
+    {
+      "bytes": 46649,
+      "compressed_sha256": "282ebbe081bbb255607e2f5a2d7d6fa75fe132e51d361db18dd9c1e0693235a9",
+      "name": "release.json",
+      "sha256": "80d756abe2c4146cb59a00266a060043fa056559727e3fcfb28fa97e5bee1836",
+      "source": "runs/owned-numeric-domain-publication-01/package/release.json"
+    }
+  ],
+  "schema_version": 1
+}

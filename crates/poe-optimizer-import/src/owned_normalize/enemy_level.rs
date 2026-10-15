@@ -100,6 +100,7 @@ pub(super) struct ProvenEnemyLevel {
     scope: SourceOccurrenceId,
     origin: SourceAttributeRef,
     level: u16,
+    selector: ValueSelector,
 }
 
 pub(super) fn collect(
@@ -121,7 +122,7 @@ pub(super) fn collect(
         let mut blocked = false;
         let mut candidate = None;
         for id in row.children() {
-            b.charge(1)?;
+            b.charge(selector.name.len().saturating_add(1))?;
             let child = &evidence.rows()[id.ordinal() as usize];
             let Some(name) = value(child, "name") else {
                 continue;
@@ -165,11 +166,58 @@ pub(super) fn collect(
                     scope,
                     origin,
                     level: policy.expected,
+                    selector: selector.clone(),
                 },
             );
         }
     }
     Ok(result)
+}
+
+pub(super) fn checked_receipts(
+    b: &mut Builder<'_, '_>,
+    scope: SourceOccurrenceId,
+    scenario: &ScenarioPresetDraft,
+    proof: Option<&ProvenEnemyLevel>,
+) -> Result<Vec<configuration_dispositions::CheckedConfigurationReceipt>> {
+    let Some(proof) = proof else {
+        return Ok(vec![]);
+    };
+    let origin = proof.origin.occurrence;
+    let target = OwnedOriginTarget::ScenarioPreset(scenario.id);
+    b.charge(
+        b.origins[origin.ordinal() as usize]
+            .links
+            .len()
+            .saturating_add(proof.selector.name.len())
+            .saturating_add(1),
+    )?;
+    if proof.scope != scope
+        || scenario.scenario.enemy.level.to_resolved() != Some(proof.level)
+        || b.evidence.rows()[origin.ordinal() as usize]
+            .occurrence()
+            .parent()
+            != Some(scope)
+        || b.origins[origin.ordinal() as usize]
+            .links
+            .iter()
+            .filter(|link| **link == target)
+            .count()
+            != 1
+    {
+        return Ok(vec![]);
+    }
+    Ok(vec![
+        configuration_dispositions::CheckedConfigurationReceipt {
+            scope,
+            origin: Some(origin),
+            selector: Some(proof.selector.clone()),
+            control: ConfigurationAdapterControl::EnemyLevel,
+            source_state: configuration_dispositions::ConfigurationSourceState::Placeholder,
+            target,
+            source_only: None,
+        },
+    ])
 }
 
 pub(super) fn level(

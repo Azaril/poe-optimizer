@@ -672,6 +672,7 @@ fn normalized_fixture(
         encounter: None,
         character_reward_inventory: None,
         configuration_inputs: None,
+        configuration_dispositions: None,
         source_presentation: None,
         gem_quality: GemQualityPolicy::Unconverted,
     };

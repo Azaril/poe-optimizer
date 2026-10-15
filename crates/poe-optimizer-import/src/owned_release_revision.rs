@@ -7,10 +7,10 @@ use crate::{
     owned_normalize::{
         ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemQualityPolicy,
         ItemParameterInputsPolicy, PassiveSocketMembershipPolicy, SupportOriginOrderPolicy,
-        equipment_membership_identity, rebind_direct_skill_inputs, rebind_gem_inventory,
-        rebind_generated_skill_inputs, rebind_payload_inventory_roles, rebind_skill_inventory,
-        rebind_support_inventory_roles, rebind_usage_inputs,
-        validate_configuration_reward_inventory,
+        equipment_membership_identity, rebind_configuration_dispositions,
+        rebind_direct_skill_inputs, rebind_gem_inventory, rebind_generated_skill_inputs,
+        rebind_payload_inventory_roles, rebind_skill_inventory, rebind_support_inventory_roles,
+        rebind_usage_inputs, validate_configuration_reward_inventory,
     },
     owned_recipe::{OwnedRecipeError, assemble_owned_recipe},
     owned_release::{
@@ -230,24 +230,30 @@ pub(crate) fn rebind_release_dependencies(
     }
     input.rewards.mapping = *mapping.identity();
     input.rewards.definitions = runtime.schema().identity().clone();
-    if input.normalization.configuration_reward_inventory.is_some() {
+    if input.normalization.configuration_reward_inventory.is_some()
+        || input.normalization.configuration_dispositions.is_some()
+    {
         let rewards = OwnedRewardPolicy::new(
             input.rewards.clone(),
             &mapping,
             runtime.schema(),
             limits.rewards,
         )?;
-        let Some(ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 {
+        if let Some(ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 {
             reward_policy,
             ..
         }) = &mut input.normalization.configuration_reward_inventory
-        else {
-            unreachable!("checked optional reward inventory");
-        };
-        // This private helper is called only with an inherited, checked release.
-        // Neither schema corrections nor contract migrations replace its reward
-        // recipes or source census. Rebind only the resulting dependency digest.
-        *reward_policy = *rewards.identity();
+        {
+            // This private helper is called only with an inherited, checked release.
+            // Neither schema corrections nor contract migrations replace its reward
+            // recipes or source census. Rebind only the resulting dependency digest.
+            *reward_policy = *rewards.identity();
+        }
+        rebind_configuration_dispositions(
+            &mut input.normalization,
+            &rewards,
+            limits.normalization,
+        )?;
         validate_configuration_reward_inventory(
             &input.normalization,
             &mapping,

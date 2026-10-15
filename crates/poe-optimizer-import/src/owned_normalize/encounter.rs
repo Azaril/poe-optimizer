@@ -116,6 +116,47 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
 pub(super) struct ProvenEncounter {
     scope: SourceOccurrenceId,
     target: EncounterDefId,
+    absent: BTreeSet<String>,
+}
+
+impl ProvenEncounter {
+    pub(super) fn proves_branch(
+        &self,
+        scope: SourceOccurrenceId,
+        scenario: &ScenarioPresetDraft,
+        guards: &BTreeSet<String>,
+    ) -> bool {
+        self.scope == scope
+            && scenario.scenario.enemy.encounter.to_resolved().as_ref() == Some(&self.target)
+            && guards.is_subset(&self.absent)
+    }
+}
+
+pub(super) fn checked_receipts(
+    b: &mut Builder<'_, '_>,
+    scope: SourceOccurrenceId,
+    scenario: &ScenarioPresetDraft,
+    proof: Option<&ProvenEncounter>,
+) -> Result<Vec<configuration_dispositions::CheckedConfigurationReceipt>> {
+    let Some(proof) = proof else {
+        return Ok(vec![]);
+    };
+    b.charge(proof.absent.len().saturating_add(1))?;
+    if !proof.proves_branch(scope, scenario, &proof.absent) {
+        return Ok(vec![]);
+    }
+    // This adapter proves constructor absence, never an authored leaf value.
+    Ok(vec![
+        configuration_dispositions::CheckedConfigurationReceipt {
+            scope,
+            origin: None,
+            selector: None,
+            control: ConfigurationAdapterControl::Encounter,
+            source_state: configuration_dispositions::ConfigurationSourceState::Absent,
+            target: OwnedOriginTarget::ScenarioPreset(scenario.id),
+            source_only: None,
+        },
+    ])
 }
 
 pub(super) fn collect(
@@ -145,12 +186,24 @@ pub(super) fn collect(
             }
         }
         if !blocked {
-            b.charge(1)?;
+            b.charge(
+                policy
+                    .absent
+                    .iter()
+                    .map(|name| name.len())
+                    .sum::<usize>()
+                    .saturating_add(1),
+            )?;
             result.insert(
                 scope,
                 ProvenEncounter {
                     scope,
                     target: policy.target.clone(),
+                    absent: policy
+                        .absent
+                        .iter()
+                        .map(|name| (*name).to_owned())
+                        .collect(),
                 },
             );
         }

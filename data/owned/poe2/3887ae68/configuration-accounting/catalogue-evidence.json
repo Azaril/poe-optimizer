@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Launch.lua",
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/GameVersions.lua",
+      "sha256": "7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Main.lua",
+      "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/EditControl.lua",
+      "sha256": "6af3f270ec07ddf2e3594effd868332c76c9e3039e6a49309965a51419dcf2d4"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "path": "src/Data/BossSkills.lua",
+      "sha256": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d"
+    },
+    {
+      "path": "runtime/lua/xml.lua",
+      "sha256": "832b6bb31f1f0e79e3ed6346113691b36ace29ed964e332530eef8b3b63af0e2"
+    }
+  ],
+  "spans": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "file_sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "first_line": 2189,
+      "last_line": 2270,
+      "lines": [
+        "\t{ var = \"presetBossSkills\", type = \"list\", defaultIndex = 1, label = \"Boss Skill Preset\", tooltipFunc = bossSkillsTooltip, list = data.bossSkillsList, apply = function(val, modList, enemyModList, build)",
+        "\t\tif not (val == \"None\") then",
+        "\t\t\tlocal bossData = data.bossSkills[val]",
+        "\t\t\tlocal isUber = build.configTab.varControls['enemyIsBoss'].list[build.configTab.varControls['enemyIsBoss'].selIndex].val == \"Uber\"",
+        "\t\t\tif bossData.earlierUber and build.configTab.varControls['enemyIsBoss'].list[build.configTab.varControls['enemyIsBoss'].selIndex].val == \"Pinnacle\" then",
+        "\t\t\t\tisUber = true",
+        "\t\t\tend",
+        "\t\t\tlocal defaultDamage = \"\"",
+        "\t\t\tbuild.configTab.varControls['enemyPhysicalDamage']:SetPlaceholder(defaultDamage, true)",
+        "\t\t\tbuild.configTab.varControls['enemyLightningDamage']:SetPlaceholder(defaultDamage, true)",
+        "\t\t\tbuild.configTab.varControls['enemyColdDamage']:SetPlaceholder(defaultDamage, true)",
+        "\t\t\tbuild.configTab.varControls['enemyFireDamage']:SetPlaceholder(defaultDamage, true)",
+        "\t\t\tbuild.configTab.varControls['enemyChaosDamage']:SetPlaceholder(defaultDamage, true)",
+        "",
+        "\t\t\tlocal rollRangeMult = m_min(m_max(build.configTab.input['enemyDamageRollRange'] or build.configTab.varControls['enemyDamageRollRange'].placeholder, 0), 100)",
+        "\t\t\tfor damageType, damageMult in pairs(bossData.DamageMultipliers) do",
+        "\t\t\t\tif isUber and bossData.UberDamageMultiplier then",
+        "\t\t\t\t\tbuild.configTab.varControls['enemy'..damageType..'Damage']:SetPlaceholder(round(data.monsterDamageTable[build.configTab.enemyLevel] * (damageMult[1] + rollRangeMult * damageMult[2]) * bossData.UberDamageMultiplier), true)",
+        "\t\t\t\telse",
+        "\t\t\t\t\tbuild.configTab.varControls['enemy'..damageType..'Damage']:SetPlaceholder(round(data.monsterDamageTable[build.configTab.enemyLevel] * (damageMult[1] + rollRangeMult * damageMult[2])), true)",
+        "\t\t\t\tend",
+        "\t\t\tend",
+        "",
+        "\t\t\tlocal defaultPen = \"\"",
+        "\t\t\tbuild.configTab.varControls['enemyPhysicalOverwhelm']:SetPlaceholder(defaultPen, true)",
+        "\t\t\tbuild.configTab.varControls['enemyLightningPen']:SetPlaceholder(defaultPen, true)",
+        "\t\t\tbuild.configTab.varControls['enemyColdPen']:SetPlaceholder(defaultPen, true)",
+        "\t\t\tbuild.configTab.varControls['enemyFirePen']:SetPlaceholder(defaultPen, true)",
+        "",
+        "\t\t\tif bossData.DamagePenetrations then",
+        "\t\t\t\tfor penType, pen in pairs(bossData.DamagePenetrations) do",
+        "\t\t\t\t\tif isUber and bossData.UberDamagePenetrations and bossData.UberDamagePenetrations[penType] then",
+        "\t\t\t\t\t\tbuild.configTab.varControls['enemy'..penType]:SetPlaceholder(bossData.UberDamagePenetrations[penType], true)",
+        "\t\t\t\t\telse",
+        "\t\t\t\t\t\tbuild.configTab.varControls['enemy'..penType]:SetPlaceholder(pen, true)",
+        "\t\t\t\t\tend",
+        "\t\t\t\tend",
+        "\t\t\tend",
+        "",
+        "\t\t\tif bossData.DamageType then",
+        "\t\t\t\tbuild.configTab.varControls['enemyDamageType']:SelByValue(bossData.DamageType, \"val\")",
+        "\t\t\t\tbuild.configTab.input['enemyDamageType'] = bossData.DamageType",
+        "\t\t\tend",
+        "\t\t\tbuild.configTab.varControls['enemyDamageType'].enabled = false",
+        "",
+        "\t\t\tif isUber and bossData.UberSpeed then",
+        "\t\t\t\tbuild.configTab.varControls['enemySpeed']:SetPlaceholder(bossData.UberSpeed, true)",
+        "\t\t\telseif bossData.speed then",
+        "\t\t\t\tbuild.configTab.varControls['enemySpeed']:SetPlaceholder(bossData.speed, true)",
+        "\t\t\tend",
+        "\t\t\tif bossData.critChance then",
+        "\t\t\t\tbuild.configTab.varControls['enemyCritChance']:SetPlaceholder(bossData.critChance, true)",
+        "\t\t\tend",
+        "",
+        "\t\t\tmodList:NewMod(\"BossSkillActive\", \"FLAG\", true, \"Config\")",
+        "",
+        "\t\t\t-- boss specific mods",
+        "\t\t\tif val == \"Atziri Flameblast\" and isUber then",
+        "\t\t\t\tenemyModList:NewMod(\"Damage\", \"INC\", 60, \"Alluring Abyss Map Mod\")",
+        "\t\t\tend",
+        "\t\t\tif bossData.additionalStats then",
+        "\t\t\t\tlocal additionalStats = isUber and bossData.additionalStats.uber or bossData.additionalStats.base",
+        "\t\t\t\tif additionalStats then",
+        "\t\t\t\t\tfor k, v in pairs(additionalStats) do",
+        "\t\t\t\t\t\tif tostring(v) == \"flag\" then",
+        "\t\t\t\t\t\t\tenemyModList:NewMod(k, \"FLAG\", true, \"BossSkillAdditionalData\")",
+        "\t\t\t\t\t\telse",
+        "\t\t\t\t\t\t\tenemyModList:NewMod(k, \"BASE\", v, \"BossSkillAdditionalData\")",
+        "\t\t\t\t\t\tend",
+        "\t\t\t\t\tend",
+        "\t\t\t\tend",
+        "\t\t\tend",
+        "\t\telse",
+        "\t\t\tif build.configTab.varControls['enemyDamageType'].enabled == false then",
+        "\t\t\t\tbuild.configTab.input['enemyDamageType'] = \"Average\"",
+        "\t\t\t\tbuild.configTab.varControls['enemyDamageType']:SelByValue(\"Average\", \"val\")",
+        "\t\t\tend",
+        "\t\t\tbuild.configTab.varControls['enemyDamageType'].enabled = true",
+        "\t\tend",
+        "\tend },",
+        "\t{ var = \"enemyDamageRollRange\", type = \"countAllowZero\", label = \"Enemy Skill Roll Range %:\", ifFlag = \"BossSkillActive\", tooltip = \"The percentage of the roll range the enemy hits for \\n eg at 100% the enemy deals its maximum damage\", defaultPlaceholderState = 70, hideIfInvalid = true },",
+        "\t{ var = \"enemyDamageType\", type = \"list\", label = \"Enemy Damage Type:\", tooltip = \"Controls which types of damage the EHP calculation uses:\\n\\tAverage: uses the Average of all typed damage types (except Damage Over Time and Untyped)\\n\\nIf a specific damage type is selected, that will be the only type used.\", list = {"
+      ]
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "file_sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "first_line": 878,
+      "last_line": 923,
+      "lines": [
+        "function ConfigTabClass:Load(xml, fileName)",
+        "\tself.activeConfigSetId = 1",
+        "\tself.configSets = { }",
+        "\tself.configSetOrderList = { 1 }",
+        "",
+        "\tlocal function setInputAndPlaceholder(node, configSetId)",
+        "\t\tif node.elem == \"Input\" then",
+        "\t\t\tif not node.attrib.name then",
+        "\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Input' element missing name attribute\", fileName)",
+        "\t\t\t\treturn true",
+        "\t\t\tend",
+        "\t\t\tif node.attrib.number then",
+        "\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = tonumber(node.attrib.number)",
+        "\t\t\telseif node.attrib.string then",
+        "\t\t\t\tif node.attrib.name == \"enemyIsBoss\" then",
+        "\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string:lower():gsub(\"(%l)(%w*)\", function(a,b) return s_upper(a)..b end)",
+        "\t\t\t\t\t:gsub(\"Uber Atziri\", \"Boss\"):gsub(\"Shaper\", \"Pinnacle\"):gsub(\"Sirus\", \"Pinnacle\")",
+        "\t\t\t\t-- backwards compat <=3.20, Uber Atziri Flameblast -> Atziri Flameblast",
+        "\t\t\t\telseif node.attrib.name == \"presetBossSkills\" then",
+        "\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string:gsub(\"^Uber \", \"\")",
+        "\t\t\t\telse",
+        "\t\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string",
+        "\t\t\t\tend",
+        "\t\t\telseif node.attrib.boolean then",
+        "\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.boolean == \"true\"",
+        "\t\t\telse",
+        "\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Input' element missing number, string or boolean attribute\", fileName)",
+        "\t\t\t\treturn true",
+        "\t\t\tend",
+        "\t\telseif node.elem == \"Placeholder\" then",
+        "\t\t\tif not node.attrib.name then",
+        "\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Placeholder' element missing name attribute\", fileName)",
+        "\t\t\t\treturn true",
+        "\t\t\tend",
+        "\t\t\tif node.attrib.number then",
+        "\t\t\t\tself.configSets[configSetId].placeholder[node.attrib.name] = tonumber(node.attrib.number)",
+        "\t\t\telseif node.attrib.string then",
+        "\t\t\t\tself.configSets[configSetId].input[node.attrib.name] = node.attrib.string",
+        "\t\t\telse",
+        "\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Placeholder' element missing number\", fileName)",
+        "\t\t\t\treturn true",
+        "\t\t\tend",
+        "\t\tend",
+        "\tend",
+        "",
+        "\t-- Catch special case of empty Config"
+      ]
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "file_sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "first_line": 1317,
+      "last_line": 1334,
+      "lines": [
+        "function ConfigTabClass:CreateConfigSet(configSetId, title)",
+        "\tlocal configSet = { id = configSetId, title = title, input = {}, placeholder = {}, customModsList = { { title = \"Default\", enabled = true, text = \"\" } } }",
+        "\tif not configSetId then",
+        "\t\tconfigSet.id = #self.configSets + 1",
+        "\tend",
+        "\t-- there are default values for input and placeholder that every new config set needs to have",
+        "\tfor _, varData in ipairs(varList) do",
+        "\t\tif varData.var then",
+        "\t\t\tconfigSet.input[varData.var] = varData.defaultState",
+        "\t\t\tconfigSet.placeholder[varData.var] = varData.defaultPlaceholderState",
+        "\t\t\tif varData.defaultIndex then",
+        "\t\t\t\tconfigSet.input[varData.var] = varData.list[varData.defaultIndex].val",
+        "\t\t\tend",
+        "\t\tend",
+        "\tend",
+        "\tself.configSets[configSet.id] = configSet",
+        "\treturn configSet",
+        "end"
+      ]
+    },
+    {
+      "path": "src/Data/BossSkills.lua",
+      "file_sha256": "97cb04fb8f604ce476551e07bb780937303663d24d225c792a7bc9cca573bb2d",
+      "first_line": 172,
+      "last_line": 176,
+      "lines": [
+        "\tbossSkillsList = {",
+        "\t\t{ val = \"None\",                label = \"None\" },",
+        "\t\t{ val = \"Atziri Flameblast\",   label = \"Atziri Flameblast\" },",
+        "\t\t{ val = \"Shaper Ball\",         label = \"Shaper Ball\" },",
+        "\t\t{ val = \"Shaper Slam\",         label = \"Shaper Slam\" },"
+      ]
+    }
+  ],
+  "scope": "One numeric Placeholder only; no Input, explicit None, boss-preset, default-inventory or evaluation authority.",
+  "control": {
+    "name": "enemyDamageRollRange",
+    "lane": "placeholder_number",
+    "has_apply": false,
+    "consumer": "presetBossSkills callback, only when the selected value is not None",
+    "absent_input_names": [
+      "enemyIsBoss",
+      "presetBossSkills",
+      "enemySizePreset"
+    ]
+  }
+}

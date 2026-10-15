@@ -1,7 +1,9 @@
 # Proposal: checked configuration dispositions
 
-**Status:** Full configuration-disposition authority accepted on 2026-10-14;
-implementation and data adoption pending.
+**Status:** Full configuration-disposition authority accepted on 2026-10-14.
+The first partial leaf-accounting implementation and source-backed publication
+are validated; complete catalogue/default accounting and inventory retirement
+remain pending.
 The narrower source-presentation precursor and final issue-integrity check are
 implemented. Neither closes an inventory; publication status and the current
 baseline are recorded in [implementation](implementation.md).
@@ -21,13 +23,18 @@ independently closable by checking Config alone: the current obligation also
 guards otherwise unaccounted source outside Config. The evidence below does not
 justify completing scenario usage or assumptions.
 
-**Current state (2026-10-09):** Original05 retains four selected input
-obligations: configuration `01f2` with 36 linked source origins, preset usage
+**Current state (2026-10-14):** Original05 retains four selected input
+obligations: configuration `01f2` with 35 linked source origins, preset usage
 `0505` with 23 known preferences, external assumptions `0207` with 17 known
 members, and scenario usage `0208` with an empty Pending list. Known members
-do not certify complete inventories. The accepted configuration authority is
-still unimplemented; retiring shared `01f2` requires accounting for every
+do not certify complete inventories. The first implementation adds partial leaf
+authority; retiring shared `01f2` still requires accounting for every
 remaining Config and outside-Config origin, including Party.
+The first published rule accounts for one numeric Placeholder under the
+checked default-Encounter branch, leaving twenty Config-local and fifteen
+outside origins. All five builds retain their exact drafts and all 110 queries;
+the four Original05 inventories remain Pending. See the
+[publication packet](../data/owned/poe2/3887ae68/configuration-accounting/README.md).
 
 [Requested participation](owned-skill-participation-proposal.md) and
 [composed support discovery](owned-support-origin-composition-proposal.md) are
@@ -1013,7 +1020,7 @@ authorize full configuration closure.
 
 ## Accepted Import contract
 
-**October 14 implementation review:** the current Original05 fallback has
+**October 14 pre-publication review:** the Original05 fallback had
 36 live origins: 21 inside Config (two containers and nineteen placeholders)
 and fifteen outside; all fifteen outside origins currently have only that
 issue link. Add the accepted policy to the existing compiled normalization

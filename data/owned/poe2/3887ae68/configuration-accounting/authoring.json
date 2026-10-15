@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "before": "690169b8e0303ca02ae9a49139a8446c6b470675c28914e7f06e69e09b4d8a54",
+  "mapping_source": "4d61f5c99db4ed1a53ba34ab12d21688edabe486a63b790a0b7fec9dad05b177",
+  "normalization_version": "checked-configuration-accounting",
+  "provenance_kind": "configuration-observation-accounting",
+  "new_definitions": 0,
+  "new_slots": 0,
+  "new_programs": 0,
+  "new_native_inputs": 0,
+  "inventory_completion": false,
+  "whole_build_parity": false,
+  "expected_selected_issues": [
+    106,
+    117,
+    109,
+    123,
+    4
+  ],
+  "original05_origin_counts": {
+    "before": 36,
+    "after": 35,
+    "config_before": 21,
+    "config_after": 20,
+    "outside_before": 15,
+    "outside_after": 15
+  }
+}

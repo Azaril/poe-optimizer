@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-10-09 for the owner's aggressive retirement direction. This is a living companion to
+Updated 2026-10-14 for the owner's aggressive retirement direction. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -35,6 +35,25 @@ regressions and shared preservation helpers. Future historical release replay
 harnesses should be rebased only when they provide independent current-path
 coverage; otherwise retire their orchestration and retain useful source witnesses.
 Do not preserve a runtime format branch merely to replay an old checkpoint.
+
+**Compiler-domain rebuild, 2026-10-14:** the numeric-domain operation changes
+compiled identities to `owned-rule-programs-v4`. The current canonical package
+and seed manifest are rebuilt from authenticated public inputs; the maintained
+Sniper replay contains no private compiled identity and re-exports unchanged.
+Three historical opt-in publication helpers still compare complete predecessor
+receipts retained in `minion-attack-selection`, `sniper-population-readiness` and
+`sniper-final-inputs` dependency packets. Those archived digests describe their
+original compiler; their strict publication paths are not called by ordinary
+CI. Component and independent source checks remain useful and current.
+
+Before rerunning one of those historical publication stages, establish its
+independent value. If needed, regenerate its predecessor receipt and dependent
+authoring commitments through the current checked assembler, preserving the
+original witness bytes as evidence. Otherwise retire the obsolete orchestration
+and retain its useful component/source checks. Do not waive receipt fields,
+modify authenticated history in place or add a compatibility reader. The active
+path consumes the current authenticated authoring endpoint directly; replaying
+every historical publication is not a production prerequisite.
 
 ## Retention rule
 
@@ -430,6 +449,14 @@ retained boundary when needed. Git history is sufficient for abandoned experimen
 do not add compatibility wrappers or feature gates merely to keep them buildable.
 
 ### Configuration projection consolidation (2026-10-07)
+
+**October 14 progress:** the scalar-only configuration leaf mutator is removed.
+Reward, encounter, enemy-level and scalar adapters now emit private receipts to
+one checked accounting owner. The raw-placeholder path retains its exact
+existing authority; an explicit disposition can require additional destinations
+before any link is removed. This consolidation adds no second importer or
+native configuration interpreter. Full catalogue/default and global inventory
+accounting remain delivery work, not assumed completeness.
 
 The current typed constructor-default projection supports Player, Enemy and
 Environment. The older string-option DTO lowers to that same implementation;

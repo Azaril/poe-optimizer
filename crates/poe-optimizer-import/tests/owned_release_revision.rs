@@ -1,6 +1,8 @@
 //! A new release corrects data without changing monotonic migration semantics.
 #[path = "support/owned_character_reward_policy.rs"]
 mod character_reward_inventory;
+#[path = "support/owned_configuration_disposition_policy.rs"]
+mod configuration_dispositions;
 #[path = "support/owned_configuration_reward_policy.rs"]
 mod configuration_rewards;
 #[path = "support/owned_empty_character_rune_policy.rs"]
@@ -282,6 +284,11 @@ fn checked_revision_retains_reward_authority_and_standalone_rejects_stale_commit
         original.mapping(),
         original.rewards(),
     ));
+    input.normalization.configuration_dispositions = Some(configuration_dispositions::policy(
+        &input.normalization,
+        original.mapping(),
+        original.rewards(),
+    ));
     input.tree = Some(
         OwnedTreeNormalizationPolicy::bind_new(
             input.tree.take().unwrap().content,
@@ -301,6 +308,15 @@ fn checked_revision_retains_reward_authority_and_standalone_rejects_stale_commit
     let revised =
         compile_owned_release_revision(&checked, revision.clone(), Default::default()).unwrap();
     assert_ne!(revised.rewards().identity(), checked.rewards().identity());
+    configuration_dispositions::assert_rebound(
+        checked
+            .normalization()
+            .configuration_dispositions
+            .as_ref()
+            .unwrap(),
+        revised.normalization(),
+        revised.rewards(),
+    );
     configuration_rewards::assert_rebound(
         checked
             .normalization()
@@ -335,7 +351,7 @@ fn checked_revision_retains_reward_authority_and_standalone_rejects_stale_commit
             .eq(revised.artifacts())
     );
 
-    for case in 0..5 {
+    for case in 0..7 {
         let mut stale = revised.input().clone();
         match case {
             0 => {
@@ -376,6 +392,19 @@ fn checked_revision_retains_reward_authority_and_standalone_rejects_stale_commit
                     .as_mut()
                     .unwrap();
                 controls.pop();
+            }
+            5 => {
+                stale.normalization.configuration_dispositions =
+                    checked.normalization().configuration_dispositions.clone()
+            }
+            6 => {
+                stale
+                    .normalization
+                    .configuration_dispositions
+                    .as_mut()
+                    .unwrap()
+                    .dependencies
+                    .rewards = digest_owned("wrong-real-rewards", &0, 100).unwrap()
             }
             _ => unreachable!(),
         }

@@ -1,6 +1,8 @@
 //! Exact offline succession using shipped inputs; no source checkout or VM.
 #[path = "support/owned_character_reward_policy.rs"]
 mod character_reward_inventory;
+#[path = "support/owned_configuration_disposition_policy.rs"]
+mod configuration_dispositions;
 #[path = "support/owned_configuration_reward_policy.rs"]
 mod configuration_rewards;
 #[path = "support/owned_empty_character_rune_policy.rs"]
@@ -275,9 +277,23 @@ fn reward_inventory_tracks_checked_catalog_bindings_without_repairing_stale_auth
     .unwrap();
     let policy = configuration_rewards::policy(&mapping, &rewards);
     ordinary.normalization.configuration_reward_inventory = Some(policy.clone());
+    ordinary.normalization.configuration_dispositions = Some(configuration_dispositions::policy(
+        &ordinary.normalization,
+        &mapping,
+        &rewards,
+    ));
     let before = serde_json::to_vec(&ordinary).unwrap();
     let next = stage(ordinary.clone());
     assert_ne!(next.rewards().identity(), rewards.identity());
+    configuration_dispositions::assert_rebound(
+        ordinary
+            .normalization
+            .configuration_dispositions
+            .as_ref()
+            .unwrap(),
+        next.normalization(),
+        next.rewards(),
+    );
     configuration_rewards::assert_rebound(
         &policy,
         next.normalization()
@@ -329,10 +345,24 @@ fn reward_inventory_tracks_checked_catalog_bindings_without_repairing_stale_auth
     let (mut catalog, changed_source) = catalog_input();
     let catalog_policy = configuration_rewards::policy(next.mapping(), next.rewards());
     catalog.normalization.configuration_reward_inventory = Some(catalog_policy.clone());
+    catalog.normalization.configuration_dispositions = Some(configuration_dispositions::policy(
+        &catalog.normalization,
+        next.mapping(),
+        next.rewards(),
+    ));
     let mut same_source = changed_source.clone();
     same_source.source = catalog.mapping.source.clone();
     let result =
         transition_owned_catalog(catalog.clone(), same_source, Default::default()).unwrap();
+    configuration_dispositions::assert_rebound(
+        catalog
+            .normalization
+            .configuration_dispositions
+            .as_ref()
+            .unwrap(),
+        result.normalization(),
+        result.rewards(),
+    );
     configuration_rewards::assert_rebound(
         &catalog_policy,
         result

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "constructor": "ConfigTab.CreateConfigSet",
+  "preset_control": "presetBossSkills",
+  "default_index": 1,
+  "default_value": "None",
+  "observation": "The no-boss callback never reads enemyDamageRollRange; the numeric placeholder has no independent apply callback.",
+  "roll_definition": {
+    "default_placeholder": 70,
+    "has_apply": false,
+    "kind": "countAllowZero"
+  },
+  "report_sha256": "c20f9c8992fa062f59b42bcc1da77abc17581bf9e1a7133c6fef20251e27d2b6",
+  "native_default_emitted": false
+}

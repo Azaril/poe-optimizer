@@ -30,6 +30,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 pub(crate) mod allocation_access;
 mod character_reward_inventory;
+mod configuration_dispositions;
 mod configuration_inputs;
 mod configuration_reward_inventory;
 mod direct_skill_inputs;
@@ -64,6 +65,12 @@ mod support_order;
 mod tree;
 mod usage_inputs;
 pub use character_reward_inventory::CharacterRewardInventoryPolicy;
+pub(crate) use configuration_dispositions::rebind as rebind_configuration_dispositions;
+pub use configuration_dispositions::{
+    ConfigurationAdapterControl, ConfigurationDestination, ConfigurationDispositionDependencies,
+    ConfigurationDispositionPolicy, ConfigurationDispositionRule, ConfigurationResponsibility,
+    configuration_disposition_dependencies,
+};
 pub use configuration_inputs::{
     ConfigurationDefaultInput, ConfigurationInputTarget, ConfigurationInputsPolicy,
     ConfigurationNumericInput, ConfigurationOptionInput,
@@ -271,6 +278,10 @@ pub struct NormalizationPolicy {
     pub character_reward_inventory: Option<CharacterRewardInventoryPolicy>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub configuration_inputs: Option<ConfigurationInputsPolicy>,
+    /// Checked source/adapter accounting. Absence grants no additional authority;
+    /// this partial catalogue never completes a configuration inventory.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub configuration_dispositions: Option<ConfigurationDispositionPolicy>,
     /// Reviewed source presentation has no independent native input. Omission
     /// preserves historical fallback links; this never closes an inventory.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -920,6 +931,8 @@ struct CompiledNormalizationInputs<'p> {
     character_reward_inventory:
         Option<character_reward_inventory::CompiledCharacterRewardInventory<'p>>,
     configuration_inputs: Option<configuration_inputs::CompiledConfigurationInputs>,
+    configuration_dispositions:
+        Option<configuration_dispositions::CompiledConfigurationDispositions>,
     source_presentation: Option<source_presentation::CompiledSourcePresentation>,
     support_inventory: Option<support_inventory::CompiledInventory<'p>>,
     payload_inventory: Option<payload_inventory::CompiledPayloadInventory<'p>>,
@@ -953,6 +966,12 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
         encounter: encounter::compile(policy, mappings, definitions, limits)?,
         character_reward_inventory: character_reward_inventory::compile(policy, mappings, limits)?,
         configuration_inputs: configuration_inputs::compile(policy, mappings, definitions, limits)?,
+        configuration_dispositions: configuration_dispositions::compile(
+            policy,
+            mappings,
+            definitions,
+            limits,
+        )?,
         source_presentation: source_presentation::compile(policy, mappings, limits)?,
         support_inventory: support_inventory::compile(policy, mappings, limits)?,
         payload_inventory: payload_inventory::compile(policy, mappings, limits)?,
@@ -1107,6 +1126,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         encounter,
         character_reward_inventory,
         configuration_inputs,
+        configuration_dispositions,
         source_presentation,
         support_inventory,
         payload_inventory,
@@ -1123,6 +1143,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     rewards.verify_bindings(mappings, definitions)?;
     let configuration_reward_inventory =
         configuration_reward_inventory::compile(policy, mappings, rewards, limits)?;
+    configuration_dispositions::validate_rewards(policy, rewards)?;
     items.verify_bindings(definitions)?;
     item_source.verify_bindings(items, definitions)?;
     imported_item_construction::validate_bindings(
@@ -2233,13 +2254,6 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 "configuration input scenario scope",
             ))?;
         configuration_inputs::materialize(&mut b, scope, scenario, config_inputs.get(&scope))?;
-        configuration_inputs::account(
-            &mut b,
-            scope,
-            scenario,
-            &draft.choice_presets.members,
-            config_inputs.get(&scope),
-        )?;
     }
     // Allocate new intent obligations only after all historical records/issues.
     // Existing usage values and completion IDs move without reallocation.
@@ -2289,6 +2303,17 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             &generated_input_receipts,
         )?;
     }
+    configuration_dispositions::account(
+        &mut b,
+        &draft,
+        configuration_dispositions.as_ref(),
+        configuration_dispositions::AdapterReceipts {
+            encounters: &config_encounters,
+            levels: &config_levels,
+            inputs: &config_inputs,
+            rewards: &config_rewards,
+        },
+    )?;
     let occurrence_usage = matches!(
         policy.usage_inputs,
         Some(UsageInputPolicy::PobOccurrenceUsageV3 { .. })

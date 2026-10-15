@@ -1,0 +1,62 @@
+[
+  {
+    "id": "no-boss-skill-damage-roll-observation",
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "enemyDamageRollRange"
+    },
+    "destinations": [
+      {
+        "kind": "inapplicable_observation",
+        "recipe": {
+          "id": "finite-unused-enemy-damage-roll-placeholder",
+          "codec": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "quantity",
+              "value": {
+                "syntax": "scientific",
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                },
+                "scale": {
+                  "numerator": 1,
+                  "denominator": 1
+                }
+              }
+            }
+          },
+          "tiers": [
+            {
+              "selectors": [
+                {
+                  "lane": "placeholder_number",
+                  "name": "enemyDamageRollRange"
+                }
+              ],
+              "duplicates": "reject"
+            }
+          ],
+          "missing": {
+            "kind": "pending"
+          }
+        },
+        "absent_input_names": [
+          "enemyIsBoss",
+          "presetBossSkills",
+          "enemySizePreset"
+        ],
+        "reason": "inactive-boss-skill-damage-roll-placeholder"
+      }
+    ]
+  }
+]

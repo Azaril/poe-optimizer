@@ -30,6 +30,14 @@ three unavailable results. Recent minion Life work advances selected-Actor
 coverage; it does not close the saved Player Life metric. Final metric production
 and the four input inventories remain parallel completion gates.
 
+Checked numeric ranges now run in the existing Rust rule engine, with explicit
+unsupported-domain results. The first checked configuration-accounting
+publication also passes the all-five import regression: it removes one proven
+source-only Placeholder obligation per build and preserves all 110 queries.
+Original05 retains 35 configuration source links and its four Pending inventories.
+The common accounting owner replaces the older scalar-only leaf mutator; full
+catalogue/default and outside-Config accounting remain unfinished.
+
 The current [generated-skill correspondence packet](../data/owned/poe2/3887ae68/warrior-generated-correspondence/README.md)
 reuses an exact Import selector proof across saved physical and generated records.
 That reuse does not transfer physical assignment or provider authority. Eight
@@ -1506,8 +1514,14 @@ Requested multiplicity is not actor population or reservation. The
 [reporting proposal](owned-full-dps-aggregation-proposal.md) treats inclusion,
 exact contributions and reductions separately from selected-action DPS and combat
 activation. The [configuration accounting proposal](owned-configuration-dispositions-proposal.md)
-also distinguishes saved Inputs from effective constructor defaults. Neither
-proposal closes its still-Pending native inventory or numerical gates.
+also distinguishes saved Inputs from effective constructor defaults. Its first
+Import implementation now joins private checked receipts from the existing
+reward, encounter, enemy-level and scalar adapters. A partial injected policy
+can account for individual source leaves only after checking exact scope,
+semantic destinations and actual output. Deferred or unproved destinations
+remain blocking. The former scalar-only leaf mutator is removed; scalar receipts
+use this common owner. Full catalogue/default accounting and global inventory
+closure remain unfinished. Neither feature closes a native numerical gate.
 
 The current configuration projection also accepts injected typed constructor
 defaults for Player, Enemy and Environment external inputs. Import checks the
@@ -1542,9 +1556,10 @@ manual Direct root authority. Item-only Warrior exposes the missing generated
 case: its catalogue Gem identity is source metadata, not proof of a physical
 supplier. The [proposed separation](owned-source-action-root-separation-proposal.md)
 would share selector interpretation while independently validating actual
-Gem/Direct/Item/Tree supply. It is not implemented. Eight archived Warrior rows
-remain on Original05's configuration obligation; no new provider, successful
-input or accounting closure follows from the audit.
+Gem/Direct/Item/Tree supply. That general separation is not implemented. The
+narrower published correspondence now accounts for eight archived Warrior rows
+through their existing raw, usage and support owners. It creates no provider or
+native coverage authority; those owners retain their independent obligations.
 
 The additive physical V3 disposition uses that adapter to account for reference
 settings separately from intrinsic Gem parameters. Five injected recipes validate

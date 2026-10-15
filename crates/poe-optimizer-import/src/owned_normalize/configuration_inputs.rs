@@ -3,9 +3,9 @@ use super::source_shape::{fresh_config_sets, value};
 use super::*;
 use crate::owned_value::{OwnedValueCodec, WhitespacePolicy};
 mod defaults;
-mod dispositions;
+mod receipts;
 pub use defaults::{ConfigurationDefaultInput, ConfigurationInputTarget};
-pub(super) use dispositions::account;
+pub(super) use receipts::checked_receipts;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
@@ -319,6 +319,8 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
 }
 
 struct ProvenInput {
+    source_name: String,
+    selected_lane: ValueLane,
     presence_input: ExternalInputDefId,
     value_input: ExternalInputDefId,
     raw: Option<(SourceOccurrenceId, ParameterValue)>,
@@ -428,8 +430,14 @@ pub(super) fn collect(
                 }
             }
             if !blocked {
-                b.charge(1)?;
+                b.charge(input.source_name.len().saturating_add(1))?;
                 inputs.push(ProvenInput {
+                    source_name: input.source_name.clone(),
+                    selected_lane: if authored.is_none() && saved_placeholder.is_some() {
+                        ValueLane::PlaceholderNumber
+                    } else {
+                        ValueLane::InputNumber
+                    },
                     presence_input: input.presence_input.clone(),
                     value_input: input.value_input.clone(),
                     raw: authored.or(saved_placeholder),

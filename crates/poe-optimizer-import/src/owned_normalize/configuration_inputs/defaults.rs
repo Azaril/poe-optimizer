@@ -94,6 +94,9 @@ pub(super) struct CompiledDefault {
     ignored_placeholder_codec: Option<OwnedValueCodec>,
 }
 pub(super) struct ProvenDefault {
+    pub(super) selector: ValueSelector,
+    pub(super) constructor: bool,
+    pub(super) ignored_placeholder: Option<SourceOccurrenceId>,
     pub(super) value_input: ExternalInputDefId,
     pub(super) target: ConfigurationInputTarget,
     pub(super) origin: SourceOccurrenceId,
@@ -274,6 +277,7 @@ pub(super) fn collect(
     let mut output = Vec::new();
     for input in inputs {
         let mut selected = None;
+        let mut ignored_placeholder = None;
         let mut blocked = false;
         for id in row.children() {
             let child = &evidence.rows()[id.ordinal() as usize];
@@ -302,6 +306,7 @@ pub(super) fn collect(
                     blocked = true;
                     break;
                 }
+                ignored_placeholder = Some(*id);
                 continue;
             }
             if child.occurrence().name() != "Input" || selected.is_some() {
@@ -336,10 +341,14 @@ pub(super) fn collect(
             }
         }
         if !blocked {
-            b.charge(1)?;
+            b.charge(input.source_name.len().saturating_add(1))?;
+            let constructor = selected.is_none();
             let (origin, value) =
                 selected.unwrap_or_else(|| (scope, input.constructor_default.clone()));
             output.push(ProvenDefault {
+                selector: input.recipe.input().tiers[0].selectors[0].clone(),
+                constructor,
+                ignored_placeholder,
                 value_input: input.value_input.clone(),
                 target: input.target,
                 origin,

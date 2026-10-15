@@ -34,7 +34,8 @@ pub(crate) fn validate_configuration_reward_inventory(
     rewards: &OwnedRewardPolicy,
     limits: NormalizationLimits,
 ) -> Result<()> {
-    compile(policy, mappings, rewards, limits).map(|_| ())
+    compile(policy, mappings, rewards, limits)?;
+    super::configuration_dispositions::validate_rewards(policy, rewards)
 }
 
 pub(super) fn compile<'p>(
@@ -133,6 +134,45 @@ pub(super) struct ProvenConfigurationRewards {
     scope: SourceOccurrenceId,
     reviewed: BTreeSet<SourceOccurrenceId>,
     rewards: Vec<(RewardDefId, Vec<ParameterAssignment>)>,
+    controls: Vec<ProvenControl>,
+}
+
+struct ProvenControl {
+    recipe: OwnedDefinitionKey,
+    selector: ValueSelector,
+    origin: Option<SourceOccurrenceId>,
+    outcome: ProvenControlOutcome,
+}
+
+enum ProvenControlOutcome {
+    None,
+    Reward { index: usize },
+}
+
+impl ProvenControl {
+    fn checked_state(
+        &self,
+        next_output: &mut usize,
+        output_count: usize,
+    ) -> Option<configuration_dispositions::ConfigurationSourceState> {
+        use configuration_dispositions::ConfigurationSourceState;
+        Some(match (&self.outcome, self.origin.is_some()) {
+            (ProvenControlOutcome::None, true) => ConfigurationSourceState::AuthoredNone,
+            (ProvenControlOutcome::None, false) => ConfigurationSourceState::ConstructorDefaultNone,
+            (ProvenControlOutcome::Reward { index }, authored) => {
+                // Exact per-control output position; None never consumes a row.
+                if *index != *next_output || *index >= output_count {
+                    return None;
+                }
+                *next_output = next_output.saturating_add(1);
+                if authored {
+                    ConfigurationSourceState::Authored
+                } else {
+                    ConfigurationSourceState::ConstructorDefault
+                }
+            }
+        })
+    }
 }
 
 pub(super) fn collect(
@@ -185,6 +225,7 @@ pub(super) fn collect(
             continue;
         }
         let mut expected = Vec::new();
+        let mut controls = Vec::new();
         for rule in rewards.rules() {
             b.charge(1)?;
             let selector = &rule.recipe.tiers[0].selectors[0];
@@ -203,20 +244,36 @@ pub(super) fn collect(
                 }
             });
             let decision = rewards.decide(&rule.recipe.id, candidate.as_slice())?;
-            match decision.outcome {
-                RewardOutcome::None => {}
+            b.charge(
+                rule.recipe
+                    .id
+                    .as_str()
+                    .len()
+                    .saturating_add(selector.name.len())
+                    .saturating_add(1),
+            )?;
+            let outcome = match decision.outcome {
+                RewardOutcome::None => ProvenControlOutcome::None,
                 RewardOutcome::Reward {
                     definition,
                     parameters,
                 } => {
                     b.charge(parameters.len().saturating_add(1))?;
+                    let index = expected.len();
                     expected.push((definition, parameters));
+                    ProvenControlOutcome::Reward { index }
                 }
                 RewardOutcome::Unmapped { .. } => {
                     uncertain = true;
                     break;
                 }
-            }
+            };
+            controls.push(ProvenControl {
+                recipe: rule.recipe.id.clone(),
+                selector: selector.clone(),
+                origin: inputs.get(selector.name.as_str()).map(|(id, _)| *id),
+                outcome,
+            });
         }
         if !uncertain {
             b.charge(1)?;
@@ -226,11 +283,177 @@ pub(super) fn collect(
                     scope,
                     reviewed,
                     rewards: expected,
+                    controls,
                 },
             );
         }
     }
     Ok(proofs)
+}
+
+pub(super) fn checked_receipts(
+    b: &mut Builder<'_, '_>,
+    scope: SourceOccurrenceId,
+    choice: ChoicePresetId,
+    draft: &DraftSessionInput,
+    proof: Option<&ProvenConfigurationRewards>,
+) -> Result<Vec<configuration_dispositions::CheckedConfigurationReceipt>> {
+    use configuration_dispositions::CheckedConfigurationReceipt;
+    let Some(proof) = proof else {
+        return Ok(vec![]);
+    };
+    b.charge(draft.choice_presets.members.len())?;
+    let mut owners = draft
+        .choice_presets
+        .members
+        .iter()
+        .filter(|p| p.id == choice);
+    let Some(owner) = owners.next() else {
+        return Ok(vec![]);
+    };
+    if proof.scope != scope
+        || owners.next().is_some()
+        || owner.rewards.completion != DraftListCompletion::Complete
+        || owner.rewards.members.len() != proof.rewards.len()
+    {
+        return Ok(vec![]);
+    }
+    b.charge(
+        owner
+            .rewards
+            .members
+            .len()
+            .saturating_mul(draft.rewards.members.len().saturating_add(1)),
+    )?;
+    for (id, (definition, parameters)) in owner.rewards.members.iter().zip(&proof.rewards) {
+        let mut outputs = draft.rewards.members.iter().filter(|r| r.id == *id);
+        let Some(actual) = outputs.next() else {
+            return Ok(vec![]);
+        };
+        b.charge(parameters.len())?;
+        if outputs.next().is_some()
+            || actual.definition.to_resolved().as_ref() != Some(definition)
+            || actual.parameters.completion != DraftListCompletion::Complete
+            || actual.parameters.members.len() != parameters.len()
+            || !actual
+                .parameters
+                .members
+                .iter()
+                .zip(parameters)
+                .all(|(a, e)| a.to_resolved().as_ref() == Some(e))
+        {
+            return Ok(vec![]);
+        }
+    }
+    let target = OwnedOriginTarget::ChoicePreset(choice);
+    let mut result = Vec::new();
+    let mut next_output = 0usize;
+    for control in &proof.controls {
+        b.charge(
+            control
+                .recipe
+                .as_str()
+                .len()
+                .saturating_add(control.selector.name.len())
+                .saturating_add(1),
+        )?;
+        let Some(source_state) = control.checked_state(&mut next_output, proof.rewards.len())
+        else {
+            return Ok(vec![]);
+        };
+        if let Some(origin) = control.origin {
+            b.charge(
+                b.origins[origin.ordinal() as usize]
+                    .links
+                    .len()
+                    .saturating_add(1),
+            )?;
+            if b.evidence.rows()[origin.ordinal() as usize]
+                .occurrence()
+                .parent()
+                != Some(scope)
+                || b.origins[origin.ordinal() as usize]
+                    .links
+                    .iter()
+                    .filter(|l| **l == target)
+                    .count()
+                    != 1
+            {
+                continue;
+            }
+        }
+        result.push(CheckedConfigurationReceipt {
+            scope,
+            origin: control.origin,
+            selector: Some(control.selector.clone()),
+            control: ConfigurationAdapterControl::Reward {
+                recipe: control.recipe.clone(),
+            },
+            source_state,
+            target: target.clone(),
+            source_only: None,
+        });
+    }
+    if next_output != proof.rewards.len() {
+        return Ok(vec![]);
+    }
+    Ok(result)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use configuration_dispositions::ConfigurationSourceState;
+
+    #[test]
+    fn configuration_reward_receipts_keep_none_defaults_and_exact_emitting_positions_distinct() {
+        let imported = crate::build_instance::ImportedBuildInstance::from_decoded(
+            crate::decode_build(b"<PathOfBuilding2/>").unwrap(),
+            BuildLineage::from_bytes([28; 16]),
+            Default::default(),
+        )
+        .unwrap();
+        let origin = imported.occurrences()[0].id();
+        let control = |authored: bool, outcome| ProvenControl {
+            recipe: key("test-rule"),
+            selector: ValueSelector {
+                lane: ValueLane::InputBoolean,
+                name: "test-input".into(),
+            },
+            origin: authored.then_some(origin),
+            outcome,
+        };
+        let controls = [
+            control(true, ProvenControlOutcome::None),
+            control(false, ProvenControlOutcome::Reward { index: 0 }),
+            control(false, ProvenControlOutcome::None),
+            control(true, ProvenControlOutcome::Reward { index: 1 }),
+        ];
+        let mut next = 0;
+        let states: Vec<_> = controls
+            .iter()
+            .map(|c| c.checked_state(&mut next, 2).unwrap())
+            .collect();
+        assert_eq!(
+            states,
+            vec![
+                ConfigurationSourceState::AuthoredNone,
+                ConfigurationSourceState::ConstructorDefault,
+                ConfigurationSourceState::ConstructorDefaultNone,
+                ConfigurationSourceState::Authored
+            ]
+        );
+        assert_eq!(next, 2);
+        for (next, index, count) in [(0, 1, 2), (1, 0, 2), (1, 2, 2), (0, 0, 0)] {
+            let mut cursor = next;
+            assert!(
+                control(true, ProvenControlOutcome::Reward { index })
+                    .checked_state(&mut cursor, count)
+                    .is_none()
+            );
+            assert_eq!(cursor, next);
+        }
+    }
 }
 
 pub(super) fn finish(
