@@ -73,7 +73,7 @@ pub use configuration_dispositions::{
 };
 pub use configuration_inputs::{
     ConfigurationDefaultInput, ConfigurationInputTarget, ConfigurationInputsPolicy,
-    ConfigurationNumericInput, ConfigurationOptionInput,
+    ConfigurationNumericInput, ConfigurationOptionInput, ConfigurationValueSelection,
 };
 pub(crate) use configuration_reward_inventory::validate_configuration_reward_inventory;
 pub use configuration_reward_inventory::{

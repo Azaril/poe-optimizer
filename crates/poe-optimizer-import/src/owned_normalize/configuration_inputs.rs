@@ -4,7 +4,9 @@ use super::*;
 use crate::owned_value::{OwnedValueCodec, WhitespacePolicy};
 mod defaults;
 mod receipts;
-pub use defaults::{ConfigurationDefaultInput, ConfigurationInputTarget};
+pub use defaults::{
+    ConfigurationDefaultInput, ConfigurationInputTarget, ConfigurationValueSelection,
+};
 pub(super) use receipts::checked_receipts;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -82,6 +84,43 @@ fn charge(work: &mut usize, amount: usize, limits: NormalizationLimits) -> Resul
     Ok(())
 }
 
+/// A leaf cannot be accounted for by a subset of its declared projections.
+/// No disposition rule is required; without one the source remains pending.
+pub(super) fn check_projection_destinations(
+    policy: &NormalizationPolicy,
+    selector: &ValueSelector,
+    adapters: &BTreeSet<&ConfigurationAdapterControl>,
+    work: &mut usize,
+    limits: NormalizationLimits,
+) -> Result<()> {
+    let Some(ConfigurationInputsPolicy::PobFreshConfigInputsV3 { default_inputs, .. }) =
+        &policy.configuration_inputs
+    else {
+        return Ok(());
+    };
+    charge(work, default_inputs.len(), limits)?;
+    if !matches!(
+        selector.lane,
+        ValueLane::InputNumber | ValueLane::PlaceholderNumber
+    ) {
+        return Ok(());
+    }
+    for input in default_inputs {
+        charge(work, input.source_name.len().saturating_add(1), limits)?;
+        if input.selection.projects_placeholder() && input.source_name == selector.name {
+            charge(work, input.value_input.key().as_str().len(), limits)?;
+            if !adapters.contains(&ConfigurationAdapterControl::ScalarInput {
+                input: input.value_input.clone(),
+            }) {
+                return Err(NormalizationError::Policy(
+                    "configuration projection responsibilities",
+                ));
+            }
+        }
+    }
+    Ok(())
+}
+
 pub(super) fn compile<I: DefinitionSchemaIndex>(
     policy: &NormalizationPolicy,
     mappings: &OwnedMappingIndex,
@@ -137,6 +176,10 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     }
     let numeric_rows = inputs.len().saturating_add(fallbacks.len());
     let default_rows = options.len().saturating_add(constructor_inputs.len());
+    let projection_rows = constructor_inputs
+        .iter()
+        .filter(|r| r.selection.projects_placeholder())
+        .count();
     let rows = numeric_rows.saturating_add(default_rows);
     if rows == 0
         || rows > 64
@@ -144,6 +187,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             .len()
             .saturating_add(fallbacks.len().saturating_mul(2))
             .saturating_add(default_rows)
+            .saturating_add(projection_rows)
             > limits.value.max_selectors
         || numeric_rows.saturating_mul(2).saturating_add(default_rows)
             > limits.draft.input.max_collection_entries
@@ -274,7 +318,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             placeholder_fallback,
         });
     }
-    let mut compiled_defaults = Vec::new();
+    let mut compiled_defaults: Vec<defaults::CompiledDefault> = Vec::new();
     let mut tokens = defaults::TokenBudget::default();
     // The historical option DTO lowers to the same typed constructor-default
     // path. It adds no separate collection or materialization behavior.
@@ -284,7 +328,12 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             .map(defaults::DefaultInputRef::from),
     ) {
         selector_bytes = selector_bytes
-            .checked_add(input.source_name.len())
+            .checked_add(
+                input
+                    .source_name
+                    .len()
+                    .saturating_mul(1 + usize::from(input.selection.projects_placeholder())),
+            )
             .filter(|n| *n <= limits.value.max_total_selector_bytes)
             .ok_or(NormalizationError::Limit(
                 "configuration input selector bytes",
@@ -295,20 +344,40 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             || input.source_name.len() > limits.value.max_selector_bytes
             || input.source_name.trim_ascii() != input.source_name
             || input.source_name.chars().any(char::is_control)
-            || !names.insert(input.source_name.to_owned())
             || !ids.insert((input.value_input.clone(), input.target))
             || !recipes.insert(input.recipe.id.clone())
         {
             return Err(NormalizationError::Policy("configuration input identities"));
         }
-        compiled_defaults.push(defaults::compile(
+        let compiled_input = defaults::compile(
             &input,
             definitions,
             &declared,
             limits,
             &mut work,
             &mut tokens,
-        )?);
+        )?;
+        charge(&mut work, compiled_defaults.len(), limits)?;
+        if !names.insert(input.source_name.to_owned())
+            && !compiled_defaults
+                .iter()
+                .any(|old| old.shares_census(&compiled_input))
+        {
+            return Err(NormalizationError::Policy(
+                "configuration projection source agreement",
+            ));
+        }
+        compiled_defaults.push(compiled_input);
+    }
+    for input in &compiled_defaults {
+        if let Some(output) = input.projection_output() {
+            charge(&mut work, ids.len(), limits)?;
+            if ids.iter().filter(|(id, _)| id == output).count() != 1 {
+                return Err(NormalizationError::Policy(
+                    "configuration projection output identity",
+                ));
+            }
+        }
     }
     Ok(Some(CompiledConfigurationInputs {
         encounter: encounter.clone(),

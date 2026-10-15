@@ -29,6 +29,7 @@ pub(super) enum ConfigurationSourceState {
     /// Existing raw-only adapter authority, after checking both presence and value.
     OverwrittenRawPlaceholder,
     IgnoredDefaultPlaceholder,
+    UnselectedProjection,
 }
 
 /// Commitments to the exact adapters whose output is being accounted for.
@@ -301,6 +302,13 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                 },
             });
         }
+        configuration_inputs::check_projection_destinations(
+            policy,
+            &row.selector,
+            &adapters,
+            &mut work,
+            limits,
+        )?;
         rules.push(CompiledRule {
             selector: row.selector.clone(),
             destinations,

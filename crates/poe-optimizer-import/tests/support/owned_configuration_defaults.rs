@@ -160,6 +160,7 @@ fn default_policy(f: &DefaultFixture) -> NormalizationPolicy {
             target,
             recipe,
             constructor_default,
+            selection: ConfigurationValueSelection::InputOrConstructor,
             ignore_numeric_placeholder: false,
         });
     }

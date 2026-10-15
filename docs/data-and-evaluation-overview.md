@@ -63,8 +63,12 @@ The owner has also approved [multiple projections from a saved control](owned-co
 This extends the existing Import policy with explicit selection for each typed
 output and requires checked accounting for every output before retiring a source
 leaf. Enemy distance demonstrates the need: PoB's direct reader preserves zero,
-while its callback can choose the Placeholder instead. This contract is being
-implemented; distance support is not yet published. Source calculation-view
+while its callback can choose the Placeholder instead. This contract is
+implemented: each projection selects explicitly, shares checked source discovery
+and needs an exact receipt, including checked nonselection. A partially declared
+accounting rule cannot retire the leaf, and malformed losing-lane values remain
+blocking. All 537 Import library/normalization tests and strict Clippy pass.
+Distance data support is not yet published. Source calculation-view
 flags such as `Effective` are not gameplay states and will not enter the native
 model. Their treatment must be reconciled to actual scenario semantics separately.
 

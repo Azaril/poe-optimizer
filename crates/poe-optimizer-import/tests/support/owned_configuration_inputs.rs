@@ -11,6 +11,8 @@ mod disposition_tests;
 mod fallback_tests;
 #[path = "owned_configuration_options.rs"]
 mod option_tests;
+#[path = "owned_configuration_projections.rs"]
+mod projection_tests;
 use super::*;
 use serde_json::Value;
 

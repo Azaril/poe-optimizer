@@ -27,7 +27,9 @@ impl ConfigurationInputTarget {
     }
 }
 
-/// A typed authored Input, or its injected constructor value on proven absence.
+/// A typed output selected from an authored Input and, when explicitly enabled,
+/// its effective Placeholder. The constructor supplies the absent Input in the
+/// default mode, or the absent Placeholder in a projection mode.
 /// A matching malformed record never authorizes the default. Numeric
 /// Placeholders may be ignored only with explicit source-reader evidence.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -38,11 +40,34 @@ pub struct ConfigurationDefaultInput {
     pub target: ConfigurationInputTarget,
     pub recipe: ValueRecipeInput,
     pub constructor_default: ParameterValue,
+    /// Select one semantic output from the checked shared control census.
+    #[serde(
+        default,
+        skip_serializing_if = "ConfigurationValueSelection::is_default"
+    )]
+    pub selection: ConfigurationValueSelection,
     /// Admit a valid numeric Placeholder as unused source data. It supplies no
     /// value or provenance and does not suppress the constructor default when
     /// the authored Input is absent. Only numeric recipes permit this opt-in.
     #[serde(default, skip_serializing_if = "is_false")]
     pub ignore_numeric_placeholder: bool,
+}
+/// Import-only value selection; these are not native gameplay conditions.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ConfigurationValueSelection {
+    #[default]
+    InputOrConstructor,
+    InputThenPlaceholder,
+    NonzeroInputThenPlaceholder,
+}
+impl ConfigurationValueSelection {
+    fn is_default(&self) -> bool {
+        *self == Self::InputOrConstructor
+    }
+    pub(super) fn projects_placeholder(self) -> bool {
+        !self.is_default()
+    }
 }
 fn is_false(value: &bool) -> bool {
     !*value
@@ -55,6 +80,7 @@ pub(super) struct DefaultInputRef<'a> {
     pub(super) recipe: &'a ValueRecipeInput,
     constructor_default: Cow<'a, ParameterValue>,
     ignore_numeric_placeholder: bool,
+    pub(super) selection: ConfigurationValueSelection,
 }
 impl<'a> From<&'a ConfigurationOptionInput> for DefaultInputRef<'a> {
     fn from(input: &'a ConfigurationOptionInput) -> Self {
@@ -67,6 +93,7 @@ impl<'a> From<&'a ConfigurationOptionInput> for DefaultInputRef<'a> {
                 input.constructor_default.clone(),
             )),
             ignore_numeric_placeholder: false,
+            selection: ConfigurationValueSelection::InputOrConstructor,
         }
     }
 }
@@ -79,6 +106,7 @@ impl<'a> From<&'a ConfigurationDefaultInput> for DefaultInputRef<'a> {
             recipe: &input.recipe,
             constructor_default: Cow::Borrowed(&input.constructor_default),
             ignore_numeric_placeholder: input.ignore_numeric_placeholder,
+            selection: input.selection,
         }
     }
 }
@@ -92,6 +120,7 @@ pub(super) struct CompiledDefault {
     constructor_default: ParameterValue,
     attribute: &'static str,
     ignored_placeholder_codec: Option<OwnedValueCodec>,
+    selection: ConfigurationValueSelection,
 }
 pub(super) struct ProvenDefault {
     pub(super) selector: ValueSelector,
@@ -101,6 +130,27 @@ pub(super) struct ProvenDefault {
     pub(super) target: ConfigurationInputTarget,
     pub(super) origin: SourceOccurrenceId,
     pub(super) value: ParameterValue,
+    pub(super) unselected: Vec<(SourceOccurrenceId, ValueSelector)>,
+    pub(super) projected: bool,
+}
+
+impl CompiledDefault {
+    pub(super) fn shares_census(&self, other: &Self) -> bool {
+        // Compilation fixes both selector lanes, names, Reject duplicates,
+        // Pending absence and no aliases. Recipe IDs identify outputs, not a
+        // decoding difference; the remaining source semantics must agree.
+        self.source_name == other.source_name
+            && self.selection.projects_placeholder()
+            && other.selection.projects_placeholder()
+            && self.recipe.input().codec == other.recipe.input().codec
+            && self.schema == other.schema
+            && self.constructor_default == other.constructor_default
+    }
+    pub(super) fn projection_output(&self) -> Option<&ExternalInputDefId> {
+        self.selection
+            .projects_placeholder()
+            .then_some(&self.value_input)
+    }
 }
 
 #[derive(Default)]
@@ -217,6 +267,21 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             "configuration input numeric placeholder codec",
         ));
     }
+    if input.selection.projects_placeholder()
+        && (lane != ValueLane::InputNumber || input.ignore_numeric_placeholder)
+    {
+        return Err(NormalizationError::Policy(
+            "configuration projection numeric lanes",
+        ));
+    }
+    if input.selection.projects_placeholder()
+        && let ValueCodecKind::Quantity { scale, .. } = &input.recipe.codec.codec
+        && (scale.numerator.get() != 1 || scale.denominator.get() != 1)
+    {
+        return Err(NormalizationError::Policy(
+            "configuration projection raw unit",
+        ));
+    }
     if let ValueSchema::Option { allowed } = &raw.value {
         charge(work, allowed.members.len(), limits)?;
     }
@@ -255,16 +320,117 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         .then(|| OwnedValueCodec::new(recipe.codec.clone(), limits.value.value))
         .transpose()
         .map_err(ValuePolicyError::from)?;
+    let mut source_recipe = recipe.clone();
+    if input.selection.projects_placeholder() {
+        let mut placeholder = source_recipe.tiers[0].clone();
+        placeholder.selectors[0].lane = ValueLane::PlaceholderNumber;
+        source_recipe.tiers.push(placeholder);
+    }
     Ok(CompiledDefault {
         source_name: input.source_name.to_owned(),
         value_input: input.value_input.clone(),
         target: input.target,
-        recipe: ValueRecipe::new(recipe.clone(), limits.value)?,
+        recipe: ValueRecipe::new(source_recipe, limits.value)?,
         schema: raw.value.clone(),
         constructor_default: input.constructor_default.as_ref().clone(),
         attribute,
         ignored_placeholder_codec,
+        selection: input.selection,
     })
+}
+
+#[derive(Clone)]
+struct SourceValues {
+    authored: Option<(SourceOccurrenceId, ParameterValue)>,
+    placeholder: Option<(SourceOccurrenceId, ParameterValue)>,
+    ignored_placeholder: Option<SourceOccurrenceId>,
+}
+
+fn census(
+    b: &mut Builder<'_, '_>,
+    scope: SourceOccurrenceId,
+    input: &CompiledDefault,
+) -> Result<Option<SourceValues>> {
+    let evidence = b.evidence;
+    let row = &evidence.rows()[scope.ordinal() as usize];
+    let mut values = SourceValues {
+        authored: None,
+        placeholder: None,
+        ignored_placeholder: None,
+    };
+    for id in row.children() {
+        let child = &evidence.rows()[id.ordinal() as usize];
+        if value(child, "name") != Some(input.source_name.as_str()) {
+            continue;
+        }
+        // A present record with the wrong lane is never evidence that the
+        // constructor's input was absent, even under the numeric opt-in.
+        let Some(text) = value(child, input.attribute) else {
+            return Ok(None);
+        };
+        if text.len() > b.limits.value.value.max_source_bytes {
+            return Err(NormalizationError::Limit(
+                "configuration input source bytes",
+            ));
+        }
+        b.charge(text.len())?;
+        if child.occurrence().name() == "Placeholder"
+            && let Some(codec) = &input.ignored_placeholder_codec
+        {
+            // The declared source reader never consumes this value. Check
+            // its finite numeric spelling through the same typed codec,
+            // without imposing the destination value's allowed range.
+            if codec.decode(text).is_err() {
+                return Ok(None);
+            }
+            if values.ignored_placeholder.replace(*id).is_some() {
+                return Ok(None);
+            }
+            continue;
+        }
+        let selected = match child.occurrence().name() {
+            "Input" => &mut values.authored,
+            "Placeholder" if input.selection.projects_placeholder() => &mut values.placeholder,
+            _ => return Ok(None),
+        };
+        if selected.is_some() {
+            return Ok(None);
+        }
+        let (index, attribute) = b.attributes[id.ordinal() as usize][input.attribute];
+        let candidate = ValueCandidate {
+            selector: &input.recipe.input().tiers
+                [usize::from(child.occurrence().name() == "Placeholder")]
+            .selectors[0],
+            origin: SourceAttributeRef {
+                occurrence: *id,
+                index,
+            },
+            value: match attribute.decoded() {
+                Ok(text) => CandidateValue::Decoded(text),
+                Err(error) => CandidateValue::Unavailable(error),
+            },
+        };
+        if let ValueSchema::Option { allowed } = &input.schema {
+            b.charge(allowed.members.len())?;
+        }
+        match input.recipe.decide(&[candidate])?.outcome {
+            ValueOutcome::Selected { value, .. }
+                if gem_inputs::value_valid(&value, &input.schema) =>
+            {
+                *selected = Some((*id, value));
+            }
+            _ => return Ok(None),
+        }
+    }
+    Ok(Some(values))
+}
+
+fn is_zero(value: &ParameterValue) -> bool {
+    match value {
+        ParameterValue::Integer(value) => value.get() == 0,
+        ParameterValue::Quantity(value) => value.value() == 0.,
+        _ => false, // Compilation restricts zero selection to numeric controls.
+    }
 }
 
 pub(super) fn collect(
@@ -272,87 +438,67 @@ pub(super) fn collect(
     scope: SourceOccurrenceId,
     inputs: &[CompiledDefault],
 ) -> Result<Vec<ProvenDefault>> {
-    let evidence = b.evidence;
-    let row = &evidence.rows()[scope.ordinal() as usize];
     let mut output = Vec::new();
+    // Only compile-checked common source contracts share this census. Cache
+    // rejected controls as well: no projection repairs a malformed sibling.
+    let mut sources = BTreeMap::new();
     for input in inputs {
-        let mut selected = None;
-        let mut ignored_placeholder = None;
-        let mut blocked = false;
-        for id in row.children() {
-            let child = &evidence.rows()[id.ordinal() as usize];
-            if value(child, "name") != Some(input.source_name.as_str()) {
-                continue;
-            }
-            // A present record with the wrong lane is never evidence that the
-            // constructor's input was absent, even under the numeric opt-in.
-            let Some(text) = value(child, input.attribute) else {
-                blocked = true;
-                break;
-            };
-            if text.len() > b.limits.value.value.max_source_bytes {
-                return Err(NormalizationError::Limit(
-                    "configuration input source bytes",
-                ));
-            }
-            b.charge(text.len())?;
-            if child.occurrence().name() == "Placeholder"
-                && let Some(codec) = &input.ignored_placeholder_codec
-            {
-                // The declared source reader never consumes this value. Check
-                // its finite numeric spelling through the same typed codec,
-                // without imposing the destination value's allowed range.
-                if codec.decode(text).is_err() {
-                    blocked = true;
-                    break;
-                }
-                ignored_placeholder = Some(*id);
-                continue;
-            }
-            if child.occurrence().name() != "Input" || selected.is_some() {
-                blocked = true;
-                break;
-            }
-            let (index, attribute) = b.attributes[id.ordinal() as usize][input.attribute];
-            let candidate = ValueCandidate {
-                selector: &input.recipe.input().tiers[0].selectors[0],
-                origin: SourceAttributeRef {
-                    occurrence: *id,
-                    index,
-                },
-                value: match attribute.decoded() {
-                    Ok(text) => CandidateValue::Decoded(text),
-                    Err(error) => CandidateValue::Unavailable(error),
-                },
-            };
-            if let ValueSchema::Option { allowed } = &input.schema {
-                b.charge(allowed.members.len())?;
-            }
-            match input.recipe.decide(&[candidate])?.outcome {
-                ValueOutcome::Selected { value, .. }
-                    if gem_inputs::value_valid(&value, &input.schema) =>
-                {
-                    selected = Some((*id, value));
-                }
-                _ => {
-                    blocked = true;
-                    break;
-                }
-            }
+        // Key copies and cached failures cost work as well as successful values.
+        b.charge(input.source_name.len().saturating_add(1))?;
+        if let std::collections::btree_map::Entry::Vacant(entry) =
+            sources.entry(input.source_name.clone())
+        {
+            entry.insert(census(b, scope, input)?);
         }
-        if !blocked {
+        if let Some(values) = &sources[&input.source_name] {
             b.charge(input.source_name.len().saturating_add(1))?;
+            let authored = values.authored.as_ref().filter(|(_, value)| {
+                input.selection != ConfigurationValueSelection::NonzeroInputThenPlaceholder
+                    || !is_zero(value)
+            });
+            let selected = authored.or(values.placeholder.as_ref());
             let constructor = selected.is_none();
-            let (origin, value) =
-                selected.unwrap_or_else(|| (scope, input.constructor_default.clone()));
+            let (origin, value) = selected
+                .cloned()
+                .unwrap_or_else(|| (scope, input.constructor_default.clone()));
+            let mut selector = input.recipe.input().tiers[0].selectors[0].clone();
+            if values
+                .placeholder
+                .as_ref()
+                .is_some_and(|(id, _)| *id == origin)
+            {
+                selector.lane = ValueLane::PlaceholderNumber;
+            }
+            let mut unselected = Vec::new();
+            if input.selection.projects_placeholder() {
+                for (source, lane) in [
+                    (&values.authored, ValueLane::InputNumber),
+                    (&values.placeholder, ValueLane::PlaceholderNumber),
+                ] {
+                    if let Some((id, _)) = source
+                        && *id != origin
+                    {
+                        b.charge(input.source_name.len().saturating_add(1))?;
+                        unselected.push((
+                            *id,
+                            ValueSelector {
+                                lane,
+                                name: input.source_name.clone(),
+                            },
+                        ));
+                    }
+                }
+            }
             output.push(ProvenDefault {
-                selector: input.recipe.input().tiers[0].selectors[0].clone(),
+                selector,
                 constructor,
-                ignored_placeholder,
+                ignored_placeholder: values.ignored_placeholder,
                 value_input: input.value_input.clone(),
                 target: input.target,
                 origin,
                 value,
+                unselected,
+                projected: input.selection.projects_placeholder(),
             });
         }
     }

@@ -458,6 +458,17 @@ before any link is removed. This consolidation adds no second importer or
 native configuration interpreter. Full catalogue/default and global inventory
 accounting remain delivery work, not assumed completeness.
 
+The October 14 [projection proposal](owned-configuration-projections-proposal.md)
+records two live interpretations of `enemyDistance`: explicit zero survives the
+direct skill-range read but can select a nonzero Placeholder in the configuration
+callback. The owner approved representing both outputs through the existing
+adapter; implementation adds no parallel source model or compatibility version.
+Its source `Effective` gate is a PoB calculation-view setting, not a game state
+(`CalcSetup.lua:111–113,804–825`, `CalcsTab.lua:13–16,170–175`). Reconcile this gate
+to owned scenario semantics independently before any native contribution is
+admitted; do not import a UI mode flag. Numerical source agreement alone does not
+establish intended gameplay semantics or justify a PoB defect classification.
+
 The current typed constructor-default projection supports Player, Enemy and
 Environment. The older string-option DTO lowers to that same implementation;
 there is one default collector and materializer. `PobFreshNumericConfigOverridesV1`,

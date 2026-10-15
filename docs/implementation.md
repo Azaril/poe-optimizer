@@ -156,10 +156,11 @@ override and CI suppliers still need evidence. The six critical numeric
 dependencies and four critical query memberships remain open; observed zero or
 empty source buckets do not establish complete exclusions.
 
-In parallel, implement the owner's accepted
-[configuration projection contract](owned-configuration-projections-proposal.md).
-One source control may produce distinct owned inputs, with shared checked
-discovery and complete per-leaf receipts. Reuse the retained distance witness
+The owner's accepted
+[configuration projection contract](owned-configuration-projections-proposal.md)
+is now implemented and tested in Import. One source control may produce distinct
+owned inputs, with shared checked discovery and complete per-leaf receipts.
+The next data adoption should reuse the retained distance witness
 instead of adding an unnecessary observer. Its twelve distance controls and
 fourteen rows establish raw selection and two source consumer paths across JIT
 modes, not complete downstream native coverage or fresh-repeat/plain-control
@@ -169,6 +170,36 @@ not a game state, and must be reconciled separately. Original05's current
 ordinary minion-accuracy branch is intrinsically CannotBeEvaded and does not read
 distance; distance import is not by itself a new Sniper accuracy calculation.
 Do not publish unused assumptions or retire a leaf after checking only one role.
+
+### Configuration projection implementation
+
+`ConfigurationDefaultInput.selection` now explicitly chooses authored Input or
+constructor (the existing default), Input then Placeholder, or nonzero Input
+then Placeholder. These are Import-only source selectors; Core and Engine gain
+no UI, widget or Lua behavior. The current format is updated in place, without
+a compatibility version or parallel importer. Existing ordinary policies keep
+their serialized form and selection behavior.
+
+Projection rows share one checked source census, including cached failures,
+and must agree on source syntax, codec, schema and constructor. Malformed data
+in either lane invalidates all projections, even when that lane would lose.
+Each projection needs a distinct output ID, exact typed value/target and complete
+selected/unselected source receipts. An accounting rule naming only some of a
+control's declared projections is rejected. Multiple outputs add only one link
+from each source leaf to its Scenario preset. Missing accounting rules leave
+the source obligation Pending, and no receipt closes the containing inventory.
+
+Validation passes: **191 Import library tests and 346 normalization tests**,
+including eleven new projection integration tests and one private output-tamper
+test; strict Import Clippy also passes. Controls cover explicit/negative zero,
+saved/constructor zero, losing-lane errors, incomplete responsibilities,
+target/value/multiplicity tampering, per-preset isolation, ordering and limits.
+Logs: `runs/owned-configuration-projections-tests-01.log`,
+`runs/owned-configuration-projections-regression-01.log` and
+`runs/owned-configuration-projections-clippy-01.log`.
+This portable contract alone changes no release definitions or real build data;
+the Life package above remains canonical. Distance data publication, native
+consumer coverage and calculation-view reconciliation remain subsequent work.
 
 ## Previous checkpoint: Player incoming-critical receivers
 
@@ -230,15 +261,12 @@ also depends on accuracy, avoidance and category composition. Keep those gaps;
 do not add an observed-zero receiver. The smallest possible critical exclusion,
 optional override absence, still needs a complete source-name/transport proof.
 
-**Accepted next input contract:** [multiple configuration projections](owned-configuration-projections-proposal.md).
+**Subsequent input contract:** [multiple configuration projections](owned-configuration-projections-proposal.md).
 One saved enemy-distance control can yield range 0 and distance-modifier candidate
-80 from Input 0 / Placeholder 80. Current adapters cannot represent both roles.
-The owner approved extending the existing Import selection/receipt path while reusing
-typed Scenario inputs and common configuration accounting; it creates no native
-UI or Lua behavior. No source interpretation is classified as a defect.
-Implement the current policy in place with shared discovery, distinct semantic
-outputs and complete per-leaf receipts, then validate actual source controls
-before publishing distance data.
+80 from Input 0 / Placeholder 80. The existing adapter now represents both roles
+through the approved extension described above, reusing typed Scenario inputs
+and common configuration accounting. No source interpretation is classified as
+a defect. Actual source-role validation remains required before publishing data.
 Independent source inspection also identifies `Effective` as a calculation-view
 gate, not a game state. Its reconciliation belongs to the existing Lua/UI cleanup
 work: approving value projections does not authorize importing a source preview

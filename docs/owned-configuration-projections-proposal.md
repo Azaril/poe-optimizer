@@ -1,15 +1,16 @@
 # Multiple projections from one configuration control
 
-**Status:** Pending owner review, 2026-10-14. No implementation is authorized by
-this proposal. This extends the owned Import policy; it adds no Core or Engine
-authority and does not complete a configuration inventory.
+**Status:** Accepted by the owner, 2026-10-14; portable Import contract implemented
+and validated. This adds no Core or Engine authority and does not complete a
+configuration inventory. Distance data has not yet been published under this
+contract.
 
-**Recommendation:** Extend the existing configuration input adapter with explicit
-selection rules for each semantic output. Parse each saved control once, produce
-typed Scenario assumptions, and use the existing
+**Decision:** The existing configuration input adapter now has explicit selection
+rules for each semantic output. It checks each shared numeric control once,
+produces typed Scenario assumptions, and uses the existing
 [configuration disposition owner](owned-configuration-dispositions-proposal.md)
-to account for every output. Update the current format and rebuild its data;
-do not add a V4 compatibility branch, parallel importer or second source model.
+to account for every output. The current format is extended directly; there is
+no V4 compatibility branch, parallel importer or second source model.
 
 ## The concrete problem
 
@@ -33,37 +34,54 @@ modifier candidate **80**. Original05 has no authored Input and saves
 `<Placeholder number="20" name="enemyDistance"/>` in
 `tests/fixtures/builds/breadth-20260908/build-05.xml:554`, source ordinal 444.
 Its equality at 20 does not prove the two meanings interchangeable.
-These are inspected source semantics; new controlled distance observations have
-not yet established numerical parity.
+Existing retained source controls cover these selection differences; their
+bounded scope and remaining validation limits are recorded below.
 
-The current `ConfigurationNumericInput` fallback preserves zero but retains only
-the winning value. `ConfigurationDefaultInput` admits Input or a constructor
-value, not a consumed Placeholder. Configuration compilation also requires each
-`source_name` to be unique across projections. Two existing rows therefore cannot
-represent both consumers faithfully, and ignoring the Placeholder would discard
-a live input. Publishing one projection cannot account for this entire leaf.
+Before this change, `ConfigurationNumericInput` fallback preserved zero but
+retained only the winning value. `ConfigurationDefaultInput` admitted Input or
+a constructor value, not a consumed Placeholder, and compilation required each
+`source_name` to be unique across projections. Two rows could not represent both
+consumers faithfully. Ignoring the Placeholder would discard a live input;
+publishing one projection cannot account for this entire leaf.
 
-## Proposed bounded extension
+## Implemented bounded extension
 
-Reuse the existing typed adapter, source frame checks and value codecs. A control
-declares its shared input/placeholder syntax and reviewed constructor defaults;
-each output declares its own target, external-input ID and explicit selection:
+`ConfigurationDefaultInput` reuses the existing typed adapter, source frame
+checks and value codecs. A control declares its shared input/placeholder syntax
+and reviewed constructor defaults; each output declares its own target,
+external-input ID and explicit `ConfigurationValueSelection`:
 
-- **Preserve zero:** authored Input, otherwise effective Placeholder.
-- **Skip zero Input:** nonzero Input, otherwise effective Placeholder.
+- **`input_then_placeholder`:** authored Input, including zero, otherwise
+  effective Placeholder.
+- **`nonzero_input_then_placeholder`:** nonzero Input, otherwise effective
+  Placeholder.
+- **`input_or_constructor`:** the existing default mode, whose serialized field
+  is omitted and whose Input-or-constructor behavior remains unchanged.
 
 An effective Placeholder is its checked saved value, or its reviewed constructor
 value on proven absence. Malformed, duplicate or unsupported source never selects
-a default. The precise DTO spelling remains an implementation detail of this
-decision; there should be one maintained selection path.
+a default. Multiple projections must agree on their numeric codec, destination
+schema and constructor value; the compiled grammar fixes the remaining source
+recipe semantics. A shared census validates both saved lanes, including an
+unselected lane, and shares failures as well as successful values. These new
+modes accept numeric Integer or Quantity codecs only.
 
 For distance, the second output is a **callback candidate**, not an emitted
 modifier. A known zero candidate lets an injected native predicate suppress the
 contribution; it does not manufacture a zero contribution or prove its supplier
-inventory complete. The Effective applicability condition remains a separate
-native dependency. Missing output evidence is unavailable, not false or zero.
+inventory complete. Independently reconcile the source `Effective` gate to owned
+scenario semantics before emitting a contribution; this proposal imports no UI
+or calculation-mode flag. Missing output evidence is unavailable, not false or zero.
 Source widget dispatch stays in the import boundary. Native rules consume owned
 quantities and conditions, with no PoB control types, UI state or Lua truthiness.
+
+The source gate is a calculation-view policy, not a game state:
+`CalcSetup.lua:804–825` derives it from CALCS `misc_buffMode`, with other modes
+using Effective; `CalcSetup.lua:111–113` installs the database condition.
+`CalcsTab.lua:13–16,170–175` defines Unbuffed/Buffed/Combat/Effective views while
+the sidebar uses Effective. Selecting owned enemy assumptions must remain
+independent of that UI. Approving the projection selector does not establish
+an automatic mapping for these source view modes.
 
 The accepted disposition contract already supports several
 `Adapter(ScalarInput { input })` destinations for one leaf. Require a unique
@@ -90,9 +108,37 @@ zero controls. The code proves a discrepancy; it does not establish which game
 mechanic is intended. We currently lack sufficient mechanics evidence to choose
 this alternative confidently. Do not silently declare either consumer correct.
 
-The recommended extension preserves the observed meanings within the existing
-model. Its multiple-output and zero-selection authority changes the public
-Import policy, so the owner should approve it before implementation.
+The owner approved the extension: preserve the observed meanings within the
+existing model, including explicit multiple-output and zero-selection authority.
+The retained source controls and their exact data bindings gate publication of
+the raw distance inputs. Native applicability reconciliation separately gates
+emission of distance contributions; accounting for raw input ownership does not
+establish downstream mechanic coverage.
+
+## Retained source evidence and implementation validation
+
+No new PoB execution was performed for this Import change. The existing
+`owned_minion_accuracy_source` witness includes a distance subset of 12 controls
+and 14 rows: Input 0 / Placeholder 80, saved Placeholder 0, constructor 20,
+negative and fractional inputs, and CALCS Effective/Combat behavior. Its JIT-off
+and JIT-on packets have identical bytes, SHA-256
+`a61e14e329084002bdc1b1ef9034f33e62574e0982619a9a6a5dcb4554786890`, as
+recorded in `data/owned/poe2/3887ae68/minion-accuracy/authoring.json`.
+The full witness has 31 cases and 32 complete-load attempts per JIT mode; these
+are broader witness totals, not additional distance controls. There is no plain
+uninstrumented control or independent repetition of each distance variant in
+that witness. It is neither whole-build parity nor supplier-completeness proof.
+
+The portable contract passed 78 focused checks and the full Import library and
+normalization regression: 191 library tests plus 346 normalization tests. Strict
+Clippy passed for both targets. Logs are
+`runs/owned-configuration-projections-tests-01.log`,
+`runs/owned-configuration-projections-regression-01.log` and
+`runs/owned-configuration-projections-clippy-01.log`.
+The new controls cover both numeric codecs, zero constructors, shared-census
+order independence, losing-lane validation, source scopes, bounded work,
+projection identity and completeness, and tampered output value/target/count.
+Existing default policies retain their prior behavior.
 
 ## Validation required before publication
 
@@ -109,8 +155,10 @@ Import policy, so the owner should approve it before implementation.
 | Change mode, active ConfigSet or selected preset | Recompute exact applicability and ownership; no stale receipt reuse. |
 | Reimport all five originals | Preserve unrelated data, exact source correspondence and all 110 queries; record only the reviewed leaf/input delta. |
 
-Authenticate the existing catalogue/constructor bodies and add bounded original
-source controls for both consumer paths. Test the native predicates through
-ordinary and prepared execution, reused workers and Rayon. Source agreement,
-input accounting, numerical supplier coverage and complete-build evaluation
-remain separate gates.
+Before distance publication, bind its injected definitions and constructor to
+the authenticated catalogue and retained controls for both consumers; identify
+any additional evidence needed without treating the existing witness as new
+acquisition. Native contribution predicates still require ordinary and prepared
+execution, reused workers and Rayon tests after the source view gate has been
+reconciled. Source agreement, input accounting, numerical supplier coverage and
+complete-build evaluation remain separate gates.

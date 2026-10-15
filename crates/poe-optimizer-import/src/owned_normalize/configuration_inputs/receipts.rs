@@ -28,6 +28,22 @@ fn outputs_match(input: &ProvenInput, output: &[ExternalAssumptionDraft]) -> boo
         && output.windows(expected.len()).any(|rows| rows == expected)
 }
 
+fn default_output_matches(
+    input: &defaults::ProvenDefault,
+    output: &[ExternalAssumptionDraft],
+) -> bool {
+    let expected = ExternalAssumptionDraft {
+        input: input.value_input.clone().into(),
+        target: input.target.draft(),
+        value: input.value.clone().into(),
+    };
+    let mut matching = output.iter().filter(|row| {
+        row.input.to_resolved().as_ref() == Some(&input.value_input)
+            && (input.projected || row.target == input.target.draft())
+    });
+    matching.next() == Some(&expected) && matching.next().is_none()
+}
+
 /// Private per-control receipts are issued only against the actual ordered
 /// output, exact target, source scope and source links. They carry no inventory
 /// completion authority. The common owner decides whether every role is covered.
@@ -132,16 +148,7 @@ pub(in crate::owned_normalize) fn checked_receipts(
                 .saturating_add(b.origins[input.origin.ordinal() as usize].links.len())
                 .saturating_add(1),
         )?;
-        let expected = ExternalAssumptionDraft {
-            input: input.value_input.clone().into(),
-            target: input.target.draft(),
-            value: input.value.clone().into(),
-        };
-        let mut matching = scenario.scenario.assumptions.members.iter().filter(|row| {
-            row.input.to_resolved().as_ref() == Some(&input.value_input)
-                && row.target == input.target.draft()
-        });
-        if matching.next() != Some(&expected) || matching.next().is_some() {
+        if !default_output_matches(input, &scenario.scenario.assumptions.members) {
             continue;
         }
         if input.constructor {
@@ -168,6 +175,8 @@ pub(in crate::owned_normalize) fn checked_receipts(
             control: control.clone(),
             source_state: if input.constructor {
                 ConfigurationSourceState::ConstructorDefault
+            } else if input.selector.lane == ValueLane::PlaceholderNumber {
+                ConfigurationSourceState::Placeholder
             } else {
                 ConfigurationSourceState::Authored
             },
@@ -188,12 +197,100 @@ pub(in crate::owned_normalize) fn checked_receipts(
                 source_only: Some(key("unused-config-placeholder")),
             });
         }
+        for (origin, selector) in &input.unselected {
+            b.charge(selector.name.len().saturating_add(1))?;
+            if b.evidence.rows()[origin.ordinal() as usize]
+                .occurrence()
+                .parent()
+                != Some(scope)
+            {
+                continue;
+            }
+            receipts.push(CheckedConfigurationReceipt {
+                scope,
+                origin: Some(*origin),
+                selector: Some(selector.clone()),
+                control: ConfigurationAdapterControl::ScalarInput {
+                    input: input.value_input.clone(),
+                },
+                source_state: ConfigurationSourceState::UnselectedProjection,
+                target: target.clone(),
+                source_only: Some(key("unselected-config-projection")),
+            });
+        }
     }
     Ok(receipts)
 }
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn projection_receipts_require_exact_output_value_target_and_multiplicity() {
+        let ns = GameVersionNamespace::new("projection-test", "v1").unwrap();
+        let id = ExternalInputDefId::new(ns.clone(), key("output"));
+        let other = ExternalInputDefId::new(ns.clone(), key("other"));
+        let unit = UnitDefId::new(ns, key("unit"));
+        let imported = crate::build_instance::ImportedBuildInstance::from_decoded(
+            crate::decode_build(b"<PathOfBuilding2/>").unwrap(),
+            BuildLineage::from_bytes([28; 16]),
+            Default::default(),
+        )
+        .unwrap();
+        for number in [0., 80.] {
+            let value =
+                ParameterValue::Quantity(FiniteQuantity::new(number, unit.clone()).unwrap());
+            let input = defaults::ProvenDefault {
+                selector: ValueSelector {
+                    lane: ValueLane::InputNumber,
+                    name: "control".into(),
+                },
+                constructor: false,
+                ignored_placeholder: None,
+                value_input: id.clone(),
+                target: ConfigurationInputTarget::Enemy,
+                origin: imported.occurrences()[0].id(),
+                value: value.clone(),
+                unselected: vec![],
+                projected: true,
+            };
+            let expected = ExternalAssumptionDraft {
+                input: id.clone().into(),
+                target: DraftAssumptionTarget::Enemy,
+                value: value.into(),
+            };
+            assert!(default_output_matches(
+                &input,
+                std::slice::from_ref(&expected)
+            ));
+            for mutation in 0..7 {
+                let mut actual = vec![expected.clone()];
+                match mutation {
+                    0 => actual.clear(),
+                    1 => {
+                        actual[0].value = ParameterValue::Quantity(
+                            FiniteQuantity::new(number + 1., unit.clone()).unwrap(),
+                        )
+                        .into()
+                    }
+                    2 => actual[0].target = DraftAssumptionTarget::Environment,
+                    3 => actual.push(expected.clone()),
+                    4 => {
+                        let mut alias = expected.clone();
+                        alias.target = DraftAssumptionTarget::Environment;
+                        actual.push(alias);
+                    }
+                    5 => actual[0].input = other.clone().into(),
+                    6 => actual[0].value = ParameterValue::Boolean(false).into(),
+                    _ => unreachable!(),
+                }
+                assert!(
+                    !default_output_matches(&input, &actual),
+                    "value {number}, mutation {mutation}"
+                );
+            }
+        }
+    }
 
     #[test]
     fn accounting_checks_actual_presence_raw_value_target_multiplicity_and_order() {
