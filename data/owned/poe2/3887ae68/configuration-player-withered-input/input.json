@@ -1,0 +1,70 @@
+{
+  "source_name": "multiplierWitheredStackCountSelf",
+  "value_input": {
+    "kind": "external_input",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003382"
+  },
+  "target": "player",
+  "recipe": {
+    "id": "configured-withered-stacks-on-player",
+    "codec": {
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "whitespace": "exact",
+      "codec": {
+        "kind": "quantity",
+        "value": {
+          "syntax": "scientific",
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000295a"
+          },
+          "scale": {
+            "numerator": 1,
+            "denominator": 1
+          }
+        }
+      }
+    },
+    "tiers": [
+      {
+        "selectors": [
+          {
+            "lane": "input_number",
+            "name": "multiplierWitheredStackCountSelf"
+          }
+        ],
+        "duplicates": "reject"
+      }
+    ],
+    "missing": {
+      "kind": "pending"
+    }
+  },
+  "constructor_default": {
+    "kind": "quantity",
+    "value": {
+      "value": 15,
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000295a"
+      }
+    }
+  },
+  "ignore_numeric_placeholder": false,
+  "selection": "input_then_placeholder"
+}

@@ -1,0 +1,48 @@
+[
+  {
+    "selector": {
+      "name": "multiplierWitheredStackCountSelf",
+      "lane": "input_number"
+    },
+    "id": "checked-player-withered-input_number",
+    "destinations": [
+      {
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003382"
+          }
+        },
+        "kind": "adapter"
+      }
+    ]
+  },
+  {
+    "selector": {
+      "name": "multiplierWitheredStackCountSelf",
+      "lane": "placeholder_number"
+    },
+    "id": "checked-player-withered-placeholder_number",
+    "destinations": [
+      {
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003382"
+          }
+        },
+        "kind": "adapter"
+      }
+    ]
+  }
+]

@@ -71,8 +71,8 @@ blocking. All 537 Import library/normalization tests and strict Clippy pass.
 The [distance packet](../data/owned/poe2/3887ae68/configuration-distance-inputs/README.md)
 now publishes two typed Enemy assumptions for skill range and distance effects,
 using the existing distance unit. The five-build gate preserves all 110 queries
-and local IDs while accounting for one source leaf per build; Original05 retains
-31 configuration-linked origins and four selected input obligations. Six
+and local IDs while accounting for one source leaf per build; that checkpoint
+retained 31 configuration-linked origins and four selected input obligations. Six
 source/data tests, sixteen publication controls and strict Clippy pass. A zero
 candidate does not manufacture a zero contribution, and downstream mechanics
 remain incomplete. Source calculation-view
@@ -85,8 +85,12 @@ inventories, preserving its exact socket and all external jewel/radius
 responsibilities. Full source construction, not an observed empty runtime list,
 supports the closure. All-five preservation and strict Clippy pass. Original05's
 partial passive owners fall from thirteen to twelve; no input issue or complete
-build gate closes. The next raw input is the Player's configured Withered amount,
-whose downstream applicability, scaling and cap remain separate calculations.
+build gate closes. The [configured Player Withered amount](../data/owned/poe2/3887ae68/configuration-player-withered-input/README.md)
+is now a typed raw Scenario input. Saved zero, fractions and values above the
+effective stack cap survive import; downstream applicability, scaling and cap
+remain separate calculations. All-five preservation passes. Original05 now has
+thirty remaining configuration-origin links, with its four overall input
+obligations and complete-build gate still open.
 
 Archived generated skills now retain unfinished preset usage even when no
 supported manual sibling initializes it. A generic source-discovery producer
@@ -100,7 +104,8 @@ imports replace the old results; the release data and numerical coverage are
 unchanged. The all-five regression preserves every selected request and 110
 queries. Firebolt's separate archived selector/deferred-usage proof remains
 missing, so its configuration fallback stays alongside the new usage obligation;
-Original05 still has 32 configuration-linked origins and four selected issues.
+That checkpoint retained 32 configuration-linked origins and four selected issues;
+the subsequent raw-input publications above reduce the origin count to thirty.
 See the [archived-usage checkpoint](implementation.md#previous-checkpoint-archived-generated-usage-responsibilities)
 for full-corpus validation and the next complete-build blockers.
 
@@ -138,7 +143,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-empty-intrinsic-passive-socket).
+[implementation checkpoint](implementation.md#current-checkpoint-configured-player-withered-input).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -1298,7 +1303,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-empty-intrinsic-passive-socket),
+live in the [implementation plan](implementation.md#current-checkpoint-configured-player-withered-input),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.

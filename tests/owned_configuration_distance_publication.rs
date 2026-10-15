@@ -27,5 +27,6 @@ fn publish_distance_projections_preserving_all_five_originals() {
             .into(),
         original05_before: (32, 17, 15),
         new_definitions: 2,
+        expectations: publication::cases::distance(),
     });
 }

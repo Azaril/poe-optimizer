@@ -1,5 +1,8 @@
 //! Shared all-five exact preservation and real-input mutation checks.
 use crate::selected;
+#[allow(dead_code)]
+#[path = "owned_configuration_publication_cases.rs"]
+pub mod cases;
 use poe_optimizer_import::owned_release::StagedOwnedRelease;
 #[allow(dead_code)]
 #[path = "owned_configuration_accounting.rs"]
@@ -53,10 +56,10 @@ fn assumptions(draft: &mut Value) -> &mut Vec<Value> {
         .as_array_mut()
         .unwrap()
 }
-fn expected(input: &Value, v: f64) -> Value {
+fn expected(input: &Value, target: &Value, v: f64) -> Value {
     let mut value = input["constructor_default"].clone();
     value["value"]["value"] = json!(v);
-    json!({"input":{"kind":"known","value":input["value_input"]},"target":{"kind":"enemy"},"value":{"kind":"known","value":value}})
+    json!({"input":{"kind":"known","value":input["value_input"]},"target":target,"value":{"kind":"known","value":value}})
 }
 fn source(xml: &[u8]) -> ImportedBuildInstance {
     ImportedBuildInstance::from_decoded(
@@ -111,6 +114,45 @@ fn census(sidecar: &Value, e: &SourceProjectEvidence, issue: &Value) -> (usize, 
     (total, inside, total - inside)
 }
 
+#[derive(Clone, Copy)]
+pub enum LeafRole {
+    Contributes,
+    IgnoredPlaceholder,
+    UnselectedProjection,
+}
+impl LeafRole {
+    fn disposition(self) -> Value {
+        match self {
+            Self::Contributes => json!({"kind":"contributes"}),
+            Self::IgnoredPlaceholder => {
+                json!({"kind":"source_only","value":"unused-config-placeholder"})
+            }
+            Self::UnselectedProjection => {
+                json!({"kind":"source_only","value":"unselected-config-projection"})
+            }
+        }
+    }
+}
+pub struct Output {
+    pub policy_target: &'static str,
+    pub draft_target: Value,
+    pub selection: Option<&'static str>,
+    pub ignore_placeholder: bool,
+}
+pub struct Control {
+    pub name: &'static str,
+    pub input: Option<&'static str>,
+    pub placeholder: Option<&'static str>,
+    pub values: Option<Vec<f64>>,
+    /// Exact aggregate source role, independently supplied for each saved lane.
+    pub roles: [Option<LeafRole>; 2],
+}
+pub struct Expectations {
+    pub outputs: Vec<Output>,
+    pub original_placeholder: LeafRole,
+    pub default: f64,
+    pub controls: Vec<Control>,
+}
 pub struct Publication {
     pub directory: PathBuf,
     pub stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
@@ -118,6 +160,7 @@ pub struct Publication {
     pub output: PathBuf,
     pub original05_before: (usize, usize, usize),
     pub new_definitions: usize,
+    pub expectations: Expectations,
 }
 pub fn run(spec: Publication) {
     let inputs: Vec<Value> =
@@ -125,26 +168,23 @@ pub fn run(spec: Publication) {
             .into_iter()
             .map(|v| serde_json::to_value(v).unwrap())
             .collect();
-    // This harness has two explicit case families: the historical singleton
-    // default adapters, and the reviewed two-output distance selector pair.
-    // Vector length alone must not imply either source disposition or semantics.
-    let projected = inputs.iter().any(|i| i.get("selection").is_some());
-    if projected {
-        assert_eq!(inputs.len(), 2);
-        assert_eq!(inputs[0]["selection"], "input_then_placeholder");
-        assert_eq!(inputs[1]["selection"], "nonzero_input_then_placeholder");
-        for input in &inputs {
-            assert_eq!(input["source_name"], "enemyDistance");
-            assert_eq!(input["target"], "enemy");
-            assert!(
-                input
-                    .get("ignore_numeric_placeholder")
-                    .is_none_or(|v| v == false)
-            );
-        }
-    } else {
-        assert_eq!(inputs.len(), 1);
-        assert_eq!(inputs[0]["ignore_numeric_placeholder"], true);
+    // Test expectations are explicit. Neither source name nor vector length
+    // selects semantics, target ownership or source-accounting outcomes.
+    let expectation = spec.expectations;
+    assert_eq!(inputs.len(), expectation.outputs.len());
+    for (input, output) in inputs.iter().zip(&expectation.outputs) {
+        assert_eq!(input["target"], output.policy_target);
+        assert_eq!(
+            input.get("selection").and_then(Value::as_str),
+            output.selection
+        );
+        assert_eq!(
+            input
+                .get("ignore_numeric_placeholder")
+                .and_then(Value::as_bool)
+                .unwrap_or(false),
+            output.ignore_placeholder
+        );
     }
     let input = &inputs[0];
     let source_name = input["source_name"].as_str().unwrap();
@@ -155,6 +195,7 @@ pub fn run(spec: Publication) {
     let default = input["constructor_default"]["value"]["value"]
         .as_f64()
         .unwrap();
+    assert_eq!(default, expectation.default);
     for i in &inputs {
         assert_eq!(i["source_name"], input["source_name"]);
         assert_eq!(i["constructor_default"], input["constructor_default"]);
@@ -203,7 +244,8 @@ pub fn run(spec: Publication) {
             },
             inputs
                 .iter()
-                .map(|i| expected(i, default))
+                .zip(&expectation.outputs)
+                .map(|(i, o)| expected(i, &o.draft_target, default))
                 .collect::<Vec<_>>()
         );
         let oldlineage = a["draft"]["allocator"]["lineage"].clone();
@@ -241,11 +283,7 @@ pub fn run(spec: Publication) {
         assert_eq!(sa["origins"][at]["links"], json!([issue]));
         assert_eq!(
             sb["origins"][at]["disposition"],
-            if projected {
-                json!({"kind":"contributes"})
-            } else {
-                json!({"kind":"source_only","value":"unused-config-placeholder"})
-            }
+            expectation.original_placeholder.disposition()
         );
         assert_eq!(sb["origins"][at]["links"], json!([scenario]));
         let counts_before = census(&sa, &evidence, &issue);
@@ -336,52 +374,22 @@ pub fn run(spec: Publication) {
         fs::read_to_string(root.join("tests/fixtures/builds/breadth-20260908/build-05.xml"))
             .unwrap();
     let mut controls = vec![];
-    let cases = if projected {
-        vec![
-            (
-                "changed-placeholder",
-                None,
-                Some("80"),
-                Some(vec![80., 80.]),
-            ),
-            ("zero", Some("0"), Some("80"), Some(vec![0., 80.])),
-            ("negative-zero", Some("-0"), Some("80"), Some(vec![0., 80.])),
-            (
-                "fraction",
-                Some("-12.5"),
-                Some("80"),
-                Some(vec![-12.5, -12.5]),
-            ),
-            ("nonzero", Some("50"), Some("80"), Some(vec![50., 50.])),
-            ("zero-placeholder", None, Some("0"), Some(vec![0., 0.])),
-            ("both-zero", Some("0"), Some("0"), Some(vec![0., 0.])),
-            ("zero-constructor", Some("0"), None, Some(vec![0., default])),
-            ("absent", None, None, Some(vec![default, default])),
-            (
-                "boundary",
-                Some("1000000"),
-                Some("-1000000"),
-                Some(vec![1000000., 1000000.]),
-            ),
-            ("bad-placeholder", Some("0"), Some("NaN"), None),
-            ("losing-outside-range", Some("50"), Some("1000001"), None),
-            ("input-outside-range", Some("-1000001"), Some("20"), None),
-        ]
-    } else {
-        [
-            ("changed-placeholder", None, Some("999"), Some(default)),
-            ("zero", Some("0"), Some("999"), Some(0.)),
-            ("fraction", Some("-12.5"), Some("999"), Some(-12.5)),
-            ("above-probability", Some("150"), Some("999"), Some(150.)),
-            ("zero-placeholder", None, Some("0"), Some(default)),
-            ("absent", None, None, Some(default)),
-            ("bad-placeholder", Some("0"), Some("NaN"), None),
-        ]
-        .into_iter()
-        .map(|(n, i, p, v)| (n, i, p, v.map(|v| vec![v])))
-        .collect()
-    };
-    for (name, input, placeholder, expected_value) in cases {
+    for case in expectation.controls {
+        let Control {
+            name,
+            input,
+            placeholder,
+            values,
+            roles,
+        } = case;
+        assert_eq!(roles[0].is_some(), values.is_some() && input.is_some());
+        assert_eq!(
+            roles[1].is_some(),
+            values.is_some() && placeholder.is_some()
+        );
+        if let Some(values) = &values {
+            assert_eq!(values.len(), inputs.len());
+        }
         let xml = edits::field(
             &edits::field(
                 &original,
@@ -393,7 +401,7 @@ pub fn run(spec: Publication) {
             source_name,
             input.map(|v| ("number", v)),
         );
-        controls.push((name, xml, expected_value));
+        controls.push((name, xml, values, roles));
     }
     for (name, key) in [
         ("explicit-none", "presetBossSkills"),
@@ -404,9 +412,10 @@ pub fn run(spec: Publication) {
             name,
             edits::field(&original, "Input", key, Some(("string", "None"))),
             None,
+            [None, None],
         ));
     }
-    for (name, xml, value) in &controls {
+    for (name, xml, value, roles) in &controls {
         let path = out.join(format!("probe-{name}.xml"));
         fs::write(&path, xml).unwrap();
         let target = out.join(format!("probe-{name}"));
@@ -423,82 +432,58 @@ pub fn run(spec: Publication) {
                 .as_ref()
                 .map(|values| inputs
                     .iter()
+                    .zip(&expectation.outputs)
                     .zip(values)
-                    .map(|(i, v)| expected(i, *v))
+                    .map(|((i, o), v)| expected(i, &o.draft_target, *v))
                     .collect::<Vec<_>>())
                 .unwrap_or_default(),
             "{name}"
         );
-        if value.is_none() {
-            let imported = source(xml.as_bytes());
-            let e = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
-            let sidecar = read(target.join("sidecar.json"));
-            assert!(
-                sidecar["origins"][leaf(&e, "Placeholder", source_name)]["links"]
-                    .as_array()
-                    .unwrap()
-                    .iter()
-                    .any(|l| l["kind"] == "issue"),
-                "{name}"
-            );
-            if projected {
-                for row in e.rows().iter().filter(|r| {
-                    r.attribute("name")
-                        .is_some_and(|a| a.decoded().ok() == Some(source_name))
-                }) {
+        let imported = source(xml.as_bytes());
+        let e = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
+        let sidecar = read(target.join("sidecar.json"));
+        let scenario = json!({"kind":"scenario_preset","value":draft["draft"]["scenario_presets"]["members"][0]["id"]});
+        for (lane, element) in ["Input", "Placeholder"].into_iter().enumerate() {
+            let rows: Vec<_> = e
+                .rows()
+                .iter()
+                .filter(|r| {
+                    r.occurrence().name() == element
+                        && r.attribute("name")
+                            .is_some_and(|a| a.decoded().ok() == Some(source_name))
+                })
+                .collect();
+            assert!(rows.len() <= 1);
+            if value.is_some() {
+                assert_eq!(
+                    rows.len(),
+                    usize::from(roles[lane].is_some()),
+                    "{name}: saved lane inventory"
+                );
+            }
+            for row in rows {
+                let origin = &sidecar["origins"][row.occurrence().id().ordinal() as usize];
+                if value.is_none() {
                     assert!(
-                        sidecar["origins"][row.occurrence().id().ordinal() as usize]["links"]
+                        origin["links"]
                             .as_array()
                             .unwrap()
                             .iter()
                             .any(|l| l["kind"] == "issue"),
-                        "{name}: every unaccounted saved lane stays pending"
+                        "{name}: every saved lane stays pending"
+                    );
+                } else {
+                    assert_eq!(
+                        origin["links"],
+                        json!([scenario]),
+                        "{name}: one exact link per leaf"
+                    );
+                    assert_eq!(
+                        origin["disposition"],
+                        roles[lane].unwrap().disposition(),
+                        "{name}: exact checked source role"
                     );
                 }
-            }
-        }
-        if projected && value.is_some() {
-            let imported = source(xml.as_bytes());
-            let e = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
-            let sidecar = read(target.join("sidecar.json"));
-            let scenario = json!({"kind":"scenario_preset","value":draft["draft"]["scenario_presets"]["members"][0]["id"]});
-            let authored = e
-                .rows()
-                .iter()
-                .find(|r| {
-                    r.occurrence().name() == "Input"
-                        && r.attribute("name")
-                            .is_some_and(|a| a.decoded().ok() == Some(source_name))
-                })
-                .map(|r| {
-                    r.attribute("number")
-                        .unwrap()
-                        .decoded()
-                        .unwrap()
-                        .parse::<f64>()
-                        .unwrap()
-                });
-            for row in e.rows().iter().filter(|r| {
-                r.attribute("name")
-                    .is_some_and(|a| a.decoded().ok() == Some(source_name))
-            }) {
-                let at = row.occurrence().id().ordinal() as usize;
-                assert_eq!(
-                    sidecar["origins"][at]["links"],
-                    json!([scenario]),
-                    "{name}: one exact link per leaf"
-                );
-                let selected =
-                    row.occurrence().name() == "Input" || authored.is_none_or(|v| v == 0.);
-                assert_eq!(
-                    sidecar["origins"][at]["disposition"],
-                    if selected {
-                        json!({"kind":"contributes"})
-                    } else {
-                        json!({"kind":"source_only","value":"unselected-config-projection"})
-                    },
-                    "{name}: checked source role for each saved lane"
-                );
             }
         }
     }

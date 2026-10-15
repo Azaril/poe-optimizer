@@ -1,5 +1,13 @@
 # Canonical Life contribution queries
 
+This packet records the original query publication. The later
+[bounded equipment domain](../life-equipment-domain/README.md) closes the
+equipment group's reviewed numeric membership and the joined fixture now uses
+that published closure directly. It no longer creates an equipment closure of
+its own. Other source/owner gaps and final-Life work remain open; see the
+[implementation plan](../../../../../docs/implementation.md) for the current
+endpoint. The original publication's limits below describe its historical state.
+
 This packet adopts operations V23 in the current owned release and declares
 three queries over canonical Life `311a`. It preserves all existing producer
 bodies, recipients, item rolls, applicability and coverage obligations.

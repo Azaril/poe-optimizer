@@ -32,6 +32,7 @@ fn publish_configured_enemy_interval_preserving_all_five_originals() {
             .into(),
         original05_before: (35, 20, 15),
         new_definitions: 2,
+        expectations: publication::cases::ignored_enemy(700.),
     });
 }
 
@@ -49,6 +50,7 @@ fn publish_configured_enemy_critical_chance_preserving_all_five_originals() {
             .into(),
         original05_before: (34, 19, 15),
         new_definitions: 1,
+        expectations: publication::cases::ignored_enemy(5.),
     });
 }
 
@@ -66,5 +68,6 @@ fn publish_configured_enemy_critical_damage_preserving_all_five_originals() {
             .into(),
         original05_before: (33, 18, 15),
         new_definitions: 1,
+        expectations: publication::cases::ignored_enemy(30.),
     });
 }

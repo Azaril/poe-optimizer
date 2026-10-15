@@ -105,7 +105,67 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: empty intrinsic passive socket
+## Current checkpoint: configured Player Withered input
+
+The [Withered input packet](../data/owned/poe2/3887ae68/configuration-player-withered-input/README.md)
+adds one typed Scenario assumption for the Player, ExternalInput `3382` in
+existing Count Unit `295a`. It uses the accepted `input_then_placeholder`
+projection: authored zero is preserved, otherwise the saved Placeholder or
+reviewed constructor supplies the value. All five originals save Placeholder
+15. Negative, fractional and above-cap values remain raw inputs within the
+declared import domain; the downstream ten-stack cap is not applied here.
+
+The retained configuration catalogue and both callback constructions establish
+the source identity, default and Player destination. The packet adds no native
+effect, contribution, calculation-view flag or `CanBeWithered` assumption.
+Applicability, effect scaling and effective stack limits remain native work.
+No new runtime API or source execution is introduced.
+
+The current package is **`runs/owned-configuration-player-withered-publication-01/package`**:
+
+- Input: `33598edfe20d3870095441218bc8cd7cb708795b9dcf2ffbceb0379a6d4a75ca`.
+- Definitions: `4d42bca1073c746f48e0bbedb84429c69893d80dff223595a7e11f59856fda37`.
+- Rules: `3f4bb17d4ad5fd8141f3cc856fc78030ec9c8a1d7d7d4019f57c953fa8e21093`.
+- Compiled: `95d061f96391f96f3c412a0e450f4ac31d1eba41dcb37cd96419c10e38814acd`.
+- Registry: `52f73df4e76c3135c71c436f8717e483ca558af8a8b3a5cea8d1e9319a7d9191`, last issued `3382`.
+
+Nine ordinary source tests pass across the three existing scalar packets,
+distance and Withered. The all-five publication passes in 47.81s with nineteen
+input controls, exact local identities, all 110 queries, the complete draft and
+sidecar inverse, and eighteen byte-identical rebuilt artifacts. Original05's
+configuration origins fall **31 → 30**: fifteen direct Config origins plus the
+same fifteen outside Config. Selected input issues remain **106/117/109/123/4**;
+complete native builds remain **0/5**. Independent source/data review passes.
+The shared test harness now takes explicit target, selector, output and per-lane
+role expectations instead of branching on a source name or output count.
+The three existing scalar publication matrices pass in 121.29s and the distance
+matrix passes in 45.32s, preserving their endpoints. Strict Clippy passes for all
+six targets. Logs are `runs/owned-configuration-player-withered-tests-02.log`,
+`runs/owned-configuration-player-withered-publication-01.log`,
+`runs/owned-configuration-player-withered-regressions-01.log` and
+`runs/owned-configuration-player-withered-clippy-01.log`. The packet contains six
+files totaling 45,557 bytes, with LF/no-BOM JSON and exact Git byte checks.
+
+**Resume:** implement the guarded final Player Life consumer using the existing
+Stat-owned Player receiver, checked numeric/Boolean contribution queries and
+optional override selection. Reuse Life `311a` and Unit `3119`; reserve
+`3383`–`3388` for five adjustment channels and the CI Boolean. The real joined
+native producers already yield 1257 BASE, 5% increased and a MORE factor of one;
+the authored consumer should derive 1320 through the existing graph. Validate
+CI before present override (including zero) before ordinary arithmetic, the
+checked rounding domain, actual level/item mutations and reused/parallel runs.
+Retained eleven-case source vectors cover aggregate arithmetic; positive
+transformation/override controls remain synthetic. Adding a final scalar does
+not close supplier, cross-group ordering, selected owner or whole-build gaps.
+This data-only implementation uses approved public contracts and is in progress.
+
+The remaining selected passive owners are not interchangeable with empty
+intrinsic rules: the previously documented distinct-minion-type census and
+untranslated Puppet Master/Archon effects retain their own blockers. Keep raw
+input accounting separate from effect implementation and complete request
+admission. No new model decision is required for this raw Withered input.
+
+## Previous checkpoint: empty intrinsic passive socket
 
 **CI repair:** run `38675971601` at `c4a62464` failed both platforms' allocation
 export verification before Rust checks. Numeric-domain commit `55b63528` updated
@@ -132,7 +192,7 @@ ownership and coverage. The retained Spec3 empty-jewel evidence preserves the
 occupied archived Specs5/6 and supplies no authority to erase external providers.
 No new PoB execution or source-specific native behavior is added.
 
-The current package is **`runs/owned-empty-passive-socket-publication-01/package`**:
+This checkpoint's package is **`runs/owned-empty-passive-socket-publication-01/package`**:
 
 - Input: `d6e9d0f455087d0d240cc014514c94360b52a1b8bb5ba3efe810603aa13e6474`.
 - Definitions: `0f9184e99363d76bb99ed2ad5cd3f8ffd9fa5fbe02985ee876a1e3e62706db79`.
@@ -153,15 +213,10 @@ Validation logs: `runs/owned-empty-passive-socket-tests-02.log`,
 `runs/owned-empty-passive-socket-publication-01.log` and
 `runs/owned-empty-passive-socket-clippy-01.log`.
 
-**Resume:** import the Player's configured Withered amount through the existing
-single-output projection contract. Source ordinal 451 saves Placeholder 15;
-Count Unit `295a`, Player Scenario ownership and preserve-zero selection already
-exist. Retained source constructor/callback evidence supports this raw input.
-Do not pre-clamp it to the downstream ten-stack cap, emit an effect, import a
-calculation-view flag or infer `CanBeWithered`. Applicability and scaling remain
-native work. This input checkpoint needs no new public model. Continue Life
-supplier/final-metric work and preserve occurrence ownership for Sigil,
-Corrupting Cry and Demon Form settings.
+The subsequent Withered checkpoint above imports the Player's raw amount.
+Applicability and scaling remain native work. Continue Life supplier/final-metric
+work and preserve occurrence ownership for Sigil, Corrupting Cry and Demon Form
+settings.
 
 ## Previous checkpoint: configured distance inputs
 
