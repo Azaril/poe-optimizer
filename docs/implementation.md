@@ -139,6 +139,56 @@ whole-plan/registry/input gates and add no zero writers to fill gaps. Continue
 with the closest complete build, Original05, and begin optimizer integration
 only after the complete unchanged request and its reference checks pass.
 
+**Parallel supplier checkpoint completed:** the
+[offline supplier packet](../data/owned/poe2/3887ae68/mana-supplier-sources/README.md)
+reconstructs the exact selected sources and checks all declared native writers
+for the five adjustment channels. Nine equipment uses/eight items, 55 allocations
+plus two implicit roots, nine authored skills, sixteen support assignments,
+twenty-three physical gems and three generated input bindings remain distinct.
+The retained configuration predecessor has byte-identical import artifacts to
+the current Mana release; this historical binding grants no new runtime authority.
+
+Complete pinned shared-initialization and Player/class-baseline bodies now have
+reviewed neutral exclusions for the fifteen relevant source names. The dynamic
+writer domain is exactly Str/Dex/Int. Both retained source reports account for
+all eighteen baseline visits, each with 151 records and 136 stat names. These
+are two bounded source-body exclusions, not completion of their native Actor or
+Class owners. The packet's complete-supplier and native-coverage claims remain
+false. No input obligation or prior rule owner closes.
+
+Six ordinary packet tests pass (8.11s), as do explicit retention (5.84s), strict
+Clippy and exact raw/Git-byte checks. Direct controls reject new zero/inactive
+ordinary or application writers, nested/incoming source records, missing visits,
+changed item/generated/socket membership, stale grant paths and foreign lineage
+IDs even after their outer commitments are recomputed. The current typed
+policy-only and policy-plus-query commitments are checked in their distinct
+domains. The final pass also pins the exact canonical release receipt bytes.
+Evidence: `runs/owned-mana-supplier-{retain-02,tests-02,packet-clippy-02}.log`.
+Review SHA-256 is `5810da9c76ff173dffffda3df8e69d618de9b613d44cfb02f5b19fe496fdd712`.
+
+The [source witness](owned-mana-supplier-evidence.md) separately validates four
+complete loads, full observed inventories and numerical controls. Five witness
+tests and strict Clippy pass. The corrected acquisition's original strict order
+comparison remains a recorded failure; a separately pinned offline comparison
+proves only cross-destination ordering independence against the actual consumers.
+Raw acquisition bytes and driver identity remain intact, with no numerical
+waiver, native ordering change or retry-until-pass. The first defective observer
+run remains diagnostic and is not promoted.
+
+**Next blocker:** review the already-retained selected configuration/default
+callback bodies, then node/socket/generated/support constructors and declarations,
+and later procedural transformations/recipient delivery. Join these to exact
+owned source dispositions before claiming neutral supplier admission. Observed
+calls and zero Conversion transport records cannot stand in for those reviews.
+No new acquisition is implied by this backlog. The next successful source
+exclusion must identify its exact covered body/domain and preserve all remaining
+gaps; avoid another observation-only packet with no admission progress.
+
+GitHub CI for formula commit `bb26b80` is pending in run `38660297338`; the earlier
+pending main runs were coalesced by workflow concurrency. Older active-run
+formatting failures are already repaired in `0a8fa4e`; current CI is not claimed
+green. No workflow was cancelled by an agent.
+
 ## Accepted decisions and next implementation boundary
 
 On October 8 the owner approved all three recently prompted decisions:
@@ -344,10 +394,10 @@ behavior, fallback evaluator or resource-specific engine constant.
 The active V27 contract is updated in place. Compiled rule identities use
 `owned-rule-programs-v4`, invalidating downstream private plans. Old compiled
 receipts are rebuilt from authenticated authoring inputs rather than accepted
-through a compatibility loader. The unpublished Mana program checks its actual
+through a compatibility loader. The now-published guarded Mana program checks its actual
 pre-rounding operand against the injected inclusive Mana range
 `[-f64::MAX, 2^52]`; a known override can bypass that arithmetic. Transformation
-supplier admission and final publication remain independent gates.
+supplier admission remains separate from formula publication and is still open.
 
 **Native validation:** the final current-code pass has **102 Engine tests**
 (63 unit, 30 rule, three numeric-plan and six identity tests), **20 Mana tests**,

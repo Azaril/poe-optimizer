@@ -1,0 +1,96 @@
+# Mana supplier evidence and remaining admission
+
+Updated October 14, 2026. The final Mana formula is a published owned rule;
+this offline evidence concerns the sources feeding its five adjustment inputs.
+It does not grant native coverage or make the unchanged Sniper build executable.
+
+The source census includes the three outgoing Mana conversions to Energy Shield,
+Armour and Evasion, direct `ExtraMana` and `ManaTotal`, and incoming conversion or
+gain-as-Mana from Armour, Evasion, Energy Shield, Life and Ward. Those fifteen
+names belong only to source acquisition/reconciliation. Native rules use owned
+stat identities and the existing contribution graph.
+
+The earlier resource-transformation witness proves numerical operations under
+controlled inputs. Its zero-valued procedural Conversion records are transport
+results, not evidence that suppliers are absent. The new witness retains full
+constructed records and source-function references so each potential source can
+be reviewed rather than inferred from a zero final value.
+
+## Acquisition and determinism
+
+The optional PoB test `owned_mana_supplier_source` captures the unchanged
+Original05 fixture through original functions, using a read-only observer.
+Four complete loads provide two independent JIT-off observations and
+uninstrumented JIT-off/JIT-on numerical controls. Captured inventories include:
+
+- 18 initialization/baseline observations before configuration merging.
+- 663 configuration catalogue rows and 125 actual callback invocations across
+  two configuration constructions.
+- 2,394 passive construction visits and 42 node-list visits, including explicit
+  socket state.
+- 768 skill visits before routing and 768 after construction.
+- 21 environment observations with item and supplied-actor roots.
+
+The raw acquisition reports are preserved. The first run has observer defects
+and remains diagnostic: matched effects lacked socket-group context, and a loop
+header hook captured intermediate routing states. The corrected second capture
+fixes both. Its initial strict comparison still failed because PoB enumerated
+unrelated destination records in different orders; no numerical output differed.
+
+Offline comparison of the complete second pair is separately versioned and
+authenticated against the exact archived acquisition driver. It never rewrites
+that driver's recorded identity or the raw reports. Source-backed comparison
+rules admit only unrelated inventory ordering:
+
+- Ordinary modifier inventories compare full records grouped by stat, preserving
+  duplicate counts and order within each stat.
+- Constructed-skill `SkillData` records may reorder distinct assigned keys.
+  `CalcActiveSkill` assigns each record to `skillData[value.key]`; duplicate-key
+  order and every field remain exact.
+- Constructed-skill `MinionModifier` wrappers may reorder distinct nested stat
+  names. `CalcPerform` passes the nested modifier unchanged to `ModDB:AddMod`,
+  which appends it to its own stat list. Same-destination ordering, conditions,
+  flags, duplicates and values remain exact.
+
+These are source-inventory comparison rules, not native arithmetic laws or
+numerical parity exceptions. Native fresh/reused/parallel checks remain strict.
+The comparison also preserves exact counts, complete record bodies, constructed
+skill data and all observed scalar outputs. Mutation tests exercise same-key
+ordering, payload changes and duplicates.
+
+Five ordinary witness tests, retained-pair verification (4.01s) and strict Clippy
+pass. Logs are `runs/owned-mana-supplier-{ordinary-03,retained-01,clippy-01}.log`.
+The retained comparison receipt is
+`runs/owned-mana-supplier-source-02/retained-comparison.json`, SHA-256
+`be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155`.
+The failed acquisition-comparison logs remain alongside it; this is not a
+retry-until-pass protocol.
+
+## Limits and next work
+
+Actual callback invocations do not account for unexecuted branches. A function
+reference needs a complete body review before it supplies an exclusion. Item
+snapshots must be joined with the existing exact slot/bonded-item recipe audit;
+environment construction must be joined with later buff and recipient delivery.
+Node, generated-skill, support and socket records similarly require complete
+constructor/declaration accounting.
+
+The [supplier packet](../data/owned/poe2/3887ae68/mana-supplier-sources/README.md)
+binds these observations to saved source occurrences and the existing owned
+selection. Its body exclusions and unresolved domains are separate from runtime
+owner completeness. A changed or missing source, foreign lineage, new inactive
+writer, or zero-valued writer must fail reconciliation itself. Whole-plan
+unavailability is not a substitute for those direct checks.
+
+The first body exclusions now pass for complete shared initialization and the
+Player/class baseline. Their only dynamic writer names come from the literal
+Str/Dex/Int loop. Both reports' eighteen baseline visits each preserve all 151
+records and 136 stat names. Six packet regressions, explicit retention and strict
+Clippy pass; none grants native Actor/Class completion. The packet also preserves
+nine equipment uses of eight items, 55 allocations and two implicit roots,
+nine authored skills, sixteen support assignments, twenty-three physical gems,
+and three generated input bindings.
+
+Continue the selected neutral-domain review before positive transfer mechanics.
+Preserve all four Original05 input obligations, prior Partial owners and global
+query/plan gates until their own proofs and native implementations are complete.

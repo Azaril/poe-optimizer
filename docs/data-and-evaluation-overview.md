@@ -47,6 +47,12 @@ declaration. Source-supplier admission, whole-plan completeness and the producti
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
 [implementation checkpoint](implementation.md#current-checkpoint-guarded-player-mana-publication).
+The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
+neutral exclusions for complete shared-initialization and Player/class-baseline
+source bodies. Its retained construction records and direct mutation controls
+preserve exact source identity and multiplicity. Configuration callbacks and
+later transformations remain unresolved; neither a zero observation nor a
+source-only exclusion completes native owners or global contribution coverage.
 
 The current [generated-skill correspondence packet](../data/owned/poe2/3887ae68/warrior-generated-correspondence/README.md)
 reuses an exact Import selector proof across saved physical and generated records.

@@ -1,0 +1,112 @@
+{
+  "acquisition": [
+    {
+      "bytes": 14322,
+      "path": "acquisition-driver.rs",
+      "sha256": "be4593763a3ad6503d7aea1f8eda71346175374f256578c3d5c41ee2c9e77c6b"
+    },
+    {
+      "bytes": 11680,
+      "path": "acquisition-observer.lua",
+      "sha256": "8da6bcb569e35a57628632d783c8be454125d11055a8a38b2727c1d4fdf49e9c"
+    },
+    {
+      "bytes": 81347,
+      "path": "acquisition-helpers.lua",
+      "sha256": "9c6af9dd3261cf196dbd5182cce05e7eb87a9c2033090d96047fad7d4feeb7f0"
+    },
+    {
+      "bytes": 14535,
+      "path": "acquisition-bootstrap.rs",
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9"
+    }
+  ],
+  "comparison_driver_sha256": "e2e2526b24c1fda3badb3d2ff33eed351ec48702fa5e1cd4e1c371bfa6a7e9e1",
+  "comparison_policy": {
+    "constructed_skill_MinionModifier": "distinct nested destination names; same-name order preserved",
+    "constructed_skill_SkillData": "distinct assignment keys; same-key order preserved",
+    "constructed_visits": "counted inventories",
+    "record_lists": "stat buckets preserving same-stat order"
+  },
+  "counts": {
+    "baseline": 18,
+    "callback_invocations": 125,
+    "configuration": 2,
+    "environments": 21,
+    "node_construction": 2394,
+    "node_lists": 42,
+    "skill_construction": 1536
+  },
+  "files": [
+    {
+      "bytes": 24913131,
+      "path": "jit-off-observed-raw.json",
+      "sha256": "ec9dffc4252aa2bd810795057c1772e9ca487e53098392f5c8b2abcf3d8b25e0"
+    },
+    {
+      "bytes": 131190,
+      "path": "jit-off-plain-raw.json",
+      "sha256": "cf0c183a637a0f2622c58d75677667bb03222bab7fd8d2338d2a9c53edc9004e"
+    },
+    {
+      "bytes": 25031221,
+      "path": "source-jit-off.json",
+      "sha256": "542e0e7ebc1947a45be14f8b0c9e4eed28df2d37d7d46c8d3fd0a1ee5444c971"
+    },
+    {
+      "bytes": 24913139,
+      "path": "jit-on-observed-raw.json",
+      "sha256": "9a699d2420c47fb23c56e2c0249f6c1f746a0ffe09832f7b0d2db85fdb1fdbb7"
+    },
+    {
+      "bytes": 131199,
+      "path": "jit-on-plain-raw.json",
+      "sha256": "2f7551daf641b7ebc018e6e698ba8a06a691329dec3fd25123430ea565e63547"
+    },
+    {
+      "bytes": 25031220,
+      "path": "source-jit-on.json",
+      "sha256": "fd7cd3dfbe854e876fa9bc452d09814edefbd53d83019869bd0e06da73ceb22e"
+    }
+  ],
+  "kind": "retained-mana-supplier-construction-comparison",
+  "schema_version": 1,
+  "scope": {
+    "all_record_bodies_and_multiplicities_exact": true,
+    "all_scalar_outputs_exact": true,
+    "native_arithmetic_order_authority": false,
+    "native_coverage_authorized": false,
+    "new_source_loads": 0,
+    "raw_reports_unchanged": true,
+    "unresolved_branches_preserved": true
+  },
+  "source_consumers": [
+    {
+      "body": "\tfor _, value in ipairs(env.modDB:List(activeSkill.skillCfg, \"SkillData\")) do\n\t\tactiveSkill.skillData[value.key] = value.value\n\tend\n\tfor _, value in ipairs(skillModList:List(activeSkill.skillCfg, \"SkillData\")) do\n\t\tactiveSkill.skillData[value.key] = value.value\n\tend",
+      "body_sha256": "7459c5b46371a774b1620b25560fe271c50f01361c64fcd420c39a2f688dc781",
+      "first_line": 896,
+      "last_line": 901,
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "source_newlines": "CRLF normalized to LF; exact pinned manifest contract",
+      "whole_file_sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "body": "local function addMinionModifiers(modList, skillCfg, minion)\n\tfor _, value in ipairs(modList:List(skillCfg, \"MinionModifier\")) do\n\t\tif not value.type or minion.type == value.type then\n\t\t\tminion.modDB:AddMod(value.mod)\n\t\tend\n\tend\nend",
+      "body_sha256": "a04941c33f124816eafabf0ec6f3f90787db456afe1bd7fe5c2fcad4c8b0b569",
+      "first_line": 1161,
+      "last_line": 1167,
+      "path": "src/Modules/CalcPerform.lua",
+      "source_newlines": "CRLF normalized to LF; exact pinned manifest contract",
+      "whole_file_sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "body": "function ModDBClass:AddMod(mod)\n\tlocal name = mod.name\n\tif not self.mods[name] then\n\t\tself.mods[name] = { }\n\tend\n\tt_insert(self.mods[name], mod)\nend",
+      "body_sha256": "ee630c4e523799697498a51aa49801f1bb9ce58da18bd1e8e0efe5949ce02bf9",
+      "first_line": 31,
+      "last_line": 37,
+      "path": "src/Classes/ModDB.lua",
+      "source_newlines": "CRLF normalized to LF; exact pinned manifest contract",
+      "whole_file_sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    }
+  ]
+}

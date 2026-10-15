@@ -1,0 +1,166 @@
+{
+  "files": [
+    {
+      "bytes": 1188831,
+      "compressed_sha256": "f835e9141b9e3991097f3d61c970c38b3507a2bc256b039adabe91eedd2ab06a",
+      "name": "draft.json",
+      "sha256": "594480542a61f0b69ecc3c0c9f05e8dbbba47b5da7745e5e5dd6a7ddb98f0c1d",
+      "source": "runs/owned-configuration-accounting-publication-02/original-05/draft.json"
+    },
+    {
+      "bytes": 951597,
+      "compressed_sha256": "74dbb871f2e7c773799bd914df7cdd0311562db20559bbf9628f47624ccec13f",
+      "name": "sidecar.json",
+      "sha256": "9e6ce24b24ab080f205ee8fde8935c5e8ffa0d7369aedb78e3ab2fbd542e43b7",
+      "source": "runs/owned-configuration-accounting-publication-02/original-05/sidecar.json"
+    },
+    {
+      "bytes": 705,
+      "compressed_sha256": "e86f10eba60e770d4629a2824ef895db1f5cfee46335222e306810212c8d65c6",
+      "name": "selection.json",
+      "sha256": "ddb5c3190819264621e685096e81a529b3de867d7d71ccb40b271d376e36d854",
+      "source": "runs/owned-configuration-accounting-publication-02/selection-05.json"
+    },
+    {
+      "bytes": 2485,
+      "compressed_sha256": "0956227b310fb3440d93dc84d9db4bff3fa5435b28b6fd3708ba1dcef7b9c4b7",
+      "name": "import-report.json",
+      "sha256": "34622a892db11c79c1bab5ba10ac37ddfac9f0ae485a8808a02498ffefd67ad2",
+      "source": "runs/owned-configuration-accounting-publication-02/original-05/report.json"
+    },
+    {
+      "bytes": 1513,
+      "compressed_sha256": "4bf3dae992442f90a4e23c5b60b728feed7d1948446f7ff9181bc68b0782c1c3",
+      "name": "manifest.json",
+      "sha256": "e2e54294c364e34efb92bf2fad18ab151be040cb9f23677b436a7bb29916bc4a",
+      "source": "runs/owned-configuration-accounting-publication-02/package/manifest.json"
+    },
+    {
+      "bytes": 46863,
+      "compressed_sha256": "9b27abd9f21eeaa5ae9814e1e9267479554363c27ce9601725b88585e8cd4e70",
+      "name": "release.json",
+      "sha256": "d8e22b5197b6c70e0f1996e9eca3745f4e37b27dd60145ce2717d87059e6bb58",
+      "source": "runs/owned-configuration-accounting-publication-02/package/release.json"
+    },
+    {
+      "bytes": 17231070,
+      "compressed_sha256": "d67c24832605c9a8cb0001d8a09cf61ba79b508e263ad54f13e3e57c557a6fe3",
+      "name": "rules.json",
+      "sha256": "34f4880a51182d89006651942c2a02890c2af3dc1bf8d064e6be292852d9c992",
+      "source": "runs/owned-configuration-accounting-publication-02/package/rules.json"
+    },
+    {
+      "bytes": 1821428,
+      "compressed_sha256": "0ed5077c185e0aa842caa3db9bf17ce95b8daced74a321a47ca1873d0e1f8765",
+      "name": "normalization.json",
+      "sha256": "9abdfc80de108dbbb537e7850c00411ccbd5baba8d469626feb0c4bb56034886",
+      "source": "runs/owned-configuration-accounting-publication-02/package/normalization.json"
+    },
+    {
+      "bytes": 9732,
+      "compressed_sha256": "694cc8488c312a3f6b1cf7b5eb1314c4e936b9f937df859880db29e3c33ae856",
+      "name": "queries-original-05.json",
+      "sha256": "4b520d4204aa9a4124b9a8963af1c7cc445c18218766655cca21686993f69fa0",
+      "source": "runs/owned-configuration-accounting-publication-02/package/queries-original-05.json"
+    },
+    {
+      "bytes": 24913131,
+      "compressed_sha256": "092dd62150be179f6e1178229fb84c096dd01b8e862721e8e7e605f2ac8d010b",
+      "name": "jit-off-observed-raw.json",
+      "sha256": "ec9dffc4252aa2bd810795057c1772e9ca487e53098392f5c8b2abcf3d8b25e0",
+      "source": "runs/owned-mana-supplier-source-02/jit-off-observed-raw.json"
+    },
+    {
+      "bytes": 131190,
+      "compressed_sha256": "c4d0a24cccb039ef60a3833a0f984c7cef1277f0a7c91d0158c96f8b16f62894",
+      "name": "jit-off-plain-raw.json",
+      "sha256": "cf0c183a637a0f2622c58d75677667bb03222bab7fd8d2338d2a9c53edc9004e",
+      "source": "runs/owned-mana-supplier-source-02/jit-off-plain-raw.json"
+    },
+    {
+      "bytes": 25031221,
+      "compressed_sha256": "eb3e2f5df46d7c7f7e55b5968d1609ab7c6010f2b93b24137dec3d925e65b842",
+      "name": "source-jit-off.json",
+      "sha256": "542e0e7ebc1947a45be14f8b0c9e4eed28df2d37d7d46c8d3fd0a1ee5444c971",
+      "source": "runs/owned-mana-supplier-source-02/source-jit-off.json"
+    },
+    {
+      "bytes": 24913139,
+      "compressed_sha256": "964b44fa48bc79f673c491af222bb2a0d7f57b37f4ec6847bfc4a832cc9cc9d8",
+      "name": "jit-on-observed-raw.json",
+      "sha256": "9a699d2420c47fb23c56e2c0249f6c1f746a0ffe09832f7b0d2db85fdb1fdbb7",
+      "source": "runs/owned-mana-supplier-source-02/jit-on-observed-raw.json"
+    },
+    {
+      "bytes": 131199,
+      "compressed_sha256": "2c2ef2e6cb724002dd5580e9e8f0881fd919099f36381ec88295c56f436303b2",
+      "name": "jit-on-plain-raw.json",
+      "sha256": "2f7551daf641b7ebc018e6e698ba8a06a691329dec3fd25123430ea565e63547",
+      "source": "runs/owned-mana-supplier-source-02/jit-on-plain-raw.json"
+    },
+    {
+      "bytes": 25031220,
+      "compressed_sha256": "f895dff33823fa7dd6a33dc874b6f66bdc424291e0fd45216761691cd5777242",
+      "name": "source-jit-on.json",
+      "sha256": "fd7cd3dfbe854e876fa9bc452d09814edefbd53d83019869bd0e06da73ceb22e",
+      "source": "runs/owned-mana-supplier-source-02/source-jit-on.json"
+    },
+    {
+      "bytes": 14322,
+      "compressed_sha256": "fd8637156c24b8402c135100527002e6f4274c36cf3700d0f4b8e9b8f724b6db",
+      "name": "acquisition-driver.rs",
+      "sha256": "be4593763a3ad6503d7aea1f8eda71346175374f256578c3d5c41ee2c9e77c6b",
+      "source": "runs/owned-mana-supplier-source-02/acquisition-driver.rs"
+    },
+    {
+      "bytes": 11680,
+      "compressed_sha256": "8c0d741340c83b429aae4d3910d23bd7e15d1d4b66d73a23228fa4b6839e6cb0",
+      "name": "acquisition-observer.lua",
+      "sha256": "8da6bcb569e35a57628632d783c8be454125d11055a8a38b2727c1d4fdf49e9c",
+      "source": "runs/owned-mana-supplier-source-02/acquisition-observer.lua"
+    },
+    {
+      "bytes": 81347,
+      "compressed_sha256": "a9e1dd504f10eed34d1aa03b99e2e17e661f46843065aba68752da14e07fdf8f",
+      "name": "acquisition-helpers.lua",
+      "sha256": "9c6af9dd3261cf196dbd5182cce05e7eb87a9c2033090d96047fad7d4feeb7f0",
+      "source": "runs/owned-mana-supplier-source-02/acquisition-helpers.lua"
+    },
+    {
+      "bytes": 14535,
+      "compressed_sha256": "906745b6c26d25bc5a2eb220a7aacccbd3b7da06e88d9fa500cf6dc927d9ff1e",
+      "name": "acquisition-bootstrap.rs",
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9",
+      "source": "runs/owned-mana-supplier-source-02/acquisition-bootstrap.rs"
+    },
+    {
+      "bytes": 217603,
+      "compressed_sha256": "5a7e58cb01e31f8f7d7e2b5988ebd183ab6d7cb4f0f097b925c8a95680a17de4",
+      "name": "source-manifest.json",
+      "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+      "source": "crates/poe-optimizer-pob/data/pob-source-manifest.json"
+    },
+    {
+      "bytes": 23927,
+      "compressed_sha256": "8ca67d0a640f09555f28457899123ad31a27bfe1a990df82821da908106df960",
+      "name": "comparison-driver.rs",
+      "sha256": "e2e2526b24c1fda3badb3d2ff33eed351ec48702fa5e1cd4e1c371bfa6a7e9e1",
+      "source": "crates/poe-optimizer-pob/tests/owned_mana_supplier_source.rs"
+    },
+    {
+      "bytes": 67979,
+      "compressed_sha256": "978e927bb815ad02b2f26bf8a602ba5bd79293fd611da90becfb136993126339",
+      "name": "upstream-LICENSE.md",
+      "sha256": "22d2d075c1d361971764fbbd1e12e1485bdf35f0769ffac4eca8a79afc60dda8",
+      "source": "vendor/path-of-building-poe2/LICENSE.md"
+    },
+    {
+      "bytes": 100609,
+      "compressed_sha256": "6cf68ffe3f750e1b0670c54f4152fa2cbd88db2c1092d16c7541f773582a708c",
+      "name": "CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "source": "vendor/path-of-building-poe2/src/Modules/CalcSetup.lua"
+    }
+  ],
+  "schema_version": 1
+}
