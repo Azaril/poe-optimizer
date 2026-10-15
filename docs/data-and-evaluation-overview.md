@@ -1361,8 +1361,18 @@ complete loader bodies exclude the reviewed callbacks; parent-weapon delivery
 keeps its independent original Flag-call authority. Seven tests and strict
 Clippy pass. No source interpreter or Lua flag type enters native evaluation.
 
-Direct/local source completeness, remaining dynamic factories, other extra-stat
-expansion and final source-to-native membership remain admission work. These
+The [later-helper proof](../data/owned/poe2/3887ae68/self-flat-later-helpers/README.md)
+reviews complete Actor, defence and trigger bodies and their destinations.
+Computed names have explicit finite resource/resistance domains; arbitrary
+nested EnemyModifier payloads retain their actual Actor destination. The late
+reservation-created ExtraAura is kept explicit: it follows same-pass delivery,
+and the actual earlier query is separately captured as empty. This is no claim
+about arbitrary future or reused PoB state. Exact Basic construction and dispatch
+prove no selected trigger handler. Seven tests and strict Clippy pass.
+
+The enumerated finite source path now has these validated component proofs;
+their final join to the native potential-writer census and checked contribution
+membership remains admission work. These
 authenticated Lua observations stay offline; the
 native runtime gains no Lua record type or interpreter. The older unpublished
 flat-damage drafts retain useful arithmetic/parity tests, but their IDs now

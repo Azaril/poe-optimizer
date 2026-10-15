@@ -1,0 +1,60 @@
+{
+  "bodies_sha256": "c8b99d9a6d63ce813641a07969baa4a8bf3a417f02545b917849fd1da5b858ef",
+  "construction": {
+    "basic_rows_by_mode": {
+      "CALCS": 2,
+      "CALCULATOR": 2,
+      "MAIN": 32
+    },
+    "basic_trigger_dispatch": "no matching config; source-derived, not an observed dispatch event",
+    "child_lifecycle": {
+      "child_level": 1,
+      "child_pairs": 18,
+      "child_quality": 0,
+      "modes": {
+        "CALCS": 1,
+        "CALCULATOR": 1,
+        "MAIN": 16
+      },
+      "profile": "RaisedSkeletonSniper",
+      "recipe": "MinionMeleeBow",
+      "recipe_sha256": "abc764c4728687f465ffea2ea8b16e597e2a91121ee7e2e37a5bbe7d2c90e213",
+      "selected_bindings_sha256": "e2089f9e8487b75ad46f708255a1bc157c4b004129842d7f245f06dccd36570e",
+      "support_effects": 0
+    },
+    "triggered_by_nil_observed": false
+  },
+  "inputs_sha256": "d7df2cde5648ee00354c80f70f50285f12851070d31b16677777b2d7b1c08faf",
+  "kind": "finite-selected-later-helper-destinations",
+  "late_aura_limit": "Reservation may append arbitrary nested ExtraAura payloads. It runs after current-pass ExtraAura delivery; this proves no immediate delivery by these helpers, not absence, purity, arbitrary reused-environment behavior or future-pass exclusion.",
+  "minion_store_review_sha256": "743bf794c227a577ae97a92e3823541f734af31046788b9f04db35e988f38b0d",
+  "remaining": [
+    "Exact later Party/AffectedByAuraMod call-time authority belongs to its separate source capture.",
+    "Flask/Keystone and Action-local factory proofs are separate dependencies, not closed by this helper packet.",
+    "Parent-store readers, global supplier admission, numeric behavior and final native membership remain outside this proof."
+  ],
+  "schema_version": 1,
+  "scope": {
+    "all_temporal_minion_writers_accounted": false,
+    "native_coverage_authorized": false,
+    "new_source_execution": false,
+    "numeric_order_authority": false,
+    "universal_factory_absence": false
+  },
+  "source_deductions": {
+    "Player_offence_minion_writes": [
+      "CritChance",
+      "CritMultiplier"
+    ],
+    "attributes_charges_misc_literal_store_names_reviewed": true,
+    "defence_computed_names_have_explicit_closed_domains": true,
+    "defence_estimations_and_breakdowns_write_outputs_not_modifier_payloads": true,
+    "direct_names_exclude_reviewed_self_flat_and_factory_names": true,
+    "enemy_modifier_destination_is_actor_enemy_not_selected_friendly_minion": true,
+    "enemy_modifier_payload_names_remain_arbitrary": true,
+    "late_ExtraAura_creation_preserved": true,
+    "late_ExtraAura_reused_or_future_pass_absence_proved": false,
+    "late_ExtraAura_same_pass_delivery_precedes_creation": true,
+    "selected_Basic_trigger_handler_not_dispatched_by_pinned_source": true
+  }
+}

@@ -183,7 +183,7 @@ physical endpoints together:
 | --- | --- |
 | Flask/Charm and Keystone | [Offline proof](../data/owned/poe2/3887ae68/self-flat-flask-keystone/README.md): all 112 actual candidates across each of 21 fresh environments exclude Flask/Charm providers. Complete dispatch and early destination review plus two exact 30-record Sniper deliveries exclude primary Keystone candidates. The secondary query is unexecuted, not observed empty. |
 | Later Party and aura delivery | [Fixed acquisition](../data/owned/poe2/3887ae68/self-flat-later-aura-delivery/README.md): all 18 original performs contain the exact Party gate and AffectedByAuraMod List call, with complete empty raw ancestry/returns and no delivery. All four numerical snapshots agree. The initial validator's path assertion failed; its capture/code/log remain sealed and the corrected offline assessment required no source rerun. |
-| Later Actor/defence/trigger helpers | Complete destination and computed-name review is authored; focused validation is queued. Arbitrary EnemyModifier payloads target the actual Enemy relation. Late ExtraAura creation remains explicit and is only excluded from same-pass delivery; original 3169 query evidence supplies the separate finite captured-call authority. |
+| Later Actor/defence/trigger helpers | [Validated offline proof](../data/owned/poe2/3887ae68/self-flat-later-helpers/README.md): complete destination and computed-name review retains arbitrary EnemyModifier payloads targeting the actual Enemy relation. Late ExtraAura creation remains explicit and is only excluded from same-pass delivery; original 3169 query evidence supplies the separate finite captured-call authority. Seven ordinary tests, retention and strict Clippy pass. |
 | Action factories and callbacks | [Validated offline proof](../data/owned/poe2/3887ae68/self-flat-action-factories/README.md): complete factory/filter bodies and exact Basic Attack configuration establish that twenty Spell-only write sites are inapplicable, not absent. Parent-weapon and callbacks retain separate source authority. Seven ordinary tests, offline retention and strict Clippy pass. |
 
 The final shared suite passes **48 ordinary tests** and strict Clippy across
@@ -195,6 +195,8 @@ blocking issue. Logs:
 and `runs/owned-later-aura-{retain,ordinary,clippy,source-clippy}-01.log`.
 The separate Action target passes seven tests (14.15s), retention (10.87s) and
 strict Clippy (1.19s): `runs/owned-self-flat-action-factories-{retain,ordinary,clippy}-01.log`.
+The later-helper target passes seven tests (15.33s), retention (12.13s) and
+strict Clippy (1.32s): `runs/owned-self-flat-later-helpers-{retain,ordinary,clippy}-01.log`.
 The preserved first aura assessment failure and earlier inherited raw-order
 failure grant no numerical tolerance or native Lua ordering behavior.
 
@@ -202,8 +204,8 @@ These source packets change no canonical package, allocator ID, program, query,
 native coverage or complete-build count. Current package and input checkpoint
 remain the Current Energy Shield publication above; complete builds are **0/5**.
 
-**Resume:** finish the later-helper source gate, then publish the checked native
-writer census and final physical consumer together. Use the current imported
+**Resume:** publish the checked native writer census and final physical consumer
+together. All four source follow-ups above are validated. Use the current imported
 preparation graph and existing exact Action contribution queries, intrinsic
 3212/3213 endpoints, real 336e multiplier, coefficient and Enemy-source proofs.
 Allocate fresh IDs after 3399. The old arithmetic draft's IDs collide and cannot
