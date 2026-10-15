@@ -140,8 +140,11 @@ all-five publication and strict Clippy pass. Nine supplier queries and the final
 owner remain Partial: source suppression, routing, magnitude transforms and
 numeric ordering still require admission. This is a verified component, not a
 complete unchanged-build result. Resource capacity is separate from reservation
-and the source's negative unreserved Spirit; the proposed resource-obligation
-ownership change still awaits a decision.
+and the source's negative unreserved Spirit. The owner accepted
+[Skill-owned resource obligations](owned-resource-obligations-proposal.md) on
+October 15. Its public contract, Skill support receiving and reservation-data
+migration remain to be implemented; the current reservation path still depends
+on Action construction.
 
 The [Mana cleanup](../data/owned/poe2/3887ae68/mana-direct-queries/README.md)
 removes five forwarding programs and Player receivers. The final Mana program

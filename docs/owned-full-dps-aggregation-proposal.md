@@ -6,6 +6,15 @@ Existing count transport and raw-input publications do not establish aggregate
 damage parity or complete usage inventories.
 **Date:** 2026-10-05.
 
+**October 15 clarification:** preserving saved inclusion intent is an independent
+input task under accepted exact skill-preset preference ownership. It need not
+wait for a new aggregate metric. The current preflight checks typed Boolean
+transport, source/provider applicability and scenario replacement through the
+existing usage/import contracts. It must not create a fake numeric producer,
+activate a skill, mutate requested metrics or complete the whole usage inventory.
+If metadata-only intent needs a public contract change, that specific change
+requires review before implementation. Full aggregate execution remains proposed.
+
 Use exact native occurrence and action identities to build a checked contribution
 inventory, then evaluate explicitly declared reductions in the existing rule
 graph. Keep aggregate reporting separate from skill activation, actor population

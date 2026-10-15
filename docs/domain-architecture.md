@@ -218,12 +218,15 @@ must not share a reduction merely because both are dimensionless. A missing
 contribution is not an authored neutral contribution; complete membership must
 justify the consumer's identity value.
 
-The [resource-obligation proposal](owned-resource-obligations-proposal.md) is
-pending owner review. It addresses sustained reservation that must be evaluated
-independently of metric selection, recommending Skill-owned obligations with
-explicit Action dependencies where mechanically necessary. Skill support
-recipients and dependency demand require reviewed contracts; the current
-Action-based component is not silently reinterpreted by this proposal.
+The owner accepted [Skill-owned resource obligations](owned-resource-obligations-proposal.md)
+on October 15. Sustained reservation belongs to an exact participating Skill,
+with explicit payer Actor, resource and obligation kind. Metric selection must
+not create or remove that obligation. Exact Action dependencies are declared
+only where selected part, mode or stat set is mechanically relevant; per-use
+costs remain Action-owned. Implement checked Skill support recipients and bounded
+dependency/cycle validation on the same occurrence graph. These contracts and
+the migration are pending implementation; the current Action-owned reservation
+component must be replaced explicitly, without a parallel compatibility path.
 
 Rules may inspect the bound Action's existing part, mode and stat-set identities
 through typed Boolean equality predicates. These are read-only request facts:

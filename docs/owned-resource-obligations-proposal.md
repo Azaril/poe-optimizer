@@ -1,7 +1,15 @@
 # Proposal: resource obligations independent of metric selection
 
-**Status:** Proposed; owner decision required before implementation.
-**Date:** 2026-10-06.
+**Status:** Accepted by the owner on 2026-10-15; public contract and native
+migration are not yet implemented.
+**Date:** Proposed 2026-10-06; accepted 2026-10-15.
+
+The owner selected Skill-owned obligations with explicit Action dependencies.
+Implement the recommendation below, preserving the single occurrence graph,
+exact payer/resource identity and complete contributor checks. No further
+approval is needed for this agreed ownership change. The implementation plan
+tracks the contract, support-recipient extension and current reservation
+migration; acceptance alone does not change existing numerical coverage.
 
 ## Problem
 
@@ -50,10 +58,10 @@ disabled Skill.
 | **Skill-owned obligations with explicit Action dependencies — recommended** | Models sustained reservation independently of reporting, while retaining Action-dependent mechanics. Supports repeated summons and other sustained skills without a fake cast. | Requires a reviewed obligation/dependency contract and Skill support recipients; current Action-owned reservation data must migrate. |
 | Explicit required Actions on Skill definitions | Can reuse current Action reservation programs and support recipients, with less immediate migration. | Treats sustained reservation as an Action calculation and requires concrete selections even for skills with no meaningful cast. Needs additional rules to prevent duplicate obligations across Actions. |
 
-Neither option permits implicit zero costs, missing-input defaults, or relaxation
-of selected-build coverage. Neither is implemented by this proposal.
+The accepted option permits no implicit zero costs, missing-input defaults or
+relaxation of selected-build coverage. It is not yet implemented.
 
-## Implementation gate after approval
+## Implementation gates
 
 1. Define one bounded dependency contract using existing occurrence identities,
    with explicit activation, selection authority, phase and cycle checks. Review

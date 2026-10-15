@@ -301,9 +301,16 @@ Retained review SHA-256:
 
 The final Spirit component is now published above. Its source suppression,
 supplier and numeric-order admission remain explicit gaps. Capacity is distinct
-from reservation. The resource-obligation ownership proposal is awaiting the owner's
-answer; no dependent support-recipient or reservation migration is authorized
-yet. Sniper physical-base assembly remains behind its missing self-flat supplier
+from reservation. The owner accepted
+[Skill-owned resource obligations](owned-resource-obligations-proposal.md) on
+October 15: explicit payer/resource identity, exact Action dependencies only
+where mechanically required, and checked Skill support recipients. After the
+current equipment-source and reporting-intent checkpoints, implement the bounded
+contract and migrate existing reservation data, removing the superseded live
+Action-owned path. Prove invariance to unrelated metric-query changes alongside
+participation, repeated sources, counts, payer identity, dependency cycles and
+Action-sensitive controls. Existing numerical and complete-plan gaps remain
+until independently closed. Sniper physical-base assembly remains behind its missing self-flat supplier
 authority, and its unpublished draft IDs must be reconciled before adoption.
 
 Native-only writer census
@@ -684,8 +691,13 @@ accounting steps; known values and remaining Firebolt correspondence are separat
 known assumptions do not prove the constructor/default catalogue complete;
 `0208`'s empty saved usage does not account for seven default child-effect enables.
 Known scalar values cannot certify these inventories. Checked configuration
-accounting and per-consumer projections are implemented; reporting ownership
-remains unapproved. The damage-roll packet accounts for the exact numeric
+accounting and per-consumer projections are implemented. Preserving reporting
+inclusion can reuse accepted exact preset preferences; it does not require a new
+aggregate metric or a change to selected-action DPS. The next input preflight
+checks whether the existing usage/import contracts can retain this typed Boolean
+intent without a fake mechanical producer. Actual aggregate execution, any new
+report target and origin-sensitive tie semantics remain separate design gates.
+The damage-roll packet accounts for the exact numeric
 Placeholder only under its proved absent-boss guards; broader encounter branches
 remain unadmitted. Continue numerical dependencies and source accounting
 without inventing completion or adding scalar-only patches that leave every
@@ -1384,15 +1396,15 @@ numerical outputs when game intent remains unresolved.
    Reservation input `3271` remains Action-owned and unresolved. Parent Action
    discovery follows query/usage/choice/support demand; no Action StatReceiver
    target exists. Do not fabricate a query or support to reach that consumer.
-   Keep the -25 contributor available while the ownership decision below is
-   pending; migrate or deliver it only under the reviewed resource contract.
+   Keep the -25 contributor available; migrate or deliver it through the
+   accepted resource contract below.
 
    The [resource-obligation proposal](owned-resource-obligations-proposal.md)
-   recommends exact Skill-owned sustained reservation with explicit Action
+   now authorizes exact Skill-owned sustained reservation with explicit Action
    dependencies where a mechanic needs a selected part/mode/stat set. It also
-   identifies the missing Skill support-recipient contract. This is pending
-   owner review, not an implemented migration or authorization to manufacture
-   Action demand. After approval, validate contrasting reservation/cost shapes,
+   identifies the missing Skill support-recipient contract. The owner accepted
+   it on October 15; implementation must not manufacture Action demand from
+   metric queries. Validate contrasting reservation/cost shapes,
    migrate the existing live consumer, and prove query-independent results.
 
    PoB applies the derived Gigantic Life/Damage bonuses only in its full combat
@@ -1690,7 +1702,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Action-routing format retirement | Inventory the remaining V1/V2 readers and publication/test consumers, migrate useful callers to one current format with explicit selector coverage, then remove obsolete branches. Do not convert unknown selector coverage to Complete-empty. Preserve source witnesses and all-five/routing regressions; this cleanup follows the selected flat-damage work. [Retirement scope](legacy-retirement.md#other-current-compatibility-investigations). |
 | Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. Shared exact-provider proof now serves raw quality and requested-count import independently. Same-definition allocations in different presets remain distinct. Enabled/global/reporting dispositions and usage inventory closure remain open. [Contract and gates](owned-generated-skill-usage-proposal.md). |
 | Requested participation | [Common gate](owned-skill-participation-proposal.md), unified typed Import and first Sniper packet are validated. All-five/source/native checks preserve count, effect controls and mechanical availability. Next close genuine parameter inventories for remaining skills before readiness publication; no PoB preview bypass or default is imported. Full-original coverage remains open. |
-| Resource ownership and demand | [Resource-obligation proposal](owned-resource-obligations-proposal.md) awaits owner review. Ordinary sustained reservation should be independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Define Skill support recipients and contrast cost conversion, mines and stance/toggle selection; then migrate the current Action reservation bodies and validate query invariance. Gigantic's producer/status and isolated Life/Damage-factor packets are published; final reservation delivery remains open. |
+| Resource ownership and demand | [Accepted October 15](owned-resource-obligations-proposal.md): sustained reservation is independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Define Skill support recipients and contrast cost conversion, mines and stance/toggle selection; then migrate the current Action reservation bodies and validate query invariance. Public contract and migration are not yet implemented. Gigantic's producer/status and isolated Life/Damage-factor packets are published; final reservation delivery remains open. |
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
