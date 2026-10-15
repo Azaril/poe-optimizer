@@ -1,0 +1,111 @@
+{
+  "archives": {
+    "acquisition-bootstrap.rs": {
+      "bytes": 14535,
+      "compressed_bytes": 4212,
+      "compressed_sha256": "906745b6c26d25bc5a2eb220a7aacccbd3b7da06e88d9fa500cf6dc927d9ff1e",
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9"
+    },
+    "acquisition-driver.rs": {
+      "bytes": 12120,
+      "compressed_bytes": 4064,
+      "compressed_sha256": "7b2f9f991c876c890412a091650b1ea261ed2bde9b2c69e55e4fb7be2c78d2b2",
+      "sha256": "600b24937a359fe4f2547e669c786472a462eef7b790baab7fd41e86b456d927"
+    },
+    "acquisition-helpers.lua": {
+      "bytes": 81347,
+      "compressed_bytes": 19220,
+      "compressed_sha256": "a9e1dd504f10eed34d1aa03b99e2e17e661f46843065aba68752da14e07fdf8f",
+      "sha256": "9c6af9dd3261cf196dbd5182cce05e7eb87a9c2033090d96047fad7d4feeb7f0"
+    },
+    "acquisition-observer.lua": {
+      "bytes": 11671,
+      "compressed_bytes": 3373,
+      "compressed_sha256": "2e075f527f4c4e6924460061d119887d2afdb3540711d19f8dfd7ed4feee0b4c",
+      "sha256": "8c91715dbb4f9080fe1f82b8f9056b569822f9fea61f9ef7316cb9fe331d84fe"
+    },
+    "observed-a.json": {
+      "bytes": 28795867,
+      "compressed_bytes": 692457,
+      "compressed_sha256": "d33635b33702c3b358f766c7afeca074e0b703cf6da35e9c1898a61a7279a59a",
+      "sha256": "6f172593924eb0933fa399e136da43603609db78cd67e8956c962a0883f0e1cd"
+    },
+    "observed-b.json": {
+      "bytes": 28795867,
+      "compressed_bytes": 692458,
+      "compressed_sha256": "2b2c7e6bcf53b3130eec2d707cb3e8efa7beb0db85d0e2457720a32ee830211f",
+      "sha256": "3fe7dc1420058892cb2bd9d981b5ce26acd20110e7cea99dd4774f9c0ed57628"
+    },
+    "plain-off.json": {
+      "bytes": 131190,
+      "compressed_bytes": 12607,
+      "compressed_sha256": "116193242506a30b930c24a477db0af9d43ab4426764626a38a02cef936d429b",
+      "sha256": "7827bbd4e7d079ce906ba2d6ee56110cd46dfed98ef2fd6606e2c9e16f112209"
+    },
+    "plain-on.json": {
+      "bytes": 131199,
+      "compressed_bytes": 12613,
+      "compressed_sha256": "7eb9159772f8204d6306269969fe924aa9ddd613a70a38baafd750ea6e36b298",
+      "sha256": "ba6763c9298f1ebc3dc48db995794346b461f660fdf88edb93d07b15ab2f6259"
+    }
+  },
+  "report_metadata": {
+    "all_scalar_outputs_exact": true,
+    "bootstrap_sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9",
+    "comparison": {
+      "counted_node_visits_only": true,
+      "native_order_authority": false,
+      "raw_sequence_retained": true,
+      "slot_and_lifecycle_order_exact": true
+    },
+    "complete_loads": 4,
+    "counts": {
+      "init_calls": 21,
+      "list_calls": 42,
+      "node_calls": 2394,
+      "slot_candidates": 2352
+    },
+    "driver_sha256": "600b24937a359fe4f2547e669c786472a462eef7b790baab7fd41e86b456d927",
+    "files": [
+      {
+        "bytes": 28795867,
+        "file": "observed-a.json",
+        "sha256": "6f172593924eb0933fa399e136da43603609db78cd67e8956c962a0883f0e1cd"
+      },
+      {
+        "bytes": 28795867,
+        "file": "observed-b.json",
+        "sha256": "3fe7dc1420058892cb2bd9d981b5ce26acd20110e7cea99dd4774f9c0ed57628"
+      },
+      {
+        "bytes": 131190,
+        "file": "plain-off.json",
+        "sha256": "7827bbd4e7d079ce906ba2d6ee56110cd46dfed98ef2fd6606e2c9e16f112209"
+      },
+      {
+        "bytes": 131199,
+        "file": "plain-on.json",
+        "sha256": "ba6763c9298f1ebc3dc48db995794346b461f660fdf88edb93d07b15ab2f6259"
+      }
+    ],
+    "helper_sha256": "9c6af9dd3261cf196dbd5182cce05e7eb87a9c2033090d96047fad7d4feeb7f0",
+    "instrumented_jit_enabled": false,
+    "instrumented_loads": 2,
+    "kind": "original-mana-radius-input-evidence",
+    "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+    "native_coverage_authorized": false,
+    "observer_sha256": "8c91715dbb4f9080fe1f82b8f9056b569822f9fea61f9ef7316cb9fe331d84fe",
+    "plain_jit_modes": [
+      false,
+      true
+    ],
+    "schema_version": 1,
+    "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "xml": {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  },
+  "report_sha256": "8784718a733d10878da117724b3dff69e97d380c0140bfbab1cc02ffbf11a2da",
+  "schema_version": 1
+}

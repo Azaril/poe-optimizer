@@ -6,6 +6,11 @@ coverage, installs no zero producer, closes no import obligation and does not
 make final Mana or the complete build available. It is test/authoring evidence;
 production evaluation never loads these archives.
 
+The [selected radius review](radius-review.md) additionally reconciles empty
+passive-jewel construction using complete bodies and explicitly observed
+invocation/slot inputs. It preserves the separate ordinary-passive,
+generated-skill and later-delivery obligations.
+
 The required source census includes Mana conversion to Energy Shield, Armour
 and Evasion; direct `ExtraMana` and `ManaTotal`; and both `ConvertToMana` and
 `GainAsMana` from Armour, Evasion, Energy Shield, Life and Ward. A zero-valued or

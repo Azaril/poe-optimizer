@@ -92,6 +92,14 @@ remain separate calculations. All-five preservation passes. Original05 now has
 thirty remaining configuration-origin links, with its four overall input
 obligations and complete-build gate still open.
 
+The [selected radius-provider review](../data/owned/poe2/3887ae68/mana-supplier-sources/radius-review.md)
+now excludes both passive-jewel insertion paths for this unchanged selection
+using complete constructor bodies and explicit item/override inputs. Four fresh
+reference loads agree on captured scalar output, and seven offline mutation
+tests pass. The native package is unchanged: this source proof neither implements
+generic radius effects nor completes native supplier inventories. Ordinary
+passive construction and later generated-skill/support delivery remain open.
+
 The [guarded Player Life consumer](../data/owned/poe2/3887ae68/player-life-pool/README.md)
 now publishes the final formula on the existing Life Stat using direct checked
 contribution reads. It applies CI before a present override, including zero,

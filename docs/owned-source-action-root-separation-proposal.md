@@ -1,6 +1,8 @@
 # Proposal: separate source selectors from skill supply
 
-**Status:** Proposed; not accepted or implemented.
+**Status:** The broader Import separation remains proposed. A subsequent bounded
+selector/deferred-field correspondence is published independently, as described
+below; it does not implement this structural refactor.
 **Date:** 2026-10-08.
 **Decider:** Project owner.
 **Scope:** Owned Import only. No new native occurrence, evaluator or source-language runtime.
@@ -26,10 +28,15 @@ output `32a0` and stat set `32a1` can be reused; they do not prove the missing
 Warrior supply or source selectors. Saved raw level 11 and quality 0 remain
 source observations, not new native inputs.
 
-The intended accounting result is to reduce `01f2`'s source links from 44 to 36
+The original intended accounting result was to reduce `01f2`'s source links from 44 to 36
 while preserving each real unresolved owner. It would not complete `01f2`,
-retire any of the five selected input issues, enable Warrior or change the
-selected Sniper request. No such reduction has been published.
+retire any of the then-five selected input issues, enable Warrior or change the
+selected Sniper request. The subsequent
+[Warrior correspondence packet](../data/owned/poe2/3887ae68/warrior-generated-correspondence/README.md)
+does publish that narrow reduction using the already checked source proof. It
+preserves all real raw-input, usage and support obligations and supplies no
+fabricated physical occurrence. Later accounting reduces the current source-link
+count to 30. The broader separation proposed here remains open.
 
 ## Current boundary
 

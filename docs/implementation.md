@@ -180,19 +180,60 @@ compressed hashes are independently checked. They do not enlarge the native
 release package. Review receipt SHA-256:
 `929e8805a7e1ec72ef9d022354309fde61b1e85c12032173fda6550e23ddcccf`.
 
-**Next:** reconcile the selected passive-jewel/radius constructor boundary.
-Reuse explicit empty Spec3 socket membership, the intrinsic socket packet,
-source02 node/socket inventories and the selected 55 allocations plus two roots.
-Check complete initialization/wipe, both radius insertion branches and the
-node-builder/list consumers before excluding radius callbacks. An observed
-empty output is insufficient. Reject occupied/unknown sockets, injected radius
-providers and changed selection membership. If a necessary constructor input is
-missing from retained evidence, stop that closure and acquire or model the actual
-dependency rather than infer absence. This uses existing contracts and targets
-one source boundary; ordinary passive transformations, generated/support
-delivery, later direct configuration consumers and native coverage stay separate.
-Preserve the four selected obligations until their actual owners and inventories
-are complete.
+### Selected radius-provider source proof
+
+The [radius packet](../data/owned/poe2/3887ae68/mana-supplier-sources/radius-review.md)
+now reconciles the selected empty passive-jewel constructor boundary. Source02
+omitted invocation overrides, reuse/acceleration inputs and actual slot candidates;
+a fixed four-load acquisition supplies those inputs. Two independent observed
+JIT-off runs agree, and their captured scalar snapshots exactly match plain
+JIT-off/on controls. Original functions remain unchanged.
+
+Each trace has 21 fresh environments, 113 ordered slots with 112 actual selections
+per environment, all nineteen empty socket selections, and 42 node-list passes
+with 2,394 node visits. Exact source membership preserves 55 allocations and two
+separate roots. Complete constructor bodies and the absent item/override inputs
+exclude both radius insertion branches. Empty final lists alone are insufficient.
+The proof refuses occupied/unknown sockets, injected providers, changed membership,
+unrecognized overrides, acceleration and reused environments. It does not claim
+to implement generic radius mechanics or complete native supplier coverage.
+
+The source acquisition passes in 81.25s; offline retention passes in 15.49s;
+seven ordinary mutation tests pass in 20.72s. Both strict Clippy targets and
+independent review pass. The first retention attempt failed because the verifier
+incorrectly required the same keystone argument on both node-list calls. It now
+requires the actual first-pass `true` and second-pass omitted argument. Source
+capture was unchanged and was not repeated. Four raw loads and four acquisition
+scripts retain 57,973,796 raw bytes in 1,441,004 compressed bytes. Compact metadata
+reconstructs the exact accepted report, avoiding a duplicate 57 MB archive.
+Review SHA-256: `6cfff1148386ee1d5b98eaab1d334b5eb745194bd623c2e1a725d9335ce760a2`.
+Native package, queries, four input obligations and complete-build count remain
+unchanged.
+
+Evidence: `runs/owned-mana-radius-source-{ordinary-01,acquire-01,clippy-01}.log`
+and `runs/owned-mana-radius-{retain-01,retain-02,ordinary-01,offline-clippy-01}.log`.
+
+**Next source step:** reconcile ordinary selected-passive name domains from the
+existing source02 observations. Review `resetModList`, complete node/list
+constructors and the original ModList/ModStore transport bodies. Join keyed
+declaration/list inventories to counted full record bodies, preserving empty
+visits and duplicates. Source02 node-return rows lack explicit node IDs: never
+zip them to a different capture's traversal order. Initial inspection finds
+unchanged input/output record sequences and no Mana-adjustment names, but this
+needs a checked declaration/transport proof. Generated-skill roots, later delivery,
+numerical scaling/order, twelve Partial passive owners and runtime inventories
+remain separate. No new API or source acquisition is presently indicated.
+
+In parallel, the next saved-metric slice is final **Player Spirit**. Reuse the
+actual Solar modifier, its separate Amulet-copy contribution (including the
+observed zero) and the three exact reward occurrences. The retained full-build
+controls expect 113, 110 and 115. Two data programs can implement the copy and
+final consumer under existing contracts; source suppression, supplier and
+numeric-order admission remain explicit gaps. Capacity is distinct from
+reservation. The resource-obligation ownership proposal is awaiting the owner's
+answer; no dependent support-recipient or reservation migration is authorized
+yet. Sniper physical-base assembly remains behind its missing self-flat supplier
+authority, and its unpublished draft IDs must be reconciled before adoption.
 
 Native-only writer census
 could make Life's adjustment groups Complete-empty, as Mana's already are, but
@@ -267,13 +308,21 @@ run: `owned_item_bases_cli`, `owned_attribute_cli` and `owned_extension_cli`
 reject the former current-manifest receipt; `owned_catalog_cli` rejects the
 former generated catalog manifest. Those are covered by `47fa0592` and
 `7aebbde1` respectively. All 19 current and eight import/compiled artifact
-receipts now match their exact hash and size. No additional code defect was
-found. At this audit the Life BASE push `c409fae8` had queued run `38682815324`;
+receipts now match their exact hash and size. The later Ubuntu cli-0/cli-1 logs
+show the same old current-manifest failure in `owned_weapon_profiles_cli`,
+`owned_class_bases_cli`, `owned_intrinsic_cli` and `owned_passive_views_cli`, plus
+the old `current/transition.json` byte mismatch in `owned_tree_cli`. These are
+the receipt family regenerated by `47fa0592`; no additional code defect was
+found. A fresh local `owned_tree_cli` run passes all three tests in 6.98s,
+including exact twenty-artifact reproduction, all-five XML censuses and failure
+controls (`runs/ci-owned-tree-receipts-01.log`).
+The latest inspected push `d3249924` has pending run `38684776813`;
 main concurrency preserves the running older revision and coalesces pending revisions. Recent
 jobs have completed, but live job logs are unavailable, so individual long steps
 have not been diagnosed as hung. Do not report the queued revision as green.
 Evidence: `runs/ci-import-c4a62464-job116230401602.log` and
-`runs/ci-catalog-republication-01-diff.json`; validation:
+`runs/ci-catalog-republication-01-diff.json`, plus
+`runs/ci-job-116230401634.log` and `runs/ci-job-116230401669.log`; validation:
 `runs/ci-owned-catalog-recipe-receipts-01.log`.
 
 ## Previous checkpoint: configured Player Withered input
@@ -667,18 +716,17 @@ The next input evidence work should classify the retained
 include inherited-node and Amulet-copy transport. Do not repeat that acquisition
 or treat a new scalar grammar as progress on these selected obligations.
 
-**Archived Warrior preflight (2026-10-08):** eight remaining `01f2` source links
-belong to four item-granted Warrior pairs in presets 3/5/6/1. Exact generated,
-usage and support Pending owners already exist, but the current selector adapter
-requires either physical Gem supply or a manually selectable root. Warrior is
-item-only; private adapter reuse would invent that authority. No data was
-authored, the exploratory private reuse was removed, and the count remains 44.
-The [selector/supply separation proposal](owned-source-action-root-separation-proposal.md)
-records the structural boundary, the genuine reusable child action and the
-conditional 44-to-36 accounting target. This is a pending Import decision;
-do not add a fake physical Gem or weaken root checks. The immediate native
-priority is Life-consumer adoption of the implemented Actor/reward graph,
-followed by the accepted exact Skill query extension.
+**Warrior selector/supply status:** the October 8 preflight is
+[historical](implementation-history.md#archived-2026-10-15-warrior-selector-preflight-from-october-8).
+The subsequent [Warrior correspondence packet](../data/owned/poe2/3887ae68/warrior-generated-correspondence/README.md)
+reuses an exact selector/deferred-field proof for eight archived source rows,
+retiring their configuration fallback while preserving their same-preset raw,
+usage and support obligations. That publication reduced source links 44 → 36;
+later accounting brings the current count to 30. It does not fabricate physical
+supply or implement the broader proposed Import refactor. The
+[selector/supply separation proposal](owned-source-action-root-separation-proposal.md)
+remains a distinct pending design decision, not an instruction to repeat the
+completed bounded correspondence work.
 
 **Accepted composition work: support-origin discovery.** The selected Original05
 preset currently has sixteen physical support assignments in eight known

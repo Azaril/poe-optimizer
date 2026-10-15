@@ -6,6 +6,21 @@
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
 
+## Archived 2026-10-15: Warrior selector preflight from October 8
+
+**Archived Warrior preflight (2026-10-08):** eight remaining `01f2` source links
+belong to four item-granted Warrior pairs in presets 3/5/6/1. Exact generated,
+usage and support Pending owners already exist, but the current selector adapter
+requires either physical Gem supply or a manually selectable root. Warrior is
+item-only; private adapter reuse would invent that authority. No data was
+authored, the exploratory private reuse was removed, and the count remains 44.
+The [selector/supply separation proposal](owned-source-action-root-separation-proposal.md)
+records the structural boundary, the genuine reusable child action and the
+conditional 44-to-36 accounting target. This is a pending Import decision;
+do not add a fake physical Gem or weaken root checks. The immediate native
+priority is Life-consumer adoption of the implemented Actor/reward graph,
+followed by the accepted exact Skill query extension.
+
 ## Archived 2026-10-15 checkpoint: direct Mana queries
 
 The [Mana cleanup](../data/owned/poe2/3887ae68/mana-direct-queries/README.md)

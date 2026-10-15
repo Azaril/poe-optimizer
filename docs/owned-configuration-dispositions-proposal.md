@@ -23,16 +23,18 @@ independently closable by checking Config alone: the current obligation also
 guards otherwise unaccounted source outside Config. The evidence below does not
 justify completing scenario usage or assumptions.
 
-**Current state (2026-10-14):** Original05 retains four selected input
-obligations: configuration `01f2` with 35 linked source origins, preset usage
-`0505` with 23 known preferences, external assumptions `0207` with 17 known
+**Current state (2026-10-15):** Original05 retains four selected input
+obligations: configuration `01f2` with 30 linked source origins, preset usage
+`0505` with 23 known preferences, external assumptions `0207` with 23 known
 members, and scenario usage `0208` with an empty Pending list. Known members
 do not certify complete inventories. The first implementation adds partial leaf
 authority; retiring shared `01f2` still requires accounting for every
 remaining Config and outside-Config origin, including Party.
-The first published rule accounts for one numeric Placeholder under the
-checked default-Encounter branch, leaving twenty Config-local and fifteen
-outside origins. All five builds retain their exact drafts and all 110 queries;
+The first published rule accounted for one numeric Placeholder under the
+checked default-Encounter branch, then leaving twenty Config-local and fifteen
+outside origins. Subsequent input publications account for five more origins;
+their current status is in the [execution overview](data-and-evaluation-overview.md).
+All five builds retain their exact query identities and all 110 queries;
 the four Original05 inventories remain Pending. See the
 [publication packet](../data/owned/poe2/3887ae68/configuration-accounting/README.md).
 

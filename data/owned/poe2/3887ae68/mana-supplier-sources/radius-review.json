@@ -1,0 +1,63 @@
+{
+  "body_review_sha256": "8f2676a24eaa4090064b415a6c70f87e4574f38bad949b2a11dff835e4ed03ff",
+  "evidence_reused": {
+    "selected_socket_source_spec": 3,
+    "source02_environment_count": 21,
+    "source02_node_constructor_count": 2394,
+    "source02_node_list_count": 42
+  },
+  "historical_membership_publication": "3ee48944d26b5351ecc267cc2e87637b68a8b6153b7ab2bbc5c906f11e4bd702",
+  "kind": "selected-passive-radius-source-review",
+  "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "observed": {
+    "allocation_occurrences": 55,
+    "early_skipped_slot": "Ring 3",
+    "empty_socket_slots_per_call": 19,
+    "fresh_environments": 21,
+    "implicit_roots": [
+      8305,
+      54447
+    ],
+    "modes": {
+      "CALCS": 1,
+      "CALCULATOR": 4,
+      "MAIN": 16
+    },
+    "native_coverage_authorized": false,
+    "nested_init_calls": 0,
+    "node_constructor_calls": 2394,
+    "node_list_calls": 42,
+    "ordered_slots_per_call": 113,
+    "radius_provider_branches_reached_with_eligible_item": 0,
+    "reused_environments": 0,
+    "selected_candidates_per_call": 112,
+    "selected_nodes": 57,
+    "selected_radius_construction_reconciled": true
+  },
+  "protocol": {
+    "captured_scalar_snapshots_exact": true,
+    "comparison_only_counts_node_visits": true,
+    "fresh_loads": 4,
+    "hooked_jit_off": 2,
+    "plain_jit_modes": [
+      false,
+      true
+    ],
+    "raw_node_visit_order_retained": true
+  },
+  "schema_version": 1,
+  "scope": {
+    "arbitrary_reuse_or_overrides_covered": false,
+    "current_native_package_changed": false,
+    "generated_support_construction_covered": false,
+    "generic_radius_behavior_covered": false,
+    "later_modifier_delivery_covered": false,
+    "native_coverage_authorized": false,
+    "ordinary_passive_transformations_covered": false,
+    "selected_radius_construction_reconciled": true
+  },
+  "selected_membership_sha256": "13ef20f4c457691ccc3bb8005825f732c60e579a04397feeee9bc49c4595ec7a",
+  "source_report_sha256": "8784718a733d10878da117724b3dff69e97d380c0140bfbab1cc02ffbf11a2da",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+}

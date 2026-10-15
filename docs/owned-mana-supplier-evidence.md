@@ -102,6 +102,19 @@ The native package remains the
 
 ## Limits and next work
 
+The [selected radius-provider proof](../data/owned/poe2/3887ae68/mana-supplier-sources/radius-review.md)
+now fills the older capture's missing invocation and item-selection inputs.
+Four fixed fresh loads preserve captured scalar output across observed and plain
+JIT-off/on execution. The offline review binds 21 fresh environments, all 113
+ordered slots and 112 actual selections per call, nineteen empty socket slots,
+and 42 node-list passes to the exact selected 55 allocations plus two roots.
+Complete bodies and absent item/override inputs exclude both radius insertion
+branches; empty final lists alone do not. Reuse, acceleration, unknown overrides
+and changed providers remain outside the proof. Seven ordinary tests, explicit
+retention and both strict Clippy targets pass. The first offline verifier's
+incorrect assumption about the second pass's keystone argument was repaired
+against the unchanged capture; no additional source run was made.
+
 Actual callback invocations do not account for unexecuted branches. A function
 reference needs a complete body review before it supplies an exclusion. Item
 snapshots must be joined with the existing exact slot/bonded-item recipe audit;
@@ -126,9 +139,12 @@ nine authored skills, sixteen support assignments, twenty-three physical gems,
 and three generated input bindings.
 
 Continue the selected neutral-domain review before positive transfer mechanics.
-The next bounded candidate is passive-jewel/radius construction, using the
-existing explicit empty-socket membership and retained node/socket inputs. Its
-initialization and insertion bodies must prove absence; captured empty lists
-alone cannot. The [implementation plan](implementation.md) owns this next step.
+The next bounded candidate is ordinary selected-passive construction: join
+source02's keyed declarations/lists and gating inputs to the complete node/list
+and ModList/ModStore transport bodies. Prove preservation of the finite writer-name
+domain, rather than infer absence from aggregate zeros. Node-return rows lack
+explicit IDs; do not infer cross-capture identity from iteration order.
+Generated-skill roots, later delivery and numerical scaling/order stay separate.
+The [implementation plan](implementation.md) owns this next step.
 Preserve all four Original05 input obligations, prior Partial owners and global
 query/plan gates until their own proofs and native implementations are complete.
