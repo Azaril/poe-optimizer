@@ -585,6 +585,22 @@ domain gaps remain explicit. Pushed as `ba33003d`.
 
 ## CI receipt repair (2026-10-15)
 
+The same run's Engine jobs `116297674753` (Ubuntu) and `116297675032` (Windows)
+subsequently exposed two obsolete
+preparation-scope expectations after exact Skill support receiving was added.
+Tests now recognize Skill-context support programs and their actual version
+gates, while rejecting unrelated owners and unauthorized assigned-Skill aliases.
+The concrete no-binding regression covers both Actor and Skill recipients:
+preparation and ordinary execution remain unavailable without a checked support
+binding. No production code or admission rule changed. All 54 relevant tests
+pass across preparation scopes/readiness, computed supports and support delivery;
+strict Clippy passes for all four targets. Evidence:
+`runs/ci-owned-preparation-scopes-{02,03,clippy-01}.log` and
+`runs/ci-job-116297674753.log` / `runs/ci-job-116297675032.log`.
+The earlier local scope run exposed an incorrect
+test expectation below the Skill-context version gate; that assertion was fixed
+before the final passing run. These local results do not establish hosted success.
+
 Run `38695918235` (`b81bae66`) subsequently exposed one remaining derived
 receipt mismatch in both platform validation jobs: `import/policies/transition.json`
 still named the pre-repair compiled transition. The offline exporter regenerates

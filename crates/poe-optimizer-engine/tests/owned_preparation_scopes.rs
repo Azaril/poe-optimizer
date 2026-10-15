@@ -108,42 +108,48 @@ fn program(rules: &mut RulePackageInput) -> &mut RuleProgram {
 }
 
 #[test]
-fn actor_applicability_requires_v13_and_an_exact_support_owner() {
-    let (schema, mut rules) = base();
-    let p = program(&mut rules);
-    p.context = RuleEntityKind::Actor;
-    p.reads.clear();
-    p.nodes.retain(|n| n.id == key("yes"));
-    p.effects[0].effect = RuleEffectKind::SupportApplicability {
-        applicable: key("yes"),
-    };
-    for version in [
-        OWNED_RULE_OPERATIONS_V6,
-        OWNED_RULE_OPERATIONS_V7,
-        OWNED_RULE_OPERATIONS_V8,
-        OWNED_RULE_OPERATIONS_V9,
-        OWNED_RULE_OPERATIONS_V10,
-        OWNED_RULE_OPERATIONS_V11,
-        OWNED_RULE_OPERATIONS_V12,
-    ] {
-        rules.operations_version = key(version);
-        fails(
-            &schema,
-            &rules,
-            "actor support applicability requires owned-domain-operations-v13",
-        );
-        // Explicit old Action semantics are unchanged.
-        program(&mut rules).context = RuleEntityKind::Action;
+fn actor_and_skill_applicability_require_v13_and_an_exact_support_owner() {
+    for context in [RuleEntityKind::Actor, RuleEntityKind::Skill] {
+        let (schema, mut rules) = base();
+        let p = program(&mut rules);
+        p.context = context;
+        p.reads.clear();
+        p.nodes.retain(|n| n.id == key("yes"));
+        p.effects[0].effect = RuleEffectKind::SupportApplicability {
+            applicable: key("yes"),
+        };
+        for version in [
+            OWNED_RULE_OPERATIONS_V6,
+            OWNED_RULE_OPERATIONS_V7,
+            OWNED_RULE_OPERATIONS_V8,
+            OWNED_RULE_OPERATIONS_V9,
+            OWNED_RULE_OPERATIONS_V10,
+            OWNED_RULE_OPERATIONS_V11,
+            OWNED_RULE_OPERATIONS_V12,
+        ] {
+            rules.operations_version = key(version);
+            // Skill context itself requires V12; once admitted, its
+            // applicability effect still requires V13 like Actor receiving.
+            let expected =
+                if context == RuleEntityKind::Skill && version != OWNED_RULE_OPERATIONS_V12 {
+                    "preparation scopes require owned-domain-operations-v12"
+                } else {
+                    "actor/skill support applicability requires owned-domain-operations-v13"
+                };
+            fails(&schema, &rules, expected);
+            // Explicit old Action semantics are unchanged.
+            program(&mut rules).context = RuleEntityKind::Action;
+            compile(&schema, &rules).unwrap();
+            program(&mut rules).context = context;
+        }
+        rules.operations_version = key(OWNED_RULE_OPERATIONS_V13);
         compile(&schema, &rules).unwrap();
-        program(&mut rules).context = RuleEntityKind::Actor;
+        let active_only = gem_roles(&schema, &mut rules, vec![AuthoredGemRole::SkillUse]);
+        fails(&active_only, &rules, "SupportAssignment Gem owner");
+        rules.owners[0].owner = subject(id::<SkillDefinition>("skill.target"));
+        rules.definitions = schema.identity().clone();
+        fails(&schema, &rules, "SupportAssignment Gem owner");
     }
-    rules.operations_version = key(OWNED_RULE_OPERATIONS_V13);
-    compile(&schema, &rules).unwrap();
-    let active_only = gem_roles(&schema, &mut rules, vec![AuthoredGemRole::SkillUse]);
-    fails(&active_only, &rules, "SupportAssignment Gem owner");
-    rules.owners[0].owner = subject(id::<SkillDefinition>("skill.target"));
-    rules.definitions = schema.identity().clone();
-    fails(&schema, &rules, "SupportAssignment Gem owner");
 }
 fn compile(
     schema: &OwnedDefinitionSchemaPackage,
@@ -345,7 +351,7 @@ fn origin_scope_is_authorized_by_support_gem_role_not_actor_or_action_context_al
 }
 
 #[test]
-fn skill_context_requires_skill_or_active_gem_and_keeps_support_assignment_alias_distinct() {
+fn skill_context_admits_declared_gem_roles_and_keeps_support_alias_authority_distinct() {
     let (schema, mut rules) = base();
     let p = program(&mut rules);
     p.context = RuleEntityKind::Skill;
@@ -358,11 +364,17 @@ fn skill_context_requires_skill_or_active_gem_and_keeps_support_assignment_alias
         stat: id("skill-value"),
         value: key("level-value"),
     };
+    // A SupportAssignment Gem can now own an exact Skill-receiver program.
+    // This is static rule authority; plan compilation still requires the
+    // concrete support application to bind the receiving Skill and origin.
+    compile(&schema, &rules).unwrap();
+    rules.owners[0].owner = subject(id::<ItemTemplateDefinition>("item.template"));
     fails(
         &schema,
         &rules,
-        "Skill context requires a Skill or SkillUse Gem owner",
+        "Skill context requires a Skill, SkillUse Gem or SupportAssignment Gem owner",
     );
+    rules.owners[0].owner = subject(id::<GemDefinition>("gem.support"));
     let active = gem_roles(&schema, &mut rules, vec![AuthoredGemRole::SkillUse]);
     compile(&active, &rules).unwrap();
     rules.owners[0].owner = subject(id::<SkillDefinition>("skill.target"));
@@ -373,6 +385,13 @@ fn skill_context_requires_skill_or_active_gem_and_keeps_support_assignment_alias
     };
     fails(&active, &rules, "SupportAssignment Gem owner");
     rules.owners[0].owner = subject(id::<GemDefinition>("gem.support"));
+    fails(&active, &rules, "SupportAssignment Gem owner");
+    let support = gem_roles(
+        &active,
+        &mut rules,
+        vec![AuthoredGemRole::SupportAssignment],
+    );
+    compile(&support, &rules).unwrap();
     let dual = gem_roles(
         &active,
         &mut rules,
@@ -381,7 +400,7 @@ fn skill_context_requires_skill_or_active_gem_and_keeps_support_assignment_alias
             AuthoredGemRole::SupportAssignment,
         ],
     );
-    fails(&dual, &rules, "relative support scope requires");
+    compile(&dual, &rules).unwrap();
 }
 
 #[test]

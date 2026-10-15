@@ -384,42 +384,44 @@ fn a_partial_stage_partition_does_not_create_execution_authority() {
 
 #[test]
 fn unsupported_delivery_is_not_skipped_to_claim_complete_preparation() {
-    let mut f = generated_fixture();
-    f.owner_mut(&subject(def::<GemDefinition>("support")))
-        .programs
-        .members
-        .push(RuleProgram {
-            id: key("delivery"),
-            context: RuleEntityKind::Actor,
-            reads: vec![],
-            nodes: vec![bool_node("yes", true)],
-            effects: vec![effect(
-                "require",
-                RuleEffectKind::Requirement {
-                    satisfied: key("yes"),
-                    code: key("required"),
-                },
-            )],
-        });
-    let report = evaluate(&f, target(30, "first"));
-    assert!(matches!(
-        report.outcome,
-        ComputedSupportOutcome::Unavailable { .. }
-    ));
-    assert!(
-        report
-            .gaps
-            .iter()
-            .any(|g| g.reason == PlanGapReason::UnsupportedRelation)
-    );
-    // Ordinary effect plans retain their own support-delivery rejection too.
-    assert!(
-        f.compile()
-            .unwrap()
-            .gaps()
-            .iter()
-            .any(|g| g.reason == PlanGapReason::UnsupportedRelation)
-    );
+    for context in [RuleEntityKind::Actor, RuleEntityKind::Skill] {
+        let mut f = generated_fixture();
+        f.owner_mut(&subject(def::<GemDefinition>("support")))
+            .programs
+            .members
+            .push(RuleProgram {
+                id: key("delivery"),
+                context,
+                reads: vec![],
+                nodes: vec![bool_node("yes", true)],
+                effects: vec![effect(
+                    "require",
+                    RuleEffectKind::Requirement {
+                        satisfied: key("yes"),
+                        code: key("required"),
+                    },
+                )],
+            });
+        let report = evaluate(&f, target(30, "first"));
+        assert!(matches!(
+            report.outcome,
+            ComputedSupportOutcome::Unavailable { .. }
+        ));
+        assert!(
+            report
+                .gaps
+                .iter()
+                .any(|g| g.reason == PlanGapReason::UnsupportedRelation)
+        );
+        // Ordinary effect plans retain their own support-delivery rejection too.
+        assert!(
+            f.compile()
+                .unwrap()
+                .gaps()
+                .iter()
+                .any(|g| g.reason == PlanGapReason::UnsupportedRelation)
+        );
+    }
 }
 
 #[test]
