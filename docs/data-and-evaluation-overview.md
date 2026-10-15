@@ -59,6 +59,15 @@ not supplied by this import work. Shared source/publication test helpers now
 cover all three inputs, with two CLI test binaries instead of separate binaries
 per input.
 
+The owner has also approved [multiple projections from a saved control](owned-configuration-projections-proposal.md).
+This extends the existing Import policy with explicit selection for each typed
+output and requires checked accounting for every output before retiring a source
+leaf. Enemy distance demonstrates the need: PoB's direct reader preserves zero,
+while its callback can choose the Placeholder instead. This contract is being
+implemented; distance support is not yet published. Source calculation-view
+flags such as `Effective` are not gameplay states and will not enter the native
+model. Their treatment must be reconciled to actual scenario semantics separately.
+
 Archived generated skills now retain unfinished preset usage even when no
 supported manual sibling initializes it. A generic source-discovery producer
 uses the existing checked census through either raw-input or occurrence-usage
@@ -83,7 +92,18 @@ Native tests match 52 retained source observations, with fresh/reused/Rayon
 agreement; checked publication preserves all five imports and 110 queries.
 Six numeric dependency producers and four Partial supplier queries remain open,
 so final formulas alone do not make complete critical support. See the
-[current checkpoint](implementation.md#current-checkpoint-player-incoming-critical-receivers).
+[critical checkpoint](implementation.md#previous-checkpoint-player-incoming-critical-receivers).
+
+The [bounded equipment-Life packet](../data/owned/poe2/3887ae68/life-equipment-domain/README.md)
+now completes one existing equipment query group. Three injected numeric checks
+bound integral contributions and the copy operand to `[-2^37, 2^37]`. The
+engine's non-raisable 65,536-effect ceiling and unique membership prove exact
+binary64 equipment sums independent of order. That ceiling is a semantic
+dependency of this proof; increasing it requires new proof and affected identity
+invalidation. Upstream magnitude/routing coverage, four flat-Life owner gaps,
+cross-group arithmetic and final Player Life remain incomplete. Native/CLI tests
+and checked all-five publication pass without changing queries or input issues.
+See the [current checkpoint](implementation.md#current-checkpoint-bounded-equipment-life-reduction).
 
 The final Player Mana formula is now published as injected rules with its exact
 Player receiver. The existing Rust engine executes its arithmetic, range check
@@ -93,7 +113,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-player-incoming-critical-receivers).
+[implementation checkpoint](implementation.md#current-checkpoint-bounded-equipment-life-reduction).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -107,7 +127,7 @@ The admission review also confirms that all five Mana adjustment groups are
 already Complete-empty. Their remaining source review supports future owner
 closure, but is not itself a missing native reduction implementation. Class
 coverage still waits on shared prepared-hand/state producers; equipment Life
-still needs a proved effective-amount and accumulation domain. These gates must
+now has bounded accumulation but still needs source/magnitude admission. These gates must
 not be replaced by inferred defaults or reassigned markers.
 
 The current [generated-skill correspondence packet](../data/owned/poe2/3887ae68/warrior-generated-correspondence/README.md)
@@ -229,8 +249,9 @@ promoted into native reduction order. The
 [native Life-copy packet](../data/owned/poe2/3887ae68/amulet-life-copy/README.md)
 now implements those branches with existing typed operations, eligibility,
 frozen percentage and exact occurrences. Its potential writer joins checked
-Life membership; four owner gaps and the Partial equipment query now remain. The
-native test suite verifies that the actual Partial query refuses a total even
+Life membership. The later bounded-equipment packet closes that query group
+while preserving all four owner gaps. The original tests retain the predecessor's
+Partial-query refusal; current tests reject incomplete owner admission even
 when copy arithmetic works. No runtime Lua behavior or new public model is
 introduced; remaining equipment/resource coverage is still required before
 final Life. Component parity remains distinct from
@@ -1252,7 +1273,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-player-incoming-critical-receivers),
+live in the [implementation plan](implementation.md#current-checkpoint-bounded-equipment-life-reduction),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.

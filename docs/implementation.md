@@ -76,7 +76,7 @@ These reference observations are not evidence of native metric completion.
 
 | Saved query references | Native work to reuse | Remaining final producer |
 | --- | --- | --- |
-| 00: Player Life | Intrinsic/Strength/item/reward contributions and checked Life queries | Complete equipment reduction, adjustments, override/CI behavior and final arithmetic with a proved numerical domain |
+| 00: Player Life | Intrinsic/Strength/item/reward contributions, checked Life queries and bounded equipment accumulation | Complete supplier/magnitude admission, adjustments, override/CI behavior and final arithmetic with a proved numerical domain |
 | 01: Player Mana | Intrinsic/Intelligence contributions, checked queries, adjustment collectors, override selection and published guarded consumer with checked numeric domain | Transformation supplier admission, whole-plan completion and evaluation binding |
 | 02, 18, 19: Player ES, Armour, Evasion | Selected item magnitude/local-defence intermediates and global/passive contributions | Final item properties, complete receiving, transformations and final Actor totals |
 | 03–06: four capped Player resistances | Item/passive/reward inputs and configured penalty | Complete contributor inventories, aggregation and cap/override calculations |
@@ -105,7 +105,72 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: Player incoming-critical receivers
+## Current checkpoint: bounded equipment Life reduction
+
+The [Life equipment packet](../data/owned/poe2/3887ae68/life-equipment-domain/README.md)
+closes one existing equipment contribution group using three checked numeric
+ranges in two existing programs. It adds no runtime operation, definition,
+receiver or evaluation bundle. The four flat-Life owner gaps, global query
+coverage, other owners and every import obligation remain unchanged.
+
+The unchanged effective-amount producer yields integral values. Both final
+direct/copy contributions and the copy's effective input are bounded to
+`[-2^37, 2^37]`. The engine's non-raisable limit of 65,536 effects, together with
+unique checked query membership, bounds every signed accumulation prefix by
+`2^53`. Equipment sums are therefore exact in binary64 regardless of order.
+Existing ranks are deterministic, not a reproduction of PoB traversal. The
+copy-input guard also prevents a small factor from hiding the retained large
+source number-to-text discrepancy. This proof applies only to the equipment
+subtotal; upstream magnitude/routing and complete resource arithmetic still
+need their own evidence. Increasing the engine effect ceiling would require
+re-proving this domain and invalidating affected semantic identities/admission.
+
+The current package is **`runs/owned-life-equipment-domain-publication-01/package`**:
+
+- Input: `fe061a37c795102c8ca025cf52ebca199cb0ba3be42c9fa901e6c42ac5bc6f3f`.
+- Definitions: `b738e9063cef1f30220fb0f149f4c5110c3f0a457bc42dc4d520556bb37a0bc1`.
+- Rules: `2cae66eb49d2e4c0370c02c5d966637c7fea712b293e2d3de6a7011bbf61e45b`.
+- Compiled: `fb9d2ee46c87576e1f88efab13cc2a4e0bf50b950307192fb30e16e08e359593`.
+- Registry: `53d5c7af67f5d6bf85543c8f53d33feab9ac9802731237198dcd408d603eb7f5`, last issued `337f`.
+
+Validation: 44 Engine replay tests (seven new), two ordinary CLI tests, strict
+Clippy on both targets and the explicit all-five publication gate pass. Actual
+imported item occurrences, duplicate uses, reversed ranks, boundaries, lazy
+branches, hard-limit refusal and fresh/reused/Rayon replay are covered. The
+publication takes 22.88s and rebuilds all eighteen artifacts byte-identically.
+All 110 queries, exact local IDs and selected counts **106/117/109/123/4** remain
+unchanged. Configuration-linked origins remain **48/83/39/34/32**; no input
+issue or rule owner closes, and complete native builds remain **0/5**.
+Logs: `runs/owned-life-equipment-domain-native-05.log`,
+`runs/owned-life-equipment-domain-cli-03.log`,
+`runs/owned-life-equipment-domain-publication-01.log`,
+`runs/owned-life-equipment-domain-native-clippy-01.log` and
+`runs/owned-life-equipment-domain-clippy-02.log`.
+
+**Next blocker selection:** keep Original05 first. Recheck actual selected Life
+suppliers and final resource assembly against this bounded subtotal; do not
+equate component fixtures or a closed query group with complete Player Life.
+No native modifier-transform producer is currently published. Final Life can
+reuse existing stat receivers and checked numeric selection, but adjustment,
+override and CI suppliers still need evidence. The six critical numeric
+dependencies and four critical query memberships remain open; observed zero or
+empty source buckets do not establish complete exclusions.
+
+In parallel, implement the owner's accepted
+[configuration projection contract](owned-configuration-projections-proposal.md).
+One source control may produce distinct owned inputs, with shared checked
+discovery and complete per-leaf receipts. Reuse the retained distance witness
+instead of adding an unnecessary observer. Its twelve distance controls and
+fourteen rows establish raw selection and two source consumer paths across JIT
+modes, not complete downstream native coverage or fresh-repeat/plain-control
+proof for each variant. Reuse distance Unit `2425`; weapon range and action
+geometry are different concepts. Source `Effective` is a calculation-view gate,
+not a game state, and must be reconciled separately. Original05's current
+ordinary minion-accuracy branch is intrinsically CannotBeEvaded and does not read
+distance; distance import is not by itself a new Sniper accuracy calculation.
+Do not publish unused assumptions or retire a leaf after checking only one role.
+
+## Previous checkpoint: Player incoming-critical receivers
 
 The owner approved final incoming-critical results on the existing stat-owned
 Player receivers. The [published packet](../data/owned/poe2/3887ae68/player-critical-receivers/README.md)
@@ -123,7 +188,7 @@ chance override distinguishes absence from zero and uses checked agreement.
 All four supplier query memberships remain Partial, and six resolved numeric
 dependencies still need producers. Shared Player coverage remains Partial.
 
-The current package is **`runs/owned-player-critical-publication-02/package`**:
+This checkpoint's package is **`runs/owned-player-critical-publication-02/package`**:
 
 - Input: `99262608a1adb63a3abbe00fadd312610daa3c44df2a902b62f1d9900c56d25e`.
 - Definitions: `b738e9063cef1f30220fb0f149f4c5110c3f0a457bc42dc4d520556bb37a0bc1`.
@@ -158,19 +223,6 @@ frozen `Actor / 337f / Override` channel and final program dependencies. Tests
 exercise that existing requirement and reject its absence; this packet does not
 invent a separate readiness system or declare complete incoming-critical/EHP.
 
-**Next blocker selection:** keep Original05 first. Prefer admitting an actual
-selected supplier or finishing a saved metric over adding more unused formulas.
-Review the six critical numeric dependencies and four query memberships against
-real selected sources. Player Life remains a direct saved-metric priority: its
-equipment reduction still needs an effective-amount/domain/order proof before
-coverage can close; the accepted numeric output guard alone does not prove
-intermediate sums. Final Life can reuse existing stat receivers and checked
-numeric selection, but CI/override/adjustment suppliers need their own evidence.
-The four selected input inventories remain an independent gate. Enemy-distance
-triage must preserve its direct reader's explicit-zero semantics separately from
-the configuration callback's zero-to-Placeholder fallback. Do not remove source
-links or invent neutral contributors merely to reduce blocker counts.
-
 The post-publication source review found no critical supplier ready for closure.
 Original05 observes zero for the six numeric dependencies and empty flag/override
 buckets, but this does not prove complete producer exclusions. Configured evasion
@@ -178,27 +230,19 @@ also depends on accuracy, avoidance and category composition. Keep those gaps;
 do not add an observed-zero receiver. The smallest possible critical exclusion,
 optional override absence, still needs a complete source-name/transport proof.
 
-**Next implementation in progress:** bounded equipment-Life reduction using the
-existing checked-domain operation. The engine enforces a non-raisable ceiling of
-65,536 effects, and checked query binding rejects duplicate effect indices.
-Guarding each integral direct/copy contribution to `[-2^37, 2^37]` bounds every
-signed partial sum by `2^53`, independently of source order. Copying also needs a
-guard on its effective input so a tiny factor cannot hide a large source numeric
-transport discrepancy. This is a proposed data-bound proof, not yet published
-coverage. Preserve the shared effective-value diagnostic and all four flat-Life
-owner gaps. Final resource assembly needs its own bounds; this proof would apply
-only to the equipment query group. Test the hard limit, actual producer graphs,
-boundary failures, duplicate occurrences, lazy branches and exact publication
-before retiring that group's existing numeric-order gap.
-
-**Pending owner decision:** [multiple configuration projections](owned-configuration-projections-proposal.md).
+**Accepted next input contract:** [multiple configuration projections](owned-configuration-projections-proposal.md).
 One saved enemy-distance control can yield range 0 and distance-modifier candidate
 80 from Input 0 / Placeholder 80. Current adapters cannot represent both roles.
-The proposal extends the existing Import selection/receipt path while reusing
+The owner approved extending the existing Import selection/receipt path while reusing
 typed Scenario inputs and common configuration accounting; it creates no native
-UI or Lua behavior. The alternative investigates intended game semantics before
-classifying one source interpretation as a defect. This public policy decision
-has been prompted; no dependent implementation is authorized yet.
+UI or Lua behavior. No source interpretation is classified as a defect.
+Implement the current policy in place with shared discovery, distinct semantic
+outputs and complete per-leaf receipts, then validate actual source controls
+before publishing distance data.
+Independent source inspection also identifies `Effective` as a calculation-view
+gate, not a game state. Its reconciliation belongs to the existing Lua/UI cleanup
+work: approving value projections does not authorize importing a source preview
+mode into native rules. The proposal and retirement register retain the evidence.
 
 ## Previous checkpoint: archived generated usage responsibilities
 
@@ -268,8 +312,8 @@ authority. That publication rebases from registry 3372 and reuses configured
 inputs 3371/3372; incomplete suppliers remain open.
 Separate read-only triage found no additional ready data-only Config
 leaf retirement: twelve remaining count widgets use zero-to-Placeholder fallback,
-while three allow zero and have distinct consumers. Enemy distance is a useful
-next mechanical input because Sniper accuracy reads it, but its direct reader
+while three allow zero and have distinct consumers. Enemy distance supplies
+multiple source mechanics, but its direct reader
 preserves explicit zero while the configuration callback does not. Preserve both
 meanings; do not force the entire setting through one scalar policy. Scorch's
 apparently obsolete source state needs a complete dynamic-consumer proof before

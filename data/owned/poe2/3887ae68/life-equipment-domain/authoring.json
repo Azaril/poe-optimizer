@@ -1,0 +1,32 @@
+{
+  "kind": "life-equipment-domain",
+  "before": "99262608a1adb63a3abbe00fadd312610daa3c44df2a902b62f1d9900c56d25e",
+  "artifacts": {
+    "dependencies.json": {
+      "bytes": 165025,
+      "sha256": "a3a7638d02d25086b24e53d8d15351728babafba228d8bd8c48f2abd9d5126ad"
+    },
+    "programs.json": {
+      "bytes": 19022,
+      "sha256": "db6b6a9542b83761dd0c867c5514cdec9d321ca6aa5b41cf612a8121a81545ee"
+    },
+    "query.json": {
+      "bytes": 37412,
+      "sha256": "2d1eaec6d5c5e87870e7514ae61e5801d6edc8a1a76e4d24d72ddd284b8e686e"
+    },
+    "proof.json": {
+      "bytes": 1777,
+      "sha256": "203bc5932893d01342137376070ef395531adb7a5f6ea1a534966408cd751d56"
+    }
+  },
+  "scope": {
+    "changed_programs": 2,
+    "closed_groups": 1,
+    "closed_existing_owners": 0,
+    "new_definitions": 0,
+    "new_receivers": 0,
+    "supplier_admission": false,
+    "evaluation_bundle": false,
+    "whole_build": false
+  }
+}

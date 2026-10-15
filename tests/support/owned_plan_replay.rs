@@ -191,6 +191,12 @@ impl ReplayInput {
         serde_json::from_slice(&json).unwrap()
     }
     pub fn compile(&self) -> std::result::Result<NativePlan, String> {
+        self.compile_with_limits(PlanLimits::default())
+    }
+    pub fn compile_with_limits(
+        &self,
+        limits: PlanLimits,
+    ) -> std::result::Result<NativePlan, String> {
         let definitions = Arc::new(
             OwnedDefinitionSchemaPackage::new(self.schema.clone(), Default::default())
                 .map_err(|e| e.to_string())?,
@@ -266,7 +272,7 @@ impl ReplayInput {
                 inputs,
                 receiving,
             },
-            Default::default(),
+            limits,
             Default::default(),
         )
         .map_err(|e| e.to_string())

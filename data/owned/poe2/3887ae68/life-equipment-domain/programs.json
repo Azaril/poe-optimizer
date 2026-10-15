@@ -1,0 +1,778 @@
+[
+  {
+    "id": "contribute-player-flat-life",
+    "context": "equipment_use",
+    "reads": [
+      {
+        "id": "effective",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            }
+          }
+        },
+        "source": {
+          "kind": "stat",
+          "value": {
+            "entity": "modifier",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295b"
+            }
+          }
+        }
+      },
+      {
+        "id": "direct-applicability",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "stat",
+          "value": {
+            "entity": "current",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000003306"
+            }
+          }
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "id": "effective",
+        "expression": {
+          "kind": "read",
+          "input": "effective"
+        }
+      },
+      {
+        "id": "one-count",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 1.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "count-factor",
+        "expression": {
+          "kind": "ratio",
+          "numerator": "effective",
+          "denominator": "one-count",
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000001"
+          }
+        }
+      },
+      {
+        "id": "one-life",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 1.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003119"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "life-points",
+        "expression": {
+          "kind": "scale",
+          "value": "one-life",
+          "factor": "count-factor"
+        }
+      },
+      {
+        "id": "direct-applicability",
+        "expression": {
+          "kind": "read",
+          "input": "direct-applicability"
+        }
+      },
+      {
+        "id": "bounded-life-points",
+        "expression": {
+          "kind": "check_numeric_domain",
+          "value": "life-points",
+          "domain": {
+            "kind": "quantity",
+            "value": {
+              "minimum": {
+                "value": -137438953472.0,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003119"
+                }
+              },
+              "maximum": {
+                "value": 137438953472.0,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003119"
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "effects": [
+      {
+        "id": "direct-flat-life",
+        "when": "direct-applicability",
+        "effect": {
+          "kind": "contribute",
+          "entity": "player",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000311a"
+          },
+          "contribution": "add",
+          "value": "bounded-life-points"
+        }
+      }
+    ]
+  },
+  {
+    "id": "amulet-copy-flat-life",
+    "context": "equipment_use",
+    "reads": [
+      {
+        "id": "eligible",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "stat",
+          "value": {
+            "entity": "current",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032e3"
+            }
+          }
+        }
+      },
+      {
+        "id": "effective",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            }
+          }
+        },
+        "source": {
+          "kind": "stat",
+          "value": {
+            "entity": "modifier",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295b"
+            }
+          }
+        }
+      },
+      {
+        "id": "pre-amulet-percent",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000002"
+            }
+          }
+        },
+        "source": {
+          "kind": "stat",
+          "value": {
+            "entity": "player",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032e4"
+            }
+          }
+        }
+      },
+      {
+        "id": "unscalable",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "parameter",
+          "value": {
+            "slot": {
+              "declaration": {
+                "kind": "modifier",
+                "definition": {
+                  "kind": "modifier",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003100"
+                }
+              },
+              "slot": {
+                "kind": "parameter_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003116"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "id": "eligible",
+        "expression": {
+          "kind": "read",
+          "input": "eligible"
+        }
+      },
+      {
+        "id": "unbounded-effective",
+        "expression": {
+          "kind": "read",
+          "input": "effective"
+        }
+      },
+      {
+        "id": "pre-amulet-percent",
+        "expression": {
+          "kind": "read",
+          "input": "pre-amulet-percent"
+        }
+      },
+      {
+        "id": "unscalable",
+        "expression": {
+          "kind": "read",
+          "input": "unscalable"
+        }
+      },
+      {
+        "id": "one-hundred-percent",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 100.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "factor",
+        "expression": {
+          "kind": "ratio",
+          "numerator": "pre-amulet-percent",
+          "denominator": "one-hundred-percent",
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000001"
+          }
+        }
+      },
+      {
+        "id": "identity-factor",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 1.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "factor-is-one",
+        "expression": {
+          "kind": "compare",
+          "operation": "equal",
+          "left": "factor",
+          "right": "identity-factor"
+        }
+      },
+      {
+        "id": "bypass-scaling",
+        "expression": {
+          "kind": "any",
+          "values": [
+            "factor-is-one",
+            "unscalable"
+          ]
+        }
+      },
+      {
+        "id": "scaled",
+        "expression": {
+          "kind": "scale",
+          "value": "effective",
+          "factor": "factor"
+        }
+      },
+      {
+        "id": "effective-floor",
+        "expression": {
+          "kind": "round",
+          "value": "effective",
+          "quantum": {
+            "value": 1.0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            }
+          },
+          "mode": "floor"
+        }
+      },
+      {
+        "id": "integral-effective",
+        "expression": {
+          "kind": "compare",
+          "operation": "equal",
+          "left": "effective",
+          "right": "effective-floor"
+        }
+      },
+      {
+        "id": "one-count",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 1.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "half-count",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.5,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "factor-ten",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 10.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "factor-hundred",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 100.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "scaled-ten",
+        "expression": {
+          "kind": "scale",
+          "value": "scaled",
+          "factor": "factor-ten"
+        }
+      },
+      {
+        "id": "floor-ten",
+        "expression": {
+          "kind": "round",
+          "value": "scaled-ten",
+          "quantum": {
+            "value": 1.0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            }
+          },
+          "mode": "floor"
+        }
+      },
+      {
+        "id": "fractional-copy",
+        "expression": {
+          "kind": "divide_factor",
+          "value": "floor-ten",
+          "divisor": "factor-ten"
+        }
+      },
+      {
+        "id": "scaled-hundred",
+        "expression": {
+          "kind": "scale",
+          "value": "scaled",
+          "factor": "factor-hundred"
+        }
+      },
+      {
+        "id": "biased-hundred",
+        "expression": {
+          "kind": "add",
+          "left": "scaled-hundred",
+          "right": "half-count"
+        }
+      },
+      {
+        "id": "floor-hundred",
+        "expression": {
+          "kind": "round",
+          "value": "biased-hundred",
+          "quantum": {
+            "value": 1.0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            }
+          },
+          "mode": "floor"
+        }
+      },
+      {
+        "id": "rounded-copy",
+        "expression": {
+          "kind": "divide_factor",
+          "value": "floor-hundred",
+          "divisor": "factor-hundred"
+        }
+      },
+      {
+        "id": "integral-copy",
+        "expression": {
+          "kind": "round",
+          "value": "rounded-copy",
+          "quantum": {
+            "value": 1.0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            }
+          },
+          "mode": "truncate"
+        }
+      },
+      {
+        "id": "numeric-copy",
+        "expression": {
+          "kind": "select",
+          "condition": "integral-effective",
+          "when_true": "integral-copy",
+          "when_false": "fractional-copy"
+        }
+      },
+      {
+        "id": "copied",
+        "expression": {
+          "kind": "select",
+          "condition": "bypass-scaling",
+          "when_true": "effective",
+          "when_false": "numeric-copy"
+        }
+      },
+      {
+        "id": "copied-ratio",
+        "expression": {
+          "kind": "ratio",
+          "numerator": "copied",
+          "denominator": "one-count",
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000001"
+          }
+        }
+      },
+      {
+        "id": "one-life",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 1.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003119"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "life-points",
+        "expression": {
+          "kind": "scale",
+          "value": "one-life",
+          "factor": "copied-ratio"
+        }
+      },
+      {
+        "id": "effective",
+        "expression": {
+          "kind": "check_numeric_domain",
+          "value": "unbounded-effective",
+          "domain": {
+            "kind": "quantity",
+            "value": {
+              "minimum": {
+                "value": -137438953472.0,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000295a"
+                }
+              },
+              "maximum": {
+                "value": 137438953472.0,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000295a"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "bounded-life-points",
+        "expression": {
+          "kind": "check_numeric_domain",
+          "value": "life-points",
+          "domain": {
+            "kind": "quantity",
+            "value": {
+              "minimum": {
+                "value": -137438953472.0,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003119"
+                }
+              },
+              "maximum": {
+                "value": 137438953472.0,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003119"
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "effects": [
+      {
+        "id": "copied-flat-life",
+        "when": "eligible",
+        "effect": {
+          "kind": "contribute",
+          "entity": "player",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000311a"
+          },
+          "contribution": "add",
+          "value": "bounded-life-points"
+        }
+      }
+    ]
+  }
+]

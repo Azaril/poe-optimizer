@@ -2,6 +2,8 @@
 //! This is not a complete build or permission to close production coverage.
 #[path = "support/owned_sniper_added_damage.rs"]
 mod added_damage;
+#[path = "support/owned_sniper_life_equipment_domain.rs"]
+mod life_equipment_domain;
 #[path = "support/owned_sniper_life_increase.rs"]
 mod life_increase;
 #[path = "support/owned_sniper_minion_inherent_life.rs"]
