@@ -133,10 +133,17 @@ condition. Campaign-boss progress has no authenticated constructor default, so
 Import must preserve absence rather than substitute zero. Sigil and Corrupting
 Cry stages belong to exact Skill usage. That runtime contract already exists,
 but the Config-to-occurrence import join is unfinished; Skill-targeted external
-assumptions cannot bypass it because the engine rejects those reads. Propagation
+assumptions cannot bypass it because the engine rejects Skill-targeted external
+reads. Skill-context reads of Player inputs do not establish skill ownership. Propagation
 across repeated occurrences and independently selected presets requires complete
 source-consumer and composition evidence before a policy is chosen. These are
 remaining admission tasks, not new implemented runtime behavior.
+Two concrete proposals now separate these decisions: [Scenario-owned usage
+intent](owned-scenario-usage-intent-proposal.md) would resolve skill-stage state
+against exact composed occurrences, while [numeric progression
+rewards](owned-progression-input-proposal.md) would keep campaign progress in
+the existing build Choice/reward path. Both await owner review. A saved
+configuration field's location does not determine its native owner.
 
 The [empty intrinsic socket packet](../data/owned/poe2/3887ae68/empty-passive-socket-intrinsics/README.md)
 now closes one selected passive's intrinsic rules and seven declaration
