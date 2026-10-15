@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "kind": "configured-target-distance-projections",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "archives": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "encoding": "utf8",
+      "artifact_sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "encoding": "utf8",
+      "artifact_sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "artifact_sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48",
+      "bytes": 50144,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcActiveSkill.lua.gz",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "artifact_sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b",
+      "bytes": 36471,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "artifact_sha256": "cdefa2fbbb4a15befdc728fd549902f4032c1cdf0b52c3070dc356f0a45e718f",
+      "bytes": 100609,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcSetup.lua.gz",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "artifact_sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575",
+      "bytes": 181097,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/CalcDefence.lua.gz",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 239878,
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2",
+      "encoding": "gzip",
+      "artifact_sha256": "9e232710732a7223b87b7174c7bd8a0531309675b76c605e07df55b0f72d6bf3"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "artifact_sha256": "3ee439d6209cd88adbca368dd7b3e741e9ed537531a37fcc0a8f4b1863e56147",
+      "bytes": 364029,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcOffence.lua.gz",
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "artifact_sha256": "ce7f0831e453c9b051b052ea58ec3345b4c147ee0a51f5169f46f4b7ba136f2a",
+      "bytes": 27763,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcsTab.lua.gz",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "artifact_sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466",
+      "bytes": 677245,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModParser.lua.gz",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    },
+    {
+      "path": "src/Data/Skills/sup_dex.lua",
+      "artifact_sha256": "f9e8ba5e223774088fe9cbf1081e8fd510eb6fe5f5888e3db2c1d179c8516d93",
+      "bytes": 194700,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/sup_dex.lua.gz",
+      "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    }
+  ],
+  "spans": [
+    {
+      "last": 1641,
+      "path": "src/Modules/ConfigOptions.lua",
+      "first": 1639,
+      "sha256": "c852e42b41b9784a7691b0158e86bee4313057b708894165af0554205db37913",
+      "body": "\t{ var = \"enemyDistance\", type = \"count\", label = \"Distance to enemy:\", tooltip = \"10 units equals 1 metre\\nPlayer and Minion Attacks incur an Accuracy penalty based on distance from the origin of the damage to the target,\\nwith no penalty for targets within 2 metres and up to 90% less Accuracy for targets further than 12 metres away-\", defaultPlaceholderState = 20, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:enemyDistance\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },",
+      "role": "distance-control-and-callback"
+    },
+    {
+      "last": 913,
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 907,
+      "sha256": "b7c5aa65e5c776a6fd9d775002cfe72a272ac0d726505b27c112933ebe77e6b9",
+      "body": "\t\telseif node.elem == \"Placeholder\" then\n\t\t\tif not node.attrib.name then\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Placeholder' element missing name attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\t\tif node.attrib.number then\n\t\t\t\tself.configSets[configSetId].placeholder[node.attrib.name] = tonumber(node.attrib.number)",
+      "role": "saved-placeholder-loading"
+    },
+    {
+      "last": 1200,
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1174,
+      "sha256": "fd243cb8fac97cc84d0e8804c1d0ddef80ff44310943e482d35ba93e1961c098",
+      "body": "\tlocal input = self.configSets[self.activeConfigSetId].input\n\tlocal placeholder = self.configSets[self.activeConfigSetId].placeholder\n\tself:UpdateLevel() -- enemy level handled here because it's needed to correctly set boss stats\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.apply then\n\t\t\tif varData.type == \"check\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(true, modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"count\" or varData.type == \"integer\" or varData.type == \"countAllowZero\" or varData.type == \"float\" then\n\t\t\t\tif input[varData.var] and (input[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\telseif placeholder[varData.var] and (placeholder[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(placeholder[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"list\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"text\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\t-- Apply Custom Modifier groups",
+      "role": "numeric-callback-dispatch"
+    },
+    {
+      "last": 1333,
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1317,
+      "sha256": "eecdb417eac994f9ab210f213aa7fe2e99740c3988cc2318ad452cb6e20de2a5",
+      "body": "function ConfigTabClass:CreateConfigSet(configSetId, title)\n\tlocal configSet = { id = configSetId, title = title, input = {}, placeholder = {}, customModsList = { { title = \"Default\", enabled = true, text = \"\" } } }\n\tif not configSetId then\n\t\tconfigSet.id = #self.configSets + 1\n\tend\n\t-- there are default values for input and placeholder that every new config set needs to have\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.var then\n\t\t\tconfigSet.input[varData.var] = varData.defaultState\n\t\t\tconfigSet.placeholder[varData.var] = varData.defaultPlaceholderState\n\t\t\tif varData.defaultIndex then\n\t\t\t\tconfigSet.input[varData.var] = varData.list[varData.defaultIndex].val\n\t\t\tend\n\t\tend\n\tend\n\tself.configSets[configSet.id] = configSet\n\treturn configSet",
+      "role": "fresh-placeholder-constructor"
+    },
+    {
+      "last": 689,
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 673,
+      "sha256": "86cc3f5f0f09a0aa016293c0812f8ded03dc6a824a80236a6f0b38c1c8f297f8",
+      "body": "\t-- Calculate distance from enemy\n\teffectiveRange = env.configInput.enemyDistance or env.configPlaceholder.enemyDistance\n\n\t-- Build config structure for modifier searches\n\t---@class ModCfg\n\tactiveSkill.skillCfg = {\n\t\tflags = bor(skillModFlags, activeSkill.weapon1Flags or activeSkill.weapon2Flags or 0),\n\t\tkeywordFlags = skillKeywordFlags,\n\t\tskillName = activeGrantedEffect.name:gsub(\"^Vaal \", \"\"), -- This allows modifiers that target specific skills to also apply to their Vaal counterpart\n\t\tsummonSkillName = activeSkill.summonSkill and activeSkill.summonSkill.activeEffect.grantedEffect.name,\n\t\tskillGem = activeEffect.gemData,\n\t\tskillGrantedEffect = activeGrantedEffect,\n\t\tskillPart = activeSkill.skillPart,\n\t\tskillTypes = activeSkill.skillTypes,\n\t\tskillCond = { },\n\t\tskillDist = env.mode_effective and effectiveRange,\n\t\tslotName = activeSkill.slotName,",
+      "role": "skill-distance-selection-and-view-gate"
+    },
+    {
+      "last": 739,
+      "path": "src/Classes/ModStore.lua",
+      "first": 722,
+      "sha256": "9220fa79d7db193ebd6877fa135c79cac13cf9bc5c24559d86fd32c23d7e34e5",
+      "body": "\t\telseif tag.type == \"DistanceRamp\" then\n\t\t\tif not cfg or not cfg.skillDist then\n\t\t\t\treturn\n\t\t\tend\n\t\t\tif cfg.skillDist <= tag.ramp[1][1] then\n\t\t\t\tvalue = value * tag.ramp[1][2]\n\t\t\telseif cfg.skillDist >= tag.ramp[#tag.ramp][1] then\n\t\t\t\tvalue = value * tag.ramp[#tag.ramp][2]\n\t\t\telse\n\t\t\t\tfor i, dat in ipairs(tag.ramp) do\n\t\t\t\t\tlocal next = tag.ramp[i+1]\n\t\t\t\t\tif cfg.skillDist <= next[1] then\n\t\t\t\t\t\tvalue = value * (dat[2] + (next[2] - dat[2]) * (cfg.skillDist - dat[1]) / (next[1] - dat[1]))\n\t\t\t\t\t\tbreak\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\telseif tag.type == \"Limit\" then",
+      "role": "distance-ramp-consumer"
+    },
+    {
+      "last": 113,
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 111,
+      "sha256": "4242463b16b6a2d0abfa7aa0b2547ad47a7a0df4119b604dd29ea4a8b9bead9f",
+      "body": "\tmodDB.conditions[\"Buffed\"] = env.mode_buffs\n\tmodDB.conditions[\"Combat\"] = env.mode_combat\n\tmodDB.conditions[\"Effective\"] = env.mode_effective",
+      "role": "effective-store-condition"
+    },
+    {
+      "last": 825,
+      "path": "src/Modules/CalcSetup.lua",
+      "first": 804,
+      "sha256": "71509dae7a5f0604a5ee1b7fc3d0229b68580671563acf9f265579197722df96",
+      "body": "\tlocal buffMode\n\tif mode == \"CALCS\" then\n\t\tbuffMode = env.calcsInput.misc_buffMode\n\telse\n\t\tbuffMode = \"EFFECTIVE\"\n\tend\n\tif buffMode == \"EFFECTIVE\" then\n\t\tenv.mode_buffs = true\n\t\tenv.mode_combat = true\n\t\tenv.mode_effective = true\n\telseif buffMode == \"COMBAT\" then\n\t\tenv.mode_buffs = true\n\t\tenv.mode_combat = true\n\t\tenv.mode_effective = false\n\telseif buffMode == \"BUFFED\" then\n\t\tenv.mode_buffs = true\n\t\tenv.mode_combat = false\n\t\tenv.mode_effective = false\n\telse\n\t\tenv.mode_buffs = false\n\t\tenv.mode_combat = false\n\t\tenv.mode_effective = false",
+      "role": "effective-view-policy"
+    },
+    {
+      "last": 527,
+      "path": "src/Modules/CalcPerform.lua",
+      "first": 524,
+      "sha256": "624a18fcb9e5e476e565c9f0996f4107b18839a73c0d042be3aed2d5ff795a4a",
+      "body": "\tlocal enemyDistance = m_max(modDB:Sum(\"BASE\", nil, \"Multiplier:enemyDistance\"), 0)\n\tlocal surroundedMinimum= m_max(modDB:Sum(\"BASE\", nil, \"SurroundedMinimum\"), 1)\n\tcondList[\"EnemyInPresence\"] = output.PresenceRadius >= enemyDistance\n\tcondList[\"Surrounded\"] = surroundedMinimum == 1 and output.SurroundedRadius >= enemyDistance",
+      "role": "presence-consumer"
+    },
+    {
+      "last": 1477,
+      "path": "src/Modules/CalcDefence.lua",
+      "first": 1476,
+      "sha256": "9f9dee92f69e77c63da40a5ccefb864716d8ae61c409c573e17b77fb200927b7",
+      "body": "\t\t\tlocal enemyDistance = m_max(m_min(modDB:Sum(\"BASE\", nil, \"Multiplier:enemyDistance\"), 120), 20)\n\t\t\tlocal accuracyPenalty = 1 - ((enemyDistance - 20) / 100) * (1 - 0.1)",
+      "role": "defence-distance-consumer"
+    },
+    {
+      "last": 2727,
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 2715,
+      "sha256": "6dd4f3a5f715b53b8979233ddf4439634272b43caefada1b055e4704af92af93",
+      "body": "\t\tlocal enemyDistance = env.modDB:Sum(\"BASE\", nil, \"Multiplier:enemyDistance\") / 10 or 25\n\t\tlocal enemyDistanceCapped = m_max(m_min(enemyDistance * 10, data.misc.AccuracyFalloffEnd), data.misc.AccuracyFalloffStart)\n\t\tlocal modValue = m_floor(data.misc.MaxAccuracyRangePenalty * calcLib.mod(skillModList, cfg, \"AccuracyPenalty\"))\n\t\tlocal accuracyPenalty = 1 - ((enemyDistanceCapped - data.misc.AccuracyFalloffStart) / (data.misc.AccuracyFalloffEnd - data.misc.AccuracyFalloffStart)) * modValue / 100\n\t\tlocal accuracyPenalties = {}\n\t\tlocal distances = {2, 5, 9}\n\t\tfor _, distance in ipairs(distances) do\n\t\t\taccuracyPenalties[\"accuracyPenalty\" .. distance .. \"m\"] = 1 - ((distance * 10 - data.misc.AccuracyFalloffStart) / (data.misc.AccuracyFalloffEnd - data.misc.AccuracyFalloffStart)) * modValue / 100 -- Fix\n\t\tend\n\n\t\toutput.Accuracy = m_max(0, m_floor(base * (1 + inc / 100) * more))\n\t\tlocal accuracyVsEnemy = m_max(0, m_floor(baseVsEnemy * (1 + incVsEnemy / 100) * moreVsEnemy))\n\t\tlocal accuracyVsEnemyBase = accuracyVsEnemy",
+      "role": "accuracy-distance-consumer"
+    },
+    {
+      "last": 16,
+      "path": "src/Classes/CalcsTab.lua",
+      "first": 13,
+      "sha256": "35abbd9b5094717c2d6c4a85c9fef6c1430aa251a19bd5ed5ccd54c56991a7c1",
+      "body": "\t{ label = \"Unbuffed\", buffMode = \"UNBUFFED\" },\n\t{ label = \"Buffed\", buffMode = \"BUFFED\" },\n\t{ label = \"In Combat\", buffMode = \"COMBAT\" },\n\t{ label = \"Effective DPS\", buffMode = \"EFFECTIVE\" } ",
+      "role": "calculation-view-options"
+    },
+    {
+      "last": 175,
+      "path": "src/Classes/CalcsTab.lua",
+      "first": 170,
+      "sha256": "783446b30aba99a9d184a8da74b0e881f69e96313b5e073fb7e1c24448f20626",
+      "body": "The stats in the sidebar are always shown in Effective DPS mode, regardless of this setting.\n\nUnbuffed: No auras, buffs, or other support skills or effects will apply. This is equivalent to standing in town.\nBuffed: Aura and buff skills apply. This is equivalent to standing in your hideout with auras and buffs turned on.\nIn Combat: Charges and combat buffs such as Onslaught will also apply. This will show your character sheet stats in combat.\nEffective DPS: Curses and enemy properties (such as resistances and status conditions) will also apply. This estimates your true DPS.]]) ",
+      "role": "sidebar-effective-view"
+    },
+    {
+      "last": 2162,
+      "path": "src/Modules/ModParser.lua",
+      "first": 2161,
+      "sha256": "dfe2ee206d9d49c3dbc03db4d2c7791cbab3fe97dd4f2427559f34dd2693d139",
+      "body": "\t[\"against enemies further than (%d+)m\"] = function(num) return { tag = { type = \"MultiplierThreshold\", var = \"enemyDistance\", threshold = num * 10 } } end,\n\t[\"against enemies within (%d+) ?me?t?r?e?s?\"] = function(num) return { tag = { type = \"MultiplierThreshold\", var = \"enemyDistance\", threshold = num * 10, upper = true } } end,",
+      "role": "generic-distance-threshold-translation"
+    },
+    {
+      "last": 423,
+      "path": "src/Classes/ModStore.lua",
+      "first": 421,
+      "sha256": "06b3a32cacf28e379a78ea16fa831b5736ded10c6fad3806b89b3ad500abc2a0",
+      "body": "function ModStoreClass:GetMultiplier(var, cfg, noMod)\n\treturn (not noMod and self:Override(cfg, multiplierName[var])) or (self.multipliers[var] or 0) + (self.parent and self.parent:GetMultiplier(var, cfg, true) or 0) + (not noMod and self:Sum(\"BASE\", cfg, multiplierName[var]) or 0)\nend",
+      "role": "multiplier-override-and-parent-composition"
+    },
+    {
+      "last": 611,
+      "path": "src/Classes/ModStore.lua",
+      "first": 574,
+      "sha256": "8b63a4a11ce88c4382bdd45d4b0235d80c76f1635ec6b4ea22aecf656eccb081",
+      "body": "\t\telseif tag.type == \"MultiplierThreshold\" then\n\t\t\tlocal target = self\n\t\t\tlocal thresholdTarget = self\n\t\t\tif tag.thresholdActor then\n\t\t\t\tlocal thresholdActor = getActor(self, tag.thresholdActor)\n\t\t\t\tif thresholdActor then\n\t\t\t\t\tthresholdTarget = thresholdActor.modDB\n\t\t\t\telse\n\t\t\t\t\treturn\n\t\t\t\tend\n\t\t\tend\n\t\t\tif tag.actor then\n\t\t\t\tlocal actor = getActor(self, tag.actor)\n\t\t\t\tif actor then\n\t\t\t\t\ttarget = actor.modDB\n\t\t\t\telse\n\t\t\t\t\treturn\n\t\t\t\tend\n\t\t\tend\n\t\t\tlocal mult = 0\n\t\t\tif tag.varList then\n\t\t\t\tfor _, var in pairs(tag.varList) do\n\t\t\t\t\tmult = mult + GetMultiplier(target, var, cfg)\n\t\t\t\tend\n\t\t\telse\n\t\t\t\tmult = GetMultiplier(target, tag.var, cfg)\n\t\t\tend\n\t\t\tlocal threshold = tag.threshold or GetMultiplier(tag.thresholdActor and thresholdTarget or target, tag.thresholdVar, cfg)\n\t\t\tif (tag.upper and mult > threshold) or (tag.equals and mult ~= threshold) or (not tag.upper and mult < threshold) then\n\t\t\t\treturn\n\t\t\tend\n\t\telseif tag.type == \"PerStat\" then\n\t\t\tlocal base\n\t\t\tlocal target = self\n\t\t\t-- This functions similar to the above tagTypes in regard to which actor to use, but for PerStat\n\t\t\t-- if the actor is 'parent', we don't want to return if we're already using 'parent', just keep using 'self'\n\t\t\tlocal actor = getActor(self, tag.actor)\n\t\t\tif actor then",
+      "role": "generic-distance-threshold-consumer"
+    },
+    {
+      "last": 5219,
+      "path": "src/Modules/CalcOffence.lua",
+      "first": 5207,
+      "sha256": "af019c05f894d5e4be974e31f279b8cc8766f3864fbec958af2bb05f15e3f8ad",
+      "body": "\t\t\t\tskillName = skillCfg.skillName,\n\t\t\t\tskillPart = skillCfg.skillPart,\n\t\t\t\tskillTypes = skillCfg.skillTypes,\n\t\t\t\tsummonSkillName = skillCfg.summonSkillName,\n\t\t\t\tslotName = skillCfg.slotName,\n\t\t\t\tflags = bor(ModFlag.Dot, ModFlag.Ailment, band(cfg.flags, ModFlag.WeaponMask), band(cfg.flags, ModFlag.Melee) ~= 0 and ModFlag.MeleeHit or 0),\n\t\t\t\tkeywordFlags = bor(band(cfg.keywordFlags, bnot(KeywordFlag.Hit)), KeywordFlag[ailment], KeywordFlag.Ailment, KeywordFlag[ailmentDamageType .. \"Dot\"]),\n\t\t\t\tskillCond = setmetatable({ [\"CriticalStrike\"] = true },critMetatable ),\n\t\t\t\tskillDist = skillCfg.skillDist,\n\t\t\t}\n\n\t\t\tlocal dotCfg = pass.label ~= \"Off Hand\" and activeSkill[ailment:lower() .. \"Cfg\"] or activeSkill[\"OH\" .. ailment:lower() .. \"Cfg\"]\n\t\t\tcheckWeapon1HFlags(dotCfg)",
+      "role": "ailment-distance-cfg-copy"
+    },
+    {
+      "last": 3543,
+      "path": "src/Data/Skills/sup_dex.lua",
+      "first": 3536,
+      "sha256": "92b81b67d50d60582fd72596d06a7844ae19a255cde9dab94f94271c368c1b8c",
+      "body": "\t\t\tincrementalEffectiveness = 0.054999999701977,\n\t\t\tstatDescriptionScope = \"gem_stat_descriptions\",\n\t\t\tstatMap = {\n\t\t\t\t[\"support_reach_accuracy_within_2m_+%_final\"] = {\n\t\t\t\t\tmod(\"Accuracy\", \"MORE\", nil, 0, 0, { type = \"MultiplierThreshold\", var = \"enemyDistance\", threshold = 20, upper = true } ),\n\t\t\t\t},\n\t\t\t},\n\t\t\tbaseFlags = {",
+      "role": "threshold-data-example"
+    }
+  ],
+  "constructor_dependencies": [
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/source-comparison.json",
+      "sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-review.json",
+      "sha256": "d8f7abf2202ace98318d9c3c80be31ea77c3d9d17a307a174e866fc9c44fa9d5"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-bodies.json",
+      "sha256": "1b470cb8f843655071fe8fe38d7075b974085debf683581813f20ea286a92d20"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-auxiliary-bodies.json",
+      "sha256": "b0e1f431cc964c38040abdab36618401e5f3e77407020b58df364ff31574e1a2"
+    }
+  ],
+  "license": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/LICENSE.md",
+  "witness": {
+    "jit_on_sha256": "a61e14e329084002bdc1b1ef9034f33e62574e0982619a9a6a5dcb4554786890",
+    "sha256": "a61e14e329084002bdc1b1ef9034f33e62574e0982619a9a6a5dcb4554786890",
+    "bytes": 5990540,
+    "authoring_file": "data/owned/poe2/3887ae68/minion-accuracy/authoring.json",
+    "jit_off_sha256": "a61e14e329084002bdc1b1ef9034f33e62574e0982619a9a6a5dcb4554786890",
+    "authoring_sha256": "1c6001662a0d48a4821b2c7e152f1703e3eba369d1283f293c512444208d6a82",
+    "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/distance-witness.json.gz",
+    "artifact_sha256": "472a99278aaeeb309315169296b814d25abfd2c58ed8f77d38d0edd589401cd0",
+    "observer": {
+      "artifact_sha256": "ba6e42a9f4dcabeed3b990f2958f2f37edf5b193d4c1778933db888b88b4c7fb",
+      "bytes": 14199,
+      "sha256": "6912bc785f9d2304bbc2e66844cc596cda41a67a3e48dd9f6d7b75ed35642056",
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/acquisition-observer.lua.gz"
+    }
+  },
+  "scope": {
+    "independent_distance_repetition": false,
+    "native_coverage": false,
+    "rows": 14,
+    "admitted_range": [
+      -1000000,
+      1000000
+    ],
+    "controls": 12,
+    "whole_build_parity": false,
+    "plain_control": false,
+    "new_source_execution": false,
+    "contribution_emission": false,
+    "view_mode_mapping": false
+  }
+}

@@ -18,12 +18,61 @@ fn root() -> PathBuf {
 fn hash(b: &[u8]) -> String {
     format!("{:x}", Sha256::digest(b))
 }
+pub fn retained_gzip(entry: &Value, limit: usize) -> Vec<u8> {
+    let stored = fs::read(root().join(entry["file"].as_str().unwrap())).unwrap();
+    assert_eq!(hash(&stored), entry["artifact_sha256"]);
+    let expected = entry["bytes"].as_u64().unwrap() as usize;
+    assert!(expected <= limit);
+    let mut bytes = Vec::new();
+    GzDecoder::new(stored.as_slice())
+        .take(limit as u64 + 1)
+        .read_to_end(&mut bytes)
+        .unwrap();
+    assert!(bytes.len() <= limit);
+    assert_eq!(bytes.len(), expected);
+    assert_eq!(hash(&bytes), entry["sha256"]);
+    bytes
+}
 pub fn check(
     e: &Value,
     required_archives: &[&str],
     required_spans: &[(&str, usize, usize, &str)],
     source_name: &str,
     default: f64,
+) {
+    authenticate(e, required_archives, required_spans);
+    let acquisition = acquisition();
+    for report in [&acquisition.jit_off, &acquisition.jit_on] {
+        let catalogue = report["state"]["configuration_catalogue"]
+            .as_array()
+            .unwrap();
+        let matches: Vec<_> = catalogue
+            .iter()
+            .filter(|r| r["fields"]["var"] == source_name)
+            .collect();
+        assert_eq!(matches.len(), 1);
+        assert_eq!(matches[0]["fields"]["type"], "countAllowZero");
+        assert_eq!(matches[0]["default_placeholder"].as_f64(), Some(default));
+        assert!(matches[0].get("apply").is_none());
+        let configs = report["state"]["configuration"].as_array().unwrap();
+        assert_eq!(configs.len(), 2);
+        for config in configs {
+            assert!(config["input"].get(source_name).is_none());
+            assert_eq!(config["placeholder"][source_name].as_f64(), Some(default));
+            assert_eq!(config["default_state"][source_name], 0);
+        }
+    }
+}
+pub fn acquisition() -> suppliers::SupplierAcquisition {
+    suppliers::acquisition_fixture().unwrap()
+}
+/// Authenticate source identity, complete archived bytes, exact body spans and
+/// shared constructor dependencies. Individual controls retain separate dispatch
+/// checks rather than weakening the countAllowZero checks above.
+pub fn authenticate(
+    e: &Value,
+    required_archives: &[&str],
+    required_spans: &[(&str, usize, usize, &str)],
 ) {
     let manifest: Value = serde_json::from_slice(
         &fs::read(root().join("crates/poe-optimizer-pob/data/pob-source-manifest.json")).unwrap(),
@@ -82,14 +131,7 @@ pub fn check(
         assert_eq!(hash(&stored), archive["artifact_sha256"]);
         let bytes = match archive["encoding"].as_str().unwrap() {
             "utf8" => stored,
-            "gzip" => {
-                let mut bytes = Vec::new();
-                GzDecoder::new(stored.as_slice())
-                    .take(1024 * 1024 + 1)
-                    .read_to_end(&mut bytes)
-                    .unwrap();
-                bytes
-            }
+            "gzip" => retained_gzip(archive, 1024 * 1024),
             "source_collection" => {
                 let collection: Value = serde_json::from_slice(&stored).unwrap();
                 let matching: Vec<_> = collection["sources"]
@@ -131,29 +173,6 @@ pub fn check(
                 .join("\n");
             assert_eq!(body, span["body"]);
             assert_eq!(hash(body.as_bytes()), span["sha256"]);
-        }
-    }
-    let acquisition = suppliers::acquisition_fixture().unwrap();
-    for report in [&acquisition.jit_off, &acquisition.jit_on] {
-        let catalogue = report["state"]["configuration_catalogue"]
-            .as_array()
-            .unwrap();
-        let matches: Vec<_> = catalogue
-            .iter()
-            .filter(|r| r["fields"]["var"] == source_name)
-            .collect();
-        assert_eq!(matches.len(), 1);
-        assert_eq!(matches[0]["fields"]["type"], "countAllowZero");
-        assert_eq!(matches[0]["default_placeholder"].as_f64(), Some(default));
-        assert!(matches[0].get("apply").is_none());
-        let configs = report["state"]["configuration"].as_array().unwrap();
-        assert_eq!(configs.len(), 2);
-        for config in configs {
-            assert!(config["input"].get(source_name).is_none());
-            assert_eq!(config["placeholder"][source_name].as_f64(), Some(default));
-            // countAllowZero's raw constructor state is zero; the effective
-            // Placeholder is supplied by the separately reviewed callback.
-            assert_eq!(config["default_state"][source_name], 0);
         }
     }
 }

@@ -2,8 +2,10 @@
 
 **Status:** Accepted by the owner, 2026-10-14; portable Import contract implemented
 and validated. This adds no Core or Engine authority and does not complete a
-configuration inventory. Distance data has not yet been published under this
-contract.
+configuration inventory. The [distance data packet](../data/owned/poe2/3887ae68/configuration-distance-inputs/README.md)
+now publishes both raw inputs; its all-five gate preserves local IDs and all
+110 queries, with sixteen publication controls and strict Clippy passing.
+Downstream native applicability and contribution coverage remain separate work.
 
 **Decision:** The existing configuration input adapter now has explicit selection
 rules for each semantic output. It checks each shared numeric control once,

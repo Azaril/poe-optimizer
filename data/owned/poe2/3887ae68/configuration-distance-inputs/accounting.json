@@ -1,0 +1,76 @@
+[
+  {
+    "selector": {
+      "lane": "input_number",
+      "name": "enemyDistance"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003380"
+          }
+        }
+      },
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003381"
+          }
+        }
+      }
+    ],
+    "id": "checked-target-distance-input_number"
+  },
+  {
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "enemyDistance"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003380"
+          }
+        }
+      },
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003381"
+          }
+        }
+      }
+    ],
+    "id": "checked-target-distance-placeholder_number"
+  }
+]

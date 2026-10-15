@@ -120,12 +120,45 @@ pub struct Publication {
     pub new_definitions: usize,
 }
 pub fn run(spec: Publication) {
-    let input: Value = read(spec.directory.join("input.json"));
+    let inputs: Vec<Value> =
+        crate::configuration_stage::inputs(read(spec.directory.join("input.json")))
+            .into_iter()
+            .map(|v| serde_json::to_value(v).unwrap())
+            .collect();
+    // This harness has two explicit case families: the historical singleton
+    // default adapters, and the reviewed two-output distance selector pair.
+    // Vector length alone must not imply either source disposition or semantics.
+    let projected = inputs.iter().any(|i| i.get("selection").is_some());
+    if projected {
+        assert_eq!(inputs.len(), 2);
+        assert_eq!(inputs[0]["selection"], "input_then_placeholder");
+        assert_eq!(inputs[1]["selection"], "nonzero_input_then_placeholder");
+        for input in &inputs {
+            assert_eq!(input["source_name"], "enemyDistance");
+            assert_eq!(input["target"], "enemy");
+            assert!(
+                input
+                    .get("ignore_numeric_placeholder")
+                    .is_none_or(|v| v == false)
+            );
+        }
+    } else {
+        assert_eq!(inputs.len(), 1);
+        assert_eq!(inputs[0]["ignore_numeric_placeholder"], true);
+    }
+    let input = &inputs[0];
     let source_name = input["source_name"].as_str().unwrap();
-    let input_id = input["value_input"]["key"].clone();
+    let input_ids: Vec<_> = inputs
+        .iter()
+        .map(|i| i["value_input"]["key"].clone())
+        .collect();
     let default = input["constructor_default"]["value"]["value"]
         .as_f64()
         .unwrap();
+    for i in &inputs {
+        assert_eq!(i["source_name"], input["source_name"]);
+        assert_eq!(i["constructor_default"], input["constructor_default"]);
+    }
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let prior_path = spec.prior;
     let out = spec.output;
@@ -164,8 +197,14 @@ pub fn run(spec: Publication) {
         let a = read(old.join("draft.json"));
         let mut b = read(new.join("draft.json"));
         assert_eq!(
-            assumptions(&mut b).pop().unwrap(),
-            expected(&input, default)
+            {
+                let assumptions = assumptions(&mut b);
+                assumptions.split_off(assumptions.len() - inputs.len())
+            },
+            inputs
+                .iter()
+                .map(|i| expected(i, default))
+                .collect::<Vec<_>>()
         );
         let oldlineage = a["draft"]["allocator"]["lineage"].clone();
         let newlineage = b["draft"]["allocator"]["lineage"].clone();
@@ -202,7 +241,11 @@ pub fn run(spec: Publication) {
         assert_eq!(sa["origins"][at]["links"], json!([issue]));
         assert_eq!(
             sb["origins"][at]["disposition"],
-            json!({"kind":"source_only","value":"unused-config-placeholder"})
+            if projected {
+                json!({"kind":"contributes"})
+            } else {
+                json!({"kind":"source_only","value":"unused-config-placeholder"})
+            }
         );
         assert_eq!(sb["origins"][at]["links"], json!([scenario]));
         let counts_before = census(&sa, &evidence, &issue);
@@ -287,21 +330,58 @@ pub fn run(spec: Publication) {
             fs::read(prior_path.join(&queries)).unwrap(),
             fs::read(package.join(&queries)).unwrap()
         );
-        results.push(json!({"original":case,"added_assumptions":1,"changed_leaf":at,"configuration_before":counts_before,"configuration_after":counts_after,"whole_draft_inverse":true,"whole_sidecar_inverse":true,"local_ids_unchanged":true,"selected_issues":issues.as_array().unwrap().len()}));
+        results.push(json!({"original":case,"added_assumptions":inputs.len(),"changed_leaf":at,"configuration_before":counts_before,"configuration_after":counts_after,"whole_draft_inverse":true,"whole_sidecar_inverse":true,"local_ids_unchanged":true,"selected_issues":issues.as_array().unwrap().len()}));
     }
     let original =
         fs::read_to_string(root.join("tests/fixtures/builds/breadth-20260908/build-05.xml"))
             .unwrap();
     let mut controls = vec![];
-    for (name, input, placeholder, expected_value) in [
-        ("changed-placeholder", None, Some("999"), Some(default)),
-        ("zero", Some("0"), Some("999"), Some(0.)),
-        ("fraction", Some("-12.5"), Some("999"), Some(-12.5)),
-        ("above-probability", Some("150"), Some("999"), Some(150.)),
-        ("zero-placeholder", None, Some("0"), Some(default)),
-        ("absent", None, None, Some(default)),
-        ("bad-placeholder", Some("0"), Some("NaN"), None),
-    ] {
+    let cases = if projected {
+        vec![
+            (
+                "changed-placeholder",
+                None,
+                Some("80"),
+                Some(vec![80., 80.]),
+            ),
+            ("zero", Some("0"), Some("80"), Some(vec![0., 80.])),
+            ("negative-zero", Some("-0"), Some("80"), Some(vec![0., 80.])),
+            (
+                "fraction",
+                Some("-12.5"),
+                Some("80"),
+                Some(vec![-12.5, -12.5]),
+            ),
+            ("nonzero", Some("50"), Some("80"), Some(vec![50., 50.])),
+            ("zero-placeholder", None, Some("0"), Some(vec![0., 0.])),
+            ("both-zero", Some("0"), Some("0"), Some(vec![0., 0.])),
+            ("zero-constructor", Some("0"), None, Some(vec![0., default])),
+            ("absent", None, None, Some(vec![default, default])),
+            (
+                "boundary",
+                Some("1000000"),
+                Some("-1000000"),
+                Some(vec![1000000., 1000000.]),
+            ),
+            ("bad-placeholder", Some("0"), Some("NaN"), None),
+            ("losing-outside-range", Some("50"), Some("1000001"), None),
+            ("input-outside-range", Some("-1000001"), Some("20"), None),
+        ]
+    } else {
+        [
+            ("changed-placeholder", None, Some("999"), Some(default)),
+            ("zero", Some("0"), Some("999"), Some(0.)),
+            ("fraction", Some("-12.5"), Some("999"), Some(-12.5)),
+            ("above-probability", Some("150"), Some("999"), Some(150.)),
+            ("zero-placeholder", None, Some("0"), Some(default)),
+            ("absent", None, None, Some(default)),
+            ("bad-placeholder", Some("0"), Some("NaN"), None),
+        ]
+        .into_iter()
+        .map(|(n, i, p, v)| (n, i, p, v.map(|v| vec![v])))
+        .collect()
+    };
+    for (name, input, placeholder, expected_value) in cases {
         let xml = edits::field(
             &edits::field(
                 &original,
@@ -334,12 +414,19 @@ pub fn run(spec: Publication) {
         let mut draft = read(target.join("draft.json"));
         let values: Vec<_> = assumptions(&mut draft)
             .iter()
-            .filter(|a| a["input"]["value"]["key"] == input_id)
+            .filter(|a| input_ids.contains(&a["input"]["value"]["key"]))
             .cloned()
             .collect();
         assert_eq!(
             values,
-            value.map(|v| vec![expected(&input, v)]).unwrap_or_default(),
+            value
+                .as_ref()
+                .map(|values| inputs
+                    .iter()
+                    .zip(values)
+                    .map(|(i, v)| expected(i, *v))
+                    .collect::<Vec<_>>())
+                .unwrap_or_default(),
             "{name}"
         );
         if value.is_none() {
@@ -354,6 +441,65 @@ pub fn run(spec: Publication) {
                     .any(|l| l["kind"] == "issue"),
                 "{name}"
             );
+            if projected {
+                for row in e.rows().iter().filter(|r| {
+                    r.attribute("name")
+                        .is_some_and(|a| a.decoded().ok() == Some(source_name))
+                }) {
+                    assert!(
+                        sidecar["origins"][row.occurrence().id().ordinal() as usize]["links"]
+                            .as_array()
+                            .unwrap()
+                            .iter()
+                            .any(|l| l["kind"] == "issue"),
+                        "{name}: every unaccounted saved lane stays pending"
+                    );
+                }
+            }
+        }
+        if projected && value.is_some() {
+            let imported = source(xml.as_bytes());
+            let e = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
+            let sidecar = read(target.join("sidecar.json"));
+            let scenario = json!({"kind":"scenario_preset","value":draft["draft"]["scenario_presets"]["members"][0]["id"]});
+            let authored = e
+                .rows()
+                .iter()
+                .find(|r| {
+                    r.occurrence().name() == "Input"
+                        && r.attribute("name")
+                            .is_some_and(|a| a.decoded().ok() == Some(source_name))
+                })
+                .map(|r| {
+                    r.attribute("number")
+                        .unwrap()
+                        .decoded()
+                        .unwrap()
+                        .parse::<f64>()
+                        .unwrap()
+                });
+            for row in e.rows().iter().filter(|r| {
+                r.attribute("name")
+                    .is_some_and(|a| a.decoded().ok() == Some(source_name))
+            }) {
+                let at = row.occurrence().id().ordinal() as usize;
+                assert_eq!(
+                    sidecar["origins"][at]["links"],
+                    json!([scenario]),
+                    "{name}: one exact link per leaf"
+                );
+                let selected =
+                    row.occurrence().name() == "Input" || authored.is_none_or(|v| v == 0.);
+                assert_eq!(
+                    sidecar["origins"][at]["disposition"],
+                    if selected {
+                        json!({"kind":"contributes"})
+                    } else {
+                        json!({"kind":"source_only","value":"unselected-config-projection"})
+                    },
+                    "{name}: checked source role for each saved lane"
+                );
+            }
         }
     }
     assert_eq!(release::inventory(&prior_path), prior_files);

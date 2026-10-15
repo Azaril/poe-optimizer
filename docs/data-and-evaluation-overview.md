@@ -68,7 +68,14 @@ implemented: each projection selects explicitly, shares checked source discovery
 and needs an exact receipt, including checked nonselection. A partially declared
 accounting rule cannot retire the leaf, and malformed losing-lane values remain
 blocking. All 537 Import library/normalization tests and strict Clippy pass.
-Distance data support is not yet published. Source calculation-view
+The [distance packet](../data/owned/poe2/3887ae68/configuration-distance-inputs/README.md)
+now publishes two typed Enemy assumptions for skill range and distance effects,
+using the existing distance unit. The five-build gate preserves all 110 queries
+and local IDs while accounting for one source leaf per build; Original05 retains
+31 configuration-linked origins and four selected input obligations. Six
+source/data tests, sixteen publication controls and strict Clippy pass. A zero
+candidate does not manufacture a zero contribution, and downstream mechanics
+remain incomplete. Source calculation-view
 flags such as `Effective` are not gameplay states and will not enter the native
 model. Their treatment must be reconciled to actual scenario semantics separately.
 
@@ -112,7 +119,7 @@ with 93 tests passing. Its former fixture-only equipment closure and three
 redundant historical assertions are removed. Component checks retain exact
 owners, writers, queries and receivers while permitting unrelated later release
 changes; they no longer rebuild an old full release solely for these checks.
-See the [current checkpoint](implementation.md#current-checkpoint-bounded-equipment-life-reduction).
+See the [Life checkpoint](implementation.md#previous-checkpoint-bounded-equipment-life-reduction).
 
 The final Player Mana formula is now published as injected rules with its exact
 Player receiver. The existing Rust engine executes its arithmetic, range check
@@ -122,7 +129,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-bounded-equipment-life-reduction).
+[implementation checkpoint](implementation.md#current-checkpoint-configured-distance-inputs).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -1282,7 +1289,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-bounded-equipment-life-reduction),
+live in the [implementation plan](implementation.md#current-checkpoint-configured-distance-inputs),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.

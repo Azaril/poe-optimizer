@@ -1,0 +1,142 @@
+[
+  {
+    "source_name": "enemyDistance",
+    "value_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003380"
+    },
+    "target": "enemy",
+    "recipe": {
+      "id": "configured-target-distance-for-skill-range",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "quantity",
+          "value": {
+            "syntax": "scientific",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000002425"
+            },
+            "scale": {
+              "numerator": 1,
+              "denominator": 1
+            }
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "input_number",
+              "name": "enemyDistance"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    },
+    "constructor_default": {
+      "kind": "quantity",
+      "value": {
+        "value": 20,
+        "unit": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000002425"
+        }
+      }
+    },
+    "ignore_numeric_placeholder": false,
+    "selection": "input_then_placeholder"
+  },
+  {
+    "source_name": "enemyDistance",
+    "value_input": {
+      "kind": "external_input",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003381"
+    },
+    "target": "enemy",
+    "recipe": {
+      "id": "configured-target-distance-for-distance-effects",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "quantity",
+          "value": {
+            "syntax": "scientific",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000002425"
+            },
+            "scale": {
+              "numerator": 1,
+              "denominator": 1
+            }
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "input_number",
+              "name": "enemyDistance"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    },
+    "constructor_default": {
+      "kind": "quantity",
+      "value": {
+        "value": 20,
+        "unit": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000002425"
+        }
+      }
+    },
+    "ignore_numeric_placeholder": false,
+    "selection": "nonzero_input_then_placeholder"
+  }
+]

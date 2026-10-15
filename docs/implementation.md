@@ -105,7 +105,62 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: bounded equipment Life reduction
+## Current checkpoint: configured distance inputs
+
+The [distance packet](../data/owned/poe2/3887ae68/configuration-distance-inputs/README.md)
+uses the approved projection contract to preserve both meanings of the saved
+control. External inputs `3380` and `3381` represent configured target distance
+for skill range and for distance effects. Both target the scenario Enemy, reuse
+distance Unit `2425` (ten units per metre), and use an injected admitted range
+of ±1,000,000. This is an import support domain, not a gameplay or UI clamp.
+Checked fresh construction supplies 20 only on proven absence.
+
+Input 0 / Placeholder 80 imports as **0 / 80**. A zero distance-effect candidate
+remains a value, not an emitted zero contribution. Both Input and Placeholder
+leaves require receipts for both roles. This accounts for raw input ownership
+without closing native contribution, applicability or inventory coverage. No
+native program, Stat, receiver or PoB calculation-view flag is introduced.
+
+The current package is **`runs/owned-configuration-distance-publication-02/package`**:
+
+- Input: `0efaf9bebc6a3f40e448cb22596c539b53436e15c063f92209c87627a6b4fa62`.
+- Definitions: `a03a41646f1001bffd3af45bc1fd6826d6da8e73fca9922bb035169587f41432`.
+- Rules: `754808384cc836ad43215d1c6593c5fb3decad6dfeae767662cbc39dc166a5c5`.
+- Compiled: `76e62770db9b33fd222e535d1fd814e6b6c1da57da4a5819ed145ac9af9939c2`.
+- Registry: `21abd079a3d8be840d69b9cd319c0415f2dbd1dfc866cbf14b64e63fc4404e05`, last issued `3381`.
+
+All five originals gain two assumptions and account for exactly one distance
+leaf. Full draft/sidecar inverses preserve local IDs and unrelated data; all
+110 queries remain byte-identical, and the package rebuild is byte-identical.
+Configuration-linked origins fall **48/83/39/34/32 → 47/82/38/33/31**.
+Original05 now has 16 direct Config origins and 15 outside Config; its four
+selected inventories remain Pending. Selected issue counts remain
+**106/117/109/123/4**, complete native builds **0/5**.
+
+Six ordinary source/data tests, sixteen publication controls and strict Clippy
+pass. Publication takes 45.32s. The packet authenticates eighteen source spans
+and reuses the complete existing distance witness: twelve controls, fourteen
+reviewed rows and matching JIT-off/on bytes. No new source VM runs were needed.
+Source mode suppression, thresholds, multiplier inheritance and ailment distance
+copying are explicitly distinguished from raw value selection; the retained
+witness's lack of plain control/repeated distance variants remains documented.
+Logs: `runs/owned-configuration-distance-tests-01.log`,
+`runs/owned-configuration-distance-publication-02.log` and
+`runs/owned-configuration-distance-clippy-02.log`.
+The four joined Life-query tests also pass against this new endpoint (45.04s,
+`runs/owned-life-equipment-domain-distance-01.log`), confirming that unrelated
+input additions no longer break their component authentication. A final
+three-test source replay passes after normalizing the five authoring JSON files
+to LF; parsed values, archive bytes, canonical authoring digest and endpoint are
+unchanged (`runs/owned-configuration-distance-lf-01.log`).
+
+**Next:** finish the selected empty socket's intrinsic source proof and close
+only that owner/declaration domain if validated. Continue actual Life supplier
+admission and configuration accounting from this endpoint. Distance delivery
+still needs its separate native applicability review; importing raw assumptions
+does not implement Sniper accuracy or any final distance-dependent metric.
+
+## Previous checkpoint: bounded equipment Life reduction
 
 The [Life equipment packet](../data/owned/poe2/3887ae68/life-equipment-domain/README.md)
 closes one existing equipment contribution group using three checked numeric
@@ -125,7 +180,7 @@ subtotal; upstream magnitude/routing and complete resource arithmetic still
 need their own evidence. Increasing the engine effect ceiling would require
 re-proving this domain and invalidating affected semantic identities/admission.
 
-The current package is **`runs/owned-life-equipment-domain-publication-01/package`**:
+This checkpoint's package is **`runs/owned-life-equipment-domain-publication-01/package`**:
 
 - Input: `fe061a37c795102c8ca025cf52ebca199cb0ba3be42c9fa901e6c42ac5bc6f3f`.
 - Definitions: `b738e9063cef1f30220fb0f149f4c5110c3f0a457bc42dc4d520556bb37a0bc1`.
@@ -180,7 +235,7 @@ The owner's accepted
 [configuration projection contract](owned-configuration-projections-proposal.md)
 is now implemented and tested in Import. One source control may produce distinct
 owned inputs, with shared checked discovery and complete per-leaf receipts.
-The next data adoption should reuse the retained distance witness
+The distance publication above reuses the retained witness
 instead of adding an unnecessary observer. Its twelve distance controls and
 fourteen rows establish raw selection and two source consumer paths across JIT
 modes, not complete downstream native coverage or fresh-repeat/plain-control
@@ -217,9 +272,9 @@ target/value/multiplicity tampering, per-preset isolation, ordering and limits.
 Logs: `runs/owned-configuration-projections-tests-01.log`,
 `runs/owned-configuration-projections-regression-01.log` and
 `runs/owned-configuration-projections-clippy-01.log`.
-This portable contract alone changes no release definitions or real build data;
-the Life package above remains canonical. Distance data publication, native
-consumer coverage and calculation-view reconciliation remain subsequent work.
+This portable contract alone changed no release definitions or real build data;
+the distance publication above is its first data adoption. Native consumer
+coverage and calculation-view reconciliation remain subsequent work.
 
 ## Previous checkpoint: Player incoming-critical receivers
 

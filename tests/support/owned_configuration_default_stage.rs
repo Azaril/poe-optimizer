@@ -22,6 +22,17 @@ fn key(s: &str) -> OwnedDefinitionKey {
 fn value(v: impl Serialize) -> Value {
     serde_json::to_value(v).unwrap()
 }
+/// A singleton artifact remains a singleton; a projection packet explicitly
+/// supplies an ordered vector whose entire suffix is checked by the inverse.
+pub fn inputs(value: Value) -> Vec<ConfigurationDefaultInput> {
+    if value.is_array() {
+        let inputs: Vec<ConfigurationDefaultInput> = serde_json::from_value(value).unwrap();
+        assert!(!inputs.is_empty());
+        inputs
+    } else {
+        vec![serde_json::from_value(value).unwrap()]
+    }
+}
 pub fn stage(
     prior: &StagedOwnedRelease,
     directory: &std::path::Path,
@@ -31,7 +42,7 @@ pub fn stage(
     let read = |name: &str| -> Value {
         serde_json::from_slice(&fs::read(directory.join(name)).unwrap()).unwrap()
     };
-    let input: ConfigurationDefaultInput = serde_json::from_value(read("input.json")).unwrap();
+    let inputs = inputs(read("input.json"));
     let accounting: Vec<ConfigurationDispositionRule> =
         serde_json::from_value(read("accounting.json")).unwrap();
     let d: Value = read("dependencies.json");
@@ -100,12 +111,14 @@ pub fn stage(
     else {
         panic!("current default-input policy")
     };
-    assert!(
-        !default_inputs
-            .iter()
-            .any(|i| i.source_name == input.source_name)
-    );
-    default_inputs.push(input.clone());
+    for input in &inputs {
+        assert!(
+            !default_inputs
+                .iter()
+                .any(|i| i.source_name == input.source_name)
+        );
+    }
+    default_inputs.extend(inputs.clone());
     let dependencies = configuration_disposition_dependencies(
         &full.normalization,
         carried.rewards(),
@@ -216,7 +229,7 @@ pub fn stage(
         full_policy_inverse(
             &inverse.normalization,
             carried.normalization(),
-            &input,
+            &inputs,
             &accounting
         ),
         *carried.normalization()
@@ -236,7 +249,7 @@ pub fn stage(
 fn full_policy_inverse(
     next: &poe_optimizer_import::owned_normalize::NormalizationPolicy,
     old: &poe_optimizer_import::owned_normalize::NormalizationPolicy,
-    input: &ConfigurationDefaultInput,
+    inputs: &[ConfigurationDefaultInput],
     rules: &[ConfigurationDispositionRule],
 ) -> poe_optimizer_import::owned_normalize::NormalizationPolicy {
     let mut inverse = next.clone();
@@ -245,7 +258,10 @@ fn full_policy_inverse(
     else {
         panic!()
     };
-    assert_eq!(&default_inputs.pop().unwrap(), input);
+    assert_eq!(
+        default_inputs.split_off(default_inputs.len() - inputs.len()),
+        inputs
+    );
     let dispositions = inverse.configuration_dispositions.as_mut().unwrap();
     assert_eq!(
         dispositions
