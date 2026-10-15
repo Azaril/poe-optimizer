@@ -107,6 +107,18 @@ availability/value checks pass, begin D4 immediately.
 
 ## Current checkpoint: empty intrinsic passive socket
 
+**CI repair:** run `38675971601` at `c4a62464` failed both platforms' allocation
+export verification before Rust checks. Numeric-domain commit `55b63528` updated
+the historical `current/manifest.json` compiled identity without refreshing its
+outer transition's byte commitment. Reproduction through the existing native
+successor/tree publishers preserves nineteen of twenty files exactly and repairs
+only `current/transition.json`. The existing allocation exporter regenerates its
+dependent `source-facts.json` fingerprint; allocation rules remain byte-identical.
+All fourteen unchanged allocation-export tests pass in 27.03s
+(`runs/ci-owned-allocation-repro-03.log`). No exporter, allocation algorithm or
+test was changed. This does not alter the current Sniper endpoint below; hosted
+confirmation for the repair remains pending.
+
 The [socket packet](../data/owned/poe2/3887ae68/empty-passive-socket-intrinsics/README.md)
 completes the intrinsic rule owner for Passive `1b48` (source node `7960`) and
 its seven declaration inventories. Six inventories remain empty; the seventh
