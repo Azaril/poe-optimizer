@@ -48,6 +48,7 @@ pub struct SupportReceivingInput {
 pub enum SupportReceiverKind {
     Actor,
     Action,
+    Skill,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -98,22 +99,31 @@ pub enum SupportReceiverEndpoint {
         selection: SupportActionSelection,
         admission: SupportAdmissionContext,
     },
+    /// One exact semantic Skill occurrence, not its physical Gem container or
+    /// an arbitrary output. An empty path requires a Skill definition target.
+    Skill {
+        path: Vec<DeclaredSlot<GrantSlotDefId>>,
+        admission: SupportAdmissionContext,
+    },
 }
 impl SupportReceiverEndpoint {
     pub fn path(&self) -> &[DeclaredSlot<GrantSlotDefId>] {
         match self {
-            Self::Actor { path, .. } | Self::Action { path, .. } => path,
+            Self::Actor { path, .. } | Self::Action { path, .. } | Self::Skill { path, .. } => path,
         }
     }
     pub fn kind(&self) -> SupportReceiverKind {
         match self {
             Self::Actor { .. } => SupportReceiverKind::Actor,
             Self::Action { .. } => SupportReceiverKind::Action,
+            Self::Skill { .. } => SupportReceiverKind::Skill,
         }
     }
     pub fn admission(&self) -> &SupportAdmissionContext {
         match self {
-            Self::Actor { admission, .. } | Self::Action { admission, .. } => admission,
+            Self::Actor { admission, .. }
+            | Self::Action { admission, .. }
+            | Self::Skill { admission, .. } => admission,
         }
     }
 }

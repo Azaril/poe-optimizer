@@ -170,6 +170,17 @@ enum RelativeActor {
 enum NormalizedEndpoint {
     Actor(Box<RelativeActor>),
     Action(Box<NormalizedAction>),
+    Skill(Box<RelativeSkill>),
+}
+/// The final grant's target slot, rather than its traversal label, determines
+/// generated Skill identity. Preserve every ancestor provider in that address.
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+enum RelativeSkill {
+    Assigned,
+    Generated {
+        parent: Vec<DeclaredSlot<GrantSlotDefId>>,
+        slot: DeclaredSlot<SkillGrantSlotDefId>,
+    },
 }
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 struct NormalizedAction {
@@ -186,7 +197,7 @@ struct PathContext<'a> {
     actor_skills: Option<&'a DeclaredSet<SkillDefId>>,
     potential_skills: Option<&'a DeclaredSet<SkillDefId>>,
     actor: RelativeActor,
-    exact_skill_supply: bool,
+    skill: Option<RelativeSkill>,
 }
 fn target_owner(target: &SupportTargetDefinition) -> SlotOwnerDefId {
     match target {
@@ -303,7 +314,10 @@ impl<'a, I: DefinitionSchemaIndex> Check<'a, I> {
                 SupportTargetDefinition::Skill(_) => None,
             },
             actor: RelativeActor::Assigned,
-            exact_skill_supply: false,
+            skill: match target {
+                SupportTargetDefinition::Skill(_) => Some(RelativeSkill::Assigned),
+                SupportTargetDefinition::Gem(_) => None,
+            },
         };
         for (i, step) in path.iter().enumerate() {
             self.used.work(2, self.l)?;
@@ -333,7 +347,7 @@ impl<'a, I: DefinitionSchemaIndex> Check<'a, I> {
                         parent: path[..i].to_vec(),
                         slot: slot.clone(),
                     };
-                    context.exact_skill_supply = false;
+                    context.skill = None;
                     context.actor_skills = Some(&schema.skills);
                     context.outputs = &schema.outputs;
                     match &schema.provider_definition {
@@ -359,7 +373,11 @@ impl<'a, I: DefinitionSchemaIndex> Check<'a, I> {
                     context.declarations =
                         Some(&known(self.index.definition(&schema.skill))?.declarations);
                     context.outputs = &schema.outputs;
-                    context.exact_skill_supply = true;
+                    self.used.work(i + 1, self.l)?;
+                    context.skill = Some(RelativeSkill::Generated {
+                        parent: path[..i].to_vec(),
+                        slot: slot.clone(),
+                    });
                 }
                 GrantTarget::AllocationAccess { .. } => {
                     return Err(invalid("allocation access is not a receiving provider"));
@@ -376,7 +394,11 @@ impl<'a, I: DefinitionSchemaIndex> Check<'a, I> {
     ) -> Result<()> {
         let context = self.path(target, endpoint.path())?;
         if let SupportAdmissionContext::ReceivingSkill { summoner_path } = endpoint.admission() {
-            if endpoint.kind() != SupportReceiverKind::Action || !context.exact_skill_supply {
+            if !matches!(
+                endpoint.kind(),
+                SupportReceiverKind::Action | SupportReceiverKind::Skill
+            ) || !matches!(context.skill, Some(RelativeSkill::Generated { .. }))
+            {
                 return Err(invalid(
                     "receiving admission requires an exact generated skill endpoint",
                 ));
@@ -387,12 +409,28 @@ impl<'a, I: DefinitionSchemaIndex> Check<'a, I> {
                         "summoner admission cannot depend on receiving skill or descendant",
                     ));
                 }
-                if !path.is_empty() && !self.path(target, path)?.exact_skill_supply {
+                if !path.is_empty()
+                    && !matches!(
+                        self.path(target, path)?.skill,
+                        Some(RelativeSkill::Generated { .. })
+                    )
+                {
                     return Err(invalid("summoner path must reach an exact generated skill"));
                 }
             }
         }
         match endpoint {
+            SupportReceiverEndpoint::Skill { .. } => {
+                let skill = context.skill.ok_or_else(|| {
+                    invalid(
+                        "skill receiver requires a semantic Skill root or exact generated skill",
+                    )
+                })?;
+                self.used.expanded(1, self.l)?;
+                if !normalized.insert(NormalizedEndpoint::Skill(Box::new(skill))) {
+                    return Err(invalid("duplicate normalized receiving endpoint"));
+                }
+            }
             SupportReceiverEndpoint::Actor { .. } => {
                 self.used.expanded(1, self.l)?;
                 if !normalized.insert(NormalizedEndpoint::Actor(Box::new(context.actor))) {
@@ -518,6 +556,7 @@ impl<'a, I: DefinitionSchemaIndex> Check<'a, I> {
         let context = match kind {
             SupportReceiverKind::Actor => RuleEntityKind::Actor,
             SupportReceiverKind::Action => RuleEntityKind::Action,
+            SupportReceiverKind::Skill => RuleEntityKind::Skill,
         };
         if self.stages.readiness().is_some() {
             self.readiness_role(
@@ -850,8 +889,10 @@ impl OwnedSupportReceiving {
             }
             if receiving_complete
                 && owner.programs.members.iter().any(|p| {
-                    matches!(p.context, RuleEntityKind::Actor | RuleEntityKind::Action)
-                        && !used_programs.contains(&p.id)
+                    matches!(
+                        p.context,
+                        RuleEntityKind::Actor | RuleEntityKind::Action | RuleEntityKind::Skill
+                    ) && !used_programs.contains(&p.id)
                 })
             {
                 return Err(invalid(

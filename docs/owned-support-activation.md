@@ -217,7 +217,7 @@ ability; conversion must reconcile it with the actual finite definition registry
 
 ### Finite receiving roles
 
-An injected receiving package defines named Actor or Action roles. Exact target definitions
+An injected receiving package defines named Actor, Action or Skill roles. Exact target definitions
 bind these roles to finite relative paths and endpoints, and each support Gem references the
 roles it affects. This factors target topology away from support recipes: adding a skill
 does not require duplicating every generic support definition. Target owners are explicit
@@ -231,13 +231,34 @@ product of complete declared output dimensions. No name matching, UI grouping or
 descendant search participates. Missing or Partial target/role/endpoint membership remains
 unresolved. Known local endpoints can be retained for diagnostics without closing the set.
 
+Skill endpoints address one semantic Skill occurrence. An empty path is valid
+for a Skill definition target; a physical Gem container must use an explicit
+grant path to the generated Skill it exposes, even when it exposes only one.
+Multiple final grant aliases to the same supplying Skill slot identify one
+recipient and cannot produce duplicate applications. Ancestor provider paths,
+repeated occurrences and separately generated Skills retain their identities.
+The bound receiver's Actor is private execution context, resolved from its
+actual supplying provider; it is not permission for a Skill rule to read or
+write an arbitrary Actor, nor a resource-payer declaration.
+
 Each endpoint explicitly selects its admission context. `AssignedSkill` uses the original
-target's final admission. An Action's `ReceivingSkill` uses the exact generated Skill at its
+target's final admission. An Action or Skill endpoint's `ReceivingSkill` uses the exact generated Skill at its
 endpoint and declares an optional summoner path: present-empty means the assigned target,
 and explicit absence means no summoner. The first package version restricts Actor endpoints
 to assigned-skill admission; arbitrary actor admission contexts require an explicit extension.
 Selection inheritance, receiving actor, receiving Skill and summoner are distinct identities.
 Admission dependencies and activation must be validated before executing any application.
+An empty semantic Skill endpoint uses assigned-skill admission. Skill receiving
+programs use Skill context and write only their exact Current receiver;
+preparation properties remain numeric contributions under their distinct
+readiness role. Support source reads retain the assignment. Unknown inventories,
+unclassified Skill delivery programs, backward dependencies and late writes to
+frozen channels remain errors or coverage gaps under the existing checks.
+
+This extends the same receiving model for the accepted
+[resource-obligation migration](owned-resource-obligations-proposal.md). It does
+not itself implement ongoing reservation, payer aggregation or Action dependency
+binding. Current gameplay data still needs an explicit migration to use it.
 
 Role programs separate one unguarded final applicability producer from a canonical set of
 delivery programs. Expression predicates belong inside that Boolean producer. Native
@@ -342,7 +363,7 @@ Partial encountered inventories remain plan gaps. Competing roles for one assign
 exact receiver reject instead of creating multiple applicability producers.
 
 Cold templates bind each physical assignment to its finite receivers. Raw Gem level,
-quality, parameters, choices and provenance remain on that assignment. Actor/Action value
+quality, parameters, choices and provenance remain on that assignment. Actor/Action/Skill value
 channels use the receiver, `Skill` uses its explicit receiving skill, and `AssignedSkill`
 retains the original target. Receiver activation keeps the full entering path, actor gate
 and required generated inputs. Actor-only delivery has no inferred receiving skill. These

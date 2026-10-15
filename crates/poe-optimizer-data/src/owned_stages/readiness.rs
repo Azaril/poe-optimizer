@@ -429,13 +429,19 @@ fn validate_effect<I: DefinitionSchemaIndex>(
         ),
         ReadinessProgramRole::SupportPreparationApplicability => {
             matches!(effect, RuleEffectKind::SupportApplicability { .. })
-                && matches!(context, RuleEntityKind::Actor | RuleEntityKind::Action)
+                && matches!(
+                    context,
+                    RuleEntityKind::Actor | RuleEntityKind::Action | RuleEntityKind::Skill
+                )
         }
         ReadinessProgramRole::SupportedPreparationProperty => match effect {
             RuleEffectKind::Contribute { entity, stat, .. }
                 if (*entity == RuleEntity::Current
                     || (*entity == RuleEntity::Actor && context == RuleEntityKind::Actor))
-                    && matches!(context, RuleEntityKind::Actor | RuleEntityKind::Action) =>
+                    && matches!(
+                        context,
+                        RuleEntityKind::Actor | RuleEntityKind::Action | RuleEntityKind::Skill
+                    ) =>
             {
                 matches!(
                     known(index.definition(stat))?.value,

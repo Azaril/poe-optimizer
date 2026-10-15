@@ -260,6 +260,7 @@ fn rejected_parent_does_not_gate_child_or_recompute_origin_scalars() {
         assert_eq!(app.prepared.position, 0);
         match &app.receiver {
             SupportReceiverKey::Actor(_) => assert!(!applicability(effects, app)),
+            SupportReceiverKey::Skill(_) => panic!("fixture declares Actor/Action endpoints only"),
             SupportReceiverKey::Action(action) => {
                 check_child_action(action);
                 assert!(applicability(effects, app));
@@ -485,6 +486,9 @@ fn explicit_summoner_uses_native_parent_types_while_absent_summoner_starts_child
         for app in apps {
             match &app.receiver {
                 SupportReceiverKey::Actor(_) => assert!(applicability(effects, app)),
+                SupportReceiverKey::Skill(_) => {
+                    panic!("fixture declares Actor/Action endpoints only")
+                }
                 SupportReceiverKey::Action(action) => {
                     check_child_action(action);
                     let consumer = app.prepared.origin == SupportOrigin::Assignment(occurrence(61));
@@ -568,4 +572,134 @@ fn inherited_duplicate_positions_survive_without_reselection_and_deliver_twice()
         final_value(effects, &ConcreteEntity::Actor(child_actor(30))),
         &known(36)
     );
+}
+
+#[test]
+fn exact_child_skill_admission_preserves_assignment_context_without_action_demand() {
+    let mut f = source_fixture();
+    add_child(&mut f, true);
+    for definition in &mut f.schema.definitions {
+        if let DefinitionDescriptor::Stat(DefinitionEntry {
+            id,
+            schema: SchemaState::Known(schema),
+        }) = definition
+            && *id == def::<StatDefinition>("support-total")
+        {
+            schema.targets.push(RuleEntityKind::Skill);
+        }
+    }
+    let args = inputs_with_packages(
+        &f,
+        |rules| {
+            let programs = &mut rules
+                .owners
+                .iter_mut()
+                .find(|owner| owner.owner == support_owner())
+                .unwrap()
+                .programs
+                .members;
+            for program in programs {
+                if [key("action-app"), key("action-deliver")].contains(&program.id) {
+                    program.context = RuleEntityKind::Skill;
+                }
+            }
+        },
+        |preparation| {
+            let SchemaState::Known(support) = &mut preparation.supports[0].preparation else {
+                unreachable!()
+            };
+            support.gems_only = true;
+        },
+        |receiving| {
+            receiving
+                .roles
+                .iter_mut()
+                .find(|role| role.id == key("action"))
+                .unwrap()
+                .kind = SupportReceiverKind::Skill;
+            let role = receiving.targets[0]
+                .roles
+                .members
+                .iter_mut()
+                .find(|role| role.role == key("action"))
+                .unwrap();
+            role.endpoints = DeclaredSet::complete(vec![SupportReceiverEndpoint::Skill {
+                path: vec![child_grant()],
+                admission: SupportAdmissionContext::ReceivingSkill {
+                    summoner_path: Some(vec![]),
+                },
+            }]);
+        },
+    );
+    let plan = compile_args(args);
+    let result = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    let report = evaluated(&result);
+    assert!(
+        !report
+            .effects
+            .iter()
+            .any(|effect| matches!(effect.key.invocation.entity, ConcreteEntity::Action(_)))
+    );
+    let applications: BTreeSet<_> = report.effects.iter().filter_map(application).collect();
+    assert_eq!(applications.len(), 6);
+    let mut children = BTreeSet::new();
+    for application in applications {
+        match &application.receiver {
+            SupportReceiverKey::Actor(_) => assert!(!applicability(report, application)),
+            SupportReceiverKey::Action(_) => panic!("this fixture declares no Action endpoint"),
+            SupportReceiverKey::Skill(skill) => {
+                assert!(applicability(report, application));
+                assert_ne!(skill.as_ref(), &application.prepared.target);
+                let SkillTarget::Generated(child) = skill.as_ref() else {
+                    panic!("exact generated child")
+                };
+                let (root, name, origin) =
+                    [(30, "first", 61), (30, "second", 63), (31, "first", 65)]
+                        .into_iter()
+                        .find(|(root, name, _)| application.prepared.target == target(*root, name))
+                        .unwrap();
+                assert_eq!(
+                    application.prepared.origin,
+                    SupportOrigin::Assignment(occurrence(origin))
+                );
+                let SkillTarget::Generated(parent) = target(root, name) else {
+                    unreachable!()
+                };
+                let mut provider = parent.provider;
+                provider.grant_path.push(DeclaredSlot {
+                    declaration: SlotOwnerDefId::Actor(def("family")),
+                    slot: def(name),
+                });
+                assert_eq!(
+                    child.as_ref(),
+                    &GeneratedSkillKey {
+                        provider,
+                        slot: child_supply()
+                    }
+                );
+                let expected = if application.prepared.target == target(31, "first") {
+                    25
+                } else {
+                    16
+                };
+                let effect = report
+                    .effects
+                    .iter()
+                    .find(|effect| {
+                        self::application(effect) == Some(application)
+                            && effect.key.invocation.program == key("action-deliver")
+                    })
+                    .unwrap();
+                assert_eq!(
+                    effect.key.invocation.entity,
+                    ConcreteEntity::Skill(skill.clone())
+                );
+                assert_eq!(effect.value, known(expected));
+                // The child's own scalar is 777, but delivery must retain the
+                // original assignment's support level and effective scalar.
+                assert!(children.insert(skill.clone()));
+            }
+        }
+    }
+    assert_eq!(children.len(), 3);
 }

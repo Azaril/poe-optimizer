@@ -212,7 +212,9 @@ impl<'a, I: DefinitionSchemaIndex> Check<'a, I> {
                             return Err(invalid("source summoner must be an exact ancestor skill"));
                         }
                         let context = self.path(owner, parent)?;
-                        if !context.exact_skill_supply || context.actor != RelativeActor::Assigned {
+                        if !matches!(context.skill, Some(RelativeSkill::Generated { .. }))
+                            || context.actor != RelativeActor::Assigned
+                        {
                             return Err(invalid(
                                 "source summoner lacks exact Player skill context",
                             ));

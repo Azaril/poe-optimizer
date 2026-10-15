@@ -157,9 +157,10 @@ numeric ordering still require admission. This is a verified component, not a
 complete unchanged-build result. Resource capacity is separate from reservation
 and the source's negative unreserved Spirit. The owner accepted
 [Skill-owned resource obligations](owned-resource-obligations-proposal.md) on
-October 15. Its public contract, Skill support receiving and reservation-data
-migration remain to be implemented; the current reservation path still depends
-on Action construction.
+October 15. Exact Skill support recipients now use the existing Core/Data/Engine
+receiving path. The typed obligation effect, payer/dependency binding and
+reservation-data migration remain to be implemented; the current reservation
+path still depends on Action construction.
 
 The [Mana cleanup](../data/owned/poe2/3887ae68/mana-direct-queries/README.md)
 removes five forwarding programs and Player receivers. The final Mana program
@@ -1892,8 +1893,9 @@ The [resource-obligation proposal](owned-resource-obligations-proposal.md) was
 accepted on October 15; implementation remains pending. It addresses the current
 reservation component's dependence on requested Actions: a sustained skill must
 consume its resource independently of which
-metric is displayed. The proposed Skill obligations, explicit Action dependencies
-and Skill support recipients are not yet public runtime contracts.
+metric is displayed. Exact Skill support recipients are implemented in the
+existing receiving contract. Obligation effects, explicit Action dependencies
+and payer aggregation remain planned work.
 
 ## Where the older interpreter and original Lua still fit
 

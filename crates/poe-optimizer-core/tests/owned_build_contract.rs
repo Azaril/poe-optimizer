@@ -374,10 +374,28 @@ fn prepared_support_identity_separates_positions_and_receivers() {
         receiver: one.receiver.clone(),
     };
     let three = SupportApplicationKey {
-        prepared,
+        prepared: prepared.clone(),
         receiver: SupportReceiverKey::Action(Box::new(action(ProviderRoot::SkillUse(id(8))))),
     };
-    assert_eq!(BTreeSet::from([one, two, three]).len(), 3);
+    let skill = |target| SupportApplicationKey {
+        prepared: prepared.clone(),
+        receiver: SupportReceiverKey::Skill(Box::new(target)),
+    };
+    let four = skill(SkillTarget::Authored(id(8)));
+    let five = skill(SkillTarget::Authored(id(9)));
+    let six = skill(SkillTarget::Generated(Box::new(GeneratedSkillKey {
+        provider: provider(ProviderRoot::SkillUse(id(8))),
+        slot: declared(SlotOwnerDefId::Gem(definition("support-gem")), "skill"),
+    })));
+    let applications = BTreeSet::from([one, two, three, four, five, six]);
+    assert_eq!(applications.len(), 6);
+    assert_eq!(
+        serde_json::from_value::<BTreeSet<SupportApplicationKey>>(
+            serde_json::to_value(&applications).unwrap()
+        )
+        .unwrap(),
+        applications
+    );
 }
 fn provider(root: ProviderRoot) -> ProviderKey {
     ProviderKey {

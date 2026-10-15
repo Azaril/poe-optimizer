@@ -259,6 +259,7 @@ impl SymbolicBindings {
                         SupportReceiverKey::Action(action) => {
                             ConcreteEntity::Action(action.clone())
                         }
+                        SupportReceiverKey::Skill(skill) => ConcreteEntity::Skill(skill.clone()),
                     },
                 };
                 suffix.invocations.push(Invocation {

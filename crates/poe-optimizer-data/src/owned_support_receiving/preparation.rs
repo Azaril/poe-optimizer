@@ -36,6 +36,7 @@ impl<I: DefinitionSchemaIndex> Check<'_, I> {
         let context = match kind {
             SupportReceiverKind::Actor => RuleEntityKind::Actor,
             SupportReceiverKind::Action => RuleEntityKind::Action,
+            SupportReceiverKind::Skill => RuleEntityKind::Skill,
         };
         self.readiness_role(
             owner,

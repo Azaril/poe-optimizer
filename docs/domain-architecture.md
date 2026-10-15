@@ -223,10 +223,12 @@ on October 15. Sustained reservation belongs to an exact participating Skill,
 with explicit payer Actor, resource and obligation kind. Metric selection must
 not create or remove that obligation. Exact Action dependencies are declared
 only where selected part, mode or stat set is mechanically relevant; per-use
-costs remain Action-owned. Implement checked Skill support recipients and bounded
-dependency/cycle validation on the same occurrence graph. These contracts and
-the migration are pending implementation; the current Action-owned reservation
-component must be replaced explicitly, without a parallel compatibility path.
+costs remain Action-owned. Checked Skill support recipients now use the existing
+receiving graph, with exact source paths and separate preparation/execution
+authority. The typed obligation effect, payer binding, exact Action dependencies
+and reservation migration remain to be implemented on that same graph. The
+current Action-owned reservation component must be replaced explicitly, without
+a parallel compatibility path.
 
 Rules may inspect the bound Action's existing part, mode and stat-set identities
 through typed Boolean equality predicates. These are read-only request facts:

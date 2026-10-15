@@ -195,14 +195,11 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                         + receiver.context.skill.as_ref().map_or(0, depth)
                         + 4,
                 )?;
-                let (actor, concrete) = match &receiver.context.receiver {
-                    SupportReceiverKey::Actor(actor) => {
-                        (actor.clone(), ConcreteEntity::Actor(actor.clone()))
-                    }
-                    SupportReceiverKey::Action(action) => (
-                        action.action.actor.clone(),
-                        ConcreteEntity::Action(action.clone()),
-                    ),
+                let actor = receiver.context.actor.clone();
+                let concrete = match &receiver.context.receiver {
+                    SupportReceiverKey::Actor(actor) => ConcreteEntity::Actor(actor.clone()),
+                    SupportReceiverKey::Action(action) => ConcreteEntity::Action(action.clone()),
+                    SupportReceiverKey::Skill(skill) => ConcreteEntity::Skill(skill.clone()),
                 };
                 // Source reads use the assignment. Exact receiver value channels use
                 // receiving_skill/actor/entity; never replace the source provider.

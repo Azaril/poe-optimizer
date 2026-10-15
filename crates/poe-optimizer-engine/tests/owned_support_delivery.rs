@@ -2,6 +2,8 @@
 #[allow(dead_code)]
 #[path = "support/owned_support_delivery_fixture.rs"]
 mod delivery_fixture;
+#[path = "support/owned_skill_support_delivery.rs"]
+mod skill_receiving;
 use delivery_fixture::*;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::RuleEntityKind,

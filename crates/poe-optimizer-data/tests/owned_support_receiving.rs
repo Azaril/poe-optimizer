@@ -1,4 +1,6 @@
 //! Finite declarative receiving relations; no test claims numeric delivery coverage.
+#[path = "support/owned_skill_receiving.rs"]
+mod skill_receiving;
 #[path = "support/owned_source_properties.rs"]
 mod source_properties;
 use poe_optimizer_core::{

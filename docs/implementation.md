@@ -146,10 +146,51 @@ publication helper. Evidence:
 `runs/owned-reporting-inclusion-{native-04,import-02,cli-02,publication-01}.log`
 and the publication's `validation.json`.
 
-**Resume:** implement the accepted exact Skill support-receiving endpoint in
-Core/Data/Engine, then the checked resource-obligation contract, payer aggregation
-and reservation migration described below. The current live reservation consumer
-remains Action-owned; metadata publication does not make it query-independent.
+### Exact Skill support recipients
+
+Core/Data/Engine now extend the existing receiving contract with a Skill endpoint
+and exact `SkillTarget` application key. Semantic Skill targets admit an empty
+path; Gem containers require an explicit grant to a generated Skill. Two final
+grant aliases cannot duplicate one recipient, while repeated sources, siblings
+and ancestor provider paths remain distinct. Cold binding retains the validated
+receiver Actor only as private context. It grants no new Skill-to-Actor reads,
+writes or payer authority.
+
+Skill support programs retain their assignment's inputs and provenance, write
+the exact Current receiver, and use the existing preparation/execution roles.
+Complete receiving inventories must classify their Skill programs. Missing or
+Partial inventories remain blocking; false execution participation does not
+erase preparation supply, unknown participation is not false, and late writes
+to frozen Skill channels still reject. The existing graph, scratch and Rayon
+paths handle delivery without constructing an Action. No game-specific rule,
+new compatibility branch or resource-obligation producer is added.
+
+Validation passes **202 targeted tests**: 90 Core/Data, 66 Engine library and
+46 Engine integration tests (readiness 18, participation 9, delivery 15 and
+inherited delivery 4). Controls cover direct and generated recipients,
+independent child admission, assignment inputs versus receiving inputs, exact
+occurrence identity, missing producers, scratch reuse and parallel execution.
+Strict targeted Core/Data and Engine Clippy passes; independent review is clean.
+Evidence: `runs/owned-skill-receiving-data-03.log`,
+`runs/owned-skill-receiving-data-clippy-01.log`,
+`runs/owned-skill-receiving-engine-unit-02.log` and the final Engine integration
+and Clippy logs under `runs/owned-skill-receiving-*`. Earlier fixture failures
+remain recorded; fixes did not relax runtime authority or missing-input checks.
+
+The all-five CLI publication regression passes (52.53s) at
+`runs/owned-skill-receiving-publication-01`, independently comparing all 18
+artifacts byte-for-byte with the reporting-inclusion checkpoint above. Endpoint
+`e1c2abd299aead48ff1da38aa517c4fcbcaacd2671f754deb921364c0cad4b39`,
+64,432,702 bytes, 187 provenance entries, 110 queries and selected issue counts
+**106/117/109/123/4** are unchanged. See
+`runs/owned-skill-receiving-publication-01.log` and
+`runs/owned-skill-receiving-artifact-comparison-01.json`.
+
+**Resume:** add the planned typed resource-obligation effect to the existing
+Skill owner/program inventory, checked payer aggregation and named exact Action
+dependencies, then migrate the current reservation data. The live reservation
+consumer remains Action-owned. Skill receiving alone does not make it
+query-independent or complete any of the five builds.
 
 ## Previous checkpoint: Player Spirit pool
 
@@ -475,14 +516,14 @@ including exact twenty-artifact reproduction, all-five XML censuses and failure
 controls (`runs/ci-owned-tree-receipts-01.log`).
 The completed Windows cli-0 job reports the same old weapon-profile manifest
 receipt failure in both feature profiles, with no new defect
-(`runs/ci-job-116230401591.log`). The latest inspected push `6c45804e` has
-pending run `38688262637`;
+(`runs/ci-job-116230401591.log`). The latest inspected push `a70165f1` has
+pending run `38692656700`;
 main concurrency preserves the running older revision and coalesces pending revisions. Recent
 jobs have completed, but live job logs are unavailable, so individual long steps
 have not been diagnosed as hung. Do not report the queued revision as green.
 The subsequent Windows cli-2 job repeats only the already-repaired item-base
 manifest receipt failure in both profiles (`runs/ci-job-116230401646.log`).
-The older revision's Windows PoB job has completed successfully; this is not a
+The older revision's Windows and Ubuntu PoB jobs have completed successfully; this is not a
 hosted result for the current main revision.
 Evidence: `runs/ci-import-c4a62464-job116230401602.log` and
 `runs/ci-catalog-republication-01-diff.json`, plus
@@ -1494,6 +1535,11 @@ numerical outputs when game intent remains unresolved.
    and aggregation before migrating the live reservation data. Reuse canonical
    Actor pool Stat identities and the existing occurrence/value graph; no new
    resource catalogue, second evaluator or compatibility path is required.
+   Represent obligations as typed effects in the existing complete/Partial
+   owner-program inventory, not a second top-level census. Permit emission only
+   once per exact Skill owner invocation and qualify the obligation-to-payer
+   contribution origin separately; ordinary Skill self-contributions retain
+   their current permissions. Exact Action dependencies remain explicit reads.
    Authored Gem containers must remain distinct from their generated Skill
    recipients. See the proposal's implementation contract for concrete checks.
 

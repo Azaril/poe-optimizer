@@ -22,6 +22,8 @@ pub(in crate::owned_plan) enum BoundSupportAdmission {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(in crate::owned_plan) struct BoundSupportReceiverContext {
     pub(in crate::owned_plan) receiver: SupportReceiverKey,
+    /// Validated at cold endpoint binding; this is context, not payer authority.
+    pub(in crate::owned_plan) actor: ActorKey,
     pub(in crate::owned_plan) provider: ProviderKey,
     pub(in crate::owned_plan) skill: Option<SkillTarget>,
     pub(in crate::owned_plan) admission: BoundSupportAdmission,
@@ -480,9 +482,44 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                     }
                     self.push_receiving_context(
                         BoundSupportReceiverContext {
-                            receiver: SupportReceiverKey::Actor(actor),
+                            receiver: SupportReceiverKey::Actor(actor.clone()),
+                            actor,
                             provider,
                             skill: None,
+                            admission,
+                        },
+                        &mut result.receivers,
+                        &mut seen,
+                        counts,
+                    )?;
+                }
+                SupportReceiverEndpoint::Skill { .. } => {
+                    let skill = skill.ok_or_else(|| {
+                        PlanError::Invalid(
+                            "support Skill endpoint has no exact semantic Skill target".into(),
+                        )
+                    })?;
+                    // A physical Gem root is an authored container, never an
+                    // implicit alias for one of its generated effects.
+                    if provider.grant_path.is_empty()
+                        && matches!(anchor.owner, SupportTargetDefinition::Gem(_))
+                    {
+                        return Err(PlanError::Invalid(
+                            "support Skill endpoint cannot alias a physical Gem root".into(),
+                        ));
+                    }
+                    let actor = resolved.actor().clone();
+                    if !self.receiving_actor_discovered(&actor)? {
+                        self.gap(Some(provider), None, PlanGapReason::UnresolvedTopology)?;
+                        result.complete = false;
+                        continue;
+                    }
+                    self.push_receiving_context(
+                        BoundSupportReceiverContext {
+                            receiver: SupportReceiverKey::Skill(Box::new(skill.clone())),
+                            actor,
+                            provider,
+                            skill: Some(skill),
                             admission,
                         },
                         &mut result.receivers,
@@ -801,6 +838,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         self.push_receiving_context(
             BoundSupportReceiverContext {
                 receiver: SupportReceiverKey::Action(Box::new(action)),
+                actor: actor.clone(),
                 provider: provider.clone(),
                 skill: skill.cloned(),
                 admission: admission.clone(),
@@ -825,7 +863,10 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         )?;
         charge(
             &mut self.work,
-            context.provider.grant_path.len() + context.skill.as_ref().map_or(0, target_depth) + 1,
+            context.provider.grant_path.len()
+                + context.skill.as_ref().map_or(0, target_depth)
+                + actor_depth(&context.actor)
+                + 1,
         )?;
         if !seen.insert(context.receiver.clone()) {
             return Err(PlanError::Invalid(

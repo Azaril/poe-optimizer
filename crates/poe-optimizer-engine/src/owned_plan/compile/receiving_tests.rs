@@ -141,6 +141,13 @@ struct Harness {
 }
 impl Harness {
     fn new(f: &Fixture, edit: impl FnOnce(&mut SupportReceivingInput)) -> Self {
+        Self::with_rules(f, |_| {}, edit)
+    }
+    fn with_rules(
+        f: &Fixture,
+        edit_rules: impl FnOnce(&mut RulePackageInput),
+        edit: impl FnOnce(&mut SupportReceivingInput),
+    ) -> Self {
         let args = fixture::compile_inputs(f, target(30, "first"));
         let mut rule_input = args.rules.input().clone();
         rule_input.operations_version = key(OWNED_RULE_OPERATIONS_V13);
@@ -155,6 +162,7 @@ impl Harness {
             receiver_program("action-app", RuleEntityKind::Action, true),
             receiver_program("action-deliver", RuleEntityKind::Action, false),
         ]);
+        edit_rules(&mut rule_input);
         let stored =
             OwnedRulePackage::new(rule_input, args.definitions.as_ref(), Default::default())
                 .unwrap();
@@ -346,12 +354,15 @@ fn generated_targets_preserve_entering_paths_siblings_and_actor_once_contexts() 
             match &receiver.context.receiver {
                 SupportReceiverKey::Actor(actor) => {
                     assert_eq!(*actor, child_actor(use_id));
+                    assert_eq!(receiver.context.actor, *actor);
                     assert!(receiver.context.skill.is_none());
                 }
                 SupportReceiverKey::Action(action) => {
                     assert_eq!(action.action.actor, child_actor(use_id));
+                    assert_eq!(receiver.context.actor, action.action.actor);
                     assert_eq!(receiver.context.skill, Some(target(use_id, name)));
                 }
+                SupportReceiverKey::Skill(_) => panic!("legacy fixture has no Skill endpoint"),
             }
             assert_eq!(
                 receiver.context.admission,
@@ -625,4 +636,169 @@ fn disabled_generated_ancestor_keeps_unavailable_targets_without_invented_supply
         BoundReceivingAvailability::Bound
     );
     assert_eq!(b.actions.len(), 2);
+}
+
+// Exact Skill recipients use the existing assignment and entering-provider census.
+fn skill_rules(input: &mut RulePackageInput) {
+    for program in &mut input
+        .owners
+        .iter_mut()
+        .find(|r| r.owner == support_owner())
+        .unwrap()
+        .programs
+        .members
+    {
+        if [key("action-app"), key("action-deliver")].contains(&program.id) {
+            program.context = RuleEntityKind::Skill;
+        }
+    }
+}
+fn skill_receivers(input: &mut SupportReceivingInput) {
+    input.roles = vec![
+        SupportReceivingRole {
+            id: key("actor"),
+            kind: SupportReceiverKind::Actor,
+        },
+        SupportReceivingRole {
+            id: key("skill"),
+            kind: SupportReceiverKind::Skill,
+        },
+    ];
+    input.targets[0].roles.members = vec![SupportReceivingRoleBinding {
+        role: key("skill"),
+        endpoints: DeclaredSet::complete(vec![SupportReceiverEndpoint::Skill {
+            path: vec![],
+            admission: SupportAdmissionContext::AssignedSkill,
+        }]),
+    }];
+    input.supports[0].receivers.members = vec![
+        SupportRolePrograms {
+            preparation: None,
+            role: key("actor"),
+            applicability: key("actor-app"),
+            delivery: vec![key("actor-deliver")],
+        },
+        SupportRolePrograms {
+            preparation: None,
+            role: key("skill"),
+            applicability: key("action-app"),
+            delivery: vec![key("action-deliver")],
+        },
+    ];
+}
+#[test]
+fn skill_receivers_bind_generated_identity_and_inherited_actor_without_actions() {
+    let h = Harness::with_rules(&source_fixture(), skill_rules, skill_receivers);
+    let mut b = h.builder();
+    b.discover().unwrap();
+    let bound = b.receiving(&h.receiving).unwrap();
+    assert!(b.actions.is_empty());
+    for (id, root, name) in [(60, 30, "first"), (62, 30, "second"), (64, 31, "first")] {
+        let row = &bound.assignments[&occurrence(id)];
+        assert!(row.complete);
+        assert_eq!(row.receivers.len(), 1);
+        let r = &row.receivers[0].context;
+        assert_eq!(
+            r.receiver,
+            SupportReceiverKey::Skill(Box::new(target(root, name)))
+        );
+        assert_eq!(r.skill, Some(target(root, name)));
+        assert_eq!(r.actor, child_actor(root));
+        assert_eq!(r.provider.root, ProviderRoot::SkillUse(occurrence(root)));
+        assert_eq!(r.provider.grant_path, vec![child_grant(), activation(name)]);
+        assert_eq!(
+            r.admission,
+            BoundSupportAdmission::AssignedSkill {
+                target: target(root, name)
+            }
+        );
+    }
+}
+#[test]
+fn skill_receivers_preserve_two_explicit_gem_effects_and_repeated_sources() {
+    let h = Harness::with_rules(&authored_fixture(), skill_rules, |input| {
+        skill_receivers(input);
+        input.targets[0].owner = SupportTargetDefinition::Gem(def("summoner"));
+        input.targets[0].roles.members[0].endpoints.members = ["first", "second"]
+            .into_iter()
+            .map(|name| SupportReceiverEndpoint::Skill {
+                path: vec![child_grant(), activation(name)],
+                admission: SupportAdmissionContext::ReceivingSkill {
+                    summoner_path: None,
+                },
+            })
+            .collect();
+    });
+    let mut b = h.builder();
+    b.discover().unwrap();
+    let bound = b.receiving(&h.receiving).unwrap();
+    assert!(b.actions.is_empty());
+    for (id, root) in [(60, 30), (64, 31)] {
+        let row = &bound.assignments[&occurrence(id)];
+        assert!(row.complete);
+        assert_eq!(row.receivers.len(), 2);
+        for (r, name) in row.receivers.iter().zip(["first", "second"]) {
+            assert_eq!(
+                r.context.receiver,
+                SupportReceiverKey::Skill(Box::new(target(root, name)))
+            );
+            assert_eq!(r.context.actor, child_actor(root));
+            assert_eq!(
+                r.context.admission,
+                BoundSupportAdmission::ReceivingSkill {
+                    target: target(root, name),
+                    summoner: None
+                }
+            );
+        }
+        assert_ne!(
+            row.receivers[0].context.receiver,
+            row.receivers[1].context.receiver
+        );
+        assert_ne!(
+            row.receivers[0].context.skill,
+            Some(SkillTarget::Authored(occurrence(root)))
+        );
+    }
+}
+#[test]
+fn authored_semantic_skill_root_is_player_owned_without_generated_alias() {
+    let mut f = authored_fixture();
+    for definition in &mut f.schema.definitions {
+        if let DefinitionDescriptor::Skill(DefinitionEntry {
+            id,
+            schema: SchemaState::Known(schema),
+        }) = definition
+            && *id == def::<SkillDefinition>("ability")
+        {
+            schema.directly_selectable = true;
+        }
+    }
+    for skill in &mut f.build.skills {
+        if [occurrence(30), occurrence(31)].contains(&skill.id) {
+            skill.source = AuthoredSkillSource::Direct(def("ability"));
+        }
+    }
+    let h = Harness::with_rules(&f, skill_rules, skill_receivers);
+    let mut b = h.builder();
+    b.discover().unwrap();
+    let bound = b.receiving(&h.receiving).unwrap();
+    assert!(b.actions.is_empty());
+    for (id, root) in [(60, 30), (64, 31)] {
+        let row = &bound.assignments[&occurrence(id)];
+        assert!(row.complete);
+        let r = &row.receivers[0].context;
+        assert_eq!(
+            r.receiver,
+            SupportReceiverKey::Skill(Box::new(SkillTarget::Authored(occurrence(root))))
+        );
+        assert_eq!(r.actor, ActorKey::Player);
+        assert_eq!(
+            r.provider,
+            ProviderKey {
+                root: ProviderRoot::SkillUse(occurrence(root)),
+                grant_path: vec![]
+            }
+        );
+    }
 }

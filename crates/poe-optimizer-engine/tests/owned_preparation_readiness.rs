@@ -1,12 +1,12 @@
 //! Preparation readiness is proved through a closed public support/metric plan.
-#[allow(dead_code)]
-#[path = "support/owned_preparation_readiness_fixture.rs"]
-mod support;
+#[path = "support/owned_skill_support_readiness.rs"]
+mod skill_receiving;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_readiness::*, owned_rules::*, owned_schema::*,
     owned_stages::*,
 };
 use poe_optimizer_engine::owned_plan::*;
+use skill_receiving::participation::readiness as support;
 use std::collections::BTreeSet;
 use support::delivery::{fixture as base, integer};
 use support::*;

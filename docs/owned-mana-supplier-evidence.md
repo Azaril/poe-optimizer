@@ -98,7 +98,7 @@ and recipient mutation controls. Explicit offline retention and strict Clippy
 pass; independent review is clean. Logs are
 `runs/owned-mana-configuration-rewards-{retain-03,test-03,clippy-02}.log`.
 This source-only review did not change the native package. Its latest successor
-is the [Spirit checkpoint](implementation.md#current-checkpoint-player-spirit-pool),
+is recorded in the [current checkpoint](implementation.md#current-checkpoint-reporting-inclusion-intent),
 which preserves the open Mana supplier obligations.
 
 ## Limits and next work

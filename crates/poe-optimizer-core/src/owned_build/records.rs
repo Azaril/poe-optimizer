@@ -255,6 +255,7 @@ pub struct PreparedSupportKey {
 pub enum SupportReceiverKey {
     Actor(ActorKey),
     Action(Box<ActionSelection>),
+    Skill(Box<SkillTarget>),
 }
 
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]

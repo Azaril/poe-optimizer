@@ -1,7 +1,8 @@
 # Proposal: resource obligations independent of metric selection
 
-**Status:** Accepted by the owner on 2026-10-15; public contract and native
-migration are not yet implemented.
+**Status:** Accepted by the owner on 2026-10-15. The Skill support-recipient
+extension is implemented; the typed obligation effect, payer/dependency binding
+and reservation-data migration remain to be implemented.
 **Date:** Proposed 2026-10-06; accepted 2026-10-15.
 
 The owner selected Skill-owned obligations with explicit Action dependencies.
@@ -45,9 +46,9 @@ Action rather than being charged as ongoing reservation.
 Reservation-to-cost conversion must choose the applicable cost calculation and
 rounding, not relabel an already-rounded reservation amount.
 
-This needs more than moving a program to Skill context. The current support
-receiving contract admits Actor and Action endpoints only. Skill-level resource
-modifiers need an explicit Skill recipient and applicability contract, retaining
+This needs more than moving a program to Skill context. Before this migration,
+the support receiving contract admitted Actor and Action endpoints only.
+Skill-level resource modifiers need an explicit Skill recipient and applicability contract, retaining
 support occurrence provenance and complete contributor checks. The existing
 preparation/execution phases and exact source membership remain authoritative;
 this proposal does not introduce a second build graph or let a query activate a
@@ -59,7 +60,8 @@ disabled Skill.
 | Explicit required Actions on Skill definitions | Can reuse current Action reservation programs and support recipients, with less immediate migration. | Treats sustained reservation as an Action calculation and requires concrete selections even for skills with no meaningful cast. Needs additional rules to prevent duplicate obligations across Actions. |
 
 The accepted option permits no implicit zero costs, missing-input defaults or
-relaxation of selected-build coverage. It is not yet implemented.
+relaxation of selected-build coverage. Skill support receiving is the first
+implemented slice; it adds no obligation producer or payer aggregation by itself.
 
 ## Implementation gates
 
@@ -71,6 +73,21 @@ does not create another Skill or Actor. Skill programs already instantiate from
 the discovered build independently of requested metrics. Extend that binding
 with a checked census of potential obligations, explicit payer relations and
 named Action dependencies rather than adding a separate evaluator.
+
+For implementation, reuse the existing owner/program/effect inventory as the
+potential-obligation census. Add a typed obligation effect with explicit payer,
+resource, kind and amount, emitted only by a genuine once-per-Skill owner
+invocation. Its exact occurrence plus owner/program/effect declaration supplies
+identity. Support applications modify its inputs; they must not create another
+copy of that obligation. Complete/Partial program ownership already accounts
+for untranslated mechanics, so a second top-level obligation catalogue would
+duplicate authority. This effect and its binding are planned, not implemented.
+
+Extend the existing checked program-effect query address with a separately
+validated obligation-to-payer origin. Validate the actual effect kind and its
+resource, payer and numeric type before admitting membership. Ordinary Skill
+self-contributions keep their current authority; they cannot be reclassified as
+Actor contributions merely because their values or units match.
 
 Use the canonical Actor pool Stat as the resource identity, validated for Actor
 applicability and the resource-points unit. Life, Mana and Spirit remain distinct
@@ -127,5 +144,5 @@ endpoint alone does not make reservation query-independent.
 
 Gigantic Following's independent status and owner-side efficiency contributions
 can be published while the accepted migration is being implemented. Its
-Life/Damage consumers and resource delivery remain separate work. This proposal grants no source-bug
-exception and no new numerical closure.
+Life/Damage consumers and resource delivery remain separate work. This proposal
+grants no source-bug exception and no new numerical closure.

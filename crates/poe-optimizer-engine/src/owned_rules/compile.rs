@@ -385,16 +385,18 @@ fn skill_owner<I: DefinitionSchemaIndex>(
             known(index.definition(id), path)?;
             Ok(())
         }
-        SchemaSubject::Definition(DefinitionAddress::Gem(id)) => check(
-            known(index.definition(id), path)?
-                .roles
-                .contains(&AuthoredGemRole::SkillUse),
-            path,
-            "Skill context requires a Skill or SkillUse Gem owner",
-        ),
+        SchemaSubject::Definition(DefinitionAddress::Gem(id)) => {
+            let roles = &known(index.definition(id), path)?.roles;
+            check(
+                roles.contains(&AuthoredGemRole::SkillUse)
+                    || roles.contains(&AuthoredGemRole::SupportAssignment),
+                path,
+                "Skill context requires a Skill, SkillUse Gem or SupportAssignment Gem owner",
+            )
+        }
         _ => Err(fail(
             path,
-            "Skill context requires a Skill or SkillUse Gem owner",
+            "Skill context requires a Skill, SkillUse Gem or SupportAssignment Gem owner",
         )),
     }
 }
@@ -446,10 +448,13 @@ fn entity<I: DefinitionSchemaIndex>(
             check(
                 matches!(
                     context,
-                    RuleEntityKind::SupportOrigin | RuleEntityKind::Actor | RuleEntityKind::Action
+                    RuleEntityKind::SupportOrigin
+                        | RuleEntityKind::Actor
+                        | RuleEntityKind::Action
+                        | RuleEntityKind::Skill
                 ),
                 path,
-                "relative support scope requires SupportOrigin or assignment-bound Actor/Action context",
+                "relative support scope requires SupportOrigin or assignment-bound Actor/Action/Skill context",
             )?;
             if e == RuleEntity::SupportOrigin {
                 RuleEntityKind::SupportOrigin
@@ -1548,11 +1553,14 @@ fn program<I: DefinitionSchemaIndex>(
             }
             RuleEffectKind::SupportApplicability { applicable } => {
                 check(
-                    matches!(p.context, RuleEntityKind::Action | RuleEntityKind::Actor),
+                    matches!(
+                        p.context,
+                        RuleEntityKind::Action | RuleEntityKind::Actor | RuleEntityKind::Skill
+                    ),
                     &ep,
-                    "support applicability requires action or actor context",
+                    "support applicability requires action, actor or skill context",
                 )?;
-                if p.context == RuleEntityKind::Actor {
+                if matches!(p.context, RuleEntityKind::Actor | RuleEntityKind::Skill) {
                     support_owner(&owner.owner, index, &ep)?;
                 }
                 (applicable, ComputedValueType::Boolean)
@@ -2121,12 +2129,12 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         for p in &o.programs.members {
             check(
                 operations.supports_actor_support_applicability()
-                    || p.context != RuleEntityKind::Actor
+                    || !matches!(p.context, RuleEntityKind::Actor | RuleEntityKind::Skill)
                     || !p.effects.iter().any(|effect| {
                         matches!(effect.effect, RuleEffectKind::SupportApplicability { .. })
                     }),
                 "operations_version",
-                "actor support applicability requires owned-domain-operations-v13",
+                "actor/skill support applicability requires owned-domain-operations-v13",
             )?;
             let key = (SubjectKey::from(&o.owner), p.id.clone());
             check(
