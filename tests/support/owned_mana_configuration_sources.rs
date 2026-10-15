@@ -981,14 +981,14 @@ pub fn retain() {
     fs::write(
         suppliers::root()
             .join(DIR)
-            .join("configuration-review.json"),
+            .join("configuration-reward-review.json"),
         serde_json::to_vec_pretty(&artifact).unwrap(),
     )
     .unwrap();
 }
 pub fn check() -> Result<(), String> {
     require(
-        read("configuration-review.json") == reconstruct()?,
+        read("configuration-reward-review.json") == reconstruct()?,
         "configuration supplier review differs from reconstruction",
     )
 }

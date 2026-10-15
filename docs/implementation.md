@@ -105,14 +105,56 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: Skill support and exact aggregation
+## Current checkpoint: Critical Weakness input
+
+The [Critical Weakness input packet](../data/owned/poe2/3887ae68/configuration-enemy-critical-weakness-input/README.md)
+publishes external input `3390` on the scenario Enemy, using existing Count unit
+`295a` and the shared checked configuration adapter. The configured candidate is
+preserved before activation, clamping and critical-chance calculations. No new
+native operation, gameplay program, receiver or completed supplier inventory is
+introduced. This is actual imported build data, not a fixture value in evaluation.
+
+Nonzero authored Input takes precedence over Placeholder, with constructor 20
+only when neither supplies the candidate. Zero Placeholder remains known input;
+it does not imply callback emission. Negative, fractional and above-cap values
+remain raw within the explicit import domain. Original callback bodies and both
+retained constructor observations authenticate these separate meanings.
+
+The production CLI publishes and exactly rebuilds all 18 files, then preserves
+all five originals and all 110 saved queries. Original05's configuration-linked
+origins fall **30 → 29** (14 inside Config, 15 outside); known scenario assumptions
+increase **23 → 24**. Its 35 preset preferences and all four selected input
+obligations remain unchanged. Selected issue counts stay **106/117/109/123/4**;
+complete native evaluations remain **0/5**. Activation, clamp/effect delivery and
+the complete configuration census remain separate blockers.
+
+Current package:
+**`runs/owned-configuration-critical-weakness-publication-02/package`**.
+
+- Input: `1084b2615f8ec4b8d5960077b6dda429d5220dc2a27628f32b1121ec2a23cf05`.
+- Registry: `7c575fefb36d34241783cd01f483ca240d0e4700e7b7b974ff8aa3a8b0f43878` (last `3390`).
+- Definitions: `0122fed74a6e554c6c1020ed6d448f2bd31ef980dad7e119cb38dc9cf48716fa`.
+- Rules: `d47241e98ff7214470c06637e617b56d469d0262e2b84a08156045ff29d84fcf`.
+- Compiled: `0bf62d5976442cd682f66d90dae992d1786d66a22d0c8e0c9c707c6179700c81`.
+
+The package has **64,435,356 bytes**, 188 provenance rows and unchanged
+8187/8192 program use. Three ordinary source/data tests pass, followed by the
+explicit all-five publication and 22 input/encounter/duplicate controls (61.74s).
+Strict target Clippy and independent review pass. Evidence:
+`runs/owned-configuration-critical-weakness-{ordinary-03,publication-02,clippy-01}.log`
+and the publication's `validation.json`. Publication01 is superseded: publication02
+authenticates the original immutable constructor review, preserving historical
+publication receipts. Its compiled semantics are identical to publication01.
+
+## Previous checkpoint: Skill support and exact aggregation
 
 Exact Skill support recipients and the generic exact Integer reduction now run
 in native Core/Data/Engine. They are validated prerequisites for the accepted
 Skill-owned reservation migration; obligation effects and payer binding are
-still unfinished. The published game-data package remains unchanged below.
+still unfinished. The reporting package below is the predecessor of the current
+Critical Weakness input publication.
 
-### Published data: reporting inclusion intent
+### Predecessor data: reporting inclusion intent
 
 The [reporting-inclusion packet](../data/owned/poe2/3887ae68/reporting-inclusion/README.md)
 preserves saved group inclusion as a typed Boolean on each eligible exact Skill
@@ -504,8 +546,8 @@ Spirit component now uses **8187/8192**, leaving five program slots, with 56
 receivers. Other measured Life-predecessor compiler counts are
 6548 owners, 23517 effects, 4249 reads, 32814 nodes and 41600 edges, comfortably
 within their separate caps.
-The current reporting-intent release package is **64,432,702/67,108,864 bytes**,
-leaving 2,676,162 bytes. These are separate limits. The common
+The current Critical Weakness input release is **64,435,356/67,108,864 bytes**,
+leaving 2,673,508 bytes. These are separate limits. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
 
@@ -558,6 +600,19 @@ mechanic, generated policy body or runtime code changed. Evidence:
 `runs/ci-test_export_owned_{resistance-01,tree-02,allocations-02}.log`.
 The hosted run is still active with failed validation; the local repair is not
 a hosted green result.
+
+The new input's source checks also exposed overwritten historical evidence:
+quest reconciliation had replaced `configuration-review.json`, which five
+earlier input packets authenticate. Restore its exact original 150,147 bytes
+(`d8f7abf2…`), and retain the complete expanded report as
+`configuration-reward-review.json` (183,350 bytes, `929e8805…`). The dedicated
+quest proof now reconstructs that separate artifact; its test seals both reports
+and proves their non-quest content is identical. All 24 constructor dependencies
+across the five historical packets and the new input match without changing
+historical authoring identities. This is immutable source evidence, not runtime
+compatibility or a hash fallback. The four affected Rust targets pass 19 ordinary
+tests and strict Clippy, with the explicit retention test still opt-in. Logs:
+`runs/owned-configuration-immutable-evidence-{tests,clippy}-01.log`.
 
 Hosted run `38675971601` for older revision `c4a62464` exposed another stale
 derived receipt in `owned_catalog_recipe`. The compiler-domain change updated
@@ -884,9 +939,9 @@ build.
 The current input audit found no existing-authority shortcut to close the
 four obligations. Preset usage `0505` retains unresolved global switches,
 action selection and FullDPS responsibilities despite known preferences.
-`01f2` retains 30 origins after the published correspondence and configuration
+`01f2` retains 29 origins after the published correspondence and configuration
 accounting steps; known values and remaining Firebolt correspondence are separate.
-`0207`'s 23
+`0207`'s 24
 known assumptions do not prove the constructor/default catalogue complete;
 `0208`'s empty saved usage does not account for seven default child-effect enables.
 Known scalar values cannot certify these inventories. Checked configuration
@@ -1928,7 +1983,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Application-group contribution queries | Accepted and implemented October 8 in Core/Data/Engine V25. Typed program-effect/application-group addresses preserve exact recipients, potential-source census, stacking, unknowns and explicit numeric order in one checked reduction path. Current artifacts are rebuilt with no old-format compatibility. Mixed inherited/applied damage data now adopts this capability; MORE and final hit consumers remain next. [Accepted contract](owned-application-group-contribution-queries-proposal.md). |
 | Final incoming-critical ownership | Accepted and implemented October 14 through existing stat-owned Player receivers. Three final formulas reuse configured inputs and preserve exact Enemy reads, own-Stat writes and shared Actor Partial coverage. All 52 source vectors, native/CLI checks and all-five publication pass. Six numeric producers, four Partial supplier queries and complete-build/EHP binding remain open. [Decision](owned-actor-enemy-reads-proposal.md). |
-| Configuration/source dispositions | Presentation, exact item-range ownership and common checked leaf accounting are implemented; full semantic closure is not. Original05 issue `01f2` now retains 30 source origins after damage-roll accounting, the default-input publications, distance projections and the Player Withered input; older origin counts are historical. Preset usage `0505` has 23 known preferences, assumptions `0207` has 23 known members, and scenario usage `0208` remains empty/Pending. Known members do not complete an inventory. The owner approved full checked disposition authority on October 14; complete catalogue/default and outside-origin accounting remain pending. Partial scalar success or local Config proof cannot clear global fallback. Typed defaults reach Player/Enemy/Environment inputs and the real Player resistance penalty is published. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
+| Configuration/source dispositions | Presentation, exact item-range ownership and common checked leaf accounting are implemented; full semantic closure is not. Original05 issue `01f2` now retains 29 source origins after damage-roll accounting, default inputs, distance projections, Player Withered and Enemy Critical Weakness; older counts are historical. Preset usage `0505` has 35 known preferences, assumptions `0207` has 24 known members, and scenario usage `0208` remains empty/Pending. Known members do not complete an inventory. The owner approved full checked disposition authority on October 14; complete catalogue/default and outside-origin accounting remain pending. Partial scalar success or local Config proof cannot clear global fallback. Typed defaults reach Player/Enemy/Environment inputs and the real Player resistance penalty is published. Keep scenario usage/assumptions separate and retire redundant configuration variants through the [consolidation follow-up](legacy-retirement.md#configuration-projection-consolidation-2026-10-07). [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
 | Selected passive receiving | Growing Swarm's complete default two-effect owner and Sniper receiving are published through existing contracts. Conditional/unconditional cooldown sums stay distinct; final duration, area/radius, other minion receivers and complete contributor coverage remain open. [Packet and limits](../data/owned/poe2/3887ae68/growing-swarm/README.md). |

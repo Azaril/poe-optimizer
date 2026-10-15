@@ -2,6 +2,7 @@
 mod proof;
 
 use serde_json::{Value, json};
+use sha2::{Digest, Sha256};
 use std::sync::OnceLock;
 
 fn fixture() -> &'static Value {
@@ -12,7 +13,36 @@ fn fixture() -> &'static Value {
 #[test]
 fn retained_configuration_body_domains_reconstruct_without_pob() {
     proof::check().unwrap();
-    let report = proof::read("configuration-review.json");
+    let retained = |name: &str, expected_size, expected_hash| {
+        let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join(proof::DIR)
+            .join(name);
+        let bytes = std::fs::read(path).unwrap();
+        assert_eq!(bytes.len(), expected_size);
+        assert_eq!(format!("{:x}", Sha256::digest(&bytes)), expected_hash);
+        serde_json::from_slice::<Value>(&bytes).unwrap()
+    };
+    let original = retained(
+        "configuration-review.json",
+        150_147,
+        "d8f7abf2202ace98318d9c3c80be31ea77c3d9d17a307a174e866fc9c44fa9d5",
+    );
+    let report = retained(
+        "configuration-reward-review.json",
+        183_350,
+        "929e8805a7e1ec72ef9d022354309fde61b1e85c12032173fda6550e23ddcccf",
+    );
+    // The immutable constructor evidence still authenticates historical input
+    // publications. The separate reconciliation changes only its quest proof.
+    let mut inverse = report.clone();
+    assert!(
+        inverse
+            .as_object_mut()
+            .unwrap()
+            .remove("reward_reconciliation")
+            .is_some()
+    );
+    inverse["remaining"] = original["remaining"].clone();
     for mode in ["off", "on"] {
         assert_eq!(report[mode]["phases"][0]["invoked"], 62);
         assert_eq!(report[mode]["phases"][1]["invoked"], 63);
@@ -39,8 +69,34 @@ fn retained_configuration_body_domains_reconstruct_without_pob() {
             report[mode]["scope"]["later_direct_configuration_consumers_covered"],
             false
         );
+        assert_eq!(
+            inverse[mode]["scope"]
+                .as_object_mut()
+                .unwrap()
+                .remove("selected_quest_construction_reconciled"),
+            Some(json!(true))
+        );
+        for phase in 0..2 {
+            assert_eq!(
+                original[mode]["phases"][phase]["quest_parser_boundaries"]
+                    .as_array()
+                    .unwrap()
+                    .len(),
+                17
+            );
+            assert!(
+                inverse[mode]["phases"][phase]
+                    .as_object_mut()
+                    .unwrap()
+                    .remove("reconciled_quests")
+                    .is_some()
+            );
+            inverse[mode]["phases"][phase]["quest_parser_boundaries"] =
+                original[mode]["phases"][phase]["quest_parser_boundaries"].clone();
+        }
     }
     assert_eq!(report["saved_input_dispositions_changed"], false);
+    assert_eq!(inverse, original);
 }
 
 fn quest_call(key: &str, phase: usize) -> Value {

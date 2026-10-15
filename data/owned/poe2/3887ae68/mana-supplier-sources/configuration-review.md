@@ -6,8 +6,17 @@ the selected inactive boss-skill branch, and the empty custom-text paths. It doe
 not grant native coverage, complete Mana, retire imported configuration leaves,
 or infer missing sources from zero-valued runtime outputs.
 
-`configuration-review.json` is reconstructed by the Rust test
-`owned_mana_configuration_sources`. It uses the existing authenticated source02
+`configuration-review.json` retains the original constructor review unchanged
+(150,147 bytes, SHA-256 `d8f7abf2202ace98318d9c3c80be31ea77c3d9d17a307a174e866fc9c44fa9d5`).
+Existing input publications bind those exact bytes. The expanded quest proof is
+stored separately in `configuration-reward-review.json` (183,350 bytes, SHA-256
+`929e8805a7e1ec72ef9d022354309fde61b1e85c12032173fda6550e23ddcccf`)
+and reconstructed by the Rust test `owned_mana_configuration_sources`.
+An exact inverse checks that only the quest reconciliation and its remaining
+boundaries differ; constructor defaults, callback chains and other source facts
+remain identical. Neither report is an alternate runtime path.
+
+The proof uses the existing authenticated source02
 acquisition and exact selected-input reconciliation. The `off` and `on` labels
 identify the two retained reports and their plain control modes. Both observed
 constructor traces were captured with JIT disabled; the independent plain
@@ -142,3 +151,11 @@ Validation: `cargo test -p poe-optimizer-cli --test owned_mana_configuration_sou
 passes separately (6.30s). Strict Clippy passes (0.67s), and independent review
 is clean. Logs are
 `runs/owned-mana-configuration-rewards-{retain-03,test-03,clippy-02}.log`.
+
+After separating the immutable constructor evidence from the expanded reward
+review, all 19 ordinary tests across this target, scalar defaults, distance and
+Player Withered pass. The one explicit retention test remains ignored. Strict
+Clippy passes for all four targets (0.97s). The five earlier input packets and
+their authoring identities are unchanged; all 24 constructor dependency pins
+across those packets and the new critical-weakness input match their exact files.
+Logs: `runs/owned-configuration-immutable-evidence-{tests,clippy}-01.log`.

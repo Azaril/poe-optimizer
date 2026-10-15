@@ -17,14 +17,24 @@ build support.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
 
-The current reporting-inclusion publication adds only typed preset intent through
+The current [Critical Weakness input packet](../data/owned/poe2/3887ae68/configuration-enemy-critical-weakness-input/README.md)
+preserves the configured raw count on the scenario Enemy. Existing import rules
+select a nonzero Input, then Placeholder, then constructor 20, with exact
+accounting of both saved lanes. Activation, clamping and the critical-chance
+effect remain separate calculations. All five imports and 110 queries survive
+the production CLI publication/rebuild and negative controls. Original05 has
+29 remaining configuration origins and 24 known assumptions; its four complete
+input inventories are still Pending. See the
+[current endpoint](implementation.md#current-checkpoint-critical-weakness-input).
+
+The preceding reporting-inclusion publication adds only typed preset intent through
 existing Import/Core contracts. Exact eligible occurrences retain a Boolean;
 scenario overrides remain explicit. A Complete-empty gameplay owner creates no
 effect or aggregate metric. All five imports preserve their earlier fields,
 queries, IDs and unresolved inventories, with 49 exact preferences added across
 original and archived presets. Aggregate reporting is still unimplemented.
 See the [packet](../data/owned/poe2/3887ae68/reporting-inclusion/README.md) and
-[current endpoint](implementation.md#current-checkpoint-skill-support-and-exact-aggregation).
+[predecessor endpoint](implementation.md#previous-checkpoint-skill-support-and-exact-aggregation).
 
 Delivery now explicitly prioritizes the closest complete unchanged build,
 currently Original05 (Skeletal Sniper). Its four selected input obligations
@@ -98,8 +108,9 @@ build gate closes. The [configured Player Withered amount](../data/owned/poe2/38
 is now a typed raw Scenario input. Saved zero, fractions and values above the
 effective stack cap survive import; downstream applicability, scaling and cap
 remain separate calculations. All-five preservation passes. Original05 now has
-thirty remaining configuration-origin links, with its four overall input
-obligations and complete-build gate still open.
+thirty remaining configuration-origin links at that checkpoint; the subsequent
+Critical Weakness input reduces that to twenty-nine. Its four overall input
+obligations and complete-build gate remain open.
 
 The [selected radius-provider review](../data/owned/poe2/3887ae68/mana-supplier-sources/radius-review.md)
 now excludes both passive-jewel insertion paths for this unchanged selection
@@ -120,6 +131,14 @@ Six uses have directly observed active lists; three slot-specific lists retain
 separate recipe evidence without inventing a later delivery observation. Seven
 ordinary mutation tests and strict Clippy pass. This narrows source construction
 uncertainty while preserving native source/delivery and complete-build gates.
+
+Constructor and quest evidence now have separate immutable reports. The original
+`configuration-review.json` retains the exact bytes authenticated by earlier
+input publications; `configuration-reward-review.json` contains the expanded
+quest proof. Rust checks reconstruct the latter and prove that only its quest
+reconciliation changed. Both are offline evidence for the same native path;
+neither adds another evaluator or importer behavior. The affected 19 ordinary
+Rust checks and strict Clippy pass.
 
 The [guarded Player Life consumer](../data/owned/poe2/3887ae68/player-life-pool/README.md)
 now publishes the final formula on the existing Life Stat using direct checked
@@ -223,7 +242,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-skill-support-and-exact-aggregation).
+[implementation checkpoint](implementation.md#current-checkpoint-critical-weakness-input).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -1404,7 +1423,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-skill-support-and-exact-aggregation),
+live in the [implementation plan](implementation.md#current-checkpoint-critical-weakness-input),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.

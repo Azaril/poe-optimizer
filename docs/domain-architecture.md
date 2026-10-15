@@ -41,6 +41,13 @@ it produces owned records and optional source diagnostics before evaluation/sear
 Neither definition conversion nor saved-build parsing runs for each search candidate.
 A source-format compatibility policy belongs to that importer, not to domain rule execution.
 
+Retained source evidence is immutable once a publication authenticates its bytes.
+An expanded review gets a distinct scoped artifact; it must not replace evidence
+still referenced by an earlier publication. Validate each report against its
+exact inputs and keep the current review discoverable. Preserving evidence does
+not require an old evaluator or importer behavior. Do not accept alternate
+hashes or weaken a receipt check to make changed evidence appear unchanged.
+
 Scaling semantics, artifact encoding and execution layout are separate concerns.
 The [table/curve investigation](owned-scaling-data-investigation.md) evaluates
 lossless range segments and genuine formulas without changing current exact

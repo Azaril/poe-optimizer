@@ -709,194 +709,143 @@
         "invoked": 62,
         "phase": 0,
         "player_records": 52,
-        "quest_parser_boundaries": [],
-        "reconciled_quests": [
+        "quest_parser_boundaries": [
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "b93c92822b46a7d92c60e8a10c1f7a336a0a93780a84ed8c2e46e8b9d046ee92",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1ClearfellBeira",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 1,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 1ClearfellBeira"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "440b7c38bbe70ba51914cc87403774b2a4d2068fa58acc7b65fcfbe7d9e368fa",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1FreythornKing In The Mists",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 3,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 1FreythornKing In The Mists"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "77d708502bf81d67b9189e65a3896b1e8d3a4bbcb25bedd9d73e5a5384b59266",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1Ogham ManorCandlemass",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 5,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questAct 1Ogham ManorCandlemass"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "a214b42e5db9ea960133ec95ba9845bdebb3a06f7f2dafa31dad6cbfef4d3f38",
-            "global_quest_parser_closure": false,
-            "key": "questAct 2Valley of the TitansMedallion",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 7,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 2Valley of the TitansMedallion"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "cdfdd00eea34f5d18e9be2fababa971468f55f841a179bb92f022cf20894fe39",
-            "global_quest_parser_closure": false,
-            "key": "questAct 2Spires of DesharSisters of Garukhan Shrine",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 9,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 2Spires of DesharSisters of Garukhan Shrine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "c9760ce937eede30db3753567379bed3841077407a9763bd004c2a26abc51b71",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Azak BogIgnagduk",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 11,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 3Azak BogIgnagduk"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "960af8d5cc540178c6e57bbe417337c96f20ab87af46020c100b01c09773067b",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Venom CryptsVenom Draught",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 12,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 3Venom CryptsVenom Draught"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "944564876463fe9306f68bf94fd16077abc9a60780079fcce1e324fa5c44113b",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Jiquani's MachinariumBlackjaw",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 13,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 3Jiquani's MachinariumBlackjaw"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "540d886099ed3a87071d4d2169dd4fc1c211c0fa0f1ec3258fe4d76079234340",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Eye of HinekoraSilent Hall",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 16,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Mana"
+            ],
+            "var": "questAct 4Eye of HinekoraSilent Hall"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "26765b5c7893cacdec843cc47792c0729860258b26ecb8db7ec0ff75872d4304",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Eye of HinekoraTribal Medicine",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 17,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Eye of HinekoraTribal Medicine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "9c8c33cceba83c0d5f091ba92a19d30a24fe492030d471d0e216fb5c3ba14ca1",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadTawhoa's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 18,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadTawhoa's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "acab9a20e138f39a5e31c03fe51607e233a267b48a87c688ae0f5a853af55ec8",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadTasalio's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 19,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadTasalio's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "0f8c82650ed7bf6f6c4c24a43293a4f291eab74d0d43b235fb7c04696918446b",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadNgamahu's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 20,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadNgamahu's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "e550932732c2603446712f8bd53bc7c282aedefb258c03cd17b26adbf1baa3cc",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Abandoned PrisonGoddess of Justice",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 22,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Abandoned PrisonGoddess of Justice"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "927df93d9c908c13a1f9a53821840e69fc3ed4170558c199b567cf514652d4e0",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 2Khari CrossingMolten Shrine",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 25,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questInterlude 2Khari CrossingMolten Shrine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "e5f6cf8a6b36028c1d6641591d107b0ae1b7ea2a65a5de5398e88119f0691763",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 2QimahSeven Pillars",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 26,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questInterlude 2QimahSeven Pillars"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "9602c18018eedb04e6888f86704360c4a5fa64f133e9feaf9ddd1bb3620f7632",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 3Kriar VillageLythara",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 27,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questInterlude 3Kriar VillageLythara"
           }
         ],
         "without_apply": 126
@@ -1542,194 +1491,164 @@
         "invoked": 63,
         "phase": 1,
         "player_records": 66,
-        "quest_parser_boundaries": [],
-        "reconciled_quests": [
+        "quest_parser_boundaries": [
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "b93c92822b46a7d92c60e8a10c1f7a336a0a93780a84ed8c2e46e8b9d046ee92",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1ClearfellBeira",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 1,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 1ClearfellBeira"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "440b7c38bbe70ba51914cc87403774b2a4d2068fa58acc7b65fcfbe7d9e368fa",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1FreythornKing In The Mists",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 3,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 1FreythornKing In The Mists"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "77d708502bf81d67b9189e65a3896b1e8d3a4bbcb25bedd9d73e5a5384b59266",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1Ogham ManorCandlemass",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 5,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questAct 1Ogham ManorCandlemass"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "73f599bdb868fe9aedec9d194289fe5e75850da8b32f540925a5abee001618e5",
-            "global_quest_parser_closure": false,
-            "key": "questAct 2Valley of the TitansMedallion",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 2,
-            "source_index": 7,
-            "value": "30% increased Charm Charges Gained\n\t+1 Charm Slot"
+            "argument": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "CharmChargesGained",
+              "CharmLimit"
+            ],
+            "var": "questAct 2Valley of the TitansMedallion"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "cdfdd00eea34f5d18e9be2fababa971468f55f841a179bb92f022cf20894fe39",
-            "global_quest_parser_closure": false,
-            "key": "questAct 2Spires of DesharSisters of Garukhan Shrine",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 9,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 2Spires of DesharSisters of Garukhan Shrine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "c9760ce937eede30db3753567379bed3841077407a9763bd004c2a26abc51b71",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Azak BogIgnagduk",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 11,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 3Azak BogIgnagduk"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "cd256713bc8eac699dd19e4cce182e769164b7bfb47747366019e5947da0196f",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Venom CryptsVenom Draught",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 12,
-            "value": "30% increased Elemental Ailment Threshold"
+            "argument": "30% increased Elemental Ailment Threshold",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "AilmentThreshold"
+            ],
+            "var": "questAct 3Venom CryptsVenom Draught"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "944564876463fe9306f68bf94fd16077abc9a60780079fcce1e324fa5c44113b",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Jiquani's MachinariumBlackjaw",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 13,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 3Jiquani's MachinariumBlackjaw"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "540d886099ed3a87071d4d2169dd4fc1c211c0fa0f1ec3258fe4d76079234340",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Eye of HinekoraSilent Hall",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 16,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Mana"
+            ],
+            "var": "questAct 4Eye of HinekoraSilent Hall"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "79d86b7eddec6a8629c4d4f99176609a897ebe8011d168ca7afb8d4464b2d9b7",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Eye of HinekoraTribal Medicine",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 3,
-            "source_index": 17,
-            "value": "30% increased Global Armour, Evasion and Energy Shield"
+            "argument": "30% increased Global Armour, Evasion and Energy Shield",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Armour",
+              "Evasion",
+              "EnergyShield"
+            ],
+            "var": "questAct 4Eye of HinekoraTribal Medicine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "99eb314af5af1edd5bf26714f3a2b06bda570df50f1c070d62b221f23e72306b",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadTawhoa's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 18,
-            "value": "+5% to Lightning Resistance"
+            "argument": "+5% to Lightning Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 4Halls Of The DeadTawhoa's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "2718d736e9952749fcca5cce423554651d13ad565067d3e1e8a5eda63a9af9e4",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadTasalio's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 19,
-            "value": "+5% to Cold Resistance"
+            "argument": "+5% to Cold Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 4Halls Of The DeadTasalio's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "32d193ebb35ed6efc20421eedffbae591b64ef20a60b94ccc32f6669cfc02509",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadNgamahu's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 20,
-            "value": "+5% to Fire Resistance"
+            "argument": "+5% to Fire Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 4Halls Of The DeadNgamahu's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "e91643689d86dfcddd911d52cbbe1678da25920fba2ce4326d52fbf3ed965332",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Abandoned PrisonGoddess of Justice",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 22,
-            "value": "30% increased Life Recovery from Flasks"
+            "argument": "30% increased Life Recovery from Flasks",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FlaskLifeRecovery"
+            ],
+            "var": "questAct 4Abandoned PrisonGoddess of Justice"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "927df93d9c908c13a1f9a53821840e69fc3ed4170558c199b567cf514652d4e0",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 2Khari CrossingMolten Shrine",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 25,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questInterlude 2Khari CrossingMolten Shrine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "eab8039352f39bd167121a5cc38da423e010c148401d0d092e614751d18d9399",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 2QimahSeven Pillars",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 3,
-            "source_index": 26,
-            "value": "15% increased Global Armour, Evasion and Energy Shield"
+            "argument": "15% increased Global Armour, Evasion and Energy Shield",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Armour",
+              "Evasion",
+              "EnergyShield"
+            ],
+            "var": "questInterlude 2QimahSeven Pillars"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "9602c18018eedb04e6888f86704360c4a5fa64f133e9feaf9ddd1bb3620f7632",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 3Kriar VillageLythara",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 27,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questInterlude 3Kriar VillageLythara"
           }
         ],
         "without_apply": 126
@@ -1742,8 +1661,7 @@
       "native_coverage_authorized": false,
       "quest_parser_closure": false,
       "saved_input_dispositions_changed": false,
-      "selected_none_boss_dynamic_branch_excluded": true,
-      "selected_quest_construction_reconciled": true
+      "selected_none_boss_dynamic_branch_excluded": true
     }
   },
   "on": {
@@ -2452,194 +2370,143 @@
         "invoked": 62,
         "phase": 0,
         "player_records": 52,
-        "quest_parser_boundaries": [],
-        "reconciled_quests": [
+        "quest_parser_boundaries": [
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "b93c92822b46a7d92c60e8a10c1f7a336a0a93780a84ed8c2e46e8b9d046ee92",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1ClearfellBeira",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 1,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 1ClearfellBeira"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "440b7c38bbe70ba51914cc87403774b2a4d2068fa58acc7b65fcfbe7d9e368fa",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1FreythornKing In The Mists",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 3,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 1FreythornKing In The Mists"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "77d708502bf81d67b9189e65a3896b1e8d3a4bbcb25bedd9d73e5a5384b59266",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1Ogham ManorCandlemass",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 5,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questAct 1Ogham ManorCandlemass"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "a214b42e5db9ea960133ec95ba9845bdebb3a06f7f2dafa31dad6cbfef4d3f38",
-            "global_quest_parser_closure": false,
-            "key": "questAct 2Valley of the TitansMedallion",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 7,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 2Valley of the TitansMedallion"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "cdfdd00eea34f5d18e9be2fababa971468f55f841a179bb92f022cf20894fe39",
-            "global_quest_parser_closure": false,
-            "key": "questAct 2Spires of DesharSisters of Garukhan Shrine",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 9,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 2Spires of DesharSisters of Garukhan Shrine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "c9760ce937eede30db3753567379bed3841077407a9763bd004c2a26abc51b71",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Azak BogIgnagduk",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 11,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 3Azak BogIgnagduk"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "960af8d5cc540178c6e57bbe417337c96f20ab87af46020c100b01c09773067b",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Venom CryptsVenom Draught",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 12,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 3Venom CryptsVenom Draught"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "944564876463fe9306f68bf94fd16077abc9a60780079fcce1e324fa5c44113b",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Jiquani's MachinariumBlackjaw",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 13,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 3Jiquani's MachinariumBlackjaw"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "540d886099ed3a87071d4d2169dd4fc1c211c0fa0f1ec3258fe4d76079234340",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Eye of HinekoraSilent Hall",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 16,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Mana"
+            ],
+            "var": "questAct 4Eye of HinekoraSilent Hall"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "26765b5c7893cacdec843cc47792c0729860258b26ecb8db7ec0ff75872d4304",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Eye of HinekoraTribal Medicine",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 17,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Eye of HinekoraTribal Medicine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "9c8c33cceba83c0d5f091ba92a19d30a24fe492030d471d0e216fb5c3ba14ca1",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadTawhoa's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 18,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadTawhoa's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "acab9a20e138f39a5e31c03fe51607e233a267b48a87c688ae0f5a853af55ec8",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadTasalio's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 19,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadTasalio's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "0f8c82650ed7bf6f6c4c24a43293a4f291eab74d0d43b235fb7c04696918446b",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadNgamahu's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 20,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadNgamahu's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "e550932732c2603446712f8bd53bc7c282aedefb258c03cd17b26adbf1baa3cc",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Abandoned PrisonGoddess of Justice",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 22,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Abandoned PrisonGoddess of Justice"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "927df93d9c908c13a1f9a53821840e69fc3ed4170558c199b567cf514652d4e0",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 2Khari CrossingMolten Shrine",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 25,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questInterlude 2Khari CrossingMolten Shrine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "e5f6cf8a6b36028c1d6641591d107b0ae1b7ea2a65a5de5398e88119f0691763",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 2QimahSeven Pillars",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 0,
-            "source_index": 26,
-            "value": "None"
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questInterlude 2QimahSeven Pillars"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "9602c18018eedb04e6888f86704360c4a5fa64f133e9feaf9ddd1bb3620f7632",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 3Kriar VillageLythara",
-            "native_selection": "saved-phase-only",
-            "phase": 0,
-            "player_records": 1,
-            "source_index": 27,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questInterlude 3Kriar VillageLythara"
           }
         ],
         "without_apply": 126
@@ -3285,194 +3152,164 @@
         "invoked": 63,
         "phase": 1,
         "player_records": 66,
-        "quest_parser_boundaries": [],
-        "reconciled_quests": [
+        "quest_parser_boundaries": [
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "b93c92822b46a7d92c60e8a10c1f7a336a0a93780a84ed8c2e46e8b9d046ee92",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1ClearfellBeira",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 1,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 1ClearfellBeira"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "440b7c38bbe70ba51914cc87403774b2a4d2068fa58acc7b65fcfbe7d9e368fa",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1FreythornKing In The Mists",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 3,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 1FreythornKing In The Mists"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "77d708502bf81d67b9189e65a3896b1e8d3a4bbcb25bedd9d73e5a5384b59266",
-            "global_quest_parser_closure": false,
-            "key": "questAct 1Ogham ManorCandlemass",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 5,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questAct 1Ogham ManorCandlemass"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "73f599bdb868fe9aedec9d194289fe5e75850da8b32f540925a5abee001618e5",
-            "global_quest_parser_closure": false,
-            "key": "questAct 2Valley of the TitansMedallion",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 2,
-            "source_index": 7,
-            "value": "30% increased Charm Charges Gained\n\t+1 Charm Slot"
+            "argument": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "CharmChargesGained",
+              "CharmLimit"
+            ],
+            "var": "questAct 2Valley of the TitansMedallion"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "cdfdd00eea34f5d18e9be2fababa971468f55f841a179bb92f022cf20894fe39",
-            "global_quest_parser_closure": false,
-            "key": "questAct 2Spires of DesharSisters of Garukhan Shrine",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 9,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 2Spires of DesharSisters of Garukhan Shrine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "c9760ce937eede30db3753567379bed3841077407a9763bd004c2a26abc51b71",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Azak BogIgnagduk",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 11,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 3Azak BogIgnagduk"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "cd256713bc8eac699dd19e4cce182e769164b7bfb47747366019e5947da0196f",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Venom CryptsVenom Draught",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 12,
-            "value": "30% increased Elemental Ailment Threshold"
+            "argument": "30% increased Elemental Ailment Threshold",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "AilmentThreshold"
+            ],
+            "var": "questAct 3Venom CryptsVenom Draught"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "944564876463fe9306f68bf94fd16077abc9a60780079fcce1e324fa5c44113b",
-            "global_quest_parser_closure": false,
-            "key": "questAct 3Jiquani's MachinariumBlackjaw",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 13,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 3Jiquani's MachinariumBlackjaw"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "540d886099ed3a87071d4d2169dd4fc1c211c0fa0f1ec3258fe4d76079234340",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Eye of HinekoraSilent Hall",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 16,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Mana"
+            ],
+            "var": "questAct 4Eye of HinekoraSilent Hall"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "79d86b7eddec6a8629c4d4f99176609a897ebe8011d168ca7afb8d4464b2d9b7",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Eye of HinekoraTribal Medicine",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 3,
-            "source_index": 17,
-            "value": "30% increased Global Armour, Evasion and Energy Shield"
+            "argument": "30% increased Global Armour, Evasion and Energy Shield",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Armour",
+              "Evasion",
+              "EnergyShield"
+            ],
+            "var": "questAct 4Eye of HinekoraTribal Medicine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "99eb314af5af1edd5bf26714f3a2b06bda570df50f1c070d62b221f23e72306b",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadTawhoa's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 18,
-            "value": "+5% to Lightning Resistance"
+            "argument": "+5% to Lightning Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 4Halls Of The DeadTawhoa's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "2718d736e9952749fcca5cce423554651d13ad565067d3e1e8a5eda63a9af9e4",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadTasalio's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 19,
-            "value": "+5% to Cold Resistance"
+            "argument": "+5% to Cold Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 4Halls Of The DeadTasalio's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "32d193ebb35ed6efc20421eedffbae591b64ef20a60b94ccc32f6669cfc02509",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Halls Of The DeadNgamahu's Test",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 20,
-            "value": "+5% to Fire Resistance"
+            "argument": "+5% to Fire Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 4Halls Of The DeadNgamahu's Test"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "e91643689d86dfcddd911d52cbbe1678da25920fba2ce4326d52fbf3ed965332",
-            "global_quest_parser_closure": false,
-            "key": "questAct 4Abandoned PrisonGoddess of Justice",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 22,
-            "value": "30% increased Life Recovery from Flasks"
+            "argument": "30% increased Life Recovery from Flasks",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FlaskLifeRecovery"
+            ],
+            "var": "questAct 4Abandoned PrisonGoddess of Justice"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "927df93d9c908c13a1f9a53821840e69fc3ed4170558c199b567cf514652d4e0",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 2Khari CrossingMolten Shrine",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 25,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questInterlude 2Khari CrossingMolten Shrine"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "eab8039352f39bd167121a5cc38da423e010c148401d0d092e614751d18d9399",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 2QimahSeven Pillars",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 3,
-            "source_index": 26,
-            "value": "15% increased Global Armour, Evasion and Energy Shield"
+            "argument": "15% increased Global Armour, Evasion and Energy Shield",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Armour",
+              "Evasion",
+              "EnergyShield"
+            ],
+            "var": "questInterlude 2QimahSeven Pillars"
           },
           {
-            "enemy_records": 0,
-            "finite_matrix_record_sha256": "9602c18018eedb04e6888f86704360c4a5fa64f133e9feaf9ddd1bb3620f7632",
-            "global_quest_parser_closure": false,
-            "key": "questInterlude 3Kriar VillageLythara",
-            "native_selection": "saved-phase-only",
-            "phase": 1,
-            "player_records": 1,
-            "source_index": 27,
-            "value": true
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questInterlude 3Kriar VillageLythara"
           }
         ],
         "without_apply": 126
@@ -3485,827 +3322,14 @@
       "native_coverage_authorized": false,
       "quest_parser_closure": false,
       "saved_input_dispositions_changed": false,
-      "selected_none_boss_dynamic_branch_excluded": true,
-      "selected_quest_construction_reconciled": true
+      "selected_none_boss_dynamic_branch_excluded": true
     }
   },
   "remaining": [
-    "arbitrary/noncatalogue quest strings remain outside the finite source domain",
+    "exact quest parser authority for the selected dynamic reward strings",
     "later consumers of configuration fields and emitted control records",
     "native source dispositions and query membership"
   ],
-  "reward_reconciliation": {
-    "choice_completion": {
-      "code": "configuration-roles-not-converted",
-      "id": {
-        "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-        "local": "00000000000001f2"
-      },
-      "kind": "pending"
-    },
-    "controls": 17,
-    "finite_invoked_values": 39,
-    "global_quest_parser_closure": false,
-    "global_reward_completion": {
-      "code": "rewards-not-converted",
-      "id": {
-        "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-        "local": "00000000000001b5"
-      },
-      "kind": "pending"
-    },
-    "native_coverage_authorized": false,
-    "publication": "121dc6bf9980fef3301d18e6f6cb4148884f50a792e38b7599f1db60318ab748",
-    "selected_native_rewards": [
-      {
-        "key": "questAct 1ClearfellBeira",
-        "mapping_sha256": "9fcc965e3f67e0ee751e95137f0645d044af11ce211a313c0c33ac606cc3d116",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.0000000000000027",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001f4"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "2e33ff03bb6de811d1ee370316380d2945eac41c0d315aabcaf80cebb90e8515",
-        "policy_sha256": "e52a20d429798cda236d2a2f62f4dcf9c54dcfaf34096de0d5f9b50bfab0806b",
-        "source_index": 1,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "ColdResist",
-            "source": "Quest:Act 1: Clearfell",
-            "tags": {},
-            "type": "BASE",
-            "value": 10
-          }
-        ],
-        "value": true
-      },
-      {
-        "key": "questAct 1FreythornKing In The Mists",
-        "mapping_sha256": "eebe0ac4c5a02d547d50dc98f617e337cc424a9e25365f0605d984be334e9a63",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.0000000000000028",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001f5"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "cc7ee04b2bb8013a64116623c69858ada2fd10d662b5292e4924b0f3310221b3",
-        "policy_sha256": "5a0a89cdfb9d40c7df79ea70d65e3490c9f84e127f60ba73dd59efacddbe338d",
-        "source_index": 3,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "Spirit",
-            "source": "Quest:Act 1: Freythorn",
-            "tags": {},
-            "type": "BASE",
-            "value": 30
-          }
-        ],
-        "value": true
-      },
-      {
-        "key": "questAct 1Ogham ManorCandlemass",
-        "mapping_sha256": "998226affe48d416de0e603be8104d95f53f650088ef3631dcc7bb9a9b4f4112",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.0000000000000029",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001f6"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "6a4b754fb577528ab2f9f13978755401415e302c86a5b817b1b7e2e7f2d49f4b",
-        "policy_sha256": "06342794eb5ebbe4299dd37c3dfaeafedda8ceec8608a204d169e9f45fe4c1e0",
-        "source_index": 5,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "Life",
-            "source": "Quest:Act 1: Ogham Manor",
-            "tags": {},
-            "type": "BASE",
-            "value": 20
-          }
-        ],
-        "value": true
-      },
-      {
-        "key": "questAct 2Valley of the TitansMedallion",
-        "mapping_sha256": "68ead8a95081818642290e589edee17f5e87f64e6b2507bac9c266b38b17a9e0",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.000000000000002d",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001f8"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "15efee301f12424bdc33b7595778995842abbad4b46c317cbdb4b3378ea5267f",
-        "policy_sha256": "7abc2f6f0f930f5c9422527abbd0424119e970a7d2e40111a33343a2daf4b5db",
-        "source_index": 7,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "CharmChargesGained",
-            "source": "Quest:Act 2: Valley of the Titans",
-            "tags": {},
-            "type": "INC",
-            "value": 30
-          },
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "CharmLimit",
-            "source": "Quest:Act 2: Valley of the Titans",
-            "tags": {},
-            "type": "BASE",
-            "value": 1
-          }
-        ],
-        "value": "30% increased Charm Charges Gained\n\t+1 Charm Slot"
-      },
-      {
-        "key": "questAct 2Spires of DesharSisters of Garukhan Shrine",
-        "mapping_sha256": "77980fdbc979d55b8aa1f0bec84f02d0b625f0c7144b43681b385e3fdafbc9c2",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.000000000000002a",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001f7"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "3efffbfb326562beb40e03b3fecce277fb137feab385c3d0084c2beb39b8cc74",
-        "policy_sha256": "dcfded255284bbf01e63d89ec7a98e898f43a2af2ce169a3aa67be4c09e3881f",
-        "source_index": 9,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "LightningResist",
-            "source": "Quest:Act 2: Spires of Deshar",
-            "tags": {},
-            "type": "BASE",
-            "value": 10
-          }
-        ],
-        "value": true
-      },
-      {
-        "key": "questAct 3Azak BogIgnagduk",
-        "mapping_sha256": "56094044011c021fc9035703dfd9a76fe9e469511719f2c3cb4ebd9bbaa911df",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.0000000000000030",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001f9"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "4589a9913c04f80d661b26bdee7393cae00f5154ef204e779e0371a5df880c7e",
-        "policy_sha256": "4e369ffa58561e82752eff841ca73165210dab35af2a078f7d81f67ffc00ac1a",
-        "source_index": 11,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "Spirit",
-            "source": "Quest:Act 3: Azak Bog",
-            "tags": {},
-            "type": "BASE",
-            "value": 30
-          }
-        ],
-        "value": true
-      },
-      {
-        "key": "questAct 3Venom CryptsVenom Draught",
-        "mapping_sha256": "d30c0293002868a56b84f65dcc74f0c680e22dfe9f77776c7bf3253379c0f83e",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.0000000000000036",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001fb"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "c41b7c1db5f9ea8702107bfc2543286ab557fca6d2a97f5a31797b3fa649e1ce",
-        "policy_sha256": "6ac9907df63da3aa34d74bcf627bc1c384b212dbf939fc29b7bd32091ac33cbe",
-        "source_index": 12,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "AilmentThreshold",
-            "source": "Quest:Act 3: Venom Crypts",
-            "tags": {},
-            "type": "INC",
-            "value": 30
-          }
-        ],
-        "value": "30% increased Elemental Ailment Threshold"
-      },
-      {
-        "key": "questAct 3Jiquani's MachinariumBlackjaw",
-        "mapping_sha256": "f96ee2584059fc14387406d2939086802177c3737281110f14bebc2d6883deda",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.0000000000000031",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001fa"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "b47ece2c4a433472367152634a1f12002c56883c06aed3ddcd5df2b018b60c30",
-        "policy_sha256": "47fd682c0a554d70e1eb06667696f876faf9d4592c9ce4d324b88e63fe74ba85",
-        "source_index": 13,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "FireResist",
-            "source": "Quest:Act 3: Jiquani's Machinarium",
-            "tags": {},
-            "type": "BASE",
-            "value": 10
-          }
-        ],
-        "value": true
-      },
-      {
-        "key": "questAct 4Eye of HinekoraSilent Hall",
-        "mapping_sha256": "9d9b5f1b3b6405531be8392767026019e05b9896d83c78d38f7146e5f0270b16",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.000000000000003e",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001fd"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "b417d192c038d6883c454ae562437cb9dd1aca17dab7d9d2cc25f0b2972859f8",
-        "policy_sha256": "d356221c91cecdc7d6fd090f7da26e1c43273f44b01c04428eea68ecb342bb2c",
-        "source_index": 16,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "Mana",
-            "source": "Quest:Act 4: Eye of Hinekora",
-            "tags": {},
-            "type": "INC",
-            "value": 5
-          }
-        ],
-        "value": true
-      },
-      {
-        "key": "questAct 4Eye of HinekoraTribal Medicine",
-        "mapping_sha256": "b77e757a2f3a7108ca133ae02eb985dcf196a0a0903c71fd845289553b352fbb",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.0000000000000041",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001fe"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "20b3655d2af054ebf80d2a1e3705f4081dbbdc2b5d8cefc5c84a313ffec20c29",
-        "policy_sha256": "fcee7f61fc8e5701d77c93c58509010c774026d282f8fa29339ac5e5e42d98ef",
-        "source_index": 17,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "Armour",
-            "source": "Quest:Act 4: Eye of Hinekora",
-            "tags": [
-              {
-                "type": "Global"
-              }
-            ],
-            "type": "INC",
-            "value": 30
-          },
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "Evasion",
-            "source": "Quest:Act 4: Eye of Hinekora",
-            "tags": [
-              {
-                "type": "Global"
-              }
-            ],
-            "type": "INC",
-            "value": 30
-          },
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "EnergyShield",
-            "source": "Quest:Act 4: Eye of Hinekora",
-            "tags": [
-              {
-                "type": "Global"
-              }
-            ],
-            "type": "INC",
-            "value": 30
-          }
-        ],
-        "value": "30% increased Global Armour, Evasion and Energy Shield"
-      },
-      {
-        "key": "questAct 4Halls Of The DeadTawhoa's Test",
-        "mapping_sha256": "bb9df24340dd922e044e43ef1fdc0c66b555f32bcd99294753ed14e85c6c82e5",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.0000000000000052",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "0000000000000201"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "d89e6b296e68764bd461d100c33e826d3ef5c98c2712085306949a912326778d",
-        "policy_sha256": "02a0085a3521a4ae6b231e0dec639397aba14a76e4eed486a92bd6a5fe712a53",
-        "source_index": 18,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "LightningResist",
-            "source": "Quest:Act 4: Halls Of The Dead",
-            "tags": {},
-            "type": "BASE",
-            "value": 5
-          }
-        ],
-        "value": "+5% to Lightning Resistance"
-      },
-      {
-        "key": "questAct 4Halls Of The DeadTasalio's Test",
-        "mapping_sha256": "b4b1b9f6b719bb9ae3c92623d51c6b4fc79a5a593299bc302522b3f2ba729cc7",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.000000000000004d",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "0000000000000200"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "560b6256155d30908244cdc28dada8b2567595d9f16f0c7872c8beda04a6549e",
-        "policy_sha256": "51e73461e2410c9d937e5ce7645010e3b9ce3012c702f7909832664893d6a997",
-        "source_index": 19,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "ColdResist",
-            "source": "Quest:Act 4: Halls Of The Dead",
-            "tags": {},
-            "type": "BASE",
-            "value": 5
-          }
-        ],
-        "value": "+5% to Cold Resistance"
-      },
-      {
-        "key": "questAct 4Halls Of The DeadNgamahu's Test",
-        "mapping_sha256": "5a4b2beb8ab648fe7f8af2a676287d20aadf1d1b1172d08f9722cd34ec0d6625",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.0000000000000048",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001ff"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "dc2ddf8a5803a89d05b96a8a2eb0cc4f43969c272da5e4219a9ca439be33d7d6",
-        "policy_sha256": "7d41fab7b4c8dfa03c2c16c9fca3261d94b805a797d61d5c7ca3d9f67e604e61",
-        "source_index": 20,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "FireResist",
-            "source": "Quest:Act 4: Halls Of The Dead",
-            "tags": {},
-            "type": "BASE",
-            "value": 5
-          }
-        ],
-        "value": "+5% to Fire Resistance"
-      },
-      {
-        "key": "questAct 4Abandoned PrisonGoddess of Justice",
-        "mapping_sha256": "d76332709800109a647cf547f75c30f94327c9496543f5df78aa2be1b0be54fe",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.000000000000003b",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "00000000000001fc"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "e119d9b56991851a449189ca70ae2b245be6710a9518f573cd603b77dc7e958c",
-        "policy_sha256": "a6c7b3987cc971c35d14b3171054e0b50cb42ecb992c38b682b4358907573451",
-        "source_index": 22,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "FlaskLifeRecovery",
-            "source": "Quest:Act 4: Abandoned Prison",
-            "tags": {},
-            "type": "INC",
-            "value": 30
-          }
-        ],
-        "value": "30% increased Life Recovery from Flasks"
-      },
-      {
-        "key": "questInterlude 2Khari CrossingMolten Shrine",
-        "mapping_sha256": "d2ec7b20ed60c92a2556d6ae5ad2919d21e5c4da6ad352c60d007eb5a3785284",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.0000000000000053",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "0000000000000202"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "b22ee1ddef639c799786f9598ed4783e6701b762df5429dc9998330069fe2009",
-        "policy_sha256": "847377010fa2c39fc3d2539de71e30a84ea689ab3d231fc5dced24f0c5bb5df6",
-        "source_index": 25,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "Life",
-            "source": "Quest:Interlude 2: Khari Crossing",
-            "tags": {},
-            "type": "INC",
-            "value": 5
-          }
-        ],
-        "value": true
-      },
-      {
-        "key": "questInterlude 2QimahSeven Pillars",
-        "mapping_sha256": "8d3bda3bb819a5198b60f1701bf748acf083411782af1d2599c8906cba9bacb5",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.000000000000005a",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "0000000000000203"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "49dae0ecfb7e09d9324a9fab038408d716f8cdc452667b6e43a6a8854a3e6eb3",
-        "policy_sha256": "dab62b721b6edec6c4f1c980c8a2ebf8ae459b4067341887c2d6226464f17216",
-        "source_index": 26,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "Armour",
-            "source": "Quest:Interlude 2: Qimah",
-            "tags": [
-              {
-                "type": "Global"
-              }
-            ],
-            "type": "INC",
-            "value": 15
-          },
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "Evasion",
-            "source": "Quest:Interlude 2: Qimah",
-            "tags": [
-              {
-                "type": "Global"
-              }
-            ],
-            "type": "INC",
-            "value": 15
-          },
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "EnergyShield",
-            "source": "Quest:Interlude 2: Qimah",
-            "tags": [
-              {
-                "type": "Global"
-              }
-            ],
-            "type": "INC",
-            "value": 15
-          }
-        ],
-        "value": "15% increased Global Armour, Evasion and Energy Shield"
-      },
-      {
-        "key": "questInterlude 3Kriar VillageLythara",
-        "mapping_sha256": "89f3350218686de0cc2fd5f591e7349f2f5da8399a8c8147958995d21144f240",
-        "occurrence": {
-          "definition": {
-            "kind": "known",
-            "value": {
-              "key": "def.0000000000000063",
-              "kind": "reward",
-              "namespace": {
-                "game": "poe2",
-                "version": "owned-mechanics-v1"
-              }
-            }
-          },
-          "id": {
-            "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-            "local": "0000000000000204"
-          },
-          "parameters": {
-            "completion": {
-              "kind": "complete"
-            },
-            "members": []
-          }
-        },
-        "owner_sha256": "80be562d120a0a745205bdc26a6ff0d5fd9b79de315ec82fb5a3df6227c97dab",
-        "policy_sha256": "b49f58b866a389a63b8fc576a769168b81d5b470a2df89bfb751803086718c42",
-        "source_index": 27,
-        "source_records": [
-          {
-            "flags": 0,
-            "keyword_flags": 0,
-            "name": "Spirit",
-            "source": "Quest:Interlude 3: Kriar Village",
-            "tags": {},
-            "type": "BASE",
-            "value": 40
-          }
-        ],
-        "value": true
-      }
-    ],
-    "selected_preset": {
-      "lineage": "e1005eedfec7c8e07262d3f0f85fbfa3",
-      "local": "00000000000001f1"
-    }
-  },
   "saved_input_dispositions_changed": false,
   "schema_version": 1,
   "selected_publication": "3ee48944d26b5351ecc267cc2e87637b68a8b6153b7ab2bbc5c906f11e4bd702",

@@ -1,0 +1,48 @@
+[
+  {
+    "selector": {
+      "name": "enemyCriticalWeaknessStacks",
+      "lane": "input_number"
+    },
+    "id": "checked-enemy-critical-weakness-input_number",
+    "destinations": [
+      {
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003390"
+          }
+        },
+        "kind": "adapter"
+      }
+    ]
+  },
+  {
+    "selector": {
+      "name": "enemyCriticalWeaknessStacks",
+      "lane": "placeholder_number"
+    },
+    "id": "checked-enemy-critical-weakness-placeholder_number",
+    "destinations": [
+      {
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003390"
+          }
+        },
+        "kind": "adapter"
+      }
+    ]
+  }
+]

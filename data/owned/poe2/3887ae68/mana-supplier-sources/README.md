@@ -47,8 +47,12 @@ append-only record changes and the empty custom-text path are checked.
 
 `configuration-auxiliary-bodies.json` retains the original control methods
 reached by those constructors; the reviewed notification branch cannot hide
-an unexamined callback. `configuration-review.json` is reconstructed by
+an unexamined callback. `configuration-review.json` preserves the original
+constructor evidence and its published digest. The expanded quest reconciliation
+is retained separately as `configuration-reward-review.json`, reconstructed by
 `owned_mana_configuration_sources` without executing Lua or historical Rust.
+The ordinary test authenticates both exact reports and checks that all
+non-quest constructor evidence is unchanged.
 Missing/altered callbacks, defaults, source identities, nested zero suppliers,
 prior-record rewrites and nonempty custom text are rejected. These are bounded
 direct-writer exclusions, not proof of later direct configuration consumers,

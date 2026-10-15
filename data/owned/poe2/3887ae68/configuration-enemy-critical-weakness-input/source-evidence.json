@@ -1,0 +1,110 @@
+{
+  "spans": [
+    {
+      "body": "\t{ var = \"conditionEnemyCriticalWeakness\", type = \"check\", label = \"Is the enemy Critically Weak\", ifFlag = \"ApplyCriticalWeakness\", tooltip = \"Hits against Critically Weak enemies have up to +10% Critical Strike Chance.\\nThis option will also allow you to input the effect of Critical Weakness.\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"Condition:ApplyCriticalWeakness\", \"FLAG\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },\n\t{ var = \"enemyCriticalWeaknessStacks\", type = \"count\", label = \"Critical weakness stacks:\", ifOption = \"conditionEnemyCriticalWeakness\", tooltip = \"Each stack of critical weakness applies +0.5% to critical strike chance against the affected target\", defaultPlaceholderState = 20, apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"SelfCritChance\", \"BASE\", m_max(m_min(val or 20, 20), 0) / 2, \"Critical Weakness\", { type = \"Condition\", var = \"ApplyCriticalWeakness\" })\n\tend },",
+      "role": "enemy-critical-weakness-control-and-callback",
+      "path": "src/Modules/ConfigOptions.lua",
+      "last": 1913,
+      "sha256": "50dd5c882592f38491c088ecc9ec34c1337498f70aa3a83fcba881807a1b2216",
+      "first": 1908
+    },
+    {
+      "body": "\t\telseif node.elem == \"Placeholder\" then\n\t\t\tif not node.attrib.name then\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Placeholder' element missing name attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\t\tif node.attrib.number then\n\t\t\t\tself.configSets[configSetId].placeholder[node.attrib.name] = tonumber(node.attrib.number)",
+      "role": "saved-placeholder-loading",
+      "path": "src/Classes/ConfigTab.lua",
+      "last": 913,
+      "sha256": "b7c5aa65e5c776a6fd9d775002cfe72a272ac0d726505b27c112933ebe77e6b9",
+      "first": 907
+    },
+    {
+      "body": "\tlocal input = self.configSets[self.activeConfigSetId].input\n\tlocal placeholder = self.configSets[self.activeConfigSetId].placeholder\n\tself:UpdateLevel() -- enemy level handled here because it's needed to correctly set boss stats\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.apply then\n\t\t\tif varData.type == \"check\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(true, modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"count\" or varData.type == \"integer\" or varData.type == \"countAllowZero\" or varData.type == \"float\" then\n\t\t\t\tif input[varData.var] and (input[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\telseif placeholder[varData.var] and (placeholder[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(placeholder[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"list\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"text\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\t-- Apply Custom Modifier groups",
+      "role": "numeric-callback-dispatch",
+      "path": "src/Classes/ConfigTab.lua",
+      "last": 1200,
+      "sha256": "fd243cb8fac97cc84d0e8804c1d0ddef80ff44310943e482d35ba93e1961c098",
+      "first": 1174
+    },
+    {
+      "body": "function ConfigTabClass:CreateConfigSet(configSetId, title)\n\tlocal configSet = { id = configSetId, title = title, input = {}, placeholder = {}, customModsList = { { title = \"Default\", enabled = true, text = \"\" } } }\n\tif not configSetId then\n\t\tconfigSet.id = #self.configSets + 1\n\tend\n\t-- there are default values for input and placeholder that every new config set needs to have\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.var then\n\t\t\tconfigSet.input[varData.var] = varData.defaultState\n\t\t\tconfigSet.placeholder[varData.var] = varData.defaultPlaceholderState\n\t\t\tif varData.defaultIndex then\n\t\t\t\tconfigSet.input[varData.var] = varData.list[varData.defaultIndex].val\n\t\t\tend\n\t\tend\n\tend\n\tself.configSets[configSet.id] = configSet\n\treturn configSet",
+      "role": "fresh-placeholder-constructor",
+      "path": "src/Classes/ConfigTab.lua",
+      "last": 1333,
+      "sha256": "eecdb417eac994f9ab210f213aa7fe2e99740c3988cc2318ad452cb6e20de2a5",
+      "first": 1317
+    },
+    {
+      "body": "\t\t\telse\n\t\t\t\tlocal base = 0\n\t\t\t\tlocal inc = 0\n\t\t\t\tlocal more = 1\n\t\t\t\tif not critOverride then\n\t\t\t\t\tbase = skillModList:Sum(\"BASE\", cfg, \"CritChance\") + (env.mode_effective and enemyDB:Sum(\"BASE\", nil, \"SelfCritChance\") or 0)\n\t\t\t\t\tinc = skillModList:Sum(\"INC\", cfg, \"CritChance\") + (env.mode_effective and enemyDB:Sum(\"INC\", nil, \"SelfCritChance\") or 0)\n\t\t\t\t\tmore = skillModList:More(cfg, \"CritChance\")\n\t\t\t\tend\n\t\t\t\t-- The game uses an integer permyriad chance for each critical strike roll.",
+      "role": "enemy-critical-chance-consumer-boundary",
+      "path": "src/Modules/CalcOffence.lua",
+      "last": 3885,
+      "sha256": "a312d821d020f3dd58626c7b4bf7863fd906bb573bad99af3b242ddf20d909ec",
+      "first": 3876
+    }
+  ],
+  "constructor_dependencies": [
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/source-comparison.json",
+      "sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-review.json",
+      "sha256": "d8f7abf2202ace98318d9c3c80be31ea77c3d9d17a307a174e866fc9c44fa9d5"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-bodies.json",
+      "sha256": "1b470cb8f843655071fe8fe38d7075b974085debf683581813f20ea286a92d20"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-auxiliary-bodies.json",
+      "sha256": "b0e1f431cc964c38040abdab36618401e5f3e77407020b58df364ff31574e1a2"
+    }
+  ],
+  "kind": "configured-enemy-critical-weakness-input",
+  "license": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/LICENSE.md",
+  "schema_version": 1,
+  "archives": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "encoding": "utf8",
+      "artifact_sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "encoding": "utf8",
+      "artifact_sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "artifact_sha256": "3ee439d6209cd88adbca368dd7b3e741e9ed537531a37fcc0a8f4b1863e56147",
+      "bytes": 364029,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcOffence.lua.gz",
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    }
+  ],
+  "scope": {
+    "target": "enemy",
+    "raw_configured_amount": true,
+    "constructor": 20,
+    "count_allows_zero": false,
+    "zero_candidate_is_emission": false,
+    "native_effect": false,
+    "coverage_completed": false,
+    "new_source_execution": false,
+    "mutation_source_observations": false,
+    "admitted_range": [
+      -1000000,
+      1000000
+    ]
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+}

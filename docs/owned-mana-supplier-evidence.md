@@ -98,7 +98,7 @@ and recipient mutation controls. Explicit offline retention and strict Clippy
 pass; independent review is clean. Logs are
 `runs/owned-mana-configuration-rewards-{retain-03,test-03,clippy-02}.log`.
 This source-only review did not change the native package. Its latest successor
-is recorded in the [current checkpoint](implementation.md#current-checkpoint-skill-support-and-exact-aggregation),
+is recorded in the [current checkpoint](implementation.md#current-checkpoint-critical-weakness-input),
 which preserves the open Mana supplier obligations.
 
 ## Limits and next work
