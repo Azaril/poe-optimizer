@@ -1,4 +1,6 @@
 //! Definition-side laws. Concrete candidates, ordering and refusal run in Engine tests.
+#[path = "support/owned_exact_integer_sum.rs"]
+mod exact_integer_sum;
 #[allow(dead_code)]
 #[path = "support/owned_rule_receiver_fixture.rs"]
 mod fixture;

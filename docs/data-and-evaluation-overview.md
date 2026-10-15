@@ -24,7 +24,7 @@ effect or aggregate metric. All five imports preserve their earlier fields,
 queries, IDs and unresolved inventories, with 49 exact preferences added across
 original and archived presets. Aggregate reporting is still unimplemented.
 See the [packet](../data/owned/poe2/3887ae68/reporting-inclusion/README.md) and
-[current endpoint](implementation.md#current-checkpoint-reporting-inclusion-intent).
+[current endpoint](implementation.md#current-checkpoint-skill-support-and-exact-aggregation).
 
 Delivery now explicitly prioritizes the closest complete unchanged build,
 currently Original05 (Skeletal Sniper). Its four selected input obligations
@@ -223,7 +223,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-reporting-inclusion-intent).
+[implementation checkpoint](implementation.md#current-checkpoint-skill-support-and-exact-aggregation).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -337,6 +337,17 @@ while native tests distinguish absence from a present zero and preserve Partial
 refusal. The passive's cost-conversion effect, item-granted origins, other resource
 suppliers and complete-plan admission remain separate coverage obligations.
 Data adoption adds no resource-specific native engine behavior and does not finish Mana.
+
+An independent generic `ExactIntegerSum` reduction is implemented and validated
+in current V27. Data admits it only for checked Integer Add queries
+with unordered membership, zero identity and no ranks. Engine accumulates all
+admitted occurrences in checked `i128`, then checks the final public Integer
+range. It preserves canonical failures and existing source, stage and coverage
+checks; raw contribution reads cannot bypass the checked query. This provides
+the numerical prerequisite for repeated obligations without assigning local-ID
+order to arithmetic. The [proposed obligation signature and amount channel](owned-resource-obligation-aggregation-proposal.md)
+remain a separate, unimplemented model decision; current reservation data is
+still Action-owned.
 
 The [current final Mana program](../data/owned/poe2/3887ae68/mana-direct-queries/README.md)
 joins those native inputs using ordinary typed arithmetic and lazy override
@@ -1393,7 +1404,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-reporting-inclusion-intent),
+live in the [implementation plan](implementation.md#current-checkpoint-skill-support-and-exact-aggregation),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.
@@ -1890,12 +1901,16 @@ unresolved. This uses existing typed operations without a new runtime contract.
 The real Actor owner remains Partial, and final Life is not yet published.
 
 The [resource-obligation proposal](owned-resource-obligations-proposal.md) was
-accepted on October 15; implementation remains pending. It addresses the current
+accepted on October 15; implementation is partial. It addresses the current
 reservation component's dependence on requested Actions: a sustained skill must
 consume its resource independently of which
 metric is displayed. Exact Skill support recipients are implemented in the
 existing receiving contract. Obligation effects, explicit Action dependencies
-and payer aggregation remain planned work.
+and payer aggregation remain planned work. The existing Sniper flat branch
+reads only Skill inputs and can migrate before named Action dependencies are
+added for the mechanics that need them. The generic exact Integer reduction is
+implemented and validated; the [amount-channel signature](owned-resource-obligation-aggregation-proposal.md)
+is a separate pending public-contract review.
 
 ## Where the older interpreter and original Lua still fit
 

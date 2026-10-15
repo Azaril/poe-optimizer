@@ -197,6 +197,18 @@ fn group_type<I: DefinitionSchemaIndex>(
     index: &I,
 ) -> Result<ComputedValueType, RuleStorageError> {
     let invalid = RuleStorageError::Structure;
+    if group.reduction == ContributionReduction::ExactIntegerSum {
+        if query.contribution != ContributionKind::Add
+            || *stat != ComputedValueType::Integer
+            || group.ordering != ContributionOrdering::Unordered
+            || !matches!(&group.empty, Some(ParameterValue::Integer(value)) if value.get() == 0)
+        {
+            return Err(invalid(
+                "exact integer sum requires Integer Add, unordered membership and integer zero",
+            ));
+        }
+        return Ok(ComputedValueType::Integer);
+    }
     if query.contribution == ContributionKind::Flag {
         if *stat != ComputedValueType::Boolean
             || group.empty != Some(ParameterValue::Boolean(false))
@@ -777,6 +789,17 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
     ) {
         work(usage, limits, p.reads.len().saturating_add(p.effects.len()))?;
         for read in &p.reads {
+            if matches!(
+                read.source,
+                RuleReadSource::Contributions {
+                    reduction: ContributionReduction::ExactIntegerSum,
+                    ..
+                }
+            ) {
+                return Err(RuleStorageError::Structure(
+                    "exact integer sum requires checked query membership",
+                ));
+            }
             if let RuleReadSource::Contributions {
                 contribution,
                 reduction,
@@ -946,6 +969,14 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
         let mut members = BTreeSet::new();
         let mut application_members = BTreeSet::new();
         for group in &query.groups {
+            if group.reduction == ContributionReduction::ExactIntegerSum
+                && !RuleOperationsVersion::parse(input.operations_version.as_str())
+                    .is_some_and(RuleOperationsVersion::supports_exact_integer_sum)
+            {
+                return Err(RuleStorageError::Structure(
+                    "exact integer sum requires owned-domain-operations-v27",
+                ));
+            }
             let ty = group_type(query, group, &stat.value, index)?;
             if catalog
                 .group_types

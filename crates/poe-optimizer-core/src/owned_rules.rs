@@ -16,7 +16,7 @@ pub const OWNED_RULE_PACKAGE_VERSION: u32 = 3;
 /// Baseline operation subset used when authors do not opt into newer capabilities.
 /// Package schema and content identity domains always use the current format.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
-/// Coherent numeric selection and checked numeric expression domains.
+/// Coherent numeric selection, checked numeric domains and exact integer sums.
 pub const OWNED_RULE_OPERATIONS_V27: &str = "owned-domain-operations-v27";
 /// Exact Action self-contributions and checked current-Action query reads.
 pub const OWNED_RULE_OPERATIONS_V26: &str = "owned-domain-operations-v26";
@@ -208,6 +208,9 @@ impl RuleOperationsVersion {
     pub const fn supports_numeric_domains(self) -> bool {
         self.revision() >= 27
     }
+    pub const fn supports_exact_integer_sum(self) -> bool {
+        self.revision() >= 27
+    }
     /// Current explicit Skill participation in V4 readiness metadata.
     pub const fn supports_skill_participation(self) -> bool {
         self.revision() >= 21
@@ -336,7 +339,8 @@ pub struct ContributionQuery {
 pub struct ContributionGroup {
     pub id: OwnedDefinitionKey,
     pub reduction: ContributionReduction,
-    /// Numeric folds require semantic order; Any and RequireAgreement forbid ranks.
+    /// Ordered numeric folds require ranks. Any, RequireAgreement and
+    /// ExactIntegerSum are unordered and forbid ranks.
     pub ordering: ContributionOrdering,
     /// Fold identity. Selection requires None: absence is not a numeric sentinel.
     pub empty: Option<ParameterValue>,
@@ -741,6 +745,10 @@ pub enum ContributionReduction {
     Any,
     /// Complete unordered numeric domain. Absence differs from selected zero.
     RequireAgreement,
+    /// Checked-query-only Integer Add reduction. Accumulate all active terms
+    /// exactly before checking the final BoundedInteger range. No semantic
+    /// ordering or intermediate bounded-integer rounding is introduced.
+    ExactIntegerSum,
     Sum,
     Product,
 }

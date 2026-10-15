@@ -1,5 +1,5 @@
 //! Canonical failure selection for an unordered contribution reduction. This
-//! order chooses diagnostic provenance only; it never changes Boolean truth.
+//! order chooses diagnostic provenance only, never a Boolean or numeric result.
 use super::*;
 use std::cmp::Ordering;
 

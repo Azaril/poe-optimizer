@@ -542,7 +542,8 @@ impl Sources<'_> {
                 }
                 (ContributionOrdering::Unordered, None) => {
                     // Stable identity order makes binding structure deterministic.
-                    // It has no semantic rank or effect on Any or diagnostic priority.
+                    // It has no numeric authority for exact integer sums, no
+                    // effect on Any, and no diagnostic priority.
                     let canonical = (identity, source, &invocation.entity);
                     if unordered
                         .entry(&group.id)

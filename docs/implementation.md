@@ -105,7 +105,14 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: reporting inclusion intent
+## Current checkpoint: Skill support and exact aggregation
+
+Exact Skill support recipients and the generic exact Integer reduction now run
+in native Core/Data/Engine. They are validated prerequisites for the accepted
+Skill-owned reservation migration; obligation effects and payer binding are
+still unfinished. The published game-data package remains unchanged below.
+
+### Published data: reporting inclusion intent
 
 The [reporting-inclusion packet](../data/owned/poe2/3887ae68/reporting-inclusion/README.md)
 preserves saved group inclusion as a typed Boolean on each eligible exact Skill
@@ -191,6 +198,52 @@ Skill owner/program inventory, checked payer aggregation and named exact Action
 dependencies, then migrate the current reservation data. The live reservation
 consumer remains Action-owned. Skill receiving alone does not make it
 query-independent or complete any of the five builds.
+
+### Exact Integer aggregation
+
+The generic `ExactIntegerSum` reduction is implemented in the current V27
+contract. It admits checked Add queries over Integer Stats, unordered membership,
+integer zero and no ranks. Worker execution accumulates every active occurrence
+in checked `i128`, then checks the final public Integer range. The unchanged
+65,536-effect cap proves the intermediate bound. Signed cancellation is exact;
+local IDs and discovery order carry no numeric authority. Unknown contributors,
+Partial membership and final overflow retain explicit failures. Raw reads cannot
+bypass the checked query, and ordinary Sum/Product behavior is unchanged.
+
+Validation passes **143 targeted tests**: Core/Data 33, Engine library 70 and
+Engine integration 40. The six new integration cases reuse existing repeated
+Reward-to-Player authority; they do not pretend that Skill-to-payer delivery is
+implemented. Kernel controls cover the full hard effect limit, cancellation,
+canonical failures and work budgets. End-to-end checks include distinct duplicate
+sources, missing values, inactive occurrences, scratch reuse and Rayon. Strict
+targeted Clippy passes; independent code and identity reviews are clean. Earlier
+test-authoring errors remain in their failed logs; runtime validation was not
+relaxed. Evidence: `runs/owned-exact-integer-sum-data-02.log`,
+`runs/owned-exact-integer-sum-data-clippy-01.log`,
+`runs/owned-exact-integer-sum-engine-lib-02.log`,
+`runs/owned-exact-integer-sum-engine-regression-05.log`,
+`runs/owned-exact-integer-sum-engine-actor-07.log` and
+`runs/owned-exact-integer-sum-engine-clippy-01.log`.
+
+The actual all-five CLI publication regression also passes (44.85s), rebuilding
+all 18 artifacts byte-for-byte from the same inputs into
+`runs/owned-exact-integer-sum-publication-01/package`. Input endpoint `e1c2abd299…`,
+compiled identity `6401dc0a…`, 64,432,702 bytes, 187 provenance entries, 110 queries
+and selected issue counts **106/117/109/123/4** remain unchanged. No game-data
+regeneration or source acquisition is required. Evidence:
+`runs/owned-exact-integer-sum-publication-01.log` and
+`runs/owned-exact-integer-sum-artifact-comparison-01.json`. Complete native
+originals remain **0/5**.
+
+**Resume:** obligation amounts must stay separate from ordinary pool contributions.
+The [aggregation refinement](owned-resource-obligation-aggregation-proposal.md)
+records the proposed resource/kind/quantum signature and amount channel; the
+owner question is pending. Do not implement those public fields until resolved.
+The current Sniper intrinsic and ordinary flat programs use no Action-specific
+read, so they can migrate after the obligation/payer contract and before the later
+named Action-dependency extension. Unsupported Action-dependent branches must
+stay explicit throughout that cutover. This generic reducer adds no obligation
+effect, payer authority, reservation data or complete-build coverage.
 
 ## Previous checkpoint: Player Spirit pool
 
@@ -423,9 +476,9 @@ supplier and numeric-order admission remain explicit gaps. Capacity is distinct
 from reservation. The owner accepted
 [Skill-owned resource obligations](owned-resource-obligations-proposal.md) on
 October 15: explicit payer/resource identity, exact Action dependencies only
-where mechanically required, and checked Skill support recipients. After the
-completed equipment-source and reporting-intent checkpoints, implement the bounded
-contract and migrate existing reservation data, removing the superseded live
+where mechanically required, and checked Skill support recipients. The receiving
+extension is implemented and validated. Complete the obligation/payer contract
+and migrate existing reservation data, removing the superseded live
 Action-owned path. Prove invariance to unrelated metric-query changes alongside
 participation, repeated sources, counts, payer identity, dependency cycles and
 Action-sensitive controls. Existing numerical and complete-plan gaps remain
@@ -516,13 +569,17 @@ including exact twenty-artifact reproduction, all-five XML censuses and failure
 controls (`runs/ci-owned-tree-receipts-01.log`).
 The completed Windows cli-0 job reports the same old weapon-profile manifest
 receipt failure in both feature profiles, with no new defect
-(`runs/ci-job-116230401591.log`). The latest inspected push `a70165f1` has
-pending run `38692656700`;
+(`runs/ci-job-116230401591.log`). The latest inspected push `b81bae66` has
+pending run `38695918235`;
 main concurrency preserves the running older revision and coalesces pending revisions. Recent
 jobs have completed, but live job logs are unavailable, so individual long steps
 have not been diagnosed as hung. Do not report the queued revision as green.
 The subsequent Windows cli-2 job repeats only the already-repaired item-base
 manifest receipt failure in both profiles (`runs/ci-job-116230401646.log`).
+Windows cli-1 also completed with only the same old class/intrinsic/passive-view
+manifest and tree-transition failures in both profiles
+(`runs/ci-job-116230401733.log`). At 07:07 UTC, only Windows cli-3 remained
+running on that older revision. No new failure class was found.
 The older revision's Windows and Ubuntu PoB jobs have completed successfully; this is not a
 hosted result for the current main revision.
 Evidence: `runs/ci-import-c4a62464-job116230401602.log` and
@@ -1525,14 +1582,16 @@ numerical outputs when game intent remains unresolved.
    The [resource-obligation proposal](owned-resource-obligations-proposal.md)
    now authorizes exact Skill-owned sustained reservation with explicit Action
    dependencies where a mechanic needs a selected part/mode/stat set. It also
-   identifies the missing Skill support-recipient contract. The owner accepted
+   identified the required Skill support-recipient contract. The owner accepted
    it on October 15; implementation must not manufacture Action demand from
    metric queries. Validate contrasting reservation/cost shapes,
    migrate the existing live consumer, and prove query-independent results.
-   Implement the exact Skill support endpoint first in the existing Core/Data/
-   Engine receiving contract, retaining preparation, participation and provider
-   checks. Then add the checked obligation census, exact payer/Action bindings
-   and aggregation before migrating the live reservation data. Reuse canonical
+   The exact Skill support endpoint is now implemented and validated in Core/Data/
+   Engine, retaining preparation, participation and provider checks. Next add
+   the checked obligation census, payer binding and aggregation, then migrate
+   the current Sniper data. Its ordinary flat branch needs no Action dependency;
+   add named exact Action bindings before admitting Action-sensitive branches.
+   Reuse canonical
    Actor pool Stat identities and the existing occurrence/value graph; no new
    resource catalogue, second evaluator or compatibility path is required.
    Represent obligations as typed effects in the existing complete/Partial
@@ -1626,11 +1685,11 @@ numerical outputs when game intent remains unresolved.
    separate consumer/gameplay evidence. A missing PoB handler is not proof that
    the game mechanic is inert. Keep these gaps explicit rather than closing a
    support from admission alone.
-   Sniper reservation needs build-driven parent Action contexts without
-   hidden reference queries. Current Action contexts come from real queries,
-   usage/choices and receiving declarations; merely owning a parent Action program
-   does not request that context. Establish genuine build-derived demand and review
-   its selection contract rather than adding fake usage or queries to make it run.
+   Sniper reservation must migrate from its current Action-owned programs to
+   the accepted Skill-owned obligation model. Its ordinary flat branch reads no
+   Action-specific property, so no parent Action or hidden query is needed for
+   that migration. Later part/mode/stat-set-dependent branches require explicit
+   named dependency binding; metric demand cannot choose or activate them.
    Quality, infusion, Gigantic, physical-range damage
    and complete offence/defence follow their measured input dependencies. Finalize
    and evaluate the exact unchanged request before claiming a working build.
@@ -1838,7 +1897,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Action-routing format retirement | Inventory the remaining V1/V2 readers and publication/test consumers, migrate useful callers to one current format with explicit selector coverage, then remove obsolete branches. Do not convert unknown selector coverage to Complete-empty. Preserve source witnesses and all-five/routing regressions; this cleanup follows the selected flat-damage work. [Retirement scope](legacy-retirement.md#other-current-compatibility-investigations). |
 | Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. Shared exact-provider proof now serves raw quality and requested-count import independently. Same-definition allocations in different presets remain distinct. Enabled/global/reporting dispositions and usage inventory closure remain open. [Contract and gates](owned-generated-skill-usage-proposal.md). |
 | Requested participation | [Common gate](owned-skill-participation-proposal.md), unified typed Import and first Sniper packet are validated. All-five/source/native checks preserve count, effect controls and mechanical availability. Next close genuine parameter inventories for remaining skills before readiness publication; no PoB preview bypass or default is imported. Full-original coverage remains open. |
-| Resource ownership and demand | [Accepted October 15](owned-resource-obligations-proposal.md): sustained reservation is independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Define Skill support recipients and contrast cost conversion, mines and stance/toggle selection; then migrate the current Action reservation bodies and validate query invariance. Public contract and migration are not yet implemented. Gigantic's producer/status and isolated Life/Damage-factor packets are published; final reservation delivery remains open. |
+| Resource ownership and demand | [Accepted October 15](owned-resource-obligations-proposal.md): sustained reservation is independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Skill support recipients and generic exact Integer aggregation are implemented and validated; [amount-channel signature](owned-resource-obligation-aggregation-proposal.md) awaits review. Obligation effects, payer binding and live reservation migration are still unimplemented. The current Sniper flat branch requires no Action dependency; later cost conversion, mines and stance/toggle branches need their own reviewed declarations. Gigantic's producer/status and isolated Life/Damage-factor packets are published; final reservation delivery remains open. |
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |

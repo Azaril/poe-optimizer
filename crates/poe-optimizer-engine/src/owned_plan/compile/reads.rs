@@ -621,10 +621,15 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 empty,
             } => {
                 if *contribution == ContributionKind::Flag
-                    || *reduction == ContributionReduction::Any
+                    || matches!(
+                        reduction,
+                        ContributionReduction::Any
+                            | ContributionReduction::RequireAgreement
+                            | ContributionReduction::ExactIntegerSum
+                    )
                 {
                     return Err(PlanError::Invalid(
-                        "Boolean contributions require a checked contribution query".into(),
+                        "Boolean, selection and exact integer reductions require a checked contribution query".into(),
                     ));
                 }
                 PendingRead::Contributions(

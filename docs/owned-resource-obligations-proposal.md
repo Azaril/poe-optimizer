@@ -83,6 +83,11 @@ copy of that obligation. Complete/Partial program ownership already accounts
 for untranslated mechanics, so a second top-level obligation catalogue would
 duplicate authority. This effect and its binding are planned, not implemented.
 
+The [aggregation refinement](owned-resource-obligation-aggregation-proposal.md)
+records the next concrete query-signature and integer-quantum representation for
+owner review. It keeps obligation amounts separate from resource-pool additions
+and addresses repeated sources without inventing numeric ordering.
+
 Extend the existing checked program-effect query address with a separately
 validated obligation-to-payer origin. Validate the actual effect kind and its
 resource, payer and numeric type before admitting membership. Ordinary Skill

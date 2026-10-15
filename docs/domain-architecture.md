@@ -455,6 +455,16 @@ Its exact source joins a checked query without adding a resource-specific
 engine branch or importing Lua database-order precedence. Admission of that
 effect does not close the owner's other mechanics or item-granted origins.
 
+Repeated source occurrences need no numeric ordering when a query declares a
+proven exact domain. The generic `ExactIntegerSum` extension to current V27 is
+implemented and validated: a checked Add query over Integer Stats, with unordered members,
+zero identity and no ranks. It accumulates in a bounded wider integer and checks
+the final `BoundedInteger` range; unknown contributors and incomplete membership
+still block. Ordinary ordered Sum/Product retain their existing behavior.
+The [obligation aggregation proposal](owned-resource-obligation-aggregation-proposal.md)
+separately awaits review of resource/kind/quantum identity and payer channels.
+The reducer alone adds no resource ownership or reservation coverage.
+
 The [passive topology contract](owned-passive-topology.md) separates implicit roots,
 physical allocations, attached choices, scope eligibility and injected legality budgets.
 It prevents source node lists or UI point totals from becoming native game semantics.

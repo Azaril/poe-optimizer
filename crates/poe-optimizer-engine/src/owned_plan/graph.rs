@@ -1,6 +1,8 @@
 //! Worker execution of a prebound effect DAG. No schema/source lookup or serialization.
 use super::*;
 mod diagnostic_order;
+#[cfg(test)]
+mod exact_integer_sum_tests;
 
 fn invalid(message: &str) -> PlanError {
     PlanError::Invalid(message.into())
@@ -15,8 +17,8 @@ fn value_at(values: &[Option<EffectValue>], index: usize) -> Result<&EffectValue
         .ok_or_else(|| invalid("effect dependency is absent or not scheduled before its consumer"))
 }
 
-/// Numeric left folds retain the compiler's semantic order. Boolean Any is
-/// commutative; its failure handling still inspects every active contributor.
+/// Ordinary numeric left folds retain the compiler's semantic order. Unordered
+/// exact integer sums and Boolean Any use their own all-member reductions.
 fn combine(
     left: ParameterValue,
     right: &ParameterValue,
@@ -28,8 +30,12 @@ fn combine(
             let result = match reduction {
                 ContributionReduction::Sum => a.get().checked_add(b.get()),
                 ContributionReduction::Product => a.get().checked_mul(b.get()),
-                ContributionReduction::Any | ContributionReduction::RequireAgreement => {
-                    return Err(invalid("Any requires Boolean contributions"));
+                ContributionReduction::Any
+                | ContributionReduction::RequireAgreement
+                | ContributionReduction::ExactIntegerSum => {
+                    return Err(invalid(
+                        "unordered reduction cannot use a numeric left fold",
+                    ));
                 }
             }
             .and_then(|v| BoundedInteger::new(v).ok());
@@ -45,8 +51,12 @@ fn combine(
             let value = match reduction {
                 ContributionReduction::Sum => a.value() + b.value(),
                 ContributionReduction::Product => a.value() * b.value(),
-                ContributionReduction::Any | ContributionReduction::RequireAgreement => {
-                    return Err(invalid("Any requires Boolean contributions"));
+                ContributionReduction::Any
+                | ContributionReduction::RequireAgreement
+                | ContributionReduction::ExactIntegerSum => {
+                    return Err(invalid(
+                        "unordered reduction cannot use a numeric left fold",
+                    ));
                 }
             };
             Ok(match FiniteQuantity::new(value, a.unit().clone()) {
@@ -170,6 +180,12 @@ pub(super) fn read(
             empty,
             complete: true,
         } => {
+            if *reduction == ContributionReduction::ExactIntegerSum {
+                if !matches!(empty, ParameterValue::Integer(value) if value.get() == 0) {
+                    return Err(invalid("ExactIntegerSum requires an Integer zero identity"));
+                }
+                return exact_integer_sum(effects, values, node, work);
+            }
             if *reduction == ContributionReduction::Any {
                 if *empty != ParameterValue::Boolean(false) {
                     return Err(invalid("Any requires a Boolean false identity"));
@@ -237,6 +253,56 @@ pub(super) fn read(
             Ok(known(accumulated.unwrap_or_else(|| empty.clone())))
         }
     }
+}
+
+/// Binding admits distinct concrete occurrences under the unchanged global
+/// 65,536-effect ceiling. BoundedInteger magnitudes are below 2^53, so every
+/// prefix fits below 2^69. Keep checked arithmetic here and apply the public
+/// integer range only to the complete sum: cancellation is order-independent.
+fn exact_integer_sum(
+    effects: &[usize],
+    values: &[Option<EffectValue>],
+    node: &OwnedDefinitionKey,
+    work: &mut usize,
+) -> Result<EffectValue> {
+    let mut accumulated = Some(0_i128);
+    let mut failure = None;
+    for index in effects {
+        charge(work, 1)?;
+        match value_at(values, *index)? {
+            EffectValue::Inactive => {}
+            EffectValue::Known {
+                value: ParameterValue::Integer(value),
+            } => {
+                accumulated = accumulated.and_then(|sum| sum.checked_add(i128::from(value.get())));
+            }
+            EffectValue::Known { .. } => {
+                return Err(invalid("ExactIntegerSum requires Integer contributions"));
+            }
+            blocked => {
+                if failure
+                    .is_none_or(|previous| diagnostic_order::compare(blocked, previous).is_lt())
+                {
+                    failure = Some(blocked);
+                }
+            }
+        }
+    }
+    if let Some(failure) = failure {
+        return Ok(failure.clone());
+    }
+    Ok(
+        match accumulated
+            .and_then(|value| i64::try_from(value).ok())
+            .and_then(|value| BoundedInteger::new(value).ok())
+        {
+            Some(value) => known(ParameterValue::Integer(value)),
+            None => EffectValue::NumericalError {
+                node: node.clone(),
+                reason: NumericalFailure::IntegerOverflow,
+            },
+        },
+    )
 }
 
 /// Gates are a closed conjunction. A false/Inactive gate dominates unknown or

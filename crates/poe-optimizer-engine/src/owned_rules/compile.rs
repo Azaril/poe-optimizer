@@ -574,6 +574,15 @@ fn reduction_identity(
     value: &ComputedValueType,
     path: &str,
 ) -> Result<(), RuleError> {
+    if reduction == ContributionReduction::ExactIntegerSum {
+        return check(
+            kind == ContributionKind::Add
+                && *value == ComputedValueType::Integer
+                && matches!(empty, ParameterValue::Integer(value) if value.get() == 0),
+            path,
+            "ExactIntegerSum requires Add with Integer stat and zero identity",
+        );
+    }
     if kind == ContributionKind::Flag {
         return check(
             reduction == ContributionReduction::Any
@@ -863,10 +872,12 @@ fn read<I: DefinitionSchemaIndex>(
                     || (!matches!(kind, ContributionKind::Flag | ContributionKind::Override)
                         && !matches!(
                             reduction,
-                            ContributionReduction::Any | ContributionReduction::RequireAgreement
+                            ContributionReduction::Any
+                                | ContributionReduction::RequireAgreement
+                                | ContributionReduction::ExactIntegerSum
                         )),
                 path,
-                "Boolean contributions require a checked contribution query",
+                "Boolean, selection and exact integer reductions require a checked contribution query",
             )?;
             let st = stat(id, *e, p.context, owner, index, path)?;
             validate_value(empty, index, path)?;
@@ -1336,6 +1347,12 @@ fn program<I: DefinitionSchemaIndex>(
                         && group.reduction != ContributionReduction::Any),
                 "operations_version",
                 "Boolean contributions require owned-domain-operations-v22",
+            )?;
+            check(
+                operations.supports_exact_integer_sum()
+                    || group.reduction != ContributionReduction::ExactIntegerSum,
+                "operations_version",
+                "exact integer sum requires owned-domain-operations-v27",
             )?;
             authority = ContributionReadAuthority::CheckedQuery;
             mapped = RuleRead {

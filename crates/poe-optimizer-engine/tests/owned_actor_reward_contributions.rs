@@ -1,6 +1,8 @@
 //! Exact source membership over shared actors, rewards and independently supplied actors.
 #[path = "support/owned_empty_support_contribution_fixture.rs"]
 mod empty_support;
+#[path = "support/owned_exact_integer_sum.rs"]
+mod exact_integer_sum;
 #[allow(dead_code)]
 #[path = "support/owned_plan_fixture.rs"]
 mod support;

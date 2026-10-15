@@ -67,6 +67,7 @@ fn explicit_operation_versions_preserve_capabilities_and_plan_domains() {
         );
         assert_eq!(version.supports_numeric_selection(), revision >= 27);
         assert_eq!(version.supports_numeric_domains(), revision >= 27);
+        assert_eq!(version.supports_exact_integer_sum(), revision >= 27);
     }
     assert_eq!(OWNED_RULE_OPERATIONS_V11, "owned-domain-operations-v11");
     assert_eq!(OWNED_RULE_OPERATIONS_V12, "owned-domain-operations-v12");
@@ -87,6 +88,17 @@ fn explicit_operation_versions_preserve_capabilities_and_plan_domains() {
     assert_eq!(OWNED_RULE_PACKAGE_VERSION, 3);
     assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V14);
     assert!(RuleOperationsVersion::parse(OWNED_RULE_OPERATIONS_VERSION).is_some());
+}
+
+#[test]
+fn exact_integer_sum_has_an_explicit_wire_identity() {
+    let value = ContributionReduction::ExactIntegerSum;
+    let wire = serde_json::to_string(&value).unwrap();
+    assert_eq!(wire, r#""exact_integer_sum""#);
+    assert_eq!(
+        serde_json::from_str::<ContributionReduction>(&wire).unwrap(),
+        value
+    );
 }
 
 #[test]
