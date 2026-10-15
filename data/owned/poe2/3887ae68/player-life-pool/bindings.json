@@ -1,0 +1,88 @@
+{
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "channels": [
+    {
+      "source": "LifeConvertToEnergyShield",
+      "owned": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003383"
+      }
+    },
+    {
+      "source": "LifeConvertToArmour",
+      "owned": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003384"
+      }
+    },
+    {
+      "source": "LifeConvertToEvasion",
+      "owned": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003385"
+      }
+    },
+    {
+      "source": "ExtraLife",
+      "owned": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003386"
+      }
+    },
+    {
+      "source": "LifeTotal",
+      "owned": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003387"
+      }
+    },
+    {
+      "source": "ChaosInoculation",
+      "owned": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003388"
+      }
+    }
+  ],
+  "final": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000311a"
+  },
+  "scope": {
+    "final_player_stat_only": true,
+    "full_life_condition": false,
+    "lowest_life_mana_stat": false,
+    "source_execution_order": false,
+    "supplier_admission": false,
+    "positive_transform_source_proof": false,
+    "native_source_names": false
+  }
+}

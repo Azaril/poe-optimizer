@@ -93,6 +93,11 @@ mod player_life_contribution_native;
 mod player_life_family;
 #[path = "support/owned_sniper_player_life_inputs.rs"]
 mod player_life_inputs_native;
+#[allow(dead_code)]
+#[path = "support/owned_player_life_pool.rs"]
+mod player_life_pool_family;
+#[path = "support/owned_sniper_player_life_pool.rs"]
+mod player_life_pool_native;
 use accuracy_family::preservation as migration_preservation;
 #[allow(dead_code)]
 #[path = "support/owned_release_fixture.rs"]

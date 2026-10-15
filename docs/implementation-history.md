@@ -1,10 +1,188 @@
-> Historical snapshots through the native Attack-flat collection checkpoint on 2026-10-14.
+> Historical snapshots through the configured Player Withered checkpoint on 2026-10-14.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-14 checkpoint: configured Player Withered input
+
+The [Withered input packet](../data/owned/poe2/3887ae68/configuration-player-withered-input/README.md)
+adds one typed Scenario assumption for the Player, ExternalInput `3382` in
+existing Count Unit `295a`. It uses the accepted `input_then_placeholder`
+projection: authored zero is preserved, otherwise the saved Placeholder or
+reviewed constructor supplies the value. All five originals save Placeholder
+15. Negative, fractional and above-cap values remain raw inputs within the
+declared import domain; the downstream ten-stack cap is not applied here.
+
+The retained configuration catalogue and both callback constructions establish
+the source identity, default and Player destination. The packet adds no native
+effect, contribution, calculation-view flag or `CanBeWithered` assumption.
+Applicability, effect scaling and effective stack limits remain native work.
+No new runtime API or source execution is introduced.
+
+This checkpoint's package is **`runs/owned-configuration-player-withered-publication-01/package`**:
+
+- Input: `33598edfe20d3870095441218bc8cd7cb708795b9dcf2ffbceb0379a6d4a75ca`.
+- Definitions: `4d42bca1073c746f48e0bbedb84429c69893d80dff223595a7e11f59856fda37`.
+- Rules: `3f4bb17d4ad5fd8141f3cc856fc78030ec9c8a1d7d7d4019f57c953fa8e21093`.
+- Compiled: `95d061f96391f96f3c412a0e450f4ac31d1eba41dcb37cd96419c10e38814acd`.
+- Registry: `52f73df4e76c3135c71c436f8717e483ca558af8a8b3a5cea8d1e9319a7d9191`, last issued `3382`.
+
+Nine ordinary source tests pass across the three existing scalar packets,
+distance and Withered. The all-five publication passes in 47.81s with nineteen
+input controls, exact local identities, all 110 queries, the complete draft and
+sidecar inverse, and eighteen byte-identical rebuilt artifacts. Original05's
+configuration origins fall **31 → 30**: fifteen direct Config origins plus the
+same fifteen outside Config. Selected input issues remain **106/117/109/123/4**;
+complete native builds remain **0/5**. Independent source/data review passes.
+The shared test harness now takes explicit target, selector, output and per-lane
+role expectations instead of branching on a source name or output count.
+The three existing scalar publication matrices pass in 121.29s and the distance
+matrix passes in 45.32s, preserving their endpoints. Strict Clippy passes for all
+six targets. Logs are `runs/owned-configuration-player-withered-tests-02.log`,
+`runs/owned-configuration-player-withered-publication-01.log`,
+`runs/owned-configuration-player-withered-regressions-01.log` and
+`runs/owned-configuration-player-withered-clippy-01.log`. The packet contains six
+files totaling 45,557 bytes, with LF/no-BOM JSON and exact Git byte checks.
+
+**Resume:** implement the guarded final Player Life consumer using the existing
+Stat-owned Player receiver, checked numeric/Boolean contribution queries and
+optional override selection. Reuse Life `311a` and Unit `3119`; reserve
+`3383`–`3388` for five adjustment channels and the CI Boolean. The real joined
+native producers already yield 1257 BASE, 5% increased and a MORE factor of one;
+the authored consumer should derive 1320 through the existing graph. Validate
+CI before present override (including zero) before ordinary arithmetic, the
+checked rounding domain, actual level/item mutations and reused/parallel runs.
+Retained eleven-case source vectors cover aggregate arithmetic; positive
+transformation/override controls remain synthetic. Adding a final scalar does
+not close supplier, cross-group ordering, selected owner or whole-build gaps.
+This data-only implementation uses approved public contracts and is in progress.
+Its first publication attempt exposed the current compiler budget: 8188 existing
+owner programs plus one application program already consume 8189 of 8192 slots.
+Adding seven programs would exceed that bound. Keep the limit
+unchanged for this checkpoint and remove the six redundant pass-through
+receivers: the final consumer can read all seven new checked contribution queries
+directly. Six typed contribution-channel Stats remain, but only one program and
+one Player receiver are added (8190 total budget slots). Review the
+compiler-capacity headroom before the
+next mechanic publication; it is a tooling bound, not a gameplay rule or a
+reason to omit required mechanics.
+
+The remaining selected passive owners are not interchangeable with empty
+intrinsic rules: the previously documented distinct-minion-type census and
+untranslated Puppet Master/Archon effects retain their own blockers. Keep raw
+input accounting separate from effect implementation and complete request
+admission. No new model decision is required for this raw Withered input.
+
+## Archived 2026-10-14 checkpoint: empty intrinsic passive socket
+
+**CI repair:** run `38675971601` at `c4a62464` failed both platforms' allocation
+export verification before Rust checks. Numeric-domain commit `55b63528` updated
+the historical `current/manifest.json` compiled identity without refreshing its
+outer transition's byte commitment. Reproduction through the existing native
+successor/tree publishers preserves nineteen of twenty files exactly and repairs
+only `current/transition.json`. The existing allocation exporter regenerates its
+dependent `source-facts.json` fingerprint; allocation rules remain byte-identical.
+All fourteen unchanged allocation-export tests pass in 27.03s
+(`runs/ci-owned-allocation-repro-03.log`). No exporter, allocation algorithm or
+test was changed. This does not alter the current Sniper endpoint below; hosted
+confirmation for the repair remains pending.
+
+The [socket packet](../data/owned/poe2/3887ae68/empty-passive-socket-intrinsics/README.md)
+completes the intrinsic rule owner for Passive `1b48` (source node `7960`) and
+its seven declaration inventories. Six inventories remain empty; the seventh
+retains exactly Socket `320e`. There are no new definitions or programs and no
+changes to topology, point pools, providers, selected values or queries.
+
+The complete source node and constructors establish an empty intrinsic modifier
+list; this Socket does not receive the Normal-node class-start flag. External
+jewel/radius transformations and allocation bookkeeping retain their separate
+ownership and coverage. The retained Spec3 empty-jewel evidence preserves the
+occupied archived Specs5/6 and supplies no authority to erase external providers.
+No new PoB execution or source-specific native behavior is added.
+
+This checkpoint's package is **`runs/owned-empty-passive-socket-publication-01/package`**:
+
+- Input: `d6e9d0f455087d0d240cc014514c94360b52a1b8bb5ba3efe810603aa13e6474`.
+- Definitions: `0f9184e99363d76bb99ed2ad5cd3f8ffd9fa5fbe02985ee876a1e3e62706db79`.
+- Rules: `a3b2ccf3b9f5821d7ccd9f891abf77d40538a1c3f2199c51a6a1f7070d2f697b`.
+- Compiled: `064b44e8b524c45458433006ea482d3db0a7b81da0d7f0486d88d53b157494b3`.
+- Registry: `21abd079a3d8be840d69b9cd319c0415f2dbd1dfc866cbf14b64e63fc4404e05`, last issued `3381`.
+
+Three ordinary tests, the all-five publication and strict Clippy pass. Seven
+mutations exercise source identity/body, node choices, topology, socket contents,
+intrinsic programs and preserved archived membership. The exact inverse changes
+only the reviewed owner/declaration closures and provenance. All eighteen files
+rebuild identically; all 110 queries, local IDs, selected input counts
+**106/117/109/123/4** and configuration origins **47/82/38/33/31** remain intact.
+The selected 55-allocation census confirms partial passive owners **13 → 12**.
+Complete native builds remain **0/5**. The receipt and selected-owner census are
+in `runs/owned-empty-passive-socket-publication-01`.
+Validation logs: `runs/owned-empty-passive-socket-tests-02.log`,
+`runs/owned-empty-passive-socket-publication-01.log` and
+`runs/owned-empty-passive-socket-clippy-01.log`.
+
+The subsequent Withered checkpoint above imports the Player's raw amount.
+Applicability and scaling remain native work. Continue Life supplier/final-metric
+work and preserve occurrence ownership for Sigil, Corrupting Cry and Demon Form
+settings.
+
+## Archived 2026-10-14 checkpoint: configured distance inputs
+
+The [distance packet](../data/owned/poe2/3887ae68/configuration-distance-inputs/README.md)
+uses the approved projection contract to preserve both meanings of the saved
+control. External inputs `3380` and `3381` represent configured target distance
+for skill range and for distance effects. Both target the scenario Enemy, reuse
+distance Unit `2425` (ten units per metre), and use an injected admitted range
+of ±1,000,000. This is an import support domain, not a gameplay or UI clamp.
+Checked fresh construction supplies 20 only on proven absence.
+
+Input 0 / Placeholder 80 imports as **0 / 80**. A zero distance-effect candidate
+remains a value, not an emitted zero contribution. Both Input and Placeholder
+leaves require receipts for both roles. This accounts for raw input ownership
+without closing native contribution, applicability or inventory coverage. No
+native program, Stat, receiver or PoB calculation-view flag is introduced.
+
+This checkpoint's package is **`runs/owned-configuration-distance-publication-02/package`**:
+
+- Input: `0efaf9bebc6a3f40e448cb22596c539b53436e15c063f92209c87627a6b4fa62`.
+- Definitions: `a03a41646f1001bffd3af45bc1fd6826d6da8e73fca9922bb035169587f41432`.
+- Rules: `754808384cc836ad43215d1c6593c5fb3decad6dfeae767662cbc39dc166a5c5`.
+- Compiled: `76e62770db9b33fd222e535d1fd814e6b6c1da57da4a5819ed145ac9af9939c2`.
+- Registry: `21abd079a3d8be840d69b9cd319c0415f2dbd1dfc866cbf14b64e63fc4404e05`, last issued `3381`.
+
+All five originals gain two assumptions and account for exactly one distance
+leaf. Full draft/sidecar inverses preserve local IDs and unrelated data; all
+110 queries remain byte-identical, and the package rebuild is byte-identical.
+Configuration-linked origins fall **48/83/39/34/32 → 47/82/38/33/31**.
+Original05 now has 16 direct Config origins and 15 outside Config; its four
+selected inventories remain Pending. Selected issue counts remain
+**106/117/109/123/4**, complete native builds **0/5**.
+
+Six ordinary source/data tests, sixteen publication controls and strict Clippy
+pass. Publication takes 45.32s. The packet authenticates eighteen source spans
+and reuses the complete existing distance witness: twelve controls, fourteen
+reviewed rows and matching JIT-off/on bytes. No new source VM runs were needed.
+Source mode suppression, thresholds, multiplier inheritance and ailment distance
+copying are explicitly distinguished from raw value selection; the retained
+witness's lack of plain control/repeated distance variants remains documented.
+Logs: `runs/owned-configuration-distance-tests-01.log`,
+`runs/owned-configuration-distance-publication-02.log` and
+`runs/owned-configuration-distance-clippy-02.log`.
+The four joined Life-query tests also pass against this new endpoint (45.04s,
+`runs/owned-life-equipment-domain-distance-01.log`), confirming that unrelated
+input additions no longer break their component authentication. A final
+three-test source replay passes after normalizing the five authoring JSON files
+to LF; parsed values, archive bytes, canonical authoring digest and endpoint are
+unchanged (`runs/owned-configuration-distance-lf-01.log`).
+
+The subsequent socket checkpoint above completes only its reviewed intrinsic
+domain. Actual Life supplier admission and configuration accounting continue.
+Distance delivery
+still needs its separate native applicability review; importing raw assumptions
+does not implement Sniper accuracy or any final distance-dependent metric.
 
 ## Archived 2026-10-14 checkpoint: native minion Attack-flat collection
 

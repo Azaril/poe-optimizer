@@ -1,0 +1,44 @@
+{
+  "kind": "player-life-pool",
+  "before": "33598edfe20d3870095441218bc8cd7cb708795b9dcf2ffbceb0379a6d4a75ca",
+  "release": "pob-3887ae68-player-life-pool-v1",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v27",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "artifacts": {
+    "extension.json": {
+      "bytes": 5324,
+      "sha256": "774e8d47cf59fa341a4cb7960f461ccdfb2fd4e747e531b667d3925945a9df0b"
+    },
+    "consumer.json": {
+      "bytes": 36838,
+      "sha256": "3daec35b466609d06bdd8eabc6595ff63047ebb1eefdc39d82fa319da34d4185"
+    },
+    "dependencies.json": {
+      "bytes": 231195,
+      "sha256": "32eb95632ceaf8391576f92939e98d64f5e448001a0cae646a3f57240fb01692"
+    },
+    "bindings.json": {
+      "bytes": 1949,
+      "sha256": "0d209704b5ac5c8c015c899999628b0465e8410bd7319cd6cf574f2cd1afa590"
+    },
+    "source-vectors.json": {
+      "bytes": 14300,
+      "sha256": "ccf7b4872da5a0cdf7da59649248038b831379e6b20ba584b3c225d2e759b902"
+    }
+  },
+  "scope": {
+    "new_definitions": 6,
+    "new_programs": 1,
+    "new_receivers": 1,
+    "new_queries": 7,
+    "closed_existing_owners": 0,
+    "supplier_admission": false,
+    "complete_life": false,
+    "evaluation_bundle": false,
+    "whole_build": false
+  }
+}

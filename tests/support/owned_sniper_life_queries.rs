@@ -17,7 +17,7 @@ const QUERY_IDS: [&str; 3] = [
     "life-increased-contributions",
     "life-more-contributions",
 ];
-fn world() -> World {
+pub(super) fn world() -> World {
     let mut w = World::load();
     let f = &mut w.sniper.base.source.base.inner;
     assert!(
@@ -137,7 +137,7 @@ fn world() -> World {
     }
     w
 }
-fn configure(stages: &mut EvaluationStagesInput) {
+pub(super) fn configure(stages: &mut EvaluationStagesInput) {
     stages.stages.extend([
         EvaluationStage {
             id: key(READY),

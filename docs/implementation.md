@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-14 (EDT).
+Updated: 2026-10-15 (EDT).
 
 This is the active delivery plan. The [design](domain-architecture.md) defines
 the end state; the [execution overview](data-and-evaluation-overview.md) explains
@@ -76,7 +76,7 @@ These reference observations are not evidence of native metric completion.
 
 | Saved query references | Native work to reuse | Remaining final producer |
 | --- | --- | --- |
-| 00: Player Life | Intrinsic/Strength/item/reward contributions, checked Life queries and bounded equipment accumulation | Complete supplier/magnitude admission, adjustments, override/CI behavior and final arithmetic with a proved numerical domain |
+| 00: Player Life | Intrinsic/Strength/item/reward contributions, checked Life queries, bounded equipment accumulation and guarded final consumer with conversion/override/CI precedence | Complete supplier/magnitude admission, prove cross-group/conversion accumulation domains, finalize plan and evaluation binding |
 | 01: Player Mana | Intrinsic/Intelligence contributions, checked queries, adjustment collectors, override selection and published guarded consumer with checked numeric domain | Transformation supplier admission, whole-plan completion and evaluation binding |
 | 02, 18, 19: Player ES, Armour, Evasion | Selected item magnitude/local-defence intermediates and global/passive contributions | Final item properties, complete receiving, transformations and final Actor totals |
 | 03–06: four capped Player resistances | Item/passive/reward inputs and configured penalty | Complete contributor inventories, aggregation and cap/override calculations |
@@ -105,173 +105,121 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: configured Player Withered input
+## Current checkpoint: guarded Player Life consumer
 
-The [Withered input packet](../data/owned/poe2/3887ae68/configuration-player-withered-input/README.md)
-adds one typed Scenario assumption for the Player, ExternalInput `3382` in
-existing Count Unit `295a`. It uses the accepted `input_then_placeholder`
-projection: authored zero is preserved, otherwise the saved Placeholder or
-reviewed constructor supplies the value. All five originals save Placeholder
-15. Negative, fractional and above-cap values remain raw inputs within the
-declared import domain; the downstream ten-stack cap is not applied here.
+The [Player Life packet](../data/owned/poe2/3887ae68/player-life-pool/README.md)
+publishes one data-defined program and Player receiver for existing Life Stat
+`311a`. Six new typed contribution channels (`3383`–`3388`) and seven checked
+queries represent outgoing conversions, pre-/post-scaling additions, the CI
+flag and coherent optional override. The consumer reads these queries directly;
+there are no intermediate pass-through receiver programs or new engine APIs.
 
-The retained configuration catalogue and both callback constructions establish
-the source identity, default and Player destination. The packet adds no native
-effect, contribution, calculation-view flag or `CanBeWithered` assumption.
-Applicability, effect scaling and effective stack limits remain native work.
-No new runtime API or source execution is introduced.
+Final-value precedence is CI → present override, including zero → ordinary
+arithmetic. The ordinary path uses the actual operand's checked rounding domain,
+native rounding and minimum one. Source PoB computes its ordinary resource loop
+before applying CI; native lazy selection preserves the final value without
+copying that execution history. Whole-request coverage remains mandatory. The
+source's FullLife side effect and lowest-Life/Mana result are separate work.
 
-The current package is **`runs/owned-configuration-player-withered-publication-01/package`**:
+The final owner's program inventory remains Partial for cross-group and
+conversion-order proof. All seven new supplier queries remain Partial; empty
+membership does not establish absence. The published equipment bound alone does
+not prove arbitrary regrouping with inherent, intrinsic or reward contributions.
+No existing owner, source inventory or complete-build gate closes.
 
-- Input: `33598edfe20d3870095441218bc8cd7cb708795b9dcf2ffbceb0379a6d4a75ca`.
-- Definitions: `4d42bca1073c746f48e0bbedb84429c69893d80dff223595a7e11f59856fda37`.
-- Rules: `3f4bb17d4ad5fd8141f3cc856fc78030ec9c8a1d7d7d4019f57c953fa8e21093`.
-- Compiled: `95d061f96391f96f3c412a0e450f4ac31d1eba41dcb37cd96419c10e38814acd`.
-- Registry: `52f73df4e76c3135c71c436f8717e483ca558af8a8b3a5cea8d1e9319a7d9191`, last issued `3382`.
+The current package is **`runs/owned-player-life-pool-publication-02/package`**:
 
-Nine ordinary source tests pass across the three existing scalar packets,
-distance and Withered. The all-five publication passes in 47.81s with nineteen
-input controls, exact local identities, all 110 queries, the complete draft and
-sidecar inverse, and eighteen byte-identical rebuilt artifacts. Original05's
-configuration origins fall **31 → 30**: fifteen direct Config origins plus the
-same fifteen outside Config. Selected input issues remain **106/117/109/123/4**;
-complete native builds remain **0/5**. Independent source/data review passes.
-The shared test harness now takes explicit target, selector, output and per-lane
-role expectations instead of branching on a source name or output count.
-The three existing scalar publication matrices pass in 121.29s and the distance
-matrix passes in 45.32s, preserving their endpoints. Strict Clippy passes for all
-six targets. Logs are `runs/owned-configuration-player-withered-tests-02.log`,
-`runs/owned-configuration-player-withered-publication-01.log`,
-`runs/owned-configuration-player-withered-regressions-01.log` and
-`runs/owned-configuration-player-withered-clippy-01.log`. The packet contains six
-files totaling 45,557 bytes, with LF/no-BOM JSON and exact Git byte checks.
+- Input: `aedc17306523ec3c513f6e04c2d1937774705585b9c33c9c1cc9006b0c6452a1`.
+- Definitions: `cf65959955725dde2758ea79cb5542dca1fe9a9601a352344f8f3fad24ad837b`.
+- Rules: `c36478c0cd0d232d24363c4a30dfe0ac12764213720c7119417112335be6acdd`.
+- Compiled: `6dc31559ebdb6dfa9875ca1e7aa0a1ab6fe8708845db66956518431488460e3e`.
+- Registry: `6e97db58bec5855fa1a5b8e0b5253fc3ab74c3192a48e29262cce59cd47b076a`, last issued `3388`.
 
-**Resume:** implement the guarded final Player Life consumer using the existing
-Stat-owned Player receiver, checked numeric/Boolean contribution queries and
-optional override selection. Reuse Life `311a` and Unit `3119`; reserve
-`3383`–`3388` for five adjustment channels and the CI Boolean. The real joined
-native producers already yield 1257 BASE, 5% increased and a MORE factor of one;
-the authored consumer should derive 1320 through the existing graph. Validate
-CI before present override (including zero) before ordinary arithmetic, the
-checked rounding domain, actual level/item mutations and reused/parallel runs.
-Retained eleven-case source vectors cover aggregate arithmetic; positive
-transformation/override controls remain synthetic. Adding a final scalar does
-not close supplier, cross-group ordering, selected owner or whole-build gaps.
-This data-only implementation uses approved public contracts and is in progress.
+The all-five publication passes in 35.56s, preserves all 110 saved queries and
+exact local identities, and rebuilds all eighteen files identically. Input issues
+remain **106/117/109/123/4** and configuration origins **46/81/37/32/30**.
+Complete native builds remain **0/5**. Two ordinary authoring/source tests and
+all 101 joined native tests pass, including eight new Life tests. The actual
+component derives 1320 from BASE 1257, INC 5 and MORE 1; level and robe-roll
+changes, fresh/reused/four-worker execution, the saved Player Life metric and
+explicit unavailable paths are checked. Finite test fixtures alone close the
+unproved supplier/order domains. Strict Clippy passes for both targets. Evidence:
+`runs/owned-player-life-pool-joined-05.log` (101 joined tests, 65.06s),
+`runs/owned-player-life-pool-authoring-02.log` (two source tests, 0.33s),
+`runs/owned-player-life-pool-publication-02.log` and
+`runs/owned-player-life-pool-clippy-02.log`. Independent data/source review
+passes; earlier rejected setup and budget attempts remain diagnostic logs.
 
-The remaining selected passive owners are not interchangeable with empty
-intrinsic rules: the previously documented distinct-minion-type census and
-untranslated Puppet Master/Archon effects retain their own blockers. Keep raw
-input accounting separate from effect implementation and complete request
-admission. No new model decision is required for this raw Withered input.
+Retained evidence contains eleven source-control cases with repeated observed
+loads and uninstrumented JIT-off/on references (66 historical loads). Each compact
+vector is reconstructed from 72 original consumer invocations per acquisition;
+all archive bytes, source metadata and the complete formula body are checked.
+These are aggregate formula controls, not eleven independently supported builds.
+Positive transformation/override controls remain synthetic. No new PoB process
+was run. The packet keeps the original failures as diagnostics.
+
+**Next:** address measured compiler capacity before publishing more mechanics,
+then continue actual Life supplier admission and cross-group/conversion-order
+proofs from this endpoint, preserving the four selected import obligations.
+The rejected seven-program draft exceeded 8192:
+the predecessor has 8188 owner programs plus one application. Direct query reads
+remove six redundant receivers; this publication uses 8190 budget slots and
+changes no limit. The remaining passive blockers are unchanged.
+
+### Measured catalog capacity and next cleanup
+
+Read-only compilation of this exact endpoint reproduces its compiled identity.
+Programs are the only nearly exhausted compiler collection: **8190/8192**,
+including the one effect application. Owners are 6548/8192; effects
+23517/65536; reads 4249/65536; nodes 32814/262144; edges 41600/1048576.
+The complete release is **64,388,037/67,108,864 bytes**, leaving 2,720,827
+bytes; its input is 64,376,489 bytes. These are separate limits. The common
+content digest also enforces the 64 MiB envelope, so increasing only release
+input limits would not address package growth.
+
+Review the five Mana adjustment receivers (`3357`–`335b`) next: the current
+catalog has only the final Mana program reading their computed values. Replacing
+these single-query pass-throughs with direct checked queries could recover five
+program slots, preserving typed contribution channels, Partial coverage,
+execution stages and numerical behavior. Verify all readers and saved metric
+references before removal. Do not split catalogs by the selected build or remove
+legitimate per-item programs to meet a budget.
+
+Track compiler/schema validation work and release byte totals at subsequent
+publications; private aggregate work counters need bounded diagnostics before
+claiming exact headroom. If simplification is insufficient, make a measured
+catalog-capacity adjustment with boundary tests. **Keep the independent
+`PlanLimits.max_effects = 65536` unchanged:** the equipment exact-sum proof uses
+`65536 × 2^37 = 2^53`. Limits are acceptance/execution gates and are not hashed
+into result identities, so a changed numerical domain requires an explicit
+proof and artifact/cache invalidation rather than relying on a limit change to
+invalidate results.
+
+## Previous checkpoint: configured Player Withered input
+
+[Archived publication and validation](implementation-history.md#archived-2026-10-14-checkpoint-configured-player-withered-input):
+one raw typed Player assumption, preserve-zero selection and checked receipt
+for both saved lanes. Original05 configuration-origin links decreased 31 → 30;
+all five selected issue counts and 110 queries remain unchanged. Nine source
+tests, nineteen new controls, all existing scalar/distance publication matrices
+and strict Clippy pass. Native applicability, scaling and stack limits remain
+separate calculations.
 
 ## Previous checkpoint: empty intrinsic passive socket
 
-**CI repair:** run `38675971601` at `c4a62464` failed both platforms' allocation
-export verification before Rust checks. Numeric-domain commit `55b63528` updated
-the historical `current/manifest.json` compiled identity without refreshing its
-outer transition's byte commitment. Reproduction through the existing native
-successor/tree publishers preserves nineteen of twenty files exactly and repairs
-only `current/transition.json`. The existing allocation exporter regenerates its
-dependent `source-facts.json` fingerprint; allocation rules remain byte-identical.
-All fourteen unchanged allocation-export tests pass in 27.03s
-(`runs/ci-owned-allocation-repro-03.log`). No exporter, allocation algorithm or
-test was changed. This does not alter the current Sniper endpoint below; hosted
-confirmation for the repair remains pending.
-
-The [socket packet](../data/owned/poe2/3887ae68/empty-passive-socket-intrinsics/README.md)
-completes the intrinsic rule owner for Passive `1b48` (source node `7960`) and
-its seven declaration inventories. Six inventories remain empty; the seventh
-retains exactly Socket `320e`. There are no new definitions or programs and no
-changes to topology, point pools, providers, selected values or queries.
-
-The complete source node and constructors establish an empty intrinsic modifier
-list; this Socket does not receive the Normal-node class-start flag. External
-jewel/radius transformations and allocation bookkeeping retain their separate
-ownership and coverage. The retained Spec3 empty-jewel evidence preserves the
-occupied archived Specs5/6 and supplies no authority to erase external providers.
-No new PoB execution or source-specific native behavior is added.
-
-This checkpoint's package is **`runs/owned-empty-passive-socket-publication-01/package`**:
-
-- Input: `d6e9d0f455087d0d240cc014514c94360b52a1b8bb5ba3efe810603aa13e6474`.
-- Definitions: `0f9184e99363d76bb99ed2ad5cd3f8ffd9fa5fbe02985ee876a1e3e62706db79`.
-- Rules: `a3b2ccf3b9f5821d7ccd9f891abf77d40538a1c3f2199c51a6a1f7070d2f697b`.
-- Compiled: `064b44e8b524c45458433006ea482d3db0a7b81da0d7f0486d88d53b157494b3`.
-- Registry: `21abd079a3d8be840d69b9cd319c0415f2dbd1dfc866cbf14b64e63fc4404e05`, last issued `3381`.
-
-Three ordinary tests, the all-five publication and strict Clippy pass. Seven
-mutations exercise source identity/body, node choices, topology, socket contents,
-intrinsic programs and preserved archived membership. The exact inverse changes
-only the reviewed owner/declaration closures and provenance. All eighteen files
-rebuild identically; all 110 queries, local IDs, selected input counts
-**106/117/109/123/4** and configuration origins **47/82/38/33/31** remain intact.
-The selected 55-allocation census confirms partial passive owners **13 → 12**.
-Complete native builds remain **0/5**. The receipt and selected-owner census are
-in `runs/owned-empty-passive-socket-publication-01`.
-Validation logs: `runs/owned-empty-passive-socket-tests-02.log`,
-`runs/owned-empty-passive-socket-publication-01.log` and
-`runs/owned-empty-passive-socket-clippy-01.log`.
-
-The subsequent Withered checkpoint above imports the Player's raw amount.
-Applicability and scaling remain native work. Continue Life supplier/final-metric
-work and preserve occurrence ownership for Sigil, Corrupting Cry and Demon Form
-settings.
+[Archived proof and validation](implementation-history.md#archived-2026-10-14-checkpoint-empty-intrinsic-passive-socket):
+Passive `1b48` and its seven intrinsic declaration inventories are complete;
+Socket `320e`, topology and external jewel/radius obligations remain intact.
+Selected partial passive owners decreased 13 → 12. The separate CI receipt
+repair is pushed as `47fa0592`; all fourteen existing allocation-export tests
+pass locally, with hosted confirmation pending.
 
 ## Previous checkpoint: configured distance inputs
 
-The [distance packet](../data/owned/poe2/3887ae68/configuration-distance-inputs/README.md)
-uses the approved projection contract to preserve both meanings of the saved
-control. External inputs `3380` and `3381` represent configured target distance
-for skill range and for distance effects. Both target the scenario Enemy, reuse
-distance Unit `2425` (ten units per metre), and use an injected admitted range
-of ±1,000,000. This is an import support domain, not a gameplay or UI clamp.
-Checked fresh construction supplies 20 only on proven absence.
-
-Input 0 / Placeholder 80 imports as **0 / 80**. A zero distance-effect candidate
-remains a value, not an emitted zero contribution. Both Input and Placeholder
-leaves require receipts for both roles. This accounts for raw input ownership
-without closing native contribution, applicability or inventory coverage. No
-native program, Stat, receiver or PoB calculation-view flag is introduced.
-
-This checkpoint's package is **`runs/owned-configuration-distance-publication-02/package`**:
-
-- Input: `0efaf9bebc6a3f40e448cb22596c539b53436e15c063f92209c87627a6b4fa62`.
-- Definitions: `a03a41646f1001bffd3af45bc1fd6826d6da8e73fca9922bb035169587f41432`.
-- Rules: `754808384cc836ad43215d1c6593c5fb3decad6dfeae767662cbc39dc166a5c5`.
-- Compiled: `76e62770db9b33fd222e535d1fd814e6b6c1da57da4a5819ed145ac9af9939c2`.
-- Registry: `21abd079a3d8be840d69b9cd319c0415f2dbd1dfc866cbf14b64e63fc4404e05`, last issued `3381`.
-
-All five originals gain two assumptions and account for exactly one distance
-leaf. Full draft/sidecar inverses preserve local IDs and unrelated data; all
-110 queries remain byte-identical, and the package rebuild is byte-identical.
-Configuration-linked origins fall **48/83/39/34/32 → 47/82/38/33/31**.
-Original05 now has 16 direct Config origins and 15 outside Config; its four
-selected inventories remain Pending. Selected issue counts remain
-**106/117/109/123/4**, complete native builds **0/5**.
-
-Six ordinary source/data tests, sixteen publication controls and strict Clippy
-pass. Publication takes 45.32s. The packet authenticates eighteen source spans
-and reuses the complete existing distance witness: twelve controls, fourteen
-reviewed rows and matching JIT-off/on bytes. No new source VM runs were needed.
-Source mode suppression, thresholds, multiplier inheritance and ailment distance
-copying are explicitly distinguished from raw value selection; the retained
-witness's lack of plain control/repeated distance variants remains documented.
-Logs: `runs/owned-configuration-distance-tests-01.log`,
-`runs/owned-configuration-distance-publication-02.log` and
-`runs/owned-configuration-distance-clippy-02.log`.
-The four joined Life-query tests also pass against this new endpoint (45.04s,
-`runs/owned-life-equipment-domain-distance-01.log`), confirming that unrelated
-input additions no longer break their component authentication. A final
-three-test source replay passes after normalizing the five authoring JSON files
-to LF; parsed values, archive bytes, canonical authoring digest and endpoint are
-unchanged (`runs/owned-configuration-distance-lf-01.log`).
-
-The subsequent socket checkpoint above completes only its reviewed intrinsic
-domain. Actual Life supplier admission and configuration accounting continue.
-Distance delivery
-still needs its separate native applicability review; importing raw assumptions
-does not implement Sniper accuracy or any final distance-dependent metric.
+[Archived publication and controls](implementation-history.md#archived-2026-10-14-checkpoint-configured-distance-inputs):
+two typed Enemy assumptions preserve zero differently for skill range and
+modifier candidates. All-five publication, sixteen controls and strict Clippy
+pass. Native applicability and effects remain separate work.
 
 ## Previous checkpoint: bounded equipment Life reduction
 

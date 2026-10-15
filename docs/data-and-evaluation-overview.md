@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-14. The owned path imports an external build into explicit
+Snapshot: 2026-10-15. The owned path imports an external build into explicit
 occurrences, validates it against injected definitions and rules, and executes
 the resulting graph in Rust. The CLI, future UI and optimizer share those public
 contracts. Native calculation has no Lua state or PoB subprocess. Optional
@@ -92,6 +92,24 @@ remain separate calculations. All-five preservation passes. Original05 now has
 thirty remaining configuration-origin links, with its four overall input
 obligations and complete-build gate still open.
 
+The [guarded Player Life consumer](../data/owned/poe2/3887ae68/player-life-pool/README.md)
+now publishes the final formula on the existing Life Stat using direct checked
+contribution reads. It applies CI before a present override, including zero,
+then ordinary resource arithmetic with a checked rounding domain. Six new typed
+channels and seven Partial supplier queries use the existing native engine;
+no Lua behavior or intermediate pass-through receivers are needed. The final
+owner retains its unproved cross-group/conversion-order domain. The all-five
+publication preserves every saved query and input obligation; a published
+formula alone does not make Player Life or the whole build admitted.
+The joined component now derives 1320 from actual intrinsic, Strength, item and
+reward producers and binds the saved Player Life metric. All 101 joined tests
+pass, including input changes, source vectors, fresh/reused/parallel agreement
+and unavailable paths. Only the finite test graph closes the remaining proof
+domains; the production endpoint keeps them Partial. The
+[capacity review](implementation.md#measured-catalog-capacity-and-next-cleanup)
+tracks the compiler's remaining two program slots and roughly 2.7 MB release
+headroom before additional catalog growth.
+
 Archived generated skills now retain unfinished preset usage even when no
 supported manual sibling initializes it. A generic source-discovery producer
 uses the existing checked census through either raw-input or occurrence-usage
@@ -143,7 +161,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-configured-player-withered-input).
+[implementation checkpoint](implementation.md#current-checkpoint-guarded-player-life-consumer).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -1303,7 +1321,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-configured-player-withered-input),
+live in the [implementation plan](implementation.md#current-checkpoint-guarded-player-life-consumer),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.
