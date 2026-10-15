@@ -543,6 +543,22 @@ domain gaps remain explicit. Pushed as `ba33003d`.
 
 ## CI receipt repair (2026-10-15)
 
+Run `38695918235` (`b81bae66`) subsequently exposed one remaining derived
+receipt mismatch in both platform validation jobs: `import/policies/transition.json`
+still named the pre-repair compiled transition. The offline exporter regenerates
+all 22 seed/policy artifacts; 21 are byte-identical and the remaining artifact
+changes only `compiled_transition_sha256` to
+`011f4aedcec6f931b71bf55f768e13020efe6fca1f5684919ca19452a1b255e4`.
+All 16 existing import-export tests now pass. The downstream resistance, tree
+and allocation export suites also pass (18/16/14 tests), using workspace-local
+temporary files for the sandboxed mutation cases. No test assertion, source
+mechanic, generated policy body or runtime code changed. Evidence:
+`runs/ci-job-116297674{329,741}.log`,
+`runs/ci-import-policy-{regeneration,regression}-01.log`, and
+`runs/ci-test_export_owned_{resistance-01,tree-02,allocations-02}.log`.
+The hosted run is still active with failed validation; the local repair is not
+a hosted green result.
+
 Hosted run `38675971601` for older revision `c4a62464` exposed another stale
 derived receipt in `owned_catalog_recipe`. The compiler-domain change updated
 the active tree seed but missed `import/compiled/manifest.json`. The existing
@@ -569,17 +585,20 @@ including exact twenty-artifact reproduction, all-five XML censuses and failure
 controls (`runs/ci-owned-tree-receipts-01.log`).
 The completed Windows cli-0 job reports the same old weapon-profile manifest
 receipt failure in both feature profiles, with no new defect
-(`runs/ci-job-116230401591.log`). The latest inspected push `b81bae66` has
-pending run `38695918235`;
-main concurrency preserves the running older revision and coalesces pending revisions. Recent
-jobs have completed, but live job logs are unavailable, so individual long steps
-have not been diagnosed as hung. Do not report the queued revision as green.
+(`runs/ci-job-116230401591.log`). At 07:26 UTC, revision `b81bae66` has active
+run `38695918235`, while the latest inspected push `26c5cd1a` has pending run
+`38698549720`. Main concurrency preserves the running revision and coalesces
+pending revisions. Live job logs are unavailable, so individual long steps have
+not been diagnosed as hung. Do not report either newer revision as green.
 The subsequent Windows cli-2 job repeats only the already-repaired item-base
 manifest receipt failure in both profiles (`runs/ci-job-116230401646.log`).
 Windows cli-1 also completed with only the same old class/intrinsic/passive-view
 manifest and tree-transition failures in both profiles
-(`runs/ci-job-116230401733.log`). At 07:07 UTC, only Windows cli-3 remained
-running on that older revision. No new failure class was found.
+(`runs/ci-job-116230401733.log`). The last Windows cli-3 job completed at
+07:15 UTC with only the already-repaired attribute/extension current-manifest
+and generated-catalog manifest mismatches in both profiles
+(`runs/ci-job-116230401699.log`). The old run is terminal with failure;
+no new failure class was found.
 The older revision's Windows and Ubuntu PoB jobs have completed successfully; this is not a
 hosted result for the current main revision.
 Evidence: `runs/ci-import-c4a62464-job116230401602.log` and
@@ -1014,13 +1033,13 @@ where it accounts for every relevant capability. No new runtime origin variant
 is needed merely to describe a sound Assignment-only domain, but Partial rules
 cannot be interpreted as absence of extra supports.
 
-The same audit found no supported shortcut for the other four selected
-obligations: 23 imported preferences do not account for every field across twenty usage
-rows in ten groups; configuration `01f2` still covers 44 origins (21 inside
-Config and 23 elsewhere); seventeen known external assumptions do not account for
-28 non-reward effective defaults, including seven child buff/curse/aura enables.
-Scenario usage remains empty/Pending. Preserve these distinctions rather than
-closing global inventories after adding another local scalar recipe.
+The earlier audit found no supported shortcut from known members to complete
+inventories. Subsequent publications have transported more source fields; use
+the counts at the current checkpoint, not the older audit's counts. Twenty
+selected usage rows in ten groups still need complete field accounting, and the
+28 non-reward effective defaults include seven child buff/curse/aura enables.
+Scenario usage remains empty/Pending. Preserve these distinctions when adding
+a local scalar recipe.
 
 **Configuration/default transport and next consumer accounting.** The retained
 `owned-configuration-inputs-source-01/source-jit-{off,on}.json`,
@@ -1133,10 +1152,10 @@ inherent Life 54 through the
 Class/global-owner coverage and final Player Life remain open; do not reopen
 finished query memberships or confuse them with these distinct blockers.
 
-**Input resume:** keep Original05's five selected issues and 44 origins linked
-to configuration issue `01f2` open. Its 101 item-range records already have exact
-item/output or unresolved-item ownership; the remaining origins are 21 Config
-and 23 outside Config, with all 23 outside origins retaining only this issue.
+**Input resume:** use the current checkpoint's four selected obligations and
+configuration-origin census. Its 101 item-range records already have exact
+item/output or unresolved-item ownership. Later field publications narrow the
+remaining Config and outside-Config origins without completing their inventories.
 The [generated-source consumer census](owned-configuration-dispositions-proposal.md#generated-group-consumer-census-next-blocker-2026-10-05)
 must distinguish execution/reporting intent from PoB reference selectors for
 the remaining Skill/Gem origins. The selected-output proof retired six generated rows from fallback; the
@@ -1255,12 +1274,13 @@ candidate semantics are established. Fractional controls test reachability;
 they do not establish game legality merely because the wire type represents them.
 
 Do not route Magnified's ordinary-cost factor `32fa` into Spirit reservation
-input `326e`: their source fields and consumers are distinct. Current support
-receivers are Actors or Actions; `ReceivingSkill` names an admission context,
-not a third receiver kind. Do not synthesize primary Summon Actions, invoke a
-parent contribution once per child Action, or repurpose source-property
-preparation as execution authority. A genuine parent demand/recipient extension
-needs contrasting real cases and review before changing the public contract.
+input `326e`: their source fields and consumers are distinct. Checked support
+receivers now include exact Skills as well as Actors and Actions; `ReceivingSkill`
+still names a separate admission context. The accepted Skill-owned obligation
+migration must use that exact recipient. Do not synthesize primary Summon Actions,
+invoke a parent obligation once per child Action, or repurpose source-property
+preparation as execution authority. Payer aggregation and amount-channel identity
+remain the next contract step described at the current checkpoint.
 The valid-but-unreviewed part/stat-set control now passes: the existing guard
 produces Inactive and the demanding contribution reports UpstreamUnavailable,
 without a Boolean default. MissingProducer remains the separate absent-program
@@ -1342,10 +1362,11 @@ merely because a compatibility test asserts it, and do not silently change
 numerical outputs when game intent remains unresolved.
 
 1. **Complete generated usage and remaining source accounting.** Original05
-   now has five selected obligations and 23 selected preferences: four skeletal
+   now has four selected obligations and 35 selected preferences: four skeletal
    counts, Offering and Frost Bomb switches, five Direct/Tree/Item occurrence
-   counts, and twelve requested-participation preferences. Remaining global/
-   reporting usage and full field accounting need the
+   counts, twelve requested-participation preferences and twelve reporting
+   inclusion preferences. Remaining global usage, Action/reporting execution
+   and full field accounting need the
    [generated applicability contract](owned-generated-skill-usage-proposal.md).
    The versioned Core contract, all-stored-row proofs, V6 permissions and V19
    input producers pass focused validation. Use that checked boundary;
@@ -1715,8 +1736,9 @@ Placeholders do not supply the value, and actual source consumers remain at
 publication and its mutation controls. This is input work, not completed critical
 effect, EHP or configuration-inventory coverage; no public model change is needed.
 
-Enemy distance is a distinct future input: its count-style zero fallback differs
-from the raw override lane. More numeric controls alone cannot close the current
+Enemy distance is now published as explicit per-consumer projections: its
+count-style zero fallback differs from the raw override lane. More numeric
+controls alone cannot close the current
 configuration or usage inventories. Do not add unrelated catalog families while
 an identified selected-request blocker has a clear fix.
 

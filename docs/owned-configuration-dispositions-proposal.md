@@ -25,7 +25,7 @@ justify completing scenario usage or assumptions.
 
 **Current state (2026-10-15):** Original05 retains four selected input
 obligations: configuration `01f2` with 30 linked source origins, preset usage
-`0505` with 23 known preferences, external assumptions `0207` with 23 known
+`0505` with 35 known preferences, external assumptions `0207` with 23 known
 members, and scenario usage `0208` with an empty Pending list. Known members
 do not certify complete inventories. The first implementation adds partial leaf
 authority; retiring shared `01f2` still requires accounting for every
