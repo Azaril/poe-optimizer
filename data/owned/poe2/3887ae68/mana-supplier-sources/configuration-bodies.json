@@ -1,0 +1,748 @@
+{
+  "schema_version": 1,
+  "kind": "reviewed-configuration-mana-supplier-bodies",
+  "source": {
+    "path": "src/Modules/ConfigOptions.lua",
+    "archive": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+    "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+  },
+  "constructor_source": {
+    "path": "src/Classes/ConfigTab.lua",
+    "archive": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
+    "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+  },
+  "bodies": [
+    {
+      "first": 117,
+      "last": 119,
+      "body": "\t{ var = \"multiplierCurrentManaPercentage\", type = \"count\", label = \"Current ^x7070FFMana^7 %:\", ifSkillData = \"currentManaPercentage\", defaultState = 100, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:CurrentManaPercentage\", \"BASE\", m_max(m_min(val,100), 0), \"Config\")\n\tend },",
+      "sha256": "e20fd3754ad6ca792cf37b0945f224a8cd84a26d3997c11f6eb9e1fbf5cc6658",
+      "vars": [
+        "multiplierCurrentManaPercentage"
+      ],
+      "declared_names": [
+        "Multiplier:CurrentManaPercentage"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 157,
+      "last": 160,
+      "body": "\t{ var = \"multiplierCurrentEnergyShield\", type = \"count\", label = \"Current ^x88FFFFEnergy Shield^7 percentage:\", ifCond = \"UseCurrentEnergyShield\", defaultPlaceholderState = 100, tooltip = \"Used in calculations for ^xAF6025Silks of Veneration^7 and ^xAF6025The Mutable Star^7.\\nOverflowed ^x88FFFFEnergy Shield^7 is allowed, up to 150%.\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Condition:UseCurrentEnergyShield\", \"FLAG\", true, \"Config\")\n\t\tmodList:NewMod(\"Multiplier:CurrentEnergyShield\", \"BASE\", val, \"Config\")\n\tend },",
+      "sha256": "ced545e799e2cb2a583956c416658a741f60d7541f403ba1bec7540a810f5cc2",
+      "vars": [
+        "multiplierCurrentEnergyShield"
+      ],
+      "declared_names": [
+        "Condition:UseCurrentEnergyShield",
+        "Multiplier:CurrentEnergyShield"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 192,
+      "last": 198,
+      "body": "\t{ var = \"resourceGainMode\", type = \"list\", label = \"Resource gain calculation mode:\", ifCond = \"AverageResourceGain\", defaultIndex = 2, tooltip = \"Controls how resource on hit/kill is calculated:\\n\\tMinimum: does not include chances\\n\\tAverage: includes chance gains, averaged based on uptime\\n\\tMaximum: treats all chances as certain\", list = {{val=\"MIN\",label=\"Minimum\"},{val=\"AVERAGE\",label=\"Average\"},{val=\"MAX\",label=\"Maximum\"}}, apply = function(val, modList, enemyModList)\n\t\tif val == \"AVERAGE\" then\n\t\t\tmodList:NewMod(\"Condition:AverageResourceGain\", \"FLAG\", true, \"Config\")\n\t\telseif val == \"MAX\" then\n\t\t\tmodList:NewMod(\"Condition:MaxResourceGain\", \"FLAG\", true, \"Config\")\n\t\tend\n\tend },",
+      "sha256": "ebfe6d41ba268031d92a7ddfe184a4f95d96440ec93bca16d2ab8b065fd0761f",
+      "vars": [
+        "resourceGainMode"
+      ],
+      "declared_names": [
+        "Condition:AverageResourceGain",
+        "Condition:MaxResourceGain"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 288,
+      "last": 290,
+      "body": "\t{ var = \"targetBrandedEnemy\", type = \"check\", label = \"Skill is targeting the Branded enemy\", ifCond = \"TargetingBrandedEnemy\", defaultState = true, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Condition:TargetingBrandedEnemy\", \"FLAG\", true, \"Config\")\n\tend },",
+      "sha256": "c0ba9d8c392689a2244a214dd0616233d68ede9d1283c3260e7bcf3fb407bc8b",
+      "vars": [
+        "targetBrandedEnemy"
+      ],
+      "declared_names": [
+        "Condition:TargetingBrandedEnemy"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 320,
+      "last": 322,
+      "body": "\t{ var = \"ConcPathBypassCD\", type = \"check\", label = \"Bypass CD?\", ifSkill = \"Consecrated Path of Endurance\", defaultState = true, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"CooldownRecovery\", \"OVERRIDE\", 0, \"Config\", { type = \"SkillName\", skillName = \"Consecrated Path of Endurance\" })\n\tend },",
+      "sha256": "9f424363834101a705599479c98d6ad68440f65cee23375b2751166b3e57b53a",
+      "vars": [
+        "ConcPathBypassCD"
+      ],
+      "declared_names": [
+        "CooldownRecovery"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 338,
+      "last": 342,
+      "body": "\t{ var = \"conditionCorruptingCryStages\", type = \"count\", label = \"# of Corrupted Blood stacks:\", ifGemFamily = \"Corrupting Cry\", defaultPlaceholderState = 10, apply = function(val, modList, enemyModList)\n\t\t-- It's set to 9 here with val -1 to so that it defaults to 1 stage and has max 10 stages.\n\t\t-- set limit in skill multiplier for max stages\n\t\tmodList:NewMod(\"Multiplier:CorruptingCryStageAfterFirst\", \"BASE\", val-1, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },",
+      "sha256": "f4c27f8c78d8d33b953fdafde4995718a46fcbe4ae889be2445e2ef09b360c3d",
+      "vars": [
+        "conditionCorruptingCryStages"
+      ],
+      "declared_names": [
+        "Multiplier:CorruptingCryStageAfterFirst"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 356,
+      "last": 358,
+      "body": "\t{ var = \"inDemonForm\", type = \"check\", label = \"Are you in Demon Form?\", ifSkill = \"Demon Form\", defaultState = true, tooltip = \"Players need a minimum of 2 ^xE05030Life ^7to enter Demon Form, so you cannot use it with Chaos Inoculation\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Condition:DemonForm\", \"FLAG\", true, \"Config\", { type = \"StatThreshold\", stat = \"Life\", threshold = 2 })\n\tend },",
+      "sha256": "a7813c7a8ddb9fbc2c6481fad24f99e1e5fd6b3bbb9ef3f01c4bbaa0072f1659",
+      "vars": [
+        "inDemonForm"
+      ],
+      "declared_names": [
+        "Condition:DemonForm"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 359,
+      "last": 361,
+      "body": "\t{ var = \"demonFormStacks\", type = \"count\", label = \"Demonflame Stacks\", ifSkill = \"Demon Form\", defaultPlaceholderState = 10, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:DemonFlameStacks\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"DemonForm\" } )\n\tend },",
+      "sha256": "79c79a1632e57508c0fcfd338737f7723dc3cbe5b21aad3f0d8faa6619cb363e",
+      "vars": [
+        "demonFormStacks"
+      ],
+      "declared_names": [
+        "Multiplier:DemonFlameStacks"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 381,
+      "last": 389,
+      "body": "\t{ var = \"touchedDebuffsCount\", type = \"countAllowZero\", label = \"Glorious Madness Stacks\", ifOption = \"embraceMadnessActive\", defaultState = 10, tooltip = \"Glorious Madness Stacks grants:\\n\\tEroding Touch: 6% inc Damage Taken per stack\\n\\tParalysing Touch: 6% reduced Action Speed per stack\\n\\tDiluting Touch: 9% reduced Flask charges gained and 9% reduced Flask Effect per stack\\n\\tWasting Touch: 9% reduced ^xE05030Life ^7and ^x88FFFFEnergy Shield ^7recovery rate per stack\", apply = function(val, modList, enemyModList)\n\t\tval = m_min(val, 10)\n\t\tmodList:NewMod(\"DamageTaken\", \"INC\", val * 6, val..\" Eroding Touch Stacks\", { type = \"GlobalEffect\", effectType = \"Debuff\" }, { type = \"Condition\", var = \"AffectedByGloriousMadness\" })\n\t\tmodList:NewMod(\"ActionSpeed\", \"INC\", -val * 6, val..\" Paralysing Touch Stacks\", { type = \"GlobalEffect\", effectType = \"Debuff\" }, { type = \"Condition\", var = \"AffectedByGloriousMadness\" })\n\t\tmodList:NewMod(\"FlaskChargesGained\", \"INC\", -val * 9, val..\" Diluting Touch Stacks\", { type = \"GlobalEffect\", effectType = \"Debuff\" }, { type = \"Condition\", var = \"AffectedByGloriousMadness\" })\n\t\tmodList:NewMod(\"FlaskEffect\", \"INC\", -val * 9, val..\" Diluting Touch Stacks\", { type = \"GlobalEffect\", effectType = \"Debuff\" }, { type = \"Condition\", var = \"AffectedByGloriousMadness\" })\n\t\tmodList:NewMod(\"LifeRecoveryRate\", \"INC\", -val * 9, val..\" Wasting Touch Stacks\", { type = \"GlobalEffect\", effectType = \"Debuff\" }, { type = \"Condition\", var = \"AffectedByGloriousMadness\" })\n\t\tmodList:NewMod(\"EnergyShieldRecoveryRate\", \"INC\", -val * 9, val..\" Wasting Touch Stacks\", { type = \"GlobalEffect\", effectType = \"Debuff\" }, { type = \"Condition\", var = \"AffectedByGloriousMadness\" })\n\tend },",
+      "sha256": "837f2a37582f374819bead60f604b4a91f8023ab65e688c2c321f8063c2b764a",
+      "vars": [
+        "touchedDebuffsCount"
+      ],
+      "declared_names": [
+        "DamageTaken",
+        "ActionSpeed",
+        "FlaskChargesGained",
+        "FlaskEffect",
+        "LifeRecoveryRate",
+        "EnergyShieldRecoveryRate"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 398,
+      "last": 400,
+      "body": "\t{ var = \"FlickerStrikeBypassCD\", type = \"check\", label = \"Bypass CD?\", ifSkill = \"Flicker Strike\", includeTransfigured = true, defaultState = true, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"CooldownRecovery\", \"OVERRIDE\", 0, \"Config\", { type = \"SkillName\", skillName = \"Flicker Strike\", includeTransfigured = true })\n\tend },",
+      "sha256": "1a454a754c973832d61e78989a198f26d2a2654d06542f17fbbf63bb5821f522",
+      "vars": [
+        "FlickerStrikeBypassCD"
+      ],
+      "declared_names": [
+        "CooldownRecovery"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 401,
+      "last": 419,
+      "body": "\t{ var = \"elementalConfluxElement\", type = \"list\", label = \"Elemental Conflux Element:\", ifSkill = \"Elemental Conflux\", list = { { val = 1, label = \"Average\" }, { val = 2, label = \"Lightning\" }, { val = 3, label = \"Cold\" }, { val = 4, label = \"Fire\" } }, defaultIndex = 1, apply = function(val, modList, enemyModList)\n\t\t\tlocal coldMultiplier = 0\n\t\t\tlocal fireMultiplier = 0\n\t\t\tlocal lightningMultiplier = 0\n\t\t\tif val == 1 then\n\t\t\t\tcoldMultiplier = 3\n\t\t\t\tfireMultiplier = 3\n\t\t\t\tlightningMultiplier = 3\n\t\t\telseif val == 2 then\n\t\t\t\tlightningMultiplier = 1\n\t\t\telseif val == 3 then\n\t\t\t\tcoldMultiplier = 1\n\t\t\telseif val == 4 then\n\t\t\t\tfireMultiplier = 1\n\t\t\tend\n\t\t\tmodList:NewMod(\"Multiplier:ElementalConfluxLightningEffect\", \"BASE\", lightningMultiplier, \"Config\",\t{ type = \"GlobalEffect\" })\n\t\t\tmodList:NewMod(\"Multiplier:ElementalConfluxColdEffect\", \"BASE\", coldMultiplier, \"Config\", { type = \"GlobalEffect\" })\n\t\t\tmodList:NewMod(\"Multiplier:ElementalConfluxFireEffect\", \"BASE\", fireMultiplier, \"Config\", { type = \"GlobalEffect\" })\n\t\tend",
+      "sha256": "ff5f58b5527baece6e8898a7600abe86d1225d743c8a5013093528d789607518",
+      "vars": [
+        "elementalConfluxElement"
+      ],
+      "declared_names": [
+        "Multiplier:ElementalConfluxLightningEffect",
+        "Multiplier:ElementalConfluxColdEffect",
+        "Multiplier:ElementalConfluxFireEffect"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 458,
+      "last": 464,
+      "body": "\t{ var = \"SecondsSinceInevitableCrit\", type = \"count\", label = \"# of seconds since Inevitable Crit:\", ifSkill = { \"Inexorable Critical I\", \"Inexorable Critical II\" }, defaultState = 10, tooltip = \"Also implies you've crit recently if the value is 3s or below\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:SecondsSinceInevitableCrit\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"Combat\" })\n\t\tif val < 4 then\n\t\t\tmodList:NewMod(\"Condition:CritRecently\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Combat\" })\n\t\t\tmodList:NewMod(\"Condition:SkillCritRecently\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Combat\" })\n\t\tend\n\tend },",
+      "sha256": "ae8025ece9adfb3d54017fe17e795c31f802d09c037e0c57ac6822b695ea9a4d",
+      "vars": [
+        "SecondsSinceInevitableCrit"
+      ],
+      "declared_names": [
+        "Multiplier:SecondsSinceInevitableCrit",
+        "Condition:CritRecently",
+        "Condition:SkillCritRecently"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 474,
+      "last": 476,
+      "body": "\t{ var = \"purpleFlameStacks\", type = \"count\", label = \"Purple Flames collected:\", tooltip = \"Number of Purple Flames of Chayula collected (max 10).\", ifSkill = \"Into the Breach\", defaultState = 10, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:PurpleFlamesCount\", \"BASE\", m_min(val, 10), \"Config\")\n\tend },",
+      "sha256": "ef56ed3b1b736defe661fd3f3ef58fd365d4eac2bc26308196bb602db479ca16",
+      "vars": [
+        "purpleFlameStacks"
+      ],
+      "declared_names": [
+        "Multiplier:PurpleFlamesCount"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 544,
+      "last": 546,
+      "body": "\t{ var = \"raiseSpectreEnableBuffs\", type = \"check\", defaultState = true, label = \"Enable buffs:\", ifSkillFlag = \"spectre\", includeTransfigured = true, tooltip = \"Enable any buff skills that your spectres have.\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"SkillData\", \"LIST\", { key = \"enable\", value = true }, \"Config\", { type = \"SkillType\", skillType = SkillType.Buff }, { type = \"SkillName\", skillName = \"Spectre\", partialMatch = true, summonSkill = true })\n\tend },",
+      "sha256": "518b1fa602c33827b26fcad5f7a487756270999cc9cfbe6406ecac0b3b6098f1",
+      "vars": [
+        "raiseSpectreEnableBuffs"
+      ],
+      "declared_names": [
+        "SkillData"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 547,
+      "last": 549,
+      "body": "\t{ var = \"raiseSpectreEnableCurses\", type = \"check\", defaultState = true, label = \"Enable curses:\", ifSkillFlag = \"spectre\", includeTransfigured = true, tooltip = \"Enable any curse skills that your spectres have.\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"SkillData\", \"LIST\", { key = \"enable\", value = true }, \"Config\", { type = \"SkillType\", skillType = SkillType.AppliesCurse }, { type = \"SkillName\", skillName = \"Spectre\", partialMatch = true, summonSkill = true })\n\tend },",
+      "sha256": "b060b41fa2464b40a5b114b89b085f729f6dab2f37cf7b8ab00c2de95998e75f",
+      "vars": [
+        "raiseSpectreEnableCurses"
+      ],
+      "declared_names": [
+        "SkillData"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 599,
+      "last": 601,
+      "body": "\t{ var = \"sigilOfPowerStages\", type = \"countAllowZero\", label = \"Stages:\", ifSkill = \"Sigil of Power\", defaultPlaceholderState = 1, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:SigilOfPowerStage\", \"BASE\", val, \"Config\")\n\tend },",
+      "sha256": "e6e9b9bb75afdb3079805f63f34cedb91b3ccd91c583da83d28407119bbe880d",
+      "vars": [
+        "sigilOfPowerStages"
+      ],
+      "declared_names": [
+        "Multiplier:SigilOfPowerStage"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 644,
+      "last": 646,
+      "body": "\t{ var = \"summonCompanionEnableBuffs\", type = \"check\", defaultState = true, label = \"Enable buffs:\", ifSkillFlag = \"summonBeast\", includeTransfigured = true, tooltip = \"Enable any buff skills that your Companions have.\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"SkillData\", \"LIST\", { key = \"enable\", value = true }, \"Config\", { type = \"SkillType\", skillType = SkillType.Buff }, { type = \"SkillName\", skillName = \"Companion\", partialMatch = true, summonSkill = true })\n\tend },",
+      "sha256": "dbd7bc023eef8abfffabdc489f44345da636086ae216a27b5eea52aeaf3805fb",
+      "vars": [
+        "summonCompanionEnableBuffs"
+      ],
+      "declared_names": [
+        "SkillData"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 647,
+      "last": 649,
+      "body": "\t{ var = \"summonCompanionEnableCurses\", type = \"check\", defaultState = true, label = \"Enable curses:\", ifSkillFlag = \"summonBeast\", includeTransfigured = true, tooltip = \"Enable any curse skills that your Companions have.\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"SkillData\", \"LIST\", { key = \"enable\", value = true }, \"Config\", { type = \"SkillType\", skillType = SkillType.AppliesCurse }, { type = \"SkillName\", skillName = \"Companion\", partialMatch = true, summonSkill = true })\n\tend },",
+      "sha256": "0f5169784ee00547832191eac0590ce1cde5468c25bac947241530851c17825a",
+      "vars": [
+        "summonCompanionEnableCurses"
+      ],
+      "declared_names": [
+        "SkillData"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 651,
+      "last": 653,
+      "body": "\t{ var = \"summonElementalRelicEnableAngerAura\", type = \"check\", defaultState = true, label = \"Enable Anger Aura:\", ifSkill = \"Summon Elemental Relic\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"SkillData\", \"LIST\", { key = \"enable\", value = true }, \"Config\", { type = \"SkillId\", skillId = \"Anger\" }, { type = \"SkillName\", skillName = \"Summon Elemental Relic\", summonSkill = true })\n\tend },",
+      "sha256": "e3351f04588cbd58023676f2b0d54a140d1b249301494aa742d420a5dcdbdb40",
+      "vars": [
+        "summonElementalRelicEnableAngerAura"
+      ],
+      "declared_names": [
+        "SkillData"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 654,
+      "last": 656,
+      "body": "\t{ var = \"summonElementalRelicEnableHatredAura\", type = \"check\", defaultState = true, label = \"Enable Hatred Aura:\", ifSkill = \"Summon Elemental Relic\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"SkillData\", \"LIST\", { key = \"enable\", value = true }, \"Config\", { type = \"SkillId\", skillId = \"Hatred\" }, { type = \"SkillName\", skillName = \"Summon Elemental Relic\", summonSkill = true })\n\tend },",
+      "sha256": "0804fae3461983a27d752d06a595bb3513b9f025b70f0ff9224ddaec2f9ef9de",
+      "vars": [
+        "summonElementalRelicEnableHatredAura"
+      ],
+      "declared_names": [
+        "SkillData"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 657,
+      "last": 659,
+      "body": "\t{ var = \"summonElementalRelicEnableWrathAura\", type = \"check\", defaultState = true, label = \"Enable Wrath Aura:\", ifSkill = \"Summon Elemental Relic\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"SkillData\", \"LIST\", { key = \"enable\", value = true }, \"Config\", { type = \"SkillId\", skillId = \"Wrath\" }, { type = \"SkillName\", skillName = \"Summon Elemental Relic\", summonSkill = true })\n\tend },",
+      "sha256": "8d9152516f704c5becf7fcf1a01d7844e4667ef3bda4a98a9c7ead2ffc88093e",
+      "vars": [
+        "summonElementalRelicEnableWrathAura"
+      ],
+      "declared_names": [
+        "SkillData"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 715,
+      "last": 717,
+      "body": "\t{ var = \"VigilantStrikeBypassCD\", type = \"check\", label = \"Bypass CD?\", ifSkill = \"Vigilant Strike\", defaultState = true, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"CooldownRecovery\", \"OVERRIDE\", 0, \"Config\", { type = \"SkillName\", skillName = \"Vigilant Strike\" })\n\tend },",
+      "sha256": "b41bae9974ecbcd6e354303310bdfa7c33938750c4a4e6e6dd99c8a814924f1d",
+      "vars": [
+        "VigilantStrikeBypassCD"
+      ],
+      "declared_names": [
+        "CooldownRecovery"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 780,
+      "last": 794,
+      "body": "\tThis is the size of some of the largest bosses (i.e. Nucleus of the Maven; Tsoagoth, The Brine King)]], list = {{val=\"Small\",label=\"Small\"},{val=\"Medium\",label=\"Medium\"},{val=\"Large\",label=\"Large\"},{val=\"Huge\",label=\"Huge\"}}, apply = function(val, modList, enemyModList, build)\n\t\tif val == \"Small\" then\n\t\t\tbuild.configTab.varControls['enemyRadius']:SetPlaceholder(2, false)\n\t\t\tmodList:NewMod(\"EnemyRadius\", \"BASE\", 2, \"Config\")\n\t\telseif val == \"Medium\" then\n\t\t\tbuild.configTab.varControls['enemyRadius']:SetPlaceholder(3, false)\n\t\t\tmodList:NewMod(\"EnemyRadius\", \"BASE\", 3, \"Config\")\n\t\telseif val == \"Large\" then\n\t\t\tbuild.configTab.varControls['enemyRadius']:SetPlaceholder(5, false)\n\t\t\tmodList:NewMod(\"EnemyRadius\", \"BASE\", 5, \"Config\")\n\t\telseif val == \"Huge\" then\n\t\t\tbuild.configTab.varControls['enemyRadius']:SetPlaceholder(11, false)\n\t\t\tmodList:NewMod(\"EnemyRadius\", \"BASE\", 11, \"Config\")\n\t\tend\n\tend },",
+      "sha256": "b6fbaec2d2ed71f698282dee1ae4b8013116ecdafa8793078809aad034e7adf5",
+      "vars": [
+        "enemySizePreset"
+      ],
+      "declared_names": [
+        "EnemyRadius",
+        "EnemyRadius",
+        "EnemyRadius",
+        "EnemyRadius"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 871,
+      "last": 879,
+      "body": "\t}, defaultIndex = 2, apply = function(val, modList, enemyModList)\n\t\tif val == \"AVERAGE\" then\n\t\t\tmodList:NewMod(\"Condition:averageRepeat\", \"FLAG\", true, \"Config\")\n\t\t\tmodList:NewMod(\"MinionModifier\", \"LIST\", { mod = modLib.createMod(\"Condition:averageRepeat\", \"FLAG\", true, \"Config\") })\n\t\telseif val == \"FINAL\" or val == \"FINAL_DPS\" then\n\t\t\tmodList:NewMod(\"Condition:alwaysFinalRepeat\", \"FLAG\", true, \"Config\")\n\t\t\tmodList:NewMod(\"MinionModifier\", \"LIST\", { mod = modLib.createMod(\"Condition:alwaysFinalRepeat\", \"FLAG\", true, \"Config\") })\n\t\tend\n\tend },",
+      "sha256": "7e50ce2711bee1c4611bb82535fd92f6d3e33ab0df365d0aca8ade1986e0ff8b",
+      "vars": [
+        "repeatMode"
+      ],
+      "declared_names": [
+        "Condition:averageRepeat",
+        "MinionModifier",
+        "Condition:averageRepeat",
+        "Condition:alwaysFinalRepeat",
+        "MinionModifier",
+        "Condition:alwaysFinalRepeat"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1032,
+      "last": 1034,
+      "body": "\t{ var = \"companionInPresence\", type = \"check\", label = \"Is a Companion in your Presence?\", ifSkillType = SkillType.CreatesCompanion, defaultState = true, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Condition:CompanionInPresence\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"HaveCompanion\" })\n\tend },",
+      "sha256": "041b4463494a1d2896fa54b7ad1422318e75029094c72ea61223d45e305ebe3f",
+      "vars": [
+        "companionInPresence"
+      ],
+      "declared_names": [
+        "Condition:CompanionInPresence"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1119,
+      "last": 1121,
+      "body": "\t{ var = \"multiplierWitheredStackCountSelf\", type = \"countAllowZero\", label = \"# of Withered Stacks on you:\", ifFlag = \"Condition:CanBeWithered\", tooltip = \"Withered applies 5% increased ^xD02090Chaos ^7Damage Taken to the self, up to 10 stacks.\", defaultPlaceholderState = 15, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:WitheredStack\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },",
+      "sha256": "b6db8fadf9d5674a58493e1f85b9b93a4f79a1607a98fdc4a6d3165259dfca95",
+      "vars": [
+        "multiplierWitheredStackCountSelf"
+      ],
+      "declared_names": [
+        "Multiplier:WitheredStack"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1281,
+      "last": 1283,
+      "body": "\t{ var = \"multiplierStunnedRecently\", type = \"count\", label = \"# of times Stunned Recently:\", ifOption = \"conditionStunnedRecently\", defaultPlaceholderState = 1, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:StunnedRecently\", \"BASE\", m_min(val, 100), \"Config\", { type = \"Condition\", var = \"Combat\" }, { type = \"Condition\", var = \"StunnedRecently\" } )\n\tend },",
+      "sha256": "8c5d07d3b8f8fe9ef8626cbfe6d664a850692511ce0c0120dd610a9f7bcfd125",
+      "vars": [
+        "multiplierStunnedRecently"
+      ],
+      "declared_names": [
+        "Multiplier:StunnedRecently"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1421,
+      "last": 1423,
+      "body": "\t{ var = \"conditionChampionIntimidate\", type = \"check\", label = \"Is Champion's Intimidate active?\", ifEnemyCond = \"ChampionIntimidate\", defaultState = true, apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"Condition:ChampionIntimidate\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Combat\" })\n\tend },",
+      "sha256": "6749ab540fcdd971cf4e4e978dd26b2fb6a7e8e1b72d3f801534b3805aa57e5c",
+      "vars": [
+        "conditionChampionIntimidate"
+      ],
+      "declared_names": [
+        "Condition:ChampionIntimidate"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1503,
+      "last": 1505,
+      "body": "\t{ var = \"multiplierWarcryUsedRecently\", type = \"count\", label = \"# of Warcries Used Recently:\", defaultPlaceholderState = 1, ifOption = \"conditionUsedWarcryRecently\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:WarcryUsedRecently\", \"BASE\", m_min(val, 100), \"Config\", { type = \"Condition\", var = \"Combat\" }, { type = \"Condition\", var = \"UsedWarcryRecently\" } )\n\tend },",
+      "sha256": "757ed4aaf8d36443e39442fafd54861da928652587e1777a758e32e92589d355",
+      "vars": [
+        "multiplierWarcryUsedRecently"
+      ],
+      "declared_names": [
+        "Multiplier:WarcryUsedRecently"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1609,
+      "last": 1611,
+      "body": "\t{ var = \"GamblesprintMovementSpeed\", type = \"list\", label = \"Gamblesprint Movement Speed\", defaultIndex=3, list={{val=0,label=\"0%\"},{val=10,label=\"10%\"},{val=20,label=\"20%\"},{val=30,label=\"30%\"},{val=40,label=\"40%\"}}, ifFlag = \"Condition:HaveGamblesprint\", tooltip = \"This option sets the Movement Speed from Gamblesprint boots.\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"MovementSpeed\", \"INC\", val, \"Config\", { type = \"Condition\", var = \"Combat\" }, { type = \"Condition\", var = \"HaveGamblesprint\" })\n\tend },",
+      "sha256": "23dec3bab3cf95e3c6e4e6f5fbc268a04406874728bd9b5ad14ac9aae4fea663",
+      "vars": [
+        "GamblesprintMovementSpeed"
+      ],
+      "declared_names": [
+        "MovementSpeed"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1639,
+      "last": 1641,
+      "body": "\t{ var = \"enemyDistance\", type = \"count\", label = \"Distance to enemy:\", tooltip = \"10 units equals 1 metre\\nPlayer and Minion Attacks incur an Accuracy penalty based on distance from the origin of the damage to the target,\\nwith no penalty for targets within 2 metres and up to 90% less Accuracy for targets further than 12 metres away-\", defaultPlaceholderState = 20, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:enemyDistance\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },",
+      "sha256": "c852e42b41b9784a7691b0158e86bee4313057b708894165af0554205db37913",
+      "vars": [
+        "enemyDistance"
+      ],
+      "declared_names": [
+        "Multiplier:enemyDistance"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1657,
+      "last": 1659,
+      "body": "\t{ var = \"multiplierDifferentAmmoFired\", type = \"count\", label = \"# different Ammo Types Shot past 10s\", tooltip = \"Number of different Ammunition types used in tha past 10s\", ifMult = \"DifferentAmmoFired\", defaultPlaceholderState = 1, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:DifferentAmmoFired\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },",
+      "sha256": "14c90ddcf50aa683f55c05612032a68165d5d2388b212d5181835b6131b2a507",
+      "vars": [
+        "multiplierDifferentAmmoFired"
+      ],
+      "declared_names": [
+        "Multiplier:DifferentAmmoFired"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1660,
+      "last": 1662,
+      "body": "\t{ var = \"multiplierDifferentGrenadeFired\", type = \"count\", label = \"# different Grenade Types Shot past 10s\", tooltip = \"Number of different Grenade types used in tha past 10s\", ifMult = \"DifferentGrenadeFired\", defaultPlaceholderState = 1, apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:DifferentGrenadeFired\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },",
+      "sha256": "a893864c3584272fb93af4ccc79d5dea9e4afb85ae91de77a20fa4a5223489f1",
+      "vars": [
+        "multiplierDifferentGrenadeFired"
+      ],
+      "declared_names": [
+        "Multiplier:DifferentGrenadeFired"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1801,
+      "last": 1803,
+      "body": "\t{ var = \"ScorchStacks\", type = \"countAllowZero\", label = \"^xB97123Scorch ^7Stacks\", ifFlag = \"ScorchCanStack\", ifOption = \"conditionEnemyScorched\", defaultPlaceholderState = 1, tooltip = \"Amount of stacks of ^xB97123Scorch ^7applied to the enemy.\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"Multiplier:ScorchStacks\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },",
+      "sha256": "5ae1f033b598bb50ad1067898b47a9379f8dfc5f8a2cc705cc65fa10dd776f86",
+      "vars": [
+        "ScorchStacks"
+      ],
+      "declared_names": [
+        "Multiplier:ScorchStacks"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1819,
+      "last": 1821,
+      "body": "\t{ var = \"ChillStacks\", type = \"count\", label = \"^xADAA47Chill ^7Stacks\", ifFlag = \"ChillCanStack\", ifOption = \"conditionEnemyChilled\", defaultPlaceholderState = 1, tooltip = \"Amount of stacks of ^xADAA47Chill ^7applied to the enemy.\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"Multiplier:ChillStacks\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },",
+      "sha256": "04c458d37dd352aefde20dbb3fad2684449dbfa30bd8e80f8986a922ba9b27a8",
+      "vars": [
+        "ChillStacks"
+      ],
+      "declared_names": [
+        "Multiplier:ChillStacks"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1859,
+      "last": 1861,
+      "body": "\t{ var = \"ShockStacks\", type = \"count\", label = \"^xADAA47Shock ^7Stacks\", ifFlag = \"ShockCanStack\", ifOption = \"conditionEnemyShocked\", defaultPlaceholderState = 1, tooltip = \"Amount of stacks of ^xADAA47Shock ^7applied to the enemy.\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"Multiplier:ShockStacks\", \"BASE\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },",
+      "sha256": "fe1e720ead53e6a40ffb9adfb3561e9c4adb6c6afd2b97018da0dc82754689ee",
+      "vars": [
+        "ShockStacks"
+      ],
+      "declared_names": [
+        "Multiplier:ShockStacks"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1911,
+      "last": 1913,
+      "body": "\t{ var = \"enemyCriticalWeaknessStacks\", type = \"count\", label = \"Critical weakness stacks:\", ifOption = \"conditionEnemyCriticalWeakness\", tooltip = \"Each stack of critical weakness applies +0.5% to critical strike chance against the affected target\", defaultPlaceholderState = 20, apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"SelfCritChance\", \"BASE\", m_max(m_min(val or 20, 20), 0) / 2, \"Critical Weakness\", { type = \"Condition\", var = \"ApplyCriticalWeakness\" })\n\tend },",
+      "sha256": "ffc3eea5af3cf0c467007aa689cafcce0310ff29b4b9a87d0e1b06ac63bb6142",
+      "vars": [
+        "enemyCriticalWeaknessStacks"
+      ],
+      "declared_names": [
+        "SelfCritChance"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 1982,
+      "last": 2139,
+      "body": "\t{ var = \"enemyIsBoss\", type = \"list\", label = \"Is the enemy a Boss?\", defaultIndex = 3, tooltip = data.enemyIsBossTooltip, list = {{val=\"None\",label=\"No\"},{val=\"Boss\",label=\"Standard Boss\"},{val=\"Pinnacle\",label=\"Guardian/Pinnacle Boss\"},{val=\"Uber\",label=\"Uber Pinnacle Boss\"}}, apply = function(val, modList, enemyModList, build)\n\t\t-- These defaults are here so that the placeholders get reset correctly\n\t\tbuild.configTab.varControls['enemySpeed']:SetPlaceholder(700, true)\n\t\tbuild.configTab.varControls['enemyCritChance']:SetPlaceholder(5, true)\n\t\tbuild.configTab.varControls['enemyCritDamage']:SetPlaceholder(data.monsterConstants[\"base_critical_hit_damage_bonus\"], true)\n\t\tif val == \"None\" then\n\t\t\tlocal defaultResist = \"\"\n\t\t\tbuild.configTab.varControls['enemyLightningResist']:SetPlaceholder(defaultResist, true)\n\t\t\tbuild.configTab.varControls['enemyColdResist']:SetPlaceholder(defaultResist, true)\n\t\t\tbuild.configTab.varControls['enemyFireResist']:SetPlaceholder(defaultResist, true)\n\t\t\tbuild.configTab.varControls['enemyChaosResist']:SetPlaceholder(defaultResist, true)\n\n\t\t\tlocal defaultLevel = 82\n\t\t\tbuild.configTab.varControls['enemyLevel']:SetPlaceholder(build.characterLevel, true)\n\t\t\tbuild.configTab:UpdateLevel()\n\t\t\tif build.configTab.enemyLevel then\n\t\t\t\tdefaultLevel = build.configTab.enemyLevel\n\t\t\tend\n\n\t\t\tlocal defaultDamage = round(data.monsterDamageTable[defaultLevel] * 1.5 * data.misc.normalEnemyDPSMult)\n\t\t\tbuild.configTab.varControls['enemyPhysicalDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyLightningDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyColdDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyFireDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyChaosDamage']:SetPlaceholder(round(defaultDamage / 2.5), true)\n\n\t\t\tlocal defaultPen = \"\"\n\t\t\tbuild.configTab.varControls['enemyPhysicalOverwhelm']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyLightningPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyColdPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyFirePen']:SetPlaceholder(defaultPen, true)\n\n\t\t\tbuild.configTab.varControls['enemyArmour']:SetPlaceholder(data.monsterArmourTable[defaultLevel], true)\n\t\t\tbuild.configTab.varControls['enemyEvasion']:SetPlaceholder(data.monsterEvasionTable[defaultLevel], true)\n\t\telseif val == \"Boss\" then\n\t\t\tenemyModList:NewMod(\"Condition:Unique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"Condition:RareOrUnique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"CurseEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique13\n\t\t\tenemyModList:NewMod(\"ExposureEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique14\n\t\t\tenemyModList:NewMod(\"KnockbackDistanceOnSelf\", \"MORE\", -75, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique12\n\t\t\tenemyModList:NewMod(\"SlowEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique11\n\t\t\tenemyModList:NewMod(\"MinimumMovementSpeed\", \"BASE\", 20, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique9\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 500, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique2\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 213, \"Map Boss\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tmodList:NewMod(\"WarcryPower\", \"BASE\", 20, \"Boss\")\n\t\t\tmodList:NewMod(\"Multiplier:EnemyPower\", \"BASE\", 20, \"Boss\")\n\n\t\t\tlocal defaultEleResist = 30\n\t\t\tbuild.configTab.varControls['enemyLightningResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyColdResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyFireResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyChaosResist']:SetPlaceholder(0, true)\n\n\t\t\tlocal defaultLevel = 82\n\t\t\tbuild.configTab.varControls['enemyLevel']:SetPlaceholder(build.characterLevel, true)\n\t\t\tbuild.configTab:UpdateLevel()\n\t\t\tif build.configTab.enemyLevel then\n\t\t\t\tdefaultLevel = build.configTab.enemyLevel\n\t\t\tend\n\n\t\t\tlocal defaultDamage = round(data.monsterDamageTable[defaultLevel] * 1.5  * data.misc.stdBossDPSMult)\n\t\t\tbuild.configTab.varControls['enemyPhysicalDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyLightningDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyColdDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyFireDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyChaosDamage']:SetPlaceholder(round(defaultDamage / 2.5), true)\n\n\t\t\tlocal defaultPen = \"\"\n\t\t\tbuild.configTab.varControls['enemyPhysicalOverwhelm']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyLightningPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyColdPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyFirePen']:SetPlaceholder(defaultPen, true)\n\n\t\t\tbuild.configTab.varControls['enemyArmour']:SetPlaceholder(data.monsterArmourTable[defaultLevel], true)\n\t\t\tbuild.configTab.varControls['enemyEvasion']:SetPlaceholder(data.monsterEvasionTable[defaultLevel], true)\n\t\telseif val == \"Pinnacle\" then\n\t\t\tenemyModList:NewMod(\"Condition:Unique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"Condition:RareOrUnique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"Condition:PinnacleBoss\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"CurseEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique13\n\t\t\tenemyModList:NewMod(\"ExposureEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique14\n\t\t\tenemyModList:NewMod(\"KnockbackDistanceOnSelf\", \"MORE\", -75, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique12\n\t\t\tenemyModList:NewMod(\"SlowEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique11\n\t\t\tenemyModList:NewMod(\"MinimumMovementSpeed\", \"BASE\", 20, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique9\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 500, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique2\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 838, \"Xesht\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tmodList:NewMod(\"WarcryPower\", \"BASE\", 20, \"Boss\")\n\t\t\tmodList:NewMod(\"Multiplier:EnemyPower\", \"BASE\", 20, \"Boss\")\n\n\t\t\tlocal defaultEleResist = 50\n\t\t\tbuild.configTab.varControls['enemyLightningResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyColdResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyFireResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyChaosResist']:SetPlaceholder(0, true)\n\n\t\t\tlocal defaultLevel = 82\n\t\t\tbuild.configTab.varControls['enemyLevel']:SetPlaceholder(defaultLevel, true)\n\t\t\tbuild.configTab:UpdateLevel()\n\t\t\tif build.configTab.enemyLevel then\n\t\t\t\tdefaultLevel = m_max(build.configTab.enemyLevel, defaultLevel)\n\t\t\tend\n\n\t\t\tlocal defaultDamage = round(data.monsterDamageTable[defaultLevel] * 1.5  * data.misc.pinnacleBossDPSMult)\n\t\t\tbuild.configTab.varControls['enemyPhysicalDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyLightningDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyColdDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyFireDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyChaosDamage']:SetPlaceholder(round(defaultDamage / 2.5), true)\n\n\t\t\tbuild.configTab.varControls['enemyLightningPen']:SetPlaceholder(data.misc.pinnacleBossPen, true)\n\t\t\tbuild.configTab.varControls['enemyColdPen']:SetPlaceholder(data.misc.pinnacleBossPen, true)\n\t\t\tbuild.configTab.varControls['enemyFirePen']:SetPlaceholder(data.misc.pinnacleBossPen, true)\n\n\t\t\tbuild.configTab.varControls['enemyArmour']:SetPlaceholder(round(data.monsterArmourTable[defaultLevel] * (data.bossStats.PinnacleArmourMean/100)), true)\n\t\t\tbuild.configTab.varControls['enemyEvasion']:SetPlaceholder(round(data.monsterEvasionTable[defaultLevel] * (data.bossStats.PinnacleEvasionMean/100)), true)\n\t\telseif val == \"Uber\" then\n\t\t\tenemyModList:NewMod(\"Condition:Unique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"Condition:RareOrUnique\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"Condition:PinnacleBoss\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tenemyModList:NewMod(\"CurseEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique13\n\t\t\tenemyModList:NewMod(\"ExposureEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique14\n\t\t\tenemyModList:NewMod(\"KnockbackDistanceOnSelf\", \"MORE\", -75, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique12\n\t\t\tenemyModList:NewMod(\"SlowEffectOnSelf\", \"MORE\", -50, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique11\n\t\t\tenemyModList:NewMod(\"MinimumMovementSpeed\", \"BASE\", 20, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique9\n\t\t\tenemyModList:NewMod(\"DamageTaken\", \"MORE\", -70, \"Boss\")\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 500, \"Unique\", { type = \"Condition\", var = \"Effective\" }) -- MonsterUnique2\n\t\t\tenemyModList:NewMod(\"PoiseThreshold\", \"MORE\", 838, \"Xesht\", { type = \"Condition\", var = \"Effective\" })\n\t\t\tmodList:NewMod(\"WarcryPower\", \"BASE\", 20, \"Boss\")\n\t\t\tmodList:NewMod(\"Multiplier:EnemyPower\", \"BASE\", 20, \"Boss\")\n\n\t\t\tlocal defaultEleResist = 50\n\t\t\tbuild.configTab.varControls['enemyLightningResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyColdResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyFireResist']:SetPlaceholder(defaultEleResist, true)\n\t\t\tbuild.configTab.varControls['enemyChaosResist']:SetPlaceholder(0, true)\n\n\t\t\tlocal defaultLevel = 82\n\t\t\tbuild.configTab.varControls['enemyLevel']:SetPlaceholder(defaultLevel, true)\n\t\t\tbuild.configTab:UpdateLevel()\n\t\t\tif build.configTab.enemyLevel then\n\t\t\t\tdefaultLevel = m_max(build.configTab.enemyLevel, defaultLevel)\n\t\t\tend\n\n\t\t\tlocal defaultDamage = round(data.monsterDamageTable[defaultLevel] * 1.5  * data.misc.uberBossDPSMult)\n\t\t\tbuild.configTab.varControls['enemyPhysicalDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyLightningDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyColdDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyFireDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyChaosDamage']:SetPlaceholder(round(defaultDamage / 4), true)\n\n\t\t\tbuild.configTab.varControls['enemyLightningPen']:SetPlaceholder(data.misc.uberBossPen, true)\n\t\t\tbuild.configTab.varControls['enemyColdPen']:SetPlaceholder(data.misc.uberBossPen, true)\n\t\t\tbuild.configTab.varControls['enemyFirePen']:SetPlaceholder(data.misc.uberBossPen, true)\n\n\t\t\tbuild.configTab.varControls['enemyArmour']:SetPlaceholder(round(data.monsterArmourTable[defaultLevel] * (data.bossStats.UberArmourMean/100)), true)\n\t\t\tbuild.configTab.varControls['enemyEvasion']:SetPlaceholder(round(data.monsterEvasionTable[defaultLevel] * (data.bossStats.UberEvasionMean/100)), true)\n\t\tend\n\tend },",
+      "sha256": "4b4568bd7ea629e326d21e5b7301f03002d6a59bffaadff5970d282021aff7e9",
+      "vars": [
+        "enemyIsBoss"
+      ],
+      "declared_names": [
+        "Condition:Unique",
+        "Condition:RareOrUnique",
+        "CurseEffectOnSelf",
+        "ExposureEffectOnSelf",
+        "KnockbackDistanceOnSelf",
+        "SlowEffectOnSelf",
+        "MinimumMovementSpeed",
+        "PoiseThreshold",
+        "PoiseThreshold",
+        "WarcryPower",
+        "Multiplier:EnemyPower",
+        "Condition:Unique",
+        "Condition:RareOrUnique",
+        "Condition:PinnacleBoss",
+        "CurseEffectOnSelf",
+        "ExposureEffectOnSelf",
+        "KnockbackDistanceOnSelf",
+        "SlowEffectOnSelf",
+        "MinimumMovementSpeed",
+        "PoiseThreshold",
+        "PoiseThreshold",
+        "WarcryPower",
+        "Multiplier:EnemyPower",
+        "Condition:Unique",
+        "Condition:RareOrUnique",
+        "Condition:PinnacleBoss",
+        "CurseEffectOnSelf",
+        "ExposureEffectOnSelf",
+        "KnockbackDistanceOnSelf",
+        "SlowEffectOnSelf",
+        "MinimumMovementSpeed",
+        "DamageTaken",
+        "PoiseThreshold",
+        "PoiseThreshold",
+        "WarcryPower",
+        "Multiplier:EnemyPower"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 2165,
+      "last": 2167,
+      "body": "\t{ var = \"enemyLightningResist\", type = \"countAllowZero\", label = \"Enemy ^xADAA47Lightning Resistance:\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"LightningResist\", \"BASE\", val, \"EnemyConfig\")\n\tend },",
+      "sha256": "4dc0ff09bcdba38aeeab082649222c2ebcf86fe0c608136d2690bdecdeb2e924",
+      "vars": [
+        "enemyLightningResist"
+      ],
+      "declared_names": [
+        "LightningResist"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 2168,
+      "last": 2170,
+      "body": "\t{ var = \"enemyColdResist\", type = \"countAllowZero\", label = \"Enemy ^x3F6DB3Cold Resistance:\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"ColdResist\", \"BASE\", val, \"EnemyConfig\")\n\tend },",
+      "sha256": "b6ba75e088d68118f9285d656bf17bb4d4e5ce0c0a148996f073436248e29f6d",
+      "vars": [
+        "enemyColdResist"
+      ],
+      "declared_names": [
+        "ColdResist"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 2171,
+      "last": 2173,
+      "body": "\t{ var = \"enemyFireResist\", type = \"countAllowZero\", label = \"Enemy ^xB97123Fire Resistance:\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"FireResist\", \"BASE\", val, \"EnemyConfig\")\n\tend },",
+      "sha256": "36cd29b3768a0c1e9d8b6195ddc889e801c891d8a68cb7830c5279d696f3e576",
+      "vars": [
+        "enemyFireResist"
+      ],
+      "declared_names": [
+        "FireResist"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 2174,
+      "last": 2176,
+      "body": "\t{ var = \"enemyChaosResist\", type = \"countAllowZero\", label = \"Enemy ^xD02090Chaos Resistance:\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"ChaosResist\", \"BASE\", val, \"EnemyConfig\")\n\tend },",
+      "sha256": "cd6772cf0cdabef4ca44bb22f9714e7843bc0912b7a138da00e3845ae66269d8",
+      "vars": [
+        "enemyChaosResist"
+      ],
+      "declared_names": [
+        "ChaosResist"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 2183,
+      "last": 2185,
+      "body": "\t{ var = \"enemyEvasion\", type = \"countAllowZero\", label = \"Enemy Base ^x33FF77Evasion:\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"Evasion\", \"BASE\", val, \"Config\")\n\tend },",
+      "sha256": "f77251e205681bd29d074a0779dce259ce2f5d2a778d9fd71fdc3ad56dcc78fa",
+      "vars": [
+        "enemyEvasion"
+      ],
+      "declared_names": [
+        "Evasion"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 2186,
+      "last": 2188,
+      "body": "\t{ var = \"enemyArmour\", type = \"countAllowZero\", label = \"Enemy Base Armour:\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"Armour\", \"BASE\", val, \"Config\")\n\tend },",
+      "sha256": "e15192b77f669f4e98625a9d907d70bbf4eacb00093960263179aed865ae6bd0",
+      "vars": [
+        "enemyArmour"
+      ],
+      "declared_names": [
+        "Armour"
+      ],
+      "classification": "literal-writer-domain"
+    },
+    {
+      "first": 2189,
+      "last": 2268,
+      "body": "\t{ var = \"presetBossSkills\", type = \"list\", defaultIndex = 1, label = \"Boss Skill Preset\", tooltipFunc = bossSkillsTooltip, list = data.bossSkillsList, apply = function(val, modList, enemyModList, build)\n\t\tif not (val == \"None\") then\n\t\t\tlocal bossData = data.bossSkills[val]\n\t\t\tlocal isUber = build.configTab.varControls['enemyIsBoss'].list[build.configTab.varControls['enemyIsBoss'].selIndex].val == \"Uber\"\n\t\t\tif bossData.earlierUber and build.configTab.varControls['enemyIsBoss'].list[build.configTab.varControls['enemyIsBoss'].selIndex].val == \"Pinnacle\" then\n\t\t\t\tisUber = true\n\t\t\tend\n\t\t\tlocal defaultDamage = \"\"\n\t\t\tbuild.configTab.varControls['enemyPhysicalDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyLightningDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyColdDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyFireDamage']:SetPlaceholder(defaultDamage, true)\n\t\t\tbuild.configTab.varControls['enemyChaosDamage']:SetPlaceholder(defaultDamage, true)\n\n\t\t\tlocal rollRangeMult = m_min(m_max(build.configTab.input['enemyDamageRollRange'] or build.configTab.varControls['enemyDamageRollRange'].placeholder, 0), 100)\n\t\t\tfor damageType, damageMult in pairs(bossData.DamageMultipliers) do\n\t\t\t\tif isUber and bossData.UberDamageMultiplier then\n\t\t\t\t\tbuild.configTab.varControls['enemy'..damageType..'Damage']:SetPlaceholder(round(data.monsterDamageTable[build.configTab.enemyLevel] * (damageMult[1] + rollRangeMult * damageMult[2]) * bossData.UberDamageMultiplier), true)\n\t\t\t\telse\n\t\t\t\t\tbuild.configTab.varControls['enemy'..damageType..'Damage']:SetPlaceholder(round(data.monsterDamageTable[build.configTab.enemyLevel] * (damageMult[1] + rollRangeMult * damageMult[2])), true)\n\t\t\t\tend\n\t\t\tend\n\n\t\t\tlocal defaultPen = \"\"\n\t\t\tbuild.configTab.varControls['enemyPhysicalOverwhelm']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyLightningPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyColdPen']:SetPlaceholder(defaultPen, true)\n\t\t\tbuild.configTab.varControls['enemyFirePen']:SetPlaceholder(defaultPen, true)\n\n\t\t\tif bossData.DamagePenetrations then\n\t\t\t\tfor penType, pen in pairs(bossData.DamagePenetrations) do\n\t\t\t\t\tif isUber and bossData.UberDamagePenetrations and bossData.UberDamagePenetrations[penType] then\n\t\t\t\t\t\tbuild.configTab.varControls['enemy'..penType]:SetPlaceholder(bossData.UberDamagePenetrations[penType], true)\n\t\t\t\t\telse\n\t\t\t\t\t\tbuild.configTab.varControls['enemy'..penType]:SetPlaceholder(pen, true)\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\n\t\t\tif bossData.DamageType then\n\t\t\t\tbuild.configTab.varControls['enemyDamageType']:SelByValue(bossData.DamageType, \"val\")\n\t\t\t\tbuild.configTab.input['enemyDamageType'] = bossData.DamageType\n\t\t\tend\n\t\t\tbuild.configTab.varControls['enemyDamageType'].enabled = false\n\n\t\t\tif isUber and bossData.UberSpeed then\n\t\t\t\tbuild.configTab.varControls['enemySpeed']:SetPlaceholder(bossData.UberSpeed, true)\n\t\t\telseif bossData.speed then\n\t\t\t\tbuild.configTab.varControls['enemySpeed']:SetPlaceholder(bossData.speed, true)\n\t\t\tend\n\t\t\tif bossData.critChance then\n\t\t\t\tbuild.configTab.varControls['enemyCritChance']:SetPlaceholder(bossData.critChance, true)\n\t\t\tend\n\n\t\t\tmodList:NewMod(\"BossSkillActive\", \"FLAG\", true, \"Config\")\n\n\t\t\t-- boss specific mods\n\t\t\tif val == \"Atziri Flameblast\" and isUber then\n\t\t\t\tenemyModList:NewMod(\"Damage\", \"INC\", 60, \"Alluring Abyss Map Mod\")\n\t\t\tend\n\t\t\tif bossData.additionalStats then\n\t\t\t\tlocal additionalStats = isUber and bossData.additionalStats.uber or bossData.additionalStats.base\n\t\t\t\tif additionalStats then\n\t\t\t\t\tfor k, v in pairs(additionalStats) do\n\t\t\t\t\t\tif tostring(v) == \"flag\" then\n\t\t\t\t\t\t\tenemyModList:NewMod(k, \"FLAG\", true, \"BossSkillAdditionalData\")\n\t\t\t\t\t\telse\n\t\t\t\t\t\t\tenemyModList:NewMod(k, \"BASE\", v, \"BossSkillAdditionalData\")\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\telse\n\t\t\tif build.configTab.varControls['enemyDamageType'].enabled == false then\n\t\t\t\tbuild.configTab.input['enemyDamageType'] = \"Average\"\n\t\t\t\tbuild.configTab.varControls['enemyDamageType']:SelByValue(\"Average\", \"val\")\n\t\t\tend\n\t\t\tbuild.configTab.varControls['enemyDamageType'].enabled = true\n\t\tend\n\tend },",
+      "sha256": "48cf43dd75d570744387fac3ed350f22df5c756b8c54494e932c3d03045d5fa0",
+      "vars": [
+        "presetBossSkills"
+      ],
+      "declared_names": [
+        "BossSkillActive",
+        "Damage"
+      ],
+      "classification": "inactive-dynamic-boss-branch"
+    },
+    {
+      "first": 82,
+      "last": 84,
+      "body": "\t\t\t\tapply = function(val, modList, enemyModList)\n\t\t\t\t\tapplyModsFromString(source, quest.Stat, modList)\n\t\t\t\tend",
+      "sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+      "vars": [
+        "questAct 1ClearfellBeira",
+        "questAct 1FreythornKing In The Mists",
+        "questAct 1Ogham ManorCandlemass",
+        "questAct 2Spires of DesharSisters of Garukhan Shrine",
+        "questAct 3Azak BogIgnagduk",
+        "questAct 3Jiquani's MachinariumBlackjaw",
+        "questAct 4Eye of HinekoraSilent Hall",
+        "questInterlude 2Khari CrossingMolten Shrine",
+        "questInterlude 3Kriar VillageLythara"
+      ],
+      "declared_names": [],
+      "classification": "quest-parser-output-boundary"
+    },
+    {
+      "first": 98,
+      "last": 103,
+      "body": "\t\t\t\tapply = function(val, modList, enemyModList)\n\t\t\t\tif val == \"None\" then\n\t\t\t\t\treturn\n\t\t\t\tend\n\t\t\t\tapplyModsFromString(source, val, modList)\n\t\t\t\tend",
+      "sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+      "vars": [
+        "questAct 2Valley of the TitansMedallion",
+        "questAct 3Venom CryptsVenom Draught",
+        "questAct 4Eye of HinekoraTribal Medicine",
+        "questAct 4Halls Of The DeadTawhoa's Test",
+        "questAct 4Halls Of The DeadTasalio's Test",
+        "questAct 4Halls Of The DeadNgamahu's Test",
+        "questAct 4Abandoned PrisonGoddess of Justice",
+        "questInterlude 2QimahSeven Pillars"
+      ],
+      "declared_names": [],
+      "classification": "quest-parser-output-boundary"
+    },
+    {
+      "first": 860,
+      "last": 862,
+      "body": "\t{ var = \"configBossFaceBroken\", type = \"count\", label = \"# of Boss's Faces Broken:\", ifMult = \"BossFaceBroken\", tooltip = \"Boss's Face Broken refers to unique bosses defeated in the campaign that have a skull marker on the World Screen. Rare monster encounters with the skull marker do not count.\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Multiplier:BossFaceBroken\", \"BASE\", val, \"Config\")\n\tend },",
+      "sha256": "0ac5f3ac3e0fed65d95f4f0107ff4dc9be3905658b9476cdd2205c6e0365efe9",
+      "vars": [
+        "configBossFaceBroken"
+      ],
+      "declared_names": [
+        "Multiplier:BossFaceBroken"
+      ],
+      "classification": "literal-writer-domain"
+    }
+  ],
+  "constructors": [
+    {
+      "id": "enemy-level-update",
+      "first": 1157,
+      "last": 1167,
+      "body": "function ConfigTabClass:UpdateLevel()\n\tlocal input = self.configSets[self.activeConfigSetId].input\n\tlocal placeholder = self.configSets[self.activeConfigSetId].placeholder\n\tif input.enemyLevel and input.enemyLevel > 0 then\n\t\tself.enemyLevel = m_min(data.misc.MaxEnemyLevel, input.enemyLevel)\n\telseif placeholder.enemyLevel and placeholder.enemyLevel > 0 then\n\t\tself.enemyLevel = m_min(data.misc.MaxEnemyLevel, placeholder.enemyLevel)\n\telse\n\t\tself.enemyLevel = m_min(data.misc.MaxEnemyLevel, self.build.characterLevel)\n\tend\nend",
+      "sha256": "f2b6e7d600c007fbce8d44912511ae58def29754603181cc149d8875147ad8fd"
+    },
+    {
+      "id": "configuration-modifier-construction",
+      "first": 1169,
+      "last": 1241,
+      "body": "function ConfigTabClass:BuildModList()\n\tlocal modList = new(\"ModList\"):ModList()\n\tself.modList = modList\n\tlocal enemyModList = new(\"ModList\"):ModList()\n\tself.enemyModList = enemyModList\n\tlocal input = self.configSets[self.activeConfigSetId].input\n\tlocal placeholder = self.configSets[self.activeConfigSetId].placeholder\n\tself:UpdateLevel() -- enemy level handled here because it's needed to correctly set boss stats\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.apply then\n\t\t\tif varData.type == \"check\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(true, modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"count\" or varData.type == \"integer\" or varData.type == \"countAllowZero\" or varData.type == \"float\" then\n\t\t\t\tif input[varData.var] and (input[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\telseif placeholder[varData.var] and (placeholder[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(placeholder[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"list\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"text\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\t-- Apply Custom Modifier groups\n\tlocal customModsList = self.configSets[self.activeConfigSetId].customModsList\n\tlocal hasBlockText = false\n\tif customModsList then\n\t\tfor _, block in ipairs(customModsList) do\n\t\t\tif block.enabled ~= false and block.text and #block.text > 0 then\n\t\t\t\thasBlockText = true\n\t\t\t\tfor line in block.text:gmatch(\"([^\\n]*)\\n?\") do\n\t\t\t\t\tlocal strippedLine = StripEscapes(line):match(\"^%s*(.-)%s*$\")\n\t\t\t\t\tlocal mods, extra = modLib.parseMod(strippedLine)\n\t\t\t\t\tif mods and not extra then\n\t\t\t\t\t\tlocal source = \"Custom:\" .. (block.title or \"Default\")\n\t\t\t\t\t\tfor i = 1, #mods do\n\t\t\t\t\t\t\tlocal mod = mods[i]\n\t\t\t\t\t\t\tif mod then\n\t\t\t\t\t\t\t\tmod = modLib.setSource(mod, source)\n\t\t\t\t\t\t\t\tmodList:AddMod(mod)\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\t-- Fallback for tests/headless\n\tif not hasBlockText and input.customMods and #input.customMods > 0 then\n\t\tfor line in input.customMods:gmatch(\"([^\\n]*)\\n?\") do\n\t\t\tlocal strippedLine = StripEscapes(line):match(\"^%s*(.-)%s*$\")\n\t\t\tlocal mods, extra = modLib.parseMod(strippedLine)\n\t\t\tif mods and not extra then\n\t\t\t\tlocal source = \"Custom\"\n\t\t\t\tfor i = 1, #mods do\n\t\t\t\t\tlocal mod = mods[i]\n\t\t\t\t\tif mod then\n\t\t\t\t\t\tmod = modLib.setSource(mod, source)\n\t\t\t\t\t\tmodList:AddMod(mod)\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\nend",
+      "sha256": "b0cdd2af9be3eb096bbdd27c8cca9c4bb4c6d6f5ff116acd7959a83770483a81"
+    },
+    {
+      "id": "configuration-default-construction",
+      "first": 1317,
+      "last": 1334,
+      "body": "function ConfigTabClass:CreateConfigSet(configSetId, title)\n\tlocal configSet = { id = configSetId, title = title, input = {}, placeholder = {}, customModsList = { { title = \"Default\", enabled = true, text = \"\" } } }\n\tif not configSetId then\n\t\tconfigSet.id = #self.configSets + 1\n\tend\n\t-- there are default values for input and placeholder that every new config set needs to have\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.var then\n\t\t\tconfigSet.input[varData.var] = varData.defaultState\n\t\t\tconfigSet.placeholder[varData.var] = varData.defaultPlaceholderState\n\t\t\tif varData.defaultIndex then\n\t\t\t\tconfigSet.input[varData.var] = varData.list[varData.defaultIndex].val\n\t\t\tend\n\t\tend\n\tend\n\tself.configSets[configSet.id] = configSet\n\treturn configSet\nend",
+      "sha256": "96193ef8356da473de340f756a516c9201e05fd951d4b0aca3db9913ba214f3b"
+    },
+    {
+      "first": 315,
+      "last": 324,
+      "role": "placeholder-notification-true-branch",
+      "body": "\t\t\t\tcontrol = new(\"EditControl\"):EditControl({ \"TOPLEFT\", lastSection, \"TOPLEFT\" }, { 234, 0, 90, 18 }, \"\", nil, ((varData.type == \"integer\" or varData.type == \"countAllowZero\") and \"^%-%d\") or (varData.type == \"float\" and \"^%d.\") or \"%D\", 7, function(buf, placeholder)\n\t\t\t\t\tif placeholder then\n\t\t\t\t\t\tself.configSets[self.activeConfigSetId].placeholder[varData.var] = tonumber(buf)\n\t\t\t\t\telse\n\t\t\t\t\t\tself.configSets[self.activeConfigSetId].input[varData.var] = tonumber(buf)\n\t\t\t\t\t\tself:AddUndoState()\n\t\t\t\t\t\tself:BuildModList()\n\t\t\t\t\tend\n\t\t\t\t\tself.build.buildFlag = true\n\t\t\t\tend)",
+      "sha256": "0f320ef06b187c97506794b994f2be458272c8a6945157e4d27f57722ae09aa6"
+    }
+  ],
+  "scope": {
+    "native_coverage_authorized": false,
+    "saved_input_dispositions_changed": false,
+    "full_mana_supplier_closure": false,
+    "quest_parser_closure": false,
+    "later_direct_configuration_consumers_covered": false
+  },
+  "remaining": [
+    "exact quest parser authority for the selected dynamic reward strings",
+    "later consumers of configuration fields and emitted control records",
+    "native source dispositions and query membership"
+  ]
+}

@@ -1,8 +1,20 @@
 # Remaining Class coverage audit
 
 Status: audited on 2026-10-06 at `81227b8`; updated 2026-10-08 after the loaded-class,
-Player slot-read and optional prepared-hand witnesses passed. Class closure is withheld.
+Player slot-read and optional prepared-hand witnesses passed. Rechecked on
+2026-10-14 against the guarded Mana publication: Class closure is still withheld.
 This audit does not publish game data or change Class coverage.
+
+The October 14 review confirms that Sorceress `0a23` still has exactly the two
+intrinsic programs below, with all seven declaration inventories Complete.
+Shared Actor `332a` now has six programs: intrinsic Life and Mana, structural
+off-hand facts, resistance penalty, and inherent Strength-Life and
+Intelligence-Mana contributions. None implements effective Unarmed,
+Unencumbered or the prepared-hand substitutions. The later resource programs
+therefore do not satisfy the outstanding shared-state prerequisite. Preserve
+that prerequisite rather than close Class coverage from its finite field census
+alone. Historical package identities and program counts below describe their
+named checkpoints.
 
 The checked baseline is `runs/owned-player-rule-ownership-01/package`, input
 `344d3a2c278844c6ea9b2d1f2e27edde492e23392f8500aec5f3f3baf533051f`.

@@ -556,13 +556,11 @@ pub fn reconstruct(i: &Inputs) -> Result<Value, String> {
         hash(&resource_bytes) == "5b9d8fd01c96d3839d4311ed64f1d8886387b4e04ddfc130deddb44ed786e35f",
         "resource witness changed",
     )?;
-    let receipt = read(format!("{DIR}/inputs.json"));
-    let off: Value =
-        serde_json::from_slice(&unpack("source-jit-off.json", 32 * 1024 * 1024, &receipt)).unwrap();
-    let on: Value =
-        serde_json::from_slice(&unpack("source-jit-on.json", 32 * 1024 * 1024, &receipt)).unwrap();
-    let setup = String::from_utf8(unpack("CalcSetup.lua", 256 * 1024, &receipt)).unwrap();
-    validate_acquisition(&off, &on, &setup, &receipt)?;
+    let SupplierAcquisition {
+        jit_off: off,
+        jit_on: on,
+        setup,
+    } = acquisition_fixture()?;
     let body = review_initialization_bodies(&setup, &off)?;
     ensure(
         body == review_initialization_bodies(&setup, &on)?,
@@ -571,6 +569,29 @@ pub fn reconstruct(i: &Inputs) -> Result<Value, String> {
     Ok(
         json!({"schema_version":1,"kind":"offline-mana-supplier-source-review","scope":{"native_coverage_authorized":false,"runtime_changes":[],"complete_mana":false,"complete_supplier_closure":false},"required_source_names":relevant_names(),"selected":selected,"recipe_body_census":{"reference":selected::RECIPE,"source_record_candidates":[],"meaning":"captured-complete-record-bodies-not-constructor-or-callback-closure"},"body_reviews":body,"source_construction":{"off_metadata":source_metadata(&off),"on_metadata":source_metadata(&on),"off_candidates":source_candidates(&off["state"]),"on_candidates":source_candidates(&on["state"]),"callback_declarations_require_body_review":true},"native_inventory":{"ordinary_owners":i.rules.owners.len(),"application_owners":i.rules.effect_applications.as_ref().map(|a|a.members.len()),"reviewed_collectors":collectors(),"new_suppliers_permitted":false,"global_source_completeness":false},"resource_pass":{"reference":RESOURCE,"sha256":hash(&resource_bytes),"zero_conversion_transport_is_not_absence":true,"incoming_donors":["Armour","Evasion","EnergyShield","Life","Ward"]},"remaining":["configuration callback and default catalogue bodies beyond observed invocations","node/socket/radius/generated/support constructor and declaration body review","later procedural modifier transformations and recipient delivery","source-to-owned runtime dispositions and complete query membership"]}),
     )
+}
+
+/// Authenticated retained observations shared by subsequent bounded body reviews.
+/// These records supply evidence, never runtime source-completeness authority.
+pub struct SupplierAcquisition {
+    pub jit_off: Value,
+    pub jit_on: Value,
+    pub setup: String,
+}
+
+pub fn acquisition_fixture() -> Result<SupplierAcquisition, String> {
+    let receipt = read(format!("{DIR}/inputs.json"));
+    let jit_off: Value =
+        serde_json::from_slice(&unpack("source-jit-off.json", 32 * 1024 * 1024, &receipt)).unwrap();
+    let jit_on: Value =
+        serde_json::from_slice(&unpack("source-jit-on.json", 32 * 1024 * 1024, &receipt)).unwrap();
+    let setup = String::from_utf8(unpack("CalcSetup.lua", 256 * 1024, &receipt)).unwrap();
+    validate_acquisition(&jit_off, &jit_on, &setup, &receipt)?;
+    Ok(SupplierAcquisition {
+        jit_off,
+        jit_on,
+        setup,
+    })
 }
 
 fn source_metadata(v: &Value) -> Value {

@@ -50,9 +50,18 @@ unchanged imported build. The current endpoint is recorded in the
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
-preserve exact source identity and multiplicity. Configuration callbacks and
-later transformations remain unresolved; neither a zero observation nor a
-source-only exclusion completes native owners or global contribution coverage.
+preserve exact source identity and multiplicity. A subsequent offline review
+binds both configuration construction passes and all 125 actual callbacks to
+their complete source bodies. Literal writer domains, the inactive boss branch
+and empty custom text are accounted for; quest parsing, later direct reads and
+transformations remain unresolved. Neither a zero observation nor a source-only
+exclusion completes native owners or global contribution coverage.
+The admission review also confirms that all five Mana adjustment groups are
+already Complete-empty. Their remaining source review supports future owner
+closure, but is not itself a missing native reduction implementation. Class
+coverage still waits on shared prepared-hand/state producers; equipment Life
+still needs a proved effective-amount and accumulation domain. These gates must
+not be replaced by inferred defaults or reassigned markers.
 
 The current [generated-skill correspondence packet](../data/owned/poe2/3887ae68/warrior-generated-correspondence/README.md)
 reuses an exact Import selector proof across saved physical and generated records.

@@ -175,8 +175,50 @@ Raw acquisition bytes and driver identity remain intact, with no numerical
 waiver, native ordering change or retry-until-pass. The first defective observer
 run remains diagnostic and is not promoted.
 
-**Next blocker:** review the already-retained selected configuration/default
-callback bodies, then node/socket/generated/support constructors and declarations,
+**Admission review, October 14:** the five Mana adjustment query groups are
+already Complete-empty. Further neutral source-body evidence alone cannot make
+the unchanged request executable: selected Partial owners and the global query
+inventory still block its plan. Pair each source review with the specific input,
+producer or inventory it enables; do not count another neutral observation as
+native admission progress.
+
+Two tempting closures were reviewed and rejected. Sorceress `0a23` has the
+correct two intrinsic programs and seven Complete declaration inventories, but
+the [class audit](owned-class-coverage-audit.md) still requires actual shared
+prepared-hand/state producers. Authored occupancy and raw profile capability do
+not establish effective Unarmed state after filtering and substitutions. Keep
+the Class and shared Actor Partial; moving a marker between them is not a fix.
+Equipment Life reduction also remains Partial: raw input bounds do not bound
+resolved magnitude or Amulet copies, which can preserve fractions. The direct
+and copy effects need a proved accumulation domain or source-order law before
+their group can close. Neither review changes native coverage.
+
+The configuration review identifies a concrete input-admission step:
+`enemySpeed` is a directly consumed attack interval, not presentation data.
+For the currently admitted encounter, initialization overwrites its saved
+Placeholder with 700 milliseconds; an authored Input, including zero, wins.
+Adopt this through existing typed constructor-default/scalar accounting, with
+explicit encounter guards. Do not use the raw Placeholder fallback lane or
+claim the final speed-adjusted interval or survivability calculation. The
+remaining direct configuration consumers and quest-parser responsibilities
+retain their own obligations.
+
+**Configuration body checkpoint completed:** the separate
+[review packet](../data/owned/poe2/3887ae68/mana-supplier-sources/configuration-review.md)
+reconstructs all 663 catalogue rows and 125 actual invocations across default and
+saved construction. Its 48 complete callback bodies cover 45 literal writer
+domains, one inactive boss branch and two quest-parser entry bodies. Seventeen
+quest variables / 34 invocations retain unresolved parser authority. The empty
+custom-text path is checked; later direct configuration consumers remain open.
+Exact source/manifest paths, callback order, defaults, arguments and append-only
+record changes are authenticated. Six tests pass (5.24s), retention passes
+(5.11s) and strict Clippy passes (0.51s):
+`runs/owned-mana-configuration-{tests-02,retain-01,clippy-02}.log`.
+No PoB VM ran, source leaf retired or native inventory completed. Review digest:
+`d8f7abf2202ace98318d9c3c80be31ea77c3d9d17a307a174e866fc9c44fa9d5`.
+
+**Next source blocker:** prove quest-parser authority and direct configuration
+consumers, then node/socket/generated/support constructors and declarations,
 and later procedural transformations/recipient delivery. Join these to exact
 owned source dispositions before claiming neutral supplier admission. Observed
 calls and zero Conversion transport records cannot stand in for those reviews.
@@ -184,7 +226,8 @@ No new acquisition is implied by this backlog. The next successful source
 exclusion must identify its exact covered body/domain and preserve all remaining
 gaps; avoid another observation-only packet with no admission progress.
 
-GitHub CI for formula commit `bb26b80` is pending in run `38660297338`; the earlier
+GitHub CI for source commit `c86cfa6` is pending in run `38661700029`, with no jobs
+or reported failure at the latest October 14 check. The earlier
 pending main runs were coalesced by workflow concurrency. Older active-run
 formatting failures are already repaired in `0a8fa4e`; current CI is not claimed
 green. No workflow was cancelled by an agent.

@@ -29,9 +29,27 @@ match the three constructed attribute records. This excludes these two pinned
 initialization bodies as adjustment suppliers. It does not exclude every later
 calculation phase, every callback, or every source attached to that Actor.
 
+The subsequent `configuration-bodies.json` review reuses the same acquisition
+and the existing configuration-accounting source archive. It binds the full
+663-entry catalogue to two constructions: 62 default and 63 saved callbacks in
+their actual order. Complete bodies cover 45 literal-writer domains, the
+selected `None` boss branch and two quest-parser entry bodies. The latter's
+seventeen variables remain unresolved parser boundaries, even where the
+observed output is neutral. Exact default construction, callback arguments,
+append-only record changes and the empty custom-text path are checked.
+
+`configuration-auxiliary-bodies.json` retains the original control methods
+reached by those constructors; the reviewed notification branch cannot hide
+an unexamined callback. `configuration-review.json` is reconstructed by
+`owned_mana_configuration_sources` without executing Lua or historical Rust.
+Missing/altered callbacks, defaults, source identities, nested zero suppliers,
+prior-record rewrites and nonempty custom text are rejected. These are bounded
+direct-writer exclusions, not proof of later direct configuration consumers,
+quest parsing, native completeness or saved-field accounting.
+
 ## Exact source and owned identities
 
-The canonical import is `owned-configuration-accounting-publication-02`, input
+The bound import checkpoint is `owned-configuration-accounting-publication-02`, input
 `3ee48944d26b5351ecc267cc2e87637b68a8b6153b7ab2bbc5c906f11e4bd702`.
 Its exact draft, sidecar, selection, policy/query tuple, rules, release and
 manifest are compressed without altering their bytes. The preceding
@@ -40,6 +58,9 @@ verified old lineage to the current allocator lineage. Current objects are
 never canonicalized to erase foreign identities. The sole sidecar difference
 is the already reviewed inactive boss-roll Placeholder at source ordinal 455;
 all other origins, memberships, obligations and values remain exact.
+This historical evidence binding is not the current release endpoint; later
+publications must establish their own exact preservation or changed-source
+accounting before relying on it.
 
 The correspondence retains nine equipment uses of eight item records, including
 the two distinct uses of the same ring; 55 exact allocations and two implicit
@@ -89,8 +110,8 @@ remain exact.
 
 The captured recipe and constructed-body censuses find no adjustment records,
 but observation alone cannot close arbitrary constructors or unexecuted
-callbacks. The remaining review must cover the exact selected configuration
-callbacks/default catalogue and its source-only versus unresolved inputs;
+callbacks. The remaining review must cover quest-parser output authority and
+later direct configuration consumers, plus source-only versus unresolved inputs;
 node/socket/radius and generated/support declarations/constructors; and later
 procedural transformations and source-to-recipient delivery. Exact native
 source dispositions and complete checked-query membership must then be

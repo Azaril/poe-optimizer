@@ -1,0 +1,3373 @@
+{
+  "auxiliary_bodies_sha256": "0655cd3f32b21e62edb6cdf49ee4d4dbb260c336502b484cab64848c9630c7de",
+  "bodies_sha256": "931ad5de8a2d307d5352faa2692b1047feb466371bb1e5c2bed9783441c57a84",
+  "kind": "offline-configuration-mana-supplier-review",
+  "native_coverage_authorized": false,
+  "off": {
+    "apply_declarations": 537,
+    "catalogue_entries": 663,
+    "defaults": {
+      "input": {
+        "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+        "ConcPathBypassCD": true,
+        "FlickerStrikeBypassCD": true,
+        "GamblesprintMovementSpeed": 20,
+        "SecondsSinceInevitableCrit": 10,
+        "VigilantStrikeBypassCD": true,
+        "companionInPresence": true,
+        "conditionChampionIntimidate": true,
+        "doomBlastSource": "vixen",
+        "elementalConfluxElement": 1,
+        "enemyIsBoss": "Pinnacle",
+        "enemySizePreset": "Medium",
+        "inDemonForm": true,
+        "multiplierCurrentManaPercentage": 100,
+        "presetBossSkills": "None",
+        "purpleFlameStacks": 10,
+        "questAct 1ClearfellBeira": true,
+        "questAct 1FreythornKing In The Mists": true,
+        "questAct 1Ogham ManorCandlemass": true,
+        "questAct 2Spires of DesharSisters of Garukhan Shrine": true,
+        "questAct 2Valley of the TitansMedallion": "None",
+        "questAct 3Azak BogIgnagduk": true,
+        "questAct 3Jiquani's MachinariumBlackjaw": true,
+        "questAct 3Venom CryptsVenom Draught": "None",
+        "questAct 4Abandoned PrisonGoddess of Justice": "None",
+        "questAct 4Eye of HinekoraSilent Hall": true,
+        "questAct 4Eye of HinekoraTribal Medicine": "None",
+        "questAct 4Halls Of The DeadNgamahu's Test": "None",
+        "questAct 4Halls Of The DeadTasalio's Test": "None",
+        "questAct 4Halls Of The DeadTawhoa's Test": "None",
+        "questInterlude 2Khari CrossingMolten Shrine": true,
+        "questInterlude 2QimahSeven Pillars": "None",
+        "questInterlude 3Kriar VillageLythara": true,
+        "raiseSpectreEnableBuffs": true,
+        "raiseSpectreEnableCurses": true,
+        "repeatMode": "AVERAGE",
+        "resistancePenalty": -60,
+        "resourceGainMode": "AVERAGE",
+        "summonCompanionEnableBuffs": true,
+        "summonCompanionEnableCurses": true,
+        "summonElementalRelicEnableAngerAura": true,
+        "summonElementalRelicEnableHatredAura": true,
+        "summonElementalRelicEnableWrathAura": true,
+        "targetBrandedEnemy": true,
+        "touchedDebuffsCount": 10
+      },
+      "placeholder": {
+        "ChillStacks": 1,
+        "ScorchStacks": 1,
+        "ShockStacks": 1,
+        "conditionCorruptingCryStages": 10,
+        "demonFormStacks": 10,
+        "enemyCritChance": 5,
+        "enemyCritDamage": 30,
+        "enemyCriticalWeaknessStacks": 20,
+        "enemyDamageRollRange": 70,
+        "enemyDistance": 20,
+        "enemyPhysicalDamage": 7,
+        "enemySpeed": 700,
+        "multiplierCurrentEnergyShield": 100,
+        "multiplierDifferentAmmoFired": 1,
+        "multiplierDifferentGrenadeFired": 1,
+        "multiplierStunnedRecently": 1,
+        "multiplierWarcryUsedRecently": 1,
+        "multiplierWitheredStackCountSelf": 15,
+        "sigilOfPowerStages": 1
+      }
+    },
+    "distinct_invoked_variables": 63,
+    "phases": [
+      {
+        "active_set": 1,
+        "calls": [
+          {
+            "argument": 100,
+            "body_sha256": "e20fd3754ad6ca792cf37b0945f224a8cd84a26d3997c11f6eb9e1fbf5cc6658",
+            "catalogue_index": 4,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "dc2526e2e3b5c336261cfc4a645cfbe51cc010ca2e8388acc8b6e75eedf80c96",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierCurrentManaPercentage"
+          },
+          {
+            "argument": 100,
+            "body_sha256": "ced545e799e2cb2a583956c416658a741f60d7541f403ba1bec7540a810f5cc2",
+            "catalogue_index": 14,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "32e99360894bf6283735fb1045866467eaaa89a69eba1b2ea3e9ab8244c8d601",
+            "enemy_record_count": 0,
+            "player_record_count": 2,
+            "variable": "multiplierCurrentEnergyShield"
+          },
+          {
+            "argument": "AVERAGE",
+            "body_sha256": "ebfe6d41ba268031d92a7ddfe184a4f95d96440ec93bca16d2ab8b065fd0761f",
+            "catalogue_index": 25,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "ef3fed917a1ceaacc4412ebd2d83e6ced1de3316259f9eb11be1c99e40b3794e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "resourceGainMode"
+          },
+          {
+            "argument": true,
+            "body_sha256": "c0ba9d8c392689a2244a214dd0616233d68ede9d1283c3260e7bcf3fb407bc8b",
+            "catalogue_index": 65,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "6bfc6cfb1c96a5a1bd6cca976518e31df4ac3618c50a079642637b05eeaecba5",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "targetBrandedEnemy"
+          },
+          {
+            "argument": true,
+            "body_sha256": "9f424363834101a705599479c98d6ad68440f65cee23375b2751166b3e57b53a",
+            "catalogue_index": 78,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "2904cf2c9006ad5e62dd6afad9a52076ea35dc238d62f11cbf312c792bcf42ff",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "ConcPathBypassCD"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "f4c27f8c78d8d33b953fdafde4995718a46fcbe4ae889be2445e2ef09b360c3d",
+            "catalogue_index": 86,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "83440ffea07ca8ad89f7879d00a11a0d4dffce5cdbe463d76ae159feb9e8afc4",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "conditionCorruptingCryStages"
+          },
+          {
+            "argument": true,
+            "body_sha256": "a7813c7a8ddb9fbc2c6481fad24f99e1e5fd6b3bbb9ef3f01c4bbaa0072f1659",
+            "catalogue_index": 94,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "3ab98979534f83f5ed9d9579f9bcec0ebe60277874140ad2f7c7988c0636e9d0",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "inDemonForm"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "79c79a1632e57508c0fcfd338737f7723dc3cbe5b21aad3f0d8faa6619cb363e",
+            "catalogue_index": 95,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "c4a038d314b0027c21de9b9a03fbd070fc0b719821aa56b32e1e58bba9f24a4e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "demonFormStacks"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "837f2a37582f374819bead60f604b4a91f8023ab65e688c2c321f8063c2b764a",
+            "catalogue_index": 105,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d816674ff56a2f97f15c2c18126c7f17cde3b93a1551dd9b020ff6d5840a8f64",
+            "enemy_record_count": 0,
+            "player_record_count": 6,
+            "variable": "touchedDebuffsCount"
+          },
+          {
+            "argument": true,
+            "body_sha256": "1a454a754c973832d61e78989a198f26d2a2654d06542f17fbbf63bb5821f522",
+            "catalogue_index": 110,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "93ef246c8ec1f0a906dd17a096cbb967db2084efde061bd3fe9f02b382df451f",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "FlickerStrikeBypassCD"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "ff5f58b5527baece6e8898a7600abe86d1225d743c8a5013093528d789607518",
+            "catalogue_index": 111,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e1447d180eceb2d60acc7d7f3517a0ef465ee5cbd2b2d058567f90064186cb28",
+            "enemy_record_count": 0,
+            "player_record_count": 3,
+            "variable": "elementalConfluxElement"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "ae8025ece9adfb3d54017fe17e795c31f802d09c037e0c57ac6822b695ea9a4d",
+            "catalogue_index": 131,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a89bacd1c84f661c50ad416e66493b5e6f761e178e28f0e11de73a926b456d41",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "SecondsSinceInevitableCrit"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "ef56ed3b1b736defe661fd3f3ef58fd365d4eac2bc26308196bb602db479ca16",
+            "catalogue_index": 137,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "58813a38f12291d0ee37ed21d13c0d14345f32f53a60becace99c72dfd982c33",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "purpleFlameStacks"
+          },
+          {
+            "argument": true,
+            "body_sha256": "518b1fa602c33827b26fcad5f7a487756270999cc9cfbe6406ecac0b3b6098f1",
+            "catalogue_index": 167,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "9e8ec7b7ddac1c927d5d21ce007038c9872c72474c39f15a5bf4c77359d3575d",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "raiseSpectreEnableBuffs"
+          },
+          {
+            "argument": true,
+            "body_sha256": "b060b41fa2464b40a5b114b89b085f729f6dab2f37cf7b8ab00c2de95998e75f",
+            "catalogue_index": 168,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "af605a30be7919bd6b4ee1a7243ffc571b5ad70e8e72e7b66a0c4538ca71478e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "raiseSpectreEnableCurses"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "e6e9b9bb75afdb3079805f63f34cedb91b3ccd91c583da83d28407119bbe880d",
+            "catalogue_index": 189,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "c02157f1020086c48952d9b28b1881b7f7a8f875e79460a7014ac8fb98912294",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "sigilOfPowerStages"
+          },
+          {
+            "argument": true,
+            "body_sha256": "dbd7bc023eef8abfffabdc489f44345da636086ae216a27b5eea52aeaf3805fb",
+            "catalogue_index": 209,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "b31116cfe43aeb96c20ad36cd674a0a25699205237a0fe4bfc6c5c559d8d948c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonCompanionEnableBuffs"
+          },
+          {
+            "argument": true,
+            "body_sha256": "0f5169784ee00547832191eac0590ce1cde5468c25bac947241530851c17825a",
+            "catalogue_index": 210,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a55ed1e63ba0e7e7899ae9f8daede2f261954a95852e830b9cbbd6b67e74458c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonCompanionEnableCurses"
+          },
+          {
+            "argument": true,
+            "body_sha256": "e3351f04588cbd58023676f2b0d54a140d1b249301494aa742d420a5dcdbdb40",
+            "catalogue_index": 212,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d12ef0ac8da236d4fa5f9159b9897cdc245fc9e7503c76d785e1b0c73ec30441",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableAngerAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "0804fae3461983a27d752d06a595bb3513b9f025b70f0ff9224ddaec2f9ef9de",
+            "catalogue_index": 213,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "1655f05634b42378f242438c45acc9842a18532fc8b791438f8c9cefc217d20f",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableHatredAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "8d9152516f704c5becf7fcf1a01d7844e4667ef3bda4a98a9c7ead2ffc88093e",
+            "catalogue_index": 214,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "388f01c7123b93c01f791a4a7d6ac5ddfbc2246521e2dbcbb9640e411bb7ed6c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableWrathAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "b41bae9974ecbcd6e354303310bdfa7c33938750c4a4e6e6dd99c8a814924f1d",
+            "catalogue_index": 239,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5f05d25adfc989b774642185c9e5805f7e5070701288cdaa636c6817ab184d04",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "VigilantStrikeBypassCD"
+          },
+          {
+            "argument": "Medium",
+            "body_sha256": "b6fbaec2d2ed71f698282dee1ae4b8013116ecdafa8793078809aad034e7adf5",
+            "catalogue_index": 262,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "87abef1f094d606ec82a0391cd5e2a999063ff72c5e1477016e7742f5466f8ea",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "enemySizePreset"
+          },
+          {
+            "argument": "AVERAGE",
+            "body_sha256": "7e50ce2711bee1c4611bb82535fd92f6d3e33ab0df365d0aca8ade1986e0ff8b",
+            "catalogue_index": 287,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5501d8b059996147da3db8235389ff6a6dcad73c3c3f10b28c98262a901af8ad",
+            "enemy_record_count": 0,
+            "player_record_count": 2,
+            "variable": "repeatMode"
+          },
+          {
+            "argument": true,
+            "body_sha256": "041b4463494a1d2896fa54b7ad1422318e75029094c72ea61223d45e305ebe3f",
+            "catalogue_index": 338,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "f2310007575c3e807f5fa2cd75caaa8f43e6a86ab915684abcf61f948e95955e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "companionInPresence"
+          },
+          {
+            "argument": 15,
+            "body_sha256": "b6db8fadf9d5674a58493e1f85b9b93a4f79a1607a98fdc4a6d3165259dfca95",
+            "catalogue_index": 365,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "3b72c4a3b42aad05eaf34dade054fcd0c04dd18b24dc9fc7f8c44b7a2b19fc42",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierWitheredStackCountSelf"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "8c5d07d3b8f8fe9ef8626cbfe6d664a850692511ce0c0120dd610a9f7bcfd125",
+            "catalogue_index": 413,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d4eae8efefd29da42979f63744396bda0661d9e56f2cd1816d773dfe34aaa1ff",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierStunnedRecently"
+          },
+          {
+            "argument": true,
+            "body_sha256": "6749ab540fcdd971cf4e4e978dd26b2fb6a7e8e1b72d3f801534b3805aa57e5c",
+            "catalogue_index": 449,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "633d245b47da7eb1edf251c6bfa231b41453d4c3ae444576caacae372fdd22e9",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "conditionChampionIntimidate"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "757ed4aaf8d36443e39442fafd54861da928652587e1777a758e32e92589d355",
+            "catalogue_index": 471,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "db2cc1d6fa71da9c93c8f8e5c855667b56fd4f45b0136ada15a8f8f7a241cbf4",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierWarcryUsedRecently"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "23dec3bab3cf95e3c6e4e6f5fbc268a04406874728bd9b5ad14ac9aae4fea663",
+            "catalogue_index": 503,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a29f8747478acd46fa5171579b8b5c03350c5d4778e65b7b61a79eebc6f28e35",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "GamblesprintMovementSpeed"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "c852e42b41b9784a7691b0158e86bee4313057b708894165af0554205db37913",
+            "catalogue_index": 513,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "0be4d076a37c4ea96186f18feca9f6760c974c538bea5772843a66e6ae0e63c6",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "enemyDistance"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "14c90ddcf50aa683f55c05612032a68165d5d2388b212d5181835b6131b2a507",
+            "catalogue_index": 519,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "652a13a483690b2e171c0eba18b32b24f96cc3539a94b40e5aa6f9f6994905ea",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierDifferentAmmoFired"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "a893864c3584272fb93af4ccc79d5dea9e4afb85ae91de77a20fa4a5223489f1",
+            "catalogue_index": 520,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "7ca2a1f0ca273a508ec0d6d41e2702b3e0df8d5f3f2bd2f133720c54f34aa61d",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierDifferentGrenadeFired"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "5ae1f033b598bb50ad1067898b47a9379f8dfc5f8a2cc705cc65fa10dd776f86",
+            "catalogue_index": 562,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "125924303191b4d2b6cd4f2240b5ca79952c8601133242488016a0b1b5fc2469",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ScorchStacks"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "04c458d37dd352aefde20dbb3fad2684449dbfa30bd8e80f8986a922ba9b27a8",
+            "catalogue_index": 567,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "b576a095ffea2582d2f05bc4f2f273a254127f61771b5cfce5a2b0575e848f76",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ChillStacks"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "fe1e720ead53e6a40ffb9adfb3561e9c4adb6c6afd2b97018da0dc82754689ee",
+            "catalogue_index": 578,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "4a3acc8d7841a252b5374180a4c1cf7b291925223124e1db0d6c081e5f359968",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ShockStacks"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "ffc3eea5af3cf0c467007aa689cafcce0310ff29b4b9a87d0e1b06ac63bb6142",
+            "catalogue_index": 594,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "55afaed03203aa769b694f46c7fd6180820b6909558fa2a824f09428cf179541",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyCriticalWeaknessStacks"
+          },
+          {
+            "argument": "Pinnacle",
+            "body_sha256": "4b4568bd7ea629e326d21e5b7301f03002d6a59bffaadff5970d282021aff7e9",
+            "catalogue_index": 618,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "81e621af05e2b7f4c66be405709a6123ca92e31873b132d39663881389217352",
+            "enemy_record_count": 10,
+            "player_record_count": 2,
+            "variable": "enemyIsBoss"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "4dc0ff09bcdba38aeeab082649222c2ebcf86fe0c608136d2690bdecdeb2e924",
+            "catalogue_index": 621,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "2c3b2c8f83c95931bedc91062afe36b13b2fc226d66f9060324cd9e82eba3454",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyLightningResist"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "b6ba75e088d68118f9285d656bf17bb4d4e5ce0c0a148996f073436248e29f6d",
+            "catalogue_index": 622,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e54bf8849a73354bce53f402e0b0a916c83545a122ed143e0150d7b3cd114351",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyColdResist"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "36cd29b3768a0c1e9d8b6195ddc889e801c891d8a68cb7830c5279d696f3e576",
+            "catalogue_index": 623,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5bae0d47618d9daf0677d40df0565b073eb667500a3928841719fa8fb4424b65",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyFireResist"
+          },
+          {
+            "argument": 0,
+            "body_sha256": "cd6772cf0cdabef4ca44bb22f9714e7843bc0912b7a138da00e3845ae66269d8",
+            "catalogue_index": 624,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e8410ba4fcd008cd5e59ab9c4386811a8a9f7a7f368e5ba74bd5b1bea8caee55",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyChaosResist"
+          },
+          {
+            "argument": 1175,
+            "body_sha256": "f77251e205681bd29d074a0779dce259ce2f5d2a778d9fd71fdc3ad56dcc78fa",
+            "catalogue_index": 627,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "67aef19364a0270170f7b05f41b4f05d6af2e53badcebecede255cac3a208f7a",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyEvasion"
+          },
+          {
+            "argument": 8063,
+            "body_sha256": "e15192b77f669f4e98625a9d907d70bbf4eacb00093960263179aed865ae6bd0",
+            "catalogue_index": 628,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "87ca6f87045ba3a54f243b70c0e4abaebdd1501473b75904f6a1ef5f6c09bca9",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyArmour"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "48cf43dd75d570744387fac3ed350f22df5c756b8c54494e932c3d03045d5fa0",
+            "catalogue_index": 629,
+            "classification": "inactive-dynamic-boss-branch",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "presetBossSkills"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 647,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "23ef22d112718b10516c43db5042fbd56dfff64d55066b56599b84951dfcc940",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1ClearfellBeira"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 648,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e6a0bca67992ad8002d43253d6048046cd2b3d20d8f8fec7df8c477bb17de311",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1FreythornKing In The Mists"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 649,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "a56a7140fa5239a48c85854b9766e6e3ac8e727a2cf3823caedf09f1b27f192e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1Ogham ManorCandlemass"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 650,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 2Valley of the TitansMedallion"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 651,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "74c9756d04d548031176a28dbfba4fe25a66fdacca8ae300f9d70835649dc4b8",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 2Spires of DesharSisters of Garukhan Shrine"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 652,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "332cd51d9499856f848cfa072d7e53214ada40b461b3822e42ef91b7cd12ab25",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 3Azak BogIgnagduk"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 653,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 3Venom CryptsVenom Draught"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 654,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "391f453724a6d666bb13cb9eae3515e5879b14ed162c4dbec8f8ec9fa54d7855",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 3Jiquani's MachinariumBlackjaw"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 655,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "c73776f9706d5b50d95863b36ef0d7753fdb181cfc7c09c40df2719a789639c0",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Eye of HinekoraSilent Hall"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 656,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 657,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 658,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 659,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 660,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 661,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "d4d2b82192beac7ffaab63043d303cacf9af0ee590588dbce95cb4f9503790ec",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questInterlude 2Khari CrossingMolten Shrine"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 662,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questInterlude 2QimahSeven Pillars"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 663,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "ec35e6c07228c8e45336a75c3ba11d63f61f647e95e77eacf96a885511c1e1a9",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questInterlude 3Kriar VillageLythara"
+          }
+        ],
+        "configuration_sha256": "cafb729984e32a9449a213ca6192af262c3366217af3efe4e4c59f045708ec0d",
+        "custom_text": "complete-empty-constructor-path",
+        "enemy_records": 21,
+        "inactive_apply_declarations": 475,
+        "invoked": 62,
+        "phase": 0,
+        "player_records": 52,
+        "quest_parser_boundaries": [
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 1ClearfellBeira"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 1FreythornKing In The Mists"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questAct 1Ogham ManorCandlemass"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 2Valley of the TitansMedallion"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 2Spires of DesharSisters of Garukhan Shrine"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 3Azak BogIgnagduk"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 3Venom CryptsVenom Draught"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 3Jiquani's MachinariumBlackjaw"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Mana"
+            ],
+            "var": "questAct 4Eye of HinekoraSilent Hall"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questInterlude 2Khari CrossingMolten Shrine"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questInterlude 2QimahSeven Pillars"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questInterlude 3Kriar VillageLythara"
+          }
+        ],
+        "without_apply": 126
+      },
+      {
+        "active_set": 1,
+        "calls": [
+          {
+            "argument": 100,
+            "body_sha256": "e20fd3754ad6ca792cf37b0945f224a8cd84a26d3997c11f6eb9e1fbf5cc6658",
+            "catalogue_index": 4,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "dc2526e2e3b5c336261cfc4a645cfbe51cc010ca2e8388acc8b6e75eedf80c96",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierCurrentManaPercentage"
+          },
+          {
+            "argument": 100,
+            "body_sha256": "ced545e799e2cb2a583956c416658a741f60d7541f403ba1bec7540a810f5cc2",
+            "catalogue_index": 14,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "32e99360894bf6283735fb1045866467eaaa89a69eba1b2ea3e9ab8244c8d601",
+            "enemy_record_count": 0,
+            "player_record_count": 2,
+            "variable": "multiplierCurrentEnergyShield"
+          },
+          {
+            "argument": "AVERAGE",
+            "body_sha256": "ebfe6d41ba268031d92a7ddfe184a4f95d96440ec93bca16d2ab8b065fd0761f",
+            "catalogue_index": 25,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "ef3fed917a1ceaacc4412ebd2d83e6ced1de3316259f9eb11be1c99e40b3794e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "resourceGainMode"
+          },
+          {
+            "argument": true,
+            "body_sha256": "c0ba9d8c392689a2244a214dd0616233d68ede9d1283c3260e7bcf3fb407bc8b",
+            "catalogue_index": 65,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "6bfc6cfb1c96a5a1bd6cca976518e31df4ac3618c50a079642637b05eeaecba5",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "targetBrandedEnemy"
+          },
+          {
+            "argument": true,
+            "body_sha256": "9f424363834101a705599479c98d6ad68440f65cee23375b2751166b3e57b53a",
+            "catalogue_index": 78,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "2904cf2c9006ad5e62dd6afad9a52076ea35dc238d62f11cbf312c792bcf42ff",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "ConcPathBypassCD"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "f4c27f8c78d8d33b953fdafde4995718a46fcbe4ae889be2445e2ef09b360c3d",
+            "catalogue_index": 86,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "83440ffea07ca8ad89f7879d00a11a0d4dffce5cdbe463d76ae159feb9e8afc4",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "conditionCorruptingCryStages"
+          },
+          {
+            "argument": true,
+            "body_sha256": "a7813c7a8ddb9fbc2c6481fad24f99e1e5fd6b3bbb9ef3f01c4bbaa0072f1659",
+            "catalogue_index": 94,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "3ab98979534f83f5ed9d9579f9bcec0ebe60277874140ad2f7c7988c0636e9d0",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "inDemonForm"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "79c79a1632e57508c0fcfd338737f7723dc3cbe5b21aad3f0d8faa6619cb363e",
+            "catalogue_index": 95,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "c4a038d314b0027c21de9b9a03fbd070fc0b719821aa56b32e1e58bba9f24a4e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "demonFormStacks"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "837f2a37582f374819bead60f604b4a91f8023ab65e688c2c321f8063c2b764a",
+            "catalogue_index": 105,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d816674ff56a2f97f15c2c18126c7f17cde3b93a1551dd9b020ff6d5840a8f64",
+            "enemy_record_count": 0,
+            "player_record_count": 6,
+            "variable": "touchedDebuffsCount"
+          },
+          {
+            "argument": true,
+            "body_sha256": "1a454a754c973832d61e78989a198f26d2a2654d06542f17fbbf63bb5821f522",
+            "catalogue_index": 110,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "93ef246c8ec1f0a906dd17a096cbb967db2084efde061bd3fe9f02b382df451f",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "FlickerStrikeBypassCD"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "ff5f58b5527baece6e8898a7600abe86d1225d743c8a5013093528d789607518",
+            "catalogue_index": 111,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e1447d180eceb2d60acc7d7f3517a0ef465ee5cbd2b2d058567f90064186cb28",
+            "enemy_record_count": 0,
+            "player_record_count": 3,
+            "variable": "elementalConfluxElement"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "ae8025ece9adfb3d54017fe17e795c31f802d09c037e0c57ac6822b695ea9a4d",
+            "catalogue_index": 131,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a89bacd1c84f661c50ad416e66493b5e6f761e178e28f0e11de73a926b456d41",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "SecondsSinceInevitableCrit"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "ef56ed3b1b736defe661fd3f3ef58fd365d4eac2bc26308196bb602db479ca16",
+            "catalogue_index": 137,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "58813a38f12291d0ee37ed21d13c0d14345f32f53a60becace99c72dfd982c33",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "purpleFlameStacks"
+          },
+          {
+            "argument": true,
+            "body_sha256": "518b1fa602c33827b26fcad5f7a487756270999cc9cfbe6406ecac0b3b6098f1",
+            "catalogue_index": 167,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "9e8ec7b7ddac1c927d5d21ce007038c9872c72474c39f15a5bf4c77359d3575d",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "raiseSpectreEnableBuffs"
+          },
+          {
+            "argument": true,
+            "body_sha256": "b060b41fa2464b40a5b114b89b085f729f6dab2f37cf7b8ab00c2de95998e75f",
+            "catalogue_index": 168,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "af605a30be7919bd6b4ee1a7243ffc571b5ad70e8e72e7b66a0c4538ca71478e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "raiseSpectreEnableCurses"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "e6e9b9bb75afdb3079805f63f34cedb91b3ccd91c583da83d28407119bbe880d",
+            "catalogue_index": 189,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "c02157f1020086c48952d9b28b1881b7f7a8f875e79460a7014ac8fb98912294",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "sigilOfPowerStages"
+          },
+          {
+            "argument": true,
+            "body_sha256": "dbd7bc023eef8abfffabdc489f44345da636086ae216a27b5eea52aeaf3805fb",
+            "catalogue_index": 209,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "b31116cfe43aeb96c20ad36cd674a0a25699205237a0fe4bfc6c5c559d8d948c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonCompanionEnableBuffs"
+          },
+          {
+            "argument": true,
+            "body_sha256": "0f5169784ee00547832191eac0590ce1cde5468c25bac947241530851c17825a",
+            "catalogue_index": 210,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a55ed1e63ba0e7e7899ae9f8daede2f261954a95852e830b9cbbd6b67e74458c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonCompanionEnableCurses"
+          },
+          {
+            "argument": true,
+            "body_sha256": "e3351f04588cbd58023676f2b0d54a140d1b249301494aa742d420a5dcdbdb40",
+            "catalogue_index": 212,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d12ef0ac8da236d4fa5f9159b9897cdc245fc9e7503c76d785e1b0c73ec30441",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableAngerAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "0804fae3461983a27d752d06a595bb3513b9f025b70f0ff9224ddaec2f9ef9de",
+            "catalogue_index": 213,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "1655f05634b42378f242438c45acc9842a18532fc8b791438f8c9cefc217d20f",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableHatredAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "8d9152516f704c5becf7fcf1a01d7844e4667ef3bda4a98a9c7ead2ffc88093e",
+            "catalogue_index": 214,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "388f01c7123b93c01f791a4a7d6ac5ddfbc2246521e2dbcbb9640e411bb7ed6c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableWrathAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "b41bae9974ecbcd6e354303310bdfa7c33938750c4a4e6e6dd99c8a814924f1d",
+            "catalogue_index": 239,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5f05d25adfc989b774642185c9e5805f7e5070701288cdaa636c6817ab184d04",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "VigilantStrikeBypassCD"
+          },
+          {
+            "argument": "Medium",
+            "body_sha256": "b6fbaec2d2ed71f698282dee1ae4b8013116ecdafa8793078809aad034e7adf5",
+            "catalogue_index": 262,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "87abef1f094d606ec82a0391cd5e2a999063ff72c5e1477016e7742f5466f8ea",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "enemySizePreset"
+          },
+          {
+            "argument": 56,
+            "body_sha256": "0ac5f3ac3e0fed65d95f4f0107ff4dc9be3905658b9476cdd2205c6e0365efe9",
+            "catalogue_index": 285,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "439f29e1d3239eaa0a6f989a8d784e4c0a62f09858b621729731f6bc872e3f3d",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "configBossFaceBroken"
+          },
+          {
+            "argument": "AVERAGE",
+            "body_sha256": "7e50ce2711bee1c4611bb82535fd92f6d3e33ab0df365d0aca8ade1986e0ff8b",
+            "catalogue_index": 287,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "36ee083c74d04a23969a260e7f003b8e405fadbcea19b8dcff80f7d38bfd8381",
+            "enemy_record_count": 0,
+            "player_record_count": 2,
+            "variable": "repeatMode"
+          },
+          {
+            "argument": true,
+            "body_sha256": "041b4463494a1d2896fa54b7ad1422318e75029094c72ea61223d45e305ebe3f",
+            "catalogue_index": 338,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "cf301cad7501d596829b36c4cb48515d94377dc0463156f22ffc37af32d59af9",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "companionInPresence"
+          },
+          {
+            "argument": 15,
+            "body_sha256": "b6db8fadf9d5674a58493e1f85b9b93a4f79a1607a98fdc4a6d3165259dfca95",
+            "catalogue_index": 365,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a4298035fd366c4760aaf073b8d56bc0e1d8b3b2f70a5647965cfa7a2f52d914",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierWitheredStackCountSelf"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "8c5d07d3b8f8fe9ef8626cbfe6d664a850692511ce0c0120dd610a9f7bcfd125",
+            "catalogue_index": 413,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "cce37ebf84083884781a0a831bbab3032a6bca8881df6d8a0407c3264b670ec0",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierStunnedRecently"
+          },
+          {
+            "argument": true,
+            "body_sha256": "6749ab540fcdd971cf4e4e978dd26b2fb6a7e8e1b72d3f801534b3805aa57e5c",
+            "catalogue_index": 449,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "633d245b47da7eb1edf251c6bfa231b41453d4c3ae444576caacae372fdd22e9",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "conditionChampionIntimidate"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "757ed4aaf8d36443e39442fafd54861da928652587e1777a758e32e92589d355",
+            "catalogue_index": 471,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "4221ede370ead2f039584cdc8ecc0561d582b2bfe679ce1bccc9736820d5a630",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierWarcryUsedRecently"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "23dec3bab3cf95e3c6e4e6f5fbc268a04406874728bd9b5ad14ac9aae4fea663",
+            "catalogue_index": 503,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "4b7a797d8af492a047c8b44406aa2c40c91b1cb733b1d8752a03d2e3b3396569",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "GamblesprintMovementSpeed"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "c852e42b41b9784a7691b0158e86bee4313057b708894165af0554205db37913",
+            "catalogue_index": 513,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "9cd5cd01b899a1759b1ddb362d2e59b088e29537b570dcafb31b464f49be56db",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "enemyDistance"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "14c90ddcf50aa683f55c05612032a68165d5d2388b212d5181835b6131b2a507",
+            "catalogue_index": 519,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5d6cd2ce8f8f710a72001426bd2ee03fc335b61f14436d3cf752bd200ae66b26",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierDifferentAmmoFired"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "a893864c3584272fb93af4ccc79d5dea9e4afb85ae91de77a20fa4a5223489f1",
+            "catalogue_index": 520,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d14403cac4e45b8163a07191da1e1b2e22c927fa9c1b93f12847121d50eb49d0",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierDifferentGrenadeFired"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "5ae1f033b598bb50ad1067898b47a9379f8dfc5f8a2cc705cc65fa10dd776f86",
+            "catalogue_index": 562,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "125924303191b4d2b6cd4f2240b5ca79952c8601133242488016a0b1b5fc2469",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ScorchStacks"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "04c458d37dd352aefde20dbb3fad2684449dbfa30bd8e80f8986a922ba9b27a8",
+            "catalogue_index": 567,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "b576a095ffea2582d2f05bc4f2f273a254127f61771b5cfce5a2b0575e848f76",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ChillStacks"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "fe1e720ead53e6a40ffb9adfb3561e9c4adb6c6afd2b97018da0dc82754689ee",
+            "catalogue_index": 578,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "4a3acc8d7841a252b5374180a4c1cf7b291925223124e1db0d6c081e5f359968",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ShockStacks"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "ffc3eea5af3cf0c467007aa689cafcce0310ff29b4b9a87d0e1b06ac63bb6142",
+            "catalogue_index": 594,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "55afaed03203aa769b694f46c7fd6180820b6909558fa2a824f09428cf179541",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyCriticalWeaknessStacks"
+          },
+          {
+            "argument": "Pinnacle",
+            "body_sha256": "4b4568bd7ea629e326d21e5b7301f03002d6a59bffaadff5970d282021aff7e9",
+            "catalogue_index": 618,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "751aa8b4272db7edadbd155f4bdecb6434cc21ee9ccc4c32c9e3240b0c07ba04",
+            "enemy_record_count": 10,
+            "player_record_count": 2,
+            "variable": "enemyIsBoss"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "4dc0ff09bcdba38aeeab082649222c2ebcf86fe0c608136d2690bdecdeb2e924",
+            "catalogue_index": 621,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "2c3b2c8f83c95931bedc91062afe36b13b2fc226d66f9060324cd9e82eba3454",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyLightningResist"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "b6ba75e088d68118f9285d656bf17bb4d4e5ce0c0a148996f073436248e29f6d",
+            "catalogue_index": 622,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e54bf8849a73354bce53f402e0b0a916c83545a122ed143e0150d7b3cd114351",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyColdResist"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "36cd29b3768a0c1e9d8b6195ddc889e801c891d8a68cb7830c5279d696f3e576",
+            "catalogue_index": 623,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5bae0d47618d9daf0677d40df0565b073eb667500a3928841719fa8fb4424b65",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyFireResist"
+          },
+          {
+            "argument": 0,
+            "body_sha256": "cd6772cf0cdabef4ca44bb22f9714e7843bc0912b7a138da00e3845ae66269d8",
+            "catalogue_index": 624,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e8410ba4fcd008cd5e59ab9c4386811a8a9f7a7f368e5ba74bd5b1bea8caee55",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyChaosResist"
+          },
+          {
+            "argument": 1175,
+            "body_sha256": "f77251e205681bd29d074a0779dce259ce2f5d2a778d9fd71fdc3ad56dcc78fa",
+            "catalogue_index": 627,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "67aef19364a0270170f7b05f41b4f05d6af2e53badcebecede255cac3a208f7a",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyEvasion"
+          },
+          {
+            "argument": 8063,
+            "body_sha256": "e15192b77f669f4e98625a9d907d70bbf4eacb00093960263179aed865ae6bd0",
+            "catalogue_index": 628,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "87ca6f87045ba3a54f243b70c0e4abaebdd1501473b75904f6a1ef5f6c09bca9",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyArmour"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "48cf43dd75d570744387fac3ed350f22df5c756b8c54494e932c3d03045d5fa0",
+            "catalogue_index": 629,
+            "classification": "inactive-dynamic-boss-branch",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "presetBossSkills"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 647,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "78b8b172f5371d98f1f56e3a9e23d4fffc82696ab19ea2b90afb391c33c69865",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1ClearfellBeira"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 648,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "bd5201e8f7d4acabcdc5c5ecc4ae13638844bfcd8b4bd942df01279df40b5cd4",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1FreythornKing In The Mists"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 649,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "9ea91a61b495e218bafdf230b2a8b47ca19b7d7a00e7918fed59debac0f0ac98",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1Ogham ManorCandlemass"
+          },
+          {
+            "argument": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 650,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "2557915b6f4a37f473c0e3ea7c3df8286504f8740dbc48bf94865324a455d0b4",
+            "enemy_record_count": 0,
+            "player_record_count": 2,
+            "variable": "questAct 2Valley of the TitansMedallion"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 651,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "4608008cb0b8d87172df128979f560affb3832c4716500f5cc57ff696c6590ca",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 2Spires of DesharSisters of Garukhan Shrine"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 652,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "1ae3f79895cf4a593bb2b96fad224dd20116297df1a222cce8aecce01732854a",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 3Azak BogIgnagduk"
+          },
+          {
+            "argument": "30% increased Elemental Ailment Threshold",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 653,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "ee37e228000f3dc44a4cf9620304720fc53108aa40e1118f057f2ef22747c16a",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 3Venom CryptsVenom Draught"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 654,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "df7d2f6783a79ddae9a3d60637c26504a1117880485f837ac5bba7d1d4226144",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 3Jiquani's MachinariumBlackjaw"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 655,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "b407837c83dd046b6e88ee92dc09707e58a0673be4e2d9bf6f1e0c695556cfb3",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Eye of HinekoraSilent Hall"
+          },
+          {
+            "argument": "30% increased Global Armour, Evasion and Energy Shield",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 656,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "d8ec234a79a19d62b833078796b465681d8100b7e7942526e233e0fee0a57348",
+            "enemy_record_count": 0,
+            "player_record_count": 3,
+            "variable": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          {
+            "argument": "+5% to Lightning Resistance",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 657,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "3f381a96d4b4bef75ef4eb96e98af3eee77ca519e4a7389168632ff10e383f3e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          {
+            "argument": "+5% to Cold Resistance",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 658,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "78a68b52fcbe52372e1ae1210a9e9ddbb7a1040e662e3cf13149bcf48005aa2d",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          {
+            "argument": "+5% to Fire Resistance",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 659,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "bd9463495c9d2903e2fa08dbbac44f294cd239da8b4ef80dcca0d7636054e5c6",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          {
+            "argument": "30% increased Life Recovery from Flasks",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 660,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "21995d2c926905d5152b2d593071ecc83d8e569dca32ea411f20d60b0fb23e6f",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 661,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "49c400a161e80abf2db612c98996edebcf9f7eca394259d1ed3ad0f0ef36b1e9",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questInterlude 2Khari CrossingMolten Shrine"
+          },
+          {
+            "argument": "15% increased Global Armour, Evasion and Energy Shield",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 662,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "c14a79005ff008238d1057bbbc4cbff28d13ecd819f893a667d507045d6e6d68",
+            "enemy_record_count": 0,
+            "player_record_count": 3,
+            "variable": "questInterlude 2QimahSeven Pillars"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 663,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "ec2b07f844f9a635735b86137f177ee52e5132279d28a0e4a181e902f1880ea8",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questInterlude 3Kriar VillageLythara"
+          }
+        ],
+        "configuration_sha256": "5dbf310b5016fc0a7abfeebdf424562df267120f8c875322aead167b02489772",
+        "custom_text": "complete-empty-constructor-path",
+        "enemy_records": 21,
+        "inactive_apply_declarations": 474,
+        "invoked": 63,
+        "phase": 1,
+        "player_records": 66,
+        "quest_parser_boundaries": [
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 1ClearfellBeira"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 1FreythornKing In The Mists"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questAct 1Ogham ManorCandlemass"
+          },
+          {
+            "argument": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "CharmChargesGained",
+              "CharmLimit"
+            ],
+            "var": "questAct 2Valley of the TitansMedallion"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 2Spires of DesharSisters of Garukhan Shrine"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 3Azak BogIgnagduk"
+          },
+          {
+            "argument": "30% increased Elemental Ailment Threshold",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "AilmentThreshold"
+            ],
+            "var": "questAct 3Venom CryptsVenom Draught"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 3Jiquani's MachinariumBlackjaw"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Mana"
+            ],
+            "var": "questAct 4Eye of HinekoraSilent Hall"
+          },
+          {
+            "argument": "30% increased Global Armour, Evasion and Energy Shield",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Armour",
+              "Evasion",
+              "EnergyShield"
+            ],
+            "var": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          {
+            "argument": "+5% to Lightning Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          {
+            "argument": "+5% to Cold Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          {
+            "argument": "+5% to Fire Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          {
+            "argument": "30% increased Life Recovery from Flasks",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FlaskLifeRecovery"
+            ],
+            "var": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questInterlude 2Khari CrossingMolten Shrine"
+          },
+          {
+            "argument": "15% increased Global Armour, Evasion and Energy Shield",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Armour",
+              "Evasion",
+              "EnergyShield"
+            ],
+            "var": "questInterlude 2QimahSeven Pillars"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questInterlude 3Kriar VillageLythara"
+          }
+        ],
+        "without_apply": 126
+      }
+    ],
+    "scope": {
+      "direct_literal_callback_suppliers_excluded": true,
+      "empty_custom_text_suppliers_excluded": true,
+      "later_direct_configuration_consumers_covered": false,
+      "native_coverage_authorized": false,
+      "quest_parser_closure": false,
+      "saved_input_dispositions_changed": false,
+      "selected_none_boss_dynamic_branch_excluded": true
+    }
+  },
+  "on": {
+    "apply_declarations": 537,
+    "catalogue_entries": 663,
+    "defaults": {
+      "input": {
+        "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+        "ConcPathBypassCD": true,
+        "FlickerStrikeBypassCD": true,
+        "GamblesprintMovementSpeed": 20,
+        "SecondsSinceInevitableCrit": 10,
+        "VigilantStrikeBypassCD": true,
+        "companionInPresence": true,
+        "conditionChampionIntimidate": true,
+        "doomBlastSource": "vixen",
+        "elementalConfluxElement": 1,
+        "enemyIsBoss": "Pinnacle",
+        "enemySizePreset": "Medium",
+        "inDemonForm": true,
+        "multiplierCurrentManaPercentage": 100,
+        "presetBossSkills": "None",
+        "purpleFlameStacks": 10,
+        "questAct 1ClearfellBeira": true,
+        "questAct 1FreythornKing In The Mists": true,
+        "questAct 1Ogham ManorCandlemass": true,
+        "questAct 2Spires of DesharSisters of Garukhan Shrine": true,
+        "questAct 2Valley of the TitansMedallion": "None",
+        "questAct 3Azak BogIgnagduk": true,
+        "questAct 3Jiquani's MachinariumBlackjaw": true,
+        "questAct 3Venom CryptsVenom Draught": "None",
+        "questAct 4Abandoned PrisonGoddess of Justice": "None",
+        "questAct 4Eye of HinekoraSilent Hall": true,
+        "questAct 4Eye of HinekoraTribal Medicine": "None",
+        "questAct 4Halls Of The DeadNgamahu's Test": "None",
+        "questAct 4Halls Of The DeadTasalio's Test": "None",
+        "questAct 4Halls Of The DeadTawhoa's Test": "None",
+        "questInterlude 2Khari CrossingMolten Shrine": true,
+        "questInterlude 2QimahSeven Pillars": "None",
+        "questInterlude 3Kriar VillageLythara": true,
+        "raiseSpectreEnableBuffs": true,
+        "raiseSpectreEnableCurses": true,
+        "repeatMode": "AVERAGE",
+        "resistancePenalty": -60,
+        "resourceGainMode": "AVERAGE",
+        "summonCompanionEnableBuffs": true,
+        "summonCompanionEnableCurses": true,
+        "summonElementalRelicEnableAngerAura": true,
+        "summonElementalRelicEnableHatredAura": true,
+        "summonElementalRelicEnableWrathAura": true,
+        "targetBrandedEnemy": true,
+        "touchedDebuffsCount": 10
+      },
+      "placeholder": {
+        "ChillStacks": 1,
+        "ScorchStacks": 1,
+        "ShockStacks": 1,
+        "conditionCorruptingCryStages": 10,
+        "demonFormStacks": 10,
+        "enemyCritChance": 5,
+        "enemyCritDamage": 30,
+        "enemyCriticalWeaknessStacks": 20,
+        "enemyDamageRollRange": 70,
+        "enemyDistance": 20,
+        "enemyPhysicalDamage": 7,
+        "enemySpeed": 700,
+        "multiplierCurrentEnergyShield": 100,
+        "multiplierDifferentAmmoFired": 1,
+        "multiplierDifferentGrenadeFired": 1,
+        "multiplierStunnedRecently": 1,
+        "multiplierWarcryUsedRecently": 1,
+        "multiplierWitheredStackCountSelf": 15,
+        "sigilOfPowerStages": 1
+      }
+    },
+    "distinct_invoked_variables": 63,
+    "phases": [
+      {
+        "active_set": 1,
+        "calls": [
+          {
+            "argument": 100,
+            "body_sha256": "e20fd3754ad6ca792cf37b0945f224a8cd84a26d3997c11f6eb9e1fbf5cc6658",
+            "catalogue_index": 4,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "dc2526e2e3b5c336261cfc4a645cfbe51cc010ca2e8388acc8b6e75eedf80c96",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierCurrentManaPercentage"
+          },
+          {
+            "argument": 100,
+            "body_sha256": "ced545e799e2cb2a583956c416658a741f60d7541f403ba1bec7540a810f5cc2",
+            "catalogue_index": 14,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "32e99360894bf6283735fb1045866467eaaa89a69eba1b2ea3e9ab8244c8d601",
+            "enemy_record_count": 0,
+            "player_record_count": 2,
+            "variable": "multiplierCurrentEnergyShield"
+          },
+          {
+            "argument": "AVERAGE",
+            "body_sha256": "ebfe6d41ba268031d92a7ddfe184a4f95d96440ec93bca16d2ab8b065fd0761f",
+            "catalogue_index": 25,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "ef3fed917a1ceaacc4412ebd2d83e6ced1de3316259f9eb11be1c99e40b3794e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "resourceGainMode"
+          },
+          {
+            "argument": true,
+            "body_sha256": "c0ba9d8c392689a2244a214dd0616233d68ede9d1283c3260e7bcf3fb407bc8b",
+            "catalogue_index": 65,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "6bfc6cfb1c96a5a1bd6cca976518e31df4ac3618c50a079642637b05eeaecba5",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "targetBrandedEnemy"
+          },
+          {
+            "argument": true,
+            "body_sha256": "9f424363834101a705599479c98d6ad68440f65cee23375b2751166b3e57b53a",
+            "catalogue_index": 78,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "2904cf2c9006ad5e62dd6afad9a52076ea35dc238d62f11cbf312c792bcf42ff",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "ConcPathBypassCD"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "f4c27f8c78d8d33b953fdafde4995718a46fcbe4ae889be2445e2ef09b360c3d",
+            "catalogue_index": 86,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "83440ffea07ca8ad89f7879d00a11a0d4dffce5cdbe463d76ae159feb9e8afc4",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "conditionCorruptingCryStages"
+          },
+          {
+            "argument": true,
+            "body_sha256": "a7813c7a8ddb9fbc2c6481fad24f99e1e5fd6b3bbb9ef3f01c4bbaa0072f1659",
+            "catalogue_index": 94,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "3ab98979534f83f5ed9d9579f9bcec0ebe60277874140ad2f7c7988c0636e9d0",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "inDemonForm"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "79c79a1632e57508c0fcfd338737f7723dc3cbe5b21aad3f0d8faa6619cb363e",
+            "catalogue_index": 95,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "c4a038d314b0027c21de9b9a03fbd070fc0b719821aa56b32e1e58bba9f24a4e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "demonFormStacks"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "837f2a37582f374819bead60f604b4a91f8023ab65e688c2c321f8063c2b764a",
+            "catalogue_index": 105,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d816674ff56a2f97f15c2c18126c7f17cde3b93a1551dd9b020ff6d5840a8f64",
+            "enemy_record_count": 0,
+            "player_record_count": 6,
+            "variable": "touchedDebuffsCount"
+          },
+          {
+            "argument": true,
+            "body_sha256": "1a454a754c973832d61e78989a198f26d2a2654d06542f17fbbf63bb5821f522",
+            "catalogue_index": 110,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "93ef246c8ec1f0a906dd17a096cbb967db2084efde061bd3fe9f02b382df451f",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "FlickerStrikeBypassCD"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "ff5f58b5527baece6e8898a7600abe86d1225d743c8a5013093528d789607518",
+            "catalogue_index": 111,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e1447d180eceb2d60acc7d7f3517a0ef465ee5cbd2b2d058567f90064186cb28",
+            "enemy_record_count": 0,
+            "player_record_count": 3,
+            "variable": "elementalConfluxElement"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "ae8025ece9adfb3d54017fe17e795c31f802d09c037e0c57ac6822b695ea9a4d",
+            "catalogue_index": 131,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a89bacd1c84f661c50ad416e66493b5e6f761e178e28f0e11de73a926b456d41",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "SecondsSinceInevitableCrit"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "ef56ed3b1b736defe661fd3f3ef58fd365d4eac2bc26308196bb602db479ca16",
+            "catalogue_index": 137,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "58813a38f12291d0ee37ed21d13c0d14345f32f53a60becace99c72dfd982c33",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "purpleFlameStacks"
+          },
+          {
+            "argument": true,
+            "body_sha256": "518b1fa602c33827b26fcad5f7a487756270999cc9cfbe6406ecac0b3b6098f1",
+            "catalogue_index": 167,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "9e8ec7b7ddac1c927d5d21ce007038c9872c72474c39f15a5bf4c77359d3575d",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "raiseSpectreEnableBuffs"
+          },
+          {
+            "argument": true,
+            "body_sha256": "b060b41fa2464b40a5b114b89b085f729f6dab2f37cf7b8ab00c2de95998e75f",
+            "catalogue_index": 168,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "af605a30be7919bd6b4ee1a7243ffc571b5ad70e8e72e7b66a0c4538ca71478e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "raiseSpectreEnableCurses"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "e6e9b9bb75afdb3079805f63f34cedb91b3ccd91c583da83d28407119bbe880d",
+            "catalogue_index": 189,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "c02157f1020086c48952d9b28b1881b7f7a8f875e79460a7014ac8fb98912294",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "sigilOfPowerStages"
+          },
+          {
+            "argument": true,
+            "body_sha256": "dbd7bc023eef8abfffabdc489f44345da636086ae216a27b5eea52aeaf3805fb",
+            "catalogue_index": 209,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "b31116cfe43aeb96c20ad36cd674a0a25699205237a0fe4bfc6c5c559d8d948c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonCompanionEnableBuffs"
+          },
+          {
+            "argument": true,
+            "body_sha256": "0f5169784ee00547832191eac0590ce1cde5468c25bac947241530851c17825a",
+            "catalogue_index": 210,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a55ed1e63ba0e7e7899ae9f8daede2f261954a95852e830b9cbbd6b67e74458c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonCompanionEnableCurses"
+          },
+          {
+            "argument": true,
+            "body_sha256": "e3351f04588cbd58023676f2b0d54a140d1b249301494aa742d420a5dcdbdb40",
+            "catalogue_index": 212,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d12ef0ac8da236d4fa5f9159b9897cdc245fc9e7503c76d785e1b0c73ec30441",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableAngerAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "0804fae3461983a27d752d06a595bb3513b9f025b70f0ff9224ddaec2f9ef9de",
+            "catalogue_index": 213,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "1655f05634b42378f242438c45acc9842a18532fc8b791438f8c9cefc217d20f",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableHatredAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "8d9152516f704c5becf7fcf1a01d7844e4667ef3bda4a98a9c7ead2ffc88093e",
+            "catalogue_index": 214,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "388f01c7123b93c01f791a4a7d6ac5ddfbc2246521e2dbcbb9640e411bb7ed6c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableWrathAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "b41bae9974ecbcd6e354303310bdfa7c33938750c4a4e6e6dd99c8a814924f1d",
+            "catalogue_index": 239,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5f05d25adfc989b774642185c9e5805f7e5070701288cdaa636c6817ab184d04",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "VigilantStrikeBypassCD"
+          },
+          {
+            "argument": "Medium",
+            "body_sha256": "b6fbaec2d2ed71f698282dee1ae4b8013116ecdafa8793078809aad034e7adf5",
+            "catalogue_index": 262,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "87abef1f094d606ec82a0391cd5e2a999063ff72c5e1477016e7742f5466f8ea",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "enemySizePreset"
+          },
+          {
+            "argument": "AVERAGE",
+            "body_sha256": "7e50ce2711bee1c4611bb82535fd92f6d3e33ab0df365d0aca8ade1986e0ff8b",
+            "catalogue_index": 287,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5501d8b059996147da3db8235389ff6a6dcad73c3c3f10b28c98262a901af8ad",
+            "enemy_record_count": 0,
+            "player_record_count": 2,
+            "variable": "repeatMode"
+          },
+          {
+            "argument": true,
+            "body_sha256": "041b4463494a1d2896fa54b7ad1422318e75029094c72ea61223d45e305ebe3f",
+            "catalogue_index": 338,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "f2310007575c3e807f5fa2cd75caaa8f43e6a86ab915684abcf61f948e95955e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "companionInPresence"
+          },
+          {
+            "argument": 15,
+            "body_sha256": "b6db8fadf9d5674a58493e1f85b9b93a4f79a1607a98fdc4a6d3165259dfca95",
+            "catalogue_index": 365,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "3b72c4a3b42aad05eaf34dade054fcd0c04dd18b24dc9fc7f8c44b7a2b19fc42",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierWitheredStackCountSelf"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "8c5d07d3b8f8fe9ef8626cbfe6d664a850692511ce0c0120dd610a9f7bcfd125",
+            "catalogue_index": 413,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d4eae8efefd29da42979f63744396bda0661d9e56f2cd1816d773dfe34aaa1ff",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierStunnedRecently"
+          },
+          {
+            "argument": true,
+            "body_sha256": "6749ab540fcdd971cf4e4e978dd26b2fb6a7e8e1b72d3f801534b3805aa57e5c",
+            "catalogue_index": 449,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "633d245b47da7eb1edf251c6bfa231b41453d4c3ae444576caacae372fdd22e9",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "conditionChampionIntimidate"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "757ed4aaf8d36443e39442fafd54861da928652587e1777a758e32e92589d355",
+            "catalogue_index": 471,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "db2cc1d6fa71da9c93c8f8e5c855667b56fd4f45b0136ada15a8f8f7a241cbf4",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierWarcryUsedRecently"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "23dec3bab3cf95e3c6e4e6f5fbc268a04406874728bd9b5ad14ac9aae4fea663",
+            "catalogue_index": 503,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a29f8747478acd46fa5171579b8b5c03350c5d4778e65b7b61a79eebc6f28e35",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "GamblesprintMovementSpeed"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "c852e42b41b9784a7691b0158e86bee4313057b708894165af0554205db37913",
+            "catalogue_index": 513,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "0be4d076a37c4ea96186f18feca9f6760c974c538bea5772843a66e6ae0e63c6",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "enemyDistance"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "14c90ddcf50aa683f55c05612032a68165d5d2388b212d5181835b6131b2a507",
+            "catalogue_index": 519,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "652a13a483690b2e171c0eba18b32b24f96cc3539a94b40e5aa6f9f6994905ea",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierDifferentAmmoFired"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "a893864c3584272fb93af4ccc79d5dea9e4afb85ae91de77a20fa4a5223489f1",
+            "catalogue_index": 520,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "7ca2a1f0ca273a508ec0d6d41e2702b3e0df8d5f3f2bd2f133720c54f34aa61d",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierDifferentGrenadeFired"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "5ae1f033b598bb50ad1067898b47a9379f8dfc5f8a2cc705cc65fa10dd776f86",
+            "catalogue_index": 562,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "125924303191b4d2b6cd4f2240b5ca79952c8601133242488016a0b1b5fc2469",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ScorchStacks"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "04c458d37dd352aefde20dbb3fad2684449dbfa30bd8e80f8986a922ba9b27a8",
+            "catalogue_index": 567,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "b576a095ffea2582d2f05bc4f2f273a254127f61771b5cfce5a2b0575e848f76",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ChillStacks"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "fe1e720ead53e6a40ffb9adfb3561e9c4adb6c6afd2b97018da0dc82754689ee",
+            "catalogue_index": 578,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "4a3acc8d7841a252b5374180a4c1cf7b291925223124e1db0d6c081e5f359968",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ShockStacks"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "ffc3eea5af3cf0c467007aa689cafcce0310ff29b4b9a87d0e1b06ac63bb6142",
+            "catalogue_index": 594,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "55afaed03203aa769b694f46c7fd6180820b6909558fa2a824f09428cf179541",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyCriticalWeaknessStacks"
+          },
+          {
+            "argument": "Pinnacle",
+            "body_sha256": "4b4568bd7ea629e326d21e5b7301f03002d6a59bffaadff5970d282021aff7e9",
+            "catalogue_index": 618,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "81e621af05e2b7f4c66be405709a6123ca92e31873b132d39663881389217352",
+            "enemy_record_count": 10,
+            "player_record_count": 2,
+            "variable": "enemyIsBoss"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "4dc0ff09bcdba38aeeab082649222c2ebcf86fe0c608136d2690bdecdeb2e924",
+            "catalogue_index": 621,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "2c3b2c8f83c95931bedc91062afe36b13b2fc226d66f9060324cd9e82eba3454",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyLightningResist"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "b6ba75e088d68118f9285d656bf17bb4d4e5ce0c0a148996f073436248e29f6d",
+            "catalogue_index": 622,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e54bf8849a73354bce53f402e0b0a916c83545a122ed143e0150d7b3cd114351",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyColdResist"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "36cd29b3768a0c1e9d8b6195ddc889e801c891d8a68cb7830c5279d696f3e576",
+            "catalogue_index": 623,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5bae0d47618d9daf0677d40df0565b073eb667500a3928841719fa8fb4424b65",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyFireResist"
+          },
+          {
+            "argument": 0,
+            "body_sha256": "cd6772cf0cdabef4ca44bb22f9714e7843bc0912b7a138da00e3845ae66269d8",
+            "catalogue_index": 624,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e8410ba4fcd008cd5e59ab9c4386811a8a9f7a7f368e5ba74bd5b1bea8caee55",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyChaosResist"
+          },
+          {
+            "argument": 1175,
+            "body_sha256": "f77251e205681bd29d074a0779dce259ce2f5d2a778d9fd71fdc3ad56dcc78fa",
+            "catalogue_index": 627,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "67aef19364a0270170f7b05f41b4f05d6af2e53badcebecede255cac3a208f7a",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyEvasion"
+          },
+          {
+            "argument": 8063,
+            "body_sha256": "e15192b77f669f4e98625a9d907d70bbf4eacb00093960263179aed865ae6bd0",
+            "catalogue_index": 628,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "87ca6f87045ba3a54f243b70c0e4abaebdd1501473b75904f6a1ef5f6c09bca9",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyArmour"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "48cf43dd75d570744387fac3ed350f22df5c756b8c54494e932c3d03045d5fa0",
+            "catalogue_index": 629,
+            "classification": "inactive-dynamic-boss-branch",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "presetBossSkills"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 647,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "23ef22d112718b10516c43db5042fbd56dfff64d55066b56599b84951dfcc940",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1ClearfellBeira"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 648,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e6a0bca67992ad8002d43253d6048046cd2b3d20d8f8fec7df8c477bb17de311",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1FreythornKing In The Mists"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 649,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "a56a7140fa5239a48c85854b9766e6e3ac8e727a2cf3823caedf09f1b27f192e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1Ogham ManorCandlemass"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 650,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 2Valley of the TitansMedallion"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 651,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "74c9756d04d548031176a28dbfba4fe25a66fdacca8ae300f9d70835649dc4b8",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 2Spires of DesharSisters of Garukhan Shrine"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 652,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "332cd51d9499856f848cfa072d7e53214ada40b461b3822e42ef91b7cd12ab25",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 3Azak BogIgnagduk"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 653,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 3Venom CryptsVenom Draught"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 654,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "391f453724a6d666bb13cb9eae3515e5879b14ed162c4dbec8f8ec9fa54d7855",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 3Jiquani's MachinariumBlackjaw"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 655,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "c73776f9706d5b50d95863b36ef0d7753fdb181cfc7c09c40df2719a789639c0",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Eye of HinekoraSilent Hall"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 656,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 657,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 658,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 659,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 660,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 661,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "d4d2b82192beac7ffaab63043d303cacf9af0ee590588dbce95cb4f9503790ec",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questInterlude 2Khari CrossingMolten Shrine"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 662,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "questInterlude 2QimahSeven Pillars"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 663,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "ec35e6c07228c8e45336a75c3ba11d63f61f647e95e77eacf96a885511c1e1a9",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questInterlude 3Kriar VillageLythara"
+          }
+        ],
+        "configuration_sha256": "cafb729984e32a9449a213ca6192af262c3366217af3efe4e4c59f045708ec0d",
+        "custom_text": "complete-empty-constructor-path",
+        "enemy_records": 21,
+        "inactive_apply_declarations": 475,
+        "invoked": 62,
+        "phase": 0,
+        "player_records": 52,
+        "quest_parser_boundaries": [
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 1ClearfellBeira"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 1FreythornKing In The Mists"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questAct 1Ogham ManorCandlemass"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 2Valley of the TitansMedallion"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 2Spires of DesharSisters of Garukhan Shrine"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 3Azak BogIgnagduk"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 3Venom CryptsVenom Draught"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 3Jiquani's MachinariumBlackjaw"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Mana"
+            ],
+            "var": "questAct 4Eye of HinekoraSilent Hall"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questInterlude 2Khari CrossingMolten Shrine"
+          },
+          {
+            "argument": "None",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [],
+            "var": "questInterlude 2QimahSeven Pillars"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questInterlude 3Kriar VillageLythara"
+          }
+        ],
+        "without_apply": 126
+      },
+      {
+        "active_set": 1,
+        "calls": [
+          {
+            "argument": 100,
+            "body_sha256": "e20fd3754ad6ca792cf37b0945f224a8cd84a26d3997c11f6eb9e1fbf5cc6658",
+            "catalogue_index": 4,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "dc2526e2e3b5c336261cfc4a645cfbe51cc010ca2e8388acc8b6e75eedf80c96",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierCurrentManaPercentage"
+          },
+          {
+            "argument": 100,
+            "body_sha256": "ced545e799e2cb2a583956c416658a741f60d7541f403ba1bec7540a810f5cc2",
+            "catalogue_index": 14,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "32e99360894bf6283735fb1045866467eaaa89a69eba1b2ea3e9ab8244c8d601",
+            "enemy_record_count": 0,
+            "player_record_count": 2,
+            "variable": "multiplierCurrentEnergyShield"
+          },
+          {
+            "argument": "AVERAGE",
+            "body_sha256": "ebfe6d41ba268031d92a7ddfe184a4f95d96440ec93bca16d2ab8b065fd0761f",
+            "catalogue_index": 25,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "ef3fed917a1ceaacc4412ebd2d83e6ced1de3316259f9eb11be1c99e40b3794e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "resourceGainMode"
+          },
+          {
+            "argument": true,
+            "body_sha256": "c0ba9d8c392689a2244a214dd0616233d68ede9d1283c3260e7bcf3fb407bc8b",
+            "catalogue_index": 65,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "6bfc6cfb1c96a5a1bd6cca976518e31df4ac3618c50a079642637b05eeaecba5",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "targetBrandedEnemy"
+          },
+          {
+            "argument": true,
+            "body_sha256": "9f424363834101a705599479c98d6ad68440f65cee23375b2751166b3e57b53a",
+            "catalogue_index": 78,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "2904cf2c9006ad5e62dd6afad9a52076ea35dc238d62f11cbf312c792bcf42ff",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "ConcPathBypassCD"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "f4c27f8c78d8d33b953fdafde4995718a46fcbe4ae889be2445e2ef09b360c3d",
+            "catalogue_index": 86,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "83440ffea07ca8ad89f7879d00a11a0d4dffce5cdbe463d76ae159feb9e8afc4",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "conditionCorruptingCryStages"
+          },
+          {
+            "argument": true,
+            "body_sha256": "a7813c7a8ddb9fbc2c6481fad24f99e1e5fd6b3bbb9ef3f01c4bbaa0072f1659",
+            "catalogue_index": 94,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "3ab98979534f83f5ed9d9579f9bcec0ebe60277874140ad2f7c7988c0636e9d0",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "inDemonForm"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "79c79a1632e57508c0fcfd338737f7723dc3cbe5b21aad3f0d8faa6619cb363e",
+            "catalogue_index": 95,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "c4a038d314b0027c21de9b9a03fbd070fc0b719821aa56b32e1e58bba9f24a4e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "demonFormStacks"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "837f2a37582f374819bead60f604b4a91f8023ab65e688c2c321f8063c2b764a",
+            "catalogue_index": 105,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d816674ff56a2f97f15c2c18126c7f17cde3b93a1551dd9b020ff6d5840a8f64",
+            "enemy_record_count": 0,
+            "player_record_count": 6,
+            "variable": "touchedDebuffsCount"
+          },
+          {
+            "argument": true,
+            "body_sha256": "1a454a754c973832d61e78989a198f26d2a2654d06542f17fbbf63bb5821f522",
+            "catalogue_index": 110,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "93ef246c8ec1f0a906dd17a096cbb967db2084efde061bd3fe9f02b382df451f",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "FlickerStrikeBypassCD"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "ff5f58b5527baece6e8898a7600abe86d1225d743c8a5013093528d789607518",
+            "catalogue_index": 111,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e1447d180eceb2d60acc7d7f3517a0ef465ee5cbd2b2d058567f90064186cb28",
+            "enemy_record_count": 0,
+            "player_record_count": 3,
+            "variable": "elementalConfluxElement"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "ae8025ece9adfb3d54017fe17e795c31f802d09c037e0c57ac6822b695ea9a4d",
+            "catalogue_index": 131,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a89bacd1c84f661c50ad416e66493b5e6f761e178e28f0e11de73a926b456d41",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "SecondsSinceInevitableCrit"
+          },
+          {
+            "argument": 10,
+            "body_sha256": "ef56ed3b1b736defe661fd3f3ef58fd365d4eac2bc26308196bb602db479ca16",
+            "catalogue_index": 137,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "58813a38f12291d0ee37ed21d13c0d14345f32f53a60becace99c72dfd982c33",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "purpleFlameStacks"
+          },
+          {
+            "argument": true,
+            "body_sha256": "518b1fa602c33827b26fcad5f7a487756270999cc9cfbe6406ecac0b3b6098f1",
+            "catalogue_index": 167,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "9e8ec7b7ddac1c927d5d21ce007038c9872c72474c39f15a5bf4c77359d3575d",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "raiseSpectreEnableBuffs"
+          },
+          {
+            "argument": true,
+            "body_sha256": "b060b41fa2464b40a5b114b89b085f729f6dab2f37cf7b8ab00c2de95998e75f",
+            "catalogue_index": 168,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "af605a30be7919bd6b4ee1a7243ffc571b5ad70e8e72e7b66a0c4538ca71478e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "raiseSpectreEnableCurses"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "e6e9b9bb75afdb3079805f63f34cedb91b3ccd91c583da83d28407119bbe880d",
+            "catalogue_index": 189,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "c02157f1020086c48952d9b28b1881b7f7a8f875e79460a7014ac8fb98912294",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "sigilOfPowerStages"
+          },
+          {
+            "argument": true,
+            "body_sha256": "dbd7bc023eef8abfffabdc489f44345da636086ae216a27b5eea52aeaf3805fb",
+            "catalogue_index": 209,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "b31116cfe43aeb96c20ad36cd674a0a25699205237a0fe4bfc6c5c559d8d948c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonCompanionEnableBuffs"
+          },
+          {
+            "argument": true,
+            "body_sha256": "0f5169784ee00547832191eac0590ce1cde5468c25bac947241530851c17825a",
+            "catalogue_index": 210,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a55ed1e63ba0e7e7899ae9f8daede2f261954a95852e830b9cbbd6b67e74458c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonCompanionEnableCurses"
+          },
+          {
+            "argument": true,
+            "body_sha256": "e3351f04588cbd58023676f2b0d54a140d1b249301494aa742d420a5dcdbdb40",
+            "catalogue_index": 212,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d12ef0ac8da236d4fa5f9159b9897cdc245fc9e7503c76d785e1b0c73ec30441",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableAngerAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "0804fae3461983a27d752d06a595bb3513b9f025b70f0ff9224ddaec2f9ef9de",
+            "catalogue_index": 213,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "1655f05634b42378f242438c45acc9842a18532fc8b791438f8c9cefc217d20f",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableHatredAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "8d9152516f704c5becf7fcf1a01d7844e4667ef3bda4a98a9c7ead2ffc88093e",
+            "catalogue_index": 214,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "388f01c7123b93c01f791a4a7d6ac5ddfbc2246521e2dbcbb9640e411bb7ed6c",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "summonElementalRelicEnableWrathAura"
+          },
+          {
+            "argument": true,
+            "body_sha256": "b41bae9974ecbcd6e354303310bdfa7c33938750c4a4e6e6dd99c8a814924f1d",
+            "catalogue_index": 239,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5f05d25adfc989b774642185c9e5805f7e5070701288cdaa636c6817ab184d04",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "VigilantStrikeBypassCD"
+          },
+          {
+            "argument": "Medium",
+            "body_sha256": "b6fbaec2d2ed71f698282dee1ae4b8013116ecdafa8793078809aad034e7adf5",
+            "catalogue_index": 262,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "87abef1f094d606ec82a0391cd5e2a999063ff72c5e1477016e7742f5466f8ea",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "enemySizePreset"
+          },
+          {
+            "argument": 56,
+            "body_sha256": "0ac5f3ac3e0fed65d95f4f0107ff4dc9be3905658b9476cdd2205c6e0365efe9",
+            "catalogue_index": 285,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "439f29e1d3239eaa0a6f989a8d784e4c0a62f09858b621729731f6bc872e3f3d",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "configBossFaceBroken"
+          },
+          {
+            "argument": "AVERAGE",
+            "body_sha256": "7e50ce2711bee1c4611bb82535fd92f6d3e33ab0df365d0aca8ade1986e0ff8b",
+            "catalogue_index": 287,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "36ee083c74d04a23969a260e7f003b8e405fadbcea19b8dcff80f7d38bfd8381",
+            "enemy_record_count": 0,
+            "player_record_count": 2,
+            "variable": "repeatMode"
+          },
+          {
+            "argument": true,
+            "body_sha256": "041b4463494a1d2896fa54b7ad1422318e75029094c72ea61223d45e305ebe3f",
+            "catalogue_index": 338,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "cf301cad7501d596829b36c4cb48515d94377dc0463156f22ffc37af32d59af9",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "companionInPresence"
+          },
+          {
+            "argument": 15,
+            "body_sha256": "b6db8fadf9d5674a58493e1f85b9b93a4f79a1607a98fdc4a6d3165259dfca95",
+            "catalogue_index": 365,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "a4298035fd366c4760aaf073b8d56bc0e1d8b3b2f70a5647965cfa7a2f52d914",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierWitheredStackCountSelf"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "8c5d07d3b8f8fe9ef8626cbfe6d664a850692511ce0c0120dd610a9f7bcfd125",
+            "catalogue_index": 413,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "cce37ebf84083884781a0a831bbab3032a6bca8881df6d8a0407c3264b670ec0",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierStunnedRecently"
+          },
+          {
+            "argument": true,
+            "body_sha256": "6749ab540fcdd971cf4e4e978dd26b2fb6a7e8e1b72d3f801534b3805aa57e5c",
+            "catalogue_index": 449,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "633d245b47da7eb1edf251c6bfa231b41453d4c3ae444576caacae372fdd22e9",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "conditionChampionIntimidate"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "757ed4aaf8d36443e39442fafd54861da928652587e1777a758e32e92589d355",
+            "catalogue_index": 471,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "4221ede370ead2f039584cdc8ecc0561d582b2bfe679ce1bccc9736820d5a630",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierWarcryUsedRecently"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "23dec3bab3cf95e3c6e4e6f5fbc268a04406874728bd9b5ad14ac9aae4fea663",
+            "catalogue_index": 503,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "4b7a797d8af492a047c8b44406aa2c40c91b1cb733b1d8752a03d2e3b3396569",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "GamblesprintMovementSpeed"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "c852e42b41b9784a7691b0158e86bee4313057b708894165af0554205db37913",
+            "catalogue_index": 513,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "9cd5cd01b899a1759b1ddb362d2e59b088e29537b570dcafb31b464f49be56db",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "enemyDistance"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "14c90ddcf50aa683f55c05612032a68165d5d2388b212d5181835b6131b2a507",
+            "catalogue_index": 519,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5d6cd2ce8f8f710a72001426bd2ee03fc335b61f14436d3cf752bd200ae66b26",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierDifferentAmmoFired"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "a893864c3584272fb93af4ccc79d5dea9e4afb85ae91de77a20fa4a5223489f1",
+            "catalogue_index": 520,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "d14403cac4e45b8163a07191da1e1b2e22c927fa9c1b93f12847121d50eb49d0",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "multiplierDifferentGrenadeFired"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "5ae1f033b598bb50ad1067898b47a9379f8dfc5f8a2cc705cc65fa10dd776f86",
+            "catalogue_index": 562,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "125924303191b4d2b6cd4f2240b5ca79952c8601133242488016a0b1b5fc2469",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ScorchStacks"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "04c458d37dd352aefde20dbb3fad2684449dbfa30bd8e80f8986a922ba9b27a8",
+            "catalogue_index": 567,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "b576a095ffea2582d2f05bc4f2f273a254127f61771b5cfce5a2b0575e848f76",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ChillStacks"
+          },
+          {
+            "argument": 1,
+            "body_sha256": "fe1e720ead53e6a40ffb9adfb3561e9c4adb6c6afd2b97018da0dc82754689ee",
+            "catalogue_index": 578,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "4a3acc8d7841a252b5374180a4c1cf7b291925223124e1db0d6c081e5f359968",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "ShockStacks"
+          },
+          {
+            "argument": 20,
+            "body_sha256": "ffc3eea5af3cf0c467007aa689cafcce0310ff29b4b9a87d0e1b06ac63bb6142",
+            "catalogue_index": 594,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "55afaed03203aa769b694f46c7fd6180820b6909558fa2a824f09428cf179541",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyCriticalWeaknessStacks"
+          },
+          {
+            "argument": "Pinnacle",
+            "body_sha256": "4b4568bd7ea629e326d21e5b7301f03002d6a59bffaadff5970d282021aff7e9",
+            "catalogue_index": 618,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "751aa8b4272db7edadbd155f4bdecb6434cc21ee9ccc4c32c9e3240b0c07ba04",
+            "enemy_record_count": 10,
+            "player_record_count": 2,
+            "variable": "enemyIsBoss"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "4dc0ff09bcdba38aeeab082649222c2ebcf86fe0c608136d2690bdecdeb2e924",
+            "catalogue_index": 621,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "2c3b2c8f83c95931bedc91062afe36b13b2fc226d66f9060324cd9e82eba3454",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyLightningResist"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "b6ba75e088d68118f9285d656bf17bb4d4e5ce0c0a148996f073436248e29f6d",
+            "catalogue_index": 622,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e54bf8849a73354bce53f402e0b0a916c83545a122ed143e0150d7b3cd114351",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyColdResist"
+          },
+          {
+            "argument": 50,
+            "body_sha256": "36cd29b3768a0c1e9d8b6195ddc889e801c891d8a68cb7830c5279d696f3e576",
+            "catalogue_index": 623,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "5bae0d47618d9daf0677d40df0565b073eb667500a3928841719fa8fb4424b65",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyFireResist"
+          },
+          {
+            "argument": 0,
+            "body_sha256": "cd6772cf0cdabef4ca44bb22f9714e7843bc0912b7a138da00e3845ae66269d8",
+            "catalogue_index": 624,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "e8410ba4fcd008cd5e59ab9c4386811a8a9f7a7f368e5ba74bd5b1bea8caee55",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyChaosResist"
+          },
+          {
+            "argument": 1175,
+            "body_sha256": "f77251e205681bd29d074a0779dce259ce2f5d2a778d9fd71fdc3ad56dcc78fa",
+            "catalogue_index": 627,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "67aef19364a0270170f7b05f41b4f05d6af2e53badcebecede255cac3a208f7a",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyEvasion"
+          },
+          {
+            "argument": 8063,
+            "body_sha256": "e15192b77f669f4e98625a9d907d70bbf4eacb00093960263179aed865ae6bd0",
+            "catalogue_index": 628,
+            "classification": "literal-writer-domain",
+            "delta_sha256": "87ca6f87045ba3a54f243b70c0e4abaebdd1501473b75904f6a1ef5f6c09bca9",
+            "enemy_record_count": 1,
+            "player_record_count": 0,
+            "variable": "enemyArmour"
+          },
+          {
+            "argument": "None",
+            "body_sha256": "48cf43dd75d570744387fac3ed350f22df5c756b8c54494e932c3d03045d5fa0",
+            "catalogue_index": 629,
+            "classification": "inactive-dynamic-boss-branch",
+            "delta_sha256": "e3cc5a0f6c4c9a6b8e391161def809df42d050a452eb31e8c4a9ac7f0d32243a",
+            "enemy_record_count": 0,
+            "player_record_count": 0,
+            "variable": "presetBossSkills"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 647,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "78b8b172f5371d98f1f56e3a9e23d4fffc82696ab19ea2b90afb391c33c69865",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1ClearfellBeira"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 648,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "bd5201e8f7d4acabcdc5c5ecc4ae13638844bfcd8b4bd942df01279df40b5cd4",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1FreythornKing In The Mists"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 649,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "9ea91a61b495e218bafdf230b2a8b47ca19b7d7a00e7918fed59debac0f0ac98",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 1Ogham ManorCandlemass"
+          },
+          {
+            "argument": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 650,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "2557915b6f4a37f473c0e3ea7c3df8286504f8740dbc48bf94865324a455d0b4",
+            "enemy_record_count": 0,
+            "player_record_count": 2,
+            "variable": "questAct 2Valley of the TitansMedallion"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 651,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "4608008cb0b8d87172df128979f560affb3832c4716500f5cc57ff696c6590ca",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 2Spires of DesharSisters of Garukhan Shrine"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 652,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "1ae3f79895cf4a593bb2b96fad224dd20116297df1a222cce8aecce01732854a",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 3Azak BogIgnagduk"
+          },
+          {
+            "argument": "30% increased Elemental Ailment Threshold",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 653,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "ee37e228000f3dc44a4cf9620304720fc53108aa40e1118f057f2ef22747c16a",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 3Venom CryptsVenom Draught"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 654,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "df7d2f6783a79ddae9a3d60637c26504a1117880485f837ac5bba7d1d4226144",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 3Jiquani's MachinariumBlackjaw"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 655,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "b407837c83dd046b6e88ee92dc09707e58a0673be4e2d9bf6f1e0c695556cfb3",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Eye of HinekoraSilent Hall"
+          },
+          {
+            "argument": "30% increased Global Armour, Evasion and Energy Shield",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 656,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "d8ec234a79a19d62b833078796b465681d8100b7e7942526e233e0fee0a57348",
+            "enemy_record_count": 0,
+            "player_record_count": 3,
+            "variable": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          {
+            "argument": "+5% to Lightning Resistance",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 657,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "3f381a96d4b4bef75ef4eb96e98af3eee77ca519e4a7389168632ff10e383f3e",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          {
+            "argument": "+5% to Cold Resistance",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 658,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "78a68b52fcbe52372e1ae1210a9e9ddbb7a1040e662e3cf13149bcf48005aa2d",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          {
+            "argument": "+5% to Fire Resistance",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 659,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "bd9463495c9d2903e2fa08dbbac44f294cd239da8b4ef80dcca0d7636054e5c6",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          {
+            "argument": "30% increased Life Recovery from Flasks",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 660,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "21995d2c926905d5152b2d593071ecc83d8e569dca32ea411f20d60b0fb23e6f",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 661,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "49c400a161e80abf2db612c98996edebcf9f7eca394259d1ed3ad0f0ef36b1e9",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questInterlude 2Khari CrossingMolten Shrine"
+          },
+          {
+            "argument": "15% increased Global Armour, Evasion and Energy Shield",
+            "body_sha256": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "catalogue_index": 662,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "c14a79005ff008238d1057bbbc4cbff28d13ecd819f893a667d507045d6e6d68",
+            "enemy_record_count": 0,
+            "player_record_count": 3,
+            "variable": "questInterlude 2QimahSeven Pillars"
+          },
+          {
+            "argument": true,
+            "body_sha256": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "catalogue_index": 663,
+            "classification": "quest-parser-output-boundary",
+            "delta_sha256": "ec2b07f844f9a635735b86137f177ee52e5132279d28a0e4a181e902f1880ea8",
+            "enemy_record_count": 0,
+            "player_record_count": 1,
+            "variable": "questInterlude 3Kriar VillageLythara"
+          }
+        ],
+        "configuration_sha256": "5dbf310b5016fc0a7abfeebdf424562df267120f8c875322aead167b02489772",
+        "custom_text": "complete-empty-constructor-path",
+        "enemy_records": 21,
+        "inactive_apply_declarations": 474,
+        "invoked": 63,
+        "phase": 1,
+        "player_records": 66,
+        "quest_parser_boundaries": [
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 1ClearfellBeira"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 1FreythornKing In The Mists"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questAct 1Ogham ManorCandlemass"
+          },
+          {
+            "argument": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "CharmChargesGained",
+              "CharmLimit"
+            ],
+            "var": "questAct 2Valley of the TitansMedallion"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 2Spires of DesharSisters of Garukhan Shrine"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questAct 3Azak BogIgnagduk"
+          },
+          {
+            "argument": "30% increased Elemental Ailment Threshold",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "AilmentThreshold"
+            ],
+            "var": "questAct 3Venom CryptsVenom Draught"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 3Jiquani's MachinariumBlackjaw"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Mana"
+            ],
+            "var": "questAct 4Eye of HinekoraSilent Hall"
+          },
+          {
+            "argument": "30% increased Global Armour, Evasion and Energy Shield",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Armour",
+              "Evasion",
+              "EnergyShield"
+            ],
+            "var": "questAct 4Eye of HinekoraTribal Medicine"
+          },
+          {
+            "argument": "+5% to Lightning Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "LightningResist"
+            ],
+            "var": "questAct 4Halls Of The DeadTawhoa's Test"
+          },
+          {
+            "argument": "+5% to Cold Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "ColdResist"
+            ],
+            "var": "questAct 4Halls Of The DeadTasalio's Test"
+          },
+          {
+            "argument": "+5% to Fire Resistance",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FireResist"
+            ],
+            "var": "questAct 4Halls Of The DeadNgamahu's Test"
+          },
+          {
+            "argument": "30% increased Life Recovery from Flasks",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "FlaskLifeRecovery"
+            ],
+            "var": "questAct 4Abandoned PrisonGoddess of Justice"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Life"
+            ],
+            "var": "questInterlude 2Khari CrossingMolten Shrine"
+          },
+          {
+            "argument": "15% increased Global Armour, Evasion and Energy Shield",
+            "body": "a2c8d80a6799ea29a6c70b28d7c6d05888156b9a7d639ecf83e5583ce8bece66",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Armour",
+              "Evasion",
+              "EnergyShield"
+            ],
+            "var": "questInterlude 2QimahSeven Pillars"
+          },
+          {
+            "argument": true,
+            "body": "75e23937e8d90955facc6ed8dbb54c6536f290dcfd9c3fd767f99775e45c649c",
+            "closure": "pending-quest-parser-authority",
+            "emitted_names": [
+              "Spirit"
+            ],
+            "var": "questInterlude 3Kriar VillageLythara"
+          }
+        ],
+        "without_apply": 126
+      }
+    ],
+    "scope": {
+      "direct_literal_callback_suppliers_excluded": true,
+      "empty_custom_text_suppliers_excluded": true,
+      "later_direct_configuration_consumers_covered": false,
+      "native_coverage_authorized": false,
+      "quest_parser_closure": false,
+      "saved_input_dispositions_changed": false,
+      "selected_none_boss_dynamic_branch_excluded": true
+    }
+  },
+  "remaining": [
+    "exact quest parser authority for the selected dynamic reward strings",
+    "later consumers of configuration fields and emitted control records",
+    "native source dispositions and query membership"
+  ],
+  "saved_input_dispositions_changed": false,
+  "schema_version": 1,
+  "selected_publication": "3ee48944d26b5351ecc267cc2e87637b68a8b6153b7ab2bbc5c906f11e4bd702",
+  "selection": {
+    "build": {
+      "active_weapon_loadout": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002b6"
+      },
+      "allocations": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000001bf"
+      },
+      "character": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000001c1"
+      },
+      "choices": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000001f1"
+      },
+      "equipment": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000002aa"
+      },
+      "skills": {
+        "lineage": "933793e7f857b22285aecc5b7ea80726",
+        "local": "00000000000001dd"
+      }
+    },
+    "queries": {
+      "lineage": "933793e7f857b22285aecc5b7ea80726",
+      "local": "0000000000000679"
+    },
+    "scenario": {
+      "lineage": "933793e7f857b22285aecc5b7ea80726",
+      "local": "0000000000000205"
+    }
+  },
+  "source_origin_count": 799
+}
