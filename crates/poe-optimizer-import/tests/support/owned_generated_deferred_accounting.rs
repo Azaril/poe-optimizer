@@ -413,30 +413,189 @@ fn archived_generated_accounting_refuses_unselected_ambiguity_or_missing_existin
     for ordinal in pair(&original) {
         assert!(is_fallback(&result, ordinal));
     }
-    let no_sibling = original.replacen(
+}
+
+fn without_manual_sibling(text: &str) -> String {
+    text.replacen(
         &format!("<Skill enabled=\"true\">{}</Skill>", inventory::GEM),
         "",
         1,
+    )
+}
+
+#[test]
+fn archived_generated_source_establishes_usage_responsibility_without_a_manual_sibling() {
+    let f = configured();
+    assert!(f.base.policy.usage_inputs.is_none());
+    let original = without_manual_sibling(&document(&generated()));
+    for text in [
+        original.clone(),
+        original.replace("enabled=\"true\"", "enabled=\"false\""),
+        original
+            .replace("count=\"1\"", "count=\"nil\"")
+            .replace("enableGlobal2=\"true\"", "enableGlobal2=\"nil\""),
+        original
+            .replace("count=\"1\"", "")
+            .replace("enableGlobal1=\"true\"", "")
+            .replace("enableGlobal2=\"true\"", ""),
+    ] {
+        let result = run(&f, &text);
+        let owners = three_owners(&result);
+        for ordinal in pair(&text) {
+            assert!(!is_fallback(&result, ordinal));
+            let links = &result.sidecar().origins[ordinal as usize].links;
+            for owner in owners {
+                assert!(links.contains(&OwnedOriginTarget::Issue(owner)));
+            }
+        }
+        assert_eq!(result.draft().input().skills.members.len(), 1);
+        assert!(result.draft().input().gems.members.is_empty());
+        assert!(result.draft().input().items.members.is_empty());
+        assert!(result.draft().input().allocations.members.is_empty());
+        assert!(result.sidecar().origins.iter().all(|row| {
+            !row.links
+                .iter()
+                .any(|link| matches!(link, OwnedOriginTarget::GeneratedSkillInput { .. }))
+        }));
+        let again = run(&f, &text);
+        assert_eq!(result.draft(), again.draft());
+        assert_eq!(result.allocator_after(), again.allocator_after());
+        assert_eq!(
+            serde_json::to_value(result.sidecar()).unwrap(),
+            serde_json::to_value(again.sidecar()).unwrap()
+        );
+    }
+
+    let mut unconfigured = configured();
+    unconfigured.base.policy.generated_skill_inputs = None;
+    let result = run(&unconfigured, &original);
+    let preset = &result.draft().input().skill_presets.members[0];
+    assert!(preset.intent.is_none() && preset.usage_preferences.is_none());
+    for ordinal in pair(&original) {
+        assert!(is_fallback(&result, ordinal));
+    }
+}
+
+#[test]
+fn archived_usage_responsibility_never_substitutes_for_complete_field_accounting() {
+    let f = configured();
+    for (before, after) in [
+        ("quality=\"0\"", "quality=\"bad\""),
+        ("count=\"1\"", "count=\"bad\""),
+        ("enableGlobal1=\"true\"", "enableGlobal1=\"maybe\""),
+        ("quality=\"0\"", "skillMinionSkill=\"999\" quality=\"0\""),
+    ] {
+        let text = without_manual_sibling(&document(&generated().replace(before, after)));
+        let result = run(&f, &text);
+        three_owners(&result);
+        for ordinal in pair(&text) {
+            assert!(is_fallback(&result, ordinal), "{after}: source {ordinal}");
+        }
+    }
+}
+
+#[test]
+fn three_pending_owners_do_not_replace_missing_generated_field_proof() {
+    let mut f = configured();
+    f.base.policy.direct_skill_inputs = None;
+    assert!(f.base.policy.gem_inventory.is_none());
+    // The selected preset is explicitly empty, so removing the Direct policy
+    // cannot change an unrelated manual skill's accounting.
+    let text = without_manual_sibling(&document(&generated())).replace(
+        &format!("<Skill enabled=\"true\">{}</Skill>", inventory::GEM),
+        "",
     );
-    let result = run(&configured(), &no_sibling);
-    assert!(matches!(
-        result.draft().input().skill_presets.members[0]
+    let result = run(&f, &text);
+    let owners = three_owners(&result);
+    for ordinal in pair(&text) {
+        assert!(is_fallback(&result, ordinal));
+        let links = &result.sidecar().origins[ordinal as usize].links;
+        assert!(
+            links.contains(&OwnedOriginTarget::Issue(owners[1])),
+            "recognized saved usage keeps its real responsibility"
+        );
+        assert!(
+            !links.iter().any(|link| matches!(
+                link,
+                OwnedOriginTarget::GeneratedSkillInput { .. }
+                    | OwnedOriginTarget::Skill(_)
+                    | OwnedOriginTarget::Gem(_)
+                    | OwnedOriginTarget::Support(_)
+            )),
+            "missing proof never manufactures a physical or Direct occurrence"
+        );
+    }
+    let proven = run(&configured(), &text);
+    assert_eq!(
+        result.draft(),
+        proven.draft(),
+        "field accounting changes neither the real obligations nor their values"
+    );
+    assert_eq!(result.allocator_after(), proven.allocator_after());
+    for ordinal in pair(&text) {
+        assert!(!is_fallback(&proven, ordinal));
+    }
+}
+
+#[test]
+fn archived_usage_discovery_reuses_the_same_presets_existing_pending_issue() {
+    let f = configured();
+    let text = document(&generated());
+    let mut without_generated = configured();
+    without_generated.base.policy.generated_skill_inputs = None;
+    let old = run(&without_generated, &text);
+    let old_usage = old.draft().input().skill_presets.members[0]
+        .usage_preferences
+        .as_ref()
+        .unwrap();
+    let result = run(&f, &text);
+    let usage = &result.draft().input().skill_presets.members[0]
+        .intent
+        .as_ref()
+        .unwrap()
+        .usage;
+    assert_eq!(usage.completion, old_usage.completion);
+    assert!(usage.members.is_empty() && old_usage.members.is_empty());
+    assert_eq!(
+        three_owners(&result)[1],
+        owner(&old_usage.completion, "usage-preferences-not-converted")
+    );
+}
+
+#[test]
+fn archived_usage_owner_requires_recognized_source_and_an_explicit_other_selection() {
+    let f = configured();
+    let original = without_manual_sibling(&document(&generated()));
+    for changed in [
+        original.replace("activeSkillSet=\"2\"", "activeSkillSet=\"1\""),
+        original.replace("activeSkillSet=\"2\"", "activeSkillSet=\"9\""),
+        original.replace("activeSkillSet=\"2\"", ""),
+        original.replace("source=\"Tree:7\"", "source=\"Tree:07\""),
+        original.replace("level=\"1\"", "level=\"bad\""),
+        original.replace("level=\"1\"", "level=\"1.5\""),
+        original.replace("level=\"1\"", ""),
+        original.replace("source=\"Tree:7\"", "source=\"Tree:7\" unknown=\"true\""),
+        original.replace(
+            "<SkillSet id=\"1\">",
+            &format!(
+                "<SkillSet id=\"1\"><Skill source=\"Tree:7\">{}</Skill>",
+                generated()
+            ),
+        ),
+    ] {
+        let result = run(&f, &changed);
+        let usage = &result.draft().input().skill_presets.members[0]
             .intent
             .as_ref()
             .unwrap()
-            .usage
-            .completion,
-        DraftListCompletion::Complete
-    ));
-    for ordinal in pair(&no_sibling) {
-        assert!(is_fallback(&result, ordinal));
-    }
-    for origin in &result.sidecar().origins {
+            .usage;
         assert!(
-            !origin
-                .links
-                .iter()
-                .any(|l| matches!(l, OwnedOriginTarget::GeneratedSkillInput { .. }))
+            matches!(usage.completion, DraftListCompletion::Complete),
+            "{changed}"
         );
+        assert!(usage.members.is_empty());
+        for ordinal in pair(&changed) {
+            assert!(is_fallback(&result, ordinal));
+        }
     }
 }

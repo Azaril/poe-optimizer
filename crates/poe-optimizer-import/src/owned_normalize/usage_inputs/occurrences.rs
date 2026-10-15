@@ -365,14 +365,12 @@ pub(super) fn materialize(
 ) -> Result<Vec<MaterializedUsage>> {
     let mut receipts = Vec::new();
     let mut plans = direct_plans(b, draft, compiled, context)?;
-    for generated_skill_sources::ResolvedPreset {
-        source: set,
-        preset_index: preset,
-        sources: rows,
-        ..
-    } in generated_skill_sources::resolve(b, draft, &compiled.generated, context)?
-    {
-        for row in rows {
+    let generated =
+        generated_skill_sources::resolve_with_archived(b, draft, &compiled.generated, context)?;
+    for resolved in &generated {
+        let set = resolved.source;
+        let preset = resolved.preset_index;
+        for row in &resolved.sources {
             let source = &b.evidence.rows()[row.source.ordinal() as usize];
             let group = &b.evidence.rows()[row.group.ordinal() as usize];
             if !frame(b, source, group, &compiled.rows[row.index])? {
@@ -382,10 +380,10 @@ pub(super) fn materialize(
                 source: row.source,
                 group: row.group,
                 preset,
-                target: UsageTarget::Skill(SkillTarget::Generated(Box::new(row.target))),
+                target: UsageTarget::Skill(SkillTarget::Generated(Box::new(row.target.clone()))),
                 applicability: PresetApplicability::WhenExactSourceSelected,
                 rule: row.index,
-                origins: row.provider_sources.into_iter().chain([set]).collect(),
+                origins: row.provider_sources.iter().copied().chain([set]).collect(),
             });
         }
     }
@@ -394,8 +392,8 @@ pub(super) fn materialize(
         let source = &b.evidence.rows()[plan.source.ordinal() as usize];
         let group = &b.evidence.rows()[plan.group.ordinal() as usize];
         let preset = &mut draft.skill_presets.members[plan.preset];
-        // Only an actual proved projection adds a usage obligation. Unmatched
-        // presets retain their exact old absence/completion and issue identity.
+        // Live value projection retains its own unfinished usage inventory.
+        // Archived source responsibilities are produced separately below.
         if let Some(intent) = &mut preset.intent {
             if matches!(intent.usage.completion, DraftListCompletion::Complete) {
                 intent.usage.completion = b
@@ -507,5 +505,8 @@ pub(super) fn materialize(
             }
         }
     }
+    // A recognized archived source owns usage even without a raw-quality
+    // policy or a resolved provider. It emits no projection receipt or value.
+    generated_skill_sources::retain_archived_usage(b, draft, &generated)?;
     Ok(receipts)
 }

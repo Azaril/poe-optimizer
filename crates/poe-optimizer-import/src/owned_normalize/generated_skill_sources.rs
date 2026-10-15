@@ -783,13 +783,50 @@ pub(super) struct ArchivedSource {
     pub index: usize,
 }
 
-pub(super) fn resolve(
+/// Recognized archived syntax still owns unfinished usage work even when no
+/// provider can be selected yet. This producer neither decodes a preference nor
+/// discharges source fields; the independent accounting pass proves those.
+pub(super) fn retain_archived_usage(
     b: &mut Builder<'_, '_>,
-    draft: &DraftSessionInput,
-    compiled: &CompiledSources<'_>,
-    context: Context<'_>,
-) -> Result<Vec<ResolvedPreset>> {
-    resolve_inner(b, draft, compiled, context, false)
+    draft: &mut DraftSessionInput,
+    plans: &[ResolvedPreset],
+) -> Result<()> {
+    b.charge(plans.len())?;
+    for plan in plans {
+        b.charge(plan.archived.len())?;
+        if plan.archived.is_empty() {
+            continue;
+        }
+        let preset = &mut draft.skill_presets.members[plan.preset_index];
+        if preset.intent.is_none() && preset.usage_preferences.is_none() {
+            preset.usage_preferences =
+                Some(b.closure(plan.source, "usage-preferences-not-converted", vec![])?);
+        }
+        let completion = if let Some(intent) = &mut preset.intent {
+            &mut intent.usage.completion
+        } else {
+            &mut preset
+                .usage_preferences
+                .as_mut()
+                .expect("initialized usage responsibility")
+                .completion
+        };
+        if matches!(completion, DraftListCompletion::Complete) {
+            *completion = b
+                .closure::<()>(plan.source, "usage-preferences-not-converted", vec![])?
+                .completion;
+        }
+        let DraftListCompletion::Pending { id, .. } = completion else {
+            unreachable!("usage responsibility is pending")
+        };
+        let issue = *id;
+        for row in &plan.archived {
+            for source in [row.group, row.source] {
+                skill_input_disposition::link_once(b, source, OwnedOriginTarget::Issue(issue))?;
+            }
+        }
+    }
+    Ok(())
 }
 
 pub(super) fn resolve_with_archived(
@@ -797,16 +834,6 @@ pub(super) fn resolve_with_archived(
     draft: &DraftSessionInput,
     compiled: &CompiledSources<'_>,
     context: Context<'_>,
-) -> Result<Vec<ResolvedPreset>> {
-    resolve_inner(b, draft, compiled, context, true)
-}
-
-fn resolve_inner(
-    b: &mut Builder<'_, '_>,
-    draft: &DraftSessionInput,
-    compiled: &CompiledSources<'_>,
-    context: Context<'_>,
-    account_archived: bool,
 ) -> Result<Vec<ResolvedPreset>> {
     let evidence = b.evidence;
     let frames = skill_source_census::container_sets(b)?;
@@ -878,7 +905,7 @@ fn resolve_inner(
                     continue;
                 }
                 let is_selected = selected.skills == Some(*set);
-                let is_archived = account_archived && selected.skills.is_some() && !is_selected;
+                let is_archived = selected.skills.is_some() && !is_selected;
                 if !unambiguous_identity
                     || (!is_selected && !is_archived)
                     || group.children().len() != 1

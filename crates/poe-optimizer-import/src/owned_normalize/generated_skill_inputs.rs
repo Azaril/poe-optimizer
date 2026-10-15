@@ -356,8 +356,8 @@ pub(super) fn materialize(
                     })
                     .collect(),
             },
-            // This explicit opt-in conversion preserves legacy absence. It does
-            // not retire any existing source/usage/configuration obligation.
+            // Preserve absence until source-obligation discovery below. That
+            // pass can retain Pending usage without inventing a live target.
             None => complete(vec![]),
         };
         let mut members = Vec::new();
@@ -430,6 +430,9 @@ pub(super) fn materialize(
                 row: row.index,
             }));
     }
+    // Allocate source obligations after all existing raw-input work. They are
+    // independent of value projection and of subsequent field accounting.
+    generated_skill_sources::retain_archived_usage(b, draft, &plans)?;
     receipts.resolved = plans;
     Ok(receipts)
 }

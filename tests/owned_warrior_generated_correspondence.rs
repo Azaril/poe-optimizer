@@ -903,7 +903,7 @@ fn publish_warrior_correspondence_and_account_exactly_eight_archived_origins() {
     for ordinal in [174, 175] {
         assert!(
             after_rows.contains(&ordinal),
-            "archived Firebolt still lacks a Pending usage owner"
+            "archived Firebolt still lacks a checked deferred-usage/selector proof"
         );
     }
     for code in [

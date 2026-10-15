@@ -105,7 +105,90 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: configured enemy critical inputs
+## Current checkpoint: archived generated usage responsibilities
+
+The importer now discovers unresolved usage on a recognized archived generated
+skill independently of successful provider/value projection and unrelated manual
+siblings. Original05's archived Firebolt had saved activation, count, global
+effect and reporting fields, but absent legacy preferences were converted to a
+Complete-empty usage inventory. A generic Tree-granted test reproduced the same
+defect by removing a manual sibling; this was an importer initialization bug,
+not a Firebolt exception or a new ownership model.
+
+One shared private producer uses the existing checked generated-source census.
+Either the generated raw-input policy or occurrence-usage policy can retain the
+exact preset's Pending usage obligation independently. Existing Pending IDs and
+members are reused. It creates no provider, target, preference value or default.
+The separate field-accounting pass still requires three existing same-preset
+owners and validates every saved field before replacing a configuration link.
+Malformed or ambiguous source identity cannot acquire this proof; recognized
+sources with unresolved field values retain both their actual responsibility and
+configuration fallback. The obsolete selected-only resolver branch is removed.
+
+The release data is unchanged from the preceding critical-input checkpoint:
+input `1b7cc8d01e7b54a698240ca6fbf6f628b590b161df41ac2a909542af58c9de90`,
+seventeen manifest artifacts, eighteen files, 177 provenance rows and 110 queries.
+The current regenerated imports and byte-identical package are
+`runs/owned-archived-usage-obligations-04`, with its `package` subdirectory.
+Fresh imports are required for the corrected importer semantics; old imported
+drafts are retained as regression evidence, not restored as current proof.
+The five-build CLI checkpoint authenticates both sources and releases, checks
+draft/sidecar inverses with injective identity correspondence, exact changed
+owners, selected requests and independent fresh replays.
+
+The real-build regression exposed a separate remaining gate: archived Firebolt
+still has no configured selector/deferred-usage proof. The selected-source
+materialization path's selector-absence fallback does not authorize archived
+accounting. Its rows `174–175` therefore retain configuration `01f2` and gain
+only the newly discovered usage responsibility `0681`, also attached to SkillSet
+`167`. Generated-input owner `067c` and support owner `01d4` remain unchanged.
+Original05 still has 32 configuration-linked origins; discovering the correct
+owner is not evidence that every saved field has been interpreted. Any later
+proof reuse must preserve this distinction and cannot fabricate a physical or
+manual skill declaration for the generated source.
+
+The explicit all-five CLI regression passes in 19.04s. Existing local IDs and
+all draft values remain unchanged after accounting for the single new usage
+issue; 22 already-accounted archived origins retain the same four owners with
+only their usage-link insertion order changed. Their exact reorder is tested.
+All 110 queries and all eighteen package files are preserved. Selected issue
+counts remain **106/117/109/123/4**, configuration-linked origins remain
+**48/83/39/34/32**, and complete native builds remain **0/5**. Fresh CLI imports
+deliberately receive different lineage identities; the test authenticates every
+lineage first, then compares draft/sidecar meaning under exact correspondence.
+Repeated normalization with the same imported identity remains exact in the
+portable tests. The full normalization target passes 335 tests; the 24-test
+Direct/generated-disposition target additionally covers missing selector proof.
+Strict Import and affected CLI Clippy checks also pass.
+Logs: `runs/owned-archived-usage-{import-02,import-04,cli-04}.log` and
+`runs/owned-archived-usage-obligations-04/validation.json`.
+
+**Next blockers:** the four selected inventories and final numerical producers
+still gate the first complete build. Keep Original05 first and do not treat an
+archived-source accounting correction as complete native calculation. The
+[final-critical ownership decision](owned-actor-enemy-reads-proposal.md) is now
+accepted: implement existing stat-owned Player receivers, with exact Enemy
+dependencies and unchanged shared-Actor authority. Rebase fresh data from registry
+3372 and reuse configured inputs 3371/3372; validate component parity and
+ordinary/prepared/reused/Rayon execution before checked all-five publication.
+Separate read-only triage found no additional ready data-only Config
+leaf retirement: twelve remaining count widgets use zero-to-Placeholder fallback,
+while three allow zero and have distinct consumers. Enemy distance is a useful
+next mechanical input because Sniper accuracy reads it, but its direct reader
+preserves explicit zero while the configuration callback does not. Preserve both
+meanings; do not force the entire setting through one scalar policy. Scorch's
+apparently obsolete source state needs a complete dynamic-consumer proof before
+any exclusion; no native input should be added solely to remove a source link.
+
+Tree and Config active selectors can potentially retain their existing
+`saved_variants` obligation through checked source-frame/owner correspondence.
+This is separate from container completeness: ConfigSet still owns Pending choice
+membership, and accounted children cannot close its inventory. Build, Skills and
+Items each mix several responsibilities. Trade weights and TimelessData contain
+search intent; Calcs, Party and Import require their actual semantic owners.
+None of this review authorizes blanket container or presentation exclusions.
+
+## Previous input checkpoint: configured enemy critical inputs
 
 The canonical package is **`runs/owned-configuration-enemy-critical-damage-publication-01/package`**,
 input `1b7cc8d01e7b54a698240ca6fbf6f628b590b161df41ac2a909542af58c9de90`.
@@ -165,12 +248,11 @@ Clippy pass. Logs:
 The final consolidated targets use
 `runs/owned-configuration-default-inputs-{cli-02,clippy-02}.log`.
 
-**Resume:** keep Original05 first. The remaining final-critical ownership choice
-is now [revised and prompted](owned-actor-enemy-reads-proposal.md): prefer existing
+**Ownership follow-up:** the final-critical choice proposed at this checkpoint
+was subsequently [accepted](owned-actor-enemy-reads-proposal.md): use existing
 stat-owned Player receivers for final results, preserving shared Actor permissions
-and Partial source coverage. Do not implement either ownership change until the
-decision arrives. Once approved, rebase the obsolete draft IDs from the actual
-registry and reuse these inputs instead of recreating its presence/value policy.
+and Partial source coverage. Rebase the obsolete draft IDs from the actual
+registry and reuse these inputs instead of recreating their presence/value policy.
 Meanwhile continue exact accounting of the fifteen outside-Config origins and
 remaining saved settings through already accepted contracts. Do not force the
 count-callback fields into this overwritten-placeholder family: their zero,
@@ -188,15 +270,11 @@ follows from another disposition data row alone. The Calcs children are actual
 they must not be treated as unknown/ignored tags. Saved trade weights also have
 real objective meaning (FullDPS 1, TotalEHP 0.5).
 
-**Next independent investigation:** archived Firebolt `174–175` has a Pending
-generated-input owner `067c` and support-origin owner `01d4` on preset `01d3`,
-but its usage inventory is Complete-empty. Archived accounting currently requires
-all three same-preset Pending owners, so these leaves correctly remain blocking
-under that contract. Trace whether usage-completeness construction omitted an
-actual saved responsibility; do not manufacture an issue, downgrade Complete or
-weaken the accounting precondition merely to retire the links. Exact archived
-syntax is already reviewed. Preserve unresolved provider identity and independent
-selection across skill/equipment presets; matching set IDs are not provider proof.
+That checkpoint identified archived Firebolt `174–175` with Pending generated
+inputs `067c` and support origins `01d4` on preset `01d3`, but Complete-empty
+usage. The current checkpoint corrects the source-obligation producer while
+preserving the strict accounting gate and unresolved provider identity. Matching
+skill/equipment set IDs remain insufficient provider proof.
 
 ## Previous input checkpoint: configured enemy attack/cast interval
 

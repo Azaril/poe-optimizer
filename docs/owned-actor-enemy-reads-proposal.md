@@ -1,9 +1,10 @@
 # Final critical-result ownership and scenario Enemy reads
 
-Status: revised recommendation awaiting review, 2026-10-14. The October 7
-shared-Actor authority extension below remains unapproved and unimplemented.
+Status: stat-owned Player receivers accepted by the owner, 2026-10-14.
+The October 7 shared-Actor authority extension below is superseded and will
+not be implemented for these results.
 
-## Revised recommendation: use existing stat-owned Player receivers
+## Accepted decision: use existing stat-owned Player receivers
 
 The current architecture already has an owner for common final results:
 [stat-owned receivers](owned-stat-receivers.md). Use one explicitly Player-bound
@@ -27,7 +28,8 @@ with the existing distinction between shared Actor intrinsic contributions and
 stat-owned final formulas. Runtime verification of this particular combined
 path is still required; the review is not evidence that critical effect works.
 
-Before implementation, confirm this revised ownership direction. Then:
+The owner approved this revised ownership direction on October 14. Implement it
+through the existing receiver contract:
 
 1. Move only final-result programs to their Stat owners, with explicit Player
    receiver rows. Preserve shared Actor `332a`'s existing Partial inventory and

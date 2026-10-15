@@ -325,6 +325,172 @@ fn generated_usage_does_not_require_raw_quality_policy() {
     ));
     assert!(bindings(&result, 1).members.is_empty());
 }
+
+fn usage_completion(result: &NormalizedImport, index: usize) -> Option<&DraftListCompletion> {
+    let preset = &result.draft().input().skill_presets.members[index];
+    preset
+        .intent
+        .as_ref()
+        .map(|intent| &intent.usage.completion)
+        .or_else(|| {
+            preset
+                .usage_preferences
+                .as_ref()
+                .map(|usage| &usage.completion)
+        })
+}
+
+fn archived_groups() -> Vec<String> {
+    groups("31.5")
+        .replace(" quality=", " count=\"nil\" quality=")
+        .split_inclusive("</Skill>")
+        .map(str::to_owned)
+        .collect()
+}
+
+fn one_archived_group(group: &str) -> String {
+    source().replace(&archived_groups().concat(), group)
+}
+
+fn assert_archived_usage_owner(result: &NormalizedImport, text: &str) -> DraftIssueId {
+    let Some(DraftListCompletion::Pending { id, code }) = usage_completion(result, 0) else {
+        panic!("recognized archived syntax must retain unfinished usage");
+    };
+    assert_eq!(code.as_str(), "usage-preferences-not-converted");
+    assert!(
+        usage(result, 0).is_empty(),
+        "no saved value becomes an active usage"
+    );
+    let imported = crate::source(text, 93);
+    let rows = imported.occurrences();
+    let set = rows
+        .iter()
+        .find(|row| row.name() == "SkillSet")
+        .unwrap()
+        .id();
+    let groups: BTreeSet<_> = rows
+        .iter()
+        .filter(|row| row.parent() == Some(set))
+        .map(|row| row.id())
+        .collect();
+    for source in rows.iter().filter(|row| {
+        row.id() == set
+            || groups.contains(&row.id())
+            || row.parent().is_some_and(|parent| groups.contains(&parent))
+    }) {
+        let links = &result.sidecar().origins[source.id().ordinal() as usize].links;
+        assert!(links.contains(&OwnedOriginTarget::Issue(*id)));
+        assert!(!links.iter().any(|link| matches!(
+            link,
+            OwnedOriginTarget::GeneratedSkillInput { .. }
+                | OwnedOriginTarget::Skill(_)
+                | OwnedOriginTarget::Gem(_)
+                | OwnedOriginTarget::Support(_)
+        )));
+    }
+    *id
+}
+
+#[test]
+fn archived_item_and_tree_usage_are_discovered_without_raw_inputs_or_manual_siblings() {
+    let mut f = generated();
+    f.policy.generated_skill_inputs = None;
+    for group in archived_groups() {
+        for saved in [
+            group.clone(),
+            group
+                .replace("<Skill source=", "<Skill enabled=\"false\" source=")
+                .replace("<Gem ", "<Gem enabled=\"false\" "),
+            group.replace("count=\"nil\"", ""),
+            group.replace("count=\"nil\"", "count=\"bad\""),
+        ] {
+            let text = one_archived_group(&saved);
+            let result = run(&text, &f);
+            assert_archived_usage_owner(&result, &text);
+            assert!(
+                result.draft().input().skill_presets.members[0]
+                    .intent
+                    .is_none(),
+                "usage-only discovery has no raw-input envelope or binding"
+            );
+            assert_eq!(numbers(&result, 1), [Some(1); 4]);
+            assert!(
+                usage_completion(&result, 2).is_none(),
+                "empty sibling has no obligation"
+            );
+            let again = run(&text, &f);
+            assert_eq!(result.draft(), again.draft());
+            assert_eq!(result.allocator_after(), again.allocator_after());
+            assert_eq!(
+                serde_json::to_value(result.sidecar()).unwrap(),
+                serde_json::to_value(again.sidecar()).unwrap()
+            );
+        }
+    }
+}
+
+#[test]
+fn archived_usage_discovery_is_idempotent_across_independent_source_policies() {
+    let f = generated();
+    let text = source();
+    let mut raw_only = f.policy.clone();
+    raw_only.usage_inputs = None;
+    let old = normalize(&text, &f, &raw_only, Default::default()).unwrap();
+    let result = run(&text, &f);
+    assert_eq!(
+        assert_archived_usage_owner(&old, &text),
+        assert_archived_usage_owner(&result, &text)
+    );
+    assert_eq!(usage_completion(&old, 0), usage_completion(&result, 0));
+    assert_eq!(bindings(&old, 0), bindings(&result, 0));
+    assert_eq!(bindings(&old, 1), bindings(&result, 1));
+    assert!(usage(&result, 0).is_empty());
+}
+
+#[test]
+fn archived_usage_discovery_rejects_ambiguous_sources_and_respects_selected_axes() {
+    let mut f = generated();
+    f.policy.generated_skill_inputs = None;
+    for group in archived_groups() {
+        for changed in [
+            group
+                .replace("level=\"1\"", "level=\"bad\"")
+                .replace("level=\"7\"", "level=\"bad\""),
+            group.replace("nameSpec=\"Generated\"", "nameSpec=\"Unknown\""),
+            group.replace("<Skill source=", "<Skill unknown=\"true\" source="),
+            format!("{group}{group}"),
+        ] {
+            let result = run(&one_archived_group(&changed), &f);
+            assert!(usage_completion(&result, 0).is_none(), "{changed}");
+            assert!(usage(&result, 0).is_empty());
+            assert_eq!(numbers(&result, 1), [Some(1); 4]);
+        }
+        let text = one_archived_group(&group);
+        for changed in [
+            text.replace("activeSkillSet=\"2\"", ""),
+            text.replace("activeSkillSet=\"2\"", "activeSkillSet=\"9\""),
+        ] {
+            let result = run(&changed, &f);
+            assert!(usage_completion(&result, 0).is_none());
+            assert!(usage(&result, 0).is_empty());
+        }
+        let selected = text
+            .replace("activeSkillSet=\"2\"", "activeSkillSet=\"1\"")
+            .replace("activeSpec=\"2\"", "activeSpec=\"1\"")
+            .replace("activeItemSet=\"2\"", "activeItemSet=\"1\"");
+        let result = run(&selected, &f);
+        assert_eq!(
+            numbers(&result, 0),
+            [Some(1); 2],
+            "selection admits real targets"
+        );
+        assert!(usage(&result, 1).is_empty());
+        assert!(matches!(
+            usage_completion(&result, 1),
+            Some(DraftListCompletion::Pending { .. })
+        ));
+    }
+}
 #[test]
 fn generated_level_identity_duplicate_and_active_axes_remain_independent_gates() {
     let f = generated();

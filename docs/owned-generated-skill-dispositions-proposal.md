@@ -164,7 +164,17 @@ inventories, with their expected codes and actual source attachment:
 - Support origins retain runtime source discovery and ordering responsibility;
   one saved Gem child does not prove a complete effective support inventory.
 
-It never creates an issue or turns a Complete inventory back into Pending. Each
+The accounting pass never creates an issue or turns a Complete inventory back
+into Pending. Before accounting, source-obligation discovery must retain a
+Pending usage inventory for recognized archived generated occurrences, even
+when no physical or manual sibling has created one. Recognition uses the shared
+checked source census and belongs to the preset containing the saved record.
+It is independent of successful provider resolution, value projection and raw
+quality policy. Existing Pending owners and members are reused. This corrects
+the importer's former absent-to-Complete initialization; it does not reopen a
+proved complete inventory in response to an accounting request.
+
+Each
 row still needs the full generated field grammar, typed saved level and quality,
 the existing deferred usage codecs, and exact MAIN/CALCS selector correspondence.
 Generated missing/`nil` count/global fields are recognized only as unresolved
@@ -179,12 +189,21 @@ source, draft values, IDs, allocator state, active axes, queries and every issue
 completion remain unchanged. A source-kind or skill name alone cannot authorize
 this change, and no production branch recognizes an example build.
 
-The audited Original05 candidates are seven archived Djinn pairs (14 origins),
+The October 7 audited Original05 candidates were seven archived Djinn pairs (14 origins),
 on skill sets 3, 5, 6 and 1. The remaining four Warrior pairs lack the required
 configured correspondence, and set 2's Firebolt lacks a Pending usage obligation;
-those ten origins must retain fallback. These observations are test expectations,
-not runtime allowlists. All-five publication compares against pinned earlier
-sidecars; see the current plan for executed results and remaining blockers.
+those ten origins retained fallback at that checkpoint. Subsequent correspondence
+work accounted for the Warrior pairs. The October 14 review traced Firebolt's
+Complete-empty usage to the producer's preservation of an absent legacy field,
+not to evidence that the saved usage was empty. A generic tree-source fixture
+reproduced the same defect by removing an unrelated manual sibling. The producer
+correction above retains the actual unresolved responsibility; the accounting
+gate itself stays unchanged. Fresh real-build validation then identified the
+next independent gate: Firebolt has no configured paired selector/deferred-usage
+proof for the archived path. Its configuration fallback remains even after all
+three Pending owners exist. The selected path's absence fallback must not be
+reused as archived authority without that separate proof. These observations are test expectations, not
+runtime allowlists. See the current plan for all-five validation and blockers.
 
 ## Verified selected-source checkpoint (2026-10-06)
 

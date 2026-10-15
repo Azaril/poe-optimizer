@@ -35,8 +35,8 @@ unsupported-domain results. The first checked configuration-accounting
 publication also passes the all-five import regression: it removes one proven
 source-only Placeholder obligation per build and preserves all 110 queries.
 The subsequent configured enemy interval and two critical-input publications
-remove three more source links per build. Original05 now retains 32 configuration
-source links and its four Pending inventories.
+remove three more source links per build. That input checkpoint retained 32
+configuration source links in Original05 and its four Pending inventories.
 The common accounting owner replaces the older scalar-only leaf mutator; full
 catalogue/default and outside-Config accounting remain unfinished.
 
@@ -59,6 +59,28 @@ not supplied by this import work. Shared source/publication test helpers now
 cover all three inputs, with two CLI test binaries instead of separate binaries
 per input.
 
+Archived generated skills now retain unfinished preset usage even when no
+supported manual sibling initializes it. A generic source-discovery producer
+uses the existing checked census through either raw-input or occurrence-usage
+policy. It retains Pending ownership without decoding values or resolving a
+provider; field accounting subsequently checks the independent raw, usage and
+support owners. This fixes an absent-to-Complete importer initialization error.
+It adds no runtime model, Lua behavior or game-specific native branch. A generic
+Tree fixture and the real archived Firebolt expose the same failure. Fresh
+imports replace the old results; the release data and numerical coverage are
+unchanged. The all-five regression preserves every selected request and 110
+queries. Firebolt's separate archived selector/deferred-usage proof remains
+missing, so its configuration fallback stays alongside the new usage obligation;
+Original05 still has 32 configuration-linked origins and four selected issues.
+See the [current checkpoint](implementation.md#current-checkpoint-archived-generated-usage-responsibilities)
+for full-corpus validation and the next complete-build blockers.
+
+Final incoming-critical results now have an accepted ownership direction:
+existing Stat-owned Player receivers read their exact scenario Enemy dependencies.
+Shared-Actor permissions and incomplete source coverage remain unchanged. The
+data-defined consumer and its native binding/parity checks are being implemented
+under that contract, not through a new calculation backend.
+
 The final Player Mana formula is now published as injected rules with its exact
 Player receiver. The existing Rust engine executes its arithmetic, range check
 and optional override; no resource-specific Rust implementation was added.
@@ -67,7 +89,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-configured-enemy-critical-inputs).
+[implementation checkpoint](implementation.md#current-checkpoint-archived-generated-usage-responsibilities).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
