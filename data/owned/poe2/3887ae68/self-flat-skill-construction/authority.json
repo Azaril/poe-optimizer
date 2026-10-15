@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "kind": "selected-self-flat-skill-construction-authority",
+  "files": [
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain.json",
+      "bytes": 471969,
+      "sha256": "ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/bindings.json",
+      "bytes": 1813607,
+      "sha256": "3579dd01d1e5365a41fa256adde82e4c5f20f47e49f789eda76f999c9fe7562c"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/report.json",
+      "bytes": 3589,
+      "sha256": "7b3d1971be77acfa1a9166659e7e06df26cf95e669d6b60305e7138940e51640"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/source-comparison.json",
+      "bytes": 4549,
+      "sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155"
+    }
+  ],
+  "scope": {
+    "ordinary_mapping_and_base_record_names": true,
+    "observed_local_and_buff_routing": true,
+    "extra_skill_stat_input_authority": false,
+    "inherited_player_store_complete": false,
+    "dynamic_factories_complete": false,
+    "native_coverage_authorized": false,
+    "observed_buff_payload_correspondence": true,
+    "unique_delivering_source_attribution": false,
+    "recipe_value_evaluation_parity": false
+  },
+  "remaining": [
+    "ExtraSkillStat suppliers and arbitrary formatted Party inputs",
+    "all inherited Player/item/passive/config store delivery before MinionModifier consumption",
+    "dynamic parent-weapon and HollowPalm supplier completeness beyond the retained unchanged gates",
+    "source-to-native contributor inventory and complete Action query membership",
+    "unobserved global-effect recipients and branch activation; captured payload correspondence is not a complete delivering-source census"
+  ]
+}

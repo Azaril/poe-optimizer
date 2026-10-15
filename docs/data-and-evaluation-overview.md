@@ -1241,6 +1241,19 @@ The two self-flat producers remain unfinished; finite test inputs are not
 canonical data or proof of whole-build support. A future real Enemy-derived
 addition must preserve its source ownership and consuming-Action eligibility.
 
+The [selected skill-construction proof](../data/owned/poe2/3887ae68/self-flat-skill-construction/README.md)
+now accounts for the finite local recipe boundary: 40 skill/support definitions,
+768 constructor pairs per retained trace, exact source/child membership and
+complete local/buff record conservation. No direct or nested flat Physical or
+external-skill-stat records occur in that reviewed recipe set. Separate captured
+buff deliveries establish payload and recipient correspondence, without claiming
+unique delivering-source attribution, numerical scaling/order or native coverage.
+Inherited Player/item/passive/configuration stores and dynamic factories remain
+separate admission work. These authenticated Lua observations stay offline; the
+native runtime gains no Lua record type or interpreter. The older unpublished
+flat-damage drafts retain useful arithmetic/parity tests, but their IDs now
+overlap unrelated current allocations and cannot be copied into the release.
+
 Integrating that component under current readiness checks exposed an older owned
 program that combined actor preparation with an execution-only level requirement.
 The [population partition](../data/owned/poe2/3887ae68/sniper-population-readiness/README.md)

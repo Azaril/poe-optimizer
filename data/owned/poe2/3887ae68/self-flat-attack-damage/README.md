@@ -5,6 +5,13 @@ and `source-review.md` inventory source behavior; they grant no native coverage.
 The other JSON files define a bounded, unpublished native family using existing
 owned rules, checked contribution queries, receivers and Action routes.
 
+These draft IDs belong only to the isolated test composition and now overlap
+unrelated allocations in the current release. Do not publish this packet
+unchanged. Its two positive modifier families are absent from selected Original05;
+their tests remain useful source controls, but publishing them would not complete
+that build's missing flat subtotal. A current consumer can read checked Player
+contributions directly, avoiding the draft's two intermediate Actor receivers.
+
 The two modifier definitions preserve the actual source-declared ranges:
 
 | Source declaration | Minimum endpoint | Maximum endpoint |

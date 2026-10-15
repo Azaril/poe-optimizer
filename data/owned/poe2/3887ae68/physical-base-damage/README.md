@@ -6,6 +6,12 @@ tests compose it with the existing finite Sniper replay through the public
 native definition, rule, stage and evaluation APIs. It contains no Lua code,
 callbacks or runtime subprocesses.
 
+The IDs below belong to the isolated test composition, not the current release.
+Current allocations have since used draft IDs for other definitions. A future
+publication must bind the current registry and allocate fresh identities; copying
+this packet into the live package is not a migration. Complete self-flat source
+admission remains the priority before publishing another Partial consumer.
+
 One generic Action program is bound by data to Basic Skill `0021` / output
 `0022`. For each minimum and maximum endpoint it evaluates, in this order:
 

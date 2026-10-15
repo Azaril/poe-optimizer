@@ -146,6 +146,60 @@ and the publication's `validation.json`. Publication01 is superseded: publicatio
 authenticates the original immutable constructor review, preserving historical
 publication receipts. Its compiled semantics are identical to publication01.
 
+## Source checkpoint: selected skill construction
+
+The [finite construction proof](../data/owned/poe2/3887ae68/self-flat-skill-construction/README.md)
+reuses authenticated source02 acquisitions, selected recipe/binding evidence and
+the runtime-gate captures. It adds no source VM run, native API, program, query,
+allocator identity or package. The current endpoint above is unchanged.
+
+Each retained trace has **768 constructor pairs**, including 18 Sniper Basic
+Attack pairs. Forty complete recipes (28 active/generated/child and 12 support)
+contain no direct or nested flat Physical or external-skill-stat records. Exact
+source and child-Actor joins preserve 6,771 ordinary local records and account
+for 123 global records moved into 60 buff lists. Complete original construction
+and routing bodies authenticate that finite boundary. The proof does not
+reevaluate the recipes in Rust or establish recipe-value calculation parity.
+
+The separate runtime observations have 28 group deliveries: eighteen Enemy and
+ten minion deliveries across six exact supplied Actors, of which two are Sniper.
+Full payload/recipient correspondence is proved; unique delivering-source
+attribution and numerical scaling/order are not. The existing narrowly scoped
+Player-buff comparison admits cross-stat inventory permutation while preserving
+full bodies, duplicate multiplicity and within-name order. Other context and
+child-buff fields remain exact. Coherently changed captures still fail the
+complete acquisition seal, even if they satisfy the local transport law.
+
+**Resume:** reconcile complete inherited-store inputs to the actual minion
+receiving calls, preserving source identity and recipient filters. Reuse the
+existing equipment/passive constructor evidence and selected bindings before
+acquiring more observations. The retained final MAIN Player store provides a
+starting inventory of 30 minion-modifier wrappers (29 tree, one configured repeat
+count), with no flat Physical records; it is not yet a complete temporal delivery
+proof. Reconcile complete bodies and multiplicity through the captured parent
+stores into `CalcPerform.lua` calls at 1854/3123/3377/3384, using the original
+list/parent traversal and Skill-parent binding. The missing authority is exact
+source-complete input at each call, not a new recipient API.
+`ExtraSkillStat`, arbitrary Party inputs, dynamic
+parent-weapon factories and final native source dispositions remain independent
+boundaries. No zero observation or finite local absence authorizes Complete
+membership. Selected input obligations remain four; complete builds remain 0/5.
+The older flat/base drafts retain useful arithmetic and parity controls, but
+their IDs overlap unrelated current allocations. Do not publish the two absent
+positive item families or copy obsolete draft collectors to claim selected-build
+progress; current Action consumers can read checked Player queries directly.
+
+Explicit offline retention passes (9.27s); all ten ordinary source/mutation tests
+pass on the final helper (17.10s), and strict target Clippy passes (0.62s).
+Independent code and final artifact/claims reviews are clear.
+Earlier retention failures exposed incorrect verifier assumptions about the
+number of Sniper recipients and cross-stat record order; the immutable source
+captures were neither changed nor repeated. The first Clippy run found two
+mechanical lint issues, fixed before the final ordinary rerun. Evidence:
+`runs/owned-self-flat-skill-{retain-03,ordinary-02,clippy-02}.log`.
+Retained review SHA-256:
+`b2c444e057d10a0a18308b3cbed3a2a52abd5f811f087800b6dcb56591b04533`.
+
 ## Previous checkpoint: Skill support and exact aggregation
 
 Exact Skill support recipients and the generic exact Integer reduction now run

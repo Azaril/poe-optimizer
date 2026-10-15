@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "kind": "selected-self-flat-skill-constructor-bodies",
+  "source_manifest": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "files": [
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcActiveSkill.lua.gz",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04",
+      "compressed_bytes": 10868,
+      "compressed_sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae",
+      "compressed_bytes": 34408,
+      "compressed_sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "archive": "data/owned/poe2/3887ae68/mana-supplier-sources/passive-ModList.lua.gz",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d",
+      "compressed_bytes": 2020,
+      "compressed_sha256": "7b1b25081e088b45c6a28ba5449faf44409641ad0d6688518ba07bc2b36dc815"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "archive": "data/owned/poe2/3887ae68/life-base-domain/ModDB.lua.gz",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6",
+      "compressed_bytes": 2575,
+      "compressed_sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62",
+      "compressed_bytes": 7158,
+      "compressed_sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b"
+    }
+  ],
+  "spans": [
+    {
+      "role": "level-value-merge",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 22,
+      "last": 51,
+      "body": "local function mergeLevelMod(modList, mod, value)\n\tif not value then\n\t\tmodList:AddMod(mod)\n\t\treturn\n\tend\n\tif not mergeLevelCache[mod] then\n\t\tmergeLevelCache[mod] = { }\n\tend\n\tif mergeLevelCache[mod][value] then\n\t\tmodList:AddMod(mergeLevelCache[mod][value])\n\telseif value then\n\t\tlocal newMod = copyTable(mod, true)\n\t\tif type(newMod.value) == \"table\" then\n\t\t\tnewMod.value = copyTable(newMod.value, true)\n\t\t\tif newMod.value.mod then\n\t\t\t\tnewMod.value.mod = copyTable(newMod.value.mod, true)\n\t\t\t\tnewMod.value.mod.value = value\n\t\t\telse\n\t\t\t\tnewMod.value.value = value\n\t\t\tend\n\t\telse\n\t\t\tnewMod.value = value\n\t\tend\n\t\tmergeLevelCache[mod][value] = newMod\n\t\tmodList:AddMod(newMod)\n\telse\n\t\tmodList:AddMod(mod)\n\tend\nend\n\n",
+      "sha256": "0abb3ae1cc412716f26d3f7507b6994916923f6eb877597cf11c5ebcddcb69ba"
+    },
+    {
+      "role": "scalar-value-only",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 54,
+      "last": 66,
+      "body": "local function checkForScalarMultiplier(modOrGroup, modList)\n\tlocal scale = 0\n\tif modOrGroup.scalar then\n\t\tscale = modList:Sum(\"BASE\", nil, \"Multiplier:\"..modOrGroup.scalar)\n\telse\n\t\tfor _, config in ipairs(modOrGroup) do\n\t\t\tif config.scalar then\n\t\t\t\tscale = modList:Sum(\"BASE\", nil, \"Multiplier:\"..config.scalar)\n\t\t\t\tbreak\n\t\t\tend\n\t\tend\n\tend\n\treturn 1 + scale / 100\n",
+      "sha256": "47431cc125222c0d8348da00e3cf56857b2f1eafb9eb19014be99b1f44d7b25f"
+    },
+    {
+      "role": "global-tag-classification",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 69,
+      "last": 78,
+      "body": "local function isGlobalEffect(modOrGroup)\n\tlocal modList = modOrGroup.name and { modOrGroup } or modOrGroup\n\tfor _, mod in ipairs(modList) do\n\t\tfor _, tag in ipairs(mod) do\n\t\t\tif tag.type == \"GlobalEffect\" then\n\t\t\t\treturn true\n\t\t\tend\n\t\tend\n\tend\n\treturn false\n",
+      "sha256": "c5b0b4e1a6cbed10a17b8a833b5623a33948bd770f12d30ce364e3be25df3697"
+    },
+    {
+      "role": "mapped-stat-merge",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 80,
+      "last": 113,
+      "body": "local function mergeStatSet(set, onlyGlobals, skillEffect, grantedEffect, env, extraStats, modList, selectedGlobalStats)\n\t\tlocal stats = calcLib.buildSkillInstanceStats(skillEffect, grantedEffect, set, env.useAltGemQualityStats)\n\t\tif extraStats and extraStats[1] then\n\t\t\tfor _, stat in pairs(extraStats) do\n\t\t\t\tstats[stat.key] = (stats[stat.key] or 0) + stat.value\n\t\t\tend\n\t\tend\n\t\tfor stat, statValue in pairs(stats) do\n\t\t\tlocal map = set.statMap[stat]\n\t\t\tif map then\n\t\t\t\t-- Some mods need different scalars for different stats, but the same value.  Putting them in a group allows this\n\t\t\t\tfor _, modOrGroup in ipairs(map) do\n\t\t\t\t\tlocal isGlobal = isGlobalEffect(modOrGroup)\n\t\t\t\t\tif isGlobal and not onlyGlobals then\n\t\t\t\t\t\tselectedGlobalStats[stat] = true\n\t\t\t\t\tend\n\t\t\t\t\tif (not onlyGlobals or isGlobal) and not (onlyGlobals and selectedGlobalStats[stat]) then\n\t\t\t\t\t\tlocal scalar = checkForScalarMultiplier(modOrGroup, modList)\n\t\t\t\t\t\t-- Found a mod, since all mods have names\n\t\t\t\t\t\tif modOrGroup.name then\n\t\t\t\t\t\t\tmodOrGroup.source = string.format(\"Skill:%s\", grantedEffect.id)\n\t\t\t\t\t\t\tmergeLevelMod(modList, modOrGroup, map.value or statValue * (map.mult or 1) * scalar / (map.div or 1) + (map.base or 0))\n\t\t\t\t\t\telse\n\t\t\t\t\t\t\tfor _, mod in ipairs(modOrGroup) do\n\t\t\t\t\t\t\t\tlocal scalar = checkForScalarMultiplier(mod, modList)\n\t\t\t\t\t\t\t\tmod.source = string.format(\"Skill:%s\", grantedEffect.id)\n\t\t\t\t\t\t\t\tmergeLevelMod(modList, mod, modOrGroup.value or statValue * (modOrGroup.mult or 1) * scalar / (modOrGroup.div or 1) + (modOrGroup.base or 0))\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n",
+      "sha256": "5af0b261e95469d53904455b57d69a9eb069b3941d4aa354635c6bb6c4b4b486"
+    },
+    {
+      "role": "complete-skill-instance-merge",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 116,
+      "last": 141,
+      "body": "function calcs.mergeSkillInstanceMods(env, modList, skillEffect, statSet, extraStats)\n\tcalcLib.validateGemLevel(skillEffect)\n\t-- Verify that statSet provided is from skillEffect\n\tif statSet and not isValueInArray(skillEffect.grantedEffect.statSets, statSet) then\n\t\treturn\n\tend\n\tlocal selectedGlobalStats = {}\n\tlocal grantedEffect = skillEffect.grantedEffect\n\tfor _, set in ipairs(statSet and {statSet} or grantedEffect.statSets) do\n\t\tmergeStatSet(set, nil, skillEffect, grantedEffect, env, extraStats, modList, selectedGlobalStats)\n\t\tmodList:AddList(set.baseMods)\n\tend\n\tif statSet then\n\t\tfor _, set in ipairs(grantedEffect.statSets) do\n\t\t\tif set ~= statSet then\n\t\t\t\tmergeStatSet(set, true, skillEffect, grantedEffect, env, extraStats, modList, selectedGlobalStats)\n\t\t\t\tfor _, baseMod in ipairs(set.baseMods or { }) do\n\t\t\t\t\tif isGlobalEffect(baseMod) then\n\t\t\t\t\t\tmodList:AddMod(baseMod)\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\nend\n\n",
+      "sha256": "5847fe5ec1fab25306400c864eb57bc2f4bc4d6fad92ca343ac77bd5410d5a2c"
+    },
+    {
+      "role": "support-effect-selection",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 144,
+      "last": 233,
+      "body": "function calcs.createActiveSkill(activeEffect, supportList, env, actor, socketGroup, summonSkill)\n\t---@type ActiveSkill\n\tlocal activeSkill = {\n\t\tactiveEffect = activeEffect,\n\t\tsupportList = supportList,\n\t\tactor = actor,\n\t\tsummonSkill = summonSkill,\n\t\tsocketGroup = socketGroup,\n\t\tskillData = { },\n\t\tbuffList = { },\n\t}\n\n\tlocal activeGrantedEffect = activeEffect.grantedEffect\n\n\t-- Initialise skill types\n\tactiveSkill.skillTypes = copyTable(activeGrantedEffect.skillTypes)\n\tif activeGrantedEffect.minionSkillTypes then\n\t\tactiveSkill.minionSkillTypes = copyTable(activeGrantedEffect.minionSkillTypes)\n\tend\n\n\t-- Initialise skill flag set ('attack', 'projectile', etc)\n\t---@class SkillFlags\n\tlocal skillFlags\n\tlocal statSet\n\tif env.mode == \"CALCS\" then\n\t\tstatSet = activeEffect.grantedEffect.statSets[activeEffect.statSetCalcs.index]\n\t\tskillFlags = statSet and copyTable(statSet.baseFlags) or { }\n\t\tactiveEffect.statSetCalcs.statSet = statSet\n\t\tactiveEffect.statSetCalcs.skillFlags = skillFlags\n\telse\n\t\tstatSet = activeEffect.grantedEffect.statSets[activeEffect.statSet.index]\n\t\tskillFlags = statSet and copyTable(statSet.baseFlags) or { }\n\t\tactiveEffect.statSet.statSet = statSet\n\t\tactiveEffect.statSet.skillFlags = skillFlags\n\tend\n\tskillFlags.hit = skillFlags.hit or activeSkill.skillTypes[SkillType.Attack] or activeSkill.skillTypes[SkillType.Damage] or activeSkill.skillTypes[SkillType.Projectile]\n\n\t-- Process support skills\n\tactiveSkill.effectList = { activeEffect }\n\tlocal rejectedSupportsIndices = {}\n\n\tfor index, supportEffect in ipairs(supportList) do\n\t\t-- Pass 1: Add skill types from compatible supports\n\t\tif calcLib.canGrantedEffectSupportActiveSkill(supportEffect.grantedEffect, activeSkill) then\n\t\t\tfor _, skillType in pairs(supportEffect.grantedEffect.addSkillTypes) do\n\t\t\t\tactiveSkill.skillTypes[skillType] = true\n\t\t\tend\n\t\telse\n\t\t\tt_insert(rejectedSupportsIndices, index)\n\t\tend\n\tend\n\n\t-- loop over rejected supports until none are added.\n\t-- Makes sure that all skillType flags that should be added are added regardless of support gem order in group\n\tlocal notAddedNewSupport = true\n\trepeat\n\t\tnotAddedNewSupport = true\n\t\tfor index, supportEffectIndex in ipairs(rejectedSupportsIndices) do\n\t\t\tlocal supportEffect = supportList[supportEffectIndex]\n\t\t\tif calcLib.canGrantedEffectSupportActiveSkill(supportEffect.grantedEffect, activeSkill) then\n\t\t\t\tnotAddedNewSupport = false\n\t\t\t\trejectedSupportsIndices[index] = nil\n\t\t\t\tfor _, skillType in pairs(supportEffect.grantedEffect.addSkillTypes) do\n\t\t\t\t\tactiveSkill.skillTypes[skillType] = true\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tuntil (notAddedNewSupport)\n\n\tfor _, supportEffect in ipairs(supportList) do\n\t\t-- Pass 2: Add all compatible supports\n\t\tif calcLib.canGrantedEffectSupportActiveSkill(supportEffect.grantedEffect, activeSkill) then\n\t\t\tt_insert(activeSkill.effectList, supportEffect)\n\t\t\t-- Track how many active skills are supported by this support effect\n\t\t\tif supportEffect.isSupporting and activeEffect.srcInstance then\n\t\t\t\tsupportEffect.isSupporting[activeEffect.srcInstance] = true\n\t\t\t\tif supportEffect.srcInstance ~= activeEffect.srcInstance or not (activeEffect.gemData and activeEffect.gemData.grantedEffect.support) then\n\t\t\t\t\tsupportEffect.activeSkillLevel = activeEffect.level\n\t\t\t\tend\n\t\t\tend\n\t\t\tif supportEffect.grantedEffect.addFlags and not summonSkill then\n\t\t\t\t-- Support skill adds flags to supported skills (eg. Remote Mine adds 'mine')\n\t\t\t\tfor k in pairs(supportEffect.grantedEffect.addFlags) do\n\t\t\t\t\tskillFlags[k] = true\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\n\treturn activeSkill\n",
+      "sha256": "0e19cf65c5e2ec96983f2d294a961b7d6797cc8780d241f3aa48e3e6e9450612"
+    },
+    {
+      "role": "support-active-merge-callers",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 730,
+      "last": 795,
+      "body": "\t-- Add support gem modifiers to skill mod list\n\tfor _, skillEffect in pairs(activeSkill.effectList) do\n\t\tif skillEffect.grantedEffect.support then\n\t\t\tcalcs.mergeSkillInstanceMods(env, skillModList, skillEffect)\n\t\t\tlocal level = skillEffect.grantedEffect.levels[skillEffect.level]\n\t\t\tif level.manaMultiplier then\n\t\t\t\tskillModList:NewMod(\"SupportManaMultiplier\", \"MORE\", level.manaMultiplier, skillEffect.grantedEffect.modSource)\n\t\t\tend\n\t\t\tif level.reservationMultiplier then\n\t\t\t\tskillModList:NewMod(\"ReservationMultiplier\", \"MORE\", level.reservationMultiplier, skillEffect.grantedEffect.modSource)\n\t\t\tend\n\t\t\tif level.manaReservationPercent then\n\t\t\t\tactiveSkill.skillData.manaReservationPercent = level.manaReservationPercent\n\t\t\tend\n\t\t\tif level.spiritReservationFlat then\n\t\t\t\tskillModList:NewMod(\"ExtraSpirit\", \"BASE\", level.spiritReservationFlat, skillEffect.grantedEffect.modSource)\n\t\t\tend\n\t\t\tif level.cooldown then\n\t\t\t\tskillModList:NewMod(\"CooldownRecovery\", \"BASE\", level.cooldown, skillEffect.grantedEffect.modSource)\n\t\t\tend\n\t\t\t-- Handle multiple triggers situation and if triggered by a trigger skill save a reference to the trigger.\n\t\t\tlocal match = skillEffect.grantedEffect.addSkillTypes and (not skillFlags.disable)\n\t\t\tif match and skillEffect.grantedEffect.isTrigger then\n\t\t\t\tif activeSkill.triggeredBy then\n\t\t\t\t\tskillFlags.disable = true\n\t\t\t\t\tactiveSkill.disableReason = \"This skill is supported by more than one trigger\"\n\t\t\t\telse\n\t\t\t\t\tactiveSkill.triggeredBy = skillEffect\n\t\t\t\tend\n\t\t\tend\n\t\t\tif not skillEffect.grantedEffect.hidden then\n\t\t\t\tskillModList:NewMod(\"Multiplier:SupportCount\", \"BASE\", 1, \"Support Count\")\n\t\t\tend\n\t\t\tif level.PvPDamageMultiplier then\n\t\t\t\tskillModList:NewMod(\"PvpDamageMultiplier\", \"MORE\", level.PvPDamageMultiplier, skillEffect.grantedEffect.modSource)\n\t\t\tend\n\t\t\tif level.storedUses then\n\t\t\t\tactiveSkill.skillData.storedUses = level.storedUses\n\t\t\tend\n\t\tend\n\tend\n\n\t-- Apply gem/quality modifiers from support gems\n\tskillModList:NewMod(\"GemLevel\", \"BASE\", activeSkill.activeEffect.srcInstance and activeSkill.activeEffect.srcInstance.level or activeSkill.activeEffect.level, \"Max Level\")\n\tif activeSkill.activeEffect.srcInstance and activeSkill.activeEffect.srcInstance.corrupted and not (activeSkill.activeEffect.srcInstance.fromItem or activeSkill.activeEffect.srcInstance.fromTree or activeSkill.activeEffect.grantedEffect.fromItem or activeSkill.activeEffect.grantedEffect.fromTree) then\n\t\tskillModList:NewMod(\"GemCorruptionLevel\", \"BASE\", activeSkill.activeEffect.srcInstance.corruptLevel, \"Corruption\")\n\t\tactiveSkill.skillCfg.skillCond[\"GemCorrupted\"] = true\n\tend\n\tfor _, supportProperty in ipairs(getSourceGemPropertyInfo(env, activeSkill)) do\n\t\tlocal value = supportProperty.value\n\t\tif value.keyword == \"grants_active_skill\" then\n\t\t\tactiveEffect[value.key] = activeEffect[value.key] + value.value\n\t\t\tlocal gemTag = supportProperty.mod[1]\n\t\t\tgemTag = gemTag and gemTag.type == \"GemTag\" and gemTag or nil\n\t\t\tskillModList:NewMod(\"GemSupport\".. value.key:gsub(\"^%l\", string.upper), \"BASE\", value.value, supportProperty.mod.source, gemTag)\n\t\tend\n\tend\n\n\tfor _, gemProperty  in ipairs((activeSkill.activeEffect.gemPropertyInfo or {})) do\n\t\tlocal value =  gemProperty.value\n\t\tskillModList:NewMod(\"GemItem\".. value.key:gsub(\"^%l\", string.upper), \"BASE\", value.value, gemProperty.mod.source, #gemProperty.mod > 0 and gemProperty.mod[1] or nil)\n\tend\n\n\t-- Add active gem modifiers\n\tactiveEffect.actorLevel = activeSkill.actor.minionData and activeSkill.actor.level\n\tcalcs.mergeSkillInstanceMods(env, skillModList, activeEffect, activeStatSet, skillModList:List(activeSkill.skillCfg, \"ExtraSkillStat\"))\n",
+      "sha256": "4dbd4dbc651bef9b5c759be43ca324b8bfa63c60cb53b21961746d7b93ecfa59"
+    },
+    {
+      "role": "global-effect-routing",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 1033,
+      "last": 1113,
+      "body": "\t-- Separate global effect modifiers (mods that can affect defensive stats or other skills)\n\tlocal i = 1\n\twhile skillModList[i] do\n\t\tlocal effectType, effectName, effectTag\n\t\tfor _, tag in ipairs(skillModList[i]) do\n\t\t\tif tag.type == \"GlobalEffect\" then\n\t\t\t\teffectType = tag.effectType\n\t\t\t\teffectName = tag.effectName or activeGrantedEffect.name\n\t\t\t\tif activeSkill.minion and activeSkill.minion.minionData then\n\t\t\t\t\tif effectName:find(\"{0}\", 1, true) then\n\t\t\t\t\t\teffectName = effectName:gsub(\"{0}\", activeSkill.minion.minionData.name)\n\t\t\t\t\telseif activeGrantedEffect.minionList and effectName:match(\"^Companion\") then\n\t\t\t\t\t\teffectName = \"Companion: \"..activeSkill.minion.minionData.name\n\t\t\t\t\telseif activeGrantedEffect.minionList and effectName:match(\"^Spectre\") then\n\t\t\t\t\t\teffectName = \"Spectre: \"..activeSkill.minion.minionData.name\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\t\teffectTag = tag\n\t\t\t\tbreak\n\t\t\tend\n\t\tend\n\t\tif effectTag and effectTag.modCond and not skillModList:GetCondition(effectTag.modCond, activeSkill.skillCfg) then\n\t\t\tt_remove(skillModList, i)\n\t\telseif effectType then\n\t\t\tlocal buff\n\t\t\tfor _, skillBuff in ipairs(activeSkill.buffList) do\n\t\t\t\tif skillBuff.type == effectType and skillBuff.name == effectName then\n\t\t\t\t\tbuff = skillBuff\n\t\t\t\t\tbreak\n\t\t\t\tend\n\t\t\tend\n\t\t\tif not buff then\n\t\t\t\tbuff = {\n\t\t\t\t\ttype = effectType,\n\t\t\t\t\tname = effectName,\n\t\t\t\t\tallowTotemBuff = effectTag.allowTotemBuff,\n\t\t\t\t\tcond = effectTag.effectCond,\n\t\t\t\t\tenemyCond = effectTag.effectEnemyCond,\n\t\t\t\t\tstackVar = effectTag.effectStackVar,\n\t\t\t\t\tstackLimit = effectTag.effectStackLimit,\n\t\t\t\t\tstackLimitVar = effectTag.effectStackLimitVar,\n\t\t\t\t\tapplyNotPlayer = effectTag.applyNotPlayer,\n\t\t\t\t\tapplyMinions = effectTag.applyMinions,\n\t\t\t\t\tmodList = { },\n\t\t\t\t}\n\t\t\t\tif skillModList[i].source == activeGrantedEffect.modSource then\n\t\t\t\t\t-- Inherit buff configuration from the active skill\n\t\t\t\t\tbuff.activeSkillBuff = true\n\t\t\t\t\tbuff.applyNotPlayer = buff.applyNotPlayer or activeSkill.skillData.buffNotPlayer\n\t\t\t\t\tbuff.applyMinions = buff.applyMinions or activeSkill.skillData.buffMinions\n\t\t\t\t\tbuff.applyAllies = activeSkill.skillData.buffAllies\n\t\t\t\t\tbuff.allowTotemBuff = activeSkill.skillData.allowTotemBuff\n\t\t\t\tend\n\t\t\t\tt_insert(activeSkill.buffList, buff)\n\t\t\tend\n\t\t\tlocal match = false\n\t\t\tlocal modList = buff.modList\n\t\t\tfor d = 1, #modList do\n\t\t\t\tlocal destMod = modList[d]\n\t\t\t\tif modLib.compareModParams(skillModList[i], destMod) and (destMod.type == \"BASE\" or destMod.type == \"INC\") then\n\t\t\t\t\tdestMod = copyTable(destMod)\n\t\t\t\t\tdestMod.value = destMod.value + skillModList[i].value\n\t\t\t\t\tmodList[d] = destMod\n\t\t\t\t\tmatch = true\n\t\t\t\t\tbreak\n\t\t\t\tend\n\t\t\tend\n\t\t\tif not match then\n\t\t\t\tt_insert(modList, skillModList[i])\n\t\t\tend\n\t\t\tt_remove(skillModList, i)\n\t\telse\n\t\t\ti = i + 1\n\t\tend\n\tend\n\n\tif activeSkill.buffList[1] then\n\t\t-- Add to auxiliary skill list\n\t\tt_insert(env.auxSkillList, activeSkill)\n\tend\nend\n",
+      "sha256": "54faa54ba0238c947f1621f542b914968f3ff69179b73a7dfb2ee141db16da26"
+    },
+    {
+      "role": "minion-child-construction",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first": 1116,
+      "last": 1185,
+      "body": "function calcs.createMinionSkills(env, activeSkill)\n\tlocal activeEffect = activeSkill.activeEffect\n\tlocal minion = activeSkill.minion\n\tlocal minionData = minion.minionData\n\n\tminion.activeSkillList = { }\n\tlocal skillIdList = { }\n\tfor _, skillId in ipairs(minionData.skillList) do\n\t\tif env.data.skills[skillId] then\n\t\t\tt_insert(skillIdList, skillId)\n\t\tend\n\tend\n\tfor _, skill in ipairs(activeSkill.skillModList:List(activeSkill.skillCfg, \"ExtraMinionSkill\")) do\n\t\tif not skill.minionList or isValueInArray(skill.minionList, minion.type) then\n\t\t\tt_insert(skillIdList, skill.skillId)\n\t\tend\n\tend\n\tif #skillIdList == 0 then\n\t\t-- Not ideal, but let's avoid horrible crashes if a spectre has no skills for some reason\n\t\tt_insert(skillIdList, \"MeleeAtAnimationSpeed\")\n\tend\n\tlocal minionStatSetLookup = activeSkill.activeEffect.srcInstance.skillMinionSkillStatSetIndexLookup and activeSkill.activeEffect.srcInstance.skillMinionSkillStatSetIndexLookup[activeSkill.activeEffect.grantedEffect.id]\n\tlocal minionStatSetLookupCalcs = activeSkill.activeEffect.srcInstance.skillMinionSkillStatSetIndexLookupCalcs and activeSkill.activeEffect.srcInstance.skillMinionSkillStatSetIndexLookupCalcs[activeSkill.activeEffect.grantedEffect.id]\n\tfor skillIndex, skillId in ipairs(skillIdList) do\n\t\tlocal activeEffect = {\n\t\t\tgrantedEffect = env.data.skills[skillId],\n\t\t\tlevel = 1,\n\t\t\tquality = 0,\n\t\t}\n\t\tactiveEffect.statSet = {\n\t\t\tindex = minionStatSetLookup and minionStatSetLookup[skillIndex] or 1,\n\t\t}\n\t\tactiveEffect.statSetCalcs = {\n\t\t\tindex = minionStatSetLookupCalcs and minionStatSetLookupCalcs[skillIndex] or 1,\n\t\t}\n\t\tif #activeEffect.grantedEffect.levels > 1 then\n\t\t\tfor level, levelData in ipairs(activeEffect.grantedEffect.levels) do\n\t\t\t\tif levelData.levelRequirement > minion.level then\n\t\t\t\t\tbreak\n\t\t\t\telse\n\t\t\t\t\tactiveEffect.level = level\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\tlocal minionSkill = calcs.createActiveSkill(activeEffect, activeSkill.supportList, env, minion, nil, activeSkill)\n\t\tcalcs.buildActiveSkillModList(env, minionSkill)\n\t\tlocal skillFlags\n\t\tif env.mode == \"CALCS\" then\n\t\t\tskillFlags = minionSkill.activeEffect.statSetCalcs.skillFlags\n\t\telse\n\t\t\tskillFlags = minionSkill.activeEffect.statSet.skillFlags\n\t\tend\n\t\tskillFlags.minion = true\n\t\tskillFlags.minionSkill = true\n\t\tskillFlags.haveMinion = true\n\t\tminionSkill.skillData.damageEffectiveness = 1 + (activeSkill.skillData.minionDamageEffectiveness or 0) / 100\n\t\tt_insert(minion.activeSkillList, minionSkill)\n\tend\n\tlocal skillIndex\n\tif env.mode == \"CALCS\" then\n\t\tskillIndex = m_max(m_min(activeEffect.srcInstance.skillMinionSkillCalcs or 1, #minion.activeSkillList), 1)\n\t\tactiveEffect.srcInstance.skillMinionSkillCalcs = skillIndex\n\telse\n\t\tskillIndex = m_max(m_min(activeEffect.srcInstance.skillMinionSkill or 1, #minion.activeSkillList), 1)\n\t\tif env.mode == \"MAIN\" then\n\t\t\tactiveEffect.srcInstance.skillMinionSkill = skillIndex\n\t\tend\n\tend\n\tminion.mainSkill = minion.activeSkillList[skillIndex]\nend\n",
+      "sha256": "08a9e2cb4a396a93e5e49bae40dd8394ef23e93e160017585340f9b17b77b5ce"
+    },
+    {
+      "role": "buff-group-merge",
+      "path": "src/Modules/CalcPerform.lua",
+      "first": 42,
+      "last": 67,
+      "body": "local function mergeBuff(src, destTable, destKey)\n\tif not destTable[destKey] then\n\t\tdestTable[destKey] = new(\"ModList\"):ModList()\n\tend\n\tlocal dest = destTable[destKey]\n\tfor _, mod in ipairs(src) do\n\t\tlocal match = false\n\t\tif mod.type ~= \"LIST\" then\n\t\t\tfor index, destMod in ipairs(dest) do\n\t\t\t\tif modLib.compareModParams(mod, destMod) then\n\t\t\t\t\tif type(destMod.value) == \"number\" and mod.value > destMod.value then\n\t\t\t\t\t\tdest[index] = mod\n\t\t\t\t\tend\n\t\t\t\t\tmatch = true\n\t\t\t\t\tbreak\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\tif not match then\n\t\t\tt_insert(dest, mod)\n\t\tend\n\tend\nend\n\n-- Mageblood Legacies\nlocal legacies = {\n",
+      "sha256": "5cb277d60561b34262bdcf0e0c244ef3f562f0afae92ad600cf26c09c338f300"
+    },
+    {
+      "role": "minion-payload-delivery",
+      "path": "src/Modules/CalcPerform.lua",
+      "first": 1161,
+      "last": 1167,
+      "body": "local function addMinionModifiers(modList, skillCfg, minion)\n\tfor _, value in ipairs(modList:List(skillCfg, \"MinionModifier\")) do\n\t\tif not value.type or minion.type == value.type then\n\t\t\tminion.modDB:AddMod(value.mod)\n\t\tend\n\tend\nend\n",
+      "sha256": "50257f2b58a59f976fc5d60106c8d76abf481b2da22f5a820b58c481c6c8a97c"
+    },
+    {
+      "role": "buff-recipient-delivery",
+      "path": "src/Modules/CalcPerform.lua",
+      "first": 3116,
+      "last": 3134,
+      "body": "\t-- Apply buff/debuff modifiers\n\tfor _, modList in pairs(buffs) do\n\t\tmodDB:AddList(modList)\n\t\tif not modList.notBuff then\n\t\t\tmodDB.multipliers[\"BuffOnSelf\"] = (modDB.multipliers[\"BuffOnSelf\"] or 0) + 1\n\t\tend\n\t\tif env.minion then\n\t\t\taddMinionModifiers(modList, env.player.mainSkill.skillCfg, env.minion)\n\t\tend\n\tend\n\tif env.minion then\n\t\tfor _, modList in pairs(minionBuffs) do\n\t\t\tenv.minion.modDB:AddList(modList)\n\t\tend\n\tend\n\tfor _, modList in pairs(debuffs) do\n\t\tenemyDB:AddList(modList)\n\tend\n\tlocal cursesInCurseSlots = {}\n",
+      "sha256": "2efaf6fa083b5ccc269fd2024b3b5040a5d37ce42f70fe9e3e16d5b8237146c1"
+    },
+    {
+      "role": "flat-list-append",
+      "path": "src/Classes/ModList.lua",
+      "first": 20,
+      "last": 31,
+      "body": "local ModListClass = newClass(\"ModList\", \"ModStore\")\n\n---@param parent? ModStore\n---@return ModList\nfunction ModListClass:ModList(parent)\n\tself:ModStore(parent)\n\treturn self\nend\n\nfunction ModListClass:AddMod(mod)\n\tt_insert(self, mod)\nend\n",
+      "sha256": "67b5434fc8a060a3ec603bcd63e5b27b6906e8a4c77f86ef384593b51d432050"
+    },
+    {
+      "role": "flat-list-add",
+      "path": "src/Classes/ModList.lua",
+      "first": 90,
+      "last": 96,
+      "body": "function ModListClass:AddList(modList)\n\tif modList then\n\t\tfor i = 1, #modList do\n\t\t\tt_insert(self, modList[i])\n\t\tend\n\tend\nend\n",
+      "sha256": "edd9a0f269fce9879e5560691c31f6c19bc808b866c890cce0eef285ee6eeb77"
+    },
+    {
+      "role": "keyed-record-add",
+      "path": "src/Classes/ModDB.lua",
+      "first": 31,
+      "last": 37,
+      "body": "function ModDBClass:AddMod(mod)\n\tlocal name = mod.name\n\tif not self.mods[name] then\n\t\tself.mods[name] = { }\n\tend\n\tt_insert(self.mods[name], mod)\nend\n",
+      "sha256": "90d148a1763c8e12e98d9ced3ba6edc5fcec72768b0901faed1b1f2532ccedaa"
+    },
+    {
+      "role": "keyed-list-add",
+      "path": "src/Classes/ModDB.lua",
+      "first": 113,
+      "last": 122,
+      "body": "function ModDBClass:AddList(modList)\n\tlocal mods = self.mods\n\tfor i, mod in ipairs(modList) do\n\t\tlocal name = mod.name\n\t\tif not mods[name] then\n\t\t\tmods[name] = { }\n\t\tend\n\t\tt_insert(mods[name], mod)\n\tend\nend\n",
+      "sha256": "9f620a6deb14773c64e01b9ca6e1b11dabd304bb377f3c36a92d7532a8350cb8"
+    },
+    {
+      "role": "scaled-record-add",
+      "path": "src/Classes/ModStore.lua",
+      "first": 82,
+      "last": 119,
+      "body": "function ModStoreClass:ScaleAddMod(mod, scale, roundToNearest)\n\tlocal unscalable = false\n\tfor _, effects in ipairs(mod) do\n\t\tif effects.unscalable then\n\t\t\tunscalable = true\n\t\t\tbreak\n\t\tend\n\tend\n\tif scale == 1 or unscalable then\n\t\tself:AddMod(mod)\n\telse\n\t\tlocal scaledMod = copyTable(mod)\n\t\tlocal subMod = scaledMod\n\t\tif type(scaledMod.value) == \"table\" then\n\t\t\tif scaledMod.value.mod then\n\t\t\t\tsubMod = scaledMod.value.mod\n\t\t\telseif scaledMod.value.keyOfScaledMod then\n\t\t\t\tif scaledMod.value.key == \"level\" then -- +Levels can't get scaled with decimals\n\t\t\t\t\tscaledMod.value[scaledMod.value.keyOfScaledMod] = m_floor(scaledMod.value[scaledMod.value.keyOfScaledMod] * scale)\n\t\t\t\telse\n\t\t\t\t\tscaledMod.value[scaledMod.value.keyOfScaledMod] = round(scaledMod.value[scaledMod.value.keyOfScaledMod] * scale, 2)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\tif type(subMod.value) == \"number\" then\n\t\t\tlocal precision = ((data.highPrecisionMods[subMod.name] and data.highPrecisionMods[subMod.name][subMod.type])) or ((m_floor(subMod.value) ~= subMod.value) and data.defaultHighPrecision) or nil\n\t\t\tif precision then\n\t\t\t\tlocal power = 10 ^ precision\n\t\t\t\tsubMod.value = m_floor(subMod.value * scale * power) / power\n\t\t\telseif roundToNearest then\n\t\t\t\tsubMod.value = roundSymmetric(subMod.value * scale)\n\t\t\telse\n\t\t\t\tsubMod.value = m_modf(round(subMod.value * scale, 2))\n\t\t\tend\n\t\tend\n\t\tself:AddMod(scaledMod)\n\tend\nend\n",
+      "sha256": "14e2560fd6a82516cec22ac53a4998e29194f7d481774676da3898ae9b9b0978"
+    },
+    {
+      "role": "copy-list-add",
+      "path": "src/Classes/ModStore.lua",
+      "first": 121,
+      "last": 125,
+      "body": "function ModStoreClass:CopyList(modList)\n\tfor i = 1, #modList do\n\t\tself:AddMod(copyTable(modList[i]))\n\tend\nend\n",
+      "sha256": "1e1c2fca47a72555a807fd9dee72472b5bb014ccd59c1dfa164bec58a0f86df8"
+    },
+    {
+      "role": "scaled-list-add",
+      "path": "src/Classes/ModStore.lua",
+      "first": 127,
+      "last": 135,
+      "body": "function ModStoreClass:ScaleAddList(modList, scale, roundToNearest)\n\tif scale == 1 then\n\t\tself:AddList(modList)\n\telse\n\t\tfor i = 1, #modList do\n\t\t\tself:ScaleAddMod(modList[i], scale, roundToNearest)\n\t\tend\n\tend\nend\n",
+      "sha256": "1b721762120a7ad6c394919058bb300d3c0285f275bc08e8bee78a2127be5f63"
+    }
+  ]
+}
