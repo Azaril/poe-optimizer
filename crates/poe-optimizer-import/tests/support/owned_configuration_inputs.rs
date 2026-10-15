@@ -5,6 +5,8 @@ mod accounting_tests;
 mod default_tests;
 #[path = "owned_configuration_dispositions.rs"]
 mod disposition_tests;
+#[path = "owned_configuration_enemy_speed_data.rs"]
+mod enemy_speed_data_tests;
 #[path = "owned_configuration_fallbacks.rs"]
 mod fallback_tests;
 #[path = "owned_configuration_options.rs"]

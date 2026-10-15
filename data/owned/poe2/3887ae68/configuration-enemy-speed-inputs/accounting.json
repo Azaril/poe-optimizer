@@ -1,0 +1,48 @@
+[
+  {
+    "id": "authored-enemy-attack-cast-interval",
+    "selector": {
+      "lane": "input_number",
+      "name": "enemySpeed"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003370"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "overwritten-enemy-attack-cast-interval-placeholder",
+    "selector": {
+      "lane": "placeholder_number",
+      "name": "enemySpeed"
+    },
+    "destinations": [
+      {
+        "kind": "adapter",
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003370"
+          }
+        }
+      }
+    ]
+  }
+]

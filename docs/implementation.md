@@ -105,9 +105,69 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: guarded Player Mana publication
+## Current checkpoint: configured enemy attack/cast interval
 
-The canonical package is **`runs/owned-mana-pool-publication-01/package`**, input
+The canonical package is **`runs/owned-configuration-enemy-speed-publication-03/package`**,
+input `d314f839090f5a414ed5f9f97b12cac082ba66a004deea3a15a145bd865f3658`.
+The [data packet](../data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/README.md)
+adds one typed Enemy scenario input and its milliseconds unit through the
+existing default-input adapter and checked configuration accounting. No public
+model, native operation, rule program, contribution query or receiver is added.
+
+An explicit numeric `enemySpeed` Input wins, including zero. Otherwise the
+source-backed constructor default is 700 ms; initialization overwrites the saved
+numeric Placeholder. The existing encounter policy requires `enemyIsBoss`,
+`presetBossSkills` and `enemySizePreset` absent in every saved lane. This is the
+configured interval before enemy-speed modifiers, not a final speed or
+survivability result. Its injected supported range preserves finite negative,
+fractional and zero values without claiming game legality or clamping them.
+
+Definitions are `6ce1e51d32e1920ed8170fa0b2f256966e16ad28a1e0d50e7d4fba6fa7cf5d67`;
+rules are `1eb1e16b4d7f76aa68fe358a6201cca46fcbde29018e27105d7eb23c16880f73`;
+compiled rules are `e4d33726fab4ec68b1e757453afea5458baa22c724106cfc88fdba2e5de79048`.
+The recipe inverse proves exactly two new definitions, one Encounter membership
+refinement, the new import/accounting rows and their dependent identities.
+Existing rule/routing contents and all 110 queries are unchanged. The package
+has seventeen manifest artifacts, eighteen files and 175 provenance rows; it
+rebuilds byte-identically. There is no evaluation bundle.
+
+All five reimports preserve prior values, local IDs, selections and inventories,
+adding only the new assumption and retiring its exact overwritten Placeholder
+leaf. Configuration-linked origins fall **51→50 / 86→85 / 42→41 / 37→36 / 35→34**.
+Original05 retains nineteen Config-local origins (two containers and seventeen
+settings) and all fifteen outside-Config origins. Selected issue counts remain
+**106/117/109/123/4**; complete native builds remain **0/5**.
+
+Validation passes three portable Import behavior tests (0.02s), one offline
+source/data test (1.42s), all-five publication and eight changed-input controls
+(37.34s), plus strict Import and CLI target Clippy. Tests cover explicit zero,
+overwritten placeholders, independent presets, malformed/duplicate fields,
+range boundaries, encounter guards, exact origin accounting and stale receipts.
+No PoB VM ran. Logs are
+`runs/owned-configuration-enemy-speed-{import-01,cli-02,publication-03,import-clippy-01,clippy-01}.log`.
+Publication attempts 01 and 02 remain diagnostic: they exposed an omitted
+identity restoration in the test inverse and an incorrect expected Enemy wire
+shape, respectively. Neither changed source evidence or relaxed a runtime gate.
+
+**Resume:** keep Original05 first. The next concrete input is configured enemy
+critical chance: the reviewed constructor overwrites its Placeholder to 5, and
+the downstream reader preserves explicit Input zero. Adopt it through the same
+typed default-input/accounting path under the existing absent-encounter guards;
+authenticate the complete source chain before retiring its exact leaf. This
+transports an input, not a final critical-effect calculation, and needs no
+Actor-to-Enemy read. Critical damage needs its own pinned monster-constant proof.
+Keep the separate unfinished incoming-critical work untouched. Review the other
+remaining Config settings against their actual consumers. Keep the two Config containers, fifteen outside
+origins and three other selected inventories unresolved until their responsibilities
+are proved. Pair further supplier review with an actual input, producer or
+inventory change; the rejected Class and equipment-Life shortcuts below remain
+blocked. Final native metric production and whole-plan completion are still
+required before optimizer integration. Pending Actor-to-Enemy reads and resource
+demand are design decisions, not implied by this input publication.
+
+## Previous numerical checkpoint: guarded Player Mana publication
+
+The preceding package is **`runs/owned-mana-pool-publication-01/package`**, input
 `fa2829dc2d699ff8aaa0cf5d1e9e13209c466d6d0e979b0bf8450483196dc200`.
 It adds one data-defined final Mana program and one Player receiver through the
 existing full-release assembler. This is an explicit authored release, not a
@@ -119,7 +179,7 @@ rule-release label and one provenance row.
 Definitions remain `efa0011ada155c02318c3243315e6e93793a44dadf90e2c917651ab7113dfc20`;
 rules are `ddcaa9908feb626631d9daad4fc428a5c3e71cd51ecb02e1a41e77b2516b4452`;
 compiled rules are `8ce6d75fe957cb2b85ab89ba00603f348b913a66242919854863fad640aaef32`.
-Routing is unchanged. There are eighteen artifacts and 174 provenance rows;
+Routing is unchanged. There are eighteen package files and 174 provenance rows;
 only `rules.json`, `manifest.json` and `release.json` differ from the configuration
 predecessor. All artifacts rebuild byte-identically. No evaluation bundle is added.
 The five original imports retain all values/local IDs, all 110 query rows and
@@ -133,9 +193,8 @@ compare sixteen retained source vectors, and check availability, bounds,
 override behavior, stage ordering and fresh/reused/parallel equality. Evidence:
 `runs/owned-mana-pool-{tests-01,publication-01,clippy-01}.log`.
 
-**Resume:** finish the exact selected Mana supplier dispositions below. Formula
-publication is complete; neutral source admission is not. Preserve existing
-whole-plan/registry/input gates and add no zero writers to fill gaps. Continue
+Formula publication is complete; neutral source admission is not. Preserve
+existing whole-plan/registry/input gates and add no zero writers to fill gaps. Continue
 with the closest complete build, Original05, and begin optimizer integration
 only after the complete unchanged request and its reference checks pass.
 
@@ -146,7 +205,7 @@ for the five adjustment channels. Nine equipment uses/eight items, 55 allocation
 plus two implicit roots, nine authored skills, sixteen support assignments,
 twenty-three physical gems and three generated input bindings remain distinct.
 The retained configuration predecessor has byte-identical import artifacts to
-the current Mana release; this historical binding grants no new runtime authority.
+that Mana release; this historical binding grants no new runtime authority.
 
 Complete pinned shared-initialization and Player/class-baseline bodies now have
 reviewed neutral exclusions for the fifteen relevant source names. The dynamic
@@ -193,12 +252,12 @@ resolved magnitude or Amulet copies, which can preserve fractions. The direct
 and copy effects need a proved accumulation domain or source-order law before
 their group can close. Neither review changes native coverage.
 
-The configuration review identifies a concrete input-admission step:
+The configuration review identified the input-admission step now published above:
 `enemySpeed` is a directly consumed attack interval, not presentation data.
 For the currently admitted encounter, initialization overwrites its saved
 Placeholder with 700 milliseconds; an authored Input, including zero, wins.
-Adopt this through existing typed constructor-default/scalar accounting, with
-explicit encounter guards. Do not use the raw Placeholder fallback lane or
+It uses existing typed constructor-default/scalar accounting with explicit
+encounter guards. Do not use the raw Placeholder fallback lane or
 claim the final speed-adjusted interval or survivability calculation. The
 remaining direct configuration consumers and quest-parser responsibilities
 retain their own obligations.
@@ -278,13 +337,13 @@ decisions as pending are historical.
 
 On October 14 the owner approved [checked numeric domains](owned-numeric-domain-proposal.md)
 and [checked configuration accounting](owned-configuration-dispositions-proposal.md).
-Implement both in the existing rule/import paths, keeping unsupported numeric
-domains distinct from game legality and preserving every unresolved setting's
+Both are now implemented in the existing rule/import paths, keeping unsupported
+numeric domains distinct from game legality and preserving every unresolved setting's
 actual semantic responsibility. These approvals do not themselves complete
 resource supplier coverage or any import inventory. Actor-to-Enemy reads,
 resource demand, new reporting ownership and scoped coverage remain unapproved.
 
-## Current implementation checkpoint: configuration accounting
+## Implemented contract: checked configuration accounting
 
 The accepted Import contract now has one accounting owner. Reward, encounter,
 enemy-level and scalar adapters produce private receipts carrying exact source
@@ -338,9 +397,9 @@ one provenance entry records the new policy. Every draft value, selection,
 local ID and inventory is preserved, allowing only the authenticated fresh import
 lineage. The sidecar inverse permits exactly one proved leaf per original and
 its dependent commitments. Linked configuration origins fall
-**52→51 / 87→86 / 43→42 / 38→37 / 36→35**. Original05 now has twenty Config-local
-origins and all fifteen outside origins still attached to `01f2`. The selected
-issue counts remain **106/117/109/123/4**; no inventory is complete.
+**52→51 / 87→86 / 43→42 / 38→37 / 36→35**. Original05 had twenty Config-local
+origins at that checkpoint and all fifteen outside origins still attached to
+`01f2`. The selected issue counts remain **106/117/109/123/4**; no inventory is complete.
 
 Three ordinary data tests, the explicit all-five publication (27.07s), eight
 changed-input controls and strict target Clippy pass. Logs:
@@ -534,7 +593,7 @@ completed all hosted jobs successfully (`37966943229`).
 **Resume: finish Original05 first.**
 
 1. Extend the implemented configuration accounting's checked catalogue/default
-   census and actual destination coverage beyond the first published leaf.
+   census and actual destination coverage beyond the two published settings.
    Retire shared `01f2` only after every live
    origin and applicable default is accounted for; retain `0505/0207/0208`.
    Preserve all 110 saved queries and selected obligations **106/117/109/123/4**
@@ -550,19 +609,19 @@ completed all hosted jobs successfully (`37966943229`).
    occurrences. Keep source reconciliation in offline authoring evidence, not a runtime
    exclusion interpreter. Historical receipt regeneration is tracked in the
    [retirement register](legacy-retirement.md#current-rule-format-cutover-2026-10-07).
-3. Authenticate Original05's neutral Mana transformation domain, then publish
-   final resource arithmetic with real suppliers and accounted inputs. The next
-   bounded checkpoint is an offline supplier-disposition packet for outgoing
-   conversions `3357–3359`, pre-scaling extra Mana `335a` and post-scaling Mana
-   `335b`. The current census checks declared native writers only. Bind the
+3. Authenticate Original05's neutral Mana transformation domain and admit the
+   published guarded consumer with complete suppliers and accounted inputs.
+   Source-disposition work covers outgoing conversions `3357–3359`, pre-scaling
+   extra Mana `335a` and post-scaling Mana `335b`. These native groups are already
+   Complete-empty; their census checks declared native writers only. Bind the
    retained transformation evidence to complete selected source bodies,
    declarations and occurrences; the flat packet supplies reusable identities,
    not Mana exclusions. Account for thirteen Partial passive owners, eight item
    templates across nine uses, nine Partial modifier definitions, generated
    descendants/socket contents and shared/configuration/default sources. Reject
    unaccounted suppliers rather than manufacturing zero writers. This fits
-   existing approved contracts. Publishing the consumer as a guarded component
-   must retain global registry/plan and unrelated input gaps; returning a successful
+   existing approved contracts. The published guarded component retains global
+   registry/plan and unrelated input gaps; returning a successful
    production result by bypassing them would require the unapproved scoped-coverage
    change. Positive transfer mechanics need not precede this neutral admission.
    Continue
@@ -628,8 +687,8 @@ also pass. Evidence: `runs/owned-resource-transformation-source-05.log`,
 all native coverage gates remain unchanged.
 
 **Mana resume:** Original05 remains first. Authenticate its neutral transformation
-source domain before publishing final
-Mana; positive conversion support need not precede that bounded admission.
+source domain before admitting the published final Mana consumer in the unchanged
+build; positive conversion support need not precede that bounded admission.
 Review complete source bodies and declaration inventories through the existing
 normalization/item-source data and refusal tests. The current five Complete-empty
 groups only census admitted writers; they cannot close untranslated source owners.
@@ -639,10 +698,10 @@ In particular, passive `1b48`'s empty text is not proof of empty socket membersh
 Preserve all unrelated Class/Actor/item/passive/global gaps. No literal zero writer
 or build-name/identity selector should be introduced. The evidence document records
 the separate path toward positive donor-property and transformation support.
-Reuse the draft and retained source witness. The compiler-only canonical V27
-rebuild above has passed all-five import and ordinary replay checks. A future
-Mana data publication still requires its own checked successor and those same
-preservation gates. Continue final damage/Life and the four selected
+Reuse the published consumer and retained source witness. Its V27 release has
+passed all-five import and ordinary replay checks. Further supplier publications
+still require checked assembly and the same preservation gates. Continue final
+damage/Life and the four selected
 input obligations toward one complete unchanged build, then begin D4. Complete
 native builds remain **0/5** and selected obligations **106/117/109/123/4**.
 

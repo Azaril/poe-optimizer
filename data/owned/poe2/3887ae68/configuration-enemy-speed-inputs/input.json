@@ -1,0 +1,69 @@
+{
+  "source_name": "enemySpeed",
+  "value_input": {
+    "kind": "external_input",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003370"
+  },
+  "target": "enemy",
+  "recipe": {
+    "id": "saved-enemy-attack-cast-interval",
+    "codec": {
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "whitespace": "exact",
+      "codec": {
+        "kind": "quantity",
+        "value": {
+          "syntax": "scientific",
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000336f"
+          },
+          "scale": {
+            "numerator": 1,
+            "denominator": 1
+          }
+        }
+      }
+    },
+    "tiers": [
+      {
+        "selectors": [
+          {
+            "lane": "input_number",
+            "name": "enemySpeed"
+          }
+        ],
+        "duplicates": "reject"
+      }
+    ],
+    "missing": {
+      "kind": "pending"
+    }
+  },
+  "constructor_default": {
+    "kind": "quantity",
+    "value": {
+      "value": 700,
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000336f"
+      }
+    }
+  },
+  "ignore_numeric_placeholder": true
+}

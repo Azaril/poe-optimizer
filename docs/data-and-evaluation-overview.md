@@ -34,9 +34,20 @@ Checked numeric ranges now run in the existing Rust rule engine, with explicit
 unsupported-domain results. The first checked configuration-accounting
 publication also passes the all-five import regression: it removes one proven
 source-only Placeholder obligation per build and preserves all 110 queries.
-Original05 retains 35 configuration source links and its four Pending inventories.
+The subsequent configured enemy interval publication removes one more source
+link per build. Original05 now retains 34 configuration source links and its four
+Pending inventories.
 The common accounting owner replaces the older scalar-only leaf mutator; full
 catalogue/default and outside-Config accounting remain unfinished.
+
+The [configured enemy interval](../data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/README.md)
+is injected as a typed Enemy scenario assumption in milliseconds. An explicit
+numeric Input, including zero, wins; otherwise the source-backed constructor
+default is 700 ms. A saved numeric Placeholder is overwritten and cannot supply
+the value. Existing encounter guards exclude boss/preset branches whose defaults
+differ. This uses the current import adapters and accounting owner, adding no
+native operation or final enemy-speed/survivability calculation. All five imports,
+local IDs and 110 query rows remain covered by exact regression checks.
 
 The final Player Mana formula is now published as injected rules with its exact
 Player receiver. The existing Rust engine executes its arithmetic, range check
@@ -46,7 +57,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-guarded-player-mana-publication).
+[implementation checkpoint](implementation.md#current-checkpoint-configured-enemy-attackcast-interval).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -111,8 +122,8 @@ baseline calculates Intelligence 105 and contributes 210 Mana without supplying
 either number as a runtime constant. Source-only controls remain finite tests.
 The Mana source tests share one full-source loading/supervision helper; the
 refactor reproduces the previous intrinsic report byte for byte. The other
-modifiers and final-pool arithmetic remain separate dependencies. These
-contributions do not make a complete build available.
+modifiers and supplier admission remain separate dependencies; guarded final-pool
+arithmetic is now published. These contributions do not make a complete build available.
 
 The [Mana query packet](../data/owned/poe2/3887ae68/mana-contribution-queries/README.md)
 now supplies checked base/increased/MORE groups for all five currently published
@@ -123,15 +134,17 @@ domain retain global Partial coverage. This adds data through the existing
 assembler without a schema migration or production Rust change.
 An independent full-source test confirms the final PoB resource calculation,
 including rounding, clamping and a zero override, with JIT off/on and warm/fresh
-agreement. Native conversion, extra/total and final rounding still
-need explicit coverage; neither reference output nor a subtotal is a substitute.
+agreement. Final rounding now has a published guarded consumer; actual conversion
+and extra/total suppliers still need complete coverage. Neither reference output
+nor a subtotal is a substitute for an admitted complete build.
 
 The [Mana adjustment packet](../data/owned/poe2/3887ae68/mana-pool-adjustments/README.md)
 now gives the conversion percentages and pre/post-scaling additions explicit
 typed collectors. Their admitted source domains are guarded empty groups;
 unconverted mechanics remain blocking. The independent source controls include
 a real nonzero fractional conversion input and its interaction with a zero
-override. Native conversion production and final Mana are still unfinished.
+override. Native conversion supplier admission and complete-build Mana evaluation
+are still unfinished; the final arithmetic consumer is published.
 The approved [optional numeric selection](owned-numeric-selection-proposal.md)
 is now a current Core/Data/Engine API in operations V27. `Override` contributions
 feed an unordered `RequireAgreement` group with no numeric empty identity.
@@ -146,19 +159,20 @@ one allocated passive emits a zero Mana quantity into a checked selection group.
 The complete PoB source witness covers duplicate zeros and the allocated passive,
 while native tests distinguish absence from a present zero and preserve Partial
 refusal. The passive's cost-conversion effect, item-granted origins, other resource
-suppliers and final arithmetic remain separate coverage obligations. Data adoption
-adds no resource-specific native engine behavior and does not finish Mana.
+suppliers and complete-plan admission remain separate coverage obligations.
+Data adoption adds no resource-specific native engine behavior and does not finish Mana.
 
-The [draft final Mana program](../data/owned/poe2/3887ae68/mana-pool/README.md)
+The [published final Mana program](../data/owned/poe2/3887ae68/mana-pool/README.md)
 joins those native inputs using ordinary typed arithmetic and lazy override
 selection. Its finite component fixture calculates 638 Mana; the scalar
 consumer compares all 16 retained source vectors. The approved
 [numeric-domain operation](owned-numeric-domain-proposal.md) now checks the
 actual pre-rounding operand against an injected range, producing explicit
 unavailability outside it. Exact units, missing/Partial refusal, lazy overrides
-and worker reuse remain part of the same engine. The program is still absent
-from the canonical release because actual conversion/addition producers need
-coverage. Neither the draft nor its scalar comparison completes the build.
+and worker reuse remain part of the same engine. The program is in the current
+release; actual conversion/addition supplier admission and whole-plan coverage
+remain incomplete. Neither the program nor its scalar comparison completes
+the build.
 
 The separate [resource transformation witness](owned-resource-transformation-evidence.md)
 now retains 19 original-source cases with actual item/global donors and multiple
@@ -392,7 +406,8 @@ data-authored programs on existing owners, without skill-name dispatch in Rust.
 Their Partial source/support inventories and remaining combat/population modes
 still prevent full owner closure. All-five reimports preserve selections and
 110 queries; Original05's remaining obligations and the 0/5 completion count remain.
-The current package is `runs/owned-gigantic-flags-publication-01/package`.
+That checkpoint used `runs/owned-gigantic-flags-publication-01/package`;
+the current endpoint is in the implementation plan.
 See the [packet and coverage limits](../data/owned/poe2/3887ae68/sand-preparation/README.md).
 
 A joined finite test now supplies Sand's ordinary level from the real Crown/Solar
@@ -400,7 +415,7 @@ canonical modifier, direct applicability, Amulet snapshot and copy programs.
 Selected canonical rolls come from a fresh import; unrelated item mechanics and
 real support inventory remain outside that fixture. Exact donor identities,
 changed equipment/rolls, Partial and missing-producer refusals, scratch reuse and
-Rayon checks pass on the current package. This adds integration evidence without
+Rayon checks pass on that package. This adds integration evidence without
 promoting production contributor coverage or substituting a whole-build request.
 
 A finite joined test now carries actual item contributions through physical
@@ -1197,12 +1212,12 @@ distribution separation from adapter tooling remains a migration gate.
 
 The latest checked development release is eighteen files, about 60 MB. It is a
 Partial data release with no evaluation bundle; it cannot be passed off as a
-complete runnable game database. It uses schema V6 and operations V21 for
+complete runnable game database. It uses schema V6 and operations V27 for
 reviewed occurrence inputs, exact generated preset inputs, source-property preparation and the published
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#checked-baseline-and-original-build-results),
+live in the [implementation plan](implementation.md#current-checkpoint-configured-enemy-attackcast-interval),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.
