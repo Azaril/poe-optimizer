@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "kind": "inherited-minion-original-operation-bodies",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "files": [
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+      "encoding": "gzip",
+      "archive_bytes": 34408,
+      "archive_sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcActiveSkill.lua.gz",
+      "encoding": "gzip",
+      "archive_bytes": 10868,
+      "archive_sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+      "encoding": "gzip",
+      "archive_bytes": 7158,
+      "archive_sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "archive": "data/owned/poe2/3887ae68/mana-supplier-sources/passive-ModList.lua.gz",
+      "encoding": "gzip",
+      "archive_bytes": 2020,
+      "archive_sha256": "7b1b25081e088b45c6a28ba5449faf44409641ad0d6688518ba07bc2b36dc815",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "archive": "data/owned/poe2/3887ae68/life-base-domain/ModDB.lua.gz",
+      "encoding": "gzip",
+      "archive_bytes": 2575,
+      "archive_sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "archive": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+      "encoding": "plain",
+      "archive_bytes": 235127,
+      "archive_sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    }
+  ],
+  "spans": [
+    {
+      "role": "original-nested-delivery",
+      "path": "src/Modules/CalcPerform.lua",
+      "first_line": 1161,
+      "last_line": 1167,
+      "body": "local function addMinionModifiers(modList, skillCfg, minion)\n\tfor _, value in ipairs(modList:List(skillCfg, \"MinionModifier\")) do\n\t\tif not value.type or minion.type == value.type then\n\t\t\tminion.modDB:AddMod(value.mod)\n\t\tend\n\tend\nend\n",
+      "body_sha256": "50257f2b58a59f976fc5d60106c8d76abf481b2da22f5a820b58c481c6c8a97c"
+    },
+    {
+      "role": "actual-child-store-construction",
+      "path": "src/Modules/CalcPerform.lua",
+      "first_line": 1193,
+      "last_line": 1227,
+      "body": "function calcs.perform(env, skipEHP)\n\t---@type ModDB\n\tlocal modDB = env.modDB\n\t---@type ModDB\n\tlocal enemyDB = env.enemyDB\n\n\t-- Merge keystone modifiers\n\tenv.keystonesAdded = { }\n\tmergeKeystones(env)\n\n\t-- Build minion skills\n\tfor _, activeSkill in ipairs(env.player.activeSkillList) do\n\t\tactiveSkill.skillModList = new(\"ModList\"):ModList(activeSkill.baseSkillModList)\n\t\tif activeSkill.minion then\n\t\t\tactiveSkill.minion.modDB = new(\"ModDB\"):ModDB()\n\t\t\tactiveSkill.minion.modDB.actor = activeSkill.minion\n\t\t\tcalcs.createMinionSkills(env, activeSkill)\n\t\t\tactiveSkill.skillPartName = activeSkill.minion.mainSkill.activeEffect.grantedEffect.name\n\t\tend\n\tend\n\n\tenv.player.output = { }\n\tenv.enemy.output = {}\n\t---@class Output\n\tlocal output = env.player.output\n\n\tenv.partyMembers = env.build.partyTab.actor\n\tenv.player.partyMembers = env.partyMembers\n\tlocal partyTabEnableExportBuffs = env.build.partyTab.enableExportBuffs and env.mode ~= \"CALCULATOR\"\n\n\tenv.minion = env.player.mainSkill.minion\n\tif env.minion then\n\t\t-- Initialise minion modifier database\n\t\toutput.Minion = { }\n\t\tenv.minion.output = output.Minion\n",
+      "body_sha256": "f7619ba6168c96a709bc24995b639ad37d88531da3ae51dc1ed64922970782bf"
+    },
+    {
+      "role": "selected-receiver-and-hostile-boundary",
+      "path": "src/Modules/CalcPerform.lua",
+      "first_line": 1844,
+      "last_line": 1856,
+      "body": "\tif env.minion then\n\t\tif env.minion.hostile then\n\t\t\tfor _, value in ipairs(env.modDB:Tabulate(nil, nil, \"EnemyModifier\")) do\n\t\t\t\tlocal mod = value.value and value.value.mod\n\t\t\t\tif mod then\n\t\t\t\t\tlocal copy = copyTable(mod, true)\n\t\t\t\t\tenv.minion.modDB:AddMod(modLib.setSource(copy, mod.source or value.mod.source))\n\t\t\t\tend\n\t\t\tend\n\t\telse\n\t\t\taddMinionModifiers(env.player.mainSkill.skillModList, env.player.mainSkill.skillCfg, env.minion)\n\t\t\tfor _, name in ipairs(env.minion.modDB:List(nil, \"Keystone\")) do\n\t\t\t\tif env.spec.tree.keystoneMap[name] then\n",
+      "body_sha256": "a41777df285225ca6e52fe3c64a0c2d9332368d0210cbbaa61604b5261bf7b98"
+    },
+    {
+      "role": "direct-spectre-prefix-gate-and-bypass-writers",
+      "path": "src/Modules/CalcPerform.lua",
+      "first_line": 2023,
+      "last_line": 2072,
+      "body": "\tlocal hasActiveSpectreSkill = false\n\tfor _, activeSkill in ipairs(env.player.activeSkillList) do\n\t\tlocal skillFlags = activeSkill.activeEffect.statSet and activeSkill.activeEffect.statSet.skillFlags\n\t\tif env.mode == \"CALCS\" then\n\t\t\tskillFlags = activeSkill.activeEffect.statSetCalcs and activeSkill.activeEffect.statSetCalcs.skillFlags\n\t\tend\n\t\tif not (skillFlags and skillFlags.disable) then\n\t\t\tlocal skillId = activeSkill.activeEffect.grantedEffect.id\n\t\t\tif skillId and skillId:match(\"^SummonSpectre\") then\n\t\t\t\thasActiveSpectreSkill = true\n\t\t\t\tbreak\n\t\t\tend\n\t\tend\n\tend\n\tif hasActiveSpectreSkill then\n\t\tfor spectreId = 1, #env.spec.build.spectreList do\n\t\t\tlocal spectreData = data.minions[env.spec.build.spectreList[spectreId]]\n\t\t\tfor modId = 1, #spectreData.modList do\n\t\t\t\tlocal modData = spectreData.modList[modId]\n\t\t\t\tif modData.name == \"EnemyCurseLimit\" or modData.name == \"EnemyMarkLimit\" then\n\t\t\t\t\tminionCurses.limit = modData.value + 1\n\t\t\t\t\tbreak\n\t\t\t\telseif modData.name == \"AllyModifier\" and modData.type == \"LIST\" then\n\t\t\t\t\tbuffs[\"Spectre\"] = buffs[\"Spectre\"] or new(\"ModList\"):ModList()\n\t\t\t\t\tminionBuffs[\"Spectre\"] = minionBuffs[\"Spectre\"] or new(\"ModList\"):ModList()\n\t\t\t\t\tfor _, modValue in pairs(modData.value) do\n\t\t\t\t\t\tlocal copyModValue = copyTable(modValue)\n\t\t\t\t\t\tcopyModValue.source = \"Spectre:\"..spectreData.name\n\t\t\t\t\t\tt_insert(minionBuffs[\"Spectre\"], copyModValue)\n\t\t\t\t\t\tt_insert(buffs[\"Spectre\"], copyModValue)\n\t\t\t\t\tend\n\t\t\t\telseif modData.name == \"MinionModifier\" and modData.type == \"LIST\" then\n\t\t\t\t\tminionBuffs[\"Spectre\"] = minionBuffs[\"Spectre\"] or new(\"ModList\"):ModList()\n\t\t\t\t\tfor _, modValue in pairs(modData.value) do\n\t\t\t\t\t\tlocal copyModValue = copyTable(modValue)\n\t\t\t\t\t\tcopyModValue.source = \"Spectre:\"..spectreData.name\n\t\t\t\t\t\tt_insert(minionBuffs[\"Spectre\"], copyModValue)\n\t\t\t\t\tend\n\t\t\t\telseif modData.name == \"PlayerModifier\" and modData.type == \"LIST\" then\n\t\t\t\t\tbuffs[\"Spectre\"] = buffs[\"Spectre\"] or new(\"ModList\"):ModList()\n\t\t\t\t\tfor _, modValue in pairs(modData.value) do\n\t\t\t\t\t\tlocal copyModValue = copyTable(modValue)\n\t\t\t\t\t\tcopyModValue.source = \"Spectre:\"..spectreData.name\n\t\t\t\t\t\tt_insert(buffs[\"Spectre\"], copyModValue)\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\n",
+      "body_sha256": "0cee0075be48f42b6ef513411ceff973c1b6d9e6c125ec67450a0afef32c5609"
+    },
+    {
+      "role": "buff-recipient-delivery",
+      "path": "src/Modules/CalcPerform.lua",
+      "first_line": 3116,
+      "last_line": 3134,
+      "body": "\t-- Apply buff/debuff modifiers\n\tfor _, modList in pairs(buffs) do\n\t\tmodDB:AddList(modList)\n\t\tif not modList.notBuff then\n\t\t\tmodDB.multipliers[\"BuffOnSelf\"] = (modDB.multipliers[\"BuffOnSelf\"] or 0) + 1\n\t\tend\n\t\tif env.minion then\n\t\t\taddMinionModifiers(modList, env.player.mainSkill.skillCfg, env.minion)\n\t\tend\n\tend\n\tif env.minion then\n\t\tfor _, modList in pairs(minionBuffs) do\n\t\t\tenv.minion.modDB:AddList(modList)\n\t\tend\n\tend\n\tfor _, modList in pairs(debuffs) do\n\t\tenemyDB:AddList(modList)\n\tend\n\tlocal cursesInCurseSlots = {}\n",
+      "body_sha256": "2efaf6fa083b5ccc269fd2024b3b5040a5d37ce42f70fe9e3e16d5b8237146c1"
+    },
+    {
+      "role": "full-secondary-life-pool-and-callers",
+      "path": "src/Modules/CalcPerform.lua",
+      "first_line": 3365,
+      "last_line": 3413,
+      "body": "\tlocal function calcMinionLifePool(env, buffs, includeSkill)\n\t\tlocal totalLife = 0\n\t\tlocal lifeList = { }\n\t\tlocal seenMinions = { }\n\t\tfor _, activeSkill in ipairs(env.player.activeSkillList) do\n\t\t\tlocal skillFlags = env.mode == \"CALCS\" and activeSkill.activeEffect.statSetCalcs.skillFlags or activeSkill.activeEffect.statSet.skillFlags\n\t\t\tlocal minion = activeSkill.minion\n\t\t\tif minion and not seenMinions[minion] and not skillFlags.disable and includeSkill(activeSkill, skillFlags) then\n\t\t\t\tseenMinions[minion] = true\n\t\t\t\tif minion ~= env.minion then\n\t\t\t\t\tminion.output = minion.output or { }\n\t\t\t\t\tinitMinionModDB(env, activeSkill)\n\t\t\t\t\taddMinionModifiers(activeSkill.skillModList, activeSkill.skillCfg, minion)\n\t\t\t\t\tfor _, name in ipairs(minion.modDB:List(nil, \"Keystone\")) do\n\t\t\t\t\t\tif env.spec.tree.keystoneMap[name] then\n\t\t\t\t\t\t\tminion.modDB:AddList(env.spec.tree.keystoneMap[name].modList)\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\t\tfor _, modList in pairs(buffs) do\n\t\t\t\t\t\taddMinionModifiers(modList, activeSkill.skillCfg, minion)\n\t\t\t\t\tend\n\t\t\t\t\tdoActorAttribsConditions(env, minion)\n\t\t\t\tend\n\t\t\t\tcalcs.doActorLifeManaSpirit(minion, true)\n\t\t\t\ttotalLife = totalLife + minion.output.Life\n\t\t\t\tt_insert(lifeList, { name = minion.minionData and minion.minionData.name or activeSkill.activeEffect.grantedEffect.name, life = minion.output.Life })\n\t\t\tend\n\t\tend\n\t\treturn totalLife, lifeList\n\tend\n\n\t-- Total life of spectres, for \"% of Damage from Hits is taken from your Spectres' Life before you\"\n\tif modDB:HasMod(\"BASE\", nil, \"TakenFromSpectresBeforeYou\") and not modDB:Override(nil, \"TotalSpectreLife\") then\n\t\tlocal totalSpectreLife, spectreLifeList = calcMinionLifePool(env, buffs, function(activeSkill, skillFlags)\n\t\t\treturn skillFlags.spectre and not activeSkill.skillTypes[SkillType.MinionsAreUndamagable]\n\t\tend)\n\t\tmodDB:NewMod(\"TotalSpectreLife\", \"BASE\", totalSpectreLife, \"Spectres\")\n\t\tenv.player.spectreLifeList = spectreLifeList\n\tend\n\n\t-- Total life of damageable companions, for \"% of Damage from Hits is taken from your Companion's Life before you\"\n\tif modDB:HasMod(\"BASE\", nil, \"TakenFromCompanionBeforeYou\", \"TakenFromCompanionBeforeYouFromDeflected\") and not modDB:Override(nil, \"TotalCompanionLife\") then\n\t\tlocal totalCompanionLife, companionLifeList = calcMinionLifePool(env, buffs, function(activeSkill)\n\t\t\treturn activeSkill.skillTypes[SkillType.Companion] and not activeSkill.skillTypes[SkillType.MinionsAreUndamagable]\n\t\tend)\n\t\tmodDB:NewMod(\"TotalCompanionLife\", \"BASE\", totalCompanionLife, \"Companions\")\n\t\tenv.player.companionLifeList = companionLifeList\n\tend\n\n",
+      "body_sha256": "fd99e0bd12d24c2f4568f1ee9b90fd401ee16627fe3a0af5c39fb53dae9b3ad9"
+    },
+    {
+      "role": "skill-store-parent-construction",
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "first_line": 495,
+      "last_line": 498,
+      "body": "\t-- Initialise skill modifier list\n\tlocal skillModList = new(\"ModList\"):ModList(activeSkill.actor.modDB)\n\tactiveSkill.skillModList = skillModList\n\tactiveSkill.baseSkillModList = skillModList\n",
+      "body_sha256": "9a3b9b2f191ef2b355ceab377d53df4f06bd2131fe5c07f6895bca20a3b58a72"
+    },
+    {
+      "role": "original-list-dispatch",
+      "path": "src/Classes/ModStore.lua",
+      "first_line": 317,
+      "last_line": 339,
+      "body": "\n---@param cfg? ModCfg\n---@param ... string\n---@return any[]\nfunction ModStoreClass:List(cfg, ...)\n\tlocal flags, keywordFlags = 0, 0\n\tlocal source\n\tif cfg then\n\t\tflags = cfg.flags or 0\n\t\tkeywordFlags = cfg.keywordFlags or 0\n\t\tsource = cfg.source\n\tend\n\tlocal result = { }\n\tlocal n = select('#', ...)\n\tif n == 1 then\n\t\tlocal arg = ...\n\t\tself:ListInternal(self, result, cfg, flags, keywordFlags, source, arg)\n\telse\n\t\tlocal n1, n2, n3, n4, n5, n6, n7, n8 = ...\n\t\tself:ListInternalMulti(self, result, cfg, flags, keywordFlags, source, n, n1, n2, n3, n4, n5, n6, n7, n8)\n\tend\n\treturn result\nend\n",
+      "body_sha256": "be744091cebc895c1489a85935da284fa84c32b13177d0c9182baf3dd512c26d"
+    },
+    {
+      "role": "flat-original-list-parent-recursion",
+      "path": "src/Classes/ModList.lua",
+      "first_line": 309,
+      "last_line": 326,
+      "body": "function ModListClass:ListInternal(context, result, cfg, flags, keywordFlags, source, modName)\n\tfor i = 1, #self do\n\t\tlocal mod = self[i]\n\t\tif mod.name == modName and mod.type == \"LIST\" and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\tif mod[1] then\n\t\t\t\tlocal value = context:EvalMod(mod, cfg) or nullValue\n\t\t\t\tif value then\n\t\t\t\t\tt_insert(result, value)\n\t\t\t\tend\n\t\t\telseif mod.value then\n\t\t\t\tt_insert(result, mod.value)\n\t\t\tend\n\t\tend\n\tend\n\tif self.parent then\n\t\tself.parent:ListInternal(context, result, cfg, flags, keywordFlags, source, modName)\n\tend\nend\n",
+      "body_sha256": "03457c00081e442cc474b9c3a13baa5f5b8a62fd57b7fe49eaef7f044dd70135"
+    },
+    {
+      "role": "keyed-original-list-parent-recursion",
+      "path": "src/Classes/ModDB.lua",
+      "first_line": 391,
+      "last_line": 411,
+      "body": "function ModDBClass:ListInternal(context, result, cfg, flags, keywordFlags, source, modName)\n\tlocal modList = self.mods[modName]\n\tif modList then\n\t\tfor i = 1, #modList do\n\t\t\tlocal mod = modList[i]\n\t\t\tif mod.type == \"LIST\" and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\t\tif mod[1] then\n\t\t\t\t\tlocal value = context:EvalMod(mod, cfg) or nullValue\n\t\t\t\t\tif value then\n\t\t\t\t\t\tt_insert(result, value)\n\t\t\t\t\tend\n\t\t\t\telseif mod.value then\n\t\t\t\t\tt_insert(result, mod.value)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif self.parent then\n\t\tself.parent:ListInternal(context, result, cfg, flags, keywordFlags, source, modName)\n\tend\nend\n",
+      "body_sha256": "a2eef24a3c58a0d0bfc7e7d2f2aad221b4fb49594fef3a2829b3c17e55a70a42"
+    },
+    {
+      "role": "original-append",
+      "path": "src/Classes/ModDB.lua",
+      "first_line": 31,
+      "last_line": 37,
+      "body": "function ModDBClass:AddMod(mod)\n\tlocal name = mod.name\n\tif not self.mods[name] then\n\t\tself.mods[name] = { }\n\tend\n\tt_insert(self.mods[name], mod)\nend\n",
+      "body_sha256": "90d148a1763c8e12e98d9ced3ba6edc5fcec72768b0901faed1b1f2532ccedaa"
+    },
+    {
+      "role": "configured-repeat-constructor",
+      "path": "src/Modules/ConfigOptions.lua",
+      "first_line": 871,
+      "last_line": 879,
+      "body": "\t}, defaultIndex = 2, apply = function(val, modList, enemyModList)\n\t\tif val == \"AVERAGE\" then\n\t\t\tmodList:NewMod(\"Condition:averageRepeat\", \"FLAG\", true, \"Config\")\n\t\t\tmodList:NewMod(\"MinionModifier\", \"LIST\", { mod = modLib.createMod(\"Condition:averageRepeat\", \"FLAG\", true, \"Config\") })\n\t\telseif val == \"FINAL\" or val == \"FINAL_DPS\" then\n\t\t\tmodList:NewMod(\"Condition:alwaysFinalRepeat\", \"FLAG\", true, \"Config\")\n\t\t\tmodList:NewMod(\"MinionModifier\", \"LIST\", { mod = modLib.createMod(\"Condition:alwaysFinalRepeat\", \"FLAG\", true, \"Config\") })\n\t\tend\n\tend },\n",
+      "body_sha256": "784c0ca8d3300c3b48e85c85c3e4327a51e50e7595d2a16b00055ad13de65054"
+    }
+  ]
+}

@@ -1637,6 +1637,20 @@ reject changed numerical/identity/configuration fields, unknown or duplicate
 channels and broken joins. The earlier raw-equality failure remains recorded
 and supplies no passing receipt.
 
+The October 15 [inherited-delivery proof](../data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/README.md)
+checks a second concrete cross-stat ordering boundary without another source
+run. Its fixed acquisition completed four loads with exact scalar agreement,
+but the original strict raw-trace comparison failed. The archived driver and
+43-field difference report remain unchanged. Each original trace first proves
+ordered pointer/List/AddMod correspondence; only then may the offline comparison
+partition complete records by the actual keyed destination stat. Duplicate
+records, within-stat order, sources and recipients remain exact. The current
+capture driver seals raw artifacts before any assessment and requires a separate
+semantic proof; it does not manufacture a passing historical acquisition.
+This is source evidence handling, not native Lua compatibility, numerical
+reassociation or permission to accept nondeterministic results. Future updates
+must fail when a within-stat sequence or result changes.
+
 ### Shared generated-source import cleanup (2026-10-05)
 
 The occurrence-count checkpoint moves the generated-source matcher out of the

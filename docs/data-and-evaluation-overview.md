@@ -1267,8 +1267,21 @@ complete local/buff record conservation. No direct or nested flat Physical or
 external-skill-stat records occur in that reviewed recipe set. Separate captured
 buff deliveries establish payload and recipient correspondence, without claiming
 unique delivering-source attribution, numerical scaling/order or native coverage.
-Inherited Player/item/passive/configuration stores and dynamic factories remain
-separate admission work. These authenticated Lua observations stay offline; the
+The subsequent [inherited-delivery proof](../data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/README.md)
+joins selected Player/passive/configuration and local Skill wrappers through the
+original List and AddMod calls. Each observed trace has 18 completed performs,
+ten deliveries and 307 appends; exact source/recipient correspondence and complete
+gate inventories are checked. All four fresh MAIN/CALCS scalar controls agree.
+The initial strict raw-trace comparison failed on cross-stat order; its complete
+failure evidence remains retained. Offline comparison permits only representation
+changes between separate keyed stat buckets, preserving bodies, duplicates and
+within-stat order. This creates no native sorting rule, numerical reassociation
+or tolerance for differing results. The maintained optional driver seals raw
+captures before assessment and still requires the separate semantic proof.
+
+Direct/local source completeness, dynamic factories, extra-stat expansion and
+final source-to-native membership remain separate admission work. These
+authenticated Lua observations stay offline; the
 native runtime gains no Lua record type or interpreter. The older unpublished
 flat-damage drafts retain useful arithmetic/parity tests, but their IDs now
 overlap unrelated current allocations and cannot be copied into the release.

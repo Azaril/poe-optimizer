@@ -149,3 +149,5 @@ Cargo.lock text eol=lf
 /data/owned/poe2/3887ae68/minion-preconversion-source/evidence/* -text
 /data/owned/poe2/3887ae68/self-flat-runtime-gates/evidence/* -text
 /data/owned/poe2/3887ae68/configuration-accounting/evidence/** -text -whitespace
+# Preserve the original strict-comparison diagnostic's authenticated CRLF bytes.
+/data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/strict-differences.json whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

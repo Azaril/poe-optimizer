@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "kind": "inherited-minion-temporal-acquisition",
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "xml": {
+    "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+    "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+  },
+  "files": [
+    {
+      "name": "observed-a.json",
+      "archive": "observed-a.json.gz",
+      "bytes": 1230640,
+      "sha256": "92da331915a3f0b7a44bb085991de0f9745989bbcce47ca43588418cea607b3f",
+      "compressed_bytes": 55488,
+      "compressed_sha256": "3e68cffec4c8c78c9b8c9ed0295fd68fa2354216f33c10c55c0569189e0a4f04"
+    },
+    {
+      "name": "observed-b.json",
+      "archive": "observed-b.json.gz",
+      "bytes": 1230640,
+      "sha256": "07a30e6ca104321c26c1bec7bc0d049b266aa367c1620f1a60fff977c99bc5d3",
+      "compressed_bytes": 55492,
+      "compressed_sha256": "7f1c9a23942fea90a214719e727b9279ffe414c3729e67406f2cc15659268ab1"
+    },
+    {
+      "name": "plain-off.json",
+      "archive": "plain-off.json.gz",
+      "bytes": 136085,
+      "sha256": "66522979b25b57091f81ba451b0d9a7b1056e71eb25dafd2b0893f9b4dc9ed84",
+      "compressed_bytes": 13379,
+      "compressed_sha256": "0c9476573e1a3223637fd4e9b0cbb393e4b9de7066fdd9af5ef98141708cc7e3"
+    },
+    {
+      "name": "plain-on.json",
+      "archive": "plain-on.json.gz",
+      "bytes": 136085,
+      "sha256": "c8eb046ca8797d1722ed32017d64f291dbf841e97cd58ff7a0e6623ebb22a8e6",
+      "compressed_bytes": 13380,
+      "compressed_sha256": "9e20a04aefccfce237f78b470c8708a0ee54a44e0c347ff15459261ecef8eac8"
+    },
+    {
+      "name": "acquisition-driver.rs",
+      "archive": "acquisition-driver.rs.gz",
+      "bytes": 11584,
+      "sha256": "5df1fbd4d517971407322e69948135ba3a9552654bd42beb56ea007df3796c3e",
+      "compressed_bytes": 3851,
+      "compressed_sha256": "ab851f25bc8c6cf35d9f808e13a9501efe4df89ab85fe79d48447b66e53144da"
+    },
+    {
+      "name": "acquisition-observer.lua",
+      "archive": "acquisition-observer.lua.gz",
+      "bytes": 14488,
+      "sha256": "269888d4fc3128f20e119158844b4ed046973ef0b761fd1dd9970d9f74e89279",
+      "compressed_bytes": 4162,
+      "compressed_sha256": "f28a58c5fe16594f8348a4b62f67fd7589d81bb2a566b680f7d45b17c8723954"
+    },
+    {
+      "name": "acquisition-helpers.lua",
+      "archive": "acquisition-helpers.lua.gz",
+      "bytes": 81347,
+      "sha256": "9c6af9dd3261cf196dbd5182cce05e7eb87a9c2033090d96047fad7d4feeb7f0",
+      "compressed_bytes": 19230,
+      "compressed_sha256": "8d59530ec3b8341a68ad5a2081568059e1e5d67ef8da95873d0bed23f9736b34"
+    },
+    {
+      "name": "acquisition-bootstrap.rs",
+      "archive": "acquisition-bootstrap.rs.gz",
+      "bytes": 14535,
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9",
+      "compressed_bytes": 4202,
+      "compressed_sha256": "56914cc879d8db78d2e65ac02e51dbbf4241060208a585f5a9ac83466db57ee6"
+    }
+  ],
+  "complete_loads": 4,
+  "instrumented_loads": 2,
+  "instrumented_jit_enabled": false,
+  "unhooked_jit_modes": [
+    false,
+    true
+  ],
+  "strict_trace_comparison_passed": false,
+  "strict_trace_different_fields": 43,
+  "failure_log": {
+    "path": "acquisition-failure.log",
+    "bytes": 1430,
+    "sha256": "f4eca28fa7eba60725dd10211b21b41f0eba2c0f2dcafd15aefb6791fea8f9d2",
+    "archive": "acquisition-failure.log.gz",
+    "compressed_bytes": 699,
+    "compressed_sha256": "83db2a5d9400ee30083753fa8cdcfce675269a1d4fae9197b4f136e2ac6307c5"
+  },
+  "strict_differences": {
+    "path": "strict-differences.json",
+    "bytes": 4963,
+    "sha256": "c3a672b410d72316e723dc151a7b756e97fd5439ae7b1cc97eb9f2bdbe720c62"
+  },
+  "acquisition_report_not_written": "The original driver asserted exact raw trace equality before writing source.json; all four raw loads and their original acquisition code are retained.",
+  "scalar_control_comparison": "Checked separately by the later offline proof; not inferred from acquisition exit status.",
+  "native_coverage_authorized": false
+}

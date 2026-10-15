@@ -143,9 +143,20 @@ test-only JSON macro expression error, fixed before these runs; source and data
 were unchanged. Logs:
 `runs/owned-configuration-player-activity-{ordinary-02,clippy-01,publication-01}.log`.
 
-**Next input blockers:** account for the remaining saved resource, skill-stage
-and progression controls under their actual owners, plus the outside-Config
-origins. Do not infer native ownership solely from a PoB modifier-list destination.
+**Next input blockers:** the remaining saved controls have distinct responsibilities:
+
+| Control | Next bounded step |
+| --- | --- |
+| Demonflame stacks | Reuse the Player Scenario Count input and authenticated constructor 10. Transformation activation, Life threshold and stack cap remain separate mechanics. |
+| Current Energy Shield | Preserve percentage points on Player, constructor 100, and the callback's separate `UseCurrentEnergyShield` Boolean dependency. A raw input cannot silently discard that second responsibility; overflow limits and native condition production remain separate. |
+| Campaign bosses defeated | Player progression, with no constructor value in the pinned source. Extend checked selection to preserve proven absence before publishing; neither saved Placeholder 56 nor zero is a default. |
+| Sigil and Corrupting Cry stages | Exact Skill usage, with all applicable consumers and preset/Scenario scope accounted for. The runtime supports usage, but Import cannot yet join a Config control to an exact occurrence. Establish the complete consumer census before deciding propagation across repeated sources or independent presets. |
+
+The Skill-targeted external-assumption type is not an executable shortcut:
+Engine external reads reject Skill contexts. Reuse checked usage composition
+instead of routing skill state through a global Player input. The remaining
+outside-Config origins need their own dispositions. Do not infer native
+ownership solely from a PoB modifier-list destination.
 Warcry/Stunned activation and upper clamps, Ammo/Grenade applicability, time
 windows and inventory limits remain downstream work. The source's preview mode
 is not a gameplay flag. Complete configuration, usage and assumption inventories
@@ -163,59 +174,65 @@ the raw Enemy count uses checked source selection and constructor 20. All-five
 preservation, 22 controls, strict Clippy and immutable source receipt checks pass.
 The subsequent ailment packet preserves this input and its downstream gaps.
 
-## Source checkpoint: selected skill construction
+## Source checkpoint: inherited minion delivery
 
-The [finite construction proof](../data/owned/poe2/3887ae68/self-flat-skill-construction/README.md)
-reuses authenticated source02 acquisitions, selected recipe/binding evidence and
-the runtime-gate captures. It adds no source VM run, native API, program, query,
-allocator identity or package. The current endpoint above is unchanged.
+The [inherited-delivery packet](../data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/README.md)
+joins the existing complete selected constructors to actual temporal receiving.
+Each observed trace contains **18 completed performs, 144 gate events, ten
+original List/AddMod deliveries and 307 appended records**. Eight exact receiving
+occurrences include two Sniper observations. Each Sniper receives the 29 selected
+passive wrappers and one configured repeat wrapper; seven additional local Skill
+wrappers occur across other recipients. Source pointers, full bodies, ancestry,
+filters, recipient identity, ordered List results and original append counts are
+checked, rather than inferring source identity from equal values.
 
-Each retained trace has **768 constructor pairs**, including 18 Sniper Basic
-Attack pairs. Forty complete recipes (28 active/generated/child and 12 support)
-contain no direct or nested flat Physical or external-skill-stat records. Exact
-source and child-Actor joins preserve 6,771 ordinary local records and account
-for 123 global records moved into 60 buff lists. Complete original construction
-and routing bodies authenticate that finite boundary. The proof does not
-reevaluate the recipes in Rust or establish recipe-value calculation parity.
+Complete observed gates establish that this unchanged selection has no Player
+buff-loop delivery, secondary minion Life-pool call or direct Spectre bypass.
+Direct `minionBuffs` AddList delivery remains the separate construction/runtime
+proof; an empty Player `buffs` list does not exclude that path. The preceding
+[construction checkpoint](implementation-history.md#archived-2026-10-15-checkpoint-selected-skill-construction)
+retains its original authenticated artifacts and finite recipe scope.
 
-The separate runtime observations have 28 group deliveries: eighteen Enemy and
-ten minion deliveries across six exact supplied Actors, of which two are Sniper.
-Full payload/recipient correspondence is proved; unique delivering-source
-attribution and numerical scaling/order are not. The existing narrowly scoped
-Player-buff comparison admits cross-stat inventory permutation while preserving
-full bodies, duplicate multiplicity and within-name order. Other context and
-child-buff fields remain exact. Coherently changed captures still fail the
-complete acquisition seal, even if they satisfy the local transport law.
+The fixed four-load acquisition's original strict raw-trace assertion failed
+(107.23s). Its original driver, observer, helpers, bootstrap, four reports,
+43-field difference report and failure log remain immutable. **All four complete
+MAIN/CALCS scalar snapshots agree exactly**, including unhooked JIT-off/on loads.
+The later offline proof checks each trace's exact source-pointer/List/AddMod
+correspondence, then compares complete per-stat sequences. Only incidental
+positions between different keyed stat buckets vary. It preserves same-stat
+order and multiplicity; it introduces no numeric reassociation, retry-until-pass
+protocol, native ordering law or source-bug exception.
 
-**Resume:** reconcile complete inherited-store inputs to the actual minion
-receiving calls, preserving source identity and recipient filters. Reuse the
-existing equipment/passive constructor evidence and selected bindings before
-acquiring more observations. The retained final MAIN Player store provides a
-starting inventory of 30 minion-modifier wrappers (29 tree, one configured repeat
-count), with no flat Physical records; it is not yet a complete temporal delivery
-proof. Reconcile complete bodies and multiplicity through the captured parent
-stores into `CalcPerform.lua` calls at 1854/3123/3377/3384, using the original
-list/parent traversal and Skill-parent binding. The missing authority is exact
-source-complete input at each call, not a new recipient API.
-`ExtraSkillStat`, arbitrary Party inputs, dynamic
-parent-weapon factories and final native source dispositions remain independent
-boundaries. No zero observation or finite local absence authorizes Complete
-membership. Selected input obligations remain four; complete builds remain 0/5.
-The older flat/base drafts retain useful arithmetic and parity controls, but
-their IDs overlap unrelated current allocations. Do not publish the two absent
-positive item families or copy obsolete draft collectors to claim selected-build
-progress; current Action consumers can read checked Player queries directly.
+The maintained optional acquisition driver now seals raw captures and code
+identities before assessment. Its capture-only contract still requires this
+separate semantic receiving proof. It has been compiled and its pure assessment
+exercised on the retained loads, including ten coherently erased-output controls;
+it has **not** repeated PoB acquisition or reclassified the original failure.
 
-Explicit offline retention passes (9.27s); all ten ordinary source/mutation tests
-pass on the final helper (17.10s), and strict target Clippy passes (0.62s).
-Independent code and final artifact/claims reviews are clear.
-Earlier retention failures exposed incorrect verifier assumptions about the
-number of Sniper recipients and cross-stat record order; the immutable source
-captures were neither changed nor repeated. The first Clippy run found two
-mechanical lint issues, fixed before the final ordinary rerun. Evidence:
-`runs/owned-self-flat-skill-{retain-03,ordinary-02,clippy-02}.log`.
-Retained review SHA-256:
-`b2c444e057d10a0a18308b3cbed3a2a52abd5f811f087800b6dcb56591b04533`.
+Offline retention passes (9.96s), all nine ordinary proof/mutation tests pass
+(11.88s), and the optional driver's parser test passes. Strict Clippy passes for
+the root target (0.82s) and PoB target (41.88s). Independent review is clear.
+Logs: `runs/owned-inherited-minion-{retain-02,ordinary-02,source-parser-02,clippy-01,source-clippy-01}.log`.
+Review SHA-256:
+`a02bb22eb2d5a0ade8b9c4be9551e047d9c976d249d615e9d8b8616b9239814f`.
+No canonical package, allocator ID, query, runtime API or native coverage changed.
+
+**Resume:** join the original minion store/profile initialization and direct
+`minionBuffs` payloads with this inherited proof to the actual dynamic
+parent-weapon and Hollow Palm gates. Separately finish the bounded direct-child
+`ExtraSkillStat` proof from existing construction evidence: both child callers
+reset a parentless minion store, and the Skill list reads it before later
+inherited delivery. That cannot prove absence in Player/summoner expansion or
+arbitrary future sources. Do not acquire another VM observation until a concrete
+missing boundary requires one.
+
+Once selected source admission is complete, publish freshly allocated self-flat
+queries and the final pre-conversion consumer together. Reuse intrinsic ranges,
+the combined added-damage factor and the reviewed coefficient/Enemy exclusions;
+Action consumers can read checked Player queries directly. The old drafts retain
+useful arithmetic controls, but their IDs overlap current allocations. Do not
+publish absent positive item families or recreate obsolete forwarding collectors
+merely to claim progress. Complete native builds remain **0/5**.
 
 ## Previous checkpoint: Skill support and exact aggregation
 
@@ -688,11 +705,15 @@ mechanic, generated policy body or runtime code changed. Evidence:
 The hosted run is still active with failed validation; the local repair is not
 a hosted green result.
 
-At the latest October 15 check, both platform workspace and Import jobs pass,
-as does Ubuntu CLI shard 3. The remaining CLI/PoB jobs are still running; no new
-distinct failure has appeared. Main revision `f7e6a9b8` is queued behind that
-older run. Pending revisions may coalesce; preserve the distinction between
-local repair validation and a completed hosted run of the repaired revision.
+At the 09:23 UTC October 15 check, both platform workspace and Import jobs pass,
+as do Ubuntu CLI shards 1 and 3. The newly failed Ubuntu CLI shard 0
+(`116297674792`) contains only three configured-Enemy source checks and Player
+Withered failing the same overwritten evidence hash in both feature profiles.
+The immutable evidence repair below, pushed in `4f4445d0`, already corrects all
+four failures; no additional code change is needed. The complete job log is
+`runs/ci-job-116297674792.log`. Other CLI/PoB jobs remain active, and main revision
+`a07c6064` has pending run `38712322558`. Pending revisions may coalesce;
+local repair validation is not a completed hosted run of the repaired revision.
 
 The new input's source checks also exposed overwritten historical evidence:
 quest reconciliation had replaced `configuration-review.json`, which five

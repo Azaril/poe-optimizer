@@ -1,0 +1,56 @@
+{
+  "comparison": {
+    "numeric_reassociation_authority": false,
+    "per_name_receiving_effects_equal": true,
+    "raw_execution_traces_equal": false,
+    "raw_order_preserved": true,
+    "sources": {
+      "actual_skill_deliveries_joined": 10,
+      "all_later_minion_store_writers_accounted": false,
+      "configured_repeat_wrappers": 1,
+      "constructor_snapshots": 21,
+      "exact_recipient_occurrences": {
+        "{\"matches\":[{\"effect_id\":\"SummonSandDjinnPlayer\",\"ordinal\":2,\"source\":{\"matches\":[{\"enable_global_1\":true,\"enable_global_2\":false,\"gem_id\":\"Metadata/Items/Gems/SkillGemAscendancySummonSandDjinn\",\"gem_index\":1,\"group_enabled\":true,\"group_index\":2,\"group_is_active_socket_group\":true,\"group_label\":\"\",\"physical_gem_id\":\"Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn\",\"raw_level\":1,\"raw_quality\":0,\"source_enabled\":true}],\"source_present\":true}}]}": 1,
+        "{\"matches\":[{\"effect_id\":\"SummonSandDjinnPlayer\",\"ordinal\":6,\"source\":{\"matches\":[{\"enable_global_1\":true,\"enable_global_2\":true,\"gem_id\":\"Metadata/Items/Gems/SkillGemAscendancySummonSandDjinn\",\"gem_index\":1,\"group_enabled\":true,\"group_index\":5,\"group_is_active_socket_group\":true,\"group_label\":\"\",\"physical_gem_id\":\"Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn\",\"raw_level\":20,\"raw_quality\":0,\"source_enabled\":true}],\"source_present\":true}}]}": 1,
+        "{\"matches\":[{\"effect_id\":\"SummonSkeletalArsonistsPlayer\",\"ordinal\":1,\"source\":{\"matches\":[{\"enable_global_1\":true,\"enable_global_2\":true,\"gem_id\":\"Metadata/Items/Gems/SkillGemSkeletalArsonist\",\"gem_index\":1,\"group_enabled\":true,\"group_index\":1,\"group_is_active_socket_group\":true,\"group_label\":\"\",\"physical_gem_id\":\"Metadata/Items/Gems/SkillGemSkeletalArsonist\",\"raw_level\":20,\"raw_quality\":0,\"source_enabled\":true}],\"source_present\":true}}]}": 2,
+        "{\"matches\":[{\"effect_id\":\"SummonSkeletalFrostMagesPlayer\",\"ordinal\":5,\"source\":{\"matches\":[{\"enable_global_1\":true,\"enable_global_2\":true,\"gem_id\":\"Metadata/Items/Gems/SkillGemSkeletalFrostMage\",\"gem_index\":1,\"group_enabled\":true,\"group_index\":4,\"group_is_active_socket_group\":true,\"group_label\":\"\",\"physical_gem_id\":\"Metadata/Items/Gems/SkillGemSkeletalFrostMage\",\"raw_level\":20,\"raw_quality\":0,\"source_enabled\":true}],\"source_present\":true}}]}": 1,
+        "{\"matches\":[{\"effect_id\":\"SummonSkeletalReaversPlayer\",\"ordinal\":9,\"source\":{\"matches\":[{\"enable_global_1\":true,\"enable_global_2\":true,\"gem_id\":\"Metadata/Items/Gems/SkillGemSkeletalReaver\",\"gem_index\":1,\"group_enabled\":true,\"group_index\":7,\"group_is_active_socket_group\":true,\"group_label\":\"\",\"physical_gem_id\":\"Metadata/Items/Gems/SkillGemSkeletalReaver\",\"raw_level\":20,\"raw_quality\":0,\"source_enabled\":true}],\"source_present\":true}}]}": 1,
+        "{\"matches\":[{\"effect_id\":\"SummonSkeletalSnipersPlayer\",\"ordinal\":4,\"source\":{\"matches\":[{\"enable_global_1\":true,\"enable_global_2\":true,\"gem_id\":\"Metadata/Items/Gems/SkillGemSkeletalSniper\",\"gem_index\":1,\"group_enabled\":true,\"group_index\":3,\"group_is_active_socket_group\":true,\"group_label\":\"\",\"physical_gem_id\":\"Metadata/Items/Gems/SkillGemSkeletalSniper\",\"raw_level\":20,\"raw_quality\":0,\"source_enabled\":true}],\"source_present\":true}}]}": 2,
+        "{\"matches\":[{\"effect_id\":\"SummonWaterDjinnPlayer\",\"ordinal\":10,\"source\":{\"matches\":[{\"enable_global_1\":true,\"enable_global_2\":false,\"gem_id\":\"Metadata/Items/Gems/SkillGemAscendancySummonWaterDjinn\",\"gem_index\":1,\"group_enabled\":true,\"group_index\":8,\"group_is_active_socket_group\":true,\"group_label\":\"\",\"physical_gem_id\":\"Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn\",\"raw_level\":1,\"raw_quality\":0,\"source_enabled\":true}],\"source_present\":true}}]}": 1,
+        "{\"matches\":[{\"effect_id\":\"SummonWaterDjinnPlayer\",\"ordinal\":12,\"source\":{\"matches\":[{\"enable_global_1\":true,\"enable_global_2\":true,\"gem_id\":\"Metadata/Items/Gems/SkillGemAscendancySummonWaterDjinn\",\"gem_index\":1,\"group_enabled\":true,\"group_index\":9,\"group_is_active_socket_group\":true,\"group_label\":\"\",\"physical_gem_id\":\"Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn\",\"raw_level\":20,\"raw_quality\":0,\"source_enabled\":true}],\"source_present\":true}}]}": 1
+      },
+      "inherited_wrapper_occurrences": 30,
+      "recipe_value_evaluation_parity": false,
+      "tree_wrappers": 29
+    },
+    "temporal": {
+      "all_minion_store_writers_accounted": false,
+      "appended": 307,
+      "deliveries": 10,
+      "life_pool_branches_observed_absent": true,
+      "native_coverage_authorized": false,
+      "performs": 18
+    },
+    "within_name_order_and_duplicates_exact": true
+  },
+  "four_scalar_controls_exact": true,
+  "kind": "finite-original-inherited-minion-delivery",
+  "original_bodies_sha256": "be50b1e712c3a3f87c9b8ec91460487f985a480a4baafb0679704386dbe9dee9",
+  "remaining": [
+    "ExtraSkillStat source inputs and computed-name expansion",
+    "Complete direct/local selected Actor supplier membership and native contributor mapping",
+    "Dynamic parent-weapon/Hollow Palm/Rallying Cry gates must be joined to the same admitted selection",
+    "Direct minionBuffs AddList delivery is separately covered by existing construction/runtime evidence",
+    "No final self-flat query or pre-conversion consumer is published by this packet"
+  ],
+  "schema_version": 1,
+  "scope": {
+    "actual_list_parent_and_receiving_correspondence": true,
+    "all_minion_store_writers_accounted": false,
+    "arbitrary_outer_tags_or_recipient_filters": false,
+    "native_coverage_authorized": false,
+    "ordinary_recipe_value_parity": false,
+    "selected_spectre_bypass_absent": true
+  },
+  "source_authority_sha256": "03a2c140246a44644fb9bfa7552c543259d41b5bed8b04201d29031b2f4bcf6c"
+}

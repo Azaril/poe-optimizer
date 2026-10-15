@@ -1,0 +1,217 @@
+[
+  {
+    "path": "$.deliveries[4].added[0].after_count",
+    "a": 1,
+    "b": 5
+  },
+  {
+    "path": "$.deliveries[4].added[0].before_count",
+    "a": 0,
+    "b": 4
+  },
+  {
+    "path": "$.deliveries[4].added[0].body.name",
+    "a": "CooldownRecovery",
+    "b": "Damage"
+  },
+  {
+    "path": "$.deliveries[4].added[0].body.type",
+    "a": "INC",
+    "b": "MORE"
+  },
+  {
+    "path": "$.deliveries[4].added[1].after_count",
+    "a": 5,
+    "b": 1
+  },
+  {
+    "path": "$.deliveries[4].added[1].before_count",
+    "a": 4,
+    "b": 0
+  },
+  {
+    "path": "$.deliveries[4].added[1].body.name",
+    "a": "Damage",
+    "b": "CooldownRecovery"
+  },
+  {
+    "path": "$.deliveries[4].added[1].body.type",
+    "a": "MORE",
+    "b": "INC"
+  },
+  {
+    "path": "$.deliveries[4].list_return[0].body.mod.name",
+    "a": "CooldownRecovery",
+    "b": "Damage"
+  },
+  {
+    "path": "$.deliveries[4].list_return[0].body.mod.type",
+    "a": "INC",
+    "b": "MORE"
+  },
+  {
+    "path": "$.deliveries[4].list_return[1].body.mod.name",
+    "a": "Damage",
+    "b": "CooldownRecovery"
+  },
+  {
+    "path": "$.deliveries[4].list_return[1].body.mod.type",
+    "a": "MORE",
+    "b": "INC"
+  },
+  {
+    "path": "$.deliveries[4].source_stores[1].records[0].body.value.mod.name",
+    "a": "CooldownRecovery",
+    "b": "Damage"
+  },
+  {
+    "path": "$.deliveries[4].source_stores[1].records[0].body.value.mod.type",
+    "a": "INC",
+    "b": "MORE"
+  },
+  {
+    "path": "$.deliveries[4].source_stores[1].records[1].body.value.mod.name",
+    "a": "Damage",
+    "b": "CooldownRecovery"
+  },
+  {
+    "path": "$.deliveries[4].source_stores[1].records[1].body.value.mod.type",
+    "a": "MORE",
+    "b": "INC"
+  },
+  {
+    "path": "$.deliveries[4].source_stores_after[1].records[0].body.value.mod.name",
+    "a": "CooldownRecovery",
+    "b": "Damage"
+  },
+  {
+    "path": "$.deliveries[4].source_stores_after[1].records[0].body.value.mod.type",
+    "a": "INC",
+    "b": "MORE"
+  },
+  {
+    "path": "$.deliveries[4].source_stores_after[1].records[1].body.value.mod.name",
+    "a": "Damage",
+    "b": "CooldownRecovery"
+  },
+  {
+    "path": "$.deliveries[4].source_stores_after[1].records[1].body.value.mod.type",
+    "a": "MORE",
+    "b": "INC"
+  },
+  {
+    "path": "$.deliveries[5].list_return[0].exact_raw_value_candidates[0].position",
+    "a": 8,
+    "b": 7
+  },
+  {
+    "path": "$.deliveries[5].source_stores[1].records[0].position",
+    "a": 8,
+    "b": 7
+  },
+  {
+    "path": "$.deliveries[5].source_stores_after[1].records[0].position",
+    "a": 8,
+    "b": 7
+  },
+  {
+    "path": "$.deliveries[7].added[0].after_count",
+    "a": 1,
+    "b": 5
+  },
+  {
+    "path": "$.deliveries[7].added[0].before_count",
+    "a": 0,
+    "b": 4
+  },
+  {
+    "path": "$.deliveries[7].added[0].body.name",
+    "a": "CooldownRecovery",
+    "b": "Damage"
+  },
+  {
+    "path": "$.deliveries[7].added[0].body.type",
+    "a": "INC",
+    "b": "MORE"
+  },
+  {
+    "path": "$.deliveries[7].added[1].after_count",
+    "a": 5,
+    "b": 1
+  },
+  {
+    "path": "$.deliveries[7].added[1].before_count",
+    "a": 4,
+    "b": 0
+  },
+  {
+    "path": "$.deliveries[7].added[1].body.name",
+    "a": "Damage",
+    "b": "CooldownRecovery"
+  },
+  {
+    "path": "$.deliveries[7].added[1].body.type",
+    "a": "MORE",
+    "b": "INC"
+  },
+  {
+    "path": "$.deliveries[7].list_return[0].body.mod.name",
+    "a": "CooldownRecovery",
+    "b": "Damage"
+  },
+  {
+    "path": "$.deliveries[7].list_return[0].body.mod.type",
+    "a": "INC",
+    "b": "MORE"
+  },
+  {
+    "path": "$.deliveries[7].list_return[1].body.mod.name",
+    "a": "Damage",
+    "b": "CooldownRecovery"
+  },
+  {
+    "path": "$.deliveries[7].list_return[1].body.mod.type",
+    "a": "MORE",
+    "b": "INC"
+  },
+  {
+    "path": "$.deliveries[7].source_stores[1].records[0].body.value.mod.name",
+    "a": "CooldownRecovery",
+    "b": "Damage"
+  },
+  {
+    "path": "$.deliveries[7].source_stores[1].records[0].body.value.mod.type",
+    "a": "INC",
+    "b": "MORE"
+  },
+  {
+    "path": "$.deliveries[7].source_stores[1].records[1].body.value.mod.name",
+    "a": "Damage",
+    "b": "CooldownRecovery"
+  },
+  {
+    "path": "$.deliveries[7].source_stores[1].records[1].body.value.mod.type",
+    "a": "MORE",
+    "b": "INC"
+  },
+  {
+    "path": "$.deliveries[7].source_stores_after[1].records[0].body.value.mod.name",
+    "a": "CooldownRecovery",
+    "b": "Damage"
+  },
+  {
+    "path": "$.deliveries[7].source_stores_after[1].records[0].body.value.mod.type",
+    "a": "INC",
+    "b": "MORE"
+  },
+  {
+    "path": "$.deliveries[7].source_stores_after[1].records[1].body.value.mod.name",
+    "a": "Damage",
+    "b": "CooldownRecovery"
+  },
+  {
+    "path": "$.deliveries[7].source_stores_after[1].records[1].body.value.mod.type",
+    "a": "MORE",
+    "b": "INC"
+  }
+]
