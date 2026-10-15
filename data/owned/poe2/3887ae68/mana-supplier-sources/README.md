@@ -8,8 +8,9 @@ production evaluation never loads these archives.
 
 The [selected radius review](radius-review.md) additionally reconciles empty
 passive-jewel construction using complete bodies and explicitly observed
-invocation/slot inputs. It preserves the separate ordinary-passive,
-generated-skill and later-delivery obligations.
+invocation/slot inputs. The subsequent ordinary-passive review below covers
+finite parsed-record transport; generated-skill and later-delivery obligations
+remain separate.
 
 The required source census includes Mana conversion to Energy Shield, Armour
 and Evasion; direct `ExtraMana` and `ManaTotal`; and both `ConvertToMana` and
@@ -52,6 +53,48 @@ Missing/altered callbacks, defaults, source identities, nested zero suppliers,
 prior-record rewrites and nonempty custom text are rejected. These are bounded
 direct-writer exclusions, not proof of later direct configuration consumers,
 general quest parsing, native completeness or saved-field accounting.
+
+## Selected passive constructor transport
+
+`passive-bodies.json` retains ten exact reset, constructor and transport spans
+from CalcSetup, ModList and ModStore. Complete files are authenticated to the
+pinned source manifest; the only new source archive is the 2,020-byte
+`passive-ModList.lua.gz`. Existing source02 and radius evidence are reused,
+without another PoB run or historical runtime execution.
+
+`passive-review.json` reconstructs 57 keyed selected nodes with 55 distinct full
+bodies. Six mode/keystone-argument groups account for all 2,394 anonymous node
+returns, including 504 empty returns. Full-body multiplicity supplies the
+correspondence: the proof never assigns a missing node ID from another capture's
+iteration order. Each of 42 node-list outputs contains the exact 57-record
+union. Ordered node records, raw list order and within-name order retain
+independent commitments; this is not a numeric reassociation law.
+
+Recursive inspection excludes all fifteen adjustment names from these parsed
+records and refuses unreviewed replacement/scaling/explosion gates, callbacks,
+aliases and weapon-set rewrites. Twelve empty parses include nine declarations
+with text and three blank roots/socket; they differ from the twelve native
+Partial owners. Empty output grants no mechanics-absence proof and does not
+override separately established intrinsic coverage. The two `ExtraSkill` roots
+retain their exact declarations and
+unproved descendant delivery. Arbitrary parsing, support/inherited/later
+delivery, positive scaling, numerical order and all native/global coverage
+remain outside this proof.
+
+`owned_mana_passive_sources` reconstructs the report and exercises source-body,
+nested supplier, gate, duplicate/count, order, generated-root and metadata
+mutations. Its ignored `retain_selected_passive_source_review` entry explicitly
+regenerates the retained report from the same authenticated inputs.
+Ordinary verification needs no Lua, local run directory or native package change.
+
+Explicit retention and all seven ordinary tests pass. Reusing the radius helper's
+authenticated supplier module removes duplicate test compilation; all seven
+radius regressions and strict Clippy for both targets pass. Independent review
+is clean. Logs use `runs/owned-mana-passive-` with suffixes `retain-01.log`,
+`ordinary-01.log`, `clippy-01.log`, `radius-ordinary-02.log` and
+`radius-clippy-02.log`. The first Clippy failure records the duplicate-module
+repair; no source capture was repeated. Retained review SHA-256:
+`007e491a5188ecd36d9673839b3fd382e7bffa0c746ff1b5d7604548ad85d2f1`.
 
 ## Exact source and owned identities
 
@@ -123,7 +166,7 @@ callbacks. The selected 34 quest callback constructions now reconcile to an
 independently authenticated finite source matrix and 17 saved native rewards;
 see `configuration-review.md`. General quest parsing and later direct
 configuration consumers remain open, plus source-only versus unresolved inputs;
-node/socket/radius and generated/support declarations/constructors; and later
+unparsed passive mechanics and generated/support declarations/constructors; and later
 procedural transformations and source-to-recipient delivery. Exact native
 source dispositions and complete checked-query membership must then be
 authored. These are explicit pending work, not inferred false flags or empty

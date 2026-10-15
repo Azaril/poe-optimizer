@@ -1,0 +1,750 @@
+{
+  "bodies_sha256": "e8059ddaeaad419422c2defb07c00f6237a7997c7f70321edef3d65e25feea0b",
+  "historical_membership_publication": "3ee48944d26b5351ecc267cc2e87637b68a8b6153b7ab2bbc5c906f11e4bd702",
+  "kind": "selected-passive-constructor-source-review",
+  "mana_adjustment_names": [
+    "ArmourConvertToMana",
+    "ArmourGainAsMana",
+    "EnergyShieldConvertToMana",
+    "EnergyShieldGainAsMana",
+    "EvasionConvertToMana",
+    "EvasionGainAsMana",
+    "ExtraMana",
+    "LifeConvertToMana",
+    "LifeGainAsMana",
+    "ManaConvertToArmour",
+    "ManaConvertToEnergyShield",
+    "ManaConvertToEvasion",
+    "ManaTotal",
+    "WardConvertToMana",
+    "WardGainAsMana"
+  ],
+  "memberships_sha256": "864ed8544149ec621451a14ac810aede9c66f9a63a8d445c13a930109e235b82",
+  "observed": {
+    "anonymous_body_lanes": {
+      "CALCS:null": 57,
+      "CALCS:true": 57,
+      "CALCULATOR:null": 228,
+      "CALCULATOR:true": 228,
+      "MAIN:null": 912,
+      "MAIN:true": 912
+    },
+    "distinct_node_bodies": 55,
+    "empty_node_returns": 504,
+    "empty_parsed_declarations": [
+      {
+        "description": {},
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "distanceToClassStart": 13,
+          "icon": "Art/2DArt/SkillIcons/passives/MasteryBlank.dds",
+          "pathDist": 0,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 7960,
+        "stats": {}
+      },
+      {
+        "description": {},
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "icon": "Art/2DArt/SkillIcons/passives/damage.dds",
+          "modKey": "",
+          "pathDist": 0,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 8305,
+        "stats": {}
+      },
+      {
+        "description": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "Grants Skill: Navira's Fracturing"
+            }
+          ]
+        },
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/WaterDjinnChiilldedGroundBurst.dds",
+          "modKey": "",
+          "pathDist": 0,
+          "unknown": true,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 10561,
+        "stats": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "Grants Skill: Navira's Fracturing"
+            }
+          ]
+        }
+      },
+      {
+        "description": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill"
+            }
+          ]
+        },
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "icon": "Art/2DArt/SkillIcons/passives/PuppeteerNode.dds",
+          "pathDist": 0,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 14686,
+        "stats": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill"
+            }
+          ]
+        }
+      },
+      {
+        "description": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "20% increased Effect of Puppet Master"
+            }
+          ]
+        },
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "icon": "Art/2DArt/SkillIcons/passives/PuppeteerNode.dds",
+          "pathDist": 0,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 19318,
+        "stats": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "20% increased Effect of Puppet Master"
+            }
+          ]
+        }
+      },
+      {
+        "description": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "Grants Skill: Kelari's Deception"
+            }
+          ]
+        },
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "icon": "Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/SandDjinnExplosiveTeleport.dds",
+          "modKey": "",
+          "pathDist": 0,
+          "unknown": true,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 23265,
+        "stats": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "Grants Skill: Kelari's Deception"
+            }
+          ]
+        }
+      },
+      {
+        "description": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% chance to gain Archon of Undeath when you use a Command skill"
+            }
+          ]
+        },
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "icon": "Art/2DArt/SkillIcons/passives/ArchonofUndeathNoteble.dds",
+          "pathDist": 0,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 26926,
+        "stats": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% chance to gain Archon of Undeath when you use a Command skill"
+            }
+          ]
+        }
+      },
+      {
+        "description": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% increased effect of Archon Buffs on you"
+            }
+          ]
+        },
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "icon": "Art/2DArt/SkillIcons/passives/ArchonofUndeathNode.dds",
+          "pathDist": 0,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 45333,
+        "stats": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% increased effect of Archon Buffs on you"
+            }
+          ]
+        }
+      },
+      {
+        "description": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill"
+            }
+          ]
+        },
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "icon": "Art/2DArt/SkillIcons/passives/PuppeteerNode.dds",
+          "pathDist": 0,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 53324,
+        "stats": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill"
+            }
+          ]
+        }
+      },
+      {
+        "description": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill"
+            }
+          ]
+        },
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "icon": "Art/2DArt/SkillIcons/passives/PuppeteerNode.dds",
+          "pathDist": 0,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 53795,
+        "stats": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% Surpassing Chance to gain a Puppet Master stack whenever you use a Command Skill"
+            }
+          ]
+        }
+      },
+      {
+        "description": {},
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "icon": "Art/2DArt/SkillIcons/passives/blankInt.dds",
+          "pathDist": 0,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 54447,
+        "stats": {}
+      },
+      {
+        "description": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% increased Mana Cost Efficiency of Command Skills"
+            },
+            {
+              "index": 2,
+              "value": "+1 maximum stacks of Puppet Master"
+            }
+          ]
+        },
+        "fields": {
+          "alloc": true,
+          "allocMode": 0,
+          "connectedToStart": true,
+          "icon": "Art/2DArt/SkillIcons/passives/PuppeteerNoteble.dds",
+          "pathDist": 0,
+          "visited": false
+        },
+        "mechanics_absence_proven": false,
+        "source_node": 62210,
+        "stats": {
+          "_positions": [
+            {
+              "index": 1,
+              "value": "15% increased Mana Cost Efficiency of Command Skills"
+            },
+            {
+              "index": 2,
+              "value": "+1 maximum stacks of Puppet Master"
+            }
+          ]
+        }
+      }
+    ],
+    "environment_count": 21,
+    "finite_parsed_record_transport_reconciled": true,
+    "generated_boundaries": [
+      {
+        "body": {
+          "flags": 0,
+          "keywordFlags": 0,
+          "name": "ExtraSkill",
+          "source": "Tree:13289",
+          "type": "LIST",
+          "value": {
+            "level": 1,
+            "skillId": "SummonSandDjinnPlayer"
+          }
+        },
+        "descendant_delivery_covered": false,
+        "source_node": 13289
+      },
+      {
+        "body": {
+          "flags": 0,
+          "keywordFlags": 0,
+          "name": "ExtraSkill",
+          "source": "Tree:32705",
+          "type": "LIST",
+          "value": {
+            "level": 1,
+            "skillId": "SummonWaterDjinnPlayer"
+          }
+        },
+        "descendant_delivery_covered": false,
+        "source_node": 32705
+      }
+    ],
+    "list_order_receipts": [
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 0,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 1,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "CALCULATOR:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 2,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "CALCULATOR:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 3,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 4,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 5,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 6,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 7,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 8,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 9,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 10,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 11,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 12,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 13,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 14,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 15,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 16,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 17,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 18,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 19,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 20,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 21,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 22,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 23,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 24,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 25,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 26,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 27,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 28,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 29,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 30,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 31,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 32,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "MAIN:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 33,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "CALCS:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 34,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "CALCS:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 35,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "CALCULATOR:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 36,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "CALCULATOR:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 37,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "CALCULATOR:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 38,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "CALCULATOR:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 39,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "CALCULATOR:true",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 40,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      },
+      {
+        "lane": "CALCULATOR:null",
+        "numerical_order_authority": false,
+        "raw_order_sha256": "dcf7c126440eb2e801d2d18792825145065164899473f2fbb154bfde44e15df2",
+        "records": 57,
+        "source_list_ordinal": 41,
+        "within_name_order_sha256": "f3ac87fd0326cb4ceb4d66dc601bf55b7ece6b3e812242cca83b3e00c55c7940"
+      }
+    ],
+    "native_coverage_authorized": false,
+    "node_lists": 42,
+    "node_returns": 2394,
+    "ordered_records_returned": 2394,
+    "root_record_names": {
+      "Condition:ConnectedToSorceressStart": 1,
+      "Condition:ConnectedToWitchStart": 1,
+      "Damage": 1,
+      "ExtraSkill": 2,
+      "Int": 18,
+      "MinionModifier": 29,
+      "ReservationEfficiency": 1,
+      "Str": 4
+    },
+    "selected_nodes": 57
+  },
+  "radius_report_sha256": "8784718a733d10878da117724b3dff69e97d380c0140bfbab1cc02ffbf11a2da",
+  "radius_review_sha256": "6cfff1148386ee1d5b98eaab1d334b5eb745194bd623c2e1a725d9335ce760a2",
+  "schema_version": 1,
+  "scope": {
+    "arbitrary_parsing_covered": false,
+    "current_native_package_changed": false,
+    "empty_parse_means_no_mechanics": false,
+    "finite_selected_parsed_record_transport_only": true,
+    "generated_skill_delivery_covered": false,
+    "native_coverage_authorized": false,
+    "native_partial_owners_closed": 0,
+    "node_ids_assigned_to_anonymous_returns": false,
+    "numerical_scaling_or_order_covered": false,
+    "support_or_later_recipient_delivery_covered": false
+  },
+  "source02_comparison_sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+}

@@ -98,7 +98,13 @@ using complete constructor bodies and explicit item/override inputs. Four fresh
 reference loads agree on captured scalar output, and seven offline mutation
 tests pass. The native package is unchanged: this source proof neither implements
 generic radius effects nor completes native supplier inventories. Ordinary
-passive construction and later generated-skill/support delivery remain open.
+passive construction was a separate boundary. The subsequent
+[passive transport proof](../data/owned/poe2/3887ae68/mana-supplier-sources/README.md)
+now reconciles its finite parsed records through complete constructor and
+transport bodies: 57 keyed nodes match 2,394 anonymous returns without inventing
+per-return identities. Full record bodies, duplicates and order commitments are
+retained. Arbitrary parsing, empty-parsed effects, generated-skill/support
+delivery and native completeness remain open.
 
 The [guarded Player Life consumer](../data/owned/poe2/3887ae68/player-life-pool/README.md)
 now publishes the final formula on the existing Life Stat using direct checked

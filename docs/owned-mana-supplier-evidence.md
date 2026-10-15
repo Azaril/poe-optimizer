@@ -120,8 +120,22 @@ Actual callback invocations do not account for unexecuted branches. A function
 reference needs a complete body review before it supplies an exclusion. Item
 snapshots must be joined with the existing exact slot/bonded-item recipe audit;
 environment construction must be joined with later buff and recipient delivery.
-Node, generated-skill, support and socket records similarly require complete
-constructor/declaration accounting.
+Generated-skill and support records similarly require complete
+constructor/declaration accounting. The selected passive follow-up now checks
+ten complete reset/constructor/transport bodies against the existing evidence.
+Its 57 keyed declarations contain 55 distinct full bodies; exact counts across
+six constructor groups reconcile all 2,394 anonymous returns and 504 empty
+returns without assigning missing node identities. Each of 42 list outputs
+preserves the full 57-record union. Per-node sequence and independent raw and
+within-name order commitments preserve the distinction between inventory
+correspondence and numerical order.
+
+All fifteen adjustment names are excluded recursively from this finite parsed
+record domain, with explicit transformation-gate refusals. Twelve empty parses
+include nine declarations with text and three blank roots/socket; this is not
+the inventory of twelve native Partial owners. Empty parsing grants no mechanics
+absence proof and does not supersede separate intrinsic proofs. Two exact
+generated roots retain descendant-delivery obligations. No native owner or input closes.
 
 The [supplier packet](../data/owned/poe2/3887ae68/mana-supplier-sources/README.md)
 binds these observations to saved source occurrences and the existing owned
@@ -140,12 +154,11 @@ nine authored skills, sixteen support assignments, twenty-three physical gems,
 and three generated input bindings.
 
 Continue the selected neutral-domain review before positive transfer mechanics.
-The next bounded candidate is ordinary selected-passive construction: join
-source02's keyed declarations/lists and gating inputs to the complete node/list
-and ModList/ModStore transport bodies. Prove preservation of the finite writer-name
-domain, rather than infer absence from aggregate zeros. Node-return rows lack
-explicit IDs; do not infer cross-capture identity from iteration order.
-Generated-skill roots, later delivery and numerical scaling/order stay separate.
-The [implementation plan](implementation.md) owns this next step.
+The selected passive parsed-record transport is now reconciled; its arbitrary
+parser domains, generated-skill roots, later delivery and numerical scaling/order
+stay separate. The next bounded source step is the eight authenticated equipment
+loads and nine exact uses: reconcile complete construction bodies and existing
+owned/slot bindings before item-to-store delivery and native dispositions. The
+[implementation plan](implementation.md) owns the next delivery step.
 Preserve all four Original05 input obligations, prior Partial owners and global
 query/plan gates until their own proofs and native implementations are complete.

@@ -1,0 +1,121 @@
+{
+  "spans": [
+    {
+      "role": "scratch-list-reset",
+      "last": 197,
+      "sha256": "f92084ff7a6e3ee08ddb835ea222620ab99867b1ee8d9fb238c47755eb65dcd1",
+      "first": 188,
+      "path": "src/Modules/CalcSetup.lua",
+      "body": "local function resetModList(list)\n\tfor i = #list, 1, -1 do\n\t\tlist[i] = nil\n\tend\n\tlist.multipliers = wipeTable(list.multipliers)\n\tlist.conditions = wipeTable(list.conditions)\n\tlist.actor = wipeTable(list.actor)\n\tlist.parent = false\n\treturn list\nend\n"
+    },
+    {
+      "role": "complete-selected-node-constructor",
+      "last": 412,
+      "sha256": "cdae882d1801e720fcece3a43cd388d58db6867f218d7ea5b80eb34f3e8dd490",
+      "first": 200,
+      "path": "src/Modules/CalcSetup.lua",
+      "body": "function calcs.buildModListForNode(env, node, reuse, incSmallPassiveSkill, includeKeystoneMods)\n\tlocal localSmallIncEffect = 0\n\tlocal localNotableIncEffect = 0\n\tlocal modList = reuse and resetModList(reuse) or new(\"ModList\"):ModList()\n\tif node.type == \"Keystone\" then\n\t\tif includeKeystoneMods then\n\t\t\tmodList:AddList(node.modList)\n\t\tend\n\t\tif node.keystoneMod then\n\t\t\tmodList:AddMod(node.keystoneMod)\n\t\tend\n\telse\n\t\tmodList:AddList(node.modList)\n\tend\n\n\tif #env.radiusJewelList > 0 and not GlobalCache.cachedData[env.mode].radiusJewelData then\n\t\trefreshJewelStatCache(env)\n\tend\n\t-- Run first pass radius jewels // jewel functions caught by jewelOtherFuncs\n\tfor _, rad in pairs(env.radiusJewelList) do\n\t\tif rad.type == \"Other\" and rad.nodes[node.id] and rad.nodes[node.id].type ~= \"Mastery\" then\n\t\t\tif rad.item.baseName:find(\"Time%-Lost\") == nil and rad.item.baseName:find(\"Timeless Jewel\") == nil then\n\t\t\t\trunRadiusJewelFunc(rad, node, modList, rad.data)\n\t\t\telseif node.type == \"Normal\" or node.type == \"Notable\" then\n\t\t\t\tlocal cache = GlobalCache.cachedData[env.mode].radiusJewelData[rad.nodeId]\n\t\t\t\tif not cache or (cache.hash ~= rad.jewelHash) then\n\t\t\t\t\trefreshJewelStatCache(env)\n\t\t\t\tend\n\t\t\t\tif node.type == \"Normal\" and node.isAttribute and cache and #cache.attributeModList > 0 then\n\t\t\t\t\tmodList:CopyList(cache.attributeModList)\n\t\t\t\telseif node.type == \"Normal\" and not node.isAttribute and cache and #cache.smallModList > 0 then\n\t\t\t\t\tmodList:CopyList(cache.smallModList)\n\t\t\t\telseif node.type == \"Notable\" and cache and #cache.notableModList > 0 then\n\t\t\t\t\tmodList:CopyList(cache.notableModList)\n\t\t\t\tend\n\t\t\t\tbreak\n\t\t\tend\n\t\tend\n\tend\n\n\t-- prefilter the modlist so that every :Flag() call does not have to go through the entire mod list\n\tlocal hasNoEffect, hasAllocNoEffect, hasScale, hasOtherEffect, hasExtraSkill, hasExplode\n\tfor i = 1, #modList do\n\t\tlocal name = modList[i].name\n\t\tif name == \"PassiveSkillHasNoEffect\" then\n\t\t\thasNoEffect = true\n\t\telseif name == \"AllocatedPassiveSkillHasNoEffect\" then\n\t\t\thasAllocNoEffect = true\n\t\telseif name == \"PassiveSkillEffect\" then\n\t\t\thasScale = true\n\t\telseif name == \"PassiveSkillHasOtherEffect\" then\n\t\t\thasOtherEffect = true\n\t\telseif name == \"ExtraSkill\" then\n\t\t\thasExtraSkill = true\n\t\telseif name == \"CanExplode\" then\n\t\t\thasExplode = true\n\t\tend\n\tend\n\n\tif (hasNoEffect and modList:Flag(nil, \"PassiveSkillHasNoEffect\")) or (env.allocNodes[node.id] and (hasAllocNoEffect and modList:Flag(nil, \"AllocatedPassiveSkillHasNoEffect\"))) then\n\t\twipeTable(modList)\n\t\thasScale = false\n\t\thasOtherEffect = nil\n\t\thasExtraSkill = nil\n\t\thasExplode = nil\n\tend\n\n\t-- Apply effect scaling\n\tif hasScale then\n\t\tlocal scale = calcLib.mod(modList, nil, \"PassiveSkillEffect\")\n\t\tif scale ~= 1 then\n\t\t\tlocal scaledList = new(\"ModList\"):ModList()\n\t\t\tscaledList:ScaleAddList(modList, scale)\n\t\t\tmodList = scaledList\n\t\tend\n\tend\n\n\t-- Run second pass radius jewels\n\tlocal rescan = false\n\tfor i = 1, #env.radiusJewelList do\n\t\tlocal rad = env.radiusJewelList[i]\n\t\tif rad.nodes[node.id] and rad.nodes[node.id].type ~= \"Mastery\" and (rad.type == \"Threshold\" or (rad.type == \"Self\" and env.allocNodes[node.id]) or (rad.type == \"SelfUnalloc\" and not env.allocNodes[node.id])) then\n\t\t\trunRadiusJewelFunc(rad, node, modList, rad.data)\n\t\t\trescan = true\n\t\t\thasOtherEffect = nil\n\t\t\thasExtraSkill = nil\n\t\t\thasExplode = nil\n\t\tend\n\tend\n\n\tif rescan then\n\t\tfor i = 1, #modList do\n\t\t\tlocal name = modList[i].name\n\t\t\tif name == \"PassiveSkillHasOtherEffect\" then\n\t\t\t\thasOtherEffect = true\n\t\t\telseif name == \"ExtraSkill\" then\n\t\t\t\thasExtraSkill = true\n\t\t\telseif name == \"CanExplode\" then\n\t\t\t\thasExplode = true\n\t\t\tend\n\t\tend\n\tend\n\n\tif hasOtherEffect and modList:Flag(nil, \"PassiveSkillHasOtherEffect\") then\n\t\tlocal newMods = modList:List(nil, \"NodeModifier\")\n\t\tfor i = 1, #newMods do\n\t\t\tlocal mod = newMods[i].mod\n\t\t\tif i == 1 then\n\t\t\t\twipeTable(modList)\n\t\t\t\thasExtraSkill = nil\n\t\t\t\thasExplode = nil\n\t\t\tend\n\t\t\tif mod.name == \"ExtraSkill\" then\n\t\t\t\thasExtraSkill = true\n\t\t\telseif mod.name == \"CanExplode\" then\n\t\t\t\thasExplode = true\n\t\t\tend\n\t\t\tmodList:AddMod(mod)\n\t\tend\n\tend\n\n\tnode.grantedSkills = wipeTable(node.grantedSkills)\n\tif hasExtraSkill then\n\t\tlocal list = modList:List(nil, \"ExtraSkill\")\n\t\tfor i = 1, #list do\n\t\t\tlocal skill = list[i]\n\t\t\tif skill.name ~= \"Unknown\" then\n\t\t\t\tt_insert(node.grantedSkills, {\n\t\t\t\t\tskillId = skill.skillId,\n\t\t\t\t\tlevel = skill.level,\n\t\t\t\t\tnoSupports = true,\n\t\t\t\t\tsource = \"Tree:\" .. node.id\n\t\t\t\t})\n\t\t\tend\n\t\tend\n\tend\n\n\tif hasExplode then\n\t\tif modList:Flag(nil, \"CanExplode\") then\n\t\t\tt_insert(env.explodeSources, node)\n\t\tend\n\tend\n\n\tfor i, mod in ipairs(modList) do\n\t\tlocal added = false\n\t\tfor j = #mod, 1, -1 do\n\t\t\tif mod[j].type == \"Condition\" and mod[j].var and mod[j].var:match(\"^WeaponSet\") then\n\t\t\t\tadded = true\n\t\t\t\tif node.allocMode ~= 0 then -- only update the conditional for WS1/WS2\n\t\t\t\t\tmod[j].var = \"WeaponSet\".. node.allocMode\n\t\t\t\telse -- if normal and condition exists, remove it\n\t\t\t\t\tt_remove(mod, j)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\t-- only add the conditional for WS1/WS2\n\t\tif not added and node.allocMode ~= 0 then\n\t\t\ttable.insert(mod, { type = \"Condition\", var = \"WeaponSet\".. node.allocMode })\n\t\telseif mod.parsedLine then\n\t\t\tlocal jewelSource = tonumber(mod.source:match(\"%d+\"))\n\t\t\tif env.build.spec.nodes[jewelSource].allocMode ~= 0 then\n\t\t\t\ttable.insert(mod, { type = \"Condition\", var = \"WeaponSet\".. env.build.spec.nodes[jewelSource].allocMode })\n\t\t\tend\n\t\tend\n\n\t\tlocal hasWSCondition = false\n\t\t-- if the jewelMod has a WS Condition, only add the incEffect given it matches the activeWeaponSet\n\t\t-- otherwise the mod came from a jewel that is allocMode 0, so it always applies\n\t\tif mod.name == \"JewelSmallPassiveSkillEffect\" then\n\t\t\tfor _, modCriteria in ipairs(mod) do\n\t\t\t\tif modCriteria.type == \"Condition\" and modCriteria.var and modCriteria.var:match(\"^WeaponSet\") then\n\t\t\t\t\tif (tonumber(modCriteria.var:match(\"(%d)\")) == (env.build.itemsTab.activeItemSet.useSecondWeaponSet and 2 or 1)) then\n\t\t\t\t\t\tlocalSmallIncEffect = mod.value\n\t\t\t\t\tend\n\t\t\t\t\thasWSCondition = true\n\t\t\t\tend\n\t\t\tend\n\t\t\tif not hasWSCondition then\n\t\t\t\tlocalSmallIncEffect = mod.value\n\t\t\tend\n\t\tend\n\t\tif mod.name == \"JewelNotablePassiveSkillEffect\" then\n\t\t\tfor _, modCriteria in ipairs(mod) do\n\t\t\t\tif modCriteria.type == \"Condition\" and modCriteria.var and modCriteria.var:match(\"^WeaponSet\") then\n\t\t\t\t\tif (tonumber(modCriteria.var:match(\"(%d)\")) == (env.build.itemsTab.activeItemSet.useSecondWeaponSet and 2 or 1)) then\n\t\t\t\t\t\tlocalNotableIncEffect = mod.value\n\t\t\t\t\tend\n\t\t\t\t\thasWSCondition = true\n\t\t\t\tend\n\t\t\tend\n\t\t\tif not hasWSCondition then\n\t\t\t\tlocalNotableIncEffect = mod.value\n\t\t\tend\n\t\tend\n\tend\n\n\t-- Apply Inc Node scaling from Hulking Form\n\tif (incSmallPassiveSkill + localSmallIncEffect) > 0 and node.type == \"Normal\" and not node.isAttribute and not node.ascendancyName then\n\t\tlocal scale = 1 + (incSmallPassiveSkill + localSmallIncEffect) / 100\n\t\tlocal scaledList = new(\"ModList\"):ModList()\n\t\tscaledList:ScaleAddList(modList, scale)\n\t\tmodList = scaledList\n\tend\n\n\tif localNotableIncEffect > 0 and node.type == \"Notable\" and not node.isAttribute and not node.ascendancyName then\n\t\tlocal scale = 1 + localNotableIncEffect / 100\n\t\tlocal scaledList = new(\"ModList\"):ModList()\n\t\tscaledList:ScaleAddList(modList, scale)\n\t\tmodList = scaledList\n\tend\n\n\treturn modList\nend\n"
+    },
+    {
+      "role": "complete-node-list-transport",
+      "last": 464,
+      "sha256": "a3d06d08b7f8c7f70926e3da8a2ad0f9f0404afa107bade394f5a250e43cf444",
+      "first": 415,
+      "path": "src/Modules/CalcSetup.lua",
+      "body": "function calcs.buildModListForNodeList(env, nodeList, finishJewels, includeKeystoneMods)\n\t-- Initialise radius jewels\n\tfor _, rad in pairs(env.radiusJewelList) do\n\t\twipeTable(rad.data)\n\t\trad.data.modSource = \"Tree:\"..rad.nodeId\n\tend\n\n\t-- calculate inc from SmallPassiveSkillEffect\n\tlocal inc = 0\n\tfor _, node in pairs(nodeList) do\n\t\tinc = inc + node.modList:Sum(\"INC\", nil ,\"SmallPassiveSkillEffect\")\n\tend\n\n\t-- Add node modifiers\n\tlocal modList = new(\"ModList\"):ModList()\n\t-- Outside MAIN mode the per-node list is merged into modList and then\n\t-- dropped, so a single list can be recycled for every node instead of\n\t-- allocating one each time.\n\tlocal scratch = env.mode ~= \"MAIN\" and new(\"ModList\"):ModList() or nil\n\tfor _, node in pairs(nodeList) do\n\t\tlocal nodeModList = calcs.buildModListForNode(env, node, scratch, inc, includeKeystoneMods)\n\t\tmodList:AddList(nodeModList)\n\t\tif env.mode == \"MAIN\" then\n\t\t\tnode.finalModList = nodeModList\n\t\tend\n\tend\n\n\tif finishJewels then\n\t\t-- Process extra radius nodes; these are unallocated nodes near conversion or threshold jewels that need to be processed\n\t\tfor _, node in pairs(env.extraRadiusNodeList) do\n\t\t\tlocal nodeModList = calcs.buildModListForNode(env, node, scratch, inc)\n\t\t\tif env.mode == \"MAIN\" then\n\t\t\t\tnode.finalModList = nodeModList\n\t\t\tend\n\t\tend\n\n\t\t-- Finalise radius jewels\n\t\tfor _, rad in pairs(env.radiusJewelList) do\n\t\t\trunRadiusJewelFunc(rad, nil, modList, rad.data)\n\t\t\tif env.mode == \"MAIN\" then\n\t\t\t\tif not rad.item.jewelRadiusData then\n\t\t\t\t\trad.item.jewelRadiusData = { }\n\t\t\t\tend -- used to calc Attributes in radius in itemsTab\n\t\t\t\trad.item.jewelRadiusData[rad.nodeId] = rad.data\n\t\t\tend\n\t\tend\n\tend\n\n\treturn modList\nend\n"
+    },
+    {
+      "role": "flat-list-construction-and-append",
+      "last": 31,
+      "sha256": "67b5434fc8a060a3ec603bcd63e5b27b6906e8a4c77f86ef384593b51d432050",
+      "first": 20,
+      "path": "src/Classes/ModList.lua",
+      "body": "local ModListClass = newClass(\"ModList\", \"ModStore\")\n\n---@param parent? ModStore\n---@return ModList\nfunction ModListClass:ModList(parent)\n\tself:ModStore(parent)\n\treturn self\nend\n\nfunction ModListClass:AddMod(mod)\n\tt_insert(self, mod)\nend\n"
+    },
+    {
+      "role": "ordered-list-append",
+      "last": 96,
+      "sha256": "edd9a0f269fce9879e5560691c31f6c19bc808b866c890cce0eef285ee6eeb77",
+      "first": 90,
+      "path": "src/Classes/ModList.lua",
+      "body": "function ModListClass:AddList(modList)\n\tif modList then\n\t\tfor i = 1, #modList do\n\t\t\tt_insert(self, modList[i])\n\t\tend\n\tend\nend\n"
+    },
+    {
+      "role": "list-value-lookup-boundary",
+      "last": 326,
+      "sha256": "03457c00081e442cc474b9c3a13baa5f5b8a62fd57b7fe49eaef7f044dd70135",
+      "first": 309,
+      "path": "src/Classes/ModList.lua",
+      "body": "function ModListClass:ListInternal(context, result, cfg, flags, keywordFlags, source, modName)\n\tfor i = 1, #self do\n\t\tlocal mod = self[i]\n\t\tif mod.name == modName and mod.type == \"LIST\" and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\tif mod[1] then\n\t\t\t\tlocal value = context:EvalMod(mod, cfg) or nullValue\n\t\t\t\tif value then\n\t\t\t\t\tt_insert(result, value)\n\t\t\t\tend\n\t\t\telseif mod.value then\n\t\t\t\tt_insert(result, mod.value)\n\t\t\tend\n\t\tend\n\tend\n\tif self.parent then\n\t\tself.parent:ListInternal(context, result, cfg, flags, keywordFlags, source, modName)\n\tend\nend\n"
+    },
+    {
+      "role": "empty-store-construction",
+      "last": 71,
+      "sha256": "7598b8ede8016fad9d83e716cd13f3a78a5dbd63000fecf73ce467179d47ea9d",
+      "first": 65,
+      "path": "src/Classes/ModStore.lua",
+      "body": "function ModStoreClass:ModStore(parent)\n\tself.parent = parent or false\n\tself.actor = parent and parent.actor or { }\n\tself.multipliers = { }\n\tself.conditions = { }\n\treturn self\nend\n"
+    },
+    {
+      "role": "scale-copy-name-preservation-boundary",
+      "last": 119,
+      "sha256": "14e2560fd6a82516cec22ac53a4998e29194f7d481774676da3898ae9b9b0978",
+      "first": 82,
+      "path": "src/Classes/ModStore.lua",
+      "body": "function ModStoreClass:ScaleAddMod(mod, scale, roundToNearest)\n\tlocal unscalable = false\n\tfor _, effects in ipairs(mod) do\n\t\tif effects.unscalable then\n\t\t\tunscalable = true\n\t\t\tbreak\n\t\tend\n\tend\n\tif scale == 1 or unscalable then\n\t\tself:AddMod(mod)\n\telse\n\t\tlocal scaledMod = copyTable(mod)\n\t\tlocal subMod = scaledMod\n\t\tif type(scaledMod.value) == \"table\" then\n\t\t\tif scaledMod.value.mod then\n\t\t\t\tsubMod = scaledMod.value.mod\n\t\t\telseif scaledMod.value.keyOfScaledMod then\n\t\t\t\tif scaledMod.value.key == \"level\" then -- +Levels can't get scaled with decimals\n\t\t\t\t\tscaledMod.value[scaledMod.value.keyOfScaledMod] = m_floor(scaledMod.value[scaledMod.value.keyOfScaledMod] * scale)\n\t\t\t\telse\n\t\t\t\t\tscaledMod.value[scaledMod.value.keyOfScaledMod] = round(scaledMod.value[scaledMod.value.keyOfScaledMod] * scale, 2)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\tif type(subMod.value) == \"number\" then\n\t\t\tlocal precision = ((data.highPrecisionMods[subMod.name] and data.highPrecisionMods[subMod.name][subMod.type])) or ((m_floor(subMod.value) ~= subMod.value) and data.defaultHighPrecision) or nil\n\t\t\tif precision then\n\t\t\t\tlocal power = 10 ^ precision\n\t\t\t\tsubMod.value = m_floor(subMod.value * scale * power) / power\n\t\t\telseif roundToNearest then\n\t\t\t\tsubMod.value = roundSymmetric(subMod.value * scale)\n\t\t\telse\n\t\t\t\tsubMod.value = m_modf(round(subMod.value * scale, 2))\n\t\t\tend\n\t\tend\n\t\tself:AddMod(scaledMod)\n\tend\nend\n"
+    },
+    {
+      "role": "copy-list-transport",
+      "last": 125,
+      "sha256": "1e1c2fca47a72555a807fd9dee72472b5bb014ccd59c1dfa164bec58a0f86df8",
+      "first": 121,
+      "path": "src/Classes/ModStore.lua",
+      "body": "function ModStoreClass:CopyList(modList)\n\tfor i = 1, #modList do\n\t\tself:AddMod(copyTable(modList[i]))\n\tend\nend\n"
+    },
+    {
+      "role": "scale-list-dispatch-boundary",
+      "last": 135,
+      "sha256": "1b721762120a7ad6c394919058bb300d3c0285f275bc08e8bee78a2127be5f63",
+      "first": 127,
+      "path": "src/Classes/ModStore.lua",
+      "body": "function ModStoreClass:ScaleAddList(modList, scale, roundToNearest)\n\tif scale == 1 then\n\t\tself:AddList(modList)\n\telse\n\t\tfor i = 1, #modList do\n\t\t\tself:ScaleAddMod(modList[i], scale, roundToNearest)\n\t\tend\n\tend\nend\n"
+    }
+  ],
+  "source_manifest": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "kind": "selected-passive-constructor-source-bodies",
+  "scope": {
+    "finite_selected_parsed_record_transport_only": true,
+    "native_coverage_authorized": false,
+    "arbitrary_parsing_covered": false,
+    "numerical_scaling_or_order_covered": false,
+    "generated_skill_delivery_covered": false
+  },
+  "files": [
+    {
+      "archive": "CalcSetup.lua.gz",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "bytes": 100609,
+      "path": "src/Modules/CalcSetup.lua",
+      "compressed_bytes": 21347,
+      "compressed_sha256": "6cf68ffe3f750e1b0670c54f4152fa2cbd88db2c1092d16c7541f773582a708c"
+    },
+    {
+      "archive": "passive-ModList.lua.gz",
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d",
+      "bytes": 14406,
+      "path": "src/Classes/ModList.lua",
+      "compressed_bytes": 2020,
+      "compressed_sha256": "7b1b25081e088b45c6a28ba5449faf44409641ad0d6688518ba07bc2b36dc815"
+    },
+    {
+      "archive": "../configuration-distance-inputs/ModStore.lua.gz",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62",
+      "bytes": 36471,
+      "path": "src/Classes/ModStore.lua",
+      "compressed_bytes": 7158,
+      "compressed_sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b"
+    }
+  ],
+  "schema_version": 1
+}

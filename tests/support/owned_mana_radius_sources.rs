@@ -4,7 +4,7 @@
 mod sockets;
 #[allow(dead_code)]
 #[path = "owned_mana_supplier_sources.rs"]
-mod supplier;
+pub(super) mod supplier;
 
 use flate2::{Compression, GzBuilder, read::GzDecoder};
 use serde_json::{Value, json};
