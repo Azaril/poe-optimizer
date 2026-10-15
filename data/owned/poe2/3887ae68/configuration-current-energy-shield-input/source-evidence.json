@@ -1,0 +1,140 @@
+{
+  "spans": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "first": 157,
+      "role": "current-energy-shield-both-callback-outputs",
+      "last": 160,
+      "body": "\t{ var = \"multiplierCurrentEnergyShield\", type = \"count\", label = \"Current ^x88FFFFEnergy Shield^7 percentage:\", ifCond = \"UseCurrentEnergyShield\", defaultPlaceholderState = 100, tooltip = \"Used in calculations for ^xAF6025Silks of Veneration^7 and ^xAF6025The Mutable Star^7.\\nOverflowed ^x88FFFFEnergy Shield^7 is allowed, up to 150%.\", apply = function(val, modList, enemyModList)\n\t\tmodList:NewMod(\"Condition:UseCurrentEnergyShield\", \"FLAG\", true, \"Config\")\n\t\tmodList:NewMod(\"Multiplier:CurrentEnergyShield\", \"BASE\", val, \"Config\")\n\tend },",
+      "sha256": "ced545e799e2cb2a583956c416658a741f60d7541f403ba1bec7540a810f5cc2"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 907,
+      "role": "saved-placeholder-loading",
+      "last": 913,
+      "body": "\t\telseif node.elem == \"Placeholder\" then\n\t\t\tif not node.attrib.name then\n\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Placeholder' element missing name attribute\", fileName)\n\t\t\t\treturn true\n\t\t\tend\n\t\t\tif node.attrib.number then\n\t\t\t\tself.configSets[configSetId].placeholder[node.attrib.name] = tonumber(node.attrib.number)",
+      "sha256": "b7c5aa65e5c776a6fd9d775002cfe72a272ac0d726505b27c112933ebe77e6b9"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1174,
+      "role": "numeric-callback-dispatch",
+      "last": 1200,
+      "body": "\tlocal input = self.configSets[self.activeConfigSetId].input\n\tlocal placeholder = self.configSets[self.activeConfigSetId].placeholder\n\tself:UpdateLevel() -- enemy level handled here because it's needed to correctly set boss stats\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.apply then\n\t\t\tif varData.type == \"check\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(true, modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"count\" or varData.type == \"integer\" or varData.type == \"countAllowZero\" or varData.type == \"float\" then\n\t\t\t\tif input[varData.var] and (input[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\telseif placeholder[varData.var] and (placeholder[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(placeholder[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"list\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"text\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\t-- Apply Custom Modifier groups",
+      "sha256": "fd243cb8fac97cc84d0e8804c1d0ddef80ff44310943e482d35ba93e1961c098"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "first": 1317,
+      "role": "fresh-placeholder-constructor",
+      "last": 1333,
+      "body": "function ConfigTabClass:CreateConfigSet(configSetId, title)\n\tlocal configSet = { id = configSetId, title = title, input = {}, placeholder = {}, customModsList = { { title = \"Default\", enabled = true, text = \"\" } } }\n\tif not configSetId then\n\t\tconfigSet.id = #self.configSets + 1\n\tend\n\t-- there are default values for input and placeholder that every new config set needs to have\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.var then\n\t\t\tconfigSet.input[varData.var] = varData.defaultState\n\t\t\tconfigSet.placeholder[varData.var] = varData.defaultPlaceholderState\n\t\t\tif varData.defaultIndex then\n\t\t\t\tconfigSet.input[varData.var] = varData.list[varData.defaultIndex].val\n\t\t\tend\n\t\tend\n\tend\n\tself.configSets[configSet.id] = configSet\n\treturn configSet",
+      "sha256": "eecdb417eac994f9ab210f213aa7fe2e99740c3988cc2318ad452cb6e20de2a5"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "first": 3321,
+      "role": "player-current-resource-downstream-consumer-boundary",
+      "last": 3330,
+      "body": "\t-- Silks of Veneration // limit is 150% because of overflowed ES\n\t[\"current energy shield also grants elemental damage reduction\"] = {\n\t\tmod(\"EnergyShieldAppliesToColdDamageTaken\", \"BASE\", 1, { type = \"Multiplier\", var = \"CurrentEnergyShield\", limit = 150 }, { type = \"Condition\", var = \"UseCurrentEnergyShield\"}),\n\t\tmod(\"EnergyShieldAppliesToFireDamageTaken\", \"BASE\", 1, { type = \"Multiplier\", var = \"CurrentEnergyShield\", limit = 150 }, { type = \"Condition\", var = \"UseCurrentEnergyShield\"}),\n\t\tmod(\"EnergyShieldAppliesToLightningDamageTaken\", \"BASE\", 1, { type = \"Multiplier\", var = \"CurrentEnergyShield\", limit = 150 }, { type = \"Condition\", var = \"UseCurrentEnergyShield\"}),\n\t},\n\t-- Mutable Star // assumed 150% limit because overflow, could not verify in wiki\n\t[\"defend against hits as though you had (%d+)%% more armour per (%d+)%% current energy shield\"] =  function(armour, _, perCurrentES) return {\n\t\tmod(\"ArmourDefense\", \"MAX\", armour, { type = \"Multiplier\", var = \"CurrentEnergyShield\", div = perCurrentES, limit = 150 }, { type = \"Condition\", var = \"UseCurrentEnergyShield\"}),\n\t} end,",
+      "sha256": "6a256674118183aebfb1c32d07e8033dc77ab4c87bbbbc7d608cae8c73f83e29"
+    }
+  ],
+  "constructor_dependencies": [
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/source-comparison.json",
+      "sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-review.json",
+      "sha256": "d8f7abf2202ace98318d9c3c80be31ea77c3d9d17a307a174e866fc9c44fa9d5"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-bodies.json",
+      "sha256": "1b470cb8f843655071fe8fe38d7075b974085debf683581813f20ea286a92d20"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/configuration-auxiliary-bodies.json",
+      "sha256": "b0e1f431cc964c38040abdab36618401e5f3e77407020b58df364ff31574e1a2"
+    }
+  ],
+  "kind": "configured-player-current-energy-shield-input",
+  "license": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/LICENSE.md",
+  "schema_version": 1,
+  "archives": [
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467",
+      "encoding": "utf8",
+      "artifact_sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
+      "normalization": "utf8_crlf_to_lf",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88",
+      "encoding": "utf8",
+      "artifact_sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "artifact_sha256": "847ad8e35590235c5f91371ed9fffde7135422410b97e336c13541917b328466",
+      "bytes": 677245,
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModParser.lua.gz",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95",
+      "encoding": "gzip",
+      "normalization": "utf8_crlf_to_lf"
+    }
+  ],
+  "scope": {
+    "target": "player",
+    "raw_configured_percentage": true,
+    "constructor": 100,
+    "count_allows_zero": false,
+    "zero_candidate_is_emission": false,
+    "native_flag": false,
+    "native_effect": false,
+    "global_condition_absence": false,
+    "coverage_completed": false,
+    "new_source_execution": false,
+    "mutation_source_observations": false,
+    "admitted_range": [
+      -1000000,
+      1000000
+    ]
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "derivation": {
+    "authority": "exact-original-callback-and-count-dispatch",
+    "source_scope": "this-config-callback-only",
+    "nonzero": [
+      {
+        "name": "Condition:UseCurrentEnergyShield",
+        "type": "FLAG",
+        "flags": 0,
+        "source": "Config",
+        "value": true,
+        "keywordFlags": 0
+      },
+      {
+        "name": "Multiplier:CurrentEnergyShield",
+        "type": "BASE",
+        "flags": 0,
+        "source": "Config",
+        "value": "raw-candidate",
+        "keywordFlags": 0
+      }
+    ],
+    "zero": [],
+    "missing_saved_lanes": "reviewed-constructor-100",
+    "malformed_saved_lane": "pending-no-input",
+    "native_outputs_emitted": false,
+    "global_condition_false_inferred": false,
+    "downstream_150_limit_applied": false
+  }
+}

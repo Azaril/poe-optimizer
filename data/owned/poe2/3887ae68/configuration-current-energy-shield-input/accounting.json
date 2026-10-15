@@ -1,0 +1,48 @@
+[
+  {
+    "selector": {
+      "name": "multiplierCurrentEnergyShield",
+      "lane": "input_number"
+    },
+    "id": "checked-player-current-energy-shield-input_number",
+    "destinations": [
+      {
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003399"
+          }
+        },
+        "kind": "adapter"
+      }
+    ]
+  },
+  {
+    "selector": {
+      "name": "multiplierCurrentEnergyShield",
+      "lane": "placeholder_number"
+    },
+    "id": "checked-player-current-energy-shield-placeholder_number",
+    "destinations": [
+      {
+        "control": {
+          "kind": "scalar_input",
+          "input": {
+            "kind": "external_input",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003399"
+          }
+        },
+        "kind": "adapter"
+      }
+    ]
+  }
+]

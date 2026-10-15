@@ -17,11 +17,21 @@ build support.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
 
-The current [Demonflame input](../data/owned/poe2/3887ae68/configuration-demonflame/README.md)
+The latest [Current Energy Shield input](../data/owned/poe2/3887ae68/configuration-current-energy-shield-input/README.md)
+preserves raw Player percentage points and accounts for both source callback
+responsibilities. A nonzero candidate emits a source-local flag and percentage;
+zero emits neither and cannot establish global flag absence. Native flag/effect
+production, downstream caps and complete contributor coverage remain unfinished.
+All-five publication, exact rebuild and 22 controls pass. Original05 now has
+**19 remaining configuration origins and 33 known assumptions**; its four
+complete input inventories remain Pending. See the
+[current endpoint](implementation.md#current-checkpoint-configuration-admission).
+
+The preceding [Demonflame input](../data/owned/poe2/3887ae68/configuration-demonflame/README.md)
 preserves Player transformation state through the existing Scenario-input model.
 Authenticated skill description and consumer bodies establish ownership;
 activation, stack limits and buff effects remain separate. All-five publication,
-exact rebuild and 22 controls pass. Original05 now has **20 remaining
+exact rebuild and 22 controls pass. Original05 then had **20 remaining
 configuration origins and 32 known assumptions**; its four complete input
 inventories remain Pending. See the
 [current endpoint](implementation.md#current-checkpoint-configuration-admission).

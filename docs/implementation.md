@@ -107,46 +107,45 @@ availability/value checks pass, begin D4 immediately.
 
 ## Current checkpoint: configuration admission
 
-The [Demonflame packet](../data/owned/poe2/3887ae68/configuration-demonflame/README.md)
-publishes Player transformation-state input `3398` using the existing Count
-unit and checked import projection. Nonzero Input wins, then Placeholder, then
-authenticated constructor 10. Raw values remain unchanged within the declared
-transport domain. The Player owns the counter; the Skill still owns activation,
-buff values and delivery. No native effect, cap, Life loss or completed inventory
-is implied. Full original description/consumer bodies establish ownership beyond
-the source's choice of modifier-list destination.
+The [Current Energy Shield packet](../data/owned/poe2/3887ae68/configuration-current-energy-shield-input/README.md)
+publishes Player percentage-point input `3399` using the existing checked
+projection: nonzero Input, then Placeholder, then authenticated constructor 100.
+The complete source callback has two responsibilities: a nonzero candidate emits
+the source-local `UseCurrentEnergyShield` flag and the unchanged percentage.
+Zero emits neither record; it does not establish that the global condition is
+false. Both actual ordered writes and the complete surrounding callback state
+are checked. No native flag writer, cap, effect or complete supplier inventory
+is implied; those consumers remain downstream work.
 
 The production CLI preserves all five originals, all 110 queries, earlier IDs,
 values and preferences, and exactly rebuilds all eighteen artifacts. Original05
-configuration origins fall **21 → 20** (7 → 6 inside Config; 14 outside unchanged),
-and known assumptions rise **31 → 32**. Its 35 usage preferences, 20 usage links
+configuration origins fall **20 → 19** (6 → 5 inside Config; 14 outside unchanged),
+and known assumptions rise **32 → 33**. Its 35 usage preferences, 20 usage links
 and four selected input obligations remain unchanged. Selected issue counts stay
 **106/117/109/123/4**, and complete native builds remain **0/5**.
-The preceding [Player activity checkpoint](implementation-history.md#archived-2026-10-15-checkpoint-player-activity-inputs)
+The preceding [Demonflame checkpoint](implementation-history.md#archived-2026-10-15-checkpoint-demonflame-input)
 and earlier source/input publications remain preserved in history.
 
-Current package: **`runs/owned-configuration-demonflame-publication-01/package`**.
+Current package: **`runs/owned-configuration-current-energy-shield-publication-01/package`**.
 
-- Input: `3b3e135ec63ce4abb92105efe56ad1bb7cb802759f8473070a11811f2d1a6e7d`.
-- Registry: `16d6787e70ccc19fa66be2f6d2e1f76356c5056375c8eb54052aa6905162d90c` (last `3398`).
-- Definitions: `9555a59e5ef17379c86f9e0a87654b607b985edb338fbe69ca36907f5f6c0f3a`.
-- Rules: `9a0cdb5c4da2e340c0faccea8658fe45fcd06efe9fe68eb1218098c464611022`.
-- Compiled: `b0d428cbdbe8441b709456d908024d30a15c27881b5d7bdc34da62d2ec23fcd5`.
+- Input: `5f4eac0385d5785bf5534f8ae0be00e4a7c718dcf87c18057eeeabb7391a75f0`.
+- Registry: `55eda3108b622c111d7a8ad19ebbead6de941b3f02987704e12ceda0b2e6ffcc` (last `3399`).
+- Definitions: `fa84eb1d95fac7382d1247df46656d7163fabdb3b872fc669c249c8b7af0e339`.
+- Rules: `cf578ce6da3ddac7bec11c5bc25d3cfb19c7235cda481298d17e3277c9846ca2`.
+- Compiled: `dd7767bc2570b79774a3912f83cc4dc3ff73558d8ed2bc161ea32ba60813006b`.
 
-The package has **64,455,304 bytes**, 192 provenance rows and unchanged
-8187/8192 program use. Four new ordinary tests pass (2.02s), as do four existing
-Player activity tests for the shared source authenticator (2.22s). Strict Clippy
-passes for both targets (1.09s); the all-five publication/rebuild and 22 controls
-pass (62.83s). Logs: `runs/owned-configuration-demonflame-{ordinary,clippy,publication}-01.log`.
-The exact `other.lua` offline archive alone now has a 2 MiB decompression bound;
-other source paths retain 1 MiB. Native package/evaluator limits are unchanged,
-and no source VM was run for this checkpoint.
+The package has **64,457,998 bytes**, 193 provenance rows and unchanged
+8187/8192 program use. Four ordinary tests pass (2.06s), strict target Clippy
+passes (1.10s), and all-five publication/rebuild plus 20 source/Encounter and
+two duplicate-lane controls pass (62.44s). Logs:
+`runs/owned-configuration-current-energy-shield-{ordinary,clippy,publication}-01.log`.
+No runtime or shared-helper changes, archive duplication, source VM run or
+raised package/evaluator limits were needed.
 
 **Next input blockers:** the remaining saved controls have distinct responsibilities:
 
 | Control | Next bounded step |
 | --- | --- |
-| Current Energy Shield | Preserve percentage points on Player, constructor 100, and the callback's separate `UseCurrentEnergyShield` Boolean dependency. A raw input cannot silently discard that second responsibility; overflow limits and native condition production remain separate. |
 | Campaign bosses defeated | Build progression, with no constructor default. The [proposed numeric Choice-reward projection](owned-progression-input-proposal.md) reuses existing Reward parameters and preserves imported configuration alternatives; Character reconciliation is the alternative. Await ownership review. Neither saved Placeholder 56 nor zero is a default. |
 | Sigil and Corrupting Cry stages | The [proposed Scenario-owned usage intent](owned-scenario-usage-intent-proposal.md) resolves explicit applicability against exact composed occurrences, preserves dormant settings and keeps independent preset axes. Await ownership/resolution review. No saved consumer or UI visibility is sufficient to classify either callback as presentation-only. |
 
@@ -224,6 +223,36 @@ edge, rather than an open-ended generic-writer task:
 Reuse authenticated evidence before acquiring another observation. None of these
 checks closes all selected-build mechanics or the four input inventories.
 Complete native builds remain **0/5**.
+
+**Read-only preflight for the next checkpoint (not a published proof):** reuse
+`tests/support/owned_mana_radius_sources.rs::{check, acquisition, fixture}` and
+its `radius::supplier` module. The authenticated `radius-acquisition.json` and
+`radius-review.json` under `mana-supplier-sources` retain both observed traces,
+their complete selected-slot inventories and fresh-environment/override state.
+They identify selected ItemSet 2 independently of SkillSet 4; archived ItemSets
+with actual flasks are not selected evidence. Validate every candidate's type,
+not merely the five named Flask/Charm slots. Then seal complete constructor and
+dispatch bodies in `CalcSetup.lua` 717–801, 1040–1291 and 1566–1579, and complete
+flask/Charm merges in `CalcPerform.lua` 1580–1840 and 2919–2923. This can exclude
+payload delivery through empty source maps without assuming flags are false.
+
+Primary Keystone expansion at `CalcPerform.lua` 1855 still needs the full
+1193–1859 selected-store transition: fresh parentless child, initializer,
+intervening writers, exact inherited payloads and helper destination authority.
+Review the helper bodies at 147–180, 203–260, 264–528 and 565–579, with Actor
+relations in `CalcSetup.lua` 752–764 and `CalcActiveSkill.lua` 904–1031. Secondary
+Keystone 3378–3380 instead uses the existing absent life-pool-call authority;
+retain its complete 3365–3412 gate body and do not invent a queried recipient
+store. A complete Keystone catalogue is unnecessary if call-time candidate
+absence is proved. Reuse the existing full source archives for these spans.
+
+For the later Action checkpoint, the inspected spell factories emit Spell-only
+flags; establish exact Basic Attack configuration and original filter semantics
+before declaring them inapplicable. Review `ModStore.lua` 202–225,
+`ModList.lua` 125–160, `ModDB.lua` 137–160 and `runSkillFunc` at
+`CalcOffence.lua` 701–724, together with the exact recipe callback inventory.
+This is a concrete review queue, not native coverage or permission to skip
+earlier supplier boundaries.
 
 ## Previous checkpoint: Skill support and exact aggregation
 
@@ -625,8 +654,8 @@ Spirit component now uses **8187/8192**, leaving five program slots, with 56
 receivers. Other measured Life-predecessor compiler counts are
 6548 owners, 23517 effects, 4249 reads, 32814 nodes and 41600 edges, comfortably
 within their separate caps.
-The current Demonflame release is **64,455,304/67,108,864 bytes**,
-leaving 2,653,560 bytes. These are separate limits. The common
+The Current Energy Shield release is **64,457,998/67,108,864 bytes**,
+leaving 2,650,866 bytes. These are separate limits. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
 

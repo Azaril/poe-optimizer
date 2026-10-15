@@ -1,10 +1,47 @@
-> Historical snapshots through the inherited-delivery and child-construction checkpoint on 2026-10-15.
+> Historical snapshots through the Demonflame input checkpoint on 2026-10-15.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-15 checkpoint: Demonflame input
+
+The [Demonflame packet](../data/owned/poe2/3887ae68/configuration-demonflame/README.md)
+publishes Player transformation-state input `3398` using the existing Count
+unit and checked import projection. Nonzero Input wins, then Placeholder, then
+authenticated constructor 10. Raw values remain unchanged within the declared
+transport domain. The Player owns the counter; the Skill still owns activation,
+buff values and delivery. No native effect, cap, Life loss or completed inventory
+is implied. Full original description/consumer bodies establish ownership beyond
+the source's choice of modifier-list destination.
+
+The production CLI preserves all five originals, all 110 queries, earlier IDs,
+values and preferences, and exactly rebuilds all eighteen artifacts. Original05
+configuration origins fall **21 → 20** (7 → 6 inside Config; 14 outside unchanged),
+and known assumptions rise **31 → 32**. Its 35 usage preferences, 20 usage links
+and four selected input obligations remain unchanged. Selected issue counts stay
+**106/117/109/123/4**, and complete native builds remain **0/5**.
+The preceding [Player activity checkpoint](implementation-history.md#archived-2026-10-15-checkpoint-player-activity-inputs)
+and earlier source/input publications remain preserved in history.
+
+Current package: **`runs/owned-configuration-demonflame-publication-01/package`**.
+
+- Input: `3b3e135ec63ce4abb92105efe56ad1bb7cb802759f8473070a11811f2d1a6e7d`.
+- Registry: `16d6787e70ccc19fa66be2f6d2e1f76356c5056375c8eb54052aa6905162d90c` (last `3398`).
+- Definitions: `9555a59e5ef17379c86f9e0a87654b607b985edb338fbe69ca36907f5f6c0f3a`.
+- Rules: `9a0cdb5c4da2e340c0faccea8658fe45fcd06efe9fe68eb1218098c464611022`.
+- Compiled: `b0d428cbdbe8441b709456d908024d30a15c27881b5d7bdc34da62d2ec23fcd5`.
+
+The package has **64,455,304 bytes**, 192 provenance rows and unchanged
+8187/8192 program use. Four new ordinary tests pass (2.02s), as do four existing
+Player activity tests for the shared source authenticator (2.22s). Strict Clippy
+passes for both targets (1.09s); the all-five publication/rebuild and 22 controls
+pass (62.83s). Logs: `runs/owned-configuration-demonflame-{ordinary,clippy,publication}-01.log`.
+The exact `other.lua` offline archive alone now has a 2 MiB decompression bound;
+other source paths retain 1 MiB. Native package/evaluator limits are unchanged,
+and no source VM was run for this checkpoint.
 
 ## Archived 2026-10-15 checkpoint: inherited delivery and child construction
 
