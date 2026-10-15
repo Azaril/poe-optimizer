@@ -79,6 +79,15 @@ remain incomplete. Source calculation-view
 flags such as `Effective` are not gameplay states and will not enter the native
 model. Their treatment must be reconciled to actual scenario semantics separately.
 
+The [empty intrinsic socket packet](../data/owned/poe2/3887ae68/empty-passive-socket-intrinsics/README.md)
+now closes one selected passive's intrinsic rules and seven declaration
+inventories, preserving its exact socket and all external jewel/radius
+responsibilities. Full source construction, not an observed empty runtime list,
+supports the closure. All-five preservation and strict Clippy pass. Original05's
+partial passive owners fall from thirteen to twelve; no input issue or complete
+build gate closes. The next raw input is the Player's configured Withered amount,
+whose downstream applicability, scaling and cap remain separate calculations.
+
 Archived generated skills now retain unfinished preset usage even when no
 supported manual sibling initializes it. A generic source-discovery producer
 uses the existing checked census through either raw-input or occurrence-usage
@@ -129,7 +138,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-configured-distance-inputs).
+[implementation checkpoint](implementation.md#current-checkpoint-empty-intrinsic-passive-socket).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -1289,7 +1298,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-configured-distance-inputs),
+live in the [implementation plan](implementation.md#current-checkpoint-empty-intrinsic-passive-socket),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.

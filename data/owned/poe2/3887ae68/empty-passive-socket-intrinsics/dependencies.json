@@ -1,0 +1,394 @@
+{
+  "before": "0efaf9bebc6a3f40e448cb22596c539b53436e15c063f92209c87627a6b4fa62",
+  "definition": {
+    "kind": "passive_node",
+    "value": {
+      "id": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b48"
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "pools": {
+            "members": [
+              {
+                "kind": "point_pool",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001bf0"
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          },
+          "adjacent": {
+            "members": [
+              {
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000e23"
+              },
+              {
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000015d0"
+              },
+              {
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001646"
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          },
+          "declarations": {
+            "parameters": {
+              "members": [],
+              "closure": {
+                "kind": "partial",
+                "value": {
+                  "gaps": [
+                    {
+                      "subject": {
+                        "kind": "definition",
+                        "value": {
+                          "kind": "passive_node",
+                          "value": {
+                            "kind": "passive_node",
+                            "namespace": {
+                              "game": "poe2",
+                              "version": "owned-mechanics-v1"
+                            },
+                            "key": "def.0000000000001b48"
+                          }
+                        }
+                      },
+                      "facet": "input_schema",
+                      "code": "tree-declarations-not-converted"
+                    }
+                  ]
+                }
+              }
+            },
+            "choices": {
+              "members": [],
+              "closure": {
+                "kind": "partial",
+                "value": {
+                  "gaps": [
+                    {
+                      "subject": {
+                        "kind": "definition",
+                        "value": {
+                          "kind": "passive_node",
+                          "value": {
+                            "kind": "passive_node",
+                            "namespace": {
+                              "game": "poe2",
+                              "version": "owned-mechanics-v1"
+                            },
+                            "key": "def.0000000000001b48"
+                          }
+                        }
+                      },
+                      "facet": "input_schema",
+                      "code": "tree-declarations-not-converted"
+                    }
+                  ]
+                }
+              }
+            },
+            "grants": {
+              "members": [],
+              "closure": {
+                "kind": "partial",
+                "value": {
+                  "gaps": [
+                    {
+                      "subject": {
+                        "kind": "definition",
+                        "value": {
+                          "kind": "passive_node",
+                          "value": {
+                            "kind": "passive_node",
+                            "namespace": {
+                              "game": "poe2",
+                              "version": "owned-mechanics-v1"
+                            },
+                            "key": "def.0000000000001b48"
+                          }
+                        }
+                      },
+                      "facet": "input_schema",
+                      "code": "tree-declarations-not-converted"
+                    }
+                  ]
+                }
+              }
+            },
+            "actors": {
+              "members": [],
+              "closure": {
+                "kind": "partial",
+                "value": {
+                  "gaps": [
+                    {
+                      "subject": {
+                        "kind": "definition",
+                        "value": {
+                          "kind": "passive_node",
+                          "value": {
+                            "kind": "passive_node",
+                            "namespace": {
+                              "game": "poe2",
+                              "version": "owned-mechanics-v1"
+                            },
+                            "key": "def.0000000000001b48"
+                          }
+                        }
+                      },
+                      "facet": "input_schema",
+                      "code": "tree-declarations-not-converted"
+                    }
+                  ]
+                }
+              }
+            },
+            "skill_grants": {
+              "members": [],
+              "closure": {
+                "kind": "partial",
+                "value": {
+                  "gaps": [
+                    {
+                      "subject": {
+                        "kind": "definition",
+                        "value": {
+                          "kind": "passive_node",
+                          "value": {
+                            "kind": "passive_node",
+                            "namespace": {
+                              "game": "poe2",
+                              "version": "owned-mechanics-v1"
+                            },
+                            "key": "def.0000000000001b48"
+                          }
+                        }
+                      },
+                      "facet": "input_schema",
+                      "code": "tree-declarations-not-converted"
+                    }
+                  ]
+                }
+              }
+            },
+            "outputs": {
+              "members": [],
+              "closure": {
+                "kind": "partial",
+                "value": {
+                  "gaps": [
+                    {
+                      "subject": {
+                        "kind": "definition",
+                        "value": {
+                          "kind": "passive_node",
+                          "value": {
+                            "kind": "passive_node",
+                            "namespace": {
+                              "game": "poe2",
+                              "version": "owned-mechanics-v1"
+                            },
+                            "key": "def.0000000000001b48"
+                          }
+                        }
+                      },
+                      "facet": "input_schema",
+                      "code": "tree-declarations-not-converted"
+                    }
+                  ]
+                }
+              }
+            },
+            "sockets": {
+              "members": [
+                {
+                  "kind": "socket_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000320e"
+                }
+              ],
+              "closure": {
+                "kind": "partial",
+                "value": {
+                  "gaps": [
+                    {
+                      "subject": {
+                        "kind": "definition",
+                        "value": {
+                          "kind": "passive_node",
+                          "value": {
+                            "kind": "passive_node",
+                            "namespace": {
+                              "game": "poe2",
+                              "version": "owned-mechanics-v1"
+                            },
+                            "key": "def.0000000000001b48"
+                          }
+                        }
+                      },
+                      "facet": "input_schema",
+                      "code": "tree-declarations-not-converted"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "owner": {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "passive_node",
+        "value": {
+          "kind": "passive_node",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000001b48"
+        }
+      }
+    },
+    "programs": {
+      "members": [],
+      "closure": {
+        "kind": "partial",
+        "value": {
+          "gaps": [
+            {
+              "subject": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001b48"
+                  }
+                }
+              },
+              "facet": "game_rules",
+              "code": "tree-game-rules-not-converted"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "socket": {
+    "kind": "socket_slot",
+    "value": {
+      "id": {
+        "kind": "socket_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000320e"
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "owner": {
+            "kind": "passive_node",
+            "definition": {
+              "kind": "passive_node",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001b48"
+            }
+          },
+          "kind": "passive",
+          "scope": "shared"
+        }
+      }
+    }
+  },
+  "mappings": [
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "passive_node",
+          "value": {
+            "tree_version": {
+              "kind": "text",
+              "value": "0_5"
+            },
+            "node_id": {
+              "kind": "text",
+              "value": "7960"
+            },
+            "view": {
+              "kind": "missing"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "kind": "passive_node",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001b48"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+# Empty intrinsic passive socket
+
+This packet completes the default intrinsic program inventory of Passive `1b48`
+(source node `7960`) and its seven declaration inventories. Six remain empty;
+the socket inventory keeps exactly the existing Socket `320e`. It adds no
+definitions or programs and changes no topology, point pool, provider, query,
+imported value or saved selection.
+
+The complete pinned node body declares a Jewel Socket with empty stats and no
+choice, alternate view, grant or unlock fields. The complete constructor and
+stat builder produce an empty intrinsic modifier list; the automatic class-start
+flag applies to Normal nodes, while this node is a Socket. Per-Spec wrappers
+inherit that default definition. Socket allocation counts and radius topology
+remain allocation/provider concerns, rather than intrinsic numeric programs.
+
+External providers retain their existing ownership and incomplete coverage.
+`CalcSetup.buildModListForNode` can apply radius effects, and equipped jewels have
+their own item delivery and distance/corruption scaling. This proof does not
+certify those behaviors or assert that they are absent for every build. It uses
+the same default-definition ownership boundary as the published plain Minion
+Life passives.
+
+The independent saved-input proof remains separate: unchanged Original05's
+selected Spec3 has no equipped jewel members and nineteen zero placeholders;
+archived Specs5/6 each retain three equipped jewels. The exact prior source
+report is retained without another PoB execution. No observed empty inventory
+is used as authority to erase an external provider.
+
+`source-evidence.json` authenticates full compressed source files against the
+pinned manifest, exact reviewed spans, the tree catalog and retained membership
+report. The three new source archives contain UTF-8 checkout bytes with only
+CRLF normalized to LF, checked against the manifest digest before retention;
+the existing CalcSetup archive is reused. This is offline authoring evidence.
+The native runtime receives only the normal owned definition/rule data.
+
+The predecessor is distance-input endpoint
+`0efaf9bebc6a3f40e448cb22596c539b53436e15c063f92209c87627a6b4fa62`.
+The published endpoint is
+`d6e9d0f455087d0d240cc014514c94360b52a1b8bb5ba3efe810603aa13e6474`,
+at `runs/owned-empty-passive-socket-publication-01/package`.
+
+All three ordinary tests and the all-five publication passed; strict target
+Clippy passed. Seven mutation controls reject changed intrinsic programs,
+topology, socket membership, source spans/identity, catalog choices and erased
+archived jewel membership. The publication preserves all 110 queries, exact
+local IDs, imported values and selected issue counts `106/117/109/123/4`, and
+rebuilds all eighteen artifacts byte-for-byte. One existing owner and seven
+declaration inventories close. Original05's selected passive owners still
+incomplete drop from thirteen to twelve; no input issue retires.
+
+No full-build result or newly admitted external provider is claimed. The
+canonical release still has no evaluation bundle and all five complete-build
+gates remain unavailable. Run the ordinary proof with
+`cargo test --test owned_empty_passive_socket_intrinsics`; the ignored publication
+uses `POE_OPTIMIZER_TEST_EMPTY_PASSIVE_SOCKET_PRIOR` and
+`POE_OPTIMIZER_TEST_EMPTY_PASSIVE_SOCKET_OUTPUT` with an unused output directory.

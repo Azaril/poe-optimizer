@@ -90,7 +90,7 @@ Four selected import obligations remain: **01f2** configuration, **0505** preset
 usage, **0207** external assumptions and **0208** scenario usage. Earlier evidence
 uses `0503` for usage; the current allocator identity is `0505`. No evaluation
 bundle or complete final metric bindings are published. Selected passive rule
-owners are 42 Complete / 13 Partial; item, class/shared Actor, supplied Actor and
+owners are 43 Complete / 12 Partial; item, class/shared Actor, supplied Actor and
 global query/application coverage retain their own gaps.
 
 **Minion Life is not a saved metric or an established numerical dependency of
@@ -105,7 +105,53 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: configured distance inputs
+## Current checkpoint: empty intrinsic passive socket
+
+The [socket packet](../data/owned/poe2/3887ae68/empty-passive-socket-intrinsics/README.md)
+completes the intrinsic rule owner for Passive `1b48` (source node `7960`) and
+its seven declaration inventories. Six inventories remain empty; the seventh
+retains exactly Socket `320e`. There are no new definitions or programs and no
+changes to topology, point pools, providers, selected values or queries.
+
+The complete source node and constructors establish an empty intrinsic modifier
+list; this Socket does not receive the Normal-node class-start flag. External
+jewel/radius transformations and allocation bookkeeping retain their separate
+ownership and coverage. The retained Spec3 empty-jewel evidence preserves the
+occupied archived Specs5/6 and supplies no authority to erase external providers.
+No new PoB execution or source-specific native behavior is added.
+
+The current package is **`runs/owned-empty-passive-socket-publication-01/package`**:
+
+- Input: `d6e9d0f455087d0d240cc014514c94360b52a1b8bb5ba3efe810603aa13e6474`.
+- Definitions: `0f9184e99363d76bb99ed2ad5cd3f8ffd9fa5fbe02985ee876a1e3e62706db79`.
+- Rules: `a3b2ccf3b9f5821d7ccd9f891abf77d40538a1c3f2199c51a6a1f7070d2f697b`.
+- Compiled: `064b44e8b524c45458433006ea482d3db0a7b81da0d7f0486d88d53b157494b3`.
+- Registry: `21abd079a3d8be840d69b9cd319c0415f2dbd1dfc866cbf14b64e63fc4404e05`, last issued `3381`.
+
+Three ordinary tests, the all-five publication and strict Clippy pass. Seven
+mutations exercise source identity/body, node choices, topology, socket contents,
+intrinsic programs and preserved archived membership. The exact inverse changes
+only the reviewed owner/declaration closures and provenance. All eighteen files
+rebuild identically; all 110 queries, local IDs, selected input counts
+**106/117/109/123/4** and configuration origins **47/82/38/33/31** remain intact.
+The selected 55-allocation census confirms partial passive owners **13 → 12**.
+Complete native builds remain **0/5**. The receipt and selected-owner census are
+in `runs/owned-empty-passive-socket-publication-01`.
+Validation logs: `runs/owned-empty-passive-socket-tests-02.log`,
+`runs/owned-empty-passive-socket-publication-01.log` and
+`runs/owned-empty-passive-socket-clippy-01.log`.
+
+**Resume:** import the Player's configured Withered amount through the existing
+single-output projection contract. Source ordinal 451 saves Placeholder 15;
+Count Unit `295a`, Player Scenario ownership and preserve-zero selection already
+exist. Retained source constructor/callback evidence supports this raw input.
+Do not pre-clamp it to the downstream ten-stack cap, emit an effect, import a
+calculation-view flag or infer `CanBeWithered`. Applicability and scaling remain
+native work. This input checkpoint needs no new public model. Continue Life
+supplier/final-metric work and preserve occurrence ownership for Sigil,
+Corrupting Cry and Demon Form settings.
+
+## Previous checkpoint: configured distance inputs
 
 The [distance packet](../data/owned/poe2/3887ae68/configuration-distance-inputs/README.md)
 uses the approved projection contract to preserve both meanings of the saved
@@ -121,7 +167,7 @@ leaves require receipts for both roles. This accounts for raw input ownership
 without closing native contribution, applicability or inventory coverage. No
 native program, Stat, receiver or PoB calculation-view flag is introduced.
 
-The current package is **`runs/owned-configuration-distance-publication-02/package`**:
+This checkpoint's package is **`runs/owned-configuration-distance-publication-02/package`**:
 
 - Input: `0efaf9bebc6a3f40e448cb22596c539b53436e15c063f92209c87627a6b4fa62`.
 - Definitions: `a03a41646f1001bffd3af45bc1fd6826d6da8e73fca9922bb035169587f41432`.
@@ -154,9 +200,9 @@ three-test source replay passes after normalizing the five authoring JSON files
 to LF; parsed values, archive bytes, canonical authoring digest and endpoint are
 unchanged (`runs/owned-configuration-distance-lf-01.log`).
 
-**Next:** finish the selected empty socket's intrinsic source proof and close
-only that owner/declaration domain if validated. Continue actual Life supplier
-admission and configuration accounting from this endpoint. Distance delivery
+The subsequent socket checkpoint above completes only its reviewed intrinsic
+domain. Actual Life supplier admission and configuration accounting continue.
+Distance delivery
 still needs its separate native applicability review; importing raw assumptions
 does not implement Sniper accuracy or any final distance-dependent metric.
 
@@ -224,12 +270,10 @@ reuse existing stat receivers and checked numeric selection, but adjustment,
 override and CI suppliers still need evidence. The six critical numeric
 dependencies and four critical query memberships remain open; observed zero or
 empty source buckets do not establish complete exclusions.
-The selected ordinary jewel socket `7960` / Passive `1b48` is a smaller candidate
-for intrinsic owner/declaration closure: its complete source constructor has no
-intrinsic modifier. Review and publish only that intrinsic domain, preserving
-the separate jewel/radius providers and allocation bookkeeping; an empty
-runtime observation alone is insufficient. Source preparation is in progress
-and will bind the next distance-input endpoint before publication.
+The subsequent socket checkpoint above closes the intrinsic domain of the
+selected ordinary jewel socket `7960` / Passive `1b48`, preserving the separate
+jewel/radius providers and allocation bookkeeping. An empty runtime observation
+alone supplies no such coverage authority.
 
 The owner's accepted
 [configuration projection contract](owned-configuration-projections-proposal.md)

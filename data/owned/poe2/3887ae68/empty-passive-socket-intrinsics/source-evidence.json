@@ -1,0 +1,493 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "source_id": "7960",
+  "archives": [
+    {
+      "source_path": "src/TreeData/0_5/tree.lua",
+      "source_sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c",
+      "source_bytes": 2620112,
+      "archive": "tree.lua.gz",
+      "archive_sha256": "150e3945838287aa50ada2f2ef998fb50c84471b38a5e4f17e4eb06b34553acb",
+      "archive_bytes": 388551,
+      "checkout_sha256": "6f13f8e6ea1f49378c0c9e0e16bbe64cc227ae0efa08740f6ff24456b5b4b1da",
+      "checkout_bytes": 2757566,
+      "acquisition": "UTF-8 checkout, CRLF to LF only, exact normalized byte digest verified against pinned source manifest; no source execution"
+    },
+    {
+      "source_path": "src/Classes/PassiveTree.lua",
+      "source_sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d",
+      "source_bytes": 31232,
+      "archive": "PassiveTree.lua.gz",
+      "archive_sha256": "65953cf9af11aedb073c6e6886b5a16cb9ebef3948eea5bec99697d134dcdcfd",
+      "archive_bytes": 8230,
+      "checkout_sha256": "b2e818a093ee7c763da2e113ac4df93fbf0fae7b4152ba2a135c9ca508f2ccbf",
+      "checkout_bytes": 32091,
+      "acquisition": "UTF-8 checkout, CRLF to LF only, exact normalized byte digest verified against pinned source manifest; no source execution"
+    },
+    {
+      "source_path": "src/Classes/PassiveSpec.lua",
+      "source_sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c",
+      "source_bytes": 95117,
+      "archive": "PassiveSpec.lua.gz",
+      "archive_sha256": "57e5da5ff05a300020c93cf3119ee1903377317183876738879a312b0c092822",
+      "archive_bytes": 23018,
+      "checkout_sha256": "578dfa5128dcbf390da7ebd1d3b86b4b6b0dd8a863a95c3e738798b739ee2f41",
+      "checkout_bytes": 97846,
+      "acquisition": "UTF-8 checkout, CRLF to LF only, exact normalized byte digest verified against pinned source manifest; no source execution"
+    },
+    {
+      "source_path": "src/Modules/CalcSetup.lua",
+      "source_sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "source_bytes": 100609,
+      "archive": "../mana-supplier-sources/CalcSetup.lua.gz",
+      "archive_sha256": "6cf68ffe3f750e1b0670c54f4152fa2cbd88db2c1092d16c7541f773582a708c",
+      "archive_bytes": 21347,
+      "checkout_sha256": "7b9c836b55e675fbb0da772748520bee559b3f51dab91491247781c40f0a81d5",
+      "checkout_bytes": 102918,
+      "acquisition": "UTF-8 checkout, CRLF to LF only, exact normalized byte digest verified against pinned source manifest; no source execution"
+    }
+  ],
+  "spans": [
+    {
+      "role": "complete-node",
+      "source_path": "src/TreeData/0_5/tree.lua",
+      "first_line": 36660,
+      "last_line": 36673,
+      "sha256": "faafc7815163e78c2379a6e6c50ff3cff8b955628810de2778a3f60fdb74913f",
+      "text": "\t\t[7960]={\n\t\t\tconnections={\n\t\t\t},\n\t\t\tgroup=395,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/MasteryBlank.dds\",\n\t\t\tisJewelSocket=true,\n\t\t\tname=\"Jewel Socket\",\n\t\t\torbit=1,\n\t\t\torbitIndex=2,\n\t\t\tskill=7960,\n\t\t\tstats={\n\t\t\t},\n\t\t\tstringId=\"jewel_slot1969\"\n\t\t},\n"
+    },
+    {
+      "role": "node-identity-type-and-dispatch",
+      "source_path": "src/Classes/PassiveTree.lua",
+      "first_line": 211,
+      "last_line": 305,
+      "sha256": "dc4808c3f2db2c831ee4277e49c0c5e824f48d15d988b1fc571a0fdf6e8f317e",
+      "text": "\tlocal nodeMap = { }\n\tfor _, n in pairs(self.nodes) do\n\t\t---@class Node\n\t\tlocal node = n\n\t\tnode.id = node.skill\n\t\tnode.iname = node.stringId\n\t\tnode.g = node.group\n\t\tnode.o = node.orbit\n\t\tnode.oidx = node.orbitIndex\n\t\tnode.dn = node.name\n\t\tnode.sd = node.stats or {}\n\n\t\tnode.__index = node\n\t\tnode.linkedId = { }\n\t\tnodeMap[node.id] = node\n\n\t\t-- Determine node type\n\t\tif node.classesStart then\n\t\t\tnode.type = \"ClassStart\"\n\t\t\tfor _, className in ipairs(node.classesStart) do\n\t\t\t\tself.classStartNodeNameMap[className] = node.id\n\t\t\t\tlocal class = self.classes[self.classNameMap[className]]\n\t\t\t\tif class ~= nil then\n\t\t\t\t\tclass.startNodeId = node.id\n\t\t\t\tend\n\t\t\tend\n\t\telseif node.isAscendancyStart then\n\t\t\tnode.type = \"AscendClassStart\"\n\t\t\tlocal ascendClass = self.ascendNameMap[node.ascendancyName].ascendClass\n\t\t\tascendClass.startNodeId = node.id\n\t\t\tif node.isSwitchable then\n\t\t\t\tfor ascName, _ in pairs(node.options) do\n\t\t\t\t\tlocal option = self.ascendNameMap[ascName].ascendClass\n\t\t\t\t\toption.startNodeId = node.id\n\t\t\t\tend\n\t\t\tend\n\t\telseif node.isOnlyImage then\n\t\t\tnode.type = \"OnlyImage\"\n\t\telseif node.isJewelSocket then\n\t\t\tnode.type = \"Socket\"\n\t\t\tself.sockets[node.id] = node\n\t\telseif node.ks or node.isKeystone then\n\t\t\tnode.type = \"Keystone\"\n\t\t\tself.keystoneMap[node.dn] = node\n\t\t\tself.keystoneMap[node.dn:lower()] = node\n\t\telseif node[\"not\"] or node.isNotable then\n\t\t\tnode.type = \"Notable\"\n\t\t\tif not node.ascendancyName then\n\t\t\t\t-- Some nodes have duplicate names in the tree data for some reason, even though they're not on the tree\n\t\t\t\t-- Only add them if they're actually part of a group (i.e. in the tree)\n\t\t\t\t-- Add everything otherwise, because cluster jewel notables don't have a group\n\t\t\t\tif not self.notableMap[node.dn:lower()] then\n\t\t\t\t\tself.notableMap[node.dn:lower()] = node\n\t\t\t\telseif node.g then\n\t\t\t\t\tself.notableMap[node.dn:lower()] = node\n\t\t\t\tend\n\t\t\telse\n\t\t\t\tif node.containJewelSocket then\n\t\t\t\t\tself.sockets[node.id] = node\n\t\t\t\tend\n\t\t\t\tself.ascendancyMap[node.dn:lower()] = node\n\t\t\t\tif not self.classNotables[self.ascendNameMap[node.ascendancyName].class.name] then\n\t\t\t\t\tself.classNotables[self.ascendNameMap[node.ascendancyName].class.name] = { }\n\t\t\t\tend\n\t\t\t\tif self.ascendNameMap[node.ascendancyName].class.name ~= \"Scion\" then\n\t\t\t\t\tt_insert(self.classNotables[self.ascendNameMap[node.ascendancyName].class.name], node.dn)\n\t\t\t\tend\n\t\t\tend\n\t\telse\n\t\t\tnode.type = \"Normal\"\n\t\t\tif node.ascendancyName == \"Ascendant\" and not node.dn:find(\"Dexterity\") and not node.dn:find(\"Intelligence\") and\n\t\t\t\tnot node.dn:find(\"Strength\") and not node.dn:find(\"Passive\") then\n\t\t\t\tself.ascendancyMap[node.dn:lower()] = node\n\t\t\t\tif not self.classNotables[self.ascendNameMap[node.ascendancyName].class.name] then\n\t\t\t\t\tself.classNotables[self.ascendNameMap[node.ascendancyName].class.name] = { }\n\t\t\t\tend\n\t\t\t\tt_insert(self.classNotables[self.ascendNameMap[node.ascendancyName].class.name], node.dn)\n\t\t\tend\n\t\tend\n\n\t\t-- Find the node group\n\t\tlocal group = self.groups[node.g]\n\t\tif group then\n\t\t\tnode.group = group\n\t\t\tgroup.ascendancyName = node.ascendancyName\n\t\t\tif node.isAscendancyStart then\n\t\t\t\tgroup.isAscendancyStart = true\n\t\t\tend\n\t\telseif node.type == \"Notable\" or node.type == \"Keystone\" then\n\t\t\tself.clusterNodeMap[node.dn] = node\n\t\tend\n\n\t\tself:ProcessNode(node)\n\tend\n\n"
+    },
+    {
+      "role": "external-jewel-radius-topology",
+      "source_path": "src/Classes/PassiveTree.lua",
+      "first_line": 350,
+      "last_line": 380,
+      "sha256": "a32af90b7ed33354bcf05f68c9b88378634b8cc743af4edc7dd076f6a2d9ab3a",
+      "text": "\t-- Precalculate the lists of nodes that are within each radius of each socket\n\tfor nodeId, socket in pairs(self.sockets) do\n\t\tif socket.name == \"Charm Socket\" then\n\t\t\tsocket.charmSocket = true\n\t\telseif not socket.containJewelSocket and not socket.noRadius then\n\t\t\tsocket.nodesInRadius = { }\n\t\t\tsocket.attributesInRadius = { }\n\t\t\tfor radiusIndex, _ in ipairs(data.jewelRadius) do\n\t\t\t\tsocket.nodesInRadius[radiusIndex] = { }\n\t\t\t\tsocket.attributesInRadius[radiusIndex] = { }\n\t\t\tend\n\n\t\t\tlocal minX, maxX = socket.x - data.maxJewelRadius, socket.x + data.maxJewelRadius\n\t\t\tlocal minY, maxY = socket.y - data.maxJewelRadius, socket.y + data.maxJewelRadius\n\n\t\t\tfor _, node in pairs(self.nodes) do\n\t\t\t\tif node.x and node.x >= minX and node.x <= maxX and node.y and node.y >= minY and node.y <= maxY\n\t\t\t\t\tand node ~= socket and not node.isBlighted and node.group and not node.isProxy\n\t\t\t\t\tand not node.group.isProxy and not node.isMastery then\n\t\t\t\t\t\tlocal vX, vY = node.x - socket.x, node.y - socket.y\n\t\t\t\t\t\tlocal distSquared = vX * vX + vY * vY\n\t\t\t\t\t\tfor radiusIndex, radiusInfo in ipairs(data.jewelRadius) do\n\t\t\t\t\t\t\tif distSquared <= radiusInfo.outerSquared and radiusInfo.innerSquared <= distSquared then\n\t\t\t\t\t\t\t\tsocket.nodesInRadius[radiusIndex][node.id] = node\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\n"
+    },
+    {
+      "role": "class-start-flags",
+      "source_path": "src/Classes/PassiveTree.lua",
+      "first_line": 408,
+      "last_line": 418,
+      "sha256": "4cfe950d797652d7e5ca6ad6ad185a29e676a12ea8cc8a9c55fb8e0fe4ed9e02",
+      "text": "\n\tfor classId, class in pairs(self.classes) do\n\t\tlocal startNode = nodeMap[class.startNodeId]\n\t\tfor _, nodeId in ipairs(startNode.linkedId) do\n\t\t\tlocal node = nodeMap[nodeId]\n\t\t\tif node.type == \"Normal\" then\n\t\t\t\tnode.modList:NewMod(\"Condition:ConnectedTo\"..class.name..\"Start\", \"FLAG\", true, \"Tree:\"..nodeId)\n\t\t\tend\n\t\tend\n\tend\n\t\n"
+    },
+    {
+      "role": "complete-intrinsic-stat-constructor",
+      "source_path": "src/Classes/PassiveTree.lua",
+      "first_line": 448,
+      "last_line": 525,
+      "sha256": "dbaafdae063379e3bf6ab19145438034c947fb48ccf7e64aee80de67893e5dae",
+      "text": "function PassiveTreeClass:ProcessStats(node, startIndex)\n\tstartIndex = startIndex or 1\n\tif startIndex == 1 then\n\t\tnode.modKey = \"\"\n\t\tnode.mods = { }\n\t\tnode.modList = new(\"ModList\"):ModList()\n\tend\n\n\tif not node.sd then\n\t\treturn\n\tend\n\n\t-- Parse node modifier lines\n\tlocal i = startIndex\n\twhile node.sd[i] do\n\t\tif node.sd[i]:match(\"\\n\") then\n\t\t\tlocal line = node.sd[i]\n\t\t\tlocal il = i\n\t\t\tt_remove(node.sd, i)\n\t\t\tfor line in line:gmatch(\"[^\\n]+\") do\n\t\t\t\tt_insert(node.sd, il, line)\n\t\t\t\til = il + 1\n\t\t\tend\n\t\tend\n\t\tlocal line = node.sd[i]\n\t\tlocal list, extra = modLib.parseMod(line)\n\t\tif not list or extra then\n\t\t\t-- Try to combine it with one or more of the lines that follow this one\n\t\t\tlocal endI = i + 1\n\t\t\twhile node.sd[endI] do\n\t\t\t\tlocal comb = line\n\t\t\t\tfor ci = i + 1, endI do\n\t\t\t\t\tcomb = comb .. \" \" .. node.sd[ci]\n\t\t\t\tend\n\t\t\t\tlist, extra = modLib.parseMod(comb, true)\n\t\t\t\tif list and not extra then\n\t\t\t\t\t-- Success, add dummy mod lists to the other lines that were combined with this one\n\t\t\t\t\tfor ci = i + 1, endI do\n\t\t\t\t\t\tnode.mods[ci] = { list = {}, combined = true }\n\t\t\t\t\tend\n\t\t\t\t\tbreak\n\t\t\t\tend\n\t\t\t\tendI = endI + 1\n\t\t\tend\n\t\tend\n\t\tif not list then\n\t\t\t-- Parser had no idea how to read this modifier\n\t\t\tnode.unknown = true\n\t\telseif extra then\n\t\t\t-- Parser recognised this as a modifier but couldn't understand all of it\n\t\t\tnode.extra = true\n\t\telse\n\t\t\tfor _, mod in ipairs(list) do\n\t\t\t\tnode.modKey = node.modKey..\"[\"..modLib.formatMod(mod)..\"]\"\n\t\t\tend\n\t\tend\n\t\tnode.mods[i] = { list = list, extra = extra }\n\t\ti = i + 1\n\t\twhile node.mods[i] do\n\t\t\t-- Skip any lines with dummy lists added by the line combining code\n\t\t\ti = i + 1\n\t\tend\n\tend\n\n\t-- Build unified list of modifiers from all recognised modifier lines\n\tfor i = startIndex, #node.mods do\n\t\tlocal mod = node.mods[i]\n\t\tif mod.list and not mod.extra then\n\t\t\tfor i, mod in ipairs(mod.list) do\n\t\t\t\tmod = modLib.setSource(mod, \"Tree:\"..node.id)\n\t\t\t\tnode.modList:AddMod(mod)\n\t\t\tend\n\t\tend\n\tend\n\tif node.type == \"Keystone\" then\n\t\tnode.keystoneMod = modLib.createMod(\"Keystone\", \"LIST\", node.dn, \"Tree\"..node.id)\n\tend\nend\n"
+    },
+    {
+      "role": "complete-node-constructor",
+      "source_path": "src/Classes/PassiveTree.lua",
+      "first_line": 527,
+      "last_line": 595,
+      "sha256": "c9118ae7d77259363039108642e2055db7c26c6b204e73d742d8116c058e28a8",
+      "text": "-- Common processing code for nodes (used for both real tree nodes and subgraph nodes)\nfunction PassiveTreeClass:ProcessNode(node)\n\tnode.targetSize = self:GetNodeTargetSize(node)\n\tlocal overlayData\n\tif node.nodeOverlay then\n\t\toverlayData = { }\n\t\tfor type, data in pairs(node.nodeOverlay) do\n\t\t\toverlayData[type] = data\n\t\tend\n\t\tlocal asset = self:GetAssetByName(overlayData.alloc)\n\t\tlocal artWidth = asset.width * self.scaleImage\n\t\toverlayData.artWidth = artWidth\n\t\toverlayData.size = artWidth\n\t\toverlayData.rsq = overlayData.size * overlayData.size\n\telse\n\t\toverlayData = self.nodeOverlay[node.type]\n\tend\n\tnode.overlay = overlayData\n\tif node.overlay then\n\t\tlocal size = node.targetSize[\"overlay\"] and node.targetSize[\"overlay\"].width or node.targetSize.width\n\t\tnode.rsq = size * size\n\t\tnode.size = size\n\tend\n\n\t-- Derive the true position of the node\n\tif node.group then\n\t\tnode.angle = self.orbitAnglesByOrbit[node.o + 1][node.oidx + 1]\n\t\tlocal orbitRadius = self.orbitRadii[node.o + 1]  * self.scaleImage\n\t\tnode.x = (node.group.x * self.scaleImage) + m_sin(node.angle) * orbitRadius\n\t\tnode.y = (node.group.y * self.scaleImage) - m_cos(node.angle) * orbitRadius\n\tend\n\n\t-- organize recipe aka oils\n\tif node.recipe then\n\t\tnode.infoRecipe = { }\n\t\tfor _, oil in ipairs(node.recipe) do\n\t\t\ttable.insert(node.infoRecipe, {\n\t\t\t\tname = oil,\n\t\t\t\tsprite = self:GetAssetByName(oil)\n\t\t\t})\n\t\tend\n\tend\n\n\tself:ProcessStats(node)\n\n\t-- if this node isSwitchable then parse also subnodes\n\tif node.isSwitchable or node.isAttribute then\n\t\tfor class, switchNode in pairs(node.options) do\n\t\t\tsetmetatable(switchNode, { __index = node })\n\t\t\tif node.isAttribute then\n\t\t\t\tswitchNode.id = node.id\n\t\t\tend\n\t\t\tswitchNode.dn = switchNode.name\n\t\t\tswitchNode.sd = switchNode.stats\n\n\t\t\tif switchNode.jewelOverlay then\n\t\t\t\tConPrintf(\"SwitchNode with jewelOverlay found: \"..switchNode.name)\n\t\t\t\tswitchNode.overlay = switchNode.jewelOverlay\n\t\t\t\tif switchNode.overlay then\n\t\t\t\t\tlocal size = node.targetSize[\"overlay\"] and node.targetSize[\"overlay\"].width or node.targetSize.width\n\t\t\t\t\tswitchNode.rsq = size * size\n\t\t\t\t\tswitchNode.size = size\n\t\t\t\tend\n\t\t\tend\n\n\t\t\tself:ProcessStats(switchNode)\n\t\tend\n\tend\nend\n"
+    },
+    {
+      "role": "spec-wrapper-constructor",
+      "source_path": "src/Classes/PassiveSpec.lua",
+      "first_line": 45,
+      "last_line": 115,
+      "sha256": "92a3dc321c865f4fa41669b2a5c361d819fcd0182d01a73e2927698b0bb91581",
+      "text": "function PassiveSpecClass:Init(treeVersion, convert)\n\tself.treeVersion = treeVersion\n\tself.tree = main:LoadTree(treeVersion)\n\tself.ignoredNodes = { }\n\tself.ignoreAllocatingSubgraph = false\n\n\t-- There are 3 allocation modes, [0] normal points, [1] weapon set 1, [2] weapon set 2\n\tself.allocMode = 0\n\n\tlocal previousTreeNodes = { }\n\tif convert then\n\t\tpreviousTreeNodes = self.build.spec.nodes\n\tend\n\n\t-- Make a local copy of the passive tree that we can modify\n\tself.nodes = { }\n\tfor _, treeNode in pairs(self.tree.nodes) do\n\t\t-- Exclude proxy or groupless nodes, as well as expansion sockets\n\t\tif treeNode.group and not treeNode.isProxy and not treeNode.group.isProxy and (not treeNode.expansionJewel or not treeNode.expansionJewel.parent) then\n\t\t\t---@class Node\n\t\t\tself.nodes[treeNode.id] = setmetatable({\n\t\t\t\tlinked = { },\n\t\t\t\tpower = { }\n\t\t\t}, treeNode)\n\t\tend\n\tend\n\tfor id, node in pairs(self.nodes) do\n\t\t-- init all nodes as normal allocationMode\n\t\tnode.allocMode = 0\n\t\t-- if the node is allocated and between the old and new tree has the same ID but does not share the same name, add to list of nodes to be ignored\n\t\tif convert and previousTreeNodes[id] and self.build.spec.allocNodes[id] and node.name ~= previousTreeNodes[id].name then\n\t\t\tself.ignoredNodes[id] = previousTreeNodes[id]\n\t\tend\n\t\tfor _, otherId in ipairs(node.linkedId) do\n\t\t\tt_insert(node.linked, self.nodes[otherId])\n\t\tend\n\tend\n\n\t-- Table of intuitive leap-like jewel node modifiers from one type of node to others with the given radius\n\t-- { from = nodeType, radiusIndex = index, to = { nodeType, [...] } }\n\tself.intuitiveLeapLikeNodes = { }\n\n\t-- List of currently allocated nodes\n\t-- Keys are node IDs, values are nodes\n\tself.allocNodes = { }\n\n\t-- List of nodes allocated in subgraphs, used to maintain allocation when loading, and when rebuilding subgraphs\n\tself.allocSubgraphNodes = { }\n\n\t-- List of cluster nodes to allocate\n\tself.allocExtendedNodes = { }\n\n\t-- Table of jewels equipped in this tree\n\t-- Keys are node IDs, values are items\n\tself.jewels = { }\n\n\t-- Tree graphs dynamically generated from cluster jewels\n\t-- Keys are subgraph IDs, values are graphs\n\tself.subGraphs = { }\n\n\t-- Keys are mastery node IDs, values are mastery effect IDs\n\tself.masterySelections = { }\n\n\t-- Keys are node IDs, values are the replacement node\n\tself.hashOverrides = { }\n\n\t-- Author notes attached to allocated nodes (Shift+Right-Click on a node to\n\t-- set one). Keyed by node id; emitted into the PoE2 .build export as the\n\t-- node's additional_text.\n\tself.nodeNotes = { }\nend\n"
+    },
+    {
+      "role": "socket-allocation-bookkeeping",
+      "source_path": "src/Classes/PassiveSpec.lua",
+      "first_line": 1029,
+      "last_line": 1056,
+      "sha256": "de36f9b58174995c344b3e1732e8a638485ba7b66ba67f2a641b8a473a639ee1",
+      "text": "function PassiveSpecClass:CountAllocNodes()\n\tlocal used, ascUsed, secondaryAscUsed, sockets, weaponSet1Used, weaponSet2Used = 0, 0, 0, 0, 0, 0\n\tfor _, node in pairs(self.allocNodes) do\n\t\tif node.type ~= \"ClassStart\" and node.type ~= \"AscendClassStart\" and node.isFreeAllocate == nil then\n\t\t\tif node.ascendancyName then\n\t\t\t\tif not node.isMultipleChoiceOption then\n\t\t\t\t\tif self.tree.secondaryAscendNameMap and self.tree.secondaryAscendNameMap[node.ascendancyName] then\n\t\t\t\t\t\tsecondaryAscUsed = secondaryAscUsed + 1\n\t\t\t\t\telse\n\t\t\t\t\t\tascUsed = ascUsed + 1\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\telse\n\t\t\t\tused = used + 1\n\t\t\tend\n\t\t\tif node.type == \"Socket\" then\n\t\t\t\tsockets = sockets + 1\n\t\t\tend\n\t\tend\n\n\t\tif node.allocMode == 1 then\n\t\t\tweaponSet1Used = weaponSet1Used + 1\n\t\telseif node.allocMode == 2 then\n\t\t\tweaponSet2Used = weaponSet2Used + 1\n\t\tend\n\tend\n\treturn used, ascUsed, secondaryAscUsed, sockets, weaponSet1Used, weaponSet2Used\nend\n"
+    },
+    {
+      "role": "spec-default-and-external-replacement-boundary",
+      "source_path": "src/Classes/PassiveSpec.lua",
+      "first_line": 1442,
+      "last_line": 2045,
+      "sha256": "1d31bf88786041e08d2c579526058a93401655d17c7b9f4fbf31ff407fd29610",
+      "text": "function PassiveSpecClass:BuildAllDependsAndPaths()\n\t-- This table will keep track of which nodes have been visited during each path-finding attempt\n\tlocal visited = { }\n\tlocal attributes = { \"Dexterity\", \"Intelligence\", \"Strength\", \"Attribute\" }\n\n\t-- First check for mods that affect intuitive leap-like properties of other nodes\n\tlocal processed = { }\n\tlocal intuitiveLeapLikeNodes = self.intuitiveLeapLikeNodes\n\tlocal alternateClassStartNodes = { }\n\tfor socketNodeId, itemId in pairs(self.jewels) do\n\t\tif self.allocNodes[socketNodeId] then\n\t\t\tlocal item = self:GetJewel(itemId)\n\t\t\tlocal className = item and item.jewelData.alternateClassStart\n\t\t\tlocal startNodeId = self.tree.classStartNodeNameMap[className]\n\t\t\tlocal startNode = startNodeId and self.nodes[startNodeId]\n\t\t\tif startNode then\n\t\t\t\talternateClassStartNodes[startNode.id] = startNode\n\t\t\tend\n\t\tend\n\tend\n\twipeTable(intuitiveLeapLikeNodes)\n\tfor id, node in pairs(self.allocNodes) do\n\t\tif node.ascendancyName then -- avoid processing potentially replaceable nodes\n\t\t\tself.tree:ProcessStats(node)\n\t\t\tif node.modList:HasMod(\"LIST\", nil, \"AllocateFromNodeRadius\") then\n\t\t\t\tfor _, radius in ipairs(node.modList:List(nil, \"AllocateFromNodeRadius\")) do\n\t\t\t\t\tt_insert(intuitiveLeapLikeNodes, radius)\n\t\t\t\tend\n\t\t\tend\n\t\t\tprocessed[id] = true\n\t\tend\n\tend\n\n\t-- Check all nodes for other nodes which depend on them (i.e. are only connected to the tree through that node)\n\tself.switchableNodes = { }\n\tfor id, node in pairs(self.nodes) do\n\t\tnode.depends = wipeTable(node.depends)\n\t\tnode.intuitiveLeapLikesAffecting = wipeTable(node.intuitiveLeapLikesAffecting)\n\t\tnode.conqueredBy = nil\n\n\t\t-- ignore cluster jewel nodes that don't have an id in the tree\n\t\tif self.tree.nodes[id] then\n\t\t\tlocal nodeToReplace = self.tree.nodes[id]\n\t\t\tif self.tree.nodes[id].isSwitchable then\n\t\t\t\tif self.tree.nodes[id].options[self.curClassName] then\n\t\t\t\t\tnodeToReplace = self.tree.nodes[id].options[self.curClassName]\n\t\t\t\telseif self.tree.nodes[id].options[self.curAscendClassName] then\n\t\t\t\t\tnodeToReplace = self.tree.nodes[id].options[self.curAscendClassName]\n\t\t\t\tend\n\t\t\t\tself.switchableNodes[nodeToReplace.id] = node\n\t\t\tend\n\t\t\tself:ReplaceNode(node, nodeToReplace)\n\t\tend\n\n\t\tif node.type ~= \"ClassStart\" and node.type ~= \"Socket\" and not node.ascendancyName then\n\t\t\tfor nodeId, itemId in pairs(self.jewels) do\n\t\t\t\tlocal item = self.build.itemsTab.items[itemId]\n\t\t\t\tif item and item.jewelRadiusIndex and self.allocNodes[nodeId] and item.jewelData and not item.jewelData.limitDisabled then\n\t\t\t\t\tlocal radiusIndex = item.jewelRadiusIndex\n\t\t\t\t\tif self.nodes[nodeId].nodesInRadius and self.nodes[nodeId].nodesInRadius[radiusIndex][node.id] then\n\t\t\t\t\t\tif itemId ~= 0 then\n\t\t\t\t\t\t\tif item.jewelData.intuitiveLeapLike then\n\t\t\t\t\t\t\t\t-- This node depends on Intuitive Leap-like behaviour\n\t\t\t\t\t\t\t\t-- This flag:\n\t\t\t\t\t\t\t\t-- 1. Prevents generation of paths from this node unless it's also connected to the start\n\t\t\t\t\t\t\t\t-- 2. Prevents allocation of path nodes when this node is being allocated\n\t\t\t\t\t\t\t\tt_insert(node.intuitiveLeapLikesAffecting, self.nodes[nodeId])\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tif item.jewelData.conqueredBy then\n\t\t\t\t\t\t\t\tnode.conqueredBy = item.jewelData.conqueredBy\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\n\t\t\t\t\tif item.jewelData and item.jewelData.fromNothingKeystone then\n\t\t\t\t\t\tfor keyName, keyNode in pairs(self.tree.keystoneMap) do\n\t\t\t\t\t\t\tif item.jewelData.fromNothingKeystones[keyName] and keyNode.nodesInRadius then\n\t\t\t\t\t\t\t\tif keyNode.nodesInRadius[radiusIndex][node.id] then\n\t\t\t\t\t\t\t\t\tt_insert(node.intuitiveLeapLikesAffecting, self.nodes[nodeId])\n\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\t\tfor _, intuitiveLeapMap in ipairs(intuitiveLeapLikeNodes) do\n\t\t\t\tlocal allocatable = false\n\t\t\t\tfor _, allocatableNodeType in ipairs(intuitiveLeapMap.to) do\n\t\t\t\t\tif allocatableNodeType == node.type then\n\t\t\t\t\t\tallocatable = true\n\t\t\t\t\t\tbreak\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\t\tif allocatable then\n\t\t\t\t\tif intuitiveLeapMap.from == \"Keystone\" then\n\t\t\t\t\t\tfor keyName, keyNode in pairs(self.tree.keystoneMap) do\n\t\t\t\t\t\t\tif self.allocNodes[keyNode.id] and keyNode.nodesInRadius and keyNode.nodesInRadius[intuitiveLeapMap.radiusIndex][id] then\n\t\t\t\t\t\t\t\tt_insert(node.intuitiveLeapLikesAffecting, self.nodes[keyNode.id])\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\t\t-- We don't keep a `nodesInRadius` map for notables, so this is disabled for now\n\t\t\t\t\t-- if intuitiveLeapMap.from == \"Notable\" then\n\t\t\t\t\t-- \tfor keyName, keyNode in pairs(self.tree.notableMap) do\n\t\t\t\t\t-- \t\tif keyNode.nodesInRadius[intuitiveLeapMap.radiusIndex][node.id] then\n\t\t\t\t\t-- \t\t\tt_insert(node.intuitiveLeapLikesAffecting, self.nodes[nodeId])\n\t\t\t\t\t-- \t\tend\n\t\t\t\t\t-- \tend\n\t\t\t\t\t-- end\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\tif node.alloc then\n\t\t\tnode.depends[1] = node -- All nodes depend on themselves\n\t\tend\n\tend\n\n\tfor _, node in pairs(self.nodes) do\n\t\t-- if the node have unlockConstraints, add this node as dependent to the constraint nodes\n\t\t-- we are running here after wiping all depends above\n\t\tif node.unlockConstraint then\n\t\t\tfor _, nodeId in ipairs(node.unlockConstraint.nodes) do\n\t\t\t\tif self.nodes[nodeId] then\n\t\t\t\t\tt_insert(self.nodes[nodeId].depends, node)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\n\t\t-- set attribute nodes\n\t\tif self.hashOverrides[node.id] then\n\t\t\tself:ReplaceNode(node, self.hashOverrides[node.id])\n\t\tend\n\n\t\t-- If node is conquered, replace it or add mods\n\t\tif node.conqueredBy and node.type ~= \"Socket\" then\n\t\t\tlocal conqueredBy = node.conqueredBy\n\t\t\tlocal legionNodes = self.tree.legion.nodes\n\t\t\tlocal legionAdditions = self.tree.legion.additions\n\n\t\t\t-- FIXME - continue implementing\n\t\t\tlocal jewelType = 5\n\t\t\tif conqueredBy.conqueror.type == \"kalguur\" then\n\t\t\t\tjewelType = 1\n\t\t\telseif conqueredBy.conqueror.type == \"abyss\" then\n\t\t\t\tjewelType = 2\n\t\t\tend\n\t\t\tlocal seed = conqueredBy.id\n\t\t\tif jewelType == 5 then\n\t\t\t\tseed = seed / 20\n\t\t\tend\n\n\t\t\tlocal replaceHelperFunc = function(statToFix, statKey, statMod, value)\n\t\t\t\tif statMod.fmt == \"g\" then -- note the only one we actually care about is \"Ritual of Flesh\" life regen\n\t\t\t\t\tif statKey:find(\"per_minute\") then\n\t\t\t\t\t\tvalue = round(value / 60, 1)\n\t\t\t\t\telseif statKey:find(\"permyriad\") then\n\t\t\t\t\t\tvalue = value / 100\n\t\t\t\t\telseif statKey:find(\"_ms\") then\n\t\t\t\t\t\tvalue = value / 1000\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\t\t--if statMod.fmt == \"d\" then -- only ever d or g, and we want both past here\n\t\t\t\tif statMod.min ~= statMod.max then\n\t\t\t\t\treturn statToFix:gsub(\"%(\" .. statMod.min .. \"%-\" .. statMod.max .. \"%)\", value)\n\t\t\t\telseif statMod.min ~= value then -- only true for might/legacy of the vaal which can combine stats\n\t\t\t\t\treturn statToFix:gsub(statMod.min, value)\n\t\t\t\tend\n\t\t\t\treturn statToFix -- if it doesn't need to be changed\n\t\t\tend\n\n\t\t\tif node.type == \"Notable\" then\n\t\t\t\t-- todo: update once we get seed data\n\t\t\t\t--local jewelDataTbl = { }\n\t\t\t\t--if seed ~= m_max(m_min(seed, data.timelessJewelSeedMax[jewelType]), data.timelessJewelSeedMin[jewelType]) then\n\t\t\t\t--\tConPrintf(\"ERROR: Seed \" .. seed .. \" is outside of valid range [\" .. data.timelessJewelSeedMin[jewelType] .. \" - \" .. data.timelessJewelSeedMax[jewelType] .. \"] for jewel type: \" .. data.timelessJewelTypes[jewelType])\n\t\t\t\t--else\n\t\t\t\t--\tjewelDataTbl = data.readLUT(conqueredBy.id, node.id, jewelType)\n\t\t\t\t--end\n\t\t\t\t----print(\"Need to Update: \" .. node.id .. \" [\" .. node.dn .. \"]\")\n\t\t\t\t--if not next(jewelDataTbl) then\n\t\t\t\t--\tConPrintf(\"Missing LUT: \" .. data.timelessJewelTypes[jewelType])\n\t\t\t\t--else\n\t\t\t\t--\tif jewelType == 1 then\n\t\t\t\t--\t\tlocal headerSize = #jewelDataTbl\n\t\t\t\t--\t\t-- FIXME: complete implementation of this. Need to set roll values for stats\n\t\t\t\t--\t\t--        based on their `fmt` specification\n\t\t\t\t--\t\tif headerSize == 2 or headerSize == 3 then\n\t\t\t\t--\t\t\tself:ReplaceNode(node, legionNodes[jewelDataTbl[1] + 1 - data.timelessJewelAdditions])\n\t\t\t\t--\n\t\t\t\t--\t\t\tfor i, repStat in ipairs(legionNodes[jewelDataTbl[1] + 1 - data.timelessJewelAdditions].sd) do\n\t\t\t\t--\t\t\t\tlocal statKey = legionNodes[jewelDataTbl[1] + 1 - data.timelessJewelAdditions].sortedStats[i]\n\t\t\t\t--\t\t\t\tlocal statMod = legionNodes[jewelDataTbl[1] + 1 - data.timelessJewelAdditions].stats[statKey]\n\t\t\t\t--\t\t\t\trepStat = replaceHelperFunc(repStat, statKey, statMod, jewelDataTbl[statMod.index + 1])\n\t\t\t\t--\t\t\t\tself:NodeAdditionOrReplacementFromString(node, repStat, i == 1) -- wipe mods on first run\n\t\t\t\t--\t\t\tend\n\t\t\t\t--\t\t\t-- should fix the stat values here (note headerSize == 3 has 2 values)\n\t\t\t\t--\t\telseif headerSize == 6 or headerSize == 8 then\n\t\t\t\t--\t\t\tlocal bias = 0\n\t\t\t\t--\t\t\tfor i,val in ipairs(jewelDataTbl) do\n\t\t\t\t--\t\t\t\tif i > (headerSize / 2) then\n\t\t\t\t--\t\t\t\t\tbreak\n\t\t\t\t--\t\t\t\telseif val <= 21 then\n\t\t\t\t--\t\t\t\t\tbias = bias + 1\n\t\t\t\t--\t\t\t\telse\n\t\t\t\t--\t\t\t\t\tbias = bias - 1\n\t\t\t\t--\t\t\t\tend\n\t\t\t\t--\t\t\tend\n\t\t\t\t--\t\t\tif bias >= 0 then\n\t\t\t\t--\t\t\t\tself:ReplaceNode(node, legionNodes[77]) -- might of the vaal\n\t\t\t\t--\t\t\telse\n\t\t\t\t--\t\t\t\tself:ReplaceNode(node, legionNodes[78]) -- legacy of the vaal\n\t\t\t\t--\t\t\tend\n\t\t\t\t--\t\t\tlocal additions = {}\n\t\t\t\t--\t\t\tfor i,val in ipairs(jewelDataTbl) do\n\t\t\t\t--\t\t\t\tif i <= (headerSize / 2) then\n\t\t\t\t--\t\t\t\t\tlocal roll = jewelDataTbl[i + headerSize / 2]\n\t\t\t\t--\t\t\t\t\tif not additions[val] then\n\t\t\t\t--\t\t\t\t\t\tadditions[val] = roll\n\t\t\t\t--\t\t\t\t\telse\n\t\t\t\t--\t\t\t\t\t\tadditions[val] = additions[val] + roll\n\t\t\t\t--\t\t\t\t\tend\n\t\t\t\t--\t\t\t\telse\n\t\t\t\t--\t\t\t\t\tbreak\n\t\t\t\t--\t\t\t\tend\n\t\t\t\t--\t\t\tend\n\t\t\t\t--\t\t\tfor add, val in pairs(additions) do\n\t\t\t\t--\t\t\t\tlocal addition = legionAdditions[add + 1]\n\t\t\t\t--\t\t\t\tfor _, addStat in ipairs(addition.sd) do\n\t\t\t\t--\t\t\t\t\tfor k,statMod in pairs(addition.stats) do -- should only be 1 big, these didn't get changed so can't just grab index\n\t\t\t\t--\t\t\t\t\t\taddStat = replaceHelperFunc(addStat, k, statMod, val)\n\t\t\t\t--\t\t\t\t\tend\n\t\t\t\t--\t\t\t\t\tself:NodeAdditionOrReplacementFromString(node, addStat)\n\t\t\t\t--\t\t\t\tend\n\t\t\t\t--\t\t\tend\n\t\t\t\t--\t\telse\n\t\t\t\t--\t\t\tConPrintf(\"Unhandled Glorious Vanity headerSize: \" .. headerSize)\n\t\t\t\t--\t\tend\n\t\t\t\t--\telse\n\t\t\t\t--\t\tfor _, jewelData in ipairs(jewelDataTbl) do\n\t\t\t\t--\t\t\tif jewelData >= data.timelessJewelAdditions then -- replace\n\t\t\t\t--\t\t\t\tjewelData = jewelData + 1 - data.timelessJewelAdditions\n\t\t\t\t--\t\t\t\tlocal legionNode = legionNodes[jewelData]\n\t\t\t\t--\t\t\t\tif legionNode then\n\t\t\t\t--\t\t\t\t\tself:ReplaceNode(node, legionNode)\n\t\t\t\t--\t\t\t\telse\n\t\t\t\t--\t\t\t\t\tConPrintf(\"Unhandled 'replace' ID: \" .. jewelData)\n\t\t\t\t--\t\t\t\tend\n\t\t\t\t--\t\t\telseif jewelData then -- add\n\t\t\t\t--\t\t\t\tlocal addition = legionAdditions[jewelData + 1]\n\t\t\t\t--\t\t\t\tfor _, addStat in ipairs(addition.sd) do\n\t\t\t\t--\t\t\t\t\tself:NodeAdditionOrReplacementFromString(node, \" \\n\" .. addStat)\n\t\t\t\t--\t\t\t\tend\n\t\t\t\t--\t\t\telseif next(jewelData) then\n\t\t\t\t--\t\t\t\tConPrintf(\"Unhandled OP: \" .. jewelData + 1)\n\t\t\t\t--\t\t\tend\n\t\t\t\t--\t\tend\n\t\t\t\t--\tend\n\t\t\t\t--end\n\t\t\telseif node.type == \"Keystone\" then\n\t\t\t\tlocal matchStr = conqueredBy.conqueror.type .. \"_keystone_\" .. conqueredBy.conqueror.id\n\t\t\t\tfor _, legionNode in ipairs(legionNodes) do\n\t\t\t\t\tif legionNode.id == matchStr then\n\t\t\t\t\t\tself:ReplaceNode(node, legionNode)\n\t\t\t\t\t\tbreak\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\telseif node.type == \"Normal\" then\n\t\t\t-- todo: update once we get seed data\n\t\t\t--\tif conqueredBy.conqueror.type == \"vaal\" then\n\t\t\t--\t\tlocal jewelDataTbl = { }\n\t\t\t--\t\tif seed ~= m_max(m_min(seed, data.timelessJewelSeedMax[jewelType]), data.timelessJewelSeedMin[jewelType]) then\n\t\t\t--\t\t\tConPrintf(\"ERROR: Seed \" .. seed .. \" is outside of valid range [\" .. data.timelessJewelSeedMin[jewelType] .. \" - \" .. data.timelessJewelSeedMax[jewelType] .. \"] for jewel type: \" .. data.timelessJewelTypes[jewelType])\n\t\t\t--\t\telse\n\t\t\t--\t\t\tjewelDataTbl = data.readLUT(conqueredBy.id, node.id, jewelType)\n\t\t\t--\t\tend\n\t\t\t--\t\t--print(\"Need to Update: \" .. node.id .. \" [\" .. node.dn .. \"]\")\n\t\t\t--\t\tif not next(jewelDataTbl) then\n\t\t\t--\t\t\tConPrintf(\"Missing LUT: \" .. data.timelessJewelTypes[jewelType])\n\t\t\t--\t\telse\n\t\t\t--\t\t\tself:ReplaceNode(node, legionNodes[jewelDataTbl[1] + 1 - data.timelessJewelAdditions])\n\t\t\t--\t\t\tfor i, repStat in ipairs(node.sd) do\n\t\t\t--\t\t\t\tlocal statKey = legionNodes[jewelDataTbl[1] + 1 - data.timelessJewelAdditions].sortedStats[i]\n\t\t\t--\t\t\t\tlocal statMod = legionNodes[jewelDataTbl[1] + 1 - data.timelessJewelAdditions].stats[statKey]\n\t\t\t--\t\t\t\trepStat = replaceHelperFunc(repStat, statKey, statMod, jewelDataTbl[2])\n\t\t\t--\t\t\t\tself:NodeAdditionOrReplacementFromString(node, repStat, true)\n\t\t\t--\t\t\tend\n\t\t\t--\t\tend\n\t\t\t--\telseif conqueredBy.conqueror.type == \"karui\" then\n\t\t\t--\t\tlocal str = isValueInArray(attributes, node.dn) and \"2\" or \"4\"\n\t\t\t--\t\tself:NodeAdditionOrReplacementFromString(node, \" \\n+\" .. str .. \" to Strength\")\n\t\t\t--\telseif conqueredBy.conqueror.type == \"maraketh\" then\n\t\t\t--\t\tlocal dex = isValueInArray(attributes, node.dn) and \"2\" or \"4\"\n\t\t\t--\t\tself:NodeAdditionOrReplacementFromString(node, \" \\n+\" .. dex .. \" to Dexterity\")\n\t\t\t--\telseif conqueredBy.conqueror.type == \"templar\" then\n\t\t\t--\t\tif isValueInArray(attributes, node.dn) then\n\t\t\t--\t\t\tlocal legionNode = legionNodes[91] -- templar_devotion_node\n\t\t\t--\t\t\tself:ReplaceNode(node, legionNode)\n\t\t\t--\t\telse\n\t\t\t--\t\t\tself:NodeAdditionOrReplacementFromString(node, \" \\n+5 to Devotion\")\n\t\t\t--\t\tend\n\t\t\t--\telseif conqueredBy.conqueror.type == \"eternal\" then\n\t\t\t--\t\tlocal legionNode = legionNodes[110] -- eternal_small_blank\n\t\t\t--\t\tself:ReplaceNode(node, legionNode)\n\t\t\t--\tend\n\t\t\t\tif conqueredBy.conqueror.type == \"abyss\" then\n\t\t\t\t\tif isValueInArray(attributes, node.dn) then\n\t\t\t\t\t\tself:NodeAdditionOrReplacementFromString(node, \" \\n+3 to Tribute\")\n\t\t\t\t\telse\n\t\t\t\t\t\tlocal legionNode = legionNodes[201] -- abyss_small_tribute\n\t\t\t\t\t\tself:ReplaceNode(node, legionNode)\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\t\tself:ReconnectNodeToClassStart(node)\n\t\tend\n\tend\n\n\t-- Add selected mastery effect mods to mastery nodes\n\tself.allocatedMasteryCount = 0\n\tself.allocatedNotableCount = 0\n\tself.allocatedSmithBodyArmourNodeCount = 0\n\tself.allocatedMasteryTypes = { }\n\tself.allocatedMasteryTypeCount = 0\n\tfor id, node in pairs(self.nodes) do\n\t\tif self.ignoredNodes[id] and self.allocNodes[id] then\n\t\t\tself.nodes[id].alloc = false\n\t\t\tself.allocNodes[id] = nil\n\t\t\t-- remove once processed to avoid allocation issue after convert\n\t\t\tself.ignoredNodes[id] = nil\n\t\telse\n\t\t\tif node.type == \"Mastery\" and self.masterySelections[id] then\n\t\t\t\tlocal effect = self.tree.masteryEffects[self.masterySelections[id]]\n\t\t\t\tif effect and self.allocNodes[id] then\n\t\t\t\t\tnode.sd = effect.sd\n\t\t\t\t\tnode.allMasteryOptions = false\n\t\t\t\t\tnode.reminderText = { \"Tip: Right click to select a different effect\" }\n\t\t\t\t\tself.tree:ProcessStats(node)\n\t\t\t\t\tself.allocatedMasteryCount = self.allocatedMasteryCount + 1\n\t\t\t\t\tif not self.allocatedMasteryTypes[self.allocNodes[id].name] then\n\t\t\t\t\t\tself.allocatedMasteryTypes[self.allocNodes[id].name] = 1\n\t\t\t\t\t\tself.allocatedMasteryTypeCount = self.allocatedMasteryTypeCount + 1\n\t\t\t\t\telse\n\t\t\t\t\t\tlocal prevCount = self.allocatedMasteryTypes[self.allocNodes[id].name]\n\t\t\t\t\t\tself.allocatedMasteryTypes[self.allocNodes[id].name] = prevCount + 1\n\t\t\t\t\t\tif prevCount == 0 then\n\t\t\t\t\t\t\tself.allocatedMasteryTypeCount = self.allocatedMasteryTypeCount + 1\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\t-- if the tree doesn't recognize the mastery selection or if we have a selection on a mastery that isn't allocated\n\t\t\t\telse\n\t\t\t\t\tself.nodes[id].alloc = false\n\t\t\t\t\tself.allocNodes[id] = nil\n\t\t\t\t\tself.masterySelections[id] = nil\n\t\t\t\tend\n\t\t\telseif node.type == \"Mastery\" then\n\t\t\t\tself:AddMasteryEffectOptionsToNode(node)\n\t\t\telseif node.type == \"Notable\" and node.alloc then\n\t\t\t\tself.allocatedNotableCount = self.allocatedNotableCount + 1\n\t\t\t\tif node.applyToArmour then\n\t\t\t\t\tself.allocatedSmithBodyArmourNodeCount = self.allocatedSmithBodyArmourNodeCount + 1\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\n\tlocal potentialDeps = { }\n\tlocal intuitiveLeaps = { }\n\tfor id, node in pairs(self.allocNodes) do\n\t\tnode.visited = true\n\t\tnode.connectedToStart = false\n\t\tlocal anyStartFound = (node.type == \"ClassStart\" or node.type == \"AscendClassStart\" or node.isFreeAllocate)\n\t\tif node.isFreeAllocate then\n\t\t\tnode.connectedToStart = true\n\t\tend\n\t\tfor _, other in ipairs(node.linked) do\n\t\t\tlocal otherAlloc = other.alloc or alternateClassStartNodes[other.id]\n\t\t\tif otherAlloc and self:CanPathThroughAllocMode(node.allocMode or 0, other) and not isValueInArray(node.depends, other) then\n\t\t\t\t-- The other node is allocated and isn't already dependent on this node, so try and find a path to a start node through it\n\t\t\t\tif other.type == \"ClassStart\" or other.type == \"AscendClassStart\" then\n\t\t\t\t\t-- Well that was easy!\n\t\t\t\t\tanyStartFound = true\n\t\t\t\t\tnode.connectedToStart = true\n\t\t\t\telseif self:FindStartFromNode(other, visited, nil, node.allocMode or 0, alternateClassStartNodes) then\n\t\t\t\t\t-- We found a path through the other node, therefore the other node cannot be dependent on this node\n\t\t\t\t\tanyStartFound = true\n\t\t\t\t\tnode.connectedToStart = true\n\t\t\t\t\tfor i, n in ipairs(visited) do\n\t\t\t\t\t\tn.visited = false\n\t\t\t\t\t\tvisited[i] = nil\n\t\t\t\t\tend\n\t\t\t\telse\n\t\t\t\t\t-- No path was found, so all the nodes visited while trying to find the path must be dependent on this node\n\t\t\t\t\t-- except for mastery nodes that have linked allocated nodes that weren't visited\n\t\t\t\t\tlocal depIds = { }\n\t\t\t\t\tfor _, n in ipairs(visited) do\n\t\t\t\t\t\tif #n.intuitiveLeapLikesAffecting == 0 then\n\t\t\t\t\t\t\tdepIds[n.id] = true\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\t\tfor i, n in ipairs(visited) do\n\t\t\t\t\t\tif n.type == \"Mastery\" then\n\t\t\t\t\t\t\tlocal otherPath = false\n\t\t\t\t\t\t\tlocal allocatedLinkCount = 0\n\t\t\t\t\t\t\tfor _, linkedNode in ipairs(n.linked) do\n\t\t\t\t\t\t\t\tif linkedNode.alloc and self:CanPathThroughAllocMode(n.allocMode or 0, linkedNode) then\n\t\t\t\t\t\t\t\t\tallocatedLinkCount = allocatedLinkCount + 1\n\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tif allocatedLinkCount > 1 then\n\t\t\t\t\t\t\t\tfor _, linkedNode in ipairs(n.linked) do\n\t\t\t\t\t\t\t\t\tif linkedNode.alloc and self:CanPathThroughAllocMode(n.allocMode or 0, linkedNode) and not depIds[linkedNode.id] then\n\t\t\t\t\t\t\t\t\t\totherPath = true\n\t\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tif not otherPath then\n\t\t\t\t\t\t\t\tt_insert(node.depends, n)\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\telse\n\t\t\t\t\t\t\t-- If n is dependent on intuitive leap then it may be dependent on this node\n\t\t\t\t\t\t\tif #n.intuitiveLeapLikesAffecting > 0 then\n\t\t\t\t\t\t\t\tif not potentialDeps[n.id] then\n\t\t\t\t\t\t\t\t\tpotentialDeps[n.id] = { }\n\t\t\t\t\t\t\t\tend\n\n\t\t\t\t\t\t\t\tt_insert(potentialDeps[n.id], node)\n\t\t\t\t\t\t\telse\n\t\t\t\t\t\t\t\tt_insert(node.depends, n)\n\t\t\t\t\t\t\tend\n\n\t\t\t\t\t\t\t-- If n is a jewel socket containing an intuitive leap-like jewel, nodes in its radius (or the radius of the keystone)\n\t\t\t\t\t\t\t-- may be dependent on this node if they're found to be unconnected to the start\n\t\t\t\t\t\t\tfor _, intuitiveLeapMap in ipairs(intuitiveLeapLikeNodes) do\n\t\t\t\t\t\t\t\tlocal allocatable = false\n\t\t\t\t\t\t\t\tfor _, allocatableNodeType in ipairs(intuitiveLeapMap.to) do\n\t\t\t\t\t\t\t\t\tif allocatableNodeType == node.type then\n\t\t\t\t\t\t\t\t\t\tallocatable = true\n\t\t\t\t\t\t\t\t\t\tbreak\n\t\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\t\tif allocatable then\n\t\t\t\t\t\t\t\t\tif intuitiveLeapMap.from == n.type then\n\t\t\t\t\t\t\t\t\t\tfor affectedNodeId, affectedNode in pairs(n.nodesInRadius[intuitiveLeapMap.radiusIndex]) do\n\t\t\t\t\t\t\t\t\t\t\tif affectedNode.alloc then\n\t\t\t\t\t\t\t\t\t\t\t\tif not intuitiveLeaps[node.id] then\n\t\t\t\t\t\t\t\t\t\t\t\t\tintuitiveLeaps[node.id] = { }\n\t\t\t\t\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\t\t\t\t\t\tt_insert(intuitiveLeaps[node.id], affectedNode)\n\t\t\t\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\t\t\t-- We don't keep a `nodesInRadius` map for notables, so this is disabled for now\n\t\t\t\t\t\t\t\t\t-- if intuitiveLeapMap.from == \"Notable\" then\n\t\t\t\t\t\t\t\t\t-- \tfor keyName, keyNode in pairs(self.tree.notableMap) do\n\t\t\t\t\t\t\t\t\t-- \t\tif keyNode.nodesInRadius[intuitiveLeapMap.radiusIndex][node.id] then\n\t\t\t\t\t\t\t\t\t-- \t\t\tt_insert(node.intuitiveLeapLikesAffecting, self.nodes[nodeId])\n\t\t\t\t\t\t\t\t\t-- \t\tend\n\t\t\t\t\t\t\t\t\t-- \tend\n\t\t\t\t\t\t\t\t\t-- end\n\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tif not intuitiveLeaps[node.id] then\n\t\t\t\t\t\t\t\tintuitiveLeaps[node.id] = self:NodesInIntuitiveLeapLikeRadius(n)\n\t\t\t\t\t\t\telse\n\t\t\t\t\t\t\t\tfor _, affectedNode in ipairs(self:NodesInIntuitiveLeapLikeRadius(n)) do\n\t\t\t\t\t\t\t\t\tt_insert(intuitiveLeaps[node.id], affectedNode)\n\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\t\tn.visited = false\n\t\t\t\t\t\tvisited[i] = nil\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\tnode.visited = false\n\t\tif not anyStartFound then\n\t\t\t-- No start nodes were found through ANY nodes\n\t\t\t-- Therefore this node and all nodes depending on it are orphans and should be pruned\n\t\t\tfor _, depNode in ipairs(node.depends) do\n\t\t\t\tlocal prune = true\n\t\t\t\tfor nodeId, itemId in pairs(self.jewels) do\n\t\t\t\t\tif self.allocNodes[nodeId] then\n\t\t\t\t\t\tif itemId ~= 0 and (\n\t\t\t\t\t\t\t self.build.itemsTab.items[itemId] and (\n\t\t\t\t\t\t\t\tself.build.itemsTab.items[itemId].jewelData\n\t\t\t\t\t\t\t\t\tand self.build.itemsTab.items[itemId].jewelData.intuitiveLeapLike\n\t\t\t\t\t\t\t\t\tand self.build.itemsTab.items[itemId].jewelRadiusIndex\n\t\t\t\t\t\t\t\t\tand self.nodes[nodeId].nodesInRadius\n\t\t\t\t\t\t\t\t\tand self.nodes[nodeId].nodesInRadius[self.build.itemsTab.items[itemId].jewelRadiusIndex][depNode.id]\n\t\t\t\t\t\t\t) or (\n\t\t\t\t\t\t\t\tself.build.itemsTab.items[itemId].jewelData\n\t\t\t\t\t\t\t\t\tand self.build.itemsTab.items[itemId].jewelData.fromNothingKeystones\n\t\t\t\t\t\t\t\t\tand self:NodeInKeystoneRadius(self.build.itemsTab.items[itemId].jewelData.fromNothingKeystones, depNode.id, self.build.itemsTab.items[itemId].jewelRadiusIndex)\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t) then\n\t\t\t\t\t\t\t-- Hold off on the pruning; this node could be supported by Intuitive Leap-like jewel\n\t\t\t\t\t\t\tprune = false\n\t\t\t\t\t\t\tif not intuitiveLeaps[nodeId] then\n\t\t\t\t\t\t\t\tintuitiveLeaps[nodeId] = { }\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tt_insert(intuitiveLeaps[nodeId], depNode)\n\t\t\t\t\t\t\tbreak\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\t\tfor _, intuitiveLeapMap in ipairs(intuitiveLeapLikeNodes) do\n\t\t\t\t\tlocal allocatable = false\n\t\t\t\t\tfor _, allocatableNodeType in ipairs(intuitiveLeapMap.to) do\n\t\t\t\t\t\tif allocatableNodeType == depNode.type then\n\t\t\t\t\t\t\tallocatable = true\n\t\t\t\t\t\t\tbreak\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\t\tif allocatable then\n\t\t\t\t\t\tif intuitiveLeapMap.from == \"Keystone\" then\n\t\t\t\t\t\t\tfor keyName, keyNode in pairs(self.tree.keystoneMap) do\n\t\t\t\t\t\t\t\tif keyNode.nodesInRadius and keyNode.nodesInRadius[intuitiveLeapMap.radiusIndex][depNode.id] then\n\t\t\t\t\t\t\t\t\t-- Hold off on the pruning; this node could be supported by Intuitive Leap-like jewel\n\t\t\t\t\t\t\t\t\tprune = false\n\t\t\t\t\t\t\t\t\tif not intuitiveLeaps[keyNode.id] then\n\t\t\t\t\t\t\t\t\t\tintuitiveLeaps[keyNode.id] = { }\n\t\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\t\t\tt_insert(intuitiveLeaps[keyNode.id], depNode)\n\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\t\tif prune then\n\t\t\t\t\tself:DeallocSingleNode(depNode)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\n\t-- All other dependencies resolved, add dependencies to nodes affected by intuitive leap-like jewels\n\t-- Nodes that are unconnected to the start depend on all nodes that connect the jewel socket to the start\n\t-- Nodes that are connected to the start depend on all nodes that connect them *and* the jewel socket to the start\n\t-- In both cases, the nodes can be affected by multiple jewels at the same time\n\tfor id, deps in pairs(potentialDeps) do\n\t\tlocal potentialNode = self.nodes[id]\n\t\tlocal seen = { }\n\t\tfor _, node in ipairs(deps) do\n\t\t\tlocal allDep = true\n\t\t\tfor _, intuitiveLeapLikeProvider in pairs(potentialNode.intuitiveLeapLikesAffecting) do\n\t\t\t\tif not isValueInArray(node.depends, intuitiveLeapLikeProvider) then\n\t\t\t\t\tallDep = false\n\t\t\t\tend\n\t\t\tend\n\t\t\tif allDep and not seen[node.id] then\n\t\t\t\tt_insert(node.depends, potentialNode)\n\t\t\t\tseen[node.id] = true\n\t\t\tend\n\t\tend\n\tend\n\n\tfor id, deps in pairs(intuitiveLeaps) do\n\t\tlocal node = self.nodes[id]\n\t\tlocal seen = { }\n\t\tfor _, dep in ipairs(deps) do\n\t\t\tif not dep.connectedToStart then\n\t\t\t\tlocal allDep = true\n\t\t\t\tfor _, intuitiveDep in ipairs(dep.intuitiveLeapLikesAffecting) do\n\t\t\t\t\tif not isValueInArray(node.depends, intuitiveDep) then\n\t\t\t\t\t\tallDep = false\n\t\t\t\t\t\tbreak\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\t\tif allDep and not seen[dep.id] then\n\t\t\t\t\tt_insert(node.depends, dep)\n\t\t\t\t\tseen[dep.id] = true\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\t\n\t-- Reset and rebuild all node paths\n\tfor id, node in pairs(self.nodes) do\n\t\tnode.pathDist = (node.alloc and #node.intuitiveLeapLikesAffecting == 0) and 0 or 1000\n\t\tnode.path = nil\n\t\tnode.pathRoot = nil\n\t\tif node.isJewelSocket or node.expansionJewel then\n\t\t\tnode.distanceToClassStart = 0\n\t\tend\n\tend\n\tlocal rootList = {}\n\tfor _, node in pairs(self.allocNodes) do\n\t\tif #node.intuitiveLeapLikesAffecting == 0 or node.connectedToStart then\n\t\t\tt_insert(rootList, node)\n\t\tend\n\tend\n\tself:BuildNodePathsToRootNodes(rootList)\n\tfor _, node in ipairs(rootList) do\n\t\tif node.isJewelSocket or node.expansionJewel then\n\t\t\tself:SetNodeDistanceToClassStart(node)\n\t\tend\n\tend\n\tlocal alternateClassStartNodesArray = {}\n\tfor _, node in pairs(alternateClassStartNodes) do\n\t\talternateClassStartNodesArray[#alternateClassStartNodesArray + 1] = node\n\tend\n\tself:BuildNodePathsToRootNodes(alternateClassStartNodesArray)\nend\n"
+    },
+    {
+      "role": "exact-replacement-and-class-start-reconnection",
+      "source_path": "src/Classes/PassiveSpec.lua",
+      "first_line": 2047,
+      "last_line": 2075,
+      "sha256": "f4f51bea58ee49fb7c07ec28b616d035a113c3379391bc3b55ec3e809171b208",
+      "text": "function PassiveSpecClass:ReplaceNode(old, newNode)\n\told.overlay = newNode.overlay\n\told.icon = newNode.icon\n\t-- Edited nodes can share a name\n\tif old.sd == newNode.sd then\n\t\treturn 1\n\tend\n\told.dn = newNode.dn\n\told.sd = newNode.sd\n\told.mods = newNode.mods\n\told.modKey = newNode.modKey\n\told.modList = new(\"ModList\"):ModList()\n\told.modList:AddList(newNode.modList)\n\told.keystoneMod = newNode.keystoneMod\n\told.activeEffectImage = newNode.activeEffectImage\n\told.reminderText = newNode.reminderText or { }\nend\n\n---Reconnects altered timeless jewel to class start, for Pure Talent\n---@param node table @ The node to add the Condition:ConnectedTo[Class] flag to, if applicable\nfunction PassiveSpecClass:ReconnectNodeToClassStart(node)\n\tfor _, linkedNodeId in ipairs(node.linkedId) do\n\t\tfor classId, class in pairs(self.tree.classes) do\n\t\t\tif linkedNodeId == class.startNodeId and node.type == \"Normal\" then\n\t\t\t\tnode.modList:NewMod(\"Condition:ConnectedTo\"..class.name..\"Start\", \"FLAG\", true, \"Tree:\"..linkedNodeId)\n\t\t\tend\n\t\tend\n\tend\nend\n"
+    },
+    {
+      "role": "complete-default-and-external-modifier-delivery",
+      "source_path": "src/Modules/CalcSetup.lua",
+      "first_line": 200,
+      "last_line": 413,
+      "sha256": "f67003608576f43c4d8b3133b6c4e8d97e332449d3b1d38cc0f787042d231f20",
+      "text": "function calcs.buildModListForNode(env, node, reuse, incSmallPassiveSkill, includeKeystoneMods)\n\tlocal localSmallIncEffect = 0\n\tlocal localNotableIncEffect = 0\n\tlocal modList = reuse and resetModList(reuse) or new(\"ModList\"):ModList()\n\tif node.type == \"Keystone\" then\n\t\tif includeKeystoneMods then\n\t\t\tmodList:AddList(node.modList)\n\t\tend\n\t\tif node.keystoneMod then\n\t\t\tmodList:AddMod(node.keystoneMod)\n\t\tend\n\telse\n\t\tmodList:AddList(node.modList)\n\tend\n\n\tif #env.radiusJewelList > 0 and not GlobalCache.cachedData[env.mode].radiusJewelData then\n\t\trefreshJewelStatCache(env)\n\tend\n\t-- Run first pass radius jewels // jewel functions caught by jewelOtherFuncs\n\tfor _, rad in pairs(env.radiusJewelList) do\n\t\tif rad.type == \"Other\" and rad.nodes[node.id] and rad.nodes[node.id].type ~= \"Mastery\" then\n\t\t\tif rad.item.baseName:find(\"Time%-Lost\") == nil and rad.item.baseName:find(\"Timeless Jewel\") == nil then\n\t\t\t\trunRadiusJewelFunc(rad, node, modList, rad.data)\n\t\t\telseif node.type == \"Normal\" or node.type == \"Notable\" then\n\t\t\t\tlocal cache = GlobalCache.cachedData[env.mode].radiusJewelData[rad.nodeId]\n\t\t\t\tif not cache or (cache.hash ~= rad.jewelHash) then\n\t\t\t\t\trefreshJewelStatCache(env)\n\t\t\t\tend\n\t\t\t\tif node.type == \"Normal\" and node.isAttribute and cache and #cache.attributeModList > 0 then\n\t\t\t\t\tmodList:CopyList(cache.attributeModList)\n\t\t\t\telseif node.type == \"Normal\" and not node.isAttribute and cache and #cache.smallModList > 0 then\n\t\t\t\t\tmodList:CopyList(cache.smallModList)\n\t\t\t\telseif node.type == \"Notable\" and cache and #cache.notableModList > 0 then\n\t\t\t\t\tmodList:CopyList(cache.notableModList)\n\t\t\t\tend\n\t\t\t\tbreak\n\t\t\tend\n\t\tend\n\tend\n\n\t-- prefilter the modlist so that every :Flag() call does not have to go through the entire mod list\n\tlocal hasNoEffect, hasAllocNoEffect, hasScale, hasOtherEffect, hasExtraSkill, hasExplode\n\tfor i = 1, #modList do\n\t\tlocal name = modList[i].name\n\t\tif name == \"PassiveSkillHasNoEffect\" then\n\t\t\thasNoEffect = true\n\t\telseif name == \"AllocatedPassiveSkillHasNoEffect\" then\n\t\t\thasAllocNoEffect = true\n\t\telseif name == \"PassiveSkillEffect\" then\n\t\t\thasScale = true\n\t\telseif name == \"PassiveSkillHasOtherEffect\" then\n\t\t\thasOtherEffect = true\n\t\telseif name == \"ExtraSkill\" then\n\t\t\thasExtraSkill = true\n\t\telseif name == \"CanExplode\" then\n\t\t\thasExplode = true\n\t\tend\n\tend\n\n\tif (hasNoEffect and modList:Flag(nil, \"PassiveSkillHasNoEffect\")) or (env.allocNodes[node.id] and (hasAllocNoEffect and modList:Flag(nil, \"AllocatedPassiveSkillHasNoEffect\"))) then\n\t\twipeTable(modList)\n\t\thasScale = false\n\t\thasOtherEffect = nil\n\t\thasExtraSkill = nil\n\t\thasExplode = nil\n\tend\n\n\t-- Apply effect scaling\n\tif hasScale then\n\t\tlocal scale = calcLib.mod(modList, nil, \"PassiveSkillEffect\")\n\t\tif scale ~= 1 then\n\t\t\tlocal scaledList = new(\"ModList\"):ModList()\n\t\t\tscaledList:ScaleAddList(modList, scale)\n\t\t\tmodList = scaledList\n\t\tend\n\tend\n\n\t-- Run second pass radius jewels\n\tlocal rescan = false\n\tfor i = 1, #env.radiusJewelList do\n\t\tlocal rad = env.radiusJewelList[i]\n\t\tif rad.nodes[node.id] and rad.nodes[node.id].type ~= \"Mastery\" and (rad.type == \"Threshold\" or (rad.type == \"Self\" and env.allocNodes[node.id]) or (rad.type == \"SelfUnalloc\" and not env.allocNodes[node.id])) then\n\t\t\trunRadiusJewelFunc(rad, node, modList, rad.data)\n\t\t\trescan = true\n\t\t\thasOtherEffect = nil\n\t\t\thasExtraSkill = nil\n\t\t\thasExplode = nil\n\t\tend\n\tend\n\n\tif rescan then\n\t\tfor i = 1, #modList do\n\t\t\tlocal name = modList[i].name\n\t\t\tif name == \"PassiveSkillHasOtherEffect\" then\n\t\t\t\thasOtherEffect = true\n\t\t\telseif name == \"ExtraSkill\" then\n\t\t\t\thasExtraSkill = true\n\t\t\telseif name == \"CanExplode\" then\n\t\t\t\thasExplode = true\n\t\t\tend\n\t\tend\n\tend\n\n\tif hasOtherEffect and modList:Flag(nil, \"PassiveSkillHasOtherEffect\") then\n\t\tlocal newMods = modList:List(nil, \"NodeModifier\")\n\t\tfor i = 1, #newMods do\n\t\t\tlocal mod = newMods[i].mod\n\t\t\tif i == 1 then\n\t\t\t\twipeTable(modList)\n\t\t\t\thasExtraSkill = nil\n\t\t\t\thasExplode = nil\n\t\t\tend\n\t\t\tif mod.name == \"ExtraSkill\" then\n\t\t\t\thasExtraSkill = true\n\t\t\telseif mod.name == \"CanExplode\" then\n\t\t\t\thasExplode = true\n\t\t\tend\n\t\t\tmodList:AddMod(mod)\n\t\tend\n\tend\n\n\tnode.grantedSkills = wipeTable(node.grantedSkills)\n\tif hasExtraSkill then\n\t\tlocal list = modList:List(nil, \"ExtraSkill\")\n\t\tfor i = 1, #list do\n\t\t\tlocal skill = list[i]\n\t\t\tif skill.name ~= \"Unknown\" then\n\t\t\t\tt_insert(node.grantedSkills, {\n\t\t\t\t\tskillId = skill.skillId,\n\t\t\t\t\tlevel = skill.level,\n\t\t\t\t\tnoSupports = true,\n\t\t\t\t\tsource = \"Tree:\" .. node.id\n\t\t\t\t})\n\t\t\tend\n\t\tend\n\tend\n\n\tif hasExplode then\n\t\tif modList:Flag(nil, \"CanExplode\") then\n\t\t\tt_insert(env.explodeSources, node)\n\t\tend\n\tend\n\n\tfor i, mod in ipairs(modList) do\n\t\tlocal added = false\n\t\tfor j = #mod, 1, -1 do\n\t\t\tif mod[j].type == \"Condition\" and mod[j].var and mod[j].var:match(\"^WeaponSet\") then\n\t\t\t\tadded = true\n\t\t\t\tif node.allocMode ~= 0 then -- only update the conditional for WS1/WS2\n\t\t\t\t\tmod[j].var = \"WeaponSet\".. node.allocMode\n\t\t\t\telse -- if normal and condition exists, remove it\n\t\t\t\t\tt_remove(mod, j)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\t-- only add the conditional for WS1/WS2\n\t\tif not added and node.allocMode ~= 0 then\n\t\t\ttable.insert(mod, { type = \"Condition\", var = \"WeaponSet\".. node.allocMode })\n\t\telseif mod.parsedLine then\n\t\t\tlocal jewelSource = tonumber(mod.source:match(\"%d+\"))\n\t\t\tif env.build.spec.nodes[jewelSource].allocMode ~= 0 then\n\t\t\t\ttable.insert(mod, { type = \"Condition\", var = \"WeaponSet\".. env.build.spec.nodes[jewelSource].allocMode })\n\t\t\tend\n\t\tend\n\n\t\tlocal hasWSCondition = false\n\t\t-- if the jewelMod has a WS Condition, only add the incEffect given it matches the activeWeaponSet\n\t\t-- otherwise the mod came from a jewel that is allocMode 0, so it always applies\n\t\tif mod.name == \"JewelSmallPassiveSkillEffect\" then\n\t\t\tfor _, modCriteria in ipairs(mod) do\n\t\t\t\tif modCriteria.type == \"Condition\" and modCriteria.var and modCriteria.var:match(\"^WeaponSet\") then\n\t\t\t\t\tif (tonumber(modCriteria.var:match(\"(%d)\")) == (env.build.itemsTab.activeItemSet.useSecondWeaponSet and 2 or 1)) then\n\t\t\t\t\t\tlocalSmallIncEffect = mod.value\n\t\t\t\t\tend\n\t\t\t\t\thasWSCondition = true\n\t\t\t\tend\n\t\t\tend\n\t\t\tif not hasWSCondition then\n\t\t\t\tlocalSmallIncEffect = mod.value\n\t\t\tend\n\t\tend\n\t\tif mod.name == \"JewelNotablePassiveSkillEffect\" then\n\t\t\tfor _, modCriteria in ipairs(mod) do\n\t\t\t\tif modCriteria.type == \"Condition\" and modCriteria.var and modCriteria.var:match(\"^WeaponSet\") then\n\t\t\t\t\tif (tonumber(modCriteria.var:match(\"(%d)\")) == (env.build.itemsTab.activeItemSet.useSecondWeaponSet and 2 or 1)) then\n\t\t\t\t\t\tlocalNotableIncEffect = mod.value\n\t\t\t\t\tend\n\t\t\t\t\thasWSCondition = true\n\t\t\t\tend\n\t\t\tend\n\t\t\tif not hasWSCondition then\n\t\t\t\tlocalNotableIncEffect = mod.value\n\t\t\tend\n\t\tend\n\tend\n\n\t-- Apply Inc Node scaling from Hulking Form\n\tif (incSmallPassiveSkill + localSmallIncEffect) > 0 and node.type == \"Normal\" and not node.isAttribute and not node.ascendancyName then\n\t\tlocal scale = 1 + (incSmallPassiveSkill + localSmallIncEffect) / 100\n\t\tlocal scaledList = new(\"ModList\"):ModList()\n\t\tscaledList:ScaleAddList(modList, scale)\n\t\tmodList = scaledList\n\tend\n\n\tif localNotableIncEffect > 0 and node.type == \"Notable\" and not node.isAttribute and not node.ascendancyName then\n\t\tlocal scale = 1 + localNotableIncEffect / 100\n\t\tlocal scaledList = new(\"ModList\"):ModList()\n\t\tscaledList:ScaleAddList(modList, scale)\n\t\tmodList = scaledList\n\tend\n\n\treturn modList\nend\n\n"
+    },
+    {
+      "role": "equipped-jewel-provider-boundary",
+      "source_path": "src/Modules/CalcSetup.lua",
+      "first_line": 1292,
+      "last_line": 1323,
+      "sha256": "fc1171eb26e55afcf6ca87eea07ee79782cebbb8d9ad106eabd0a6669bdb7e56",
+      "text": "\t\t\tlocal scale = 1\n\t\t\t-- unequips Jewel if parentSlot providing the socket is removed\n\t\t\tif item and item.type == \"Jewel\" and slot.parentSlot then\n\t\t\t\t-- Check if the item in the parent slot has enough Jewel Sockets\n\t\t\t\tlocal parentItem = env.player.itemList[slot.parentSlot.slotName]\n\t\t\t\tlocal parentSlotHidden = slot.parentSlot.slotName == \"Ring 3\" and not (modDB:Flag(nil, \"AdditionalRingSlot\") or nodesModsList:Flag(nil, \"AdditionalRingSlot\"))\n\t\t\t\tif parentSlotHidden or not parentItem or parentItem.jewelSocketCount < slot.slotNum then\n\t\t\t\t\titem = nil\n\t\t\t\telse\n\t\t\t\t\tscale = parentItem.socketedJewelEffectModifier\n\t\t\t\tend\n\t\t\tend\n\t\t\tif slot.nodeId and item and item.type == \"Jewel\" and item.jewelData and item.jewelData.jewelIncEffectFromClassStart and not (node and node.sinister) then\n\t\t\t\tif node and node.distanceToClassStart then\n\t\t\t\t\tscale = scale + node.distanceToClassStart * (item.jewelData.jewelIncEffectFromClassStart / 100)\n\t\t\t\tend\n\t\t\tend\n\n\t\t\tlocal addSourceSlotNum = false\n\t\t\tif slot.nodeId and item and item.type == \"Jewel\" then\n\t\t\t\tif node and node.containJewelSocket then\n\t\t\t\t\taddSourceSlotNum = true\n\t\t\t\t\tlocal inc = node.modList:Sum(\"INC\", nil, \"SocketedJewelEffect\")\n\t\t\t\t\tscale = scale + (inc / 100)\n\t\t\t\tend\n\t\t\tend\n\n\t\t\tif item then\n\t\t\t\tenv.player.itemList[slotName] = item\n\t\t\t\t-- Merge mods for this item\n\t\t\t\tlocal srcList = item:GetActiveModListForSlotNum(slot.slotNum, canUseBonded)\n\t\t\t\tlocal corruptedJewelEffect = slot.nodeId and getCorruptedJewelEffect(env, item, node) or 0\n"
+    }
+  ],
+  "catalog": {
+    "path": "data/owned/poe2/3887ae68/tree/tree-catalog.json",
+    "bytes": 1676797,
+    "sha256": "37db1255f28d05f67a6d81dfe286bcc698a9811e907c67d29cf640d9c28e5557",
+    "row": {
+      "key": "7960",
+      "kind": {
+        "kind": "allocation",
+        "value": {
+          "pool": "ordinary"
+        }
+      },
+      "stats": [],
+      "views": [],
+      "unlock": []
+    }
+  },
+  "prior_placement_authoring": "data/owned/poe2/3887ae68/ordinary-passive-jewel-placement/authoring.json",
+  "prior_empty_membership_authoring": "data/owned/poe2/3887ae68/empty-passive-socket-membership/authoring.json",
+  "contextual_reports": [
+    {
+      "path": "runs/owned-empty-tree-sockets-01/source-jit-off.json",
+      "bytes": 22742,
+      "sha256": "bba80239bc6444fe5dbba39a59da3abb9d279ce27fb308946542d1aa21e910f3",
+      "archive": "selected-socket-membership-source.json.gz",
+      "archive_sha256": "eab964b3ef8b1ed945d34aada0aa57dc1c58cb8e649f7b990e2ea8839dd5f6ad",
+      "original_state": {
+        "active_spec": 3,
+        "fresh_spec_objects": 7,
+        "hook_removed": true,
+        "original_functions_preserved": true,
+        "saved_state_preserved": true,
+        "specs": [
+          {
+            "constructor_calls": 1,
+            "index": 1,
+            "jewels": {},
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 0,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Act 1 & 2 (Djinns)",
+            "zero_socket_nodes": {}
+          },
+          {
+            "constructor_calls": 1,
+            "index": 2,
+            "jewels": {},
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 0,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Act 2",
+            "zero_socket_nodes": {}
+          },
+          {
+            "constructor_calls": 1,
+            "index": 3,
+            "jewels": {},
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 0,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Act 3",
+            "zero_socket_nodes": [
+              2491,
+              3367,
+              7960,
+              11184,
+              17788,
+              21984,
+              23960,
+              26178,
+              26196,
+              26725,
+              32763,
+              39087,
+              46882,
+              54127,
+              55190,
+              60735,
+              61419,
+              61834,
+              62152
+            ]
+          },
+          {
+            "constructor_calls": 1,
+            "index": 4,
+            "jewels": {},
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 0,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Act 4 to Endgame",
+            "zero_socket_nodes": {}
+          },
+          {
+            "constructor_calls": 1,
+            "index": 5,
+            "jewels": [
+              {
+                "item": 16,
+                "node": 7960
+              },
+              {
+                "item": 17,
+                "node": 21984
+              },
+              {
+                "item": 18,
+                "node": 61419
+              }
+            ],
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 3,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Early Endgame",
+            "zero_socket_nodes": {}
+          },
+          {
+            "constructor_calls": 1,
+            "index": 6,
+            "jewels": [
+              {
+                "item": 16,
+                "node": 7960
+              },
+              {
+                "item": 17,
+                "node": 21984
+              },
+              {
+                "item": 18,
+                "node": 61419
+              }
+            ],
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 3,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Mid-Endgame",
+            "zero_socket_nodes": {}
+          },
+          {
+            "constructor_calls": 1,
+            "index": 7,
+            "jewels": {},
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 0,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Act 1 & 2 (Pre-Ascend)",
+            "zero_socket_nodes": {}
+          }
+        ],
+        "tree_loads": 1,
+        "tree_postloads": 1
+      }
+    },
+    {
+      "path": "runs/owned-empty-tree-sockets-01/source-jit-on.json",
+      "bytes": 22742,
+      "sha256": "bba80239bc6444fe5dbba39a59da3abb9d279ce27fb308946542d1aa21e910f3",
+      "archive": "selected-socket-membership-source.json.gz",
+      "archive_sha256": "eab964b3ef8b1ed945d34aada0aa57dc1c58cb8e649f7b990e2ea8839dd5f6ad",
+      "original_state": {
+        "active_spec": 3,
+        "fresh_spec_objects": 7,
+        "hook_removed": true,
+        "original_functions_preserved": true,
+        "saved_state_preserved": true,
+        "specs": [
+          {
+            "constructor_calls": 1,
+            "index": 1,
+            "jewels": {},
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 0,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Act 1 & 2 (Djinns)",
+            "zero_socket_nodes": {}
+          },
+          {
+            "constructor_calls": 1,
+            "index": 2,
+            "jewels": {},
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 0,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Act 2",
+            "zero_socket_nodes": {}
+          },
+          {
+            "constructor_calls": 1,
+            "index": 3,
+            "jewels": {},
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 0,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Act 3",
+            "zero_socket_nodes": [
+              2491,
+              3367,
+              7960,
+              11184,
+              17788,
+              21984,
+              23960,
+              26178,
+              26196,
+              26725,
+              32763,
+              39087,
+              46882,
+              54127,
+              55190,
+              60735,
+              61419,
+              61834,
+              62152
+            ]
+          },
+          {
+            "constructor_calls": 1,
+            "index": 4,
+            "jewels": {},
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 0,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Act 4 to Endgame",
+            "zero_socket_nodes": {}
+          },
+          {
+            "constructor_calls": 1,
+            "index": 5,
+            "jewels": [
+              {
+                "item": 16,
+                "node": 7960
+              },
+              {
+                "item": 17,
+                "node": 21984
+              },
+              {
+                "item": 18,
+                "node": 61419
+              }
+            ],
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 3,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Early Endgame",
+            "zero_socket_nodes": {}
+          },
+          {
+            "constructor_calls": 1,
+            "index": 6,
+            "jewels": [
+              {
+                "item": 16,
+                "node": 7960
+              },
+              {
+                "item": 17,
+                "node": 21984
+              },
+              {
+                "item": 18,
+                "node": 61419
+              }
+            ],
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 3,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Mid-Endgame",
+            "zero_socket_nodes": {}
+          },
+          {
+            "constructor_calls": 1,
+            "index": 7,
+            "jewels": {},
+            "jewels_type": "table",
+            "load_calls": 1,
+            "postload_calls": 1,
+            "source_direct_socket_rows": 0,
+            "source_nested_socket_rows": 0,
+            "source_socket_containers": 1,
+            "title": "Act 1 & 2 (Pre-Ascend)",
+            "zero_socket_nodes": {}
+          }
+        ],
+        "tree_loads": 1,
+        "tree_postloads": 1
+      }
+    }
+  ],
+  "scope": {
+    "intrinsic_default_programs": "complete empty",
+    "declarations": "six complete empty inventories and one complete existing socket declaration",
+    "external_providers": "unchanged, not proved absent",
+    "selected_input_membership": "independent prior explicit-empty Spec proof",
+    "whole_build": false,
+    "fresh_source_execution": false
+  }
+}

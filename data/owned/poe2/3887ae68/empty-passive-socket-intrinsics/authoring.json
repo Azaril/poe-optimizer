@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "empty-passive-socket-intrinsics",
+  "before": "0efaf9bebc6a3f40e448cb22596c539b53436e15c063f92209c87627a6b4fa62",
+  "new_definitions": 0,
+  "closed_owners": 1,
+  "closed_declaration_inventories": 7,
+  "source_node": "7960",
+  "owned_node": "def.0000000000001b48",
+  "socket": "def.000000000000320e",
+  "artifacts": {
+    "dependencies.json": {
+      "bytes": 11646,
+      "sha256": "41f49b4109ca80dc5ad8cfea30dd82f813181ee06a86d16a957341acb45668bb"
+    },
+    "closure.json": {
+      "bytes": 3446,
+      "sha256": "4d61a50f6d04f420d5e543dab1e49235763886db5323d28ecc899b5ff6ee46a4"
+    },
+    "source-evidence.json": {
+      "bytes": 69331,
+      "sha256": "a77fff96ebfc80211daecebafc19fa5431724511d743de7b962cfd6049292da3"
+    }
+  },
+  "scope": "Default intrinsic programs and declarations only. Existing socket, topology, external jewel providers, source routing and all global coverage remain unchanged."
+}
