@@ -17,6 +17,23 @@ fn retained_configuration_body_domains_reconstruct_without_pob() {
         assert_eq!(report[mode]["phases"][0]["invoked"], 62);
         assert_eq!(report[mode]["phases"][1]["invoked"], 63);
         assert_eq!(report[mode]["scope"]["quest_parser_closure"], false);
+        assert_eq!(
+            report[mode]["scope"]["selected_quest_construction_reconciled"],
+            true
+        );
+        for phase in 0..2 {
+            assert_eq!(
+                report[mode]["phases"][phase]["quest_parser_boundaries"],
+                json!([])
+            );
+            assert_eq!(
+                report[mode]["phases"][phase]["reconciled_quests"]
+                    .as_array()
+                    .unwrap()
+                    .len(),
+                17
+            );
+        }
         assert_eq!(report[mode]["scope"]["native_coverage_authorized"], false);
         assert_eq!(
             report[mode]["scope"]["later_direct_configuration_consumers_covered"],
@@ -24,6 +41,199 @@ fn retained_configuration_body_domains_reconstruct_without_pob() {
         );
     }
     assert_eq!(report["saved_input_dispositions_changed"], false);
+}
+
+fn quest_call(key: &str, phase: usize) -> Value {
+    fixture()["off"]["calls"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|c| c["var"] == key)
+        .nth(phase)
+        .unwrap()
+        .clone()
+}
+
+#[test]
+fn finite_quest_defaults_and_saved_native_occurrences_remain_separate() {
+    let rewards = proof::reward_fixture().unwrap();
+    let reviewed = proof::review_rewards(rewards).unwrap();
+    assert_eq!(
+        reviewed["selected_native_rewards"]
+            .as_array()
+            .unwrap()
+            .len(),
+        17
+    );
+    assert_eq!(reviewed["global_reward_completion"]["kind"], "pending");
+    assert_eq!(reviewed["choice_completion"]["kind"], "pending");
+    assert_eq!(reviewed["global_quest_parser_closure"], false);
+    assert_eq!(reviewed["native_coverage_authorized"], false);
+    let mut totals = [0u64; 2];
+    let mut empty = 0;
+    for row in rewards["census"].as_array().unwrap() {
+        for (phase, total) in totals.iter_mut().enumerate() {
+            let call = quest_call(row["key"].as_str().unwrap(), phase);
+            let receipt = proof::review_quest_call(&call, phase, rewards).unwrap();
+            *total += receipt["player_records"].as_u64().unwrap();
+            assert_eq!(receipt["enemy_records"], 0);
+            if phase == 0 && call["argument_fields"]["val"] == "None" {
+                empty += 1;
+                assert_eq!(receipt["player_records"], 0);
+            }
+        }
+    }
+    assert_eq!(totals, [9, 22]);
+    assert_eq!(empty, 8);
+    // False skips check dispatch; it is not an invoked-empty finite matrix row.
+    let mut call = quest_call("questAct 1ClearfellBeira", 0);
+    call["argument_fields"]["val"] = json!(false);
+    assert_eq!(
+        proof::review_quest_call(&call, 0, rewards).unwrap_err(),
+        "quest argument outside finite invoked domain"
+    );
+}
+
+#[test]
+fn quest_record_transport_keeps_tags_positions_order_and_multiplicity() {
+    let rewards = proof::reward_fixture().unwrap();
+    let original = quest_call("questAct 4Eye of HinekoraTribal Medicine", 1);
+    let before = original["before"]["player_records"]
+        .as_array()
+        .unwrap()
+        .len();
+    for mutation in 0..10 {
+        let mut call = original.clone();
+        let records = call["after"]["player_records"].as_array_mut().unwrap();
+        match mutation {
+            0 => records[before]["body"]["value"] = json!(0),
+            1 => records[before]["body"]["_positions"][0]["value"]["type"] = json!("Condition"),
+            2 => records[before]["body"]["_positions"][0]["index"] = json!(2),
+            3 => records[before]["body"]["keywordFlags"] = json!(1),
+            4 => records[before]["body"]["source"] = json!("Quest:another source"),
+            5 => records[before]["position"] = json!(before),
+            6 => {
+                records.remove(before);
+            }
+            7 => records.push(records[before].clone()),
+            8 => records.swap(before, before + 1),
+            9 => {
+                records[before]["body"]["unreviewed"] =
+                    json!({"name":"ExtraMana","type":"BASE","value":0})
+            }
+            _ => unreachable!(),
+        }
+        assert!(
+            proof::review_quest_call(&call, 1, rewards).is_err(),
+            "mutation {mutation}"
+        );
+    }
+    let mut call = original.clone();
+    call["before"]["active_set"] = json!(2);
+    call["after"]["active_set"] = json!(2);
+    assert_eq!(
+        proof::review_quest_call(&call, 1, rewards).unwrap_err(),
+        "quest callback belongs to a different ConfigSet"
+    );
+    let mut call = original;
+    call["body"]["path"] = json!("@different/ConfigOptions.lua");
+    assert_eq!(
+        proof::review_quest_call(&call, 1, rewards).unwrap_err(),
+        "quest callback identity changed"
+    );
+}
+
+#[test]
+fn unknown_quest_strings_and_coherently_changed_matrix_are_not_authority() {
+    let original = proof::reward_fixture().unwrap();
+    let mut call = quest_call("questAct 2Valley of the TitansMedallion", 1);
+    call["argument_fields"]["val"] = json!("+123 to maximum Life");
+    assert_eq!(
+        proof::review_quest_call(&call, 1, original).unwrap_err(),
+        "quest argument outside finite invoked domain"
+    );
+    let mut rewards = original.clone();
+    let at = rewards["matrix"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .position(|r| r["key"] == call["var"] && r["value"] != "None")
+        .unwrap();
+    rewards["matrix"][at]["value"] = call["argument_fields"]["val"].clone();
+    assert_eq!(
+        proof::review_quest_call(&call, 1, &rewards).unwrap_err(),
+        "quest matrix/metadata is not independent acquisition authority"
+    );
+    rewards["authority"]["files"]["source"]["sha256"] = json!("coherently-repinned-matrix");
+    assert_eq!(
+        proof::review_quest_call(&call, 1, &rewards).unwrap_err(),
+        "quest matrix/metadata is not independent acquisition authority"
+    );
+    assert!(proof::review_rewards(&rewards).is_err());
+}
+
+#[test]
+fn current_reward_owner_mapping_and_selected_origin_are_independently_sealed() {
+    let original = proof::reward_fixture().unwrap();
+    for mutation in 0..11 {
+        let mut rewards = original.clone();
+        match mutation {
+            0 => {
+                rewards["native"][0]["owner"]["programs"]["members"][0]["effects"][0]["effect"]["entity"] =
+                    json!("enemy")
+            }
+            1 => {
+                rewards["native"][0]["owner"]["programs"]["members"][0]["effects"][0]["when"] =
+                    json!("disabled")
+            }
+            2 => rewards["native"][0]["owner"]["programs"]["closure"]["kind"] = json!("partial"),
+            3 => {
+                rewards["native"].as_array_mut().unwrap().remove(0);
+            }
+            4 => {
+                let row = rewards["native"][0].clone();
+                rewards["native"].as_array_mut().unwrap().push(row);
+            }
+            5 => {
+                rewards["native"][0]["occurrence"]["id"]["lineage"] =
+                    json!("00000000000000000000000000000000")
+            }
+            6 => {
+                let row = rewards["mapping"]
+                    .as_array_mut()
+                    .unwrap()
+                    .iter_mut()
+                    .find(|r| {
+                        r["source"]["value"]["key"]["value"] == "questAct 1ClearfellBeira"
+                            && r["source"]["value"]["source"] == "input"
+                    })
+                    .unwrap();
+                row["outcome"]["value"]["target"]["value"]["value"]["key"] =
+                    json!("def.0000000000000028");
+            }
+            7 => rewards["selected_config_origin"]["source"]["ordinal"] = json!(422),
+            8 => {
+                rewards["selected_config_origin"]["links"][0]["value"]["local"] =
+                    json!("0000000000000001")
+            }
+            9 => rewards["census"][0]["source_index"] = json!(2),
+            10 => rewards["global_reward_completion"] = json!({"kind":"complete"}),
+            _ => unreachable!(),
+        }
+        // First exercise the target mutation without a guaranteed bad digest.
+        let error = proof::review_rewards(&rewards).unwrap_err();
+        let expected = match mutation {
+            0..=2 => "selected native reward whole owner/recipient differs",
+            3 | 4 => "selected native reward missing or duplicated",
+            6 => "quest mapping selects different reward",
+            9 => "quest full source record/body/order differs from accepted effect binding",
+            _ => "reward reconciliation differs from independent source/publication authority",
+        };
+        assert_eq!(error, expected, "mutation {mutation}");
+        // A separately changed compact digest does not replace that authority.
+        rewards["authority"]["files"]["rules"]["sha256"] = json!("repinned-mutated-rules");
+        assert!(proof::review_rewards(&rewards).is_err());
+    }
 }
 
 #[test]

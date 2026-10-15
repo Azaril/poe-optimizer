@@ -34,8 +34,9 @@ and the existing configuration-accounting source archive. It binds the full
 663-entry catalogue to two constructions: 62 default and 63 saved callbacks in
 their actual order. Complete bodies cover 45 literal-writer domains, the
 selected `None` boss branch and two quest-parser entry bodies. The latter's
-seventeen variables remain unresolved parser boundaries, even where the
-observed output is neutral. Exact default construction, callback arguments,
+seventeen variables now reconcile in both constructions through the finite
+reward witness and exact selected native rewards. Arbitrary quest text remains
+outside this proof. Exact default construction, callback arguments,
 append-only record changes and the empty custom-text path are checked.
 
 `configuration-auxiliary-bodies.json` retains the original control methods
@@ -45,7 +46,7 @@ an unexamined callback. `configuration-review.json` is reconstructed by
 Missing/altered callbacks, defaults, source identities, nested zero suppliers,
 prior-record rewrites and nonempty custom text are rejected. These are bounded
 direct-writer exclusions, not proof of later direct configuration consumers,
-quest parsing, native completeness or saved-field accounting.
+general quest parsing, native completeness or saved-field accounting.
 
 ## Exact source and owned identities
 
@@ -70,7 +71,10 @@ manufactured into 57 ordinary allocations. Presets and provider grant paths
 remain separate. Sixteen observed Player effects and eight supplied Actor
 occurrences remain reference joins, not certified native descendant delivery.
 
-The five native collectors must remain exact. The reusable inventory checker
+The five collectors in the authenticated historical supplier snapshot must
+remain exact for that snapshot's proof. The current Mana endpoint has removed
+these pass-throughs and reads the five contribution queries directly. The
+historical reusable inventory checker
 inspects ordinary and application `Contribute`, `Derive`,
 `ProjectModifierTransform` and `ProjectActorStat` writers for those channels,
 including inactive/zero writers. It refuses new suppliers directly. This
@@ -110,8 +114,10 @@ remain exact.
 
 The captured recipe and constructed-body censuses find no adjustment records,
 but observation alone cannot close arbitrary constructors or unexecuted
-callbacks. The remaining review must cover quest-parser output authority and
-later direct configuration consumers, plus source-only versus unresolved inputs;
+callbacks. The selected 34 quest callback constructions now reconcile to an
+independently authenticated finite source matrix and 17 saved native rewards;
+see `configuration-review.md`. General quest parsing and later direct
+configuration consumers remain open, plus source-only versus unresolved inputs;
 node/socket/radius and generated/support declarations/constructors; and later
 procedural transformations and source-to-recipient delivery. Exact native
 source dispositions and complete checked-query membership must then be

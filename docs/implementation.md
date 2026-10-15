@@ -149,17 +149,50 @@ manifest and release change. All 110 saved queries, exact IDs and selected issue
 counts **106/117/109/123/4** are preserved. Strict Clippy across six affected
 targets passes (4.21s), as does the existing engine hard-effect-ceiling regression
 (one test, 0.19s). The joined run takes 60.34s. Evidence uses
-`runs/owned-life-base-domain-{authoring-04,final-ordinary-01,joined-02,publication-01,clippy-01,hard-limit-01}.log`.
+`runs/owned-life-base-domain-{authoring-04,final-ordinary-01,joined-02,publication-01,clippy-02,hard-limit-01}.log`.
 Complete native builds remain **0/5**.
 
-**Next:** finish the existing configuration quest/reward source reconciliation.
-Retained evidence covers all 17 controls and 39 finite callback values; join
-exact selected values, source origins, parsed records and current Reward
-occurrences/producers/recipients. The target is to discharge 34 default/saved
-construction boundaries per observation, using existing positive producers.
-Changed or extra records, ambiguous selections and changed native delivery must
-remain blocking. These leaves are already input-accounted, so this source proof
-will not itself retire a selected import issue or complete a build.
+### Source checkpoint: selected quest/reward reconciliation
+
+The [configuration source review](../data/owned/poe2/3887ae68/mana-supplier-sources/configuration-review.md)
+now reconciles all **34 selected quest callbacks per independent observation**
+against the retained 17-control, 39-value reward witness. Defaults produce nine
+records and the saved configuration produces 22; they remain separate. Exact
+control keys, typed Boolean/Option codecs, source identities, complete ordered
+records and native delivery establish the correspondence. The current report
+and sidecar bind ConfigSet source ordinal 423 to choice preset `01f1`, then to
+17 exact native reward occurrences and their Player-targeted programs.
+
+The selected parser-boundary count falls **34 → 0** in each observation. General
+quest parsing remains unproved: PoB accepts arbitrary text, while this proof
+refuses values outside the finite admitted token domain. Global reward and
+choice inventories remain Pending. These leaves were already input-accounted,
+so no selected import issue closes and complete builds remain **0/5**. The native
+package and all five originals are unchanged; bounded archives serve offline
+authentication, with no historical evaluator or reimport path.
+
+All ten ordinary Rust tests pass (4.82s), including independent source/native
+mutation refusals. Explicit offline retention passes (6.30s), strict Clippy
+passes (0.67s), and independent review is clean. Evidence uses
+`runs/owned-mana-configuration-rewards-{retain-03,test-03,clippy-02}.log`.
+The nine bounded archives total 1,221,115 compressed bytes; their raw and
+compressed hashes are independently checked. They do not enlarge the native
+release package. Review receipt SHA-256:
+`929e8805a7e1ec72ef9d022354309fde61b1e85c12032173fda6550e23ddcccf`.
+
+**Next:** reconcile the selected passive-jewel/radius constructor boundary.
+Reuse explicit empty Spec3 socket membership, the intrinsic socket packet,
+source02 node/socket inventories and the selected 55 allocations plus two roots.
+Check complete initialization/wipe, both radius insertion branches and the
+node-builder/list consumers before excluding radius callbacks. An observed
+empty output is insufficient. Reject occupied/unknown sockets, injected radius
+providers and changed selection membership. If a necessary constructor input is
+missing from retained evidence, stop that closure and acquire or model the actual
+dependency rather than infer absence. This uses existing contracts and targets
+one source boundary; ordinary passive transformations, generated/support
+delivery, later direct configuration consumers and native coverage stay separate.
+Preserve the four selected obligations until their actual owners and inventories
+are complete.
 
 Native-only writer census
 could make Life's adjustment groups Complete-empty, as Mana's already are, but
@@ -229,6 +262,16 @@ No source mechanics, test expectations or allocation code change. Independent
 inverse review confirms exactly those two digest changes and unchanged LF bytes.
 All five Import `owned_catalog_recipe` tests pass (0.35s), using the unchanged
 strict artifact comparisons. Hosted success is not yet confirmed.
+The subsequent job-log audit explains four more failing CLI targets in that old
+run: `owned_item_bases_cli`, `owned_attribute_cli` and `owned_extension_cli`
+reject the former current-manifest receipt; `owned_catalog_cli` rejects the
+former generated catalog manifest. Those are covered by `47fa0592` and
+`7aebbde1` respectively. All 19 current and eight import/compiled artifact
+receipts now match their exact hash and size. No additional code defect was
+found. At this audit the Life BASE push `c409fae8` had queued run `38682815324`;
+main concurrency preserves the running older revision and coalesces pending revisions. Recent
+jobs have completed, but live job logs are unavailable, so individual long steps
+have not been diagnosed as hung. Do not report the queued revision as green.
 Evidence: `runs/ci-import-c4a62464-job116230401602.log` and
 `runs/ci-catalog-republication-01-diff.json`; validation:
 `runs/ci-owned-catalog-recipe-receipts-01.log`.

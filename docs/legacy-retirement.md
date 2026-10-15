@@ -936,9 +936,10 @@ This proves only the **combined rounding and minimum**, not the original helper'
 raw return over the entire interval. It does not cover nonfinite operands,
 decimal/other-quantum branches, earlier arithmetic or an overriding resource
 value. In particular, no bound on legal builds or currently admitted quantities
-follows from it. A future final-Life packet must justify its actual computed
-operand domain through checked inputs and arithmetic; it must not clip inputs,
-assume this bound from an observed final Life, or silently exclude mismatches.
+follows from it. The published final-Life packet checks its actual computed
+operand against this domain; it does not clip inputs, assume this bound from an
+observed final Life, or silently exclude mismatches. Supplier and earlier
+arithmetic coverage remain independent requirements.
 The [implementation checkpoint](implementation.md#player-life-reference-checkpoint)
 records the independent full-build consumer observations and their exact scope.
 
@@ -971,10 +972,11 @@ the separate computed-range boundary for final pool rounding. It specifies an
 explicit unsupported result instead of clipping, inactivity, game illegality or
 unconditional reproduction of add-half rounding at very large magnitudes.
 The owner approved it on October 14. The current native rule path now implements
-it, and the unpublished Mana consumer checks its actual pre-rounding operand.
+it, and the published Life and Mana consumers check their actual pre-rounding
+operands.
 The compiler identity is invalidated in place; no old diagnostic reader or
-alternate rounding evaluator is retained. Resource supplier coverage and final
-pool publication remain pending.
+alternate rounding evaluator is retained. Resource supplier coverage and
+complete-build evaluation remain pending.
 
 The [attribute setup witness](owned-attribute-setup-evidence.md) is a concrete
 unresolved case: synthetic configuration/item inputs expose different local MORE

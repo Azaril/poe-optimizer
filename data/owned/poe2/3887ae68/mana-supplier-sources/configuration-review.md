@@ -37,9 +37,11 @@ each delta by digest and preserves occurrence counts.
   fifteen target names, including zero or conditionally inactive candidates.
 - `presetBossSkills` has a dynamic writer branch. Its actual argument is `None`
   in both constructions, and the exact complete body excludes that branch.
-- Two quest parser callback bodies cover 17 distinct quest variables. Their 34
-  actual deltas are retained and screened for the target names, but the parser
-  and captured reward-string authority remain an explicit unresolved boundary.
+- Two quest parser callback bodies cover 17 distinct quest variables. The 34
+  actual calls now match the independently retained finite reward witness,
+  including full ordered records, source labels, flags, tags and multiplicity.
+  These selected construction boundaries are reconciled; arbitrary parser
+  inputs remain outside the proof.
 
 Both constructions have exactly one enabled, empty custom block and no fallback
 custom text. The full `BuildModList` body proves that neither parser path runs.
@@ -67,14 +69,57 @@ covered by `upstream-LICENSE.md.gz` in this directory and the readable license a
 `../configuration-accounting/evidence/pob/LICENSE.md`. Archived
 source text is never executed by the ordinary proof.
 
+## Finite quest and selected native reward reconciliation
+
+`configuration-reward-authority.json` pins nine bounded gzip archives. The old
+reward acquisition has an independent fixed whole-file digest, as do the
+current Life BASE release and Original05 normalization report. Release artifact
+commitments authenticate the archived current rules, mapping and reward policy;
+the report authenticates the typed draft digest and exact sidecar. The full
+QuestRewards data matches the same upstream source manifest. These archives are
+evidence only; no old runtime or compiler is invoked.
+
+The original witness includes 39 invoked values across 17 controls: nine checked
+Boolean callbacks and 30 list values, including eight explicit `None` choices.
+False Boolean values skip dispatch and are not invoked-empty callback cases.
+The source callback accepts arbitrary non-`None` text, so the witness and native
+policy's finite token domain do not establish general quest-parser completeness.
+`quest_parser_closure` remains false. Unknown or noncatalogue strings refuse.
+
+Each actual source02 callback joins by exact key, typed argument and source
+index. Observer encoding differences are translated losslessly: `keyword_flags`
+versus `keywordFlags`, contiguous numeric tags, and the exact appended list
+position. No extra body fields are discarded. Both constructions start with
+empty lists: default quest construction adds nine records, while saved quest
+construction adds 22. They are not added together as native contributions.
+
+Only the saved phase joins to native selection. Authenticated ConfigSet source
+ordinal 423 links to current choice preset `01f1`; its complete selected reward
+membership points to 17 exact occurrences in the global reward inventory.
+Policy codecs resolve typed Boolean/Option values, then exact mapping receipts
+identify Reward definitions. Fifteen complete owner bodies are reused from the
+existing flat-resource, permanent-effect and recovery reward packets. The two
+Cold Resistance owners are checked completely against their Player Add route.
+Whole programs, conditions, reads, closure and recipient must match, including
+the separate Global-tag defence records and both Medallion records. Pending
+global reward inventory and other choice obligations remain pending. Character
+reward lists are not changed or used as a substitute for configuration ownership.
+
+The report records zero remaining boundaries among these 34 selected quest
+calls and retains the separate native correspondence receipts. This grants no
+native coverage and makes no claim about later resource transformations,
+inheritance or total Mana/Life evaluation.
+
 ## Remaining boundaries
 
-The quest-string parser boundary is not closed merely because these selected
-outputs contain no target names. Configuration control records and raw fields
+The general quest-string parser boundary remains open beyond the finite
+authenticated values. Configuration control records and raw fields
 can affect later calculation bodies, so those consumers still need their own
 review and native input adoption. In particular, rows with no `apply` callback
 are not necessarily presentation-only: `enemySpeed`, `enemyCritChance`, and
-`enemyCritDamage` are read directly by defence calculations.
+`enemyCritDamage` are read directly by defence calculations. Their raw native
+inputs have already been adopted; that input work is separate from downstream
+calculation and complete supplier delivery.
 
 This checkpoint changes no `01f2` configuration responsibility, owner completion,
 or native contribution membership. The broad supplier proof still has the
@@ -85,3 +130,15 @@ arguments, changed defaults and body declarations, prior-record rewrites,
 nonempty custom text, and nested zero/inactive target records. A separate finite
 dispatch test preserves numeric zero and tests the count-only fallback rule;
 it is confined to offline source evidence.
+
+Reward controls additionally reject unsupported strings, altered source tags,
+unknown fields, positions, order, duplicate/removal changes, changed owner
+recipients or conditions, wrong mappings, foreign occurrence identities and
+ConfigSet links. Changing compact metadata alongside a matrix or owner cannot
+replace the independent acquisition and publication authority.
+
+Validation: `cargo test -p poe-optimizer-cli --test owned_mana_configuration_sources
+--locked` passes all ten ordinary tests (4.82s); the explicit retention entry
+passes separately (6.30s). Strict Clippy passes (0.67s), and independent review
+is clean. Logs are
+`runs/owned-mana-configuration-rewards-{retain-03,test-03,clippy-02}.log`.

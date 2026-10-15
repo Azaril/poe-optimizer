@@ -1,6 +1,6 @@
 # Mana supplier evidence and remaining admission
 
-Updated October 14, 2026. The final Mana formula is a published owned rule;
+Updated October 15, 2026. The final Mana formula is a published owned rule;
 this offline evidence concerns the sources feeding its five adjustment inputs.
 It does not grant native coverage or make the unchanged Sniper build executable.
 
@@ -66,6 +66,40 @@ The retained comparison receipt is
 The failed acquisition-comparison logs remain alongside it; this is not a
 retry-until-pass protocol.
 
+## Selected quest/reward reconciliation
+
+The configuration audit distinguishes the finite supported reward options from
+PoB's general parser, which accepts arbitrary reward text. The retained reward
+witness supplies 17 controls and 39 finite callback values. The two actual
+configuration constructions each invoke 17 quest callbacks: defaults produce
+nine records, while the saved build produces 22. These phases remain separate;
+the saved selection alone maps to native rewards.
+
+The checked join follows the exact source control and typed value through its
+import codec, reward policy and identity mapping to the selected owned reward
+occurrence and complete Player-targeted program. An independently pinned current
+normalization report and sidecar establish the saved ConfigSet-to-preset link;
+finding a same-key preset is insufficient. Fifteen native owners reuse existing
+reviewed effect packets; two existing Cold Resistance owners complete the
+selected correspondence. Whole records, conditions, tags, order and duplicate
+counts remain exact. Unknown strings, extra or missing records, ambiguous
+selections and changed recipients cannot acquire this proof.
+
+The retained current release, rules, mapping, policy and normalization material
+serve bounded offline authentication. They are not another evaluator, importer
+or historical runtime. Native reward definitions and programs are unchanged.
+The result resolves 34 actual construction boundaries per independent
+observation. Global parser closure, later direct configuration
+consumers, native owner/plan completeness and the four selected input obligations
+remain separate. These reward leaves were already input-accounted.
+
+All ten ordinary Rust tests pass, including source, record, selection, mapping
+and recipient mutation controls. Explicit offline retention and strict Clippy
+pass; independent review is clean. Logs are
+`runs/owned-mana-configuration-rewards-{retain-03,test-03,clippy-02}.log`.
+The native package remains the
+[Life BASE checkpoint](implementation.md#current-checkpoint-bounded-player-life-base-accumulation).
+
 ## Limits and next work
 
 Actual callback invocations do not account for unexecuted branches. A function
@@ -92,5 +126,9 @@ nine authored skills, sixteen support assignments, twenty-three physical gems,
 and three generated input bindings.
 
 Continue the selected neutral-domain review before positive transfer mechanics.
+The next bounded candidate is passive-jewel/radius construction, using the
+existing explicit empty-socket membership and retained node/socket inputs. Its
+initialization and insertion bodies must prove absence; captured empty lists
+alone cannot. The [implementation plan](implementation.md) owns this next step.
 Preserve all four Original05 input obligations, prior Partial owners and global
 query/plan gates until their own proofs and native implementations are complete.

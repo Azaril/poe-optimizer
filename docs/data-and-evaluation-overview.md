@@ -186,8 +186,13 @@ source bodies. Its retained construction records and direct mutation controls
 preserve exact source identity and multiplicity. A subsequent offline review
 binds both configuration construction passes and all 125 actual callbacks to
 their complete source bodies. Literal writer domains, the inactive boss branch
-and empty custom text are accounted for; quest parsing, later direct reads and
-transformations remain unresolved. Neither a zero observation nor a source-only
+and empty custom text are accounted for. The selected quest callbacks now join
+the 17-control, 39-value source witness through typed import choices to 17 exact
+native reward occurrences and Player effects. All 34 construction boundaries
+per observation are reconciled; the nine default records remain separate from
+the 22 saved records. The current report and sidecar authenticate which saved
+configuration selects those rewards. General arbitrary-text parsing, later
+direct reads and transformations remain unresolved. Neither a zero observation nor a source-only
 exclusion completes native owners or global contribution coverage.
 The admission review also confirms that all five Mana adjustment groups are
 already Complete-empty. Life's seven corresponding adjustment/CI/override groups
