@@ -389,16 +389,16 @@ pub fn check_authored() {
     check_source(false);
 }
 fn check_dependencies(endpoint: &StagedOwnedRelease, after: bool) {
-    check_dependencies_with_query(endpoint, after, None);
+    check_dependencies_rules(endpoint, after, None, &endpoint.input().recipe.rules);
 }
-fn check_dependencies_with_query(
+fn check_dependencies_rules(
     endpoint: &StagedOwnedRelease,
     after: bool,
     reviewed: Option<(&ContributionQuery, &ContributionQuery)>,
+    rules: &RulePackageInput,
 ) {
     let d = dependencies();
     let recipe = &endpoint.input().recipe;
-    let rules = &recipe.rules;
     let expected = if after {
         owner_after()
     } else {
@@ -466,19 +466,19 @@ fn check_dependencies_with_query(
     }
 }
 pub fn assert_component(endpoint: &StagedOwnedRelease) {
-    check_authored();
-    check_dependencies(endpoint, true);
-    check_provenance(endpoint);
+    let query = query();
+    assert_component_with_reviewed_rules(endpoint, &query, &query, &endpoint.input().recipe.rules);
 }
 /// The caller first authenticates the later query change through its own
 /// packet. All original owners, receivers and other queries remain exact.
-pub fn assert_component_with_reviewed_query(
+pub fn assert_component_with_reviewed_rules(
     endpoint: &StagedOwnedRelease,
     before: &ContributionQuery,
     after: &ContributionQuery,
+    rules: &RulePackageInput,
 ) {
     check_authored();
-    check_dependencies_with_query(endpoint, true, Some((before, after)));
+    check_dependencies_rules(endpoint, true, Some((before, after)), rules);
     check_provenance(endpoint);
 }
 fn check_provenance(endpoint: &StagedOwnedRelease) {

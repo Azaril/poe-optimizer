@@ -30,10 +30,12 @@ fn inner(w: &mut World) -> &mut shared::World {
 pub(super) fn install(sniper: &mut sniper::World, endpoint: &StagedOwnedRelease) -> Census {
     // The shared World loader has already authenticated the current Life query
     // through its published inverse; the remaining checks use current programs.
-    player_life_family::assert_component_with_reviewed_receivers(
+    let previous = life_base_domain_family::previous_rules(endpoint);
+    player_life_family::assert_component_with_reviewed_rules(
         endpoint,
         &minion_inherent_family::dependencies().receiver_before,
         &minion_inherent_family::receivers(),
+        &previous,
     );
     let recipe = &endpoint.input().recipe;
     let actual_owner = recipe
@@ -47,7 +49,7 @@ pub(super) fn install(sniper: &mut sniper::World, endpoint: &StagedOwnedRelease)
     expected
         .programs
         .members
-        .push(player_life_family::program());
+        .push(life_base_domain_family::program());
     assert_eq!(actual_owner.programs.closure, expected.programs.closure);
     for p in &expected.programs.members {
         assert_eq!(
@@ -385,12 +387,12 @@ fn component() -> (OwnedDefinitionSchemaPackage, CompiledRulePackage) {
         namespace: schema.input().namespace.clone(),
         release: key("finite-inherent-life-bridge"),
         semantics_version: schema.input().semantics_version.clone(),
-        operations_version: key(OWNED_RULE_OPERATIONS_V22),
+        operations_version: life_base_domain_family::dependencies().operations_version,
         definitions: schema.identity().clone(),
         tables: vec![],
         owners: vec![DefinitionRules {
             owner: owner(),
-            programs: DeclaredSet::complete(vec![player_life_family::program()]),
+            programs: DeclaredSet::complete(vec![life_base_domain_family::program()]),
         }],
         receivers: DeclaredSet::complete(vec![]),
         effect_applications: Some(DeclaredSet::complete(vec![])),
@@ -432,7 +434,7 @@ fn evaluate_component(
     assert_eq!(result.effects.len(), 1);
     assert_eq!(
         result.effects[0].effect,
-        player_life_family::program().effects[0].effect
+        life_base_domain_family::program().effects[0].effect
     );
     result.effects[0].disposition.clone()
 }

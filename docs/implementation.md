@@ -76,7 +76,7 @@ These reference observations are not evidence of native metric completion.
 
 | Saved query references | Native work to reuse | Remaining final producer |
 | --- | --- | --- |
-| 00: Player Life | Intrinsic/Strength/item/reward contributions, checked Life queries, bounded equipment accumulation and guarded final consumer with conversion/override/CI precedence | Complete supplier/magnitude admission, prove cross-group/conversion accumulation domains, finalize plan and evaluation binding |
+| 00: Player Life | Intrinsic/Strength/item/reward contributions, checked Life queries, bounded exact BASE accumulation and guarded final consumer with conversion/override/CI precedence | Complete supplier/magnitude admission, prove conversion accumulation domains, finalize plan and evaluation binding |
 | 01: Player Mana | Intrinsic/Intelligence contributions, direct checked adjustment queries, override selection and published guarded consumer with checked numeric domain | Transformation supplier admission, whole-plan completion and evaluation binding |
 | 02, 18, 19: Player ES, Armour, Evasion | Selected item magnitude/local-defence intermediates and global/passive contributions | Final item properties, complete receiving, transformations and final Actor totals |
 | 03–06: four capped Player resistances | Item/passive/reward inputs and configured penalty | Complete contributor inventories, aggregation and cap/override calculations |
@@ -105,42 +105,71 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: direct Mana queries
+## Current checkpoint: bounded Player Life BASE accumulation
 
-The [Mana cleanup](../data/owned/poe2/3887ae68/mana-direct-queries/README.md)
-removes five one-query pass-through programs and their Player receivers on
-`3357`–`335b`. Final Mana reads the same checked contribution queries directly.
-Typed channels, query memberships/coverage, every arithmetic node, the rounding
-guard and optional-override precedence remain unchanged. Exact reader census
-checks reject any additional computed-value dependency before removal.
+The [Life BASE packet](../data/owned/poe2/3887ae68/life-base-domain/README.md)
+bounds the existing shared-Player Strength-to-Life contribution using the
+accepted numeric-domain operation. It adds no program, receiver, definition or
+runtime API. Seven distinct BASE producer addresses span intrinsic, inherent,
+equipment and reward groups. Exact producer and receiver censuses establish
+that admitted Player-targeted terms are integral and bounded by `2^37`;
+one global 65,536-effect ceiling bounds the
+whole union by `2^53`. Every prefix, subgroup and regrouping is therefore exact
+in binary64. This proves why native grouping can differ from PoB insertion order
+within the admitted domain.
 
-Current native fixtures construct this graph directly; the obsolete collector
-installer is deleted. Meaningful inactive, unknown, unlisted-source, freeze and
-override controls exercise the final consumer. Historical packets retain only
-authenticated authoring/source-evidence responsibilities. No runtime compatibility
-branch, public API, game-data ID or resource limit is added.
+The proof checks all eight Class level schemas, the sole Strength-derived Life
+writer and its receivers, the complete equipment writer, all ten potential Life
+writers and the shared-Actor application. Inactive and non-Player writers remain
+in the census. Player INC has only the fixed reward contribution; minion INC and
+MORE stay on their exact supplied Actor. Active missing or unsupported amounts
+remain unavailable, and inactive effects do not demand unused amounts.
 
-The current package is **`runs/owned-mana-direct-queries-publication-01/package`**:
+Final Life's remaining gap is now `unproved-life-conversion-order-domain`.
+PoB carries one accumulator across conversion-name buckets; independent bucket
+sums are not equivalent for unrestricted floating values. All seven adjustment,
+CI and override supplier queries remain Partial. Upstream source/magnitude,
+Actor and global coverage and the four selected input obligations are unchanged.
+A local two-owner inverse authenticates older component evidence; current
+native fixtures execute the guarded programs without rebuilding an old release.
 
-- Input: `c0bccf10cee8a70027e1bcfd923961dfd26766d56cb31bff419833cbe3244dfc`.
+The current package is **`runs/owned-life-base-domain-publication-01/package`**:
+
+- Input: `121dc6bf9980fef3301d18e6f6cb4148884f50a792e38b7599f1db60318ab748`.
 - Definitions: `cf65959955725dde2758ea79cb5542dca1fe9a9601a352344f8f3fad24ad837b` (unchanged).
-- Rules: `a4fb59e215ea9b0be03abcd4da815f15810a49ae83f7229a9cc0033869d425fa`.
-- Compiled: `914189c13e24bd25f11789ab2efc1f98d09dec62d7e237010e3c405e6b794e83`.
+- Rules: `5eeef2c9a96a7fbba84e04295080ac217c508b7775acfdb1568fdf5836f02813`.
+- Compiled: `a035113017081daf0c7135a12c271bf22861ef8164490334b3a7e0d1e734e8c9`.
 - Registry: `6e97db58bec5855fa1a5b8e0b5253fc3ab74c3192a48e29262cce59cd47b076a`, last issued `3388` (unchanged).
 
-All **24 focused tests**, strict Clippy and independent review pass. Publication
-passes in 26.21s and rebuilds all eighteen artifacts identically. Every saved
-query (110), local ID and selected issue count **106/117/109/123/4** is preserved;
-only rules, manifest and release files change. Evidence uses
-`runs/owned-mana-direct-queries-{tests-03,clippy-01,publication-01}.log`.
+All six focused controls, three minion-inherent regression tests and 101 joined
+native tests pass; the joined component
+still derives Player Life 1320 from its actual producers. All-five publication
+passes in 22.11s and rebuilds all eighteen artifacts identically. Only rules,
+manifest and release change. All 110 saved queries, exact IDs and selected issue
+counts **106/117/109/123/4** are preserved. Strict Clippy across six affected
+targets passes (4.21s), as does the existing engine hard-effect-ceiling regression
+(one test, 0.19s). The joined run takes 60.34s. Evidence uses
+`runs/owned-life-base-domain-{authoring-04,final-ordinary-01,joined-02,publication-01,clippy-01,hard-limit-01}.log`.
 Complete native builds remain **0/5**.
 
-**Next:** bound the existing shared-Player Strength-to-Life contribution and
-prove BASE regrouping over the union of intrinsic, inherent, equipment and
-reward effects. Authenticate each bound and unique producer plus the Player INC
-census before refining the final Life gap. Conversion-order proof, all supplier
-coverage and the four selected input obligations remain separate. This is an
-owned-data change using the accepted numeric-domain operation.
+**Next:** finish the existing configuration quest/reward source reconciliation.
+Retained evidence covers all 17 controls and 39 finite callback values; join
+exact selected values, source origins, parsed records and current Reward
+occurrences/producers/recipients. The target is to discharge 34 default/saved
+construction boundaries per observation, using existing positive producers.
+Changed or extra records, ambiguous selections and changed native delivery must
+remain blocking. These leaves are already input-accounted, so this source proof
+will not itself retire a selected import issue or complete a build.
+
+Native-only writer census
+could make Life's adjustment groups Complete-empty, as Mana's already are, but
+would not prove absence of untranslated suppliers or unlock this build. Do not
+prioritize a coverage-label cleanup over actual source admission. Remaining
+resource source domains include outgoing conversions, incoming donor-to-Life
+conversion/gain, post-scaling additions, CI and overrides. Keep the separate
+conversion-order proof explicit; zero observations cannot establish any of these
+absence claims. Query-scoped coverage would be a separate design decision, not
+an implicit way around the current complete-plan contract.
 
 ### Measured catalog capacity and next cleanup
 
@@ -150,8 +179,8 @@ The Mana cleanup reduces that to **8185/8192**, leaving seven slots; receivers
 decrease from 60 to 55. Other measured Life-predecessor compiler counts are
 6548 owners, 23517 effects, 4249 reads, 32814 nodes and 41600 edges, comfortably
 within their separate caps.
-The current complete release is **64,382,445/67,108,864 bytes**, leaving
-2,726,419 bytes. These are separate limits. The common
+The current complete release is **64,383,063/67,108,864 bytes**, leaving
+2,725,801 bytes. These are separate limits. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
 
@@ -165,11 +194,20 @@ Track compiler/schema validation work and release byte totals at subsequent
 publications; private aggregate work counters need bounded diagnostics before
 claiming exact headroom. If simplification is insufficient, make a measured
 catalog-capacity adjustment with boundary tests. **Keep the independent
-`PlanLimits.max_effects = 65536` unchanged:** the equipment exact-sum proof uses
+`PlanLimits.max_effects = 65536` unchanged:** the equipment and combined BASE
+exact-sum proofs use
 `65536 × 2^37 = 2^53`. Limits are acceptance/execution gates and are not hashed
 into result identities, so a changed numerical domain requires an explicit
 proof and artifact/cache invalidation rather than relying on a limit change to
 invalidate results.
+
+## Previous checkpoint: direct Mana queries
+
+[Archived publication and validation](implementation-history.md#archived-2026-10-15-checkpoint-direct-mana-queries):
+five forwarding programs and Player receivers removed; current fixtures use the
+final direct-query consumer and the obsolete collector installer is deleted.
+All 24 focused tests, all-five publication/rebuild and strict Clippy pass. Pushed
+as `0ca256a4`. Coverage and typed channels remain unchanged.
 
 ## Previous checkpoint: guarded Player Life consumer
 
@@ -463,8 +501,8 @@ the remaining downstream consumers. Complete coverage only where potential
 supplier inventories and numerical behavior are proved; source observations
 and finite component replays do not replace either requirement.
 
-The selected saved Life query is Player. Its remaining supplier, cross-group
-arithmetic and whole-plan dependencies are independent of the now-joined six
+The selected saved Life query is Player. Its remaining supplier, conversion-order
+and whole-plan dependencies are independent of the now-joined six
 minion-Life sources and inherent minion zero contribution. Those joins advance
 Actor coverage; they do not close the saved Player metric. Do not replace a
 missing producer with a supplied scalar or call a finite composition a complete
@@ -1490,7 +1528,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
-| Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Bounded equipment ordering and the guarded final Life consumer are published; magnitude/routing, cross-group arithmetic and global/owner coverage remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
+| Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Bounded equipment ordering, combined Player BASE accumulation and the guarded final Life consumer are published; magnitude/routing, conversion arithmetic and global/owner coverage remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
 | Composed support discovery | Accepted October 8. The common native gate, current authored-order DTO and source-input accounting are implemented; Original05 `01de` is retired. The Gem packet publishes 937 Known and 29 Unmapped domains with all-five preservation; all 23 selected physical Gem domains are covered. Existing typed identities fixed 111 false stat-set blockers. Pinned generated export metadata classifies eight missing runtime effects as active without implementing their Command mechanics. Continue other owner domains and exact provider exclusions; keep Command action/usage gaps separate. Unsupported positive and archived source relationships remain blocking. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Application-group contribution queries | Accepted and implemented October 8 in Core/Data/Engine V25. Typed program-effect/application-group addresses preserve exact recipients, potential-source census, stacking, unknowns and explicit numeric order in one checked reduction path. Current artifacts are rebuilt with no old-format compatibility. Mixed inherited/applied damage data now adopts this capability; MORE and final hit consumers remain next. [Accepted contract](owned-application-group-contribution-queries-proposal.md). |

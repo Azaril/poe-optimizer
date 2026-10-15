@@ -98,14 +98,22 @@ contribution reads. It applies CI before a present override, including zero,
 then ordinary resource arithmetic with a checked rounding domain. Six new typed
 channels and seven Partial supplier queries use the existing native engine;
 no Lua behavior or intermediate pass-through receivers are needed. The final
-owner retains its unproved cross-group/conversion-order domain. The all-five
+owner retains its unproved conversion-order domain. The all-five
 publication preserves every saved query and input obligation; a published
 formula alone does not make Player Life or the whole build admitted.
 The joined component now derives 1320 from actual intrinsic, Strength, item and
 reward producers and binds the saved Player Life metric. All 101 joined tests
 pass, including input changes, source vectors, fresh/reused/parallel agreement
-and unavailable paths. Only the finite test graph closes the remaining proof
-domains; the production endpoint keeps them Partial. The
+and unavailable paths. The subsequent
+[BASE domain packet](../data/owned/poe2/3887ae68/life-base-domain/README.md)
+now proves exact regrouping of intrinsic, inherent, equipment and reward
+contributions: distinct integral producers bounded by `2^37`, counted against
+one global 65,536-effect ceiling, have an absolute sum at most `2^53`. An
+existing typed range check guards the shared Strength-to-Life bridge. Exact
+producer, Class-schema and receiver censuses make changes require a new proof.
+Conversion accumulation, untranslated suppliers and complete input/plan coverage
+remain unresolved. The current joined tests use these guarded bodies; only the
+finite test graph closes the remaining domains. The
 [capacity review](implementation.md#measured-catalog-capacity-and-next-cleanup)
 tracks the compiler's remaining seven program slots and roughly 2.7 MB release
 headroom before additional catalog growth.
@@ -153,7 +161,8 @@ engine's non-raisable 65,536-effect ceiling and unique membership prove exact
 binary64 equipment sums independent of order. That ceiling is a semantic
 dependency of this proof; increasing it requires new proof and affected identity
 invalidation. Upstream magnitude/routing coverage, four flat-Life owner gaps,
-cross-group arithmetic and final Player Life remain incomplete. Native/CLI tests
+final Player Life remain incomplete; the subsequent BASE packet above proves
+cross-group addition within its bounded domain. Native/CLI tests
 and checked all-five publication pass without changing queries or input issues.
 The joined Sniper graph also uses those exact published programs and membership,
 with 93 tests passing. Its former fixture-only equipment closure and three
@@ -170,7 +179,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-direct-mana-queries).
+[implementation checkpoint](implementation.md#current-checkpoint-bounded-player-life-base-accumulation).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -181,8 +190,11 @@ and empty custom text are accounted for; quest parsing, later direct reads and
 transformations remain unresolved. Neither a zero observation nor a source-only
 exclusion completes native owners or global contribution coverage.
 The admission review also confirms that all five Mana adjustment groups are
-already Complete-empty. Their remaining source review supports future owner
-closure, but is not itself a missing native reduction implementation. Class
+already Complete-empty. Life's seven corresponding adjustment/CI/override groups
+remain Partial. An exact native writer census could close that narrow membership
+domain, but would not prove absence of untranslated suppliers or complete the
+build. Remaining source review supports owner closure; changing these labels
+alone is not the next delivery milestone. Class
 coverage still waits on shared prepared-hand/state producers; equipment Life
 now has bounded accumulation but still needs source/magnitude admission. These gates must
 not be replaced by inferred defaults or reassigned markers.
@@ -1332,7 +1344,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-direct-mana-queries),
+live in the [implementation plan](implementation.md#current-checkpoint-bounded-player-life-base-accumulation),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.

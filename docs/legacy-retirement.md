@@ -79,6 +79,14 @@ override and numerical controls exercise the current final consumer. All 24
 focused tests, all-five publication/rebuild and strict Clippy pass. Validation and
 the active endpoint are recorded in the implementation checkpoint.
 
+The published Life BASE packet applies the Lua cleanup rule to arithmetic ordering:
+preserve a demonstrated numerical law, rather than source insertion order for
+its own sake. Unique integral contributions bounded by `2^37` and the existing
+global 65,536-effect ceiling give exact regrouping over their union. The source's
+multi-name conversion accumulator remains a distinct unresolved domain; the
+BASE proof cannot authorize independent unbounded floating-point bucket sums.
+This changes owned data and proof scope, not runtime language semantics.
+
 ## Retention rule
 
 **Physical-source ports, 2026-10-09:** remove the unpublished consumer's two

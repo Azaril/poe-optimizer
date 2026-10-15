@@ -23,7 +23,8 @@ pub(super) fn check_current_packet(endpoint: &StagedOwnedRelease) {
     // Authenticate once before any joined component installs current programs.
     // Unrelated later releases may add schema or normalization without changing
     // this exact guarded owner, potential-writer census or contribution query.
-    life_equipment_domain_family::assert_component(endpoint);
+    let previous = life_base_domain_family::previous_rules(endpoint);
+    life_equipment_domain_family::assert_component_with_reviewed_rules(endpoint, &previous);
     check_prior_components(endpoint);
 }
 fn check_prior_components(endpoint: &StagedOwnedRelease) {
@@ -31,10 +32,12 @@ fn check_prior_components(endpoint: &StagedOwnedRelease) {
     amulet_life_family::check_authored();
     let equipment = life_equipment_domain_family::dependencies();
     let current_query = life_equipment_domain_family::query();
-    minion_inherent_family::assert_component_with_reviewed_query(
+    let previous = life_base_domain_family::previous_rules(endpoint);
+    minion_inherent_family::assert_component_with_reviewed_rules(
         endpoint,
         &equipment.query,
         &current_query,
+        &previous,
     );
     let minion = minion_inherent_family::dependencies();
     let minion_after = minion_inherent_family::owner_after();
@@ -99,6 +102,12 @@ fn check_prior_components(endpoint: &StagedOwnedRelease) {
     life_query_family::assert_component_with_reviewed_donors(
         endpoint,
         &[
+            (
+                &life_base_domain_family::dependencies().shared_player,
+                &life_base_domain_family::shared_after(),
+                &current_query,
+                &current_query,
+            ),
             (&equipment.owner, &guarded, &equipment.query, &current_query),
             (
                 &minion.owner_before,
@@ -127,7 +136,7 @@ fn current_life_component_allows_later_provenance_but_rejects_guard_or_query_dri
     assert_ne!(later.receipt().input, endpoint.receipt().input);
     check_current_packet(&later);
     for mutation in 0..3 {
-        let mut rules = later.input().recipe.rules.clone();
+        let mut rules = life_base_domain_family::previous_rules(&later);
         if mutation == 2 {
             rules
                 .contribution_queries

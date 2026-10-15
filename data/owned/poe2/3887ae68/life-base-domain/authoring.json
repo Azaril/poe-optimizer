@@ -1,0 +1,32 @@
+{
+  "kind": "life-base-domain",
+  "before": "c0bccf10cee8a70027e1bcfd923961dfd26766d56cb31bff419833cbe3244dfc",
+  "artifacts": {
+    "dependencies.json": {
+      "bytes": 313398,
+      "sha256": "bf76866ddbd988d33aee937f9436a93b14413a75c79011de341213910156f392"
+    },
+    "program.json": {
+      "bytes": 4241,
+      "sha256": "f04aa1647694ef0f50018f1cd1c35ea29f5647b1de9fe155ff9a3f7c2e393f65"
+    },
+    "proof.json": {
+      "bytes": 7070,
+      "sha256": "84f1f290ce25da47e5d6c7a5fed86567e746820954028a74466f3fcb227ffedb"
+    },
+    "ModDB.lua.gz": {
+      "bytes": 2575,
+      "sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9"
+    }
+  },
+  "scope": {
+    "changed_programs": 1,
+    "refined_gaps": 1,
+    "new_definitions": 0,
+    "new_receivers": 0,
+    "closed_owners": 0,
+    "closed_supplier_queries": 0,
+    "supplier_admission": false,
+    "whole_build": false
+  }
+}

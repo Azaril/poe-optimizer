@@ -23,7 +23,8 @@ fn world() -> World {
     static CURRENT: OnceLock<Component> = OnceLock::new();
     let (definitions, owners, receivers, queries) = CURRENT.get_or_init(|| {
         let endpoint = release::load(&path());
-        player_life_pool_family::assert_component(&endpoint);
+        let previous = life_base_domain_family::previous_rules(&endpoint);
+        player_life_pool_family::assert_component_with_reviewed_rules(&endpoint, &previous);
         let recipe = &endpoint.input().recipe;
         let consumer = player_life_pool_family::consumer();
         let definitions = player_life_pool_family::extension()
@@ -478,7 +479,8 @@ fn saved_player_life_metric_uses_native_execution_and_preserves_unavailability()
     use std::sync::Arc;
 
     let endpoint = release::load(&path());
-    player_life_pool_family::assert_component(&endpoint);
+    let previous = life_base_domain_family::previous_rules(&endpoint);
+    player_life_pool_family::assert_component_with_reviewed_rules(&endpoint, &previous);
     let (draft, _) = imported_selection(&path());
     let requests = draft["draft"]["query_presets"]["members"][0]["queries"]["requests"]["members"]
         .as_array()

@@ -84,6 +84,9 @@ mod offering_application_native;
 #[path = "support/owned_sniper_passive_damage_evidence.rs"]
 mod passive_damage_evidence;
 use passive_damage_evidence::family as plain_damage_source;
+#[allow(dead_code)]
+#[path = "support/owned_life_base_domain.rs"]
+mod life_base_domain_family;
 #[path = "support/owned_sniper_passive_damage_native.rs"]
 mod passive_damage_native;
 #[path = "support/owned_sniper_player_life_contribution.rs"]

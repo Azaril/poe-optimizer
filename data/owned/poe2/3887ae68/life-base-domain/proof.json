@@ -1,0 +1,125 @@
+{
+  "max_effects": 65536,
+  "component_bound": 137438953472,
+  "maximum_absolute_prefix": 9007199254740992,
+  "life_domain": {
+    "kind": "quantity",
+    "value": {
+      "minimum": {
+        "value": -137438953472,
+        "unit": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003119"
+        }
+      },
+      "maximum": {
+        "value": 137438953472,
+        "unit": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003119"
+        }
+      }
+    }
+  },
+  "prior_gap": "unproved-life-cross-group-and-conversion-order-domain",
+  "remaining_gap": "unproved-life-conversion-order-domain",
+  "base_membership_counts": [
+    2,
+    2,
+    2,
+    1
+  ],
+  "player_increased_reward": 5,
+  "player_more_identity": 1,
+  "source_manifest": "data/owned/poe2/3887ae68/mana-supplier-sources/source-manifest.json.gz",
+  "source_archives": [
+    {
+      "source": "src/Modules/CalcPerform.lua",
+      "file": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+      "compressed_sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae",
+      "spans": [
+        {
+          "first": 494,
+          "last": 509,
+          "body": "\n\t-- Add attribute bonuses\n\tif not modDB:Flag(nil, \"NoAttributeBonuses\") then\n\t\tlocal inherentAttributeMultiplier = 1\n\t\tif modDB:Flag(nil, \"DoubledInherentAttributeBonuses\") then\n\t\t\tinherentAttributeMultiplier = 2\n\t\tend\n\t\tif not modDB:Flag(nil, \"NoStrengthAttributeBonuses\") then\n\t\t\tif not modDB:Flag(nil, \"NoStrBonusToLife\") then\n\t\t\t\tif modDB:Flag(nil, \"HalvesLifeFromStrength\") then\n\t\t\t\t\tmodDB:NewMod(\"Life\", \"BASE\", output.Str * 1 * inherentAttributeMultiplier, \"Strength\")\n\t\t\t\telse\n\t\t\t\t\tmodDB:NewMod(\"Life\", \"BASE\", output.Str * 2 * inherentAttributeMultiplier, \"Strength\")\n\t\t\t\tend\n\t\t\tend\n\t\tend"
+        }
+      ]
+    },
+    {
+      "source": "src/Modules/CalcSetup.lua",
+      "file": "data/owned/poe2/3887ae68/mana-supplier-sources/CalcSetup.lua.gz",
+      "compressed_sha256": "6cf68ffe3f750e1b0670c54f4152fa2cbd88db2c1092d16c7541f773582a708c",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "spans": [
+        {
+          "first": 828,
+          "last": 837,
+          "body": "\n\tif not cachedPlayerDB then\n\t\t-- Initialise modifier database with base values\n\t\tfor _, stat in pairs({\"Str\",\"Dex\",\"Int\"}) do\n\t\t\tmodDB:NewMod(stat, \"BASE\", classStats[\"base_\"..stat:lower()], \"Base\")\n\t\tend\n\t\tmodDB.multipliers[\"Level\"] = m_max(1, m_min(100, build.characterLevel))\n\t\tcalcs.initModDB(env, modDB)\n\t\tmodDB:NewMod(\"Life\", \"BASE\", data.characterConstants[\"life_per_level\"], \"Base\", { type = \"Multiplier\", var = \"Level\", base = 16 })\n\t\tmodDB:NewMod(\"Mana\", \"BASE\", data.characterConstants[\"mana_per_level\"], \"Base\", { type = \"Multiplier\", var = \"Level\", base = 30 })"
+        }
+      ]
+    },
+    {
+      "source": "src/Classes/ModDB.lua",
+      "file": "data/owned/poe2/3887ae68/life-base-domain/ModDB.lua.gz",
+      "compressed_sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6",
+      "spans": [
+        {
+          "first": 137,
+          "last": 161,
+          "body": "function ModDBClass:SumInternal(context, modType, cfg, flags, keywordFlags, source, modName)\n\tlocal result = 0\n\tlocal globalLimits\n\tlocal modList = self.mods[modName]\n\tif modList then\n\t\tfor i = 1, #modList do\n\t\t\tlocal mod = modList[i]\n\t\t\tif mod.type == modType and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or (mod.source and (mod.source:match(\"[^:]+\") == source or mod.source == source))) then\n\t\t\t\tif mod[1] then\n\t\t\t\t\tif not globalLimits then\n\t\t\t\t\t\tglobalLimits = {}\n\t\t\t\t\tend\n\t\t\t\t\tlocal value = context:EvalMod(mod, cfg, globalLimits) or 0\n\t\t\t\t\tresult = result + value\n\t\t\t\telse\n\t\t\t\t\tresult = result + mod.value\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif self.parent then\n\t\tresult = result + self.parent:SumInternal(context, modType, cfg, flags, keywordFlags, source, modName)\n\tend\n\treturn result\nend"
+        },
+        {
+          "first": 185,
+          "last": 212,
+          "body": "function ModDBClass:SumInternalMulti(context, modType, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tlocal result = 0\n\tlocal globalLimits\n\tfor nameIndex = 1, argCount do\n\t\tlocal modName = nameAt(nameIndex, n1, n2, n3, n4, n5, n6, n7, n8)\n\t\tlocal modList = self.mods[modName]\n\t\tif modList then\n\t\t\tfor i = 1, #modList do\n\t\t\t\tlocal mod = modList[i]\n\t\t\t\tif mod.type == modType and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or ( mod.source and (mod.source:match(\"[^:]+\") == source or mod.source == source))) then\n\t\t\t\t\tif mod[1] then\n\t\t\t\t\t\tif not globalLimits then\n\t\t\t\t\t\t\tglobalLimits = {}\n\t\t\t\t\t\tend\n\t\t\t\t\t\tlocal value = context:EvalMod(mod, cfg, globalLimits) or 0\n\t\t\t\t\t\tresult = result + value\n\t\t\t\t\telse\n\t\t\t\t\t\tresult = result + mod.value\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif self.parent then\n\t\tresult = result + self.parent:SumInternalMulti(context, modType, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tend\n\treturn result\nend"
+        }
+      ]
+    }
+  ],
+  "prior_evidence": [
+    {
+      "path": "strength-life/source-vectors.json",
+      "sha256": "7b5046c47f4394ee4a6e3f43fd7b8fec5f1eaecbdb22a6e35dff038fc7676036"
+    },
+    {
+      "path": "player-intrinsic-life/source-vectors.json",
+      "sha256": "4bddcee4321c60a3aa296b6fcc936c79f5407db885ffa3750aeda330262d9b4e"
+    },
+    {
+      "path": "life-equipment-domain/proof.json",
+      "sha256": "203bc5932893d01342137376070ef395531adb7a5f6ea1a534966408cd751d56"
+    },
+    {
+      "path": "life-equipment-domain/programs.json",
+      "sha256": "db6b6a9542b83761dd0c867c5514cdec9d321ca6aa5b41cf612a8121a81545ee"
+    },
+    {
+      "path": "life-equipment-domain/dependencies.json",
+      "sha256": "a3a7638d02d25086b24e53d8d15351728babafba228d8bd8c48f2abd9d5126ad"
+    },
+    {
+      "path": "player-life-pool/source-vectors.json",
+      "sha256": "ccf7b4872da5a0cdf7da59649248038b831379e6b20ba584b3c225d2e759b902"
+    }
+  ],
+  "scope": {
+    "base_order_proved": true,
+    "player_increase_order_proved": true,
+    "conversion_order_proved": false,
+    "supplier_admission": false,
+    "whole_build": false
+  }
+}

@@ -230,7 +230,13 @@ fn census(rules: &RulePackageInput, guarded: bool) {
 /// Authenticate this component within a later release without requiring it to
 /// be the final provenance entry. Unrelated schema additions may follow it.
 pub fn assert_component(endpoint: &StagedOwnedRelease) {
-    check_component_rules(&endpoint.input().recipe.rules);
+    assert_component_with_reviewed_rules(endpoint, &endpoint.input().recipe.rules);
+}
+pub fn assert_component_with_reviewed_rules(
+    endpoint: &StagedOwnedRelease,
+    rules: &RulePackageInput,
+) {
+    check_component_rules(rules);
     let d = dependencies();
     let digest = digest_owned(KIND, &FILES.map(read::<Value>), 1024 * 1024).unwrap();
     assert_eq!(

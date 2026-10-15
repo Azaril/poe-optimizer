@@ -339,6 +339,13 @@ pub fn check_authored() {
 /// Authenticate this component wherever it appears in a later checked release.
 /// Unrelated schema/input additions need no historical whole-release rewind.
 pub fn assert_component(endpoint: &StagedOwnedRelease) {
+    assert_component_with_reviewed_rules(endpoint, &endpoint.input().recipe.rules);
+}
+/// Caller authenticates its exact later component inverse before comparison.
+pub fn assert_component_with_reviewed_rules(
+    endpoint: &StagedOwnedRelease,
+    rules: &RulePackageInput,
+) {
     use poe_optimizer_import::owned_recipe_extension::SchemaExtensionEntry;
     check_authored();
     let recipe = &endpoint.input().recipe;
@@ -351,8 +358,7 @@ pub fn assert_component(endpoint: &StagedOwnedRelease) {
     }
     let c = consumer();
     for owner in c.owners.iter().chain(&d.donor_owners) {
-        let matches: Vec<_> = recipe
-            .rules
+        let matches: Vec<_> = rules
             .owners
             .iter()
             .filter(|o| o.owner == owner.owner)
@@ -373,7 +379,7 @@ pub fn assert_component(endpoint: &StagedOwnedRelease) {
             .collect();
         assert_eq!(matches, vec![receiver]);
     }
-    let registry = recipe.rules.contribution_queries.as_ref().unwrap();
+    let registry = rules.contribution_queries.as_ref().unwrap();
     for query in c.queries.iter().chain(&d.queries) {
         let matches: Vec<_> = registry
             .members

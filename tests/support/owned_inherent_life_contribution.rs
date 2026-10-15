@@ -199,8 +199,15 @@ pub fn check_authored() {
     source(false);
 }
 fn dependencies(endpoint: &StagedOwnedRelease, after: bool, receivers: &[StatReceiver]) {
+    dependencies_rules(endpoint, after, receivers, &endpoint.input().recipe.rules);
+}
+fn dependencies_rules(
+    endpoint: &StagedOwnedRelease,
+    after: bool,
+    receivers: &[StatReceiver],
+    rules: &RulePackageInput,
+) {
     let d: Dependencies = read("dependencies.json");
-    let rules = &endpoint.input().recipe.rules;
     let owner = if after { owner_after() } else { d.owner_before };
     let actual = rules
         .owners
@@ -250,9 +257,25 @@ pub fn assert_component_with_reviewed_receivers(
     before: &[StatReceiver],
     after: &[StatReceiver],
 ) {
+    assert_component_with_reviewed_rules(endpoint, before, after, &endpoint.input().recipe.rules);
+}
+pub fn assert_component_with_reviewed_rules(
+    endpoint: &StagedOwnedRelease,
+    before: &[StatReceiver],
+    after: &[StatReceiver],
+    rules: &RulePackageInput,
+) {
     attribute_flag_family::assert_component_with_reviewed_receivers(endpoint, before, after);
     let restored = attribute_flag_family::reviewed_receiver_inverse(endpoint, before, after);
-    assert_component_receivers(endpoint, &restored);
+    check_authored();
+    dependencies_rules(endpoint, true, &restored, rules);
+    assert!(
+        endpoint
+            .receipt()
+            .provenance
+            .iter()
+            .any(|p| p.kind.as_str() == KIND && p.authoring_input == digest())
+    );
 }
 
 fn assert_component_receivers(endpoint: &StagedOwnedRelease, receivers: &[StatReceiver]) {

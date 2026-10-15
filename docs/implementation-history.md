@@ -1,10 +1,47 @@
-> Historical snapshots through the guarded Player Life checkpoint on 2026-10-15.
+> Historical snapshots through the direct Mana queries checkpoint on 2026-10-15.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-15 checkpoint: direct Mana queries
+
+The [Mana cleanup](../data/owned/poe2/3887ae68/mana-direct-queries/README.md)
+removes five one-query pass-through programs and their Player receivers on
+`3357`–`335b`. Final Mana reads the same checked contribution queries directly.
+Typed channels, query memberships/coverage, every arithmetic node, the rounding
+guard and optional-override precedence remain unchanged. Exact reader census
+checks reject any additional computed-value dependency before removal.
+
+Current native fixtures construct this graph directly; the obsolete collector
+installer is deleted. Meaningful inactive, unknown, unlisted-source, freeze and
+override controls exercise the final consumer. Historical packets retain only
+authenticated authoring/source-evidence responsibilities. No runtime compatibility
+branch, public API, game-data ID or resource limit is added.
+
+The current package is **`runs/owned-mana-direct-queries-publication-01/package`**:
+
+- Input: `c0bccf10cee8a70027e1bcfd923961dfd26766d56cb31bff419833cbe3244dfc`.
+- Definitions: `cf65959955725dde2758ea79cb5542dca1fe9a9601a352344f8f3fad24ad837b` (unchanged).
+- Rules: `a4fb59e215ea9b0be03abcd4da815f15810a49ae83f7229a9cc0033869d425fa`.
+- Compiled: `914189c13e24bd25f11789ab2efc1f98d09dec62d7e237010e3c405e6b794e83`.
+- Registry: `6e97db58bec5855fa1a5b8e0b5253fc3ab74c3192a48e29262cce59cd47b076a`, last issued `3388` (unchanged).
+
+All **24 focused tests**, strict Clippy and independent review pass. Publication
+passes in 26.21s and rebuilds all eighteen artifacts identically. Every saved
+query (110), local ID and selected issue count **106/117/109/123/4** is preserved;
+only rules, manifest and release files change. Evidence uses
+`runs/owned-mana-direct-queries-{tests-03,clippy-01,publication-01}.log`.
+Complete native builds remain **0/5**.
+
+**Next:** bound the existing shared-Player Strength-to-Life contribution and
+prove BASE regrouping over the union of intrinsic, inherent, equipment and
+reward effects. Authenticate each bound and unique producer plus the Player INC
+census before refining the final Life gap. Conversion-order proof, all supplier
+coverage and the four selected input obligations remain separate. This is an
+owned-data change using the accepted numeric-domain operation.
 
 ## Archived 2026-10-15 checkpoint: guarded Player Life consumer
 
