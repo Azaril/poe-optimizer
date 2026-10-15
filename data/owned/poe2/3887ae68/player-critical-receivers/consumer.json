@@ -1,0 +1,1481 @@
+{
+  "owners": [
+    {
+      "programs": {
+        "members": [
+          {
+            "id": "resolve-player-incoming-critical-chance",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "category",
+                "value_type": {
+                  "kind": "option"
+                },
+                "source": {
+                  "kind": "external",
+                  "value": {
+                    "entity": "enemy",
+                    "input": {
+                      "kind": "external_input",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003251"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "never",
+                "value_type": {
+                  "kind": "boolean"
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "enemy",
+                    "query": "player-critical-never",
+                    "group": "all"
+                  }
+                }
+              },
+              {
+                "id": "always",
+                "value_type": {
+                  "kind": "boolean"
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "enemy",
+                    "query": "player-critical-always",
+                    "group": "all"
+                  }
+                }
+              },
+              {
+                "id": "unlucky",
+                "value_type": {
+                  "kind": "boolean"
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "player-critical-unlucky",
+                    "group": "all"
+                  }
+                }
+              },
+              {
+                "id": "configured-chance",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "value": {
+                    "entity": "enemy",
+                    "input": {
+                      "key": "def.0000000000003371",
+                      "namespace": {
+                        "version": "owned-mechanics-v1",
+                        "game": "poe2"
+                      },
+                      "kind": "external_input"
+                    }
+                  },
+                  "kind": "external"
+                }
+              },
+              {
+                "id": "actor-chance-increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003376"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "enemy-chance-increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "enemy",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003377"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "configured-evade",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003378"
+                    }
+                  }
+                }
+              },
+              {
+                "value_type": {
+                  "kind": "boolean"
+                },
+                "source": {
+                  "value": {
+                    "projection": "present",
+                    "entity": "current",
+                    "query": "player-critical-override",
+                    "group": "all"
+                  },
+                  "kind": "contribution_selection"
+                },
+                "id": "override-present"
+              },
+              {
+                "value_type": {
+                  "value": {
+                    "unit": {
+                      "key": "def.0000000000000002",
+                      "namespace": {
+                        "version": "owned-mechanics-v1",
+                        "game": "poe2"
+                      },
+                      "kind": "unit"
+                    }
+                  },
+                  "kind": "quantity"
+                },
+                "source": {
+                  "value": {
+                    "projection": "value",
+                    "entity": "current",
+                    "query": "player-critical-override",
+                    "group": "all"
+                  },
+                  "kind": "contribution_selection"
+                },
+                "id": "override-value"
+              }
+            ],
+            "nodes": [
+              {
+                "id": "category",
+                "expression": {
+                  "kind": "read",
+                  "input": "category"
+                }
+              },
+              {
+                "id": "dot-category",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "option",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003254"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "is-dot",
+                "expression": {
+                  "kind": "compare",
+                  "operation": "equal",
+                  "left": "category",
+                  "right": "dot-category"
+                }
+              },
+              {
+                "id": "is-hit",
+                "expression": {
+                  "kind": "not",
+                  "value": "is-dot"
+                }
+              },
+              {
+                "id": "never",
+                "expression": {
+                  "kind": "read",
+                  "input": "never"
+                }
+              },
+              {
+                "id": "always",
+                "expression": {
+                  "kind": "read",
+                  "input": "always"
+                }
+              },
+              {
+                "id": "unlucky",
+                "expression": {
+                  "kind": "read",
+                  "input": "unlucky"
+                }
+              },
+              {
+                "id": "configured-chance",
+                "expression": {
+                  "kind": "read",
+                  "input": "configured-chance"
+                }
+              },
+              {
+                "id": "actor-chance-increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "actor-chance-increase"
+                }
+              },
+              {
+                "id": "enemy-chance-increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "enemy-chance-increase"
+                }
+              },
+              {
+                "id": "configured-evade",
+                "expression": {
+                  "kind": "read",
+                  "input": "configured-evade"
+                }
+              },
+              {
+                "id": "zero-percent",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "hundred-percent",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 100,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-factor",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "actor-chance-increase-factor",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "actor-chance-increase",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "enemy-chance-increase-factor",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "enemy-chance-increase",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "configured-evade-factor",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "configured-evade",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "actor-chance-factor",
+                "expression": {
+                  "kind": "add",
+                  "left": "one-factor",
+                  "right": "actor-chance-increase-factor"
+                }
+              },
+              {
+                "id": "chance-increase-factor",
+                "expression": {
+                  "kind": "add",
+                  "left": "actor-chance-factor",
+                  "right": "enemy-chance-increase-factor"
+                }
+              },
+              {
+                "id": "increased-chance",
+                "expression": {
+                  "kind": "scale",
+                  "value": "chance-before-increase",
+                  "factor": "chance-increase-factor"
+                }
+              },
+              {
+                "id": "evade-factor",
+                "expression": {
+                  "kind": "subtract",
+                  "left": "one-factor",
+                  "right": "configured-evade-factor"
+                }
+              },
+              {
+                "id": "evaded-chance",
+                "expression": {
+                  "kind": "scale",
+                  "value": "increased-chance",
+                  "factor": "evade-factor"
+                }
+              },
+              {
+                "id": "upper-clamped-chance",
+                "expression": {
+                  "kind": "minimum",
+                  "left": "evaded-chance",
+                  "right": "hundred-percent"
+                }
+              },
+              {
+                "id": "clamped-chance",
+                "expression": {
+                  "kind": "maximum",
+                  "left": "upper-clamped-chance",
+                  "right": "zero-percent"
+                }
+              },
+              {
+                "id": "always-chance",
+                "expression": {
+                  "kind": "select",
+                  "condition": "always",
+                  "when_true": "hundred-percent",
+                  "when_false": "clamped-chance"
+                }
+              },
+              {
+                "id": "base-chance",
+                "expression": {
+                  "kind": "select",
+                  "condition": "never",
+                  "when_true": "zero-percent",
+                  "when_false": "always-chance"
+                }
+              },
+              {
+                "id": "base-chance-factor",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "base-chance",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "unlucky-chance",
+                "expression": {
+                  "kind": "scale",
+                  "value": "base-chance",
+                  "factor": "base-chance-factor"
+                }
+              },
+              {
+                "id": "final-chance",
+                "expression": {
+                  "kind": "select",
+                  "condition": "unlucky",
+                  "when_true": "unlucky-chance",
+                  "when_false": "base-chance"
+                }
+              },
+              {
+                "id": "override-present",
+                "expression": {
+                  "input": "override-present",
+                  "kind": "read"
+                }
+              },
+              {
+                "id": "override-value",
+                "expression": {
+                  "input": "override-value",
+                  "kind": "read"
+                }
+              },
+              {
+                "id": "chance-before-increase",
+                "expression": {
+                  "when_false": "configured-chance",
+                  "when_true": "override-value",
+                  "kind": "select",
+                  "condition": "override-present"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "chance",
+                "when": "is-hit",
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000337c"
+                  },
+                  "value": "final-chance"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "complete"
+        }
+      },
+      "owner": {
+        "value": {
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000337c"
+          },
+          "kind": "stat"
+        },
+        "kind": "definition"
+      }
+    },
+    {
+      "programs": {
+        "members": [
+          {
+            "id": "resolve-player-incoming-critical-bonus",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "category",
+                "value_type": {
+                  "kind": "option"
+                },
+                "source": {
+                  "kind": "external",
+                  "value": {
+                    "entity": "enemy",
+                    "input": {
+                      "kind": "external_input",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003251"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "configured-damage",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "value": {
+                    "entity": "enemy",
+                    "input": {
+                      "key": "def.0000000000003372",
+                      "namespace": {
+                        "version": "owned-mechanics-v1",
+                        "game": "poe2"
+                      },
+                      "kind": "external_input"
+                    }
+                  },
+                  "kind": "external"
+                }
+              },
+              {
+                "id": "enemy-bonus-base",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "enemy",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003379"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "enemy-bonus-increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "enemy",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000337a"
+                    }
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "category",
+                "expression": {
+                  "kind": "read",
+                  "input": "category"
+                }
+              },
+              {
+                "id": "dot-category",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "option",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003254"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "is-dot",
+                "expression": {
+                  "kind": "compare",
+                  "operation": "equal",
+                  "left": "category",
+                  "right": "dot-category"
+                }
+              },
+              {
+                "id": "is-hit",
+                "expression": {
+                  "kind": "not",
+                  "value": "is-dot"
+                }
+              },
+              {
+                "id": "configured-damage",
+                "expression": {
+                  "kind": "read",
+                  "input": "configured-damage"
+                }
+              },
+              {
+                "id": "enemy-bonus-base",
+                "expression": {
+                  "kind": "read",
+                  "input": "enemy-bonus-base"
+                }
+              },
+              {
+                "id": "enemy-bonus-increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "enemy-bonus-increase"
+                }
+              },
+              {
+                "id": "zero-percent",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-factor",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "enemy-bonus-increase-factor",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "enemy-bonus-increase",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "bonus-base",
+                "expression": {
+                  "kind": "add",
+                  "left": "configured-damage",
+                  "right": "enemy-bonus-base"
+                }
+              },
+              {
+                "id": "bonus-increase-factor",
+                "expression": {
+                  "kind": "add",
+                  "left": "one-factor",
+                  "right": "enemy-bonus-increase-factor"
+                }
+              },
+              {
+                "id": "increased-bonus",
+                "expression": {
+                  "kind": "scale",
+                  "value": "bonus-base",
+                  "factor": "bonus-increase-factor"
+                }
+              },
+              {
+                "id": "final-bonus",
+                "expression": {
+                  "kind": "maximum",
+                  "left": "increased-bonus",
+                  "right": "zero-percent"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "damage-bonus",
+                "when": "is-hit",
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000337d"
+                  },
+                  "value": "final-bonus"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "complete"
+        }
+      },
+      "owner": {
+        "value": {
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000337d"
+          },
+          "kind": "stat"
+        },
+        "kind": "definition"
+      }
+    },
+    {
+      "programs": {
+        "members": [
+          {
+            "id": "resolve-player-incoming-critical-factor",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "category",
+                "value_type": {
+                  "kind": "option"
+                },
+                "source": {
+                  "kind": "external",
+                  "value": {
+                    "entity": "enemy",
+                    "input": {
+                      "kind": "external_input",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003251"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "extra-damage-reduction",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000337b"
+                    }
+                  }
+                }
+              },
+              {
+                "value_type": {
+                  "value": {
+                    "unit": {
+                      "key": "def.0000000000000002",
+                      "namespace": {
+                        "version": "owned-mechanics-v1",
+                        "game": "poe2"
+                      },
+                      "kind": "unit"
+                    }
+                  },
+                  "kind": "quantity"
+                },
+                "source": {
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "key": "def.000000000000337c",
+                      "namespace": {
+                        "version": "owned-mechanics-v1",
+                        "game": "poe2"
+                      },
+                      "kind": "stat"
+                    }
+                  },
+                  "kind": "stat"
+                },
+                "id": "final-chance"
+              },
+              {
+                "value_type": {
+                  "value": {
+                    "unit": {
+                      "key": "def.0000000000000002",
+                      "namespace": {
+                        "version": "owned-mechanics-v1",
+                        "game": "poe2"
+                      },
+                      "kind": "unit"
+                    }
+                  },
+                  "kind": "quantity"
+                },
+                "source": {
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "key": "def.000000000000337d",
+                      "namespace": {
+                        "version": "owned-mechanics-v1",
+                        "game": "poe2"
+                      },
+                      "kind": "stat"
+                    }
+                  },
+                  "kind": "stat"
+                },
+                "id": "final-bonus"
+              }
+            ],
+            "nodes": [
+              {
+                "id": "category",
+                "expression": {
+                  "kind": "read",
+                  "input": "category"
+                }
+              },
+              {
+                "id": "dot-category",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "option",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003254"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "is-dot",
+                "expression": {
+                  "kind": "compare",
+                  "operation": "equal",
+                  "left": "category",
+                  "right": "dot-category"
+                }
+              },
+              {
+                "id": "is-hit",
+                "expression": {
+                  "kind": "not",
+                  "value": "is-dot"
+                }
+              },
+              {
+                "id": "extra-damage-reduction",
+                "expression": {
+                  "kind": "read",
+                  "input": "extra-damage-reduction"
+                }
+              },
+              {
+                "id": "one-factor",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "extra-damage-reduction-factor",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "extra-damage-reduction",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "chance-factor",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "final-chance",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "bonus-factor",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "final-bonus",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "expected-bonus",
+                "expression": {
+                  "kind": "scale",
+                  "value": "chance-factor",
+                  "factor": "bonus-factor"
+                }
+              },
+              {
+                "id": "reduction-factor",
+                "expression": {
+                  "kind": "subtract",
+                  "left": "one-factor",
+                  "right": "extra-damage-reduction-factor"
+                }
+              },
+              {
+                "id": "reduced-bonus",
+                "expression": {
+                  "kind": "scale",
+                  "value": "expected-bonus",
+                  "factor": "reduction-factor"
+                }
+              },
+              {
+                "id": "critical-effect",
+                "expression": {
+                  "kind": "add",
+                  "left": "one-factor",
+                  "right": "reduced-bonus"
+                }
+              },
+              {
+                "id": "final-chance",
+                "expression": {
+                  "input": "final-chance",
+                  "kind": "read"
+                }
+              },
+              {
+                "id": "final-bonus",
+                "expression": {
+                  "input": "final-bonus",
+                  "kind": "read"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "critical-effect",
+                "when": "is-hit",
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000337e"
+                  },
+                  "value": "critical-effect"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "complete"
+        }
+      },
+      "owner": {
+        "value": {
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000337e"
+          },
+          "kind": "stat"
+        },
+        "kind": "definition"
+      }
+    }
+  ],
+  "receivers": [
+    {
+      "targets": [
+        {
+          "kind": "player"
+        }
+      ],
+      "program": "resolve-player-incoming-critical-chance",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000337c"
+      },
+      "id": "player-incoming-critical-chance"
+    },
+    {
+      "targets": [
+        {
+          "kind": "player"
+        }
+      ],
+      "program": "resolve-player-incoming-critical-bonus",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000337d"
+      },
+      "id": "player-incoming-critical-bonus"
+    },
+    {
+      "targets": [
+        {
+          "kind": "player"
+        }
+      ],
+      "program": "resolve-player-incoming-critical-factor",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000337e"
+      },
+      "id": "player-incoming-critical-factor"
+    }
+  ],
+  "queries": [
+    {
+      "id": "player-critical-never",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003373"
+      },
+      "contribution": "flag",
+      "groups": [
+        {
+          "id": "all",
+          "reduction": "any",
+          "ordering": "unordered",
+          "empty": {
+            "kind": "boolean",
+            "value": false
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000003373"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "incoming-critical-flag-domain-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "player-critical-always",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003374"
+      },
+      "contribution": "flag",
+      "groups": [
+        {
+          "id": "all",
+          "reduction": "any",
+          "ordering": "unordered",
+          "empty": {
+            "kind": "boolean",
+            "value": false
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000003374"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "incoming-critical-flag-domain-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "player-critical-unlucky",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003375"
+      },
+      "contribution": "flag",
+      "groups": [
+        {
+          "id": "all",
+          "reduction": "any",
+          "ordering": "unordered",
+          "empty": {
+            "kind": "boolean",
+            "value": false
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000003375"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "incoming-critical-flag-domain-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "groups": [
+        {
+          "empty": null,
+          "reduction": "require_agreement",
+          "ordering": "unordered",
+          "members": {
+            "members": [],
+            "closure": {
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "value": {
+                        "value": {
+                          "key": "def.000000000000337f",
+                          "namespace": {
+                            "version": "owned-mechanics-v1",
+                            "game": "poe2"
+                          },
+                          "kind": "stat"
+                        },
+                        "kind": "stat"
+                      },
+                      "kind": "definition"
+                    },
+                    "code": "player-critical-override-suppliers-unproved",
+                    "facet": "game_rules"
+                  }
+                ]
+              },
+              "kind": "partial"
+            }
+          },
+          "id": "all"
+        }
+      ],
+      "contribution": "override",
+      "stat": {
+        "key": "def.000000000000337f",
+        "namespace": {
+          "version": "owned-mechanics-v1",
+          "game": "poe2"
+        },
+        "kind": "stat"
+      },
+      "id": "player-critical-override"
+    }
+  ]
+}

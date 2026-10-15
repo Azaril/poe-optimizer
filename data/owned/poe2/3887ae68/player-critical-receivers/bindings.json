@@ -1,0 +1,147 @@
+{
+  "flags": [
+    {
+      "key": "def.0000000000003373",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    },
+    {
+      "key": "def.0000000000003374",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    },
+    {
+      "key": "def.0000000000003375",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    }
+  ],
+  "schema_version": 1,
+  "override": {
+    "key": "def.000000000000337f",
+    "namespace": {
+      "version": "owned-mechanics-v1",
+      "game": "poe2"
+    },
+    "kind": "stat"
+  },
+  "outputs": [
+    {
+      "key": "def.000000000000337c",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    },
+    {
+      "key": "def.000000000000337d",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    },
+    {
+      "key": "def.000000000000337e",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    }
+  ],
+  "raw_inputs": [
+    {
+      "key": "def.0000000000003371",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "external_input"
+    },
+    {
+      "key": "def.0000000000003372",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "external_input"
+    }
+  ],
+  "category_input": {
+    "key": "def.0000000000003251",
+    "namespace": {
+      "version": "owned-mechanics-v1",
+      "game": "poe2"
+    },
+    "kind": "external_input"
+  },
+  "damage_over_time": {
+    "key": "def.0000000000003254",
+    "namespace": {
+      "version": "owned-mechanics-v1",
+      "game": "poe2"
+    },
+    "kind": "option"
+  },
+  "dependencies": [
+    {
+      "key": "def.0000000000003376",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    },
+    {
+      "key": "def.0000000000003377",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    },
+    {
+      "key": "def.0000000000003378",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    },
+    {
+      "key": "def.0000000000003379",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    },
+    {
+      "key": "def.000000000000337a",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    },
+    {
+      "key": "def.000000000000337b",
+      "namespace": {
+        "version": "owned-mechanics-v1",
+        "game": "poe2"
+      },
+      "kind": "stat"
+    }
+  ]
+}

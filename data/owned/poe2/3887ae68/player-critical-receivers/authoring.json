@@ -1,0 +1,46 @@
+{
+  "artifacts": {
+    "dependencies.json": {
+      "bytes": 34451,
+      "sha256": "ac93706fd321f7bfa4784a3140fddcc17e5dc3ff89fc2147b02b492792a65f37"
+    },
+    "bindings.json": {
+      "bytes": 2947,
+      "sha256": "c5c331fea702dbbebb0ed512164dc22eea076570c2ba415729111f860571ae1f"
+    },
+    "extension.json": {
+      "bytes": 11055,
+      "sha256": "47cbe4b708044f8bc0b3ad8a1c1f3e2b6b228bdbb58a7062cd573b2eecf5af32"
+    },
+    "consumer.json": {
+      "bytes": 44719,
+      "sha256": "f5e05df634d4e73c3a1ee9e1dcc60068758814b562c32d73a2304bb92268d5bf"
+    }
+  },
+  "release": "pob-3887ae68-player-critical-receivers-v1",
+  "schema_version": 1,
+  "source": {
+    "sha256": "b575245bae32bd12fa0f0d39339acf58300e18bc042366a06ee5acd1adda21af",
+    "bytes": 25785,
+    "path": "data/owned/poe2/3887ae68/incoming-critical-effect/source-vectors.json"
+  },
+  "before": "1b7cc8d01e7b54a698240ca6fbf6f628b590b161df41ac2a909542af58c9de90",
+  "kind": "player-critical-receivers",
+  "contract": {
+    "schema_version": 6,
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1",
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v27"
+  },
+  "scope": {
+    "complete_critical_effect": false,
+    "new_receivers": 3,
+    "new_programs": 3,
+    "supplier_admission": false,
+    "new_definitions": 13,
+    "closed_existing_owners": 0,
+    "whole_build": false,
+    "new_queries": 4,
+    "evaluation_bundle": false
+  }
+}

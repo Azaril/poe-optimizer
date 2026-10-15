@@ -2,7 +2,8 @@
 //! Callers separately validate every schema, rule and registry change before
 //! allowing these three graphs to differ. Everything else must survive exactly.
 use poe_optimizer_import::{
-    owned_normalize::NormalizationPolicy, owned_release::StagedOwnedRelease,
+    owned_normalize::{NormalizationPolicy, configuration_disposition_dependencies},
+    owned_release::StagedOwnedRelease,
 };
 use serde_json::{Value, json};
 
@@ -11,6 +12,24 @@ pub fn assert_import_rebindings_only(prior: &StagedOwnedRelease, next: &StagedOw
     let new = next.input();
     let old_value = json!(old);
     let mut restored = json!(new);
+    // Configuration accounting commits the inherited adapters. A schema change
+    // rebinds the checked reward policy and then its inventory digest. Verify
+    // both complete dependency records before restoring just these two fields;
+    // source evidence, disposition rules and all other adapter digests survive.
+    for endpoint in [prior, next] {
+        if let Some(policy) = &endpoint.normalization().configuration_dispositions {
+            assert_eq!(
+                policy.dependencies,
+                configuration_disposition_dependencies(
+                    endpoint.normalization(),
+                    endpoint.rewards(),
+                    Default::default(),
+                )
+                .unwrap(),
+                "configuration disposition dependencies must authenticate before inverse"
+            );
+        }
+    }
     // Checked release assembly authenticates each dependency before these exact
     // rebind locations are restored. No recursive identity stripping is used.
     for path in [
@@ -78,6 +97,8 @@ pub fn assert_import_rebindings_only(prior: &StagedOwnedRelease, next: &StagedOw
         // after its exact definitions/roles dependencies above are rebound.
         // The target policy kind, presence and all other fields stay exact.
         "/normalization/direct_support_targets/direct_inputs",
+        "/normalization/configuration_dispositions/dependencies/reward_inventory",
+        "/normalization/configuration_dispositions/dependencies/rewards",
     ] {
         match (old_value.pointer(path), restored.pointer_mut(path)) {
             (Some(old), Some(new)) => *new = old.clone(),

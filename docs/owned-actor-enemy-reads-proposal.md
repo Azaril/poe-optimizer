@@ -1,6 +1,6 @@
 # Final critical-result ownership and scenario Enemy reads
 
-Status: stat-owned Player receivers accepted by the owner, 2026-10-14.
+Status: stat-owned Player receivers accepted and implemented, 2026-10-14.
 The October 7 shared-Actor authority extension below is superseded and will
 not be implemented for these results.
 
@@ -25,11 +25,19 @@ The static review checked Data's receiver validation and Enemy Flag-query
 restriction, Engine's exact Player applicability and Enemy binding, producer
 registration, stage/cycle checks and rule/plan identities. This is consistent
 with the existing distinction between shared Actor intrinsic contributions and
-stat-owned final formulas. Runtime verification of this particular combined
-path is still required; the review is not evidence that critical effect works.
+stat-owned final formulas. The published
+[receiver packet](../data/owned/poe2/3887ae68/player-critical-receivers/README.md)
+now executes this combined path. Nine native and two CLI tests pass, including
+all 52 source observations, exact Enemy bindings, unavailable inputs, lazy
+branches, checked overrides and fresh/reused/Rayon equality. Checked all-five
+publication preserves every prior coverage declaration and all 110 queries.
+Six numeric dependency producers and four Partial supplier query memberships
+remain unfinished; this component is not complete critical-effect support or
+a complete unchanged build. The [current checkpoint](implementation.md#current-checkpoint-player-incoming-critical-receivers)
+records exact identities and validation.
 
-The owner approved this revised ownership direction on October 14. Implement it
-through the existing receiver contract:
+The owner approved this revised ownership direction on October 14. The completed
+bounded implementation follows the existing receiver contract:
 
 1. Move only final-result programs to their Stat owners, with explicit Player
    receiver rows. Preserve shared Actor `332a`'s existing Partial inventory and

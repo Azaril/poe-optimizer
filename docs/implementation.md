@@ -105,7 +105,73 @@ skills still require honest plan coverage; query selection cannot silently prune
 them. Once the complete unchanged request, evaluation bundle and reference
 availability/value checks pass, begin D4 immediately.
 
-## Current checkpoint: archived generated usage responsibilities
+## Current checkpoint: Player incoming-critical receivers
+
+The owner approved final incoming-critical results on the existing stat-owned
+Player receivers. The [published packet](../data/owned/poe2/3887ae68/player-critical-receivers/README.md)
+implements that decision through three injected programs. Each writes only its
+own final Stat on the defending Player and reads the exact scenario Enemy through
+the existing dependency graph. Shared-Actor permissions are unchanged; no new
+production Rust operation, import adapter or Lua execution is added.
+
+The thirteen new definitions occupy `3373`–`337f`. The outputs are incoming
+critical chance (`337c`, percentage points), extra critical damage (`337d`,
+percentage points) and incoming critical factor (`337e`, dimensionless).
+Published configured Enemy inputs `3371`/`3372` supply raw chance/bonus;
+the consumer does not duplicate their import defaults. The optional Player
+chance override distinguishes absence from zero and uses checked agreement.
+All four supplier query memberships remain Partial, and six resolved numeric
+dependencies still need producers. Shared Player coverage remains Partial.
+
+The current package is **`runs/owned-player-critical-publication-02/package`**:
+
+- Input: `99262608a1adb63a3abbe00fadd312610daa3c44df2a902b62f1d9900c56d25e`.
+- Definitions: `b738e9063cef1f30220fb0f149f4c5110c3f0a457bc42dc4d520556bb37a0bc1`.
+- Rules: `f49d729587698a8b370b7d6bc89ecefd9898233bfc5225d44927758b4654561e`.
+- Compiled: `7ece9aaa25154296bb8af8fc035bee095f54e7419c35f2311b5adaa178d073f7`.
+- Registry: `53d5c7af67f5d6bf85543c8f53d33feab9ac9802731237198dcd408d603eb7f5`, last issued `337f`.
+
+All eighteen files rebuild byte-identically. Checked publication preserves all
+five original imports, exact local IDs, draft/sidecar meaning, previous coverage
+and all 110 queries. The shared migration inverse now authenticates the full
+configuration dependency records on both endpoints before restoring only the
+two expected reward-policy/inventory bindings; it still compares every source
+rule and unrelated dependency exactly. Selected input counts remain
+**106/117/109/123/4**, configuration-linked origins **48/83/39/34/32**, and complete
+native builds **0/5**. No existing owner closes and no input issue retires here.
+
+Nine native tests and two ordinary CLI tests pass. The native formulas match
+all 52 retained source observations under 70 explicit finite completions of
+unobserved Boolean reads; skipped source reads are not relabeled false.
+Fresh, reused-worker and Rayon reports agree. Tests cover exact Player/Enemy
+binding, scope/type/stage rejection, lazy missing operands, override agreement
+and conflicts, and unavailable results for incomplete coverage. Positive
+override controls are synthetic contract tests, not new PoB observations.
+The explicit all-five publication passes in 34.19s and strict Clippy passes.
+Logs: `runs/owned-player-critical-native-cli-06.log`,
+`runs/owned-player-critical-clippy-03.log`,
+`runs/owned-player-critical-publication-02.log`; receipt:
+`runs/owned-player-critical-publication-02/validation.json`.
+
+The release has no evaluation bundle. Its eventual stages must declare the
+frozen `Actor / 337f / Override` channel and final program dependencies. Tests
+exercise that existing requirement and reject its absence; this packet does not
+invent a separate readiness system or declare complete incoming-critical/EHP.
+
+**Next blocker selection:** keep Original05 first. Prefer admitting an actual
+selected supplier or finishing a saved metric over adding more unused formulas.
+Review the six critical numeric dependencies and four query memberships against
+real selected sources. Player Life remains a direct saved-metric priority: its
+equipment reduction still needs an effective-amount/domain/order proof before
+coverage can close; the accepted numeric output guard alone does not prove
+intermediate sums. Final Life can reuse existing stat receivers and checked
+numeric selection, but CI/override/adjustment suppliers need their own evidence.
+The four selected input inventories remain an independent gate. Enemy-distance
+triage must preserve its direct reader's explicit-zero semantics separately from
+the configuration callback's zero-to-Placeholder fallback. Do not remove source
+links or invent neutral contributors merely to reduce blocker counts.
+
+## Previous checkpoint: archived generated usage responsibilities
 
 The importer now discovers unresolved usage on a recognized archived generated
 skill independently of successful provider/value projection and unrelated manual
@@ -128,7 +194,7 @@ configuration fallback. The obsolete selected-only resolver branch is removed.
 The release data is unchanged from the preceding critical-input checkpoint:
 input `1b7cc8d01e7b54a698240ca6fbf6f628b590b161df41ac2a909542af58c9de90`,
 seventeen manifest artifacts, eighteen files, 177 provenance rows and 110 queries.
-The current regenerated imports and byte-identical package are
+The regenerated imports and byte-identical predecessor package are
 `runs/owned-archived-usage-obligations-04`, with its `package` subdirectory.
 Fresh imports are required for the corrected importer semantics; old imported
 drafts are retained as regression evidence, not restored as current proof.
@@ -163,14 +229,14 @@ Strict Import and affected CLI Clippy checks also pass.
 Logs: `runs/owned-archived-usage-{import-02,import-04,cli-04}.log` and
 `runs/owned-archived-usage-obligations-04/validation.json`.
 
-**Next blockers:** the four selected inventories and final numerical producers
+**Blockers retained from this checkpoint:** the four selected inventories and final numerical producers
 still gate the first complete build. Keep Original05 first and do not treat an
 archived-source accounting correction as complete native calculation. The
 [final-critical ownership decision](owned-actor-enemy-reads-proposal.md) is now
-accepted: implement existing stat-owned Player receivers, with exact Enemy
-dependencies and unchanged shared-Actor authority. Rebase fresh data from registry
-3372 and reuse configured inputs 3371/3372; validate component parity and
-ordinary/prepared/reused/Rayon execution before checked all-five publication.
+accepted and implemented by the current checkpoint above through existing
+stat-owned Player receivers, exact Enemy dependencies and unchanged shared-Actor
+authority. That publication rebases from registry 3372 and reuses configured
+inputs 3371/3372; incomplete suppliers remain open.
 Separate read-only triage found no additional ready data-only Config
 leaf retirement: twelve remaining count widgets use zero-to-Placeholder fallback,
 while three allow zero and have distinct consumers. Enemy distance is a useful

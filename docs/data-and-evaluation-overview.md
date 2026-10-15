@@ -72,14 +72,18 @@ unchanged. The all-five regression preserves every selected request and 110
 queries. Firebolt's separate archived selector/deferred-usage proof remains
 missing, so its configuration fallback stays alongside the new usage obligation;
 Original05 still has 32 configuration-linked origins and four selected issues.
-See the [current checkpoint](implementation.md#current-checkpoint-archived-generated-usage-responsibilities)
+See the [archived-usage checkpoint](implementation.md#previous-checkpoint-archived-generated-usage-responsibilities)
 for full-corpus validation and the next complete-build blockers.
 
-Final incoming-critical results now have an accepted ownership direction:
-existing Stat-owned Player receivers read their exact scenario Enemy dependencies.
-Shared-Actor permissions and incomplete source coverage remain unchanged. The
-data-defined consumer and its native binding/parity checks are being implemented
-under that contract, not through a new calculation backend.
+Final incoming-critical results now run on existing Stat-owned Player receivers
+with their exact scenario Enemy dependencies. Three published data-defined
+programs calculate chance, extra damage and the incoming critical factor.
+Shared-Actor permissions and incomplete source coverage remain unchanged.
+Native tests match 52 retained source observations, with fresh/reused/Rayon
+agreement; checked publication preserves all five imports and 110 queries.
+Six numeric dependency producers and four Partial supplier queries remain open,
+so final formulas alone do not make complete critical support. See the
+[current checkpoint](implementation.md#current-checkpoint-player-incoming-critical-receivers).
 
 The final Player Mana formula is now published as injected rules with its exact
 Player receiver. The existing Rust engine executes its arithmetic, range check
@@ -89,7 +93,7 @@ vectors. Publication preserves all five imports and every previous coverage
 declaration. Source-supplier admission, whole-plan completeness and the production
 evaluation bundle remain pending, so this is not a complete Mana result for an
 unchanged imported build. The current endpoint is recorded in the
-[implementation checkpoint](implementation.md#current-checkpoint-archived-generated-usage-responsibilities).
+[implementation checkpoint](implementation.md#current-checkpoint-player-incoming-critical-receivers).
 The parallel [supplier review](owned-mana-supplier-evidence.md) now proves bounded
 neutral exclusions for complete shared-initialization and Player/class-baseline
 source bodies. Its retained construction records and direct mutation controls
@@ -566,18 +570,16 @@ read the published memberships and retain explicit finite equipment/minion
 exclusions. Native workers remain Rust over compiled indices with per-worker
 scratch. See the [packet](../data/owned/poe2/3887ae68/life-contribution-queries/README.md).
 
-The next critical-hit slice has passed an independent PoB witness: 26 cases in
-each JIT mode, byte-identical reports, and 52 measured MAIN/CALCS vectors. The
-native data draft is **unpublished**: its selected shared-Actor ownership forbids
-computed Enemy reads. The October 14
-[revised ownership proposal](owned-actor-enemy-reads-proposal.md) instead recommends
-existing stat-owned Player receivers for final results, with exact Enemy Stat
-and declared Boolean Flag-query dependencies. That follows the existing
-source-contribution versus final-result ownership split and preserves the
-shared Actor's permissions and Partial coverage. The choice has been prompted
-and remains pending; combined receiver/Enemy-read execution still needs tests.
-No authority change or final critical formula is published. Source evidence and
-separate raw-input adoption do not complete contributor or whole-build coverage.
+The incoming-critical source witness covers 26 cases in each JIT mode,
+byte-identical reports and 52 measured MAIN/CALCS vectors. The initial shared-Actor
+data draft is superseded by the accepted October 14
+[stat-owned receiver decision](owned-actor-enemy-reads-proposal.md). Its published
+replacement keeps exact Enemy Stat and declared Boolean Flag-query dependencies
+under existing permissions. Nine native and two ordinary CLI tests pass,
+including all source observations, 70 finite completions for skipped Boolean
+reads, missing/Partial inputs, scope/stage rejection and deterministic worker
+reuse/parallel execution. Complete supplier admission and whole-build coverage
+remain separate work; the release still has no evaluation bundle.
 
 An independent source witness also proves that the saved damage-roll setting is
 inactive in the exact no-boss encounter: 26 complete loads pass with identical
@@ -1250,7 +1252,7 @@ reviewed occurrence inputs, exact generated preset inputs, source-property prepa
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
 Exact endpoint identities and validation receipts
-live in the [implementation plan](implementation.md#current-checkpoint-configured-enemy-critical-inputs),
+live in the [implementation plan](implementation.md#current-checkpoint-player-incoming-critical-receivers),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
 See [owned releases](owned-releases.md) for the package contract.
