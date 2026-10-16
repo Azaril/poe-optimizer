@@ -78,7 +78,7 @@ These reference observations are not evidence of native metric completion.
 | --- | --- | --- |
 | 00: Player Life | Intrinsic/Strength/item/reward contributions, checked Life queries, bounded exact BASE accumulation and guarded final consumer with conversion/override/CI precedence | Complete supplier/magnitude admission, prove conversion accumulation domains, finalize plan and evaluation binding |
 | 01: Player Mana | Intrinsic/Intelligence contributions, direct checked adjustment queries, override selection and published guarded consumer with checked numeric domain | Transformation supplier admission, whole-plan completion and evaluation binding |
-| 02, 18, 19: Player ES, Armour, Evasion | Selected item magnitude/local-defence intermediates and global/passive contributions | Final item properties, complete receiving, transformations and final Actor totals |
+| 02, 18, 19: Player ES, Armour, Evasion | Selected item magnitude/local-defence intermediates, global/passive contributions and guarded final Evasion component | Final item properties, complete receiving, transformations and admission of final Actor totals |
 | 03–06: four capped Player resistances | Item/passive/reward inputs and configured penalty | Complete contributor inventories, aggregation and cap/override calculations |
 | 07–12: total EHP and five maximum hits | Encounter and incoming-damage components | Complete resource/defence dependencies, mitigation and final survivability calculations |
 | 14: exact Sniper Basic Attack hit DPS | Prepared skill, intrinsic damage, accuracy, inherited/Offering/Gigantic/quality factors, exact-Action Command, selected physical-hit range and ordinary attack rate | Outgoing critical calculation, enemy mitigation, complete mechanic coverage and final DPS binding |
@@ -148,7 +148,35 @@ separate Damage/Speed Maximum winners remain data driven. Complete source and
 native writer checks establish the finite ordinary timing domain; all broader
 owner, input and query coverage boundaries remain Partial.
 
-Current package: **`runs/owned-offering-speed-rate-publication-01/package`**.
+The subsequent [Player Evasion component](../data/owned/poe2/3887ae68/player-evasion-final/README.md)
+publishes intrinsic BASE 7 and a guarded final receiver. Its finite native graph
+uses the actual selected 30% and 15% quest rewards and reproduces Evasion 10.
+The final owner remains Partial: native item-property, conditional and
+transformation coverage must be completed before the unchanged original can
+evaluate. Nine ordinary tests, strict target Clippy and all-five publication/
+byte-identical rebuild pass; no complete metric or build is claimed.
+
+Current package: **`runs/owned-player-evasion-final-publication-03/package`**.
+
+- Input: `e282b4bb142200944d84f30aaf35ccc77eb3fae9d6084be2c0229b9960489af9`.
+- Registry: `5874684bd9ac6570c132fada76e8e459a5c11534c248de1dfd4df25d06da41b6` (last `33a4`).
+- Definitions: `3dcde6d1c357b3e51bc6deb7e20be3a99393e569304dc887fc4e37071b9d0660`.
+- Rules: `9605dbb30b2f471395fcff04efeb058b0da7145fd7975b7d81a33c4f320d812e`.
+- Compiled: `911c727858c38537b55c6407643b9b823d5f89ebcf1d5cac87c011dbcdc17628`.
+
+The eighteen files total **64,520,414 bytes**, with 198 provenance rows,
+**8192** effective programs, 78 checked queries and 57 receivers. The serialized
+endpoint is separately 64,508,858 bytes. All 110 queries, local IDs and selected
+issue counts remain unchanged. Production Partial-owner refusal, exact saved
+metric binding in the finite graph, reward removal, unsupported numeric-domain
+diagnostics, late writes and fresh/reused/Rayon equality are checked. Logs:
+`runs/owned-player-evasion-final-{ordinary-04,clippy-01,publication-03}.log`.
+Earlier fixture and publication failures remain recorded; their repairs supply
+the actual Reward discovery declarations, append the new owner explicitly and
+match the normalized receiver by identity, retaining the exact full inverse.
+
+The Speed predecessor remains at
+**`runs/owned-offering-speed-rate-publication-01/package`**:
 
 - Input: `b6c757ffc109b2a58bc21b0d185033bfe1553c37419cf46402116dfed09e7a0e`.
 - Registry: `f2756a579a7f5d478dc626ab5d62cab5cb597e9cc3c026ceb4a49601c46ff9e2` (last `33a3`).
@@ -156,7 +184,7 @@ Current package: **`runs/owned-offering-speed-rate-publication-01/package`**.
 - Rules: `4258bbe67962385b121f03435a08ff93a2414626e4255809308e3c5b6b1b2746`.
 - Compiled: `e0148d25324ff034b3fb9f63b3cb67346484d0a63dbcf1fd5f850898edac2f6f`.
 
-The eighteen files total **64,487,868 bytes**, with 197 provenance rows and
+Its eighteen files total **64,487,868 bytes**, with 197 provenance rows and
 **8190** effective programs (8189 owner programs plus one application). The
 publication used the former 8192 ceiling; the subsequent program-only capacity
 checkpoint below raises that ceiling to 16384 without changing this package.
@@ -257,8 +285,8 @@ saved unavailable Sniper average-hit query and FullDPS/count reporting separate.
 The outgoing-critical preflight must retain the conditional Critical Weakness
 supplier even while inactive, and resolve the source-call anomaly recorded in
 [cleanup tracking](legacy-retirement.md#other-current-compatibility-investigations).
-The isolated `outgoing-critical` draft reserves 33a5/33a6 for final Action chance
-and multiplier. Intrinsic chance is 3215; accuracy confirmation is 321c, distinct
+The isolated `outgoing-critical` draft reserves final Action chance
+and multiplier outputs. Intrinsic chance is 3215; accuracy confirmation is 321c, distinct
 from after-block hit chance 3220. Shared minion bonus/cap ownership, Critical
 Weakness applicability and crit-specific dynamic producers remain unclosed.
 Additional supplier definitions/programs must be justified before allocation;
@@ -297,9 +325,11 @@ recommends extending the existing graph, with exact selected-owner/recipient
 authority and unchanged completeness rules. Await owner review before changing
 the public contract. Do not substitute a separate computed-term aggregator or
 older direct numeric reduction to bypass this gap. Source supplier proofs and
-independent Player-defence work continue. Outgoing-critical channels `33a7–33ab`
-are reserved for Actor cap/bonus and Enemy chance/bonus/activation; they are not
-published definitions or completed producers.
+independent Player-defence work continue. Outgoing-critical Actor cap/bonus and
+Enemy chance/bonus/activation channels remain unpublished. Their draft IDs are
+being reassigned after the next equipment-Evasion allocations so pending Enemy
+contracts do not block unrelated publication. Rebuild the current-format draft;
+do not allocate filler definitions or retain compatibility aliases.
 
 The unpublished [Enemy physical-mitigation reference packet](../data/owned/poe2/3887ae68/enemy-physical-mitigation/README.md)
 now retains five original source bodies, nine spans and all 39 observed Sniper
@@ -325,25 +355,33 @@ produce a zero-valued conditional record: Lua numeric truthiness is source
 evidence to classify, not native gameplay behavior to copy. This review narrows
 the next checks but does not complete source admission or native membership.
 
-**Independent next saved metric:** Player Evasion (query 19, Metric `313e`).
+**Current independent saved-metric work:** Player Evasion (query 19, Metric `313e`).
 The actual positive sources are shared Player intrinsic BASE 7 and two selected
 Reward increases of 30% and 15%; both retained reference contexts yield 10.
 Reuse channel `29f1`, Rating `29ee` and shared Player owner `332a`, with final
-Stat `33a4` reserved ahead of the unpublished critical IDs. The draft must prove
-slot-local zero domains, conditional baseline/dynamic suppliers, overrides and
-conversion exclusions before admitting the final rounding/zero-floor formula.
-Observed 10 is only a comparison target. This route avoids waiting for Enemy
-authority and does not require finishing all positive Armour/ES item properties
-first. Two planned programs would have consumed the former compiler ceiling;
-the program-only capacity change below provides room for these real mechanics.
-The initial Evasion draft deliberately keeps its final owner Partial: retained
+Stat `33a4` now published. Its checked rounding/zero-floor formula preserves
+native nearest-ties-positive semantics and rejects the source helper's
+exceptional operand immediately below 0.5; the
+[domain proof](legacy-retirement.md#evasion-rounding-domain-2026-10-15) explains
+why the Life/Mana bound alone was insufficient. Observed 10 is only a comparison
+target. This route avoids waiting for Enemy authority and does not require
+finishing all positive Armour/ES item properties first.
+The Evasion component deliberately keeps its final owner Partial: retained
 source evidence proves a finite test domain, but is not runtime authority for a
 candidate's item properties or conditions. Its controlled graph can exercise
 the saved metric binding; ordinary complete planning must still refuse it.
 The next runtime dependency is native per-equipment Evasion properties and
 their Player contributions, followed by the conditional Evasion channels and
-transfer/override guards. Do not leave a test-only completion as the final
-solution or publish observed zero item values as implicit defaults.
+transfer/override guards. Parallel implementation uses the existing shared
+EquipmentUse local-defence pattern and the accepted shared-Player slot reads;
+no new public API is needed. Retained source controls produce local Evasion 75
+from positive hybrid inputs, providing a check beyond the original's four zero
+items. Keep per-level/property-replacement absence explicit, distinguish an
+empty slot from an occupied unsupported item, preserve per-slot multiplication
+and addition order, and test nonzero injected base profiles and quality changes.
+The reviewed route is `runs/owned-evasion-runtime-route-01.md`. Do not leave a
+test-only completion as the final solution or publish observed zero item values
+as implicit defaults.
 
 The associated [direct-reduction audit](legacy-retirement.md#direct-numeric-reductions-and-encounter-membership-2026-10-15)
 found 78 older direct numeric reads in 32 current programs, including eleven
@@ -770,7 +808,7 @@ an implicit way around the current complete-plan contract.
 The Life predecessor's read-only capacity audit found programs to be the only
 nearly exhausted compiler collection, at 8190/8192 including one application.
 The Mana cleanup reduced that to 8185/8192 and receivers from 60 to 55. The
-current Offering Speed successor uses **8190/16384** after the bounded capacity
+current Player Evasion successor uses **8192/16384** after the bounded capacity
 change below, with 56 receivers. Its serialized inventories contain 6545 owners,
 23520 effects, 4272 reads, 32934 nodes and 75 checked queries. The measurement is
 bound to input `b6c757ff…` in `runs/owned-speed-program-capacity-01.json`; these
@@ -859,13 +897,14 @@ at inspection, with failed validation; do not claim hosted success.
 The [earlier receipt and source-evidence repairs](implementation-history.md#archived-2026-10-15-checkpoint-earlier-ci-receipt-repairs)
 remain recorded separately. They are not unresolved failures of this checkpoint.
 The subsequent read-only follow-up found no additional failure: completed Import,
-workspace and both Engine jobs pass. Ubuntu CLI shards 0, 1 and 2 also pass;
-the remaining jobs are still active.
+workspace and both Engine jobs pass. Ubuntu CLI shards 0, 1 and 2, Ubuntu PoB
+and Windows CLI shard 1 also pass; the remaining jobs are still active.
 Public job status and annotations are retained under
 `runs/ci-followup-20261015-38825000935/`. No runs were cancelled by this task.
-The scheduler coalesced pending revisions `885b5d7d` and `247fe562`; the pushed
-Speed revision `6e1d6eb0` has run `38835158702` pending behind the same older
-run. The repair and newer checkpoints still await their own hosted validation.
+The scheduler coalesced pending revisions `885b5d7d`, `247fe562` and `6e1d6eb0`;
+the pushed capacity revision `07275d22` has run `38837051574` pending behind
+the same older run at the latest inspection. The repair and newer checkpoints
+still await their own hosted validation.
 
 ## Previous checkpoint: configured Player Withered input
 

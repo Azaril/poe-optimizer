@@ -1019,6 +1019,40 @@ arithmetic coverage remain independent requirements.
 The [implementation checkpoint](implementation.md#player-life-reference-checkpoint)
 records the independent full-build consumer observations and their exact scope.
 
+### Evasion rounding domain (2026-10-15)
+
+The final Evasion consumer uses a zero floor, so the Life/Mana minimum-of-one
+proof cannot be reused unchanged. At the binary64 predecessor of 0.5
+(`0.49999999999999994`), source add-half/floor returns 1 and native
+nearest-ties-positive returns 0. The zero floor preserves that discrepancy.
+This is the same recorded source-helper counterexample, not a newly accepted
+compatibility behavior or evidence of an obtainable build.
+
+The finite parity domain for the combined Evasion rounding and zero floor is
+the union of `[-f64::MAX, 0.4999999999999999]` and `[0.5, 2^52]`:
+
+- Negative operands are masked by the zero floor. Nonnegative operands through
+  the second predecessor of 0.5 remain below the source's first rounding
+  threshold and yield zero in both implementations.
+- At 0.5 both yield one. Above it, each subsequent half-integer threshold has
+  the same source/native crossing as in the Life proof; the representable
+  predecessor cannot cross the next integer through floating addition.
+- The upper endpoint remains included, with the existing `2^52 + 1`
+  counterexample outside the domain.
+
+The authored Evasion receiver uses a lazy branch and the existing checked
+numeric ranges to exclude the exceptional scalar. It retains native rounding
+and reports UnsupportedDomain rather than substituting a source arithmetic
+accident. Adjacent values, negative inputs and the upper endpoint are explicit
+native controls. This proves neither preceding arithmetic nor item, condition,
+transfer or override coverage. See the [Evasion packet](../data/owned/poe2/3887ae68/player-evasion-final/README.md)
+for its validation and remaining runtime requirements.
+
+The outgoing-critical draft's decimal-rounding chains are undergoing the same
+audit. Their multiply/divide stages and raw rounding domain need separate
+proof; the Evasion zero-floor proof does not apply to them. No source-specific
+rounding mode or blanket parity exception is accepted.
+
 ### Other current compatibility investigations
 
 **Physical-damage draft retirement (2026-10-15):** the selected physical-base

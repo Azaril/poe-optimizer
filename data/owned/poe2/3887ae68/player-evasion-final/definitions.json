@@ -1,0 +1,36 @@
+[
+  {
+    "kind": "stat",
+    "value": {
+      "id": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a4"
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ee"
+              }
+            }
+          },
+          "targets": [
+            "actor"
+          ]
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "before": "b6c757ffc109b2a58bc21b0d185033bfe1553c37419cf46402116dfed09e7a0e",
+  "final_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000033a4"
+  },
+  "contribution_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000029f1"
+  },
+  "metric": {
+    "kind": "metric",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000313e"
+  },
+  "saved_request": "reference-19",
+  "unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000029ee"
+  },
+  "baseline": 7,
+  "source_result": 10,
+  "scope": {
+    "two_reward_occurrences": true,
+    "no_enemy_dependency": true,
+    "no_item_positive_defence_admission": true,
+    "complete_originals": 0
+  }
+}
