@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "kind": "ordinary-timing-admission-obligations",
+  "status": "proved-for-exact-selected-source-domain",
+  "inputs": [
+    {
+      "input": "base_time",
+      "value": "reciprocal of exact intrinsic AttackRate",
+      "admitted_neutral": {
+        "added_speed_time": 0,
+        "skill_attack_time_factor": 1
+      },
+      "authority": "The exact friendly profile declares attackTime 1.5 and no damageFixup; the existing intrinsic route owns AttackRate. No selected Speed BASE or SkillAttackTime supplier exists; CalcTools 16-32 gives the neutral INC/MORE factor. Basic is attack-only, castTime 1, one Main Hand, with no modifier or field that enables a timing override. Barrage factory requires SequentialProjectiles, absent from the complete selected inputs."
+    },
+    {
+      "input": "increased_percent",
+      "value": "exact recipient Pain Offering application-group maximum",
+      "authority": "Only the actual Offering GlobalEffect Speed INC reaches this Basic recipient. Player SoulEater/Tailwind are not minion-store ancestors. Reaver Rage belongs to the Reaver source; Rapid Casting and Spell Echo belong to another skill and are Cast-only. Skill-type/owner transport and exact empty Basic supports are preserved. All conversion/late factory enabling sources are excluded."
+    },
+    {
+      "input": "more_multiplier",
+      "admitted_neutral": 1,
+      "authority": "No Basic Speed MORE supplier: friendly profile has no damageFixup; empty Basic support list excludes Spell Echo. Fanaticism is Player-local and Cast-only. Exact source routing prevents unrelated skills from contributing."
+    },
+    {
+      "input": "additional_attack_time",
+      "admitted_neutral": 0,
+      "authority": "No TotalAttackTime record in complete actual selected inputs or recipes; complete later bodies contain only the final Sum consumer."
+    },
+    {
+      "input": "additional_cast_time",
+      "admitted_neutral": 0,
+      "authority": "No TotalCastTime record in complete actual selected inputs or recipes; complete later bodies contain only the final Sum consumer."
+    },
+    {
+      "input": "action_speed_multiplier",
+      "admitted_neutral": 1,
+      "authority": "Basic selfCast is explicitly true in all 36 complete constructor rows and follows CalcActiveSkill 635-643. Friendly minion has its own root ModDB. Player Glorious Madness ActionSpeed-60 remains on Player; enemy condition/ailment writes target enemyDB. No selected friendly ActionSpeed, TemporalChainsActionSpeed, minimum, maximum, slow flag, Chill/Freeze/Maddening provider or direct condition exists. CalcPerform 1021-1043 yields 1 from these proven empty inputs."
+    },
+    {
+      "input": "repeats",
+      "admitted_neutral": 1,
+      "authority": "CalcOffence 1138 initializes 1 plus eligible RepeatCount. The only selected RepeatCount record is Spell Echo on another skill; all 36 exact Basic constructors have empty supports. No later RepeatCount factory writes an eligible source. Basic is not Channel/Triggered and no repeat/cooldown mechanism changes ordinary timing."
+    },
+    {
+      "input": "server_tick_rate",
+      "value": "1 / 0.033",
+      "authority": "Injected reciprocal of Data.lua ServerTickRate literal; no rounded decimal substitute. Basic is not Channel, so CalcOffence 3016-3018 applies the cap."
+    }
+  ],
+  "excluded_branches_required": [
+    "instant-cast",
+    "timeOverride",
+    "fixedCastTime",
+    "triggerTime",
+    "triggerRate",
+    "attackSpeedMultiplier",
+    "castTimeOverridesAttackTime",
+    "non-neutral SkillAttackTime (empty modifier factor1 is preserved)",
+    "Trauma",
+    "warcry",
+    "channel-time",
+    "totem",
+    "cooldown",
+    "reload",
+    "Channel server-cap bypass"
+  ],
+  "next_dps_dependencies": [
+    "outgoing Sniper critical chance and bonus",
+    "separate nonlinear armour reduction of normal and critical damage",
+    "existing hit chance3220",
+    "DPS/quantity/HitSpeed suppliers and final saved reference14 binding"
+  ],
+  "no_neutral_literals_from_output": true,
+  "no_complete_build": true,
+  "authority": "timing-source-domain.json; mandatory offline full-source and native dependency checks",
+  "native_boundary": "Only authored application/input/query/writer inventories are admitted; all pre-existing owner and global Partial coverage remains unchanged."
+}

@@ -73,6 +73,39 @@ existing production assemblers; changing an expected digest in a test or ignorin
 receipt fields is not a repair. The latest evidence and validation status are in
 the [CI checkpoint](implementation.md#ci-receipt-repair-2026-10-15).
 
+## Direct numeric reductions and Encounter membership (2026-10-15)
+
+The canonical physical-hit package still has **78 direct `Contributions` reads
+in 32 programs**: 49 equipment-use, ten Enemy, nine Actor, seven Skill, two
+Action and one support-origin reads. The complete owner/application census is
+retained in `runs/owned-direct-numeric-read-audit-20261015.json`, bound to input
+`d935e89968280f49c6a6eb75463107858e44bd736ca3e96902707a42916c4b59` and its raw
+rules hash. These are application implementation paths, not separate game or
+PoB concepts. They still have type, dependency and coverage checks; "direct"
+means they lack the newer explicit query membership/group contract, not that
+they execute without validation.
+
+Eleven reads address Enemy channels: ten in `configured-incoming-hit-base`
+and one in `ordinary-minion-attack-hit-chance`. The other read in the latter
+program is its current Action's block reduction. New Critical Weakness and
+Armour consumers expose why the old mechanism persists: checked queries cannot
+yet name Encounter producers or read numeric Enemy groups. The
+[Encounter/query proposal](owned-encounter-contribution-queries-proposal.md)
+is awaiting owner review; no substitute source-term aggregator is approved.
+
+After the shared contract is accepted and validated, use checked membership for
+the new critical/mitigation work, then migrate the touched Enemy block/incoming
+damage consumers with exact source inventories and numeric ordering proofs.
+Preserve missing, inactive, zero, late and unknown suppliers. A format rewrite
+must not turn a previously unresolved input into a neutral value.
+
+The other contexts have separate producer/delivery authority and must be
+audited before migration; the Encounter extension alone cannot retire all 78
+reads. Remove the direct public operation and its exclusive code only after
+all live runtime and useful parity consumers are accounted for. Retain source
+evidence and rebuild current data instead of adding old/new format branches.
+Do not displace the first complete build with an unrelated blanket rewrite.
+
 ## Ailment calculation and display separation (2026-10-15)
 
 The ailment-input source review found a possible display-only discrepancy:

@@ -30,16 +30,30 @@ ordered increased/MORE calculation. Complete source and native writer censuses
 establish the finite selected type/conversion/suppression domain. Native results
 match the retained original physical range **574–1068**, before critical damage
 and mitigation; all-five publication, eight ordinary tests and strict Clippy
-pass. Offering Speed and ordinary attack rate are next, followed by outgoing
-critical calculation and separate normal/critical armour mitigation. Final DPS
-and complete-build coverage remain unfinished.
+pass.
+
+The latest [Offering Speed and ordinary attack-rate component](../data/owned/poe2/3887ae68/offering-speed-rate/README.md)
+adds an independently stacked Speed effect to the existing application and uses
+the actual level table and eight-input timing operation. Original05 now computes
+**0.8666666666666667 attacks/s** in native Rust. Source/destination and native
+writer checks establish the finite timing domain; fresh/reused/Rayon tests and
+all-five publication/rebuild pass. Next are outgoing critical calculation and
+separate normal/critical armour mitigation. Final DPS and complete-build coverage
+remain unfinished.
+
+The outgoing-critical and armour work exposed a shared boundary gap: checked
+queries cannot yet name existing Encounter producers or consume numeric Enemy
+groups. The [proposed extension](owned-encounter-contribution-queries-proposal.md)
+keeps those sources in the same contribution graph, with exact selected
+Encounter and recipient validation. This is awaiting owner review; no new
+authority, separate aggregator or complete-coverage claim is implemented.
 
 Its [trade-search preference successor](../data/owned/poe2/3887ae68/source-trade-preferences/README.md)
 accounts for saved trade weights in import provenance without inferring gameplay
 inputs or optimizer objectives. All-five preservation and exact package rebuild
 pass. Original05 now has **16 remaining configuration origins and 33 known
 assumptions**; its four complete input inventories remain Pending. The current
-physical-hit successor has 8189 effective programs and complete native builds
+Offering Speed successor has 8190 effective programs and complete native builds
 remain **0/5**.
 See the [current endpoint](implementation.md#current-checkpoint-configuration-admission).
 

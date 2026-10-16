@@ -81,7 +81,7 @@ These reference observations are not evidence of native metric completion.
 | 02, 18, 19: Player ES, Armour, Evasion | Selected item magnitude/local-defence intermediates and global/passive contributions | Final item properties, complete receiving, transformations and final Actor totals |
 | 03–06: four capped Player resistances | Item/passive/reward inputs and configured penalty | Complete contributor inventories, aggregation and cap/override calculations |
 | 07–12: total EHP and five maximum hits | Encounter and incoming-damage components | Complete resource/defence dependencies, mitigation and final survivability calculations |
-| 14: exact Sniper Basic Attack hit DPS | Prepared skill, intrinsic damage/rate, accuracy, inherited/Offering/Gigantic/quality factors and exact-Action Command | Conditional/type/conversion damage domains, critical/speed/enemy mitigation and final DPS binding |
+| 14: exact Sniper Basic Attack hit DPS | Prepared skill, intrinsic damage, accuracy, inherited/Offering/Gigantic/quality factors, exact-Action Command, selected physical-hit range and ordinary attack rate | Outgoing critical calculation, enemy mitigation, complete mechanic coverage and final DPS binding |
 | 13, 15, 16: Player hit DPS/average hit and Sniper average hit | Exact typed query identities | Reviewed unavailable results matching the reference; no fabricated numerical defaults |
 | 17: Player Spirit | Actual Amulet/reward inputs, explicit Amulet-copy contribution and guarded final Player consumer | Supplier, suppression and numeric-order admission plus complete-plan binding; unreserved Spirit and legality are separate |
 | 20, 21: Player movement/action speed | Movement contribution channel and typed metric declarations | Complete contributors, interactions and final calculations; observed action speed 100 is not a native constant |
@@ -139,21 +139,37 @@ pass, including fresh/reused/Rayon equality, duplicate/unknown conditions,
 zero/inactive supplier refusals and a fractional-quality rounding control.
 Source-call snapshots remain test evidence rather than runtime operands.
 
-Current package: **`runs/owned-selected-physical-hit-publication-01/package`**.
+The subsequent [Offering Speed and ordinary-rate packet](../data/owned/poe2/3887ae68/offering-speed-rate/README.md)
+extends the existing Offering application with an independently selected Speed
+effect and calculates the exact Basic Attack rate through `OrdinaryTiming`.
+Original05 yields **0.8666666666666667 attacks/s**; disabled Offering yields
+0.6666666666666666. The actual 40-row level table, source/recipient scaling and
+separate Damage/Speed Maximum winners remain data driven. Complete source and
+native writer checks establish the finite ordinary timing domain; all broader
+owner, input and query coverage boundaries remain Partial.
 
-- Input: `d935e89968280f49c6a6eb75463107858e44bd736ca3e96902707a42916c4b59`.
-- Registry: `0a1566c921fce3029d46681f26507b5436e511003dafae18a0ce0ce1ea38757e` (last `33a1`).
-- Definitions: `66054dc33148174ac81994d65c6903f63bda1bd6d7044c8369c0cf3ebd79e9d2`.
-- Rules: `24e8228d28ed7beade1936d37d04875a19f174bca5758220f4623fa24e1d22fe`.
-- Compiled: `1284bee1e2474a4f696d8bb4d9022dae5e5e1cf1ccdd160e43f974656a91b5cd`.
+Current package: **`runs/owned-offering-speed-rate-publication-01/package`**.
 
-The eighteen files total **64,474,322 bytes**, with 196 provenance rows and
-**8189/8192** effective programs (8188 owner programs plus one application).
-The separate serialized endpoint is **64,462,764 bytes**. The hit publication
-adds four definitions, one program and two queries; its exact typed inverse,
-all-five preservation and byte-identical rebuild pass (330.48s). Evidence:
-`runs/owned-selected-physical-hit-publication-01/{validation,receipt}.json`.
-Package-file totals and serialized endpoint sizes are different measurements.
+- Input: `b6c757ffc109b2a58bc21b0d185033bfe1553c37419cf46402116dfed09e7a0e`.
+- Registry: `f2756a579a7f5d478dc626ab5d62cab5cb597e9cc3c026ceb4a49601c46ff9e2` (last `33a3`).
+- Definitions: `ab74ade74def338d6b84e2d9e2c0a17ab680e5da0ddff143761dbb3a028dc099`.
+- Rules: `4258bbe67962385b121f03435a08ff93a2414626e4255809308e3c5b6b1b2746`.
+- Compiled: `e0148d25324ff034b3fb9f63b3cb67346484d0a63dbcf1fd5f850898edac2f6f`.
+
+The eighteen files total **64,487,868 bytes**, with 197 provenance rows and
+**8190/8192** effective programs (8189 owner programs plus one application).
+The Speed publication adds two definitions, one program and one query, appending
+one independently selected effect to the existing application. Fifteen ordinary
+tests, all-five publication/rebuild (32.83s) and strict Clippy pass. Native tests
+cover missing/unknown producers, separate stacking winners, late writes, actual
+tick limits, level-domain refusals and fresh/reused/Rayon equality. All 110 saved
+queries, local IDs and selected issue counts remain unchanged. Evidence:
+`runs/owned-offering-speed-rate-{final-01,publication-01,clippy-01}.log` and
+`runs/owned-offering-speed-rate-publication-01/{validation,receipt}.json`.
+The preceding physical-hit package remains reproducible at
+`runs/owned-selected-physical-hit-publication-01/package` (input `d935e899…`).
+Its eighteen files total 64,474,322 bytes; its serialized endpoint is separately
+64,462,764 bytes. These are different measurements.
 Trade preferences add no definitions, native programs, slots or tables.
 Twenty-one focused Import tests, eight ordinary CLI tests, all-five CLI
 publication/rebuild and strict Clippy pass. Evidence:
@@ -216,26 +232,18 @@ the raw Enemy count uses checked source selection and constructor 20. All-five
 preservation, 22 controls, strict Clippy and immutable source receipt checks pass.
 The subsequent ailment packet preserves this input and its downstream gaps.
 
-## Next damage checkpoint: Offering speed and ordinary attack rate
+## Next damage checkpoint: outgoing critical calculation and Enemy mitigation
 
-The physical-hit consumer is now published for its finite selected source domain.
-The next positive numerical slice is **Pain Offering Speed → ordinary Basic
-Attack rate**, reusing the current effect application, independent Maximum
-stacking selection and existing `OrdinaryTiming` operation. Use the actual
-40-row injected level table; Speed cannot borrow Damage's winning Offering.
-Current source controls give baseline rate 0.8666666666666667/s and disabled
-Offering 0.6666666666666666/s. Raw level 1 resolves to final level 3 in its
-retained control, so its Speed is 21%, not the table's level-1 20%.
+Physical hits and ordinary attack rate are published for their finite selected
+source domains. The rate proof authenticates both original JIT captures (6,981
+targeted occurrences / 124 complete records each), complete carrier records,
+36 exact Basic constructors, eleven full source bodies and the native writer
+census. It establishes all eight timing inputs, including selfCast/ActionSpeed
+and the real tick rate of `1 / 0.033`; captured empty flags and matching scalar
+outputs alone establish none of these. Raw level 1 resolves to final level 3
+in its retained control, so Offering supplies 21%, not level 1's 20%.
 
-The new `offering-speed-rate` packet is an unpublished draft. Definitions
-33a2/33a3 are reserved for recipient Speed INC and exact Action rate. Before
-rate admission, prove all eight timing inputs, the selfCast/ActionSpeed path,
-real server tick rate and every alternate timing branch. An empty captured
-flags object does not prove false. Neutral factors require complete supplier
-proofs. Preserve unknown, Partial, unlisted and late-write failures; do not
-replace the timing operation with a convenient multiplication.
-
-After rate, finish **outgoing critical chance/multiplier**, distinct from the
+Next finish **outgoing critical chance/multiplier**, distinct from the
 existing incoming-Player critical calculations, then **Enemy armour/physical
 mitigation** separately for normal and critical hits. The retained reference
 normal/critical averages after armour are 414.2081976279727 and
@@ -253,6 +261,47 @@ from after-block hit chance 3220. Shared minion bonus/cap ownership, Critical
 Weakness applicability and crit-specific dynamic producers remain unclosed.
 Additional supplier definitions/programs must be justified before allocation;
 no new runtime contract or source-argument compatibility behavior is approved.
+
+**New shared blocker, October 15:** Encounter programs already emit Enemy
+contributions, but checked membership has no Encounter origin and numeric Enemy
+queries are rejected. This blocks both conditional Critical Weakness and the
+next Armour consumer; existing configured Armour BASE `31e0` should be reused.
+The [Encounter/query proposal](owned-encounter-contribution-queries-proposal.md)
+recommends extending the existing graph, with exact selected-owner/recipient
+authority and unchanged completeness rules. Await owner review before changing
+the public contract. Do not substitute a separate computed-term aggregator or
+older direct numeric reduction to bypass this gap. Source supplier proofs and
+independent Player-defence work continue. Outgoing-critical channels `33a6–33aa`
+are reserved for Actor cap/bonus and Enemy chance/bonus/activation; they are not
+published definitions or completed producers.
+
+The unpublished [Enemy physical-mitigation reference packet](../data/owned/poe2/3887ae68/enemy-physical-mitigation/README.md)
+now retains five original source bodies, nine spans and all 39 observed Sniper
+pass comparisons. It establishes the next implementation's operation order:
+reuse configured Armour `31e0`, preserve Rating versus Damage units, use the
+monster cap of 75% rather than the Player cap of 90%, and mitigate normal and
+critical averages separately before weighting. Conversion/gain and non-effective
+reference contexts remain distinct; source output fields never become runtime
+operands. Three ordinary Rust evidence tests and strict targeted Clippy pass; logs:
+`runs/owned-enemy-physical-mitigation-{source-01,clippy-01}.log`.
+No mitigation consumer, complete supplier proof or publication is claimed.
+
+The [selected Enemy supplier review](../data/owned/poe2/3887ae68/enemy-physical-mitigation/source-domain-review.md)
+confirms that shared Enemy damage-taken/reduction channels contain conditional
+baseline rules. They are independent of Encounter configuration; the current
+existing-Actor applicability supports Player only. A separate reviewed Enemy
+binding is needed before publishing those baseline sources. Late Shock can also
+produce a zero-valued conditional record: Lua numeric truthiness is source
+evidence to classify, not native gameplay behavior to copy. This review narrows
+the next checks but does not complete source admission or native membership.
+
+The associated [direct-reduction audit](legacy-retirement.md#direct-numeric-reductions-and-encounter-membership-2026-10-15)
+found 78 older direct numeric reads in 32 current programs, including eleven
+Enemy reads. These retain their existing validation but lack explicit checked
+query membership. After the proposed Encounter contract is accepted, migrate
+the touched Enemy block/incoming-hit consumers with their real source proofs;
+do not introduce more direct reads or remove the operation before its other
+live contexts are migrated.
 
 The portable Sniper replay now contains the published physical-base program;
 all **45 ordinary Engine tests** and **40 tests across six direct CLI consumers**
@@ -671,12 +720,12 @@ an implicit way around the current complete-plan contract.
 The Life predecessor's read-only capacity audit found programs to be the only
 nearly exhausted compiler collection, at 8190/8192 including one application.
 The Mana cleanup reduced that to 8185/8192 and receivers from 60 to 55. The
-current selected physical-hit successor uses **8189/8192**, leaving three
+current Offering Speed successor uses **8190/8192**, leaving two
 program slots, with 56 receivers. Other measured Life-predecessor compiler counts are
 6548 owners, 23517 effects, 4249 reads, 32814 nodes and 41600 edges, comfortably
 within their separate caps.
-The current serialized endpoint is **64,462,764/67,108,864 bytes**,
-leaving 2,646,100 bytes. Its eighteen package files separately total 64,474,322
+The current serialized endpoint is **64,476,314/67,108,864 bytes**,
+leaving 2,632,550 bytes. Its eighteen package files separately total 64,487,868
 bytes; earlier checkpoints reported file totals. These are separate measurements. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
@@ -2060,6 +2109,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
 | Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Bounded equipment ordering, combined Player BASE accumulation and the guarded final Life consumer are published; magnitude/routing, conversion arithmetic and global/owner coverage remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
+| Encounter contributions and numeric Enemy queries | [Proposal](owned-encounter-contribution-queries-proposal.md) awaiting owner review, October 15. Reuse existing Encounter invocations in checked membership and admit typed numeric Enemy groups under existing owner read limits. Needed for configured Critical Weakness and Armour `31e0`; no separate source-term aggregator or unchecked reduction workaround is approved. Core/Data/Engine authority, real-producer tests, numerical publication and all-five regression remain pending. |
 | Composed support discovery | Accepted October 8. The common native gate, current authored-order DTO and source-input accounting are implemented; Original05 `01de` is retired. The Gem packet publishes 937 Known and 29 Unmapped domains with all-five preservation; all 23 selected physical Gem domains are covered. Existing typed identities fixed 111 false stat-set blockers. Pinned generated export metadata classifies eight missing runtime effects as active without implementing their Command mechanics. Continue other owner domains and exact provider exclusions; keep Command action/usage gaps separate. Unsupported positive and archived source relationships remain blocking. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Application-group contribution queries | Accepted and implemented October 8 in Core/Data/Engine V25. Typed program-effect/application-group addresses preserve exact recipients, potential-source census, stacking, unknowns and explicit numeric order in one checked reduction path. Current artifacts are rebuilt with no old-format compatibility. Mixed inherited/applied damage data now adopts this capability; MORE and final hit consumers remain next. [Accepted contract](owned-application-group-contribution-queries-proposal.md). |

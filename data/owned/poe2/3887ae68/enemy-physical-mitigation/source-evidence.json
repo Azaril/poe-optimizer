@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "kind": "unpublished-enemy-physical-mitigation-authority",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "report": {
+    "archive": {
+      "path": "data/owned/poe2/3887ae68/selected-physical-hit/physical-source.json.gz",
+      "bytes": 1381535,
+      "sha256": "4357fd49f43210a1afa6435a2c383a469cd1811042606ae5f719f180edf078ec"
+    },
+    "bytes": 19612949,
+    "sha256": "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935"
+  },
+  "bodies": [
+    {
+      "source_path": "src/Modules/CalcOffence.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcOffence.lua.gz",
+        "bytes": 64248,
+        "sha256": "3ee439d6209cd88adbca368dd7b3e741e9ed537531a37fcc0a8f4b1863e56147"
+      },
+      "encoding": "gzip",
+      "bytes": 364029,
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "source_path": "src/Modules/CalcDefence.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/CalcDefence.lua.gz",
+        "bytes": 39593,
+        "sha256": "9e232710732a7223b87b7174c7bd8a0531309675b76c605e07df55b0f72d6bf3"
+      },
+      "encoding": "gzip",
+      "bytes": 239878,
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "source_path": "src/Modules/Data.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Data.lua.gz",
+        "bytes": 10599,
+        "sha256": "38cd62af46c9f291240d5a33f20779bd101766d9f62b2165b929737380586c46"
+      },
+      "encoding": "gzip",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "source_path": "src/Data/Misc.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Misc.lua.gz",
+        "bytes": 8259,
+        "sha256": "bdc486e956dfde075166d88c612d2c527df2543567ae39da56e7f48090ec50c1"
+      },
+      "encoding": "gzip",
+      "bytes": 24010,
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "source_path": "src/Modules/ConfigOptions.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+        "bytes": 235127,
+        "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+      },
+      "encoding": "plain",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    }
+  ],
+  "spans": [
+    {
+      "source_path": "src/Modules/CalcDefence.lua",
+      "first": 56,
+      "last": 69,
+      "role": "signed-armour-response",
+      "sha256": "7621fcdd39af8c9f000678688cc367f9388e19c80aaced3ec4f67ff1ceada7b9"
+    },
+    {
+      "source_path": "src/Modules/CalcOffence.lua",
+      "first": 466,
+      "last": 475,
+      "role": "penetration-order",
+      "sha256": "508cbe5e504e9648de8c7be69a7b79304ea6aeb25de0cc577cb56f26c93687f7"
+    },
+    {
+      "source_path": "src/Modules/CalcOffence.lua",
+      "first": 3430,
+      "last": 3433,
+      "role": "physical-resistance-applicability",
+      "sha256": "bef1eb9844dc7f1d3303c55d9cd008e309b5b3c9e10a0157d3447b7792c0ba99"
+    },
+    {
+      "source_path": "src/Modules/CalcOffence.lua",
+      "first": 4197,
+      "last": 4320,
+      "role": "separate-normal-critical-and-physical-reduction",
+      "sha256": "a335c1be204c1def69f90c6ed93edc631ae07fcb741a22fa274d6586ceb6b348"
+    },
+    {
+      "source_path": "src/Modules/CalcOffence.lua",
+      "first": 4361,
+      "last": 4406,
+      "role": "damage-taken-and-final-mitigation",
+      "sha256": "331861c9a6a5f061b47be41dc20c55896c98bf65872d5056ccbb48161e3d3190"
+    },
+    {
+      "source_path": "src/Modules/Data.lua",
+      "first": 240,
+      "last": 265,
+      "role": "game-coefficients-and-monster-cap",
+      "sha256": "674c5a6e629c362e03c1b7d95b31869d7109ca5ba6c22fe884d298d9c2f1d69f"
+    },
+    {
+      "source_path": "src/Data/Misc.lua",
+      "first": 245,
+      "last": 260,
+      "role": "monster-constants",
+      "sha256": "e186b8e8e986397629b5bafb5dbc35d2b02f57be3b22f59728f6ee53a6299d01"
+    },
+    {
+      "source_path": "src/Modules/ConfigOptions.lua",
+      "first": 2073,
+      "last": 2097,
+      "role": "pinnacle-rating-default",
+      "sha256": "2e728e6823b52cee078cd9c47adf6e3c81e687a2280e55b061977732d9e4e4e1"
+    },
+    {
+      "source_path": "src/Modules/ConfigOptions.lua",
+      "first": 2183,
+      "last": 2188,
+      "role": "configured-armour-contribution",
+      "sha256": "5328691028bb6f22fdd64c6cb3ff10fed99729e068290a20689222e43f0dd4a9"
+    }
+  ],
+  "vectors": {
+    "path": "data/owned/poe2/3887ae68/enemy-physical-mitigation/source-vectors.json",
+    "bytes": 62861,
+    "sha256": "fb675c15fe80240d1a5388d534ebdcb45154970f1ab1cc94e1af6fafae4934df"
+  },
+  "existing_armour_producer": [
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-rating-inputs/extension.json",
+      "bytes": 84661,
+      "sha256": "e49664451157156fc21841baebc73a4fb2eefcd5949fa005513e8bd1a597c226"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-rating-inputs/native-inputs.json",
+      "bytes": 2377,
+      "sha256": "bca4c3fb3ad46c3465473588831a9af967c51111119e760e61a18ab5307237eb"
+    }
+  ],
+  "license": {
+    "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/LICENSE.md",
+    "bytes": 67979,
+    "sha256": "22d2d075c1d361971764fbbd1e12e1485bdf35f0769ffac4eca8a79afc60dda8"
+  },
+  "scope": {
+    "published": false,
+    "native_consumer_implemented": false,
+    "source_supplier_complete": false,
+    "new_source_execution": false,
+    "source_values_are_runtime_inputs": false
+  }
+}

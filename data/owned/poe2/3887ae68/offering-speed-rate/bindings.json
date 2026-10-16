@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "kind": "offering-speed-and-ordinary-attack-rate",
+  "speed_contribution": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000033a2"
+  },
+  "ordinary_attack_rate": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000033a3"
+  },
+  "intrinsic_attack_rate": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003214"
+  },
+  "speed_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "rate_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000001d39"
+  },
+  "time_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000005"
+  },
+  "source_level_parameter": "def.0000000000003223",
+  "table": "pain-offering.speed-increase",
+  "application": "pain-offering-minion-damage",
+  "stacking_modifier": "attack-cast-speed-increase",
+  "source_effect": "PainOfferingPlayer",
+  "recipient_profile": "RaisedSkeletonSniper",
+  "action_effect": "MinionMeleeBow",
+  "ordinary_rate_admission": "pending-eight-input-and-branch-authority",
+  "whole_build_complete": false
+}

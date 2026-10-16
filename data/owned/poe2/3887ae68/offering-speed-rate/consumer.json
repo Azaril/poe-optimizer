@@ -1,0 +1,380 @@
+{
+  "owners": [
+    {
+      "owner": {
+        "kind": "slot",
+        "value": {
+          "kind": "action_output",
+          "value": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000021"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000022"
+            }
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "selected-basic-ordinary-attack-rate",
+            "context": "action",
+            "reads": [
+              {
+                "id": "intrinsic-rate",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d39"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003214"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "speed-increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "actor",
+                    "query": "pain-offering-speed-contributions",
+                    "group": "pain-offering-speed"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "intrinsic-rate",
+                "expression": {
+                  "kind": "read",
+                  "input": "intrinsic-rate"
+                }
+              },
+              {
+                "id": "speed-increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "speed-increase"
+                }
+              },
+              {
+                "id": "one-rate",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d39"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-time",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000005"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "zero-time",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000005"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-factor",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "intrinsic-period-factor",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "one-rate",
+                  "denominator": "intrinsic-rate",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "intrinsic-period",
+                "expression": {
+                  "kind": "scale",
+                  "value": "one-time",
+                  "factor": "intrinsic-period-factor"
+                }
+              },
+              {
+                "id": "base-with-additional-speed-time",
+                "expression": {
+                  "kind": "add",
+                  "left": "intrinsic-period",
+                  "right": "zero-time"
+                }
+              },
+              {
+                "id": "base-time",
+                "expression": {
+                  "kind": "scale",
+                  "value": "base-with-additional-speed-time",
+                  "factor": "one-factor"
+                }
+              },
+              {
+                "id": "repeats",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 1
+                  }
+                }
+              },
+              {
+                "id": "tick-time",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0.033,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000005"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "tick-factor",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "one-time",
+                  "denominator": "tick-time",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "server-tick-rate",
+                "expression": {
+                  "kind": "scale",
+                  "value": "one-rate",
+                  "factor": "tick-factor"
+                }
+              },
+              {
+                "id": "ordinary-rate",
+                "expression": {
+                  "kind": "ordinary_timing",
+                  "recipe": {
+                    "base_time": "base-time",
+                    "increased_percent": "speed-increase",
+                    "more_multiplier": "one-factor",
+                    "additional_attack_time": "zero-time",
+                    "additional_cast_time": "zero-time",
+                    "action_speed_multiplier": "one-factor",
+                    "repeats": "repeats",
+                    "server_tick_rate": "server-tick-rate",
+                    "speed_multiplier_rounding_precision": 2,
+                    "units": {
+                      "time": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000005"
+                      },
+                      "rate": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d39"
+                      }
+                    },
+                    "output": "action_rate"
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "attack-rate",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033a3"
+                  },
+                  "value": "ordinary-rate"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "slot",
+                  "value": {
+                    "kind": "action_output",
+                    "value": {
+                      "declaration": {
+                        "kind": "skill",
+                        "definition": {
+                          "kind": "skill",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000021"
+                        }
+                      },
+                      "slot": {
+                        "kind": "action_output",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000022"
+                      }
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "remaining-game-effects-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
