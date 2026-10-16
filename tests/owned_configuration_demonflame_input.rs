@@ -51,6 +51,46 @@ fn larger_offline_catalogue_allowance_is_path_scoped_and_bounded() {
     );
 }
 #[test]
+fn retained_archive_locators_are_portable_without_changing_evidence() {
+    let proof = demonflame::read::<serde_json::Value>("source-evidence.json");
+    let original = &proof["archives"][2];
+    let locator = original["file"].as_str().unwrap();
+    assert!(locator.contains('\\'));
+    let portable = locator.replace('\\', "/");
+    assert_eq!(
+        configuration_sources::repository_source_file(locator),
+        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(&portable)
+    );
+    let mut comparison = original.clone();
+    comparison["file"] = json!(portable);
+    let limit = configuration_sources::archive_limit("src/Data/Skills/other.lua");
+    let original_bytes = configuration_sources::retained_gzip(original, limit);
+    let portable_bytes = configuration_sources::retained_gzip(&comparison, limit);
+    assert!(
+        original_bytes == portable_bytes,
+        "same independently sealed complete source bytes"
+    );
+    assert_eq!(original_bytes.len(), 1_172_527);
+    comparison["file"] = original["file"].clone();
+    assert_eq!(
+        comparison, *original,
+        "locator handling changes no source commitment"
+    );
+    for invalid in [
+        "",
+        "/archive.gz",
+        "C:\\archive.gz",
+        "../archive.gz",
+        "data//archive.gz",
+        "data\\..\\archive.gz",
+    ] {
+        assert!(
+            std::panic::catch_unwind(|| configuration_sources::repository_source_file(invalid))
+                .is_err()
+        );
+    }
+}
+#[test]
 fn source_identity_and_effect_claim_mutations_are_rejected() {
     let original = demonflame::read::<serde_json::Value>("source-evidence.json");
     for mutation in 0..6 {

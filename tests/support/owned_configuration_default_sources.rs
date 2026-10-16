@@ -18,8 +18,22 @@ fn root() -> PathBuf {
 fn hash(b: &[u8]) -> String {
     format!("{:x}", Sha256::digest(b))
 }
+/// Saved offline locators may use the author's host separator. Interpret only
+/// repository-relative components; retain the exact evidence and content seals.
+pub fn repository_source_file(file: &str) -> PathBuf {
+    assert!(!file.contains(':'), "repository-relative source locator");
+    let mut path = root();
+    for component in file.split(['/', '\\']) {
+        assert!(
+            !component.is_empty() && component != "." && component != "..",
+            "canonical repository-relative source component"
+        );
+        path.push(component);
+    }
+    path
+}
 pub fn retained_gzip(entry: &Value, limit: usize) -> Vec<u8> {
-    let stored = fs::read(root().join(entry["file"].as_str().unwrap())).unwrap();
+    let stored = fs::read(repository_source_file(entry["file"].as_str().unwrap())).unwrap();
     assert_eq!(hash(&stored), entry["artifact_sha256"]);
     let expected = entry["bytes"].as_u64().unwrap() as usize;
     assert!(expected <= limit);
@@ -136,7 +150,7 @@ pub fn authenticate(
     assert!(root().join(e["license"].as_str().unwrap()).is_file());
     for archive in e["archives"].as_array().unwrap() {
         let limit = archive_limit(archive["path"].as_str().unwrap());
-        let stored = fs::read(root().join(archive["file"].as_str().unwrap())).unwrap();
+        let stored = fs::read(repository_source_file(archive["file"].as_str().unwrap())).unwrap();
         assert_eq!(hash(&stored), archive["artifact_sha256"]);
         let bytes = match archive["encoding"].as_str().unwrap() {
             "utf8" => stored,

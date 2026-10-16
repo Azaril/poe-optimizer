@@ -400,62 +400,6 @@ pub(super) fn checked_receipts(
     Ok(result)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use configuration_dispositions::ConfigurationSourceState;
-
-    #[test]
-    fn configuration_reward_receipts_keep_none_defaults_and_exact_emitting_positions_distinct() {
-        let imported = crate::build_instance::ImportedBuildInstance::from_decoded(
-            crate::decode_build(b"<PathOfBuilding2/>").unwrap(),
-            BuildLineage::from_bytes([28; 16]),
-            Default::default(),
-        )
-        .unwrap();
-        let origin = imported.occurrences()[0].id();
-        let control = |authored: bool, outcome| ProvenControl {
-            recipe: key("test-rule"),
-            selector: ValueSelector {
-                lane: ValueLane::InputBoolean,
-                name: "test-input".into(),
-            },
-            origin: authored.then_some(origin),
-            outcome,
-        };
-        let controls = [
-            control(true, ProvenControlOutcome::None),
-            control(false, ProvenControlOutcome::Reward { index: 0 }),
-            control(false, ProvenControlOutcome::None),
-            control(true, ProvenControlOutcome::Reward { index: 1 }),
-        ];
-        let mut next = 0;
-        let states: Vec<_> = controls
-            .iter()
-            .map(|c| c.checked_state(&mut next, 2).unwrap())
-            .collect();
-        assert_eq!(
-            states,
-            vec![
-                ConfigurationSourceState::AuthoredNone,
-                ConfigurationSourceState::ConstructorDefault,
-                ConfigurationSourceState::ConstructorDefaultNone,
-                ConfigurationSourceState::Authored
-            ]
-        );
-        assert_eq!(next, 2);
-        for (next, index, count) in [(0, 1, 2), (1, 0, 2), (1, 2, 2), (0, 0, 0)] {
-            let mut cursor = next;
-            assert!(
-                control(true, ProvenControlOutcome::Reward { index })
-                    .checked_state(&mut cursor, count)
-                    .is_none()
-            );
-            assert_eq!(cursor, next);
-        }
-    }
-}
-
 pub(super) fn finish(
     b: &mut Builder<'_, '_>,
     scope: SourceOccurrenceId,
@@ -535,4 +479,60 @@ pub(super) fn finish(
     }
     output.completion = DraftListCompletion::Complete;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use configuration_dispositions::ConfigurationSourceState;
+
+    #[test]
+    fn configuration_reward_receipts_keep_none_defaults_and_exact_emitting_positions_distinct() {
+        let imported = crate::build_instance::ImportedBuildInstance::from_decoded(
+            crate::decode_build(b"<PathOfBuilding2/>").unwrap(),
+            BuildLineage::from_bytes([28; 16]),
+            Default::default(),
+        )
+        .unwrap();
+        let origin = imported.occurrences()[0].id();
+        let control = |authored: bool, outcome| ProvenControl {
+            recipe: key("test-rule"),
+            selector: ValueSelector {
+                lane: ValueLane::InputBoolean,
+                name: "test-input".into(),
+            },
+            origin: authored.then_some(origin),
+            outcome,
+        };
+        let controls = [
+            control(true, ProvenControlOutcome::None),
+            control(false, ProvenControlOutcome::Reward { index: 0 }),
+            control(false, ProvenControlOutcome::None),
+            control(true, ProvenControlOutcome::Reward { index: 1 }),
+        ];
+        let mut next = 0;
+        let states: Vec<_> = controls
+            .iter()
+            .map(|c| c.checked_state(&mut next, 2).unwrap())
+            .collect();
+        assert_eq!(
+            states,
+            vec![
+                ConfigurationSourceState::AuthoredNone,
+                ConfigurationSourceState::ConstructorDefault,
+                ConfigurationSourceState::ConstructorDefaultNone,
+                ConfigurationSourceState::Authored
+            ]
+        );
+        assert_eq!(next, 2);
+        for (next, index, count) in [(0, 1, 2), (1, 0, 2), (1, 2, 2), (0, 0, 0)] {
+            let mut cursor = next;
+            assert!(
+                control(true, ProvenControlOutcome::Reward { index })
+                    .checked_state(&mut cursor, count)
+                    .is_none()
+            );
+            assert_eq!(cursor, next);
+        }
+    }
 }

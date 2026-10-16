@@ -39,6 +39,13 @@ the existing 1 MiB allowance. Native package and evaluator limits are unchanged.
 The upstream license is the existing configuration-accounting evidence license.
 No new PoB execution occurs.
 
+The retained catalogue locator was authored with Windows separators. The offline
+source loader interprets repository-relative separators portably at the filesystem
+boundary. The original evidence JSON, archive bytes, hashes and published
+provenance remain unchanged; future locators use forward slashes. A focused
+regression resolves both spellings to the same sealed complete source bytes and
+rejects absolute or noncanonical relative locators.
+
 ## Publication scope
 
 One definition and two exact source-lane accounting rows are added. Input and
