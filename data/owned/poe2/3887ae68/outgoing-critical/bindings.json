@@ -1,0 +1,98 @@
+{
+  "kind": "unpublished-ordinary-outgoing-critical",
+  "definitions": {
+    "chance": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033a5"
+    },
+    "multiplier": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033a6"
+    },
+    "actor_cap": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033a7"
+    },
+    "actor_bonus": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033a8"
+    },
+    "enemy_chance": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033a9"
+    },
+    "enemy_bonus": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033aa"
+    },
+    "weakness_condition": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033ab"
+    }
+  },
+  "programs": [
+    "ordinary-outgoing-critical",
+    "configured-critical-weakness"
+  ],
+  "baseline_program": "intrinsic-minion-attack-source",
+  "pending_members": [
+    {
+      "query": "outgoing-critical-enemy-chance-add",
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "encounter",
+          "value": {
+            "kind": "encounter",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000031d1"
+          }
+        }
+      },
+      "program": "configured-critical-weakness",
+      "effect": "critical-weakness",
+      "required_origin": "selected Encounter; not yet represented by current ContributionOrigin"
+    }
+  ],
+  "published": false,
+  "ready_for_native_admission": false,
+  "pending": [
+    "Encounter contribution origin and numeric Enemy read contract",
+    "Complete selected and dynamic critical supplier census",
+    "ApplyCriticalWeakness complete Boolean supplier census",
+    "Unsupported branch source exclusion",
+    "Anomalous CritMultiplier More dispatch: no compatibility behavior accepted",
+    "Source-store numeric ordering and positive-supplier parity"
+  ]
+}

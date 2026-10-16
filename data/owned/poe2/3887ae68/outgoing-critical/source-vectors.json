@@ -1,0 +1,1412 @@
+{
+  "kind": "observed-outgoing-critical-comparison",
+  "source_report_sha256": "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935",
+  "rows": [
+    {
+      "case": "original-05",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "62ff0e3e25035e2f39f0065fdd0f861a3ac29dc8f75389f0052b34d750dd63a5"
+    },
+    {
+      "case": "sniper-calcs-effective",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "62ff0e3e25035e2f39f0065fdd0f861a3ac29dc8f75389f0052b34d750dd63a5"
+    },
+    {
+      "case": "sniper-calcs-effective",
+      "mode": "calcs",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "af7a50a52dda096c8c364d1af7fcc12234c68326b54abf18bc474cea0b5bf057"
+    },
+    {
+      "case": "repeat-original-05",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "62ff0e3e25035e2f39f0065fdd0f861a3ac29dc8f75389f0052b34d750dd63a5"
+    },
+    {
+      "case": "warm-calcs-to-original",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "62ff0e3e25035e2f39f0065fdd0f861a3ac29dc8f75389f0052b34d750dd63a5"
+    },
+    {
+      "case": "sniper-quality-1",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 1,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "2083471ae5565885206613cf3c0fde49a2aefd5c50ddfb9fd36743ba4348ad7c"
+    },
+    {
+      "case": "sniper-quality-20",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 20,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "3d9ac01ab2d376d6b382dcd7d52e89da90e0637a1610e319487edf0cad70dd25"
+    },
+    {
+      "case": "without-plain-node",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "04516395453f0099aeeb4e6c8f1b6ae8363369045179be37f60aed64d1868c8c"
+    },
+    {
+      "case": "without-command-node",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "e0d2a7cb96a7cdfb9f8150872ed4a5ac5d56a939a0840f0f7074a53be7e31869"
+    },
+    {
+      "case": "without-gigantic",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "79a8b64491c94620b8868446749d9b0671ff56000bc73e9a2edfac32be9a67dc"
+    },
+    {
+      "case": "quality-20-without-gigantic",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 20,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "0856ffd0059de85d62378ecad4ebcf301d961d82d8d61a4438a1adb351e398d8"
+    },
+    {
+      "case": "sniper-calcs-combat",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "62ff0e3e25035e2f39f0065fdd0f861a3ac29dc8f75389f0052b34d750dd63a5"
+    },
+    {
+      "case": "sniper-calcs-combat",
+      "mode": "calcs",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "40a5a2f35d9e57165523d979c5c8d0737141ec9db17a00d6279e0fa43c31be80"
+    },
+    {
+      "case": "sniper-calcs-buffed",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "62ff0e3e25035e2f39f0065fdd0f861a3ac29dc8f75389f0052b34d750dd63a5"
+    },
+    {
+      "case": "sniper-calcs-buffed",
+      "mode": "calcs",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "5db4d850f7b7843297a1afc3e5c0977debe3d9be9eac60bf20ec506761c1542b"
+    },
+    {
+      "case": "sniper-calcs-unbuffed",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "62ff0e3e25035e2f39f0065fdd0f861a3ac29dc8f75389f0052b34d750dd63a5"
+    },
+    {
+      "case": "sniper-calcs-unbuffed",
+      "mode": "calcs",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "6eb0bf3df6beb436bc2f394fa463adf866e0971c5c3fd3c99adcc1c7531beb82"
+    },
+    {
+      "case": "offering-disabled",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "460df41b120e3dacdc5f5c17e39e5dc887936652a8dbf162d4c55393a3867305"
+    },
+    {
+      "case": "offering-level-1",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "e3f26b303c64146d1a4119d02160c357077d0268d82e4577a21320b69abcc555"
+    },
+    {
+      "case": "offering-duplicate-equal",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "62ff0e3e25035e2f39f0065fdd0f861a3ac29dc8f75389f0052b34d750dd63a5"
+    },
+    {
+      "case": "offering-higher-first",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "1c9787960cc2ff5cbfb98b7137053b48e7fae36f12b1b7dbcff008d13a6090b0"
+    },
+    {
+      "case": "offering-higher-last",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "1c9787960cc2ff5cbfb98b7137053b48e7fae36f12b1b7dbcff008d13a6090b0"
+    },
+    {
+      "case": "flat-physical",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "6ad388565a289f744f575368a645fa25fd5642628e6f6c790beeeed0f7ec990e"
+    },
+    {
+      "case": "conversion-fire-25",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "2106748a8001436a3e0c5309b8061e99dba085d598a8e5b465102a29f755d49e"
+    },
+    {
+      "case": "conversion-over-100",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "7480111060365db9e1dab4a8bf26598189485b8ee99d89c2abb19543c69b3df3"
+    },
+    {
+      "case": "physical-gain-fire",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "5b33cc825181e50303522ab1d385e3c61a637e43dc4702a574eb98cf0f87b1fd"
+    },
+    {
+      "case": "offering-source-buff-effect",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "f948edf45297ee2901f5dbf57510441d6ee50c60f1710ec6f745737c80191860"
+    },
+    {
+      "case": "offering-recipient-buff-effect",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "ef28cb71c6618a035129b703849a50ca8090364cf8e3d1913fc3916d8440a9fc"
+    },
+    {
+      "case": "offering-both-buff-effects",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "16b456ceac7f579b0930cfb82628d538c6f029497166998d0a36642cdb022f8b"
+    },
+    {
+      "case": "no-physical-damage",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "ff3711728705806cd1ac99eb868e2f37ede9cd7af816887555e18a8e578276a6"
+    },
+    {
+      "case": "offering-positive-half-tie",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "b2f032395dd780feceb3f8af0ee54cc4f29fef819ee5321e62c9e3565436b730"
+    },
+    {
+      "case": "offering-negative-half-tie",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "642caa8279f62e3e20a1a9d1ed1fbf5dcc641fa7163ddcc494f52d2a5035b943"
+    },
+    {
+      "case": "offering-combined-more",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "abd82298f409739cac1118494098323576ab3f7b292de6de6ec9788b7843fd36"
+    },
+    {
+      "case": "offering-magnitude",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "f948edf45297ee2901f5dbf57510441d6ee50c60f1710ec6f745737c80191860"
+    },
+    {
+      "case": "flat-physical-quality-20",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 20,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "02d0c8b082b168ebf7afd66a6fbebb24e36e0538a5529739ea1635f8cba5900f"
+    },
+    {
+      "case": "two-recipients-original-main-clone-calcs",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "62ff0e3e25035e2f39f0065fdd0f861a3ac29dc8f75389f0052b34d750dd63a5"
+    },
+    {
+      "case": "two-recipients-original-main-clone-calcs",
+      "mode": "calcs",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 13,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 20,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "4bd91824002c46ee9bc377c8f33026d7359cd27aeac8249e8ed9d5a43748a406"
+    },
+    {
+      "case": "two-recipients-clone-main-original-calcs",
+      "mode": "main",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 13,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 20,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "3d9ac01ab2d376d6b382dcd7d52e89da90e0637a1610e319487edf0cad70dd25"
+    },
+    {
+      "case": "two-recipients-clone-main-original-calcs",
+      "mode": "calcs",
+      "actor_profile": "RaisedSkeletonSniper",
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "label": "Main Hand",
+      "output": {
+        "CritChance": 5,
+        "CritMultiplier": 2,
+        "CritEffect": 1.05,
+        "PreEffectiveCritChance": 5,
+        "PreEffectiveCritMultiplier": 2,
+        "AccuracyHitChance": 100,
+        "HitChance": 100
+      },
+      "whole_pass_sha256": "af7a50a52dda096c8c364d1af7fcc12234c68326b54abf18bc474cea0b5bf057"
+    }
+  ],
+  "positive_critical_controls": false,
+  "runtime_input": false
+}

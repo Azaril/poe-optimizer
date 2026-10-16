@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "kind": "unpublished-outgoing-critical-authority",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "report": {
+    "archive": {
+      "path": "data/owned/poe2/3887ae68/selected-physical-hit/physical-source.json.gz",
+      "bytes": 1381535,
+      "sha256": "4357fd49f43210a1afa6435a2c383a469cd1811042606ae5f719f180edf078ec"
+    },
+    "bytes": 19612949,
+    "sha256": "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935"
+  },
+  "construction": [
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/source-jit-off.json.gz",
+      "bytes": 1290374,
+      "sha256": "eb3e2f5df46d7c7f7e55b5968d1609ab7c6010f2b93b24137dec3d925e65b842"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/source-jit-on.json.gz",
+      "bytes": 1289531,
+      "sha256": "f895dff33823fa7dd6a33dc874b6f66bdc424291e0fd45216761691cd5777242"
+    }
+  ],
+  "source_comparison": {
+    "path": "data/owned/poe2/3887ae68/mana-supplier-sources/source-comparison.json",
+    "bytes": 4549,
+    "sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155"
+  },
+  "bodies": [
+    {
+      "source_path": "src/Modules/CalcSetup.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/mana-supplier-sources/CalcSetup.lua.gz",
+        "bytes": 21347,
+        "sha256": "6cf68ffe3f750e1b0670c54f4152fa2cbd88db2c1092d16c7541f773582a708c"
+      },
+      "encoding": "gzip",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "source_path": "src/Modules/CalcPerform.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+        "bytes": 34408,
+        "sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575"
+      },
+      "encoding": "gzip",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "source_path": "src/Modules/CalcOffence.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcOffence.lua.gz",
+        "bytes": 64248,
+        "sha256": "3ee439d6209cd88adbca368dd7b3e741e9ed537531a37fcc0a8f4b1863e56147"
+      },
+      "encoding": "gzip",
+      "bytes": 364029,
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "source_path": "src/Classes/ModStore.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+        "bytes": 7158,
+        "sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b"
+      },
+      "encoding": "gzip",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "source_path": "src/Classes/ModList.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/mana-supplier-sources/passive-ModList.lua.gz",
+        "bytes": 2020,
+        "sha256": "7b1b25081e088b45c6a28ba5449faf44409641ad0d6688518ba07bc2b36dc815"
+      },
+      "encoding": "gzip",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "source_path": "src/Classes/ModDB.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/life-base-domain/ModDB.lua.gz",
+        "bytes": 2575,
+        "sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9"
+      },
+      "encoding": "gzip",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "source_path": "src/Data/Misc.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Misc.lua.gz",
+        "bytes": 8259,
+        "sha256": "bdc486e956dfde075166d88c612d2c527df2543567ae39da56e7f48090ec50c1"
+      },
+      "encoding": "gzip",
+      "bytes": 24010,
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "source_path": "src/Modules/ConfigOptions.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+        "bytes": 235127,
+        "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+      },
+      "encoding": "utf8",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "source_path": "src/Classes/ConfigTab.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Classes/ConfigTab.lua",
+        "bytes": 50481,
+        "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+      },
+      "encoding": "utf8",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "source_path": "src/Modules/Common.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/outgoing-critical/Common.lua.gz",
+        "bytes": 9574,
+        "sha256": "ea41c886396a83d09569d75e0c7ad6b0b60e39bb9ca8e9d9680d0dca12190d8e"
+      },
+      "encoding": "gzip",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    }
+  ],
+  "spans": [
+    {
+      "role": "outgoing-critical-consumer",
+      "source_path": "src/Modules/CalcOffence.lua",
+      "first": 3816,
+      "last": 4040,
+      "sha256": "4bc67c22d3098a9e3bab8209fd344c4fd78b78e52da59eec7ef41178b1d94a49",
+      "body": "\t\t-- Calculate crit chance, crit multiplier, and their combined effect\n\t\tlocal inevitableCrits = false\n\t\tif skillModList:Flag(cfg, \"NeverCrit\") then\n\t\t\toutput.PreEffectiveCritChance = 0\n\t\t\toutput.CritChance = 0\n\t\t\toutput.CritMultiplier = 0\n\t\t\toutput.BonusCritDotMultiplier = 0\n\t\t\toutput.CritEffect = 1\n\t\telseif skillModList:Flag(cfg, \"SpellSkillsCannotDealCriticalStrikesExceptOnFinalRepeat\") then\n\t\t\tif (output.Repeats or 1) == 1 then\n\t\t\t\toutput.PreEffectiveCritChance = 0\n\t\t\t\toutput.CritChance = 0\n\t\t\t\toutput.CritMultiplier = 0\n\t\t\t\toutput.BonusCritDotMultiplier = 0\n\t\t\t\toutput.CritEffect = 1\n\t\t\telseif skillModList:Flag(cfg, \"SpellSkillsAlwaysDealCriticalStrikesOnFinalRepeat\") then\n\t\t\t\tif env.configInput.repeatMode == \"None\" then\n\t\t\t\t\toutput.PreEffectiveCritChance = 0\n\t\t\t\t\toutput.CritChance = 0\n\t\t\t\telseif env.configInput.repeatMode == \"AVERAGE\" then\n\t\t\t\t\toutput.PreEffectiveCritChance = 100 / output.Repeats\n\t\t\t\t\toutput.CritChance = 100 / output.Repeats\n\t\t\t\t\tif breakdown then\n\t\t\t\t\t\tbreakdown.CritChance = {\n\t\t\t\t\t\t\ts_format(\"100%%\"),\n\t\t\t\t\t\t\ts_format(\"/ %d ^8(number of repeats)\", output.Repeats),\n\t\t\t\t\t\t\ts_format(\"= %.2f%% average critical strike chance\", output.CritChance)\n\t\t\t\t\t\t}\n\t\t\t\t\tend\n\t\t\t\telse\n\t\t\t\t\toutput.PreEffectiveCritChance = 100\n\t\t\t\t\toutput.CritChance = 100\n\t\t\t\tend\n\t\t\t--else -- this shouldn't ever be a case but leaving this here if someone wants to implement it\n\t\t\tend\n\t\telse\n\t\t\tlocal critOverride = skillModList:Override(cfg, \"CritChance\")\n\t\t\t-- destructive link\n\t\t\tif skillModList:Flag(cfg, \"MainHandCritIsEqualToParent\") then\n\t\t\t\tcritOverride = actor.parent.output.MainHand and actor.parent.output.MainHand.CritChance or actor.parent.weaponData1.CritChance\n\t\t\telseif skillModList:Flag(cfg, \"MainHandCritIsEqualToPartyMember\") then\n\t\t\t\tcritOverride = actor.partyMembers.output.MainHand and actor.partyMembers.output.MainHand.CritChance or (actor.partyMembers.weaponData1 and actor.partyMembers.weaponData1.CritChance or 0)\n\t\t\tend\n\t\t\tlocal baseCrit = critOverride or source.CritChance or 0\n\n\t\t\tlocal baseCritFromMainHand = skillModList:Flag(cfg, \"BaseCritFromMainHand\")\n\t\t\tlocal baseCritFromParentMainHand = skillModList:Flag(cfg, \"AttackCritIsEqualToParentMainHand\")\n\t\t\tlocal baseCritOverride = skillModList:Override(cfg, \"CritChanceBase\")\n\t\t\tif baseCritOverride then\n\t\t\t\tbaseCrit = baseCritOverride\n\t\t\telseif baseCritFromMainHand then\n\t\t\t\tbaseCrit = actor.weaponData1.CritChance\n\t\t\telseif baseCritFromParentMainHand then\n\t\t\t\tbaseCrit = actor.parent.weaponData1 and actor.parent.weaponData1.CritChance or baseCrit\n\t\t\tend\n\n\t\t\tif critOverride == 100 then\n\t\t\t\toutput.PreEffectiveCritChance = 100\n\t\t\t\toutput.PreBifurcateCritChance = 100\n\t\t\t\toutput.CritChance = 100\n\t\t\telse\n\t\t\t\tlocal base = 0\n\t\t\t\tlocal inc = 0\n\t\t\t\tlocal more = 1\n\t\t\t\tif not critOverride then\n\t\t\t\t\tbase = skillModList:Sum(\"BASE\", cfg, \"CritChance\") + (env.mode_effective and enemyDB:Sum(\"BASE\", nil, \"SelfCritChance\") or 0)\n\t\t\t\t\tinc = skillModList:Sum(\"INC\", cfg, \"CritChance\") + (env.mode_effective and enemyDB:Sum(\"INC\", nil, \"SelfCritChance\") or 0)\n\t\t\t\t\tmore = skillModList:More(cfg, \"CritChance\")\n\t\t\t\tend\n\t\t\t\t-- The game uses an integer permyriad chance for each critical strike roll.\n\t\t\t\toutput.CritChance = round((baseCrit + base) * (1 + inc / 100) * more * 100) / 100\n\t\t\t\tlocal preCapCritChance = output.CritChance\n\t\t\t\toutput.CritChance = m_min(output.CritChance, skillModList:Override(nil, \"CritChanceCap\") or skillModList:Sum(\"BASE\", cfg, \"CritChanceCap\"))\n\t\t\t\tif (baseCrit + base) > 0 then\n\t\t\t\t\toutput.CritChance = m_max(output.CritChance, 0)\n\t\t\t\tend\n\t\t\t\toutput.PreEffectiveCritChance = output.CritChance\n\t\t\t\tlocal preHitCheckCritChance = output.CritChance\n\t\t\t\tif env.mode_effective then\n\t\t\t\t\t-- Hits that make an accuracy check make a second accuracy check if they roll a crit. If that fails, the crit is nullified and it just stays a normal hit\n\t\t\t\t\t-- https://www.pathofexile.com/forum/view-thread/11707/filter-account-type/staff/page/10#p748465\n\t\t\t\t\toutput.CritChance = output.CritChance * output.AccuracyHitChance / 100\n\t\t\t\tend\n\t\t\t\tlocal preLuckyCritChance = output.CritChance\n\t\t\t\tif env.mode_effective and skillModList:Flag(cfg, \"CritChanceLucky\") then\n\t\t\t\t\toutput.CritChance = (1 - (1 - output.CritChance / 100) ^ 2) * 100\n\t\t\t\tend\n\t\t\t\toutput.PreBifurcateCritChance = output.CritChance\n\t\t\t\tlocal preBifurcateCritChance = output.CritChance\n\t\t\t\tif env.mode_effective and skillModList:Flag(cfg, \"BifurcateCrit\") then\n\t\t\t\t\toutput.CritChance = (1 - (1 - output.CritChance / 100) ^ 2) * 100\n\t\t\t\tend\n\t\t\t\tlocal preInevitableCritChance = output.CritChance\n\t\t\t\tif env.mode_effective and skillModList:Flag(cfg, \"InevitableCriticalHits\") and output.CritChance > 0 then\n\t\t\t\t\tinevitableCrits = true\n\t\t\t\t\t-- Lucky crits use their effective crit chance without an extra roll-down penalty.\n\t\t\t\t\t-- Bifurcated crits roll twice per roll-down; only both rolls failing advances the penalty.\n\t\t\t\t\tlocal critChance = output.CritChance / 100\n\t\t\t\t\tlocal nonCritChance = 1 - critChance\n\n\t\t\t\t\tlocal critBonusMultiplier =\n\t\t\t\t\t\t1 * critChance + \t\t\t\t\t\t\t\t  -- 100% crit damage, crit% of the time\n\t\t\t\t\t\t0.7 * nonCritChance * critChance +\t\t\t\t  -- 70% if we roll non-crit then a crit\n\t\t\t\t\t\t0.4 * m_pow(nonCritChance, 2) * critChance + -- 40% if we roll two non-crit then a crit\n\t\t\t\t\t\t0.1 * m_pow(nonCritChance, 3) * critChance   -- 10% if we roll three non-crits then a crit\n\t\t\t\t\tif skillModList:Flag(cfg, \"BifurcateCrit\") then\n\t\t\t\t\t\t-- The terminating stage can crit twice, so scale its one-or-more-crit bonus\n\t\t\t\t\t\t-- by the expected number of crits on that stage.\n\t\t\t\t\t\tcritBonusMultiplier = critBonusMultiplier * 2 * output.PreBifurcateCritChance / output.CritChance\n\t\t\t\t\t\toutput.CritBifurcates = output.PreBifurcateCritChance ^ 2 / output.CritChance\n\t\t\t\t\tend\n\n\t\t\t\t\t-- This gets rounded when used in damage logic, so round it ahead of time to make the breakdown accurate (and less ugly)\n\t\t\t\t\tlocal lessCritBonus = round((1 - critBonusMultiplier) * -100.0, 0)\n\t\t\t\t\tskillModList:NewMod(\"CritMultiplier\", \"MORE\", lessCritBonus, \"Tree:55135\")\n\n\t\t\t\t\t-- For the sake of any logic that depends on it, every hit is considered a crit\n\t\t\t\t\toutput.CritChance = 100\n\t\t\t\tend\n\t\t\t\tif breakdown and output.CritChance ~= baseCrit then\n\t\t\t\t\tbreakdown.CritChance = { }\n\t\t\t\t\tlocal baseCritFromMainHandStr = baseCritFromMainHand and \" from main weapon\" or baseCritFromParentMainHand and \" from parent main weapon\" or \"\"\n\t\t\t\t\tif base ~= 0 then\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"(%g + %g) ^8(base%s)\", baseCrit, base, baseCritFromMainHandStr))\n\t\t\t\t\telse\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"%g ^8(base%s)\", baseCrit + base, baseCritFromMainHandStr))\n\t\t\t\t\tend\n\t\t\t\t\tif inc ~= 0 then\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"x %.2f\", 1 + inc/100)..\" ^8(increased/reduced)\")\n\t\t\t\t\tend\n\t\t\t\t\tif more ~= 1 then\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"x %.2f\", more)..\" ^8(more/less)\")\n\t\t\t\t\tend\n\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"= %.2f%% ^8(crit chance)\", output.PreEffectiveCritChance))\n\t\t\t\t\tif preCapCritChance > 100 then\n\t\t\t\t\t\tlocal overCap = preCapCritChance - 100\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"Crit is overcapped by %.2f%% (%d%% increased Critical Hit Chance)\", overCap, overCap / more / (baseCrit + base) * 100))\n\t\t\t\t\tend\n\t\t\t\t\tbreakdown.PreEffectiveCritChance = copyTable(breakdown.CritChance)\n\t\t\t\t\tif env.mode_effective and output.AccuracyHitChance < 100 then\n\t\t\t\t\t\tt_insert(breakdown.CritChance, \"\")\n\t\t\t\t\t\tt_insert(breakdown.CritChance, \"Crit confirmation roll:\")\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"%.2f%%\", preHitCheckCritChance))\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"x %.2f ^8(chance to hit)\", output.AccuracyHitChance / 100))\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"= %.2f%%\", preLuckyCritChance))\n\t\t\t\t\tend\n\t\t\t\t\tif env.mode_effective and skillModList:Flag(cfg, \"CritChanceLucky\") then\n\t\t\t\t\t\tt_insert(breakdown.CritChance, \"Crit Chance is Lucky:\")\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"1 - (1 - %.4f) x (1 - %.4f)\", preLuckyCritChance / 100, preLuckyCritChance / 100))\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"= %.2f%%\", preBifurcateCritChance))\n\t\t\t\t\tend\n\t\t\t\t\tif env.mode_effective and skillModList:Flag(cfg, \"BifurcateCrit\") then\n\t\t\t\t\t\tt_insert(breakdown.CritChance, \"Critical Strike Bifurcates:\")\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"1 - (1 - %.4f) x (1 - %.4f)\", preBifurcateCritChance / 100, preBifurcateCritChance / 100))\n\t\t\t\t\t\tt_insert(breakdown.CritChance, s_format(\"= %.2f%%\", preInevitableCritChance))\n\t\t\t\t\tend\n\t\t\t\t\tif inevitableCrits then\n\t\t\t\t\t\tt_insert(breakdown.CritChance, \"Inevitable Critical Hits:\")\n\t\t\t\t\t\tt_insert(breakdown.CritChance, \"= 100% ^8(override)\")\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\tif not output.CritEffect then\n\t\t\tif skillModList:Flag(cfg, \"NoCritMultiplier\") then\n\t\t\t\toutput.CritMultiplier = 1\n\t\t\telse\n\t\t\t\tlocal extraDamage = skillModList:Sum(\"BASE\", cfg, \"CritMultiplier\") / 100\n\t\t\t\tlocal extraDamageInc = 1 + skillModList:Sum(\"INC\", cfg, \"CritMultiplier\") / 100\n\t\t\t\tlocal extraDamageMore = skillModList:More(\"MORE\", cfg, \"CritMultiplier\")\n\t\t\t\textraDamage = extraDamage * extraDamageInc * extraDamageMore\n\t\t\t\tlocal multiOverride = skillModList:Override(skillCfg, \"CritMultiplier\")\n\t\t\t\tif multiOverride then\n\t\t\t\t\textraDamage = multiOverride / 100\n\t\t\t\tend\n\n\t\t\t\toutput.PreEffectiveCritMultiplier = 1 + extraDamage\n\t\t\t\t-- if crit bifurcates are enabled, roll for crit twice and add multiplier for each\n\t\t\t\tif env.mode_effective and skillModList:Flag(cfg, \"BifurcateCrit\") and not inevitableCrits then\n\t\t\t\t\t-- get crit chance and calculate odds of critting twice\n\t\t\t\t\tlocal critChancePercentage = output.PreBifurcateCritChance\n\t\t\t\t\tlocal bifurcateMultiChance = (critChancePercentage ^ 2) / 100\n\t\t\t\t\tlocal effectiveCritChance = output.CritChance\n\t\t\t\t\tlocal conditionalBifurcateChance = effectiveCritChance > 0 and bifurcateMultiChance / effectiveCritChance or 0\n\t\t\t\t\toutput.CritBifurcates = 1 + conditionalBifurcateChance\n\t\t\t\t\tlocal damageBonus = extraDamage\n\t\t\t\t\tlocal bifurcatedBonus = conditionalBifurcateChance * extraDamage\n\t\t\t\t\tif breakdown then\n\t\t\t\t\t\tbreakdown.CritBifurcates = {\n\t\t\t\t\t\t\ts_format(\"%.2f%% ^8(pre-bifurcate crit chance)\", critChancePercentage),\n\t\t\t\t\t\t\ts_format(\"x %.2f%%\", critChancePercentage),\n\t\t\t\t\t\t\ts_format(\"= %.2f%% ^8(chance both crit rolls succeed)\", bifurcateMultiChance),\n\t\t\t\t\t\t\ts_format(\"/ %.2f%% ^8(chance at least one crit roll succeeds)\", effectiveCritChance),\n\t\t\t\t\t\t\ts_format(\"= %.2f ^8(crit Bifurcates effect)\", 1 + conditionalBifurcateChance),\n\t\t\t\t\t\t}\n\t\t\t\t\tend\n\t\t\t\t\textraDamage = damageBonus + bifurcatedBonus\n\t\t\t\t\tskillModList:NewMod(\"CritMultiplier\", \"MORE\", floor(conditionalBifurcateChance * 100, 2), \"Bifurcated Crit Damage Bonus\")\n\t\t\t\tend\n\n\t\t\t\tif env.mode_effective then\n\t\t\t\t\tlocal enemyInc = 1 + enemyDB:Sum(\"INC\", nil, \"SelfCritMultiplier\") / 100\n\t\t\t\t\textraDamage = extraDamage + enemyDB:Sum(\"BASE\", nil, \"SelfCritMultiplier\") / 100\n\t\t\t\t\textraDamage = round(extraDamage * enemyInc, 2)\n\t\t\t\t\tif breakdown and enemyInc ~= 1 then\n\t\t\t\t\t\tbreakdown.CritMultiplier = {\n\t\t\t\t\t\t\ts_format(\"%d%% ^8(additional extra damage)\", (enemyDB:Sum(\"BASE\", nil, \"SelfCritMultiplier\") + skillModList:Sum(\"BASE\", cfg, \"CritMultiplier\")) / 100),\n\t\t\t\t\t\t\ts_format(\"x %.2f ^8(increased/reduced extra crit damage taken by enemy)\", enemyInc),\n\t\t\t\t\t\t\ts_format(\"= %d%% ^8(extra crit damage)\", extraDamage * 100),\n\t\t\t\t\t\t}\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\t\toutput.CritMultiplier = 1 + m_max(0, extraDamage)\n\t\t\tend\n\t\t\tlocal critChancePercentage = output.CritChance / 100\n\t\t\toutput.CritEffect = 1 - critChancePercentage + critChancePercentage * output.CritMultiplier\n\t\t\toutput.BonusCritDotMultiplier = (skillModList:Sum(\"BASE\", cfg, \"CritMultiplier\") - 50) * skillModList:Sum(\"BASE\", cfg, \"CritMultiplierAppliesToDegen\") / 10000\n\t\t\tif breakdown and output.CritEffect ~= 1 then\n\t\t\t\tbreakdown.CritEffect = {\n\t\t\t\t\ts_format(\"(1 - %.4f) ^8(portion of damage from non-crits)\", critChancePercentage),\n\t\t\t\t\ts_format(\"+ [ (%.4f x %g) ^8(portion of damage from crits)\", critChancePercentage, output.CritMultiplier),\n\t\t\t\t\ts_format(\"= %.3f\", output.CritEffect),\n\t\t\t\t}\n\t\t\tend\n\t\tend\n"
+    },
+    {
+      "role": "prior-local-crit-factories",
+      "source_path": "src/Modules/CalcOffence.lua",
+      "first": 744,
+      "last": 761,
+      "sha256": "48f0ddea97b55b7deb241cbd0cf7a5cec02e168fb2ae38f41c5335f6c0624bb9",
+      "body": "\tend\n\n\t-- Add addition stat bonuses\n\tif skillModList:Flag(nil, \"TransfigurationOfBody\") then\n\t\tskillModList:NewMod(\"Damage\", \"INC\", m_floor(skillModList:Sum(\"INC\", nil, \"Life\") * data.misc.Transfiguration), \"Transfiguration of Body\", ModFlag.Attack)\n\tend\n\tif skillModList:Flag(nil, \"TransfigurationOfMind\") then\n\t\tskillModList:NewMod(\"Damage\", \"INC\", m_floor(skillModList:Sum(\"INC\", nil, \"Mana\") * data.misc.Transfiguration), \"Transfiguration of Mind\")\n\tend\n\tif skillModList:Flag(nil, \"TransfigurationOfSoul\") then\n\t\tskillModList:NewMod(\"Damage\", \"INC\", m_floor(skillModList:Sum(\"INC\", nil, \"EnergyShield\") * data.misc.Transfiguration), \"Transfiguration of Soul\", ModFlag.Spell)\n\tend\n\n\tif modDB:Flag(nil, \"Elusive\") and skillModList:Flag(nil, \"SupportedByNightblade\") then\n\t\tlocal elusiveEffect = output.ElusiveEffectMod / 100\n\t\tlocal nightbladeMulti = skillModList:Sum(\"BASE\", nil, \"NightbladeElusiveCritMultiplier\")\n\t\tskillModList:NewMod(\"CritMultiplier\", \"BASE\", m_floor(nightbladeMulti * elusiveEffect), \"Nightblade\")\n\tend\n"
+    },
+    {
+      "role": "claw-and-defence-stat-crit-factories",
+      "source_path": "src/Modules/CalcOffence.lua",
+      "first": 1022,
+      "last": 1076,
+      "sha256": "8bc8d53e5e93d92051cfcb70aee9ec447e141e9ccdb13ed0ae91117192817ba4",
+      "body": "\tif skillModList:Flag(nil, \"ClawCritChanceAppliesToUnarmed\") then\n\t\t-- Claw Crit Chance conversion from Rigwald's Curse\n\t\tfor i, value in ipairs(skillModList:Tabulate(\"INC\", { flags = bor(ModFlag.Claw, ModFlag.Hit) }, \"CritChance\")) do\n\t\t\tlocal mod = value.mod\n\t\t\tif band(mod.flags, ModFlag.Claw) ~= 0 then\n\t\t\t\tskillModList:NewMod(\"CritChance\", mod.type, mod.value, mod.source, bor(band(mod.flags, bnot(ModFlag.Claw)), ModFlag.Unarmed), mod.keywordFlags, unpack(mod))\n\t\t\tend\n\t\tend\n\tend\n\tif skillModList:Flag(nil, \"ClawCritChanceAppliesToMinions\") then\n\t\t-- Claw Crit Chance conversion from Law of the Wilds\n\t\tfor i, value in ipairs(skillModList:Tabulate(\"INC\", { flags = bor(ModFlag.Claw, ModFlag.Hit) }, \"CritChance\")) do\n\t\t\tlocal mod = value.mod\n\t\t\tif band(mod.flags, ModFlag.Claw) ~= 0 then\n\t\t\t\tenv.minion.modDB:NewMod(\"CritChance\", mod.type, mod.value, mod.source)\n\t\t\tend\n\t\tend\n\tend\n\tif skillModList:Flag(nil, \"ClawCritMultiplierAppliesToMinions\") then\n\t\t-- Claw Crit Multi conversion from Law of the Wilds\n\t\tfor i, value in ipairs(skillModList:Tabulate(\"BASE\", { flags = bor(ModFlag.Claw, ModFlag.Hit) }, \"CritMultiplier\")) do\n\t\t\tlocal mod = value.mod\n\t\t\tif band(mod.flags, ModFlag.Claw) ~= 0 then\n\t\t\t\tenv.minion.modDB:NewMod(\"CritMultiplier\", mod.type, mod.value, mod.source)\n\t\t\tend\n\t\tend\n\tend\n\tif skillModList:Flag(nil, \"CritChanceIncreasedByUncappedLightningRes\") then\n\t\tfor i, value in ipairs(modDB:Tabulate(\"FLAG\", nil, \"CritChanceIncreasedByUncappedLightningRes\")) do\n\t\t\tlocal mod = value.mod\n\t\t\tskillModList:NewMod(\"CritChance\", \"INC\", output.LightningResistTotal, mod.source)\n\t\t\tbreak\n\t\tend\n\tend\n\tif skillModList:Flag(nil, \"CritChanceIncreasedByLightningRes\") then\n\t\tfor i, value in ipairs(modDB:Tabulate(\"FLAG\", nil, \"CritChanceIncreasedByLightningRes\")) do\n\t\t\tlocal mod = value.mod\n\t\t\tskillModList:NewMod(\"CritChance\", \"INC\", output.LightningResist, mod.source)\n\t\t\tbreak\n\t\tend\n\tend\n\tif skillModList:Flag(nil, \"CritChanceIncreasedByOvercappedLightningRes\") then\n\t\tfor i, value in ipairs(modDB:Tabulate(\"FLAG\", nil, \"CritChanceIncreasedByOvercappedLightningRes\")) do\n\t\t\tlocal mod = value.mod\n\t\t\tskillModList:NewMod(\"CritChance\", \"INC\", output.LightningResistOverCap, mod.source)\n\t\t\tbreak\n\t\tend\n\tend\n\tif skillModList:Flag(nil, \"CritChanceIncreasedBySpellSuppressChance\") then\n\t\tfor i, value in ipairs(modDB:Tabulate(\"FLAG\", nil, \"CritChanceIncreasedBySpellSuppressChance\")) do\n\t\t\tlocal mod = value.mod\n\t\t\tskillModList:NewMod(\"CritChance\", \"INC\", output.SpellSuppressionChance, mod.source)\n\t\t\tbreak\n\t\tend\n\tend\n"
+    },
+    {
+      "role": "critical-damage-consumer",
+      "source_path": "src/Modules/CalcOffence.lua",
+      "first": 4249,
+      "last": 4259,
+      "sha256": "59e8a6bb54a81985223e9ffb1ef941202090127de38cc95eba0b3612c9c58b56",
+      "body": "\t\t\t\t\telse\n\t\t\t\t\t\toutput.allMult = output.ScaledDamageEffect * output.FistOfWarDamageEffect * output.AncestralCallDamageEffect * output.AncestralEmpowermentDamageEffect * output.AncestralEmpowermentCombinedDamageEffect * globalOutput.OffensiveWarcryEffect\n\t\t\t\t\tend\n\t\t\t\t\tlocal allMult = output.allMult\n\t\t\t\t\tif pass == 1 then\n\t\t\t\t\t\t-- Apply crit multiplier\n\t\t\t\t\t\tallMult = allMult * output.CritMultiplier\n\t\t\t\t\tend\n\t\t\t\t\tdamageTypeHitMin = damageTypeHitMin * allMult\n\t\t\t\t\tdamageTypeHitMax = damageTypeHitMax * allMult\n\t\t\t\t\tif skillModList:Flag(skillCfg, \"LuckyHits\")\n"
+    },
+    {
+      "role": "normal-critical-weighting",
+      "source_path": "src/Modules/CalcOffence.lua",
+      "first": 4560,
+      "last": 4576,
+      "sha256": "9a2857d15e9780b6077e4acb1dcadd02a312354bd2daf04503b5a2ce33b2e23c",
+      "body": "\t\toutput.EnemyManaRegen = enemyDB:Sum(\"INC\", cfg, \"ManaRegen\")\n\t\toutput.EnemyEnergyShieldRegen = enemyDB:Sum(\"INC\", cfg, \"EnergyShieldRegen\")\n\n\t\t-- Calculate average damage and final DPS\n\t\toutput.AverageHit = totalHitAvg * (1 - output.CritChance / 100) + totalCritAvg * output.CritChance / 100\n\t\tif skillFlags.monsterExplode then\n\t\t\toutput.AverageHitToMonsterLifePercentage = output.AverageHit / monsterLife * 100\n\t\t\tif skillData.hitChanceIsExplodeChance then\n\t\t\t\toutput.HitChance = output.ExplodeChance\n\t\t\tend\n\t\tend\n\t\toutput.AverageDamage = output.AverageHit * output.HitChance / 100\n\t\tglobalOutput.AverageBurstHits = output.AverageBurstHits or 1\n\t\tlocal repeatPenalty = skillModList:Flag(nil, \"HasSeals\") and skillModList:Flag(nil, \"DamageSeal\") and not skillModList:Flag(nil, \"NoRepeatBonuses\") and calcLib.mod(skillModList, skillCfg, \"SealRepeatPenalty\") or 1\n\t\tglobalOutput.AverageBurstDamage = output.AverageDamage + output.AverageDamage * (globalOutput.AverageBurstHits - 1) * repeatPenalty or 0\n\t\tglobalOutput.ShowBurst = globalOutput.AverageBurstHits > 1\n\t\toutput.TotalDPS = output.AverageDamage * (globalOutput.HitSpeed or globalOutput.Speed) * output.DpsMultiplier * quantityMultiplier\n"
+    },
+    {
+      "role": "shared-cap-initializer",
+      "source_path": "src/Modules/CalcSetup.lua",
+      "first": 26,
+      "last": 114,
+      "sha256": "6c77648550fb529b4a0f857ed5057d87896bf0fa14e49aeb34cf37fef2d7caa4",
+      "body": "function calcs.initModDB(env, modDB)\n\tmodDB:NewMod(\"FireResistMax\", \"BASE\", data.characterConstants[\"base_maximum_all_resistances_%\"], \"Base\")\n\tmodDB:NewMod(\"ColdResistMax\", \"BASE\", data.characterConstants[\"base_maximum_all_resistances_%\"], \"Base\")\n\tmodDB:NewMod(\"LightningResistMax\", \"BASE\", data.characterConstants[\"base_maximum_all_resistances_%\"], \"Base\")\n\tmodDB:NewMod(\"ChaosResistMax\", \"BASE\", data.characterConstants[\"base_maximum_all_resistances_%\"], \"Base\")\n\tmodDB:NewMod(\"TotemFireResistMax\", \"BASE\", 75, \"Base\")\n\tmodDB:NewMod(\"TotemColdResistMax\", \"BASE\", 75, \"Base\")\n\tmodDB:NewMod(\"TotemLightningResistMax\", \"BASE\", 75, \"Base\")\n\tmodDB:NewMod(\"TotemChaosResistMax\", \"BASE\", 75, \"Base\")\n\tmodDB:NewMod(\"BaseBlockChanceMax\", \"BASE\", data.characterConstants[\"object_inherent_base_maximum_block_%_from_ot\"], \"Base\")\n\tmodDB:NewMod(\"BaseSpellBlockChanceMax\", \"BASE\", data.characterConstants[\"object_inherent_base_maximum_block_%_from_ot\"], \"Base\")\n\tmodDB:NewMod(\"SpellDodgeChanceMax\", \"BASE\", 75, \"Base\")\n\tmodDB:NewMod(\"ChargeDuration\", \"BASE\", 15, \"Base\")\n\tmodDB:NewMod(\"PowerChargesMax\", \"BASE\", data.characterConstants[\"max_power_charges\"], \"Base\")\n\tmodDB:NewMod(\"FrenzyChargesMax\", \"BASE\", data.characterConstants[\"max_frenzy_charges\"], \"Base\")\n\tmodDB:NewMod(\"EnduranceChargesMax\", \"BASE\", data.characterConstants[\"max_endurance_charges\"], \"Base\")\n\tmodDB:NewMod(\"MaximumRage\", \"BASE\", data.gameConstants[\"BaseMaximumRage\"], \"Base\")\n\tmodDB:NewMod(\"SiphoningChargesMax\", \"BASE\", 0, \"Base\")\n\tmodDB:NewMod(\"ChallengerChargesMax\", \"BASE\", 0, \"Base\")\n\tmodDB:NewMod(\"BlitzChargesMax\", \"BASE\", 0, \"Base\")\n\tmodDB:NewMod(\"InspirationChargesMax\", \"BASE\", 5, \"Base\")\n\tmodDB:NewMod(\"CrabBarriersMax\", \"BASE\", 0, \"Base\")\n\tmodDB:NewMod(\"BrutalChargesMax\", \"BASE\", 0, \"Base\")\n\tmodDB:NewMod(\"AbsorptionChargesMax\", \"BASE\", 0, \"Base\")\n\tmodDB:NewMod(\"AfflictionChargesMax\", \"BASE\", 0, \"Base\")\n\tmodDB:NewMod(\"BloodChargesMax\", \"BASE\", 5, \"Base\")\n\tmodDB:NewMod(\"MaxLifeLeechRate\", \"BASE\", 20, \"Base\")\n\tmodDB:NewMod(\"MaxManaLeechRate\", \"BASE\", 20, \"Base\")\n\tmodDB:NewMod(\"ImpaleStacksMax\", \"BASE\", 5, \"Base\")\n\tmodDB:NewMod(\"IgniteStacksMax\", \"BASE\", 1, \"Base\")\n\tmodDB:NewMod(\"BleedStacksMax\", \"BASE\", 1, \"Base\")\n\tmodDB:NewMod(\"PoisonStacksMax\", \"BASE\", 1, \"Base\")\n\tmodDB:NewMod(\"MaxEnergyShieldLeechRate\", \"BASE\", 10, \"Base\")\n\tmodDB:NewMod(\"MaxLifeLeechInstance\", \"BASE\", 10, \"Base\")\n\tmodDB:NewMod(\"MaxManaLeechInstance\", \"BASE\", 10, \"Base\")\n\tmodDB:NewMod(\"MaxEnergyShieldLeechInstance\", \"BASE\", 10, \"Base\")\n\tmodDB:NewMod(\"TrapThrowingTime\", \"BASE\", 0.6, \"Base\")\n\tmodDB:NewMod(\"MineLayingTime\", \"BASE\", 0.3, \"Base\")\n\tmodDB:NewMod(\"WarcryCastTime\", \"BASE\", 0.8, \"Base\")\n\tmodDB:NewMod(\"TotemPlacementTime\", \"BASE\", 0.6, \"Base\")\n\tmodDB:NewMod(\"BallistaPlacementTime\", \"BASE\", 0.35, \"Base\")\n\tmodDB:NewMod(\"ShockStacksMax\", \"BASE\", 1, \"Base\")\n\tmodDB:NewMod(\"ChillStacksMax\", \"BASE\", 1, \"Base\")\n\tmodDB:NewMod(\"ScorchStacksMax\", \"BASE\", 1, \"Base\")\n\tmodDB:NewMod(\"MovementSpeed\", \"INC\", -30, \"Base\", { type = \"Condition\", var = \"Maimed\" })\n\tmodDB:NewMod(\"Evasion\", \"INC\", -15, \"Base\", { type = \"Condition\", var = \"Maimed\" })\n\tmodDB:NewMod(\"MovementSpeed\", \"INC\", -30, \"Base\", { type = \"Condition\", var = \"Hindered\" })\n\tmodDB:NewMod(\"AilmentThreshold\", \"BASE\", 50, \"Base\", { type = \"PercentStat\", stat = \"Life\", percent = 1 })\n\tmodDB:NewMod(\"PoiseThreshold\", \"BASE\", 50, \"Base\", { type = \"PercentStat\", stat = \"Life\", percent = 1 })\n\tmodDB:NewMod(\"DamageTaken\", \"INC\", 10, \"Base\", { type = \"Condition\", var = \"Intimidated\"})\n\tmodDB:NewMod(\"DamageTaken\", \"INC\", 10, \"Base\", { type = \"Condition\", var = \"Intimidated\", neg = true}, { type = \"Condition\", var = \"Party:Intimidated\"})\n\tmodDB:NewMod(\"Damage\", \"INC\", -10, \"Base\", { type = \"Condition\", var = \"Intimidated\"})\n\tmodDB:NewMod(\"Damage\", \"INC\", -10, \"Base\", { type = \"Condition\", var = \"Intimidated\", neg = true}, { type = \"Condition\", var = \"Party:Intimidated\"})\n\tmodDB:NewMod(\"DamageTaken\", \"INC\", 10, \"Base\", ModFlag.Spell, { type = \"Condition\", var = \"Unnerved\"})\n\tmodDB:NewMod(\"DamageTaken\", \"INC\", 10, \"Base\", ModFlag.Spell, { type = \"Condition\", var = \"Unnerved\", neg = true}, { type = \"Condition\", var = \"Party:Unnerved\"})\n\tmodDB:NewMod(\"Damage\", \"MORE\", -10, \"Base\", { type = \"Condition\", var = \"Debilitated\"})\n\tmodDB:NewMod(\"DamageGainAsRandom\", \"BASE\", 2, \"Faerie Fire\", { type = \"Multiplier\", var = \"FaerieFireStack\", limit = 10, actor = \"enemy\" })\n\tmodDB:NewMod(\"Condition:Burning\", \"FLAG\", true, \"Base\", { type = \"IgnoreCond\" }, { type = \"Condition\", var = \"Ignited\" })\n\tmodDB:NewMod(\"Condition:Poisoned\", \"FLAG\", true, \"Base\", { type = \"IgnoreCond\" }, { type = \"MultiplierThreshold\", var = \"PoisonStack\", threshold = 1 })\n\tmodDB:NewMod(\"ShockBase\", \"BASE\", data.gameConstants[\"BaseShockMagnitude\"], \"Base\", { type = \"ActorCondition\", actor = \"enemy\", var = \"Shocked\" })\n\tmodDB:NewMod(\"ChillBase\", \"BASE\", 30, \"Base\", { type = \"ActorCondition\", actor = \"enemy\", var = \"Chilled\" })\n\tmodDB:NewMod(\"Blind\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"Blinded\" })\n\tmodDB:NewMod(\"Chill\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"Chilled\" })\n\tmodDB:NewMod(\"Freeze\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"Frozen\" })\n\tmodDB:NewMod(\"Fortify\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"Fortify\" })\n\tmodDB:NewMod(\"Fortified\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"Fortified\" })\n\tmodDB:NewMod(\"Fanaticism\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"Fanaticism\" })\n\tmodDB:NewMod(\"Onslaught\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"Onslaught\" })\n\tmodDB:NewMod(\"UnholyMight\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"UnholyMight\" })\n\tmodDB:NewMod(\"ChaoticMight\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"ChaoticMight\" })\n\tmodDB:NewMod(\"Adrenaline\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"Adrenaline\" })\n\tmodDB:NewMod(\"LesserMassiveShrine\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"LesserMassiveShrine\" })\n\tmodDB:NewMod(\"LesserBrutalShrine\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"LesserBrutalShrine\" })\n\tmodDB:NewMod(\"DiamondShrine\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"DiamondShrine\" })\n\tmodDB:NewMod(\"MassiveShrine\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"MassiveShrine\" })\n\tmodDB:NewMod(\"AlchemistsGenius\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"AlchemistsGenius\" })\n\tmodDB:NewMod(\"LuckyHits\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"LuckyHits\" })\n\tmodDB:NewMod(\"HeavyStunBuildup\", \"MORE\", 50, \"Base\", { type = \"Condition\", var = \"Dazed\"})\n\tmodDB:NewMod(\"ColdCannotHeavyStun\", \"FLAG\", true)\n\tmodDB:NewMod(\"Convergence\", \"FLAG\", true, \"Base\", { type = \"Condition\", var = \"Convergence\" })\n\tmodDB:NewMod(\"PhysicalDamageReduction\", \"BASE\", -15, \"Base\", { type = \"Condition\", var = \"Crushed\" })\n\tmodDB:NewMod(\"CritChanceCap\", \"BASE\", 100, \"Base\")\n\tmodDB:NewMod(\"PresenceRadius\", \"BASE\", data.characterConstants[\"base_presence_radius\"], \"Base\")\n\tmodDB:NewMod(\"SurroundedRadius\", \"BASE\", data.misc.SurroundedRadiusBase, \"Base\")\n\tmodDB:NewMod(\"SurroundedMinimum\", \"BASE\", data.gameConstants[\"BaseRequiredEnemiesToBeConsideredSurrounded\"], \"Base\")\n\tmodDB.conditions[\"Buffed\"] = env.mode_buffs\n\tmodDB.conditions[\"Combat\"] = env.mode_combat\n\tmodDB.conditions[\"Effective\"] = env.mode_effective\nend\n"
+    },
+    {
+      "role": "minion-initializer",
+      "source_path": "src/Modules/CalcPerform.lua",
+      "first": 1049,
+      "last": 1156,
+      "sha256": "68d8bdd02f145fad0ad2c81a90eda002c905222399c2cf12924630d5da003a38",
+      "body": "local function initMinionModDB(env, activeSkill)\n\tlocal skillFlags\n\tif env.mode == \"CALCS\" then\n\t\tskillFlags = activeSkill.activeEffect.statSetCalcs.skillFlags\n\telse\n\t\tskillFlags = activeSkill.activeEffect.statSet.skillFlags\n\tend\n\tlocal modDB = env.modDB\n\tlocal minion = activeSkill.minion\n\tminion.modDB.multipliers[\"Level\"] = minion.level\n\tcalcs.initModDB(env, minion.modDB)\n\tlocal baseLife = minion.lifeTable[minion.level] * minion.minionData.life\n\tif minion.hostile then\n\t\tbaseLife = baseLife * (env.data.mapLevelLifeMult[env.enemyLevel] or 1)\n\tend\n\tminion.modDB:NewMod(\"Life\", \"BASE\", m_floor(baseLife), \"Base\")\n\tif minion.minionData.energyShield then\n\t\tminion.modDB:NewMod(\"LifeConvertToEnergyShield\", \"BASE\", minion.minionData.energyShield * 100, \"Base\")\n\tend\n\t--Armour formula is math.floor((10 + 2 * level) * 1.067 ^ level)\n\tminion.modDB:NewMod(\"Armour\", \"BASE\", round(env.data.monsterArmourTable[minion.level] * (minion.minionData.armour or 1)), \"Base\")\n\t--Evasion formula is math.floor((50 + 16 * level + 16 * level * (MonsterType.Evasion / 100)) * (1.0212 ^ level)\n\tminion.modDB:NewMod(\"Evasion\", \"BASE\", round(env.data.monsterEvasionTable[minion.level] * (minion.minionData.evasion or 1)), \"Base\")\n\tif modDB:Flag(nil, \"MinionAccuracyEqualsAccuracy\") then\n\t\tminion.modDB:NewMod(\"Accuracy\", \"BASE\", calcLib.val(modDB, \"Accuracy\") + calcLib.val(modDB, \"Dex\") * (modDB:Override(nil, \"DexAccBonusOverride\") or data.misc.AccuracyPerDexBase), \"Player\")\n\telse\n\t\t-- Minions no longer need Accuracy as of patch 0.3.0\n\t\tminion.modDB:NewMod(\"CannotBeEvaded\", \"FLAG\", 1, \"Minion Attacks always hit\")\n\tend\n\tminion.modDB:NewMod(\"CritMultiplier\", \"BASE\", env.data.monsterConstants[\"base_critical_hit_damage_bonus\"] + env.data.playerMinionIntrinsicStats[\"base_critical_hit_damage_bonus\"], \"Base\")\n\tif skillFlags.summonBeast then\n\t\tminion.modDB:NewMod(\"FireResist\", \"BASE\", minion.minionData.companionFireResist, \"Base\")\n\t\tminion.modDB:NewMod(\"ColdResist\", \"BASE\", minion.minionData.companionColdResist, \"Base\")\n\t\tminion.modDB:NewMod(\"LightningResist\", \"BASE\", minion.minionData.companionLightningResist, \"Base\")\n\t\tminion.modDB:NewMod(\"ChaosResist\", \"BASE\", minion.minionData.companionChaosResist, \"Base\")\n\telse\n\t\tminion.modDB:NewMod(\"FireResist\", \"BASE\", minion.minionData.fireResist, \"Base\")\n\t\tminion.modDB:NewMod(\"ColdResist\", \"BASE\", minion.minionData.coldResist, \"Base\")\n\t\tminion.modDB:NewMod(\"LightningResist\", \"BASE\", minion.minionData.lightningResist, \"Base\")\n\t\tminion.modDB:NewMod(\"ChaosResist\", \"BASE\", minion.minionData.chaosResist, \"Base\")\n\tend\n\tminion.modDB:NewMod(\"ProjectileCount\", \"BASE\", 1, \"Base\")\n\tminion.modDB:NewMod(\"PhysicalHeavyStunBuildup\", \"MORE\", data.monsterConstants[\"physical_hit_damage_stun_multiplier_+%_final_from_ot\"], \"Physical Damage\")\n\tminion.modDB:NewMod(\"EnemyHeavyStunBuildup\", \"MORE\", data.monsterConstants[\"melee_hit_damage_stun_multiplier_+%_final_from_ot\"], \"Melee Damage\", ModFlag.Melee)\n\tminion.modDB:NewMod(\"Damage\", \"MORE\", minion.hiddenDamageFixup * 100, \"Hidden Level Scaling\")\n\tfor _, mod in ipairs(minion.minionData.modList) do\n\t\tminion.modDB:AddMod(mod)\n\tend\n\tfor _, mod in ipairs(activeSkill.extraSkillModList) do\n\t\tminion.modDB:AddMod(mod)\n\tend\n\tif env.talismanModList then\n\t\t-- Adding mods provided by \"Necromantic Talisman\"\n\t\tminion.modDB:AddList(env.talismanModList)\n\tend\n\tif env.theIronMass and minion.type == \"RaisedSkeleton\" then\n\t\tminion.modDB:AddList(env.theIronMass)\n\tend\n\tif activeSkill.skillData.minionUseBowAndQuiver then\n\t\tif env.player.weaponData1.type == \"Bow\" then\n\t\t\tminion.modDB:AddList(env.player.itemList[\"Weapon 1\"].slotModList[1])\n\t\tend\n\t\tif env.player.itemList[\"Weapon 2\"] and env.player.itemList[\"Weapon 2\"].type == \"Quiver\" then\n\t\t\tlocal quiverEffectMod = env.player.modDB:Sum(\"INC\", nil, \"EffectOfBonusesFromQuiver\") / 100\n\t\t\tif quiverEffectMod > 0 then\n\t\t\t\tfor _, mod in ipairs(env.player.itemList[\"Weapon 2\"].modList) do\n\t\t\t\t\tlocal modCopy = copyTable(mod)\n\t\t\t\t\tmodCopy.source = \"Many Sources:\" .. tostring(quiverEffectMod * 100) .. \"% Quiver Bonus Effect\"\n\t\t\t\t\tminion.modDB:ScaleAddMod(modCopy, quiverEffectMod)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif minion.itemSet or minion.uses then\n\t\tfor slotName, slot in pairs(env.build.itemsTab.slots) do\n\t\t\tif minion.uses[slotName] then\n\t\t\t\tlocal item\n\t\t\t\tif minion.itemSet then\n\t\t\t\t\tif slot.weaponSet == 1 and minion.itemSet.useSecondWeaponSet then\n\t\t\t\t\t\tslotName = slotName .. \" Swap\"\n\t\t\t\t\tend\n\t\t\t\t\titem = env.build.itemsTab.items[minion.itemSet[slotName].selItemId]\n\t\t\t\telse\n\t\t\t\t\titem = env.player.itemList[slotName]\n\t\t\t\tend\n\t\t\t\tif item then\n\t\t\t\t\tminion.itemList[slotName] = item\n\t\t\t\t\tminion.modDB:AddList(item.modList or item.slotModList[slot.slotNum])\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif modDB:Flag(nil, \"StrengthAddedToMinions\") then\n\t\tminion.modDB:NewMod(\"Str\", \"BASE\", round(calcLib.val(modDB, \"Str\")), \"Player\")\n\tend\n\tif modDB:Flag(nil, \"StrengthAddedToCompanions\") and activeSkill.skillTypes[SkillType.Companion] then\n\t\tminion.modDB:NewMod(\"Str\", \"BASE\", round(calcLib.val(modDB, \"Str\")), \"Sturdy Ally\")\n\tend\n\tif modDB:Flag(nil, \"HalfStrengthAddedToMinions\") then\n\t\tminion.modDB:NewMod(\"Str\", \"BASE\", round(calcLib.val(modDB, \"Str\") * 0.5), \"Player\")\n\tend\n\tif modDB:Flag(nil, \"DexterityAddedToMinions\") then\n\t\tminion.modDB:NewMod(\"Dex\", \"BASE\", round(calcLib.val(modDB, \"Dex\")), \"Dead can Dance\")\n\tend\n\tif modDB:Flag(nil, \"DexterityAddedToCompanions\") and activeSkill.skillTypes[SkillType.Companion] then\n\t\tminion.modDB:NewMod(\"Dex\", \"BASE\", round(calcLib.val(modDB, \"Dex\")), \"Tandem Assault\")\n\tend\nend\n"
+    },
+    {
+      "role": "shared-crit-constants",
+      "source_path": "src/Data/Misc.lua",
+      "first": 240,
+      "last": 290,
+      "sha256": "1ce2638a1989cb036667b62498e588f5e3992d030b1b45eba1d4ba82603d2cc2",
+      "body": "\t[\"dodge_roll_sprint_turn_rate\"] = 150,\n\t[\"sprint_movement_speed_+%\"] = 50,\n\t[\"sprint_end_stun_linger_duration_ms\"] = 200,\n\t[\"no_extra_bleeding_damage_while_moving\"] = 1,\n\t[\"base_speed\"] = 37,\n}\n-- From Metadata/Monsters/Monster.ot\ndata.monsterConstants = {\n\t[\"item_drop_slots\"] = 1,\n\t[\"energy_shield_recharge_rate_per_minute_%\"] = 750,\n\t[\"base_maximum_mana\"] = 200,\n\t[\"maximum_physical_damage_reduction_%\"] = 75,\n\t[\"base_maximum_all_resistances_%\"] = 75,\n\t[\"monster_base_flask_charges_percent_of_monster_power\"] = 50,\n\t[\"base_critical_hit_damage_bonus\"] = 30,\n\t[\"max_endurance_charges\"] = 3,\n\t[\"max_frenzy_charges\"] = 3,\n\t[\"max_power_charges\"] = 3,\n\t[\"object_inherent_base_maximum_block_%_from_ot\"] = 50,\n\t[\"movement_velocity_cap\"] = 128,\n\t[\"max_azurite_debuff_stacks\"] = 10,\n\t[\"ignore_skill_weapon_restrictions\"] = 1,\n\t[\"melee_hit_damage_stun_multiplier_+%_final_from_ot\"] = 33,\n\t[\"physical_hit_damage_stun_multiplier_+%_final_from_ot\"] = 100,\n\t[\"scale_melee_range_to_actor_scale\"] = 1,\n\t[\"use_melee_pattern_range\"] = 1,\n\t[\"melee_swing_not_scaled_by_area_modifiers\"] = 1,\n\t[\"actor_scale_+%_limit\"] = 200,\n\t[\"base_heavy_stun_duration_ms\"] = 2000,\n\t[\"melee_defer_damage_prediction\"] = 1,\n\t[\"poise_decay_delay_ms\"] = 8000,\n\t[\"poise_decay_%_per_second\"] = 5,\n\t[\"base_block_angle_degrees\"] = 180,\n\t[\"action_attack_or_cast_time_uses_animation_length\"] = 1,\n\t[\"slow_potency_+%_final_per_additional_player\"] = -10,\n\t[\"check_for_targets_between_initiator_and_projectile_source\"] = 1,\n\t[\"maximum_life_+%_final_per_additional_player\"] = 50,\n\t[\"maximum_energy_shield_+%_final_per_additional_player\"] = 50,\n\t[\"poise_threshold_+%_final_per_additional_player\"] = 50,\n\t[\"stun_base_duration_override_ms\"] = 500,\n\t[\"bleeding_moving_damage_%_of_base_override\"] = 1,\n}\n-- From PlayerMinionIntrinsicStats.dat\ndata.playerMinionIntrinsicStats = {\n\t[\"stun_base_duration_override_ms\"] = 500,\n\t[\"global_always_hit\"] = 1,\n\t[\"base_critical_hit_damage_bonus\"] = 70,\n\t[\"attack_damage_final_permyriad_per_rage\"] = 100,\n}\n-- From MonsterVarieties.dat combined with SkillTotemVariations.dat\ndata.totemLifeMult = { [1] = 1, [2] = 1, [3] = 1, [5] = 1, [12] = 1, [18] = 1, [19] = 1, [22] = 1, [15] = 1.2, [23] = 1, [24] = 1, [25] = 1, [26] = 1, }\n"
+    },
+    {
+      "role": "critical-weakness-callbacks",
+      "source_path": "src/Modules/ConfigOptions.lua",
+      "first": 1908,
+      "last": 1913,
+      "sha256": "88a1ab5eb621759098407653716028cbc953c2de89f242427924d17bb44e70eb",
+      "body": "\t{ var = \"conditionEnemyCriticalWeakness\", type = \"check\", label = \"Is the enemy Critically Weak\", ifFlag = \"ApplyCriticalWeakness\", tooltip = \"Hits against Critically Weak enemies have up to +10% Critical Strike Chance.\\nThis option will also allow you to input the effect of Critical Weakness.\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"Condition:ApplyCriticalWeakness\", \"FLAG\", val, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\tend },\n\t{ var = \"enemyCriticalWeaknessStacks\", type = \"count\", label = \"Critical weakness stacks:\", ifOption = \"conditionEnemyCriticalWeakness\", tooltip = \"Each stack of critical weakness applies +0.5% to critical strike chance against the affected target\", defaultPlaceholderState = 20, apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"SelfCritChance\", \"BASE\", m_max(m_min(val or 20, 20), 0) / 2, \"Critical Weakness\", { type = \"Condition\", var = \"ApplyCriticalWeakness\" })\n\tend },\n"
+    },
+    {
+      "role": "config-dispatch",
+      "source_path": "src/Classes/ConfigTab.lua",
+      "first": 1174,
+      "last": 1200,
+      "sha256": "27700b57c83705c0ccd01d313f6aa162a250b7c5b98e3681c676f52d5c55ce9b",
+      "body": "\tlocal input = self.configSets[self.activeConfigSetId].input\n\tlocal placeholder = self.configSets[self.activeConfigSetId].placeholder\n\tself:UpdateLevel() -- enemy level handled here because it's needed to correctly set boss stats\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.apply then\n\t\t\tif varData.type == \"check\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(true, modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"count\" or varData.type == \"integer\" or varData.type == \"countAllowZero\" or varData.type == \"float\" then\n\t\t\t\tif input[varData.var] and (input[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\telseif placeholder[varData.var] and (placeholder[varData.var] ~= 0 or varData.type ~= \"count\") then\n\t\t\t\t\tvarData.apply(placeholder[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"list\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\telseif varData.type == \"text\" then\n\t\t\t\tif input[varData.var] then\n\t\t\t\t\tvarData.apply(input[varData.var], modList, enemyModList, self.build)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\t-- Apply Custom Modifier groups\n"
+    },
+    {
+      "role": "fresh-config-constructor",
+      "source_path": "src/Classes/ConfigTab.lua",
+      "first": 1317,
+      "last": 1334,
+      "sha256": "60ff84266cd7f571d1b199bf0dae52509d516d61c1bf8108131029fef2724dd3",
+      "body": "function ConfigTabClass:CreateConfigSet(configSetId, title)\n\tlocal configSet = { id = configSetId, title = title, input = {}, placeholder = {}, customModsList = { { title = \"Default\", enabled = true, text = \"\" } } }\n\tif not configSetId then\n\t\tconfigSet.id = #self.configSets + 1\n\tend\n\t-- there are default values for input and placeholder that every new config set needs to have\n\tfor _, varData in ipairs(varList) do\n\t\tif varData.var then\n\t\t\tconfigSet.input[varData.var] = varData.defaultState\n\t\t\tconfigSet.placeholder[varData.var] = varData.defaultPlaceholderState\n\t\t\tif varData.defaultIndex then\n\t\t\t\tconfigSet.input[varData.var] = varData.list[varData.defaultIndex].val\n\t\t\tend\n\t\tend\n\tend\n\tself.configSets[configSet.id] = configSet\n\treturn configSet\nend\n"
+    },
+    {
+      "role": "more-dispatch",
+      "source_path": "src/Classes/ModStore.lua",
+      "first": 257,
+      "last": 276,
+      "sha256": "a92805fe7a8c524c178446f0570b60c59117fae4b7fb1a81e02af5f3bf39a824",
+      "body": "\n---@param cfg? ModCfg\n---@param ... string  Mod names to query. Maximum 8 names due to JIT performance concerns.\n---@return number\nfunction ModStoreClass:More(cfg, ...)\n\tlocal flags, keywordFlags = 0, 0\n\tlocal source\n\tif cfg then\n\t\tflags = cfg.flags or 0\n\t\tkeywordFlags = cfg.keywordFlags or 0\n\t\tsource = cfg.source\n\tend\n\tlocal n = select('#', ...)\n\tif n == 1 then\n\t\tlocal arg = ...\n\t\treturn self:MoreInternal(self, cfg, flags, keywordFlags, source, arg)\n\tend\n\tlocal n1, n2, n3, n4, n5, n6, n7, n8 = ...\n\treturn self:MoreInternalMulti(self, cfg, flags, keywordFlags, source, n, n1, n2, n3, n4, n5, n6, n7, n8)\nend\n"
+    },
+    {
+      "role": "condition-dispatch",
+      "source_path": "src/Classes/ModStore.lua",
+      "first": 405,
+      "last": 415,
+      "sha256": "7a04712f104a09c0879b78fc7cbe65badb2b0e1d32f99e7aeaef9c7eece8f5b7",
+      "body": "---@param var string\n---@param cfg? ModCfg\n---@param noMod? boolean\n---@return boolean\nfunction ModStoreClass:GetCondition(var, cfg, noMod)\n\tif (cfg and cfg.overrideCond and cfg.overrideCond[var] ~= nil) then\n\t\treturn cfg.overrideCond[var]\n\telse\n\t\treturn  self.conditions[var] or (self.parent and self.parent:GetCondition(var, cfg, true)) or (not noMod and self:Flag(cfg, conditionName[var]))\n\tend\nend\n"
+    },
+    {
+      "role": "condition-tag",
+      "source_path": "src/Classes/ModStore.lua",
+      "first": 742,
+      "last": 775,
+      "sha256": "f681b697542eaeab64eb62a89d6d9915a769dbd35161cc9f4c30f3a5890f0db1",
+      "body": "\t\telseif tag.type == \"Condition\" then\n\t\t\tlocal match = false\n\t\t\tlocal allOneH = ((self.actor.weaponData1 and self.actor.weaponData1.countsAsAll1H) and self.actor.weaponData1) or ((self.actor.weaponData2 and self.actor.weaponData2.countsAsAll1H) and self.actor.weaponData2)\n\t\t\tif tag.varList then\n\t\t\t\tfor _, var in pairs(tag.varList) do\n\t\t\t\t\tif tag.neg and allOneH and allOneH[\"Added\"..var] ~= nil then\n\t\t\t\t\t\t-- Varunastra adds all using weapon conditions and that causes this condition to fail when it shouldn't\n\t\t\t\t\t\t-- if the condition was added by Varunastra then ignore, otherwise return as the tag condition is not satisfied\n\t\t\t\t\t\tif not allOneH[\"Added\"..var] then\n\t\t\t\t\t\t\treturn\n\t\t\t\t\t\tend\n\t\t\t\t\telseif GetCondition(self, var, cfg) or (cfg and cfg.skillCond and cfg.skillCond[var]) then\n\t\t\t\t\t\tmatch = true\n\t\t\t\t\t\tbreak\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\telse\n\t\t\t\tif tag.neg and allOneH and allOneH[\"Added\"..tag.var] ~= nil then\n\t\t\t\t\tif not allOneH[\"Added\"..tag.var] then\n\t\t\t\t\t\treturn\n\t\t\t\t\tend\n\t\t\t\telse\n\t\t\t\t\tmatch = GetCondition(self, tag.var, cfg) or (cfg and cfg.skillCond and cfg.skillCond[tag.var])\n\t\t\t\tend\n\t\t\tend\n\t\t\tif tag.neg then\n\t\t\t\tmatch = not match\n\t\t\tend\n\t\t\tif not match then\n\t\t\t\treturn\n\t\t\tend\n\t\telseif tag.type == \"ActorCondition\" then\n\t\t\tlocal match = false\n\t\t\tlocal target = self\n"
+    },
+    {
+      "role": "list-more-folds",
+      "source_path": "src/Classes/ModList.lua",
+      "first": 164,
+      "last": 227,
+      "sha256": "f074368d1e286100fc89d936e45c000bbb7d3e01ec8b4509c8a80ca02df21f88",
+      "body": "function ModListClass:MoreInternal(context, cfg, flags, keywordFlags, source, modName)\n\tlocal result = 1\n\tlocal modPrecision = nil\n\tlocal modResult = 1\n\tfor i = 1, #self do\n\t\tlocal mod = self[i]\n\t\tif mod.name == modName and mod.type == \"MORE\" and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\tif mod[1] then\n\t\t\t\tmodResult = modResult * (1 + (context:EvalMod(mod, cfg) or 0) / 100)\n\t\t\telse\n\t\t\t\tmodResult = modResult * (1 + mod.value / 100)\n\t\t\tend\n\t\t\tif modPrecision then\n\t\t\t\tmodPrecision = m_max(modPrecision, (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or modPrecision)\n\t\t\telse\n\t\t\t\tmodPrecision = (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or nil\n\t\t\tend\n\t\tend\n\tend\n\tif modPrecision then\n\t\tlocal power = 10 ^ modPrecision\n\t\tresult = math.floor(result * modResult * power) / power\n\telse\n\t\tresult = result * round(modResult, 2)\n\tend\n\tif self.parent then\n\t\tresult = result * self.parent:MoreInternal(context, cfg, flags, keywordFlags, source, modName)\n\tend\n\treturn result\nend\n\nfunction ModListClass:MoreInternalMulti(context, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tlocal result = 1\n\tlocal modPrecision = nil\n\tfor nameIndex = 1, argCount do\n\t\tlocal modName = nameAt(nameIndex, n1, n2, n3, n4, n5, n6, n7, n8)\n\t\tlocal modResult = 1\n\t\tfor i = 1, #self do\n\t\t\tlocal mod = self[i]\n\t\t\tif mod.name == modName and mod.type == \"MORE\" and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\t\tif mod[1] then\n\t\t\t\t\tmodResult = modResult * (1 + (context:EvalMod(mod, cfg) or 0) / 100)\n\t\t\t\telse\n\t\t\t\t\tmodResult = modResult * (1 + mod.value / 100)\n\t\t\t\tend\n\t\t\t\tif modPrecision then\n\t\t\t\t\tmodPrecision = m_max(modPrecision, (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or modPrecision)\n\t\t\t\telse\n\t\t\t\t\tmodPrecision = (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or nil\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\tif modPrecision then\n\t\t\tlocal power = 10 ^ modPrecision\n\t\t\tresult = math.floor(result * modResult * power) / power\n\t\telse\n\t\t\tresult = result * round(modResult, 2)\n\t\tend\n\tend\n\tif self.parent then\n\t\tresult = result * self.parent:MoreInternalMulti(context, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tend\n\treturn result\nend\n"
+    },
+    {
+      "role": "database-more-folds",
+      "source_path": "src/Classes/ModDB.lua",
+      "first": 214,
+      "last": 295,
+      "sha256": "6a0065e5bbc8c1113a5aa30014ca279937a23a4089f596d303f9b560571ccc94",
+      "body": "function ModDBClass:MoreInternal(context, cfg, flags, keywordFlags, source, modName)\n\tlocal result = 1\n\tlocal modPrecision = nil\n\tlocal globalLimits\n\tlocal modList = self.mods[modName]\n\tlocal modResult = 1\n\tif modList then\n\t\tfor i = 1, #modList do\n\t\t\tlocal mod = modList[i]\n\t\t\tif mod.type == \"MORE\" and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\t\tlocal value\n\t\t\t\tif mod[1] then\n\t\t\t\t\tif not globalLimits then\n\t\t\t\t\t\tglobalLimits = {}\n\t\t\t\t\tend\n\t\t\t\t\tvalue = context:EvalMod(mod, cfg, globalLimits) or 0\n\t\t\t\telse\n\t\t\t\t\tvalue = mod.value or 0\n\t\t\t\tend\n\t\t\t\tmodResult = modResult * (1 + value / 100)\n\t\t\t\tif modPrecision then\n\t\t\t\t\tmodPrecision = m_max(modPrecision, (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or modPrecision)\n\t\t\t\telse\n\t\t\t\t\tmodPrecision = (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or nil\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif modPrecision then\n\t\tlocal power = 10 ^ modPrecision\n\t\tresult = math.floor(result * modResult * power) / power\n\telse\n\t\tresult = result * round(modResult, 2)\n\tend\n\tif self.parent then\n\t\tresult = result * self.parent:MoreInternal(context, cfg, flags, keywordFlags, source, modName)\n\tend\n\treturn result\nend\n\nfunction ModDBClass:MoreInternalMulti(context, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tlocal result = 1\n\tlocal modPrecision = nil\n\tlocal globalLimits\n\tfor nameIndex = 1, argCount do\n\t\tlocal modName = nameAt(nameIndex, n1, n2, n3, n4, n5, n6, n7, n8)\n\t\tlocal modList = self.mods[modName]\n\t\tlocal modResult = 1\n\t\tif modList then\n\t\t\tfor i = 1, #modList do\n\t\t\t\tlocal mod = modList[i]\n\t\t\t\tif mod.type == \"MORE\" and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\t\t\tlocal value\n\t\t\t\t\tif mod[1] then\n\t\t\t\t\t\tif not globalLimits then\n\t\t\t\t\t\t\tglobalLimits = {}\n\t\t\t\t\t\tend\n\t\t\t\t\t\tvalue = context:EvalMod(mod, cfg, globalLimits) or 0\n\t\t\t\t\telse\n\t\t\t\t\t\tvalue = mod.value or 0\n\t\t\t\t\tend\n\t\t\t\t\tmodResult = modResult * (1 + value / 100)\n\t\t\t\t\tif modPrecision then\n\t\t\t\t\t\tmodPrecision = m_max(modPrecision, (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or modPrecision)\n\t\t\t\t\telse\n\t\t\t\t\t\tmodPrecision = (data.highPrecisionMods[mod.name] and data.highPrecisionMods[mod.name][mod.type]) or nil\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\t\tif modPrecision then\n\t\t\tlocal power = 10 ^ modPrecision\n\t\t\tresult = math.floor(result * modResult * power) / power\n\t\telse\n\t\t\tresult = result * round(modResult, 2)\n\t\tend\n\tend\n\tif self.parent then\n\t\tresult = result * self.parent:MoreInternalMulti(context, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tend\n\treturn result\nend\n"
+    },
+    {
+      "role": "source-decimal-rounding",
+      "source_path": "src/Modules/Common.lua",
+      "first": 722,
+      "last": 728,
+      "sha256": "90585272c160e302702e5071f1ad55c649b8da02e83ef2d776d89a449250e1f2",
+      "body": "function round(val, dec)\n\tif dec then\n\t\treturn m_floor(val * 10 ^ dec + 0.5) / 10 ^ dec\n\telse\n\t\treturn m_floor(val + 0.5)\n\tend\nend\n"
+    },
+    {
+      "role": "profane-ground-callback",
+      "source_path": "src/Modules/ConfigOptions.lua",
+      "first": 1934,
+      "last": 1938,
+      "sha256": "1f84eed6275fdb8b91c5163fc835e9f85a8e0c52b7e71c3be5ff09b591ab498d",
+      "body": "\t{ var = \"conditionEnemyOnProfaneGround\", type = \"check\", label = \"Is the enemy on Profane Ground?\", ifFlag = \"Condition:CreateProfaneGround\", tooltip = \"Enemies on Profane Ground receive the following modifiers:\\n\\t10% increased Effect of Curses\\n\\t100% increased chance to be Critically Hit\", apply = function(val, modList, enemyModList)\n\t\tenemyModList:NewMod(\"Condition:OnProfaneGround\", \"FLAG\", true, \"Config\", { type = \"Condition\", var = \"Effective\" })\n\t\tenemyModList:NewMod(\"CurseEffectOnSelf\", \"INC\", 10, \"Config\", { type = \"Condition\", var = \"OnProfaneGround\" })\n\t\tenemyModList:NewMod(\"SelfCritChance\", \"INC\", 100, \"Config\", { type = \"Condition\", var = \"OnProfaneGround\" })\n\tend },\n"
+    },
+    {
+      "role": "blue-support-crit-factory",
+      "source_path": "src/Modules/CalcOffence.lua",
+      "first": 836,
+      "last": 873,
+      "sha256": "fed85f8da45ad18932f4f20745e1342569579f1562b8139c2180567d2742533d",
+      "body": "\tif skillModList:Flag(nil, \"SkillDamageIncreasedPerRedSupport\") or\n\t\tskillModList:Flag(nil, \"SkillSpeedIncreasedPerGreenSupport\") or\n\t\tskillModList:Flag(nil, \"SkillCritChanceIncreasedPerBlueSupport\") then\n\n\t\tlocal redSupportCount = 0\n\t\tlocal greenSupportCount = 0\n\t\tlocal blueSupportCount = 0\n\t\tfor _, support in ipairs(activeSkill.supportList) do\n\t\t\tif support.gemData.grantedEffect.color == 1 then\n\t\t\t\tredSupportCount = redSupportCount + 1\n\t\t\telseif support.gemData.grantedEffect.color == 2 then\n\t\t\t\tgreenSupportCount = greenSupportCount + 1\n\t\t\telseif support.gemData.grantedEffect.color == 3 then\n\t\t\t\tblueSupportCount = blueSupportCount + 1\n\t\t\tend\n\t\tend\n\n\t\tlocal lookupModData = function(flag)\n\t\t\tlocal result = \tactor.modDB:Tabulate(\"FLAG\", nil, flag)\n\t\t\treturn { source = result[1].mod.source, value = result[1].mod.value }\n\t\tend\n\t\t-- Conditionally check each to avoid future issues if a mod is reused in isolation\n\t\tlocal modData = { source = nil, value = nil }\n\t\tif skillModList:Flag(nil, \"SkillDamageIncreasedPerRedSupport\") then\n\t\t\tmodData = lookupModData(\"SkillDamageIncreasedPerRedSupport\")\n\t\t\tskillModList:NewMod(\"Damage\", \"INC\", redSupportCount * modData.value, modData.source)\n\t\tend\n\t\tif skillModList:Flag(nil, \"SkillSpeedIncreasedPerGreenSupport\") then\n\t\t\tmodData = lookupModData(\"SkillSpeedIncreasedPerGreenSupport\")\n\t\t\tskillModList:NewMod(\"Speed\", \"INC\", greenSupportCount * modData.value, modData.source)\n\t\t\tskillModList:NewMod(\"WarcrySpeed\", \"INC\", greenSupportCount * modData.value, modData.source)\n\t\t\tskillModList:NewMod(\"TotemPlacementSpeed\", \"INC\", greenSupportCount * modData.value, modData.source)\n\t\tend\n\t\tif skillModList:Flag(nil, \"SkillCritChanceIncreasedPerBlueSupport\") then\n\t\t\tmodData = lookupModData(\"SkillCritChanceIncreasedPerBlueSupport\")\n\t\t\tskillModList:NewMod(\"CritChance\", \"INC\", blueSupportCount * modData.value, modData.source)\n\t\tend\n\tend\n"
+    },
+    {
+      "role": "seal-crit-factory",
+      "source_path": "src/Modules/CalcOffence.lua",
+      "first": 1291,
+      "last": 1336,
+      "sha256": "68fa90bf8c6c040f45d7b3b986f6859226b3b6d4eb9dfc001b674db7ab6bf4ac",
+      "body": "\tif skillModList:Flag(nil, \"HasSeals\") and not skillModList:Flag(nil, \"NoRepeatBonuses\") then\n\t\t-- Applies seal bonuses based on seal count\n\t\tlocal totalCastSpeed = 1 / activeSkill.activeEffect.grantedEffect.castTime * calcLib.mod(skillModList, skillCfg, \"Speed\")\n\t\toutput.SealCooldown = activeSkill.activeEffect.grantedEffect.castTime * skillModList:Sum(\"BASE\", skillCfg, \"SealGainFrequency\") / calcLib.mod(skillModList, skillCfg, \"SealGainFrequency\") / 100\n\t\toutput.SealMax = skillModList:Sum(\"BASE\", skillCfg, \"SealCount\")\n\t\toutput.TimeMaxSeals = output.SealCooldown * output.SealMax\n\n\t\tif skillModList:Flag(nil, \"DamageSeal\") then\n\t\t\toutput.AverageBurstHits = output.SealMax\n\t\tend\n\t\tif skillModList:Flag(nil, \"DamageSeal\") and not skillData.hitTimeOverride then\n\t\t\tlocal skillName = getSkillNameFromFlag(skillModList, \"DamageSeal\") or \"Support\"\n\t\t\tif skillModList:Flag(nil, \"UseMaxUnleash\") then\n\t\t\t\tfor i, value in ipairs(skillModList:Tabulate(\"INC\",  { }, \"MaxSealCrit\")) do\n\t\t\t\t\tlocal mod = value.mod\n\t\t\t\t\tskillModList:NewMod(\"CritChance\", \"INC\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))\n\t\t\t\tend\n\t\t\t\tenv.player.mainSkill.skillModList:NewMod(\"DPS\", \"MORE\", (output.SealMax * calcLib.mod(skillModList, skillCfg, \"SealRepeatPenalty\")) * 100, skillName)\n\t\t\t\tenv.player.mainSkill.skillData.hitTimeOverride = m_max(output.TimeMaxSeals, totalCastSpeed * 1.1)\n\t\t\telse\n\t\t\t\tenv.player.mainSkill.skillModList:NewMod(\"DPS\", \"MORE\", round(1 / output.SealCooldown / (totalCastSpeed * 1.1) * calcLib.mod(skillModList, skillCfg, \"SealRepeatPenalty\") * 100, 2), skillName)\n\t\t\tend\n\t\tend\n\t\tif skillModList:Flag(nil, \"AreaSeal\") then\n\t\t\tlocal skillName = getSkillNameFromFlag(skillModList, \"AreaSeal\") or \"Support\"\n\t\t\tlocal sealArea = (calcLib.mod(skillModList, skillCfg, \"SealRepeatPenalty\") - 1) * 100\n\t\t\tif skillModList:Flag(nil, \"UseMaxUnleash\") then\n\t\t\t\tenv.player.mainSkill.skillModList:NewMod(\"AreaOfEffect\", \"INC\", output.SealMax * sealArea, skillName)\n\t\t\t\tenv.player.mainSkill.skillData.hitTimeOverride = m_max(output.TimeMaxSeals, totalCastSpeed * 1.1)\n\t\t\telse\n\t\t\t\tenv.player.mainSkill.skillModList:NewMod(\"AreaOfEffect\", \"INC\", round(1 / output.SealCooldown / totalCastSpeed * sealArea, 2), skillName)\n\t\t\tend\n\t\tend\n\n\t\tif breakdown then\n\t\t\tbreakdown.SealGainTime = { }\n\t\t\tbreakdown.multiChain(breakdown.SealGainTime, {\n\t\t\t\tlabel = \"Gain frequency:\",\n\t\t\t\tbase = { \"%.2fs ^8(base cast time)\", activeSkill.activeEffect.grantedEffect.castTime },\n\t\t\t\t{ \"%.2f ^8(increased/reduced gain frequency)\", 1 + skillModList:Sum(\"INC\", skillCfg, \"SealGainFrequency\") / 100 },\n\t\t\t\t{ \"%d%% ^8(of cast time)\", skillModList:Sum(\"BASE\", skillCfg, \"SealGainFrequency\") },\n\t\t\t\t{ \"%.2f ^8(increased/reduced cast speed)\", 1 / calcLib.mod(skillModList, skillCfg, \"Speed\") },\n\t\t\t\ttotal = s_format(\"= %.2fs ^8per Seal\", output.SealCooldown),\n\t\t\t})\n\t\tend\n\tend\n"
+    },
+    {
+      "role": "diamond-shrine-crit-factory",
+      "source_path": "src/Modules/CalcPerform.lua",
+      "first": 460,
+      "last": 462,
+      "sha256": "9131a94016b88945265eaca2168cab4bedfcade74b594fd0c4696b6249f41fb3",
+      "body": "\t\tif modDB:Flag(nil, \"DiamondShrine\") then\n\t\t\tmodDB:NewMod(\"CritChance\", \"OVERRIDE\", 100, \"Diamond Shrine\")\n\t\tend\n"
+    }
+  ],
+  "license": {
+    "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/LICENSE.md",
+    "bytes": 67979,
+    "sha256": "22d2d075c1d361971764fbbd1e12e1485bdf35f0769ffac4eca8a79afc60dda8"
+  },
+  "scope": {
+    "published": false,
+    "native_coverage_authorized": false,
+    "source_supplier_complete": false,
+    "new_source_execution": false,
+    "source_values_are_runtime_inputs": false,
+    "positive_critical_controls_observed": false,
+    "anomalous_more_dispatch_accepted": false
+  }
+}

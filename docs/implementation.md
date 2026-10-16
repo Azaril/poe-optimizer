@@ -264,6 +264,30 @@ Weakness applicability and crit-specific dynamic producers remain unclosed.
 Additional supplier definitions/programs must be justified before allocation;
 no new runtime contract or source-argument compatibility behavior is approved.
 
+The [unpublished critical packet](../data/owned/poe2/3887ae68/outgoing-critical/README.md)
+now retains ten complete source files, 21 spans and 39 exact recipient/output
+comparisons. Eight ordinary offline checks pass, including callback append
+inverses, exact descriptor/binding roles and an independently pinned baseline
+append. The baseline comparison uses the existing typed RuleProgram after raw
+source authentication: six historical `1` quantities serialize as `1.0` in the
+current program, with no semantic difference. The initial strengthened check
+correctly rejected raw-JSON inequality; its failed log is retained before the
+typed repair in `runs/owned-outgoing-critical-source-02.log`. Strict target
+Clippy also passes (`runs/owned-outgoing-critical-clippy-01.log`).
+These checks do not compile or execute the critical consumer. Both owners and
+all sixteen query groups remain Partial, and no release is published.
+
+Its next source gate is one selected ordinary-critical domain check joining
+existing constructor, inherited, aura/flask, Party and late-helper proofs.
+Preserve the real conditional Diamond Shrine FLAG and Critical Weakness BASE
+supplier while proving exact activation and delivery; a Player capability is
+not the Enemy condition. Check the actual gates for Nightblade/claw forwarding,
+blue supports, seals, defence conversions, inevitable/bifurcating criticals and
+other special branches. Retained evidence appears sufficient; request another
+source capture only for a concrete missing observation. Passing this finite
+source gate still requires real native membership and execution after approval
+of the Encounter/query contract.
+
 **New shared blocker, October 15:** Encounter programs already emit Enemy
 contributions, but checked membership has no Encounter origin and numeric Enemy
 queries are rejected. This blocks both conditional Critical Weakness and the
