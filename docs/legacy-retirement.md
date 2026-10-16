@@ -1048,10 +1048,36 @@ native controls. This proves neither preceding arithmetic nor item, condition,
 transfer or override coverage. See the [Evasion packet](../data/owned/poe2/3887ae68/player-evasion-final/README.md)
 for its validation and remaining runtime requirements.
 
-The outgoing-critical draft's decimal-rounding chains are undergoing the same
-audit. Their multiply/divide stages and raw rounding domain need separate
-proof; the Evasion zero-floor proof does not apply to them. No source-specific
-rounding mode or blanket parity exception is accepted.
+The outgoing-critical draft now uses semantic rounding at all six decimal
+sites. Its separate signed raw-operand proof admits
+`[-2^52, 0.4999999999999999]` or `[0.5, 2^52]`; there is no zero floor to mask
+negative discrepancies. The original multiplication by 100 remains before the
+checked rounding, with division by 100 afterwards. Thirteen boundary controls
+and actual authored-node execution validate these fragments, not upstream
+accumulation or the complete critical consumer. See the
+[critical packet](../data/owned/poe2/3887ae68/outgoing-critical/README.md).
+No source-specific rounding mode or blanket parity exception is accepted.
+
+### Sand Djinn Critical Weakness responsibility (2026-10-15)
+
+The pinned `src/Data/Skills/other.lua:9822-9833` defines
+`SummonSandDjinnPlayer` (Kelari, the Tainted Sands) as a Command-only skill.
+Its constants at lines 9888-9891 include one
+`apply_X_stacks_of_critical_weakness_on_hit` stack. The complete archived body
+is retained at `configuration-demonflame/other.lua.gz`; the selected recipe at
+`self-flat-attack-damage/selected-domain.json#/skills/22/resolved/0` preserves
+that stat with an untranslated mapping. Its separately translated critical
+damage bonus 50 is a foreign skill contribution, not Sniper's bonus.
+
+This is an unresolved gameplay responsibility. A missing PoB modifier mapping
+establishes neither intended absence nor an inactive native Enemy condition.
+Review exact generated-skill participation, commanded action applicability and
+delivery/uptime before deciding whether it affects this scenario. Do not
+auto-enable Weakness, default its condition to false, copy a Lua nil mapping
+into runtime rules, or claim a PoB-defect exception. The selected-source critical
+certificate records this obligation but cannot close a candidate's Boolean
+membership. This investigation belongs to the first-build coverage work;
+changed candidates also require their own admitted mechanics.
 
 ### Other current compatibility investigations
 

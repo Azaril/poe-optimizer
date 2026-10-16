@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "kind": "outgoing-critical-semantic-rounding-review",
+  "source": "src/Modules/Common.lua:722-728",
+  "accepted_contract": "docs/owned-numeric-domain-proposal.md",
+  "semantic_operation": "scale to integer permyriads/hundredths; nearest ties positive at quantum1; divide by100",
+  "counterexamples": [
+    {
+      "scaled_operand": 0.49999999999999994,
+      "binary64_hex": "0x1.fffffffffffffp-2",
+      "native_nearest_ties_positive": 0.0,
+      "source_add_half_floor": 1,
+      "agree": false
+    },
+    {
+      "scaled_operand": 0.5,
+      "binary64_hex": "0x1.0000000000000p-1",
+      "native_nearest_ties_positive": 1.0,
+      "source_add_half_floor": 1,
+      "agree": true
+    },
+    {
+      "scaled_operand": 0.5000000000000001,
+      "binary64_hex": "0x1.0000000000001p-1",
+      "native_nearest_ties_positive": 1.0,
+      "source_add_half_floor": 1,
+      "agree": true
+    },
+    {
+      "scaled_operand": -0.5000000000000001,
+      "binary64_hex": "-0x1.0000000000001p-1",
+      "native_nearest_ties_positive": -1.0,
+      "source_add_half_floor": -1,
+      "agree": true
+    },
+    {
+      "scaled_operand": -0.5,
+      "binary64_hex": "-0x1.0000000000000p-1",
+      "native_nearest_ties_positive": 0.0,
+      "source_add_half_floor": 0,
+      "agree": true
+    },
+    {
+      "scaled_operand": -0.49999999999999994,
+      "binary64_hex": "-0x1.fffffffffffffp-2",
+      "native_nearest_ties_positive": 0.0,
+      "source_add_half_floor": 0,
+      "agree": true
+    },
+    {
+      "scaled_operand": 500.0,
+      "binary64_hex": "0x1.f400000000000p+8",
+      "native_nearest_ties_positive": 500.0,
+      "source_add_half_floor": 500,
+      "agree": true
+    },
+    {
+      "scaled_operand": 100.0,
+      "binary64_hex": "0x1.9000000000000p+6",
+      "native_nearest_ties_positive": 100.0,
+      "source_add_half_floor": 100,
+      "agree": true
+    },
+    {
+      "scaled_operand": 4503599627370496.0,
+      "binary64_hex": "0x1.0000000000000p+52",
+      "native_nearest_ties_positive": 4503599627370496.0,
+      "source_add_half_floor": 4503599627370496,
+      "agree": true
+    },
+    {
+      "scaled_operand": 4503599627370497.0,
+      "binary64_hex": "0x1.0000000000001p+52",
+      "native_nearest_ties_positive": 4503599627370497.0,
+      "source_add_half_floor": 4503599627370498,
+      "agree": false
+    },
+    {
+      "scaled_operand": -4503599627370497.0,
+      "binary64_hex": "-0x1.0000000000001p+52",
+      "native_nearest_ties_positive": -4503599627370497,
+      "source_add_half_floor": -4503599627370496,
+      "agree": false
+    },
+    {
+      "scaled_operand": -4503599627370496.0,
+      "binary64_hex": "-0x1.0000000000000p+52",
+      "native_nearest_ties_positive": -4503599627370496,
+      "source_add_half_floor": -4503599627370496,
+      "agree": true
+    },
+    {
+      "scaled_operand": 0.4999999999999999,
+      "binary64_hex": "0x1.ffffffffffffep-2",
+      "native_nearest_ties_positive": 0,
+      "source_add_half_floor": 0,
+      "agree": true
+    }
+  ],
+  "selected_ordinary_scaled_operands": {
+    "chance": 500,
+    "bonus": 100,
+    "each_empty_more_store": 100
+  },
+  "scope": {
+    "source_output_used_as_input": false,
+    "source_add_half_floor_is_native_rule": false,
+    "magnitude_bound_alone_proves_all_binary64_parity": false,
+    "positive_critical_supplier_domain_admitted": false
+  },
+  "required_checks": [
+    "Use native nearest_ties_positive; do not return source add-half/floor result.",
+    "Validate the actual scaled rounding operand, including bypass/lazy-path behavior.",
+    "Selected-domain source proof must establish intrinsic5, cap100, bonus100 and no active Weakness or other numeric suppliers.",
+    "Changed positive suppliers require their own bounded exactness proof; selected output samples cannot grant it."
+  ],
+  "admitted_scaled_intervals": [
+    [
+      -4503599627370496,
+      0.4999999999999999
+    ],
+    [
+      0.5,
+      4503599627370496
+    ]
+  ],
+  "rounding_sites": [
+    "chance-rounded-more-current",
+    "chance-rounded-more-actor",
+    "bonus-rounded-more-current",
+    "bonus-rounded-more-actor",
+    "rounded-chance",
+    "rounded-bonus"
+  ],
+  "proof": [
+    "All checks apply to the actual binary64 scaled operand. Existing multiplication and division remain in source order; this does not prove arbitrary upstream real-number or reducer parity.",
+    "For 0 <= x <= the second predecessor of 0.5, x+0.5 cannot round up to1; both results are0. The immediate predecessor of0.5 is deliberately excluded.",
+    "For 0.5 <= x <= 2^52, representable neighbors below a half boundary are far enough from its following integer that adding0.5 cannot round across that integer; actual half ties select the larger integer. The upper endpoint remains unchanged.",
+    "For -1 <= x <=0, subtraction/cancellation with0.5 cannot cross a floor boundary except at the actual half tie; both round to the same integer.",
+    "For -2^52 <= x <=-1, adding0.5 decreases magnitude. The result spacing is no larger than input spacing, so a representable neighbor of a half boundary cannot be rounded across its following integer. Exact negative half ties select the larger integer.",
+    "The outside odd integers +(2^52+1) and -(2^52+1) demonstrate why the magnitude limits are availability guards. No source arithmetic discrepancy becomes a native rule.",
+    "Each native nearest rounding is quantum1 on the scaled quantity followed by division by100, rather than quantum0.01 division that would change the binary scale operation."
+  ]
+}

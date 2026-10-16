@@ -7,7 +7,7 @@ use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, fs, io::Read, path::PathBuf, sync::OnceLock};
 
 const EVIDENCE: &str = "9312f5e6dc12ab7788bb8be94914cd3dfa5e10c251167bb9fc1f1e84e82c2805";
-const DOMAIN: &str = "d3e1e136614d2cfaef877de951ca861cc7b94946cc2da0ebdd0629cd3c43adc6";
+const DOMAIN: &str = "dc59c4e7e8549b0e47e4653889adcb30d9b8058bc4c2b3fef38996106eff1d32";
 const VECTORS: &str = "a82928e3ebd10c8190bc2df2f24ff0fe2de947720af63a0f78796e8687c54408";
 const REPORT: &str = "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935";
 const MANIFEST: &str = "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675";
@@ -68,7 +68,7 @@ pub fn data() -> PathBuf {
 pub fn read(name: &str) -> Value {
     serde_json::from_slice(&fs::read(data().join(name)).unwrap()).unwrap()
 }
-fn hash(bytes: &[u8]) -> String {
+pub(super) fn hash(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
 fn ensure(ok: bool, message: &str) -> Result<(), String> {
@@ -83,7 +83,7 @@ fn pinned(name: &str, sha: &str) -> Value {
     );
     serde_json::from_slice(&bytes).unwrap()
 }
-fn archive(pin: &Value, limit: u64) -> Result<Vec<u8>, String> {
+pub(super) fn archive(pin: &Value, limit: u64) -> Result<Vec<u8>, String> {
     let path = pin["path"].as_str().ok_or("archive path")?;
     let path = root().join(path);
     let size = fs::metadata(&path).map_err(|e| e.to_string())?.len();
@@ -103,6 +103,35 @@ fn expand(bytes: &[u8], limit: u64) -> Result<Vec<u8>, String> {
         .map_err(|e| e.to_string())?;
     ensure(raw.len() as u64 <= limit, "expanded evidence bound")?;
     Ok(raw)
+}
+
+/// Same exact manifest/archive authority used by the initial critical packet.
+/// Additional reviewed bodies are bounded offline evidence, never runtime data.
+pub(super) fn authenticated_body(pin: &Value) -> Result<String, String> {
+    let manifest: Value =
+        serde_json::from_slice(&archive(&authority().evidence["manifest"], 1024 * 1024)?)
+            .map_err(|e| e.to_string())?;
+    let rows: Vec<_> = manifest["files"]
+        .as_array()
+        .ok_or("source manifest files")?
+        .iter()
+        .filter(|row| row["path"] == pin["source_path"])
+        .collect();
+    ensure(
+        rows.len() == 1 && rows[0]["sha256"] == pin["sha256"],
+        "complete source manifest identity",
+    )?;
+    let encoded = archive(&pin["archive"], 2 * 1024 * 1024)?;
+    let raw = match pin["encoding"].as_str() {
+        Some("gzip") => expand(&encoded, 2 * 1024 * 1024)?,
+        Some("utf8") => encoded,
+        _ => return Err("source encoding".into()),
+    };
+    ensure(
+        pin["bytes"] == raw.len() && pin["sha256"] == hash(&raw),
+        "whole source body identity",
+    )?;
+    String::from_utf8(raw).map_err(|e| e.to_string())
 }
 
 struct Authority {
@@ -497,8 +526,8 @@ pub fn review_baseline(baseline: &Value) -> Result<(), String> {
             }}}
         }));
     for (id, key) in [
-        ("critical-chance-cap", "def.00000000000033a7"),
-        ("critical-damage-bonus", "def.00000000000033a8"),
+        ("critical-chance-cap", "def.00000000000033ac"),
+        ("critical-damage-bonus", "def.00000000000033ad"),
     ] {
         expected["effects"]
             .as_array_mut()
@@ -536,7 +565,7 @@ pub fn review_definitions(definitions: &Value, bindings: &Value) -> Result<(), S
     .enumerate()
     {
         let id = json!({"kind":"stat","namespace":{"game":"poe2","version":"owned-mechanics-v1"},
-            "key":format!("def.{:016x}", 0x33a5 + offset)});
+            "key":format!("def.{:016x}", 0x33aa + offset)});
         let value = if offset == 6 {
             json!({"kind":"boolean"})
         } else {

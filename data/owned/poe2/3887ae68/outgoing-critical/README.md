@@ -5,10 +5,10 @@ multiplier for the exact supplied Actor's Basic Attack. It is separate from the
 published incoming Player critical receivers. It has no publication helper,
 successor receipt, native coverage promotion, or whole-build completion claim.
 
-The seven reserved definitions are final Action chance `33a5`, final Action
-multiplier `33a6`, shared Actor cap `33a7`, shared Actor bonus `33a8`, Enemy
-SelfCritChance `33a9`, Enemy SelfCritMultiplier `33aa`, and Enemy
-ApplyCriticalWeakness `33ab`. Modifier channels admit the applicable Actor and
+The seven reserved definitions are final Action chance `33aa`, final Action
+multiplier `33ab`, shared Actor cap `33ac`, shared Actor bonus `33ad`, Enemy
+SelfCritChance `33ae`, Enemy SelfCritMultiplier `33af`, and Enemy
+ApplyCriticalWeakness `33b0`. Modifier channels admit the applicable Actor and
 Action targets; the final chance and multiplier writes remain on the exact
 Action. The cap and bonus are appended to the existing supplied-Actor baseline
 program. Their source constants are 100 and 30 + 70, respectively. There is no
@@ -26,8 +26,15 @@ query authority is also pending. All 16 query groups and both new owners remain
 Partial. This draft is not yet an executable admitted component.
 
 The ordinary nodes retain cap/override order, accuracy confirmation from
-`321c` (not hit chance after block `3220`), explicit numeric-selection absence,
-and source decimal rounding expressed as multiply, add one half, floor, divide.
+`321c` (not hit chance after block `3220`), and explicit numeric-selection absence.
+All six decimal-rounding sites now use native nearest-ties-positive rounding
+at quantum 1 on the actual scaled operand, followed by division by 100.
+Checked ranges admit `[-2^52, 0.4999999999999999]` or `[0.5, 2^52]`.
+The immediate predecessor of 0.5 and values outside the magnitude bound remain
+unsupported. `rounding-domain.json` records the signed-domain argument and 13
+boundary/counterexample controls. The source's add-half/floor discrepancy is
+not a native rule. The original scale order remains intact; this guard does
+not prove arbitrary upstream accumulation or positive-supplier ordering.
 They do not implement NeverCrit, repetition, parent/party replacement, lucky,
 bifurcation, inevitable critical hits, or NoCritMultiplier. Those source
 branches require complete exclusion or their own implementation before the
@@ -49,17 +56,43 @@ observation counts, not distinct native suppliers. Foreign recipients are not
 silently assigned to Sniper.
 
 Diamond Shrine is an actual initializer FLAG supplier tagged with its own
-condition; its later Actor helper can create a chance override of 100. That
-condition and exact destination remain obligations, alongside the blue-support,
-seal, Nightblade, claw, defence-derived, inevitable and bifurcation factories.
-The literal writer inventory does not certify generic computed-name or later
-transport closure.
+condition; its later Actor helper can create a chance override of 100.
+`ordinary-source-domain.json` now reconciles the selected construction and
+factory paths using 15 complete manifest-bound source files, 24 exact writer
+and destination spans, and eight retained constructor/delivery proofs. It
+checks both complete source02 inventories, all 40 selected skill recipes and
+36 exact Basic constructors per trace. The Diamond FLAG and conditional
+Weakness BASE 10 stay explicit. Foreign Sand Djinn INC 50 remains attached to
+its actual constructor, and direct conditions, callbacks, generic injected
+payloads and special-branch inputs refuse even when false, zero or inactive.
+No new source process was run.
+
+This certificate establishes the finite original-source construction path.
+It cannot complete a changed native candidate. Diamond condition coverage,
+the guarded override factory, and the actual conditional Weakness member still
+need exact native membership and activation authority before owner admission.
+No artificial Diamond channel, global false condition, or neutral observed
+value is introduced. The selected absence of CritMultiplier MORE candidates
+makes the anomalous call irrelevant only in this source domain; positive
+suppliers remain unsupported.
 
 The exact Config dispatch establishes two narrower results: both original
 phases omit the Critical Weakness-enable and Profane Ground check inputs and
 invoke neither callback; each count callback appends exactly one conditional
 BASE 10 record with a full before/after-state inverse. This does not establish
 that either global condition is false, or close other condition writers.
+
+One concrete untranslated responsibility remains in the retained selected
+recipe: `self-flat-attack-damage/selected-domain.json`, skill index 22,
+`SummonSandDjinnPlayer` (Kelari, the Tainted Sands), resolved row 0 contains
+`apply_X_stacks_of_critical_weakness_on_hit` with a nil mapping. Original
+`src/Data/Skills/other.lua:9822-9833` describes the Command-only Sand Djinn;
+lines 9888-9891 declare one on-hit Weakness stack and critical bonus 50. Its
+complete source archive is already retained at
+`configuration-demonflame/other.lua.gz`. An untranslated source mapping proves
+no corresponding original modifier construction here; it does not prove
+game-level absence or native Boolean completeness. Command participation and
+Enemy delivery must be reconciled separately.
 
 The full physical source report provides 39 exact recipient/output comparisons
 with observed chance 5%, multiplier 2, and critical effect 1.05. Its quality,
@@ -76,10 +109,19 @@ representations without accepting changed quantities, units or program bodies.
 The earlier two failures in `runs/owned-next-damage-components-01.log` identified
 that representation distinction; the original source artifacts were unchanged.
 
-All eight focused tests passed in 4.85 seconds after a 13.78-second build:
-`runs/owned-outgoing-critical-source-02.log`. Strict target Clippy passed in 11.65 seconds:
+The initial eight-test checkpoint is retained in
+`runs/owned-outgoing-critical-source-02.log` and
 `runs/owned-outgoing-critical-clippy-01.log`.
-No native compilation, source-domain closure or publication is claimed.
-Remaining work is complete selected and dynamic writer/delivery reconciliation,
-numerical and stage checks, and checked publication after the contract decision
-and remaining validation.
+The extended 14-test target passed in 10.41 seconds after a 14.73-second build:
+`runs/owned-outgoing-critical-domain-01.log`. Strict target Clippy passed in
+0.44 seconds: `runs/owned-outgoing-critical-domain-clippy-01.log`.
+The tests execute the six exact authored rounding fragments through the public
+native compiler/evaluator, including an admitted/outside/missing/admitted
+scratch sequence and lazy bypass. This finite numerical test does not compile
+or admit the complete pending critical consumer.
+
+The next runtime requirements are explicit Encounter contribution membership
+and numeric Enemy reads, shared Enemy ownership, and candidate-bound Boolean
+and special-branch coverage. No query or owner is promoted to Complete, and no
+successor is published. Checked publication follows the pending contract
+decision and remaining validation.

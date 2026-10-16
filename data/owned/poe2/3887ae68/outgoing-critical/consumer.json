@@ -1029,18 +1029,96 @@
                 }
               },
               {
-                "id": "chance-rounded-more-current-half-added",
+                "id": "chance-rounded-more-current-below-half",
                 "expression": {
-                  "kind": "add",
+                  "kind": "compare",
+                  "operation": "less",
                   "left": "chance-rounded-more-current-scaled",
                   "right": "round-half-factor"
+                }
+              },
+              {
+                "id": "chance-rounded-more-current-lower-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "chance-rounded-more-current-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": -4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      },
+                      "maximum": {
+                        "value": 0.4999999999999999,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "chance-rounded-more-current-upper-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "chance-rounded-more-current-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0.5,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      },
+                      "maximum": {
+                        "value": 4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "chance-rounded-more-current-bounded",
+                "expression": {
+                  "kind": "select",
+                  "condition": "chance-rounded-more-current-below-half",
+                  "when_true": "chance-rounded-more-current-lower-domain",
+                  "when_false": "chance-rounded-more-current-upper-domain"
                 }
               },
               {
                 "id": "chance-rounded-more-current-integer",
                 "expression": {
                   "kind": "round",
-                  "value": "chance-rounded-more-current-half-added",
+                  "value": "chance-rounded-more-current-bounded",
                   "quantum": {
                     "value": 1,
                     "unit": {
@@ -1052,7 +1130,7 @@
                       "key": "def.0000000000000001"
                     }
                   },
-                  "mode": "floor"
+                  "mode": "nearest_ties_positive"
                 }
               },
               {
@@ -1072,18 +1150,96 @@
                 }
               },
               {
-                "id": "chance-rounded-more-actor-half-added",
+                "id": "chance-rounded-more-actor-below-half",
                 "expression": {
-                  "kind": "add",
+                  "kind": "compare",
+                  "operation": "less",
                   "left": "chance-rounded-more-actor-scaled",
                   "right": "round-half-factor"
+                }
+              },
+              {
+                "id": "chance-rounded-more-actor-lower-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "chance-rounded-more-actor-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": -4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      },
+                      "maximum": {
+                        "value": 0.4999999999999999,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "chance-rounded-more-actor-upper-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "chance-rounded-more-actor-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0.5,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      },
+                      "maximum": {
+                        "value": 4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "chance-rounded-more-actor-bounded",
+                "expression": {
+                  "kind": "select",
+                  "condition": "chance-rounded-more-actor-below-half",
+                  "when_true": "chance-rounded-more-actor-lower-domain",
+                  "when_false": "chance-rounded-more-actor-upper-domain"
                 }
               },
               {
                 "id": "chance-rounded-more-actor-integer",
                 "expression": {
                   "kind": "round",
-                  "value": "chance-rounded-more-actor-half-added",
+                  "value": "chance-rounded-more-actor-bounded",
                   "quantum": {
                     "value": 1,
                     "unit": {
@@ -1095,7 +1251,7 @@
                       "key": "def.0000000000000001"
                     }
                   },
-                  "mode": "floor"
+                  "mode": "nearest_ties_positive"
                 }
               },
               {
@@ -1181,18 +1337,96 @@
                 }
               },
               {
-                "id": "bonus-rounded-more-current-half-added",
+                "id": "bonus-rounded-more-current-below-half",
                 "expression": {
-                  "kind": "add",
+                  "kind": "compare",
+                  "operation": "less",
                   "left": "bonus-rounded-more-current-scaled",
                   "right": "round-half-factor"
+                }
+              },
+              {
+                "id": "bonus-rounded-more-current-lower-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "bonus-rounded-more-current-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": -4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      },
+                      "maximum": {
+                        "value": 0.4999999999999999,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "bonus-rounded-more-current-upper-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "bonus-rounded-more-current-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0.5,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      },
+                      "maximum": {
+                        "value": 4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "bonus-rounded-more-current-bounded",
+                "expression": {
+                  "kind": "select",
+                  "condition": "bonus-rounded-more-current-below-half",
+                  "when_true": "bonus-rounded-more-current-lower-domain",
+                  "when_false": "bonus-rounded-more-current-upper-domain"
                 }
               },
               {
                 "id": "bonus-rounded-more-current-integer",
                 "expression": {
                   "kind": "round",
-                  "value": "bonus-rounded-more-current-half-added",
+                  "value": "bonus-rounded-more-current-bounded",
                   "quantum": {
                     "value": 1,
                     "unit": {
@@ -1204,7 +1438,7 @@
                       "key": "def.0000000000000001"
                     }
                   },
-                  "mode": "floor"
+                  "mode": "nearest_ties_positive"
                 }
               },
               {
@@ -1224,18 +1458,96 @@
                 }
               },
               {
-                "id": "bonus-rounded-more-actor-half-added",
+                "id": "bonus-rounded-more-actor-below-half",
                 "expression": {
-                  "kind": "add",
+                  "kind": "compare",
+                  "operation": "less",
                   "left": "bonus-rounded-more-actor-scaled",
                   "right": "round-half-factor"
+                }
+              },
+              {
+                "id": "bonus-rounded-more-actor-lower-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "bonus-rounded-more-actor-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": -4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      },
+                      "maximum": {
+                        "value": 0.4999999999999999,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "bonus-rounded-more-actor-upper-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "bonus-rounded-more-actor-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0.5,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      },
+                      "maximum": {
+                        "value": 4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "bonus-rounded-more-actor-bounded",
+                "expression": {
+                  "kind": "select",
+                  "condition": "bonus-rounded-more-actor-below-half",
+                  "when_true": "bonus-rounded-more-actor-lower-domain",
+                  "when_false": "bonus-rounded-more-actor-upper-domain"
                 }
               },
               {
                 "id": "bonus-rounded-more-actor-integer",
                 "expression": {
                   "kind": "round",
-                  "value": "bonus-rounded-more-actor-half-added",
+                  "value": "bonus-rounded-more-actor-bounded",
                   "quantum": {
                     "value": 1,
                     "unit": {
@@ -1247,7 +1559,7 @@
                       "key": "def.0000000000000001"
                     }
                   },
-                  "mode": "floor"
+                  "mode": "nearest_ties_positive"
                 }
               },
               {
@@ -1588,18 +1900,96 @@
                 }
               },
               {
-                "id": "rounded-chance-half-added",
+                "id": "rounded-chance-below-half",
                 "expression": {
-                  "kind": "add",
+                  "kind": "compare",
+                  "operation": "less",
                   "left": "rounded-chance-scaled",
                   "right": "round-half-percent"
+                }
+              },
+              {
+                "id": "rounded-chance-lower-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "rounded-chance-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": -4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000002"
+                        }
+                      },
+                      "maximum": {
+                        "value": 0.4999999999999999,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000002"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "rounded-chance-upper-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "rounded-chance-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0.5,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000002"
+                        }
+                      },
+                      "maximum": {
+                        "value": 4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000002"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "rounded-chance-bounded",
+                "expression": {
+                  "kind": "select",
+                  "condition": "rounded-chance-below-half",
+                  "when_true": "rounded-chance-lower-domain",
+                  "when_false": "rounded-chance-upper-domain"
                 }
               },
               {
                 "id": "rounded-chance-integer",
                 "expression": {
                   "kind": "round",
-                  "value": "rounded-chance-half-added",
+                  "value": "rounded-chance-bounded",
                   "quantum": {
                     "value": 1,
                     "unit": {
@@ -1611,7 +2001,7 @@
                       "key": "def.0000000000000002"
                     }
                   },
-                  "mode": "floor"
+                  "mode": "nearest_ties_positive"
                 }
               },
               {
@@ -1866,18 +2256,96 @@
                 }
               },
               {
-                "id": "rounded-bonus-half-added",
+                "id": "rounded-bonus-below-half",
                 "expression": {
-                  "kind": "add",
+                  "kind": "compare",
+                  "operation": "less",
                   "left": "rounded-bonus-scaled",
                   "right": "round-half-factor"
+                }
+              },
+              {
+                "id": "rounded-bonus-lower-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "rounded-bonus-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": -4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      },
+                      "maximum": {
+                        "value": 0.4999999999999999,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "rounded-bonus-upper-domain",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "rounded-bonus-scaled",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0.5,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      },
+                      "maximum": {
+                        "value": 4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000001"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "rounded-bonus-bounded",
+                "expression": {
+                  "kind": "select",
+                  "condition": "rounded-bonus-below-half",
+                  "when_true": "rounded-bonus-lower-domain",
+                  "when_false": "rounded-bonus-upper-domain"
                 }
               },
               {
                 "id": "rounded-bonus-integer",
                 "expression": {
                   "kind": "round",
-                  "value": "rounded-bonus-half-added",
+                  "value": "rounded-bonus-bounded",
                   "quantum": {
                     "value": 1,
                     "unit": {
@@ -1889,7 +2357,7 @@
                       "key": "def.0000000000000001"
                     }
                   },
-                  "mode": "floor"
+                  "mode": "nearest_ties_positive"
                 }
               },
               {
@@ -1930,7 +2398,7 @@
                       "game": "poe2",
                       "version": "owned-mechanics-v1"
                     },
-                    "key": "def.00000000000033a5"
+                    "key": "def.00000000000033aa"
                   },
                   "value": "final-chance"
                 }
@@ -1947,7 +2415,7 @@
                       "game": "poe2",
                       "version": "owned-mechanics-v1"
                     },
-                    "key": "def.00000000000033a6"
+                    "key": "def.00000000000033ab"
                   },
                   "value": "final-multiplier"
                 }
@@ -2236,7 +2704,7 @@
                       "game": "poe2",
                       "version": "owned-mechanics-v1"
                     },
-                    "key": "def.00000000000033a9"
+                    "key": "def.00000000000033ae"
                   },
                   "contribution": "add",
                   "value": "self-critical-chance"
@@ -2282,7 +2750,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a5"
+        "key": "def.00000000000033aa"
       },
       "contribution": "add",
       "groups": [
@@ -2321,7 +2789,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a5"
+                          "key": "def.00000000000033aa"
                         }
                       }
                     },
@@ -2343,7 +2811,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a5"
+        "key": "def.00000000000033aa"
       },
       "contribution": "increase",
       "groups": [
@@ -2382,7 +2850,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a5"
+                          "key": "def.00000000000033aa"
                         }
                       }
                     },
@@ -2404,7 +2872,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a5"
+        "key": "def.00000000000033aa"
       },
       "contribution": "multiply",
       "groups": [
@@ -2443,7 +2911,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a5"
+                          "key": "def.00000000000033aa"
                         }
                       }
                     },
@@ -2465,7 +2933,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a5"
+        "key": "def.00000000000033aa"
       },
       "contribution": "override",
       "groups": [
@@ -2491,7 +2959,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a5"
+                          "key": "def.00000000000033aa"
                         }
                       }
                     },
@@ -2513,7 +2981,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a8"
+        "key": "def.00000000000033ad"
       },
       "contribution": "add",
       "groups": [
@@ -2619,7 +3087,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a8"
+                          "key": "def.00000000000033ad"
                         }
                       }
                     },
@@ -2641,7 +3109,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a8"
+        "key": "def.00000000000033ad"
       },
       "contribution": "increase",
       "groups": [
@@ -2680,7 +3148,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a8"
+                          "key": "def.00000000000033ad"
                         }
                       }
                     },
@@ -2702,7 +3170,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a8"
+        "key": "def.00000000000033ad"
       },
       "contribution": "multiply",
       "groups": [
@@ -2741,7 +3209,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a8"
+                          "key": "def.00000000000033ad"
                         }
                       }
                     },
@@ -2763,7 +3231,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a8"
+        "key": "def.00000000000033ad"
       },
       "contribution": "override",
       "groups": [
@@ -2789,7 +3257,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a8"
+                          "key": "def.00000000000033ad"
                         }
                       }
                     },
@@ -2811,7 +3279,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a7"
+        "key": "def.00000000000033ac"
       },
       "contribution": "add",
       "groups": [
@@ -2917,7 +3385,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a7"
+                          "key": "def.00000000000033ac"
                         }
                       }
                     },
@@ -2939,7 +3407,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a7"
+        "key": "def.00000000000033ac"
       },
       "contribution": "override",
       "groups": [
@@ -2965,7 +3433,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a7"
+                          "key": "def.00000000000033ac"
                         }
                       }
                     },
@@ -3035,7 +3503,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a9"
+        "key": "def.00000000000033ae"
       },
       "contribution": "add",
       "groups": [
@@ -3074,7 +3542,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a9"
+                          "key": "def.00000000000033ae"
                         }
                       }
                     },
@@ -3096,7 +3564,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033a9"
+        "key": "def.00000000000033ae"
       },
       "contribution": "increase",
       "groups": [
@@ -3135,7 +3603,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033a9"
+                          "key": "def.00000000000033ae"
                         }
                       }
                     },
@@ -3157,7 +3625,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033aa"
+        "key": "def.00000000000033af"
       },
       "contribution": "add",
       "groups": [
@@ -3196,7 +3664,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033aa"
+                          "key": "def.00000000000033af"
                         }
                       }
                     },
@@ -3218,7 +3686,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033aa"
+        "key": "def.00000000000033af"
       },
       "contribution": "increase",
       "groups": [
@@ -3257,7 +3725,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033aa"
+                          "key": "def.00000000000033af"
                         }
                       }
                     },
@@ -3279,7 +3747,7 @@
           "game": "poe2",
           "version": "owned-mechanics-v1"
         },
-        "key": "def.00000000000033ab"
+        "key": "def.00000000000033b0"
       },
       "contribution": "flag",
       "groups": [
@@ -3308,7 +3776,7 @@
                             "game": "poe2",
                             "version": "owned-mechanics-v1"
                           },
-                          "key": "def.00000000000033ab"
+                          "key": "def.00000000000033b0"
                         }
                       }
                     },

@@ -302,19 +302,32 @@ current program, with no semantic difference. The initial strengthened check
 correctly rejected raw-JSON inequality; its failed log is retained before the
 typed repair in `runs/owned-outgoing-critical-source-02.log`. Strict target
 Clippy also passes (`runs/owned-outgoing-critical-clippy-01.log`).
-These checks do not compile or execute the critical consumer. Both owners and
-all sixteen query groups remain Partial, and no release is published.
+The subsequent selected ordinary-critical review joins fifteen complete
+manifest-bound source bodies, 24 writer/destination spans, eight retained
+constructor/delivery proofs, both original traces, forty selected recipes and
+36 exact Basic constructors per trace. Conditional Diamond Shrine FLAG and
+Critical Weakness BASE suppliers remain explicit. Foreign recipients, nested
+payloads and false/zero candidates cannot become an empty native channel.
 
-Its next source gate is one selected ordinary-critical domain check joining
-existing constructor, inherited, aura/flask, Party and late-helper proofs.
-Preserve the real conditional Diamond Shrine FLAG and Critical Weakness BASE
-supplier while proving exact activation and delivery; a Player capability is
-not the Enemy condition. Check the actual gates for Nightblade/claw forwarding,
-blue supports, seals, defence conversions, inevitable/bifurcating criticals and
-other special branches. Retained evidence appears sufficient; request another
-source capture only for a concrete missing observation. Passing this finite
-source gate still requires real native membership and execution after approval
-of the Encounter/query contract.
+Six authored decimal-rounding fragments now execute with native
+nearest-ties-positive semantics, checked on their actual scaled operands over
+`[-2^52, 0.4999999999999999]` or `[0.5, 2^52]`, followed by division by 100.
+The signed bound is distinct from final Evasion's zero-floor proof. Thirteen
+boundary controls, lazy bypass and admitted/outside/missing/admitted scratch
+reuse pass. The extended target has fourteen passing tests and strict Clippy:
+`runs/owned-outgoing-critical-domain-{01,clippy-01}.log`. This executes the
+authored rounding fragments, not the complete critical consumer. Both owners
+and all sixteen query groups remain Partial; no successor is published.
+
+The source census also preserves an untranslated gameplay responsibility:
+`SummonSandDjinnPlayer` (Kelari) has one on-hit Critical Weakness stack in the
+pinned skill data, but the retained selected recipe has no modifier mapping
+for that stat. Its Command-only participation and Enemy delivery need review;
+neither the absent source modifier nor the observed critical chance establishes
+native condition absence. No PoB defect exemption is approved. See the
+[cleanup investigation](legacy-retirement.md#sand-djinn-critical-weakness-responsibility-2026-10-15).
+The next critical gate is candidate-bound condition/special-branch admission
+and actual native membership/execution after the Encounter/query decision.
 
 **New shared blocker, October 15:** Encounter programs already emit Enemy
 contributions, but checked membership has no Encounter origin and numeric Enemy
@@ -326,10 +339,10 @@ authority and unchanged completeness rules. Await owner review before changing
 the public contract. Do not substitute a separate computed-term aggregator or
 older direct numeric reduction to bypass this gap. Source supplier proofs and
 independent Player-defence work continue. Outgoing-critical Actor cap/bonus and
-Enemy chance/bonus/activation channels remain unpublished. Their draft IDs are
-being reassigned after the next equipment-Evasion allocations so pending Enemy
-contracts do not block unrelated publication. Rebuild the current-format draft;
-do not allocate filler definitions or retain compatibility aliases.
+Enemy chance/bonus/activation channels remain unpublished. The seven draft IDs
+are now `33aa`–`33b0`, following the equipment-Evasion allocations so pending
+Enemy contracts do not block unrelated publication. The current-format draft
+was rewritten in place; no filler definitions or compatibility aliases exist.
 
 The unpublished [Enemy physical-mitigation reference packet](../data/owned/poe2/3887ae68/enemy-physical-mitigation/README.md)
 now retains five original source bodies, nine spans and all 39 observed Sniper
@@ -382,6 +395,19 @@ and addition order, and test nonzero injected base profiles and quality changes.
 The reviewed route is `runs/owned-evasion-runtime-route-01.md`. Do not leave a
 test-only completion as the final solution or publish observed zero item values
 as implicit defaults.
+
+The in-flight item property uses four contiguous definitions (`33a5`–`33a8`)
+for local Evasion, its final EquipmentUse property, per-level contributions and
+property replacements. The following shared Player subtotal reserves `33a9`.
+Local modifier eligibility remains a real coverage obligation: a matching
+numeric modifier family does not establish local rather than global delivery.
+Shared Armour/Evasion, Evasion/ES and Defences contributions must be emitted
+once, preserving existing Armour/ES consumers; the predecessor currently uses
+direct reductions there. Replacement presence must leave an unsupported final
+property unavailable, including a present zero. Do not encode that Boolean as
+an invented Rating and run it through a numeric guard. Exact empty-group
+membership, missing final-property propagation and the whole-plan coverage gate
+remain distinct checks. These successor packets are not yet published.
 
 The associated [direct-reduction audit](legacy-retirement.md#direct-numeric-reductions-and-encounter-membership-2026-10-15)
 found 78 older direct numeric reads in 32 current programs, including eleven
@@ -809,12 +835,12 @@ The Life predecessor's read-only capacity audit found programs to be the only
 nearly exhausted compiler collection, at 8190/8192 including one application.
 The Mana cleanup reduced that to 8185/8192 and receivers from 60 to 55. The
 current Player Evasion successor uses **8192/16384** after the bounded capacity
-change below, with 56 receivers. Its serialized inventories contain 6545 owners,
-23520 effects, 4272 reads, 32934 nodes and 75 checked queries. The measurement is
-bound to input `b6c757ff…` in `runs/owned-speed-program-capacity-01.json`; these
+change below, with 57 receivers. Its serialized inventories contain 6546 owners,
+23522 effects, 4275 reads, 32952 nodes and 78 checked queries. The measurement is
+bound to input `e282b4bb…` in `runs/owned-evasion-program-capacity-01.json`; these
 are serialized inventory counts, not private compiler edge/work counters.
-The current serialized endpoint is **64,476,314/67,108,864 bytes**,
-leaving 2,632,550 bytes. Its eighteen package files separately total 64,487,868
+The current serialized endpoint is **64,508,858/67,108,864 bytes**,
+leaving 2,600,006 bytes. Its eighteen package files separately total 64,520,414
 bytes; earlier checkpoints reported file totals. These are separate measurements. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
@@ -901,10 +927,11 @@ workspace and both Engine jobs pass. Ubuntu CLI shards 0, 1 and 2, Ubuntu PoB
 and Windows CLI shard 1 also pass; the remaining jobs are still active.
 Public job status and annotations are retained under
 `runs/ci-followup-20261015-38825000935/`. No runs were cancelled by this task.
-The scheduler coalesced pending revisions `885b5d7d`, `247fe562` and `6e1d6eb0`;
-the pushed capacity revision `07275d22` has run `38837051574` pending behind
-the same older run at the latest inspection. The repair and newer checkpoints
-still await their own hosted validation.
+The scheduler coalesced pending revisions `885b5d7d`, `247fe562`, `6e1d6eb0`
+and `07275d22`. At the latest read-only inspection the Player Evasion revision
+`dd524416` has run `38839048945` pending behind the same still-active older run
+`38825000935`. The repair and newer checkpoints still await their own hosted
+validation; a queued revision is not a green hosted check.
 
 ## Previous checkpoint: configured Player Withered input
 

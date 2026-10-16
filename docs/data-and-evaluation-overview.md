@@ -51,6 +51,14 @@ slot reads are the next runtime dependencies, followed by conditional and
 transformation coverage. The existing numeric-domain operation excludes a
 source rounding anomaly without adding Lua-compatible native arithmetic.
 
+The unpublished outgoing-critical work now has a checked selected-source
+supplier review and executable tests of its six authored rounding fragments.
+Its full consumer still needs Enemy contribution authority and complete native
+condition coverage. The review also found an untranslated Sand Djinn on-hit
+Critical Weakness stat: source construction absence cannot stand in for game
+semantics or a false native condition. Exact participation and Enemy delivery
+remain an explicit [investigation](legacy-retirement.md#sand-djinn-critical-weakness-responsibility-2026-10-15).
+
 The outgoing-critical and armour work exposed a shared boundary gap: checked
 queries cannot yet name existing Encounter producers or consume numeric Enemy
 groups. The [proposed extension](owned-encounter-contribution-queries-proposal.md)

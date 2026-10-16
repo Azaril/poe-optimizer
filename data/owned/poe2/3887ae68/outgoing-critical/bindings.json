@@ -7,7 +7,7 @@
         "game": "poe2",
         "version": "owned-mechanics-v1"
       },
-      "key": "def.00000000000033a5"
+      "key": "def.00000000000033aa"
     },
     "multiplier": {
       "kind": "stat",
@@ -15,7 +15,7 @@
         "game": "poe2",
         "version": "owned-mechanics-v1"
       },
-      "key": "def.00000000000033a6"
+      "key": "def.00000000000033ab"
     },
     "actor_cap": {
       "kind": "stat",
@@ -23,7 +23,7 @@
         "game": "poe2",
         "version": "owned-mechanics-v1"
       },
-      "key": "def.00000000000033a7"
+      "key": "def.00000000000033ac"
     },
     "actor_bonus": {
       "kind": "stat",
@@ -31,7 +31,7 @@
         "game": "poe2",
         "version": "owned-mechanics-v1"
       },
-      "key": "def.00000000000033a8"
+      "key": "def.00000000000033ad"
     },
     "enemy_chance": {
       "kind": "stat",
@@ -39,7 +39,7 @@
         "game": "poe2",
         "version": "owned-mechanics-v1"
       },
-      "key": "def.00000000000033a9"
+      "key": "def.00000000000033ae"
     },
     "enemy_bonus": {
       "kind": "stat",
@@ -47,7 +47,7 @@
         "game": "poe2",
         "version": "owned-mechanics-v1"
       },
-      "key": "def.00000000000033aa"
+      "key": "def.00000000000033af"
     },
     "weakness_condition": {
       "kind": "stat",
@@ -55,7 +55,7 @@
         "game": "poe2",
         "version": "owned-mechanics-v1"
       },
-      "key": "def.00000000000033ab"
+      "key": "def.00000000000033b0"
     }
   },
   "programs": [
