@@ -147,7 +147,7 @@ impl World {
         let mut inner = fixture::World::new(levels);
         let f = &mut inner.f;
         assert_eq!(f.build.gems[0].definition, inputs().gem);
-        f.schema.schema_version = 5;
+        f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
         let migration = asset("migration.json");
         for row in migration["schema"].as_array().unwrap() {
             match row["kind"].as_str().unwrap() {

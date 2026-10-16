@@ -252,7 +252,7 @@ impl Fixture {
         base.scenario = rebase(&base.scenario, &inputs.namespace);
         base.queries = rebase(&base.queries, &inputs.namespace);
         base.owners = rebase(&base.owners, &inputs.namespace);
-        base.schema.schema_version = 4;
+        base.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
         base.schema
             .definitions
             .retain(|d| !matches!(d, DefinitionDescriptor::Encounter(_)));
@@ -337,14 +337,14 @@ impl Fixture {
         if let Some(value) = present {
             self.scenario.assumptions.push(ExternalAssumption {
                 input: input.presence_input.clone(),
-                target: AssumptionTarget::Enemy,
+                target: AssumptionTarget::Actor(ActorKey::ScenarioEnemy),
                 value: ParameterValue::Boolean(value),
             });
         }
         if let Some(value) = raw {
             self.scenario.assumptions.push(ExternalAssumption {
                 input: input.value_input.clone(),
-                target: AssumptionTarget::Enemy,
+                target: AssumptionTarget::Actor(ActorKey::ScenarioEnemy),
                 value: self.quantity(value, &input.unit),
             });
         }
@@ -363,7 +363,7 @@ impl Fixture {
                 .unwrap();
             self.scenario.assumptions.push(ExternalAssumption {
                 input: self.inputs.category_input.clone(),
-                target: AssumptionTarget::Enemy,
+                target: AssumptionTarget::Actor(ActorKey::ScenarioEnemy),
                 value: ParameterValue::Option(category.option.clone()),
             });
         }
@@ -401,7 +401,7 @@ impl Fixture {
             .members
             .push(RuleProgram {
                 id: key(name),
-                context: RuleEntityKind::Enemy,
+                context: RuleEntityKind::Actor,
                 reads: vec![],
                 nodes,
                 effects,
@@ -490,7 +490,7 @@ impl Fixture {
     }
     pub fn value<'a>(&self, report: &'a OwnedEffectsReport, stat: &StatDefId) -> &'a EffectValue {
         let key = PlanValueKey::Stat {
-            entity: ConcreteEntity::Enemy,
+            entity: ConcreteEntity::Actor(ActorKey::ScenarioEnemy),
             stat: stat.clone(),
         };
         let rows: Vec<_> = report.values.iter().filter(|row| row.key == key).collect();

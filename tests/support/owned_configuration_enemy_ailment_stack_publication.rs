@@ -131,7 +131,7 @@ fn expectations(
     Expectations {
         outputs: vec![Output {
             policy_target: "enemy",
-            draft_target: json!({"kind":"enemy"}),
+            draft_target: json!({"kind":"actor","value":{"kind":"scenario_enemy"}}),
             selection: Some(selection),
             ignore_placeholder: false,
         }],

@@ -4,13 +4,13 @@ use super::*;
 fn outputs_match(input: &ProvenInput, output: &[ExternalAssumptionDraft]) -> bool {
     let mut expected = vec![ExternalAssumptionDraft {
         input: input.presence_input.clone().into(),
-        target: DraftAssumptionTarget::Enemy,
+        target: DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy),
         value: ParameterValue::Boolean(input.raw.is_some()).into(),
     }];
     if let Some((_, value)) = &input.raw {
         expected.push(ExternalAssumptionDraft {
             input: input.value_input.clone().into(),
-            target: DraftAssumptionTarget::Enemy,
+            target: DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy),
             value: value.clone().into(),
         });
     }
@@ -256,7 +256,7 @@ mod tests {
             };
             let expected = ExternalAssumptionDraft {
                 input: id.clone().into(),
-                target: DraftAssumptionTarget::Enemy,
+                target: DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy),
                 value: value.into(),
             };
             assert!(default_output_matches(
@@ -317,12 +317,12 @@ mod tests {
             };
             let presence_row = ExternalAssumptionDraft {
                 input: presence.clone().into(),
-                target: DraftAssumptionTarget::Enemy,
+                target: DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy),
                 value: ParameterValue::Boolean(authored).into(),
             };
             let raw_row = ExternalAssumptionDraft {
                 input: raw.clone().into(),
-                target: DraftAssumptionTarget::Enemy,
+                target: DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy),
                 value: raw_value.clone().into(),
             };
             let expected = if authored {

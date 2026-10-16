@@ -5,7 +5,7 @@
   "registry_last_before": 13209,
   "registry_last_after": 13213,
   "contract": {
-    "schema_version": 6,
+    "schema_version": 7,
     "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
     "operations_version": "owned-domain-operations-v27",
     "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
@@ -13,19 +13,19 @@
   "artifacts": {
     "migration.json": {
       "bytes": 4207,
-      "sha256": "19b6589d25a5d2a1cd2763235a5e0c78668fd8f4816fc67a3eedd0ddc2114e24"
+      "sha256": "a9ad7e03f2907668bd363436793ecdad939a3918547cb02dc36e709cdcea28d8"
     },
     "consumer.json": {
       "bytes": 12885,
       "sha256": "d21cd22bfa2444e68c81ad7edabf504abbb272ef51dc23a12a5a2a070f81bb6a"
     },
     "dependencies.json": {
-      "bytes": 3429433,
-      "sha256": "79a7d788d11a41dd1ad2f5d6c5a16cfa3a6dfe185eb9ee8f7ea20f2d146ffe73"
+      "bytes": 3430112,
+      "sha256": "ca47416b215112a526278a9e9c115b913785611da8978ccc40721d0b8f0baa9a"
     },
     "source-evidence.json": {
       "bytes": 29836,
-      "sha256": "5070a46ee9941334ec0f6f559f135a6b83413519ab0c9da763eba5eaf58260b3"
+      "sha256": "81185b07dd271604db6163293ed57761c3baf30b6408e7b7e5e5138c84134b8f"
     },
     "bindings.json": {
       "bytes": 5653,

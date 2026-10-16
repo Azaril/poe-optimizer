@@ -129,7 +129,7 @@ fn scope(
         RuleEntity::Current => context,
         RuleEntity::Modifier => RuleEntityKind::Modifier,
         RuleEntity::Actor | RuleEntity::Player => RuleEntityKind::Actor,
-        RuleEntity::Enemy => RuleEntityKind::Enemy,
+        RuleEntity::Enemy => RuleEntityKind::Actor,
         RuleEntity::Environment => RuleEntityKind::Environment,
         RuleEntity::SupportOrigin => RuleEntityKind::SupportOrigin,
         RuleEntity::Skill | RuleEntity::AssignedSkill | RuleEntity::PropertyOwner => {

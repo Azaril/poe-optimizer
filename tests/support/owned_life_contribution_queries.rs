@@ -202,7 +202,7 @@ pub fn check_authored() {
     assert_eq!(a["before"], b["before"]);
     assert_eq!(json!(m.before), b["before"]);
     assert_eq!(m.schema_version, 5);
-    assert_eq!(m.contract.schema_version, 6);
+    assert_eq!(m.contract.schema_version, 7);
     assert_eq!(
         m.contract.operations_version,
         key(OWNED_RULE_OPERATIONS_V23)

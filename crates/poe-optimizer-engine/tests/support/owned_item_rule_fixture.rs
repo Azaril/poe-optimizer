@@ -477,7 +477,7 @@ pub fn fixture() -> Fixture {
         namespace: namespace(),
         release: key("component-test"),
         semantics_version: key("item-numeric-prefix-and-grant-test-v1"),
-        operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+        operations_version: key(OWNED_RULE_OPERATIONS_V14),
         definitions: schema.identity().clone(),
         owners: vec![
             DefinitionRules {

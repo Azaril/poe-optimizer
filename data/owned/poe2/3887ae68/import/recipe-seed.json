@@ -2574,7 +2574,7 @@
     ]
   },
   "schema": {
-    "schema_version": 2,
+    "schema_version": 7,
     "namespace": {
       "game": "poe2",
       "version": "owned-mechanics-v1"
@@ -7664,7 +7664,7 @@
     ]
   },
   "rules": {
-    "schema_version": 3,
+    "schema_version": 4,
     "namespace": {
       "game": "poe2",
       "version": "owned-mechanics-v1"
@@ -7675,8 +7675,8 @@
     "definitions": {
       "game": "poe2",
       "release": "pob-3887ae68-components",
-      "schema_version": 2,
-      "content_sha256": "ac68e93e6dc158e4dea2c4e6eba3529e526a4d1d1c20c6c9669866fcbaa6293f",
+      "schema_version": 7,
+      "content_sha256": "16f6cfdafe97ec223cb7a6418fc3e4c9f395c525222086d9bdee4598beff857d",
       "semantics_version": "owned-mechanics-components-v1"
     },
     "tables": [
@@ -12447,8 +12447,8 @@
     "definitions": {
       "game": "poe2",
       "release": "pob-3887ae68-components",
-      "schema_version": 2,
-      "content_sha256": "ac68e93e6dc158e4dea2c4e6eba3529e526a4d1d1c20c6c9669866fcbaa6293f",
+      "schema_version": 7,
+      "content_sha256": "16f6cfdafe97ec223cb7a6418fc3e4c9f395c525222086d9bdee4598beff857d",
       "semantics_version": "owned-mechanics-components-v1"
     },
     "outputs": [

@@ -132,19 +132,19 @@
     "system": "path_of_building2"
   },
   "definitions": {
-    "content_sha256": "6e84fa807ad443d35f150574f288c141f318588c14ea942e5d85c4287a6b1a58",
+    "content_sha256": "d91a65fb173f21607db86ffd8b94bdc2fbe609d611e516bb4dc5a490d7965cca",
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
+    "schema_version": 7,
     "semantics_version": "owned-mechanics-components-v1"
   },
   "membership_scope": "structural_raw_modifier_family_only",
   "numerical_eligibility": "partial",
   "prior_definitions": {
-    "content_sha256": "acdefc94830bfd5b6d7d4b9af8f83b4db0838589c2ec4a1170ee86e0e3f7795a",
+    "content_sha256": "82d1a0783251f3f76670409f3d50ff16b4b90b1c9eebf1515b368e24875020d0",
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
+    "schema_version": 7,
     "semantics_version": "owned-mechanics-components-v1"
   },
   "refined_templates": 1755,

@@ -1,6 +1,6 @@
 # Owned import inputs for source 3887ae68
 
-The 2026-10-07 contribution-contract cutover reauthored these maintained inputs with rule-package schema **3**. Their explicit operations **V6**, rule bodies, owned IDs, source pins and Partial coverage are unchanged; manifests and transition commitments were regenerated through the production publishers. Old rule-package formats are rejected, with no runtime compatibility path.
+The 2026-10-15 generic Actor cutover uses definition schema **7** and rule-package schema **4**. The explicit operations **V6** capability subset, rule bodies, owned IDs, source pins and Partial coverage remain unchanged. Manifests and dependency commitments are regenerated through the production publishers. Older wire formats are rejected; this bootstrap uses the same Actor semantics as the current evaluator.
 
 These are production inputs for the offline catalog extension and `normalize-owned`. The original component recipe, tables, and 38 IDs in the parent directory remain unchanged. The new seed adds 31 fixed reward outcomes, 30 option values, and 20 equipment slots, giving 119 allocations. The production extension reuses the six reviewed Gem/Skill mappings and appends 2,396 missing catalog identities, giving a final registry watermark of 2,515.
 
@@ -34,13 +34,13 @@ python scripts/export-owned-import-data.py --snapshot crates/poe-optimizer-data/
 
 The exporter projects the injected structured identity catalog unchanged, verifies the source file pins, and emits reviewed finite policy data. It does not execute Lua, evaluate source programs, parse stat text into effects, or inspect original-build results. Only this optional offline step reads the legacy snapshot and vendor source files. Its output directory is reserved exclusively. An I/O failure leaves an explicitly reported incomplete new directory; it does not overwrite an existing directory or claim atomic runtime publication.
 
-The seed recipe's canonical schema identity is `d61c98e791687ccd879ab763bf91b1ec4264a6be747b8c25f54f4f77c07d5667`. Production Rust assembly validated it before extension. For a newly exported seed, substitute its paths below and choose another new output directory:
+The seed recipe's canonical schema identity is `16f6cfdafe97ec223cb7a6418fc3e4c9f395c525222086d9bdee4598beff857d`. Production Rust assembly validated it before extension. For a newly exported seed, substitute its paths below and choose another new output directory:
 
 ```text
 poe-optimizer extend-owned-skill-catalog data/owned/poe2/3887ae68/import/recipe-seed.json --catalog data/owned/poe2/3887ae68/import/skill-identities.json --mapping data/owned/poe2/3887ae68/import/mapping-seed.json --source data/owned/poe2/3887ae68/import/source-pin.json --policy data/owned/poe2/3887ae68/import/skill-catalog-policy.json --output runs/my-import-compiled
 ```
 
-The extension validates the seed, appends only missing identities, preserves prior descriptors and mappings, and explicitly creates new schema/rule/routing bindings. It does not silently repair stale runtime artifacts. Its published successor schema is `be845a5de89f06eba928c4c285678cbc177b0ff4293a9a69528138db1d50f87b` and mapping identity is `3794c5e01ddcf7495fb130bfc6524e0fa256149bccec3e7b5f4da89efd24a3e7`.
+The extension validates the seed, appends only missing identities, preserves prior descriptors and mappings, and explicitly creates new schema/rule/routing bindings. It does not silently repair stale runtime artifacts. Its published successor schema is `84c2f56f027e5a93c0bd6392072f051b97157374940699b7b3e3035467613d73` and mapping identity is `e43cbc95751fadaae7ed3d810fc16c5e8fa76f424052fa14a460a3ba5dbf0e65`.
 
 To reproduce the final policy files, add `--compiled runs/my-import-compiled` to the exporter command and use another new output directory. Before changing a policy binding, that mode checks the compiled publication hashes, the exact seed/successor identities, the preserved 119 registry entries, all 105 seed definitions and 14 slots, previous source mappings, and unchanged rule/routing content. Only then does it emit policy copies bound to the successor. Runtime loaders continue to reject stale bindings.
 

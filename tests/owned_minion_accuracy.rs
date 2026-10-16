@@ -174,7 +174,7 @@ fn check_measured_configuration_controls(package: &Path, output: &Path) {
             assert_eq!(facts.len(), 1);
             assert_eq!(
                 *facts[0],
-                json!({"input":{"kind":"known","value":id},"target":{"kind":"enemy"},"value":{"kind":"known","value":value}})
+                json!({"input":{"kind":"known","value":id},"target":{"kind":"actor","value":{"kind":"scenario_enemy"}},"value":{"kind":"known","value":value}})
             );
         }
     }
@@ -231,7 +231,7 @@ fn block_configuration_and_minion_hit_chance_preserve_original_requests() {
         let block = &placeholder_fallback_inputs[0];
         let expected = json!({
             "input":{"kind":"known","value":block.presence_input},
-            "target":{"kind":"enemy"},
+            "target":{"kind":"actor","value":{"kind":"scenario_enemy"}},
             "value":{"kind":"known","value":{"kind":"boolean","value":false}}
         });
         let old_sets = a["draft"]["scenario_presets"]["members"]

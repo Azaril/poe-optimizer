@@ -243,9 +243,9 @@ def produce(manifest_bytes, policy_bytes, catalog_bytes, source_root, bundle_dir
     namespace = schema["namespace"]
     fields(namespace, "game version", "namespace")
     symbol(namespace["game"]); symbol(namespace["version"])
-    if namespace["game"] != "poe2" or (type(schema["schema_version"]) is not int or schema["schema_version"] != 2) or any(type(p["schema_version"]) is not int or p["schema_version"] != 1 for p in [registry, mapping, tree]):
+    if namespace["game"] != "poe2" or (type(schema["schema_version"]) is not int or schema["schema_version"] != 7) or any(type(p["schema_version"]) is not int or p["schema_version"] != 1 for p in [registry, mapping, tree]):
         raise ValueError("unsupported schema/package version")
-    definitions = {"game": namespace["game"], "release": schema["release"], "schema_version": 2, "content_sha256": sha(raws["schema"]), "semantics_version": schema["semantics_version"]}
+    definitions = {"game": namespace["game"], "release": schema["release"], "schema_version": 7, "content_sha256": sha(raws["schema"]), "semantics_version": schema["semantics_version"]}
     identities = {"registry": digest("owned-id-registry-v1", raws["registry"]), "mapping": digest("owned-external-mapping-v1", raws["mapping"]), "normalization": digest("owned-normalization-policy-v3", raws["normalization"]), "tree": digest("owned-tree-normalization-policy-v1", raws["tree-normalization"])}
     if transition["after"]["definitions"] != definitions or transition["tree"] != identities["tree"]:
         raise ValueError("transition schema/tree binding differs")

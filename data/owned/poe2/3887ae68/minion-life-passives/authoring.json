@@ -214,7 +214,7 @@
     "bindings": "301c17c8682c442a80e1fa1e8e4cce26b7039d3f8220d72ddc944af5aeefde2f",
     "closure": "74ca490cb0494b8f39756dabd6d7b6550cc5e434f97e6b49d5dc1fc07389f4d1",
     "dependencies": "221b5679eb4df6cf738853feec888588518c6b0c8dfb11d3d3b8686e719a08dd",
-    "migration": "5907acd35189e7e14accc40f9865edf070c31577bb2c182fa8b36136f8ed82c8",
+    "migration": "54c6b27628cd9e34804eb8b32ef0397d8048c1941ccea4b6bf9100f9fb0e42c4",
     "source-vectors": "2ec61fe7682a5dc33b75365c6dfbb370a5598b9fdfac95739f05ee1c3d37bcdb"
   }
 }

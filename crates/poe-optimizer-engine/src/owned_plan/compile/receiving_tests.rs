@@ -318,6 +318,37 @@ impl Harness {
 }
 
 #[test]
+fn scenario_enemy_never_acquires_support_receiver_or_character_provider_authority() {
+    let h = Harness::new(&source_fixture(), |_| {});
+    let mut b = h.builder();
+    b.discover().unwrap();
+    // Even a present general Actor is outside this provider-bound support role.
+    b.receiver_actors.insert(ActorKey::ScenarioEnemy);
+    assert!(
+        !b.receiving_actor_discovered(&ActorKey::ScenarioEnemy)
+            .unwrap()
+    );
+    let (_, context) = b.actor_context(&ActorKey::ScenarioEnemy).unwrap();
+    let context = context.expect("actual scenario opponent");
+    assert_eq!(context.actor, Some(ActorKey::ScenarioEnemy));
+    assert_eq!(
+        context.entity,
+        ConcreteEntity::Actor(ActorKey::ScenarioEnemy)
+    );
+    assert!(context.provider.is_none());
+    assert!(context.skill.is_none() && context.assigned_skill.is_none());
+    assert_eq!(entity(RuleEntity::Actor, &context).unwrap(), context.entity);
+    let mut environment = context;
+    environment.entity = ConcreteEntity::Environment;
+    environment.actor = None;
+    assert!(entity(RuleEntity::Actor, &environment).is_err());
+    assert_eq!(
+        entity(RuleEntity::Enemy, &environment).unwrap(),
+        ConcreteEntity::Actor(ActorKey::ScenarioEnemy)
+    );
+}
+
+#[test]
 fn generated_targets_preserve_entering_paths_siblings_and_actor_once_contexts() {
     let h = Harness::new(&source_fixture(), |_| {});
     let mut b = h.builder();

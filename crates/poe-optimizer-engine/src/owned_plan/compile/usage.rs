@@ -9,6 +9,11 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         target: &UsageTarget,
     ) -> Result<(SelectorBindingStatus, Option<Context>)> {
         let (status, mut context) = match target {
+            UsageTarget::Actor(ActorKey::ScenarioEnemy) => {
+                return Err(PlanError::Invalid(
+                    "scenario Enemy usage has no admitted role".into(),
+                ));
+            }
             UsageTarget::Actor(actor) => self.actor_context(actor)?,
             UsageTarget::Action(action) => {
                 let resolved = self.resolver.action(action)?;
@@ -18,7 +23,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                     property_owner: None,
                     origin: RuleOrigin::Usage { index },
                     provider: Some(action.action.provider.clone()),
-                    actor: resolved.expected_actor().clone(),
+                    actor: Some(resolved.expected_actor().clone()),
                     skill: match resolved.provider().exposure() {
                         ProviderExposure::Skill { key, .. } => Some(key.clone()),
                         _ => None,
@@ -62,7 +67,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                         property_owner: None,
                         origin: RuleOrigin::Usage { index },
                         provider: Some(provider),
-                        actor: resolved.provider().actor().clone(),
+                        actor: Some(resolved.provider().actor().clone()),
                         skill,
                         receiving_skill: None,
                         assigned_skill: None,

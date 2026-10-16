@@ -135,10 +135,10 @@
     }
   },
   "definitions": {
-    "content_sha256": "9d338e4c20a52f01a16288982356a887bb8a52840db6592c433fa8780ab6b4f7",
+    "content_sha256": "a0225693e5e181c1af0c17f5880fdfd8f02147c61c5aa3088da92dd2a4f74ef6",
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
+    "schema_version": 7,
     "semantics_version": "owned-mechanics-components-v1"
   },
   "effective_count": {
@@ -10790,10 +10790,10 @@
     }
   },
   "prior_definitions": {
-    "content_sha256": "3c5976bc60dde217ef4430e60db81cff97e22da122286f72278001ab172d4f8a",
+    "content_sha256": "a1a56807734f1d365538b910ed7a178e369b6ce5c074d299874995ed3bee9a0d",
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
+    "schema_version": 7,
     "semantics_version": "owned-mechanics-components-v1"
   },
   "refined_templates": 1756,

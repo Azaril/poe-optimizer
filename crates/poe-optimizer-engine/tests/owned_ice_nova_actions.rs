@@ -123,7 +123,7 @@ impl World {
         f.build = namespace(&f.build);
         f.scenario = namespace(&f.scenario);
         f.queries = namespace(&f.queries);
-        f.schema.schema_version = 5;
+        f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
         f.build.items.clear();
         f.build.equipment.clear();
         f.owners.clear();

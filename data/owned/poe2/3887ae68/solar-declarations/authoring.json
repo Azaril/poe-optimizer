@@ -84,7 +84,7 @@
   "artifact_sha256": {
     "bindings": "5b4154d0d42ee4298ee6f84dc3a2fbfec55459d44767dc323ccf67fb5fe0cd91",
     "dependencies": "e09731329519d2f00d01c98aed74893c4df8693746bbbd35c47164b821c73218",
-    "migration": "c00c6691f7094bef1e505ebef75a520311bee11edaeaaf7427de654aa13e6b87",
+    "migration": "75a03acd5c17bfbee7d4184448a13b64aefe1f053ab1dc4c9ef663697f489cfe",
     "source-vectors": "b529c574f3ea391da574a3b34dd9eb90cc8d1a8defd75727e0f273a4f0125576"
   }
 }

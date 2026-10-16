@@ -123,6 +123,11 @@ fn validate<I: DefinitionSchemaIndex>(
                 RuleEntityKind::Actor,
                 Some(MetricActorRole::Owned),
             ),
+            MetricBindingRole::ScenarioEnemyActor => (
+                MetricTargetKind::Actor,
+                RuleEntityKind::Actor,
+                Some(MetricActorRole::ScenarioEnemy),
+            ),
             MetricBindingRole::Action => (MetricTargetKind::Action, RuleEntityKind::Action, None),
         };
         used.charge(metric.targets.len(), limits)?;

@@ -763,7 +763,7 @@ fn compile_request(
                 namespace: ns(),
                 release: key("rules"),
                 semantics_version: key("test-v1"),
-                operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+                operations_version: key(OWNED_RULE_OPERATIONS_V14),
                 definitions: definitions.identity().clone(),
                 owners: f.owners.clone(),
             },

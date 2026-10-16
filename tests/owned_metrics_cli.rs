@@ -50,7 +50,7 @@ fn save(dir: &Path, f: &Fixture) {
         namespace: ns(),
         release: key("rules"),
         semantics_version: key("test-v1"),
-        operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+        operations_version: key(OWNED_RULE_OPERATIONS_V14),
         definitions: schema.identity().clone(),
         owners: f.owners.clone(),
     };

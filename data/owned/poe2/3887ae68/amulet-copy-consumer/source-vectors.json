@@ -24,7 +24,7 @@
   "artifacts": [
     {
       "path": "data/owned/poe2/3887ae68/amulet-level-copy/authoring.json",
-      "sha256": "e63845fa3eb53de7d2db80d051215634fc6d0c661c2e20bc904f303c37a97b3f"
+      "sha256": "bfad8986eea3f0fc1e42d61118424e3e010b4f4d5d26aef48ca60470c2282844"
     },
     {
       "path": "data/owned/poe2/3887ae68/amulet-level-copy/bindings.json",
@@ -36,7 +36,7 @@
     },
     {
       "path": "data/owned/poe2/3887ae68/amulet-level-copy/migration.json",
-      "sha256": "5d75689bdb8562d060c271fbbe0f3f565c46014956ee5767e2404242d825daa1"
+      "sha256": "81edfc85589634be9f287558fec660093c9327114a1a2592c9eb638aa201a5ce"
     },
     {
       "path": "data/owned/poe2/3887ae68/amulet-level-copy/source-vectors.json",
@@ -44,7 +44,7 @@
     },
     {
       "path": "data/owned/poe2/3887ae68/amulet-bonus-snapshot/authoring.json",
-      "sha256": "93fb0e2418cad67727a10412cf241624b415cd3047d3e0c8dce5d253bdb24547"
+      "sha256": "d88c5b52200756a8d919c1d123a70a2c3595adc5ed0df32510ce1698e949b101"
     },
     {
       "path": "data/owned/poe2/3887ae68/amulet-bonus-snapshot/bindings.json",
@@ -56,7 +56,7 @@
     },
     {
       "path": "data/owned/poe2/3887ae68/amulet-bonus-snapshot/snapshot-authoring.json",
-      "sha256": "18dbb452612265ba57fff4c7ab8e6371c9ec4be685f7b249ec7ac73c55b3ad08"
+      "sha256": "77e6851b4f89a3b752a6c4876a9dcb3a1c1ea9a24473d8e5ee462381793f7bc6"
     },
     {
       "path": "data/owned/poe2/3887ae68/amulet-bonus-snapshot/readiness.json",

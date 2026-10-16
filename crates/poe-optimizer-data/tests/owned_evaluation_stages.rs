@@ -174,7 +174,7 @@ impl Fixture {
                 namespace: ns(),
                 release: key("rules"),
                 semantics_version: key("v1"),
-                operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+                operations_version: key(OWNED_RULE_OPERATIONS_V14),
                 definitions: schema.identity().clone(),
                 tables: vec![],
                 owners: vec![
@@ -541,7 +541,7 @@ fn channel_types_duplicates_and_binding_changes_are_rejected() {
                 .push(f.input.frozen_channels[0].clone()),
             1 => {
                 f.input.frozen_channels[0].channel = StageChannel::Stat {
-                    scope: RuleEntityKind::Enemy,
+                    scope: RuleEntityKind::Action,
                     stat: id("a"),
                 }
             }

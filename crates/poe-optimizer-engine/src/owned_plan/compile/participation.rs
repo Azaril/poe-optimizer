@@ -60,7 +60,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         }
         // A support origin can be an assignment while its receiving actor belongs
         // to another provider. Mechanical actor grants alone do not encode usage.
-        if let ActorKey::Owned(actor) = &context.actor {
+        if let Some(ActorKey::Owned(actor)) = &context.actor {
             charge(&mut self.work, actor.provider.grant_path.len() + 1)?;
             providers.insert(&actor.provider);
         }

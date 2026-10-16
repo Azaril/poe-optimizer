@@ -270,7 +270,7 @@ pub fn check_authored() {
             format!("{:x}", Sha256::digest(bytes))
         );
     }
-    assert_eq!(m.contract.schema_version, 6);
+    assert_eq!(m.contract.schema_version, 7);
     assert_eq!(
         m.contract.operations_version,
         key(OWNED_RULE_OPERATIONS_V27)

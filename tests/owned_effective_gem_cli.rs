@@ -83,7 +83,7 @@ fn synthetic() -> (OwnedDefinitionSchemaPackage, EffectiveGemRecipeInput) {
     declarations.parameters.members.push(corruption.clone());
     let schema = OwnedDefinitionSchemaPackage::new(
         SchemaPackageInput {
-            schema_version: 4,
+            schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: ns,
             release: key("synthetic"),
             semantics_version: key("synthetic"),

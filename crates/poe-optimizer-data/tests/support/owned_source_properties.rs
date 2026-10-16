@@ -310,7 +310,7 @@ fn source_v3_is_canonical_bound_and_preserves_legacy_wire() {
     let mut null = raw;
     null["source_properties"] = serde_json::Value::Null;
     assert!(serde_json::from_value::<SupportReceivingInput>(null).is_err());
-    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V14);
+    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V28);
     assert_eq!(OWNED_SUPPORT_RECEIVING_VERSION, 1);
     assert_eq!(OWNED_EVALUATION_STAGES_VERSION, 1);
 }
@@ -395,7 +395,7 @@ fn source_receiving_v3_accepts_bound_v4_stages_without_gaining_ordinary_property
 #[test]
 fn preset_input_operations_keep_checked_v3_readiness_and_source_authority() {
     let f = fixture_with(
-        |schema| schema.schema_version = OWNED_SCHEMA_PACKAGE_V6,
+        |schema| schema.schema_version = OWNED_SCHEMA_PACKAGE_VERSION,
         |rules| rules.operations_version = key(OWNED_RULE_OPERATIONS_V19),
     );
     let stored = f.build(f.input.clone()).unwrap();

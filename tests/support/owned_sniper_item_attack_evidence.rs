@@ -619,7 +619,10 @@ pub fn normalized_block_inputs(package: &Path) -> Vec<BlockCase> {
                 target: decode(&fact["target"]),
                 value: decode(&fact["value"]["value"]),
             };
-            assert_eq!(assumption.target, AssumptionTarget::Enemy);
+            assert_eq!(
+                assumption.target,
+                AssumptionTarget::Actor(poe_optimizer_core::owned_build::ActorKey::ScenarioEnemy)
+            );
             if input == &block.presence_input {
                 assert_eq!(assumption.value, ParameterValue::Boolean(saved.is_some()));
             } else {

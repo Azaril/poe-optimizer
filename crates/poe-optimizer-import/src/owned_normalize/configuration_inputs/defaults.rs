@@ -13,14 +13,14 @@ pub enum ConfigurationInputTarget {
 impl ConfigurationInputTarget {
     fn role(self) -> AssumptionTargetKind {
         match self {
-            Self::Enemy => AssumptionTargetKind::Enemy,
+            Self::Enemy => AssumptionTargetKind::ScenarioEnemyActor,
             Self::Environment => AssumptionTargetKind::Environment,
-            Self::Player => AssumptionTargetKind::Actor,
+            Self::Player => AssumptionTargetKind::PlayerActor,
         }
     }
     pub(super) fn draft(self) -> DraftAssumptionTarget {
         match self {
-            Self::Enemy => DraftAssumptionTarget::Enemy,
+            Self::Enemy => DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy),
             Self::Environment => DraftAssumptionTarget::Environment,
             Self::Player => DraftAssumptionTarget::Actor(DraftActorKey::Player),
         }

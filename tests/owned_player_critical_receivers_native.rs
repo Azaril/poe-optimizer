@@ -89,12 +89,12 @@ impl World {
             (
                 "enemy-operand",
                 ComputedValueType::Integer,
-                vec![RuleEntityKind::Actor, RuleEntityKind::Enemy],
+                vec![RuleEntityKind::Actor],
             ),
             (
                 "never",
                 ComputedValueType::Boolean,
-                vec![RuleEntityKind::Actor, RuleEntityKind::Enemy],
+                vec![RuleEntityKind::Actor],
             ),
             (
                 "selected",
@@ -135,7 +135,7 @@ impl World {
             .members
             .push(RuleProgram {
                 id: key("enemy-operand"),
-                context: RuleEntityKind::Enemy,
+                context: RuleEntityKind::Actor,
                 reads: vec![read("level", RuleReadSource::EnemyLevel)],
                 nodes: vec![read_node("level", "level")],
                 effects: vec![derive(
@@ -482,8 +482,32 @@ fn receiver_results_do_not_close_untranslated_shared_actor_coverage() {
 
 #[test]
 fn receiver_contract_keeps_existing_type_scope_and_write_restrictions() {
+    let mut world = World::new(7, false);
+    world.f.owner_mut(&stat("selected")).programs.members[0].reads[1].source =
+        RuleReadSource::Stat {
+            entity: RuleEntity::Enemy,
+            stat: def("final"),
+        };
+    let schema = world.schema();
+    // Actor-scoped reads can address the exact ScenarioEnemy without granting
+    // this Player receiver permission to write there or supplying a producer.
+    assert!(
+        CompiledRulePackage::compile(&world.rules(&schema), schema.as_ref(), Default::default())
+            .is_ok()
+    );
     for case in 0..5 {
-        let world = World::new(7, false);
+        let mut world = World::new(7, false);
+        world
+            .f
+            .schema
+            .definitions
+            .push(DefinitionDescriptor::Stat(known(
+                def("environment-only"),
+                StatSchema {
+                    value: ComputedValueType::Integer,
+                    targets: vec![RuleEntityKind::Environment],
+                },
+            )));
         let schema = world.schema();
         let mut input = world.rules(&schema);
         let p = &mut input
@@ -521,7 +545,7 @@ fn receiver_contract_keeps_existing_type_scope_and_write_restrictions() {
             _ => {
                 p.reads[1].source = RuleReadSource::Stat {
                     entity: RuleEntity::Enemy,
-                    stat: def("final"),
+                    stat: def("environment-only"),
                 }
             }
         }
@@ -561,7 +585,7 @@ fn receiver_dependency_cycles_competing_producers_and_frozen_stages_still_refuse
         world
             .plan_with(|stages| stages.frozen_channels.push(FrozenStageChannel {
                 channel: StageChannel::Stat {
-                    scope: RuleEntityKind::Enemy,
+                    scope: RuleEntityKind::Actor,
                     stat: def("enemy-operand")
                 },
                 stage: key("prepare"),

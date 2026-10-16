@@ -349,7 +349,7 @@ impl World {
             namespace: ns(),
             release: key("minion-component"),
             semantics_version: key("finite-test"),
-            operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+            operations_version: key(OWNED_RULE_OPERATIONS_V14),
             definitions: schema.identity().clone(),
             owners: self.f.owners.clone(),
             tables: self.f.tables.clone(),

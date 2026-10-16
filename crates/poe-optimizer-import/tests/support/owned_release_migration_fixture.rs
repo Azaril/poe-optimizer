@@ -28,11 +28,10 @@ pub fn key(value: &str) -> OwnedDefinitionKey {
 /// Rebind only constituent identities; preserve their complete semantic inputs.
 pub fn contract(
     mut input: OwnedReleaseInput,
-    schema_version: u32,
     operations: &str,
     release: &str,
 ) -> StagedOwnedRelease {
-    input.recipe.schema.schema_version = schema_version;
+    assert_eq!(input.recipe.schema.schema_version, 7, "current schema only");
     input.recipe.schema.release = key(release);
     let definitions =
         OwnedDefinitionSchemaPackage::new(input.recipe.schema.clone(), Default::default()).unwrap();
@@ -168,7 +167,6 @@ pub fn contract(
 pub fn evaluated_prior() -> StagedOwnedRelease {
     contract(
         evaluation::fixture().input,
-        4,
         "owned-domain-operations-v15",
         "evaluated-v15",
     )

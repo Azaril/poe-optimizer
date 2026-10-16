@@ -84,7 +84,7 @@ fn fixture() -> Fixture {
                     id,
                     schema: SchemaState::Known(ExternalInputSchema {
                         value,
-                        targets: vec![AssumptionTargetKind::Enemy],
+                        targets: vec![AssumptionTargetKind::ScenarioEnemyActor],
                     }),
                 }));
         }
@@ -218,7 +218,10 @@ fn values(result: &NormalizedImport, index: usize) -> Vec<(ExternalInputDefId, P
         .members
         .iter()
         .map(|a| {
-            assert_eq!(a.target, DraftAssumptionTarget::Enemy);
+            assert_eq!(
+                a.target,
+                DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy)
+            );
             (
                 a.input.to_resolved().unwrap(),
                 a.value.to_resolved().unwrap(),
@@ -492,7 +495,7 @@ fn policy_source_types_membership_units_and_recipe_authority_are_checked() {
                     let SchemaState::Known(raw) = &mut entry.schema else {
                         panic!()
                     };
-                    raw.targets = vec![AssumptionTargetKind::Actor];
+                    raw.targets = vec![AssumptionTargetKind::PlayerActor];
                 }
                 DefinitionDescriptor::Encounter(entry) if mutation == 2 => {
                     let SchemaState::Known(owner) = &mut entry.schema else {

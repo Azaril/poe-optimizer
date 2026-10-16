@@ -174,6 +174,6 @@
   "artifact_sha256": {
     "bindings": "780c278e35c29ac1aa5eeba9cf1028396334af0dba1a25bc7d828aa8c4113aaa",
     "dependencies": "1c7db1f4eec89bd29f5867ad996474e20e6a02162975d9a5d780dc2fe9287b75",
-    "migration": "2fe9b182faed829c4613ea342693735dfe89a0d5be07ad2147a43df40007d952"
+    "migration": "b7f327fd8213c3d3eed0d516e7bbc352a7581b0a0af24c51dc0e152c770abd81"
   }
 }

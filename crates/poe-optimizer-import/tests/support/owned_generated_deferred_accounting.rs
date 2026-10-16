@@ -33,7 +33,7 @@ fn configured() -> Fixture {
         .allocate_slot::<SkillGrantSlotDefinition>(SlotOwnerDefId::PassiveNode(passive.clone()))
         .unwrap();
     let mut schema = a.schema.input().clone();
-    schema.schema_version = OWNED_SCHEMA_PACKAGE_V6;
+    schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
     schema
         .definitions
         .push(DefinitionDescriptor::PassiveNode(DefinitionEntry {

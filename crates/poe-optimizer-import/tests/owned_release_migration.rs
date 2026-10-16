@@ -1,12 +1,10 @@
-//! Explicit contract migration preserves historical releases and ordered requests.
+//! Current contract migration preserves exact releases and ordered requests.
+#[path = "support/owned_release_migration_current.rs"]
+mod current;
 #[path = "support/owned_compact_fixture.rs"]
 mod fixture;
-#[path = "support/owned_release_migration_v3_fixture.rs"]
-mod v3_fixture;
-#[path = "support/owned_release_migration_v4.rs"]
-mod v4;
-#[path = "support/owned_release_migration_v5.rs"]
-mod v5;
+#[path = "support/owned_release_migration_fixture.rs"]
+mod migration_fixture;
 use poe_optimizer_core::{
     owned_build::{ParameterValue, QueryId},
     owned_content::digest_owned,
@@ -85,14 +83,14 @@ fn record<I, D>(id: I, schema: D) -> DefinitionEntry<I, D> {
 }
 fn header(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
     OwnedReleaseMigrationInput {
-        schema_version: 1,
+        schema_version: 5,
         before: prior.receipt().input,
         release: key("actor-supply-migrated"),
         reason: key("explicit-contract-migration"),
         contract: OwnedReleaseContractMigration {
-            schema_version: 3,
+            schema_version: 7,
             schema_semantics_version: key("owned-actor-inputs-v1"),
-            operations_version: key("owned-domain-operations-v11"),
+            operations_version: key(OWNED_RULE_OPERATIONS_V14),
             rule_semantics_version: key("owned-actor-rules-v1"),
         },
         schema: vec![],
@@ -105,69 +103,38 @@ fn header(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
 }
 
 #[test]
-fn omitted_evaluation_preserves_the_frozen_v1_wire_and_authoring_digest() {
-    // Keep the historical field list independent from the current DTO so a
-    // default-valued field accidentally entering the wire changes this witness.
-    #[derive(serde::Serialize)]
-    struct Legacy<'a> {
-        schema_version: u32,
-        before: poe_optimizer_core::owned_content::OwnedContentDigest,
-        release: &'a OwnedDefinitionKey,
-        reason: &'a OwnedDefinitionKey,
-        contract: &'a OwnedReleaseContractMigration,
-        schema: &'a [SchemaExtensionEntry],
-        tables: &'a [IntegerRuleTable],
-        owners: &'a [DefinitionRules],
-        receivers: &'a [StatReceiver],
-        query_targets: &'a [OwnedReleaseQueryTargetMigration],
-    }
+fn current_wire_roundtrips_and_commits_the_complete_authoring_input() {
     let prior = prior();
     let input = header(&prior);
-    let historical = Legacy {
-        schema_version: input.schema_version,
-        before: input.before,
-        release: &input.release,
-        reason: &input.reason,
-        contract: &input.contract,
-        schema: &input.schema,
-        tables: &input.tables,
-        owners: &input.owners,
-        receivers: &input.receivers,
-        query_targets: &input.query_targets,
-    };
-    let bytes = serde_json::to_vec(&historical).unwrap();
-    assert_eq!(serde_json::to_vec(&input).unwrap(), bytes);
-    let restored: OwnedReleaseMigrationInput = serde_json::from_slice(&bytes).unwrap();
+    let value = serde_json::to_value(&input).unwrap();
+    assert_eq!(value["schema_version"], 5);
+    assert!(value.get("evaluation").is_none());
+    let restored: OwnedReleaseMigrationInput = serde_json::from_value(value.clone()).unwrap();
     assert_eq!(restored, input);
-    assert!(restored.evaluation.is_none());
-    let expected = digest_owned(
-        "owned-release-contract-migration-v1",
-        &historical,
-        1_000_000,
-    )
-    .unwrap();
+    let expected = digest_owned("owned-release-contract-migration-v5", &input, 1_000_000).unwrap();
     let migrated = compile_owned_release_migration(&prior, input, Default::default()).unwrap();
-    assert_eq!(migrated.input().schema_version, 1);
     assert_eq!(
         migrated.input().provenance.last().unwrap().authoring_input,
         expected
     );
+    for version in [0, 1, 2, 3, 4, 6] {
+        let mut old = value.clone();
+        old["schema_version"] = version.into();
+        let old = serde_json::from_value(old).unwrap();
+        assert!(matches!(
+            compile_owned_release_migration(&prior, old, Default::default()),
+            Err(OwnedReleaseError::Invalid(
+                "migration requires current authoring version 5"
+            ))
+        ));
+    }
 }
 
 #[test]
-fn schema3_operations11_migrate_to_explicit_schema4_operations13_and_metric_artifact() {
-    let old = prior();
-    let prior = compile_owned_release_migration(&old, header(&old), Default::default()).unwrap();
-    assert_eq!(prior.input().recipe.schema.schema_version, 3);
-    assert_eq!(
-        prior.input().recipe.rules.operations_version.as_str(),
-        "owned-domain-operations-v11"
-    );
+fn current_migration_can_add_exact_metric_artifacts_to_an_unevaluated_release() {
+    let prior = prior();
     let mut migration = header(&prior);
-    migration.schema_version = 2;
-    migration.release = key("explicit-preparation-contract");
-    migration.contract.schema_version = 4;
-    migration.contract.operations_version = key("owned-domain-operations-v13");
+    migration.release = key("explicit-evaluation-contract");
     let mut schema = prior.input().recipe.schema.clone();
     schema.schema_version = migration.contract.schema_version;
     schema.semantics_version = migration.contract.schema_semantics_version.clone();
@@ -184,14 +151,14 @@ fn schema3_operations11_migrate_to_explicit_schema4_operations13_and_metric_arti
         support: None,
     });
     let authoring =
-        digest_owned("owned-release-contract-migration-v2", &migration, 1_000_000).unwrap();
+        digest_owned("owned-release-contract-migration-v5", &migration, 1_000_000).unwrap();
     let result =
         compile_owned_release_migration(&prior, migration.clone(), Default::default()).unwrap();
     assert_eq!(result.input().schema_version, 2);
-    assert_eq!(result.input().recipe.schema.schema_version, 4);
+    assert_eq!(result.input().recipe.schema.schema_version, 7);
     assert_eq!(
         result.input().recipe.rules.operations_version.as_str(),
-        "owned-domain-operations-v13"
+        OWNED_RULE_OPERATIONS_V14
     );
     assert!(result.evaluation().unwrap().support().is_none());
     assert_eq!(result.query_sets(), prior.query_sets());
@@ -397,7 +364,7 @@ fn migration_atomically_binds_new_actor_and_parameters_without_rewriting_prior_r
     let prior = prior();
     let migration = actor_migration(&prior);
     let authoring = digest_owned(
-        "owned-release-contract-migration-v1",
+        "owned-release-contract-migration-v5",
         &migration,
         16 * 1024 * 1024,
     )
@@ -406,10 +373,10 @@ fn migration_atomically_binds_new_actor_and_parameters_without_rewriting_prior_r
         compile_owned_release_migration(&prior, migration.clone(), Default::default()).unwrap();
     assert_eq!(result.receipt().query_sets, 5);
     assert_eq!(result.receipt().query_rows, 110);
-    assert_eq!(result.input().recipe.schema.schema_version, 3);
+    assert_eq!(result.input().recipe.schema.schema_version, 7);
     assert_eq!(
         result.input().recipe.rules.operations_version.as_str(),
-        "owned-domain-operations-v11"
+        OWNED_RULE_OPERATIONS_V14
     );
     assert_eq!(
         result.input().recipe.registry.last_issued.get(),
@@ -565,7 +532,10 @@ fn migration_rejects_unknown_contracts_stale_inputs_schema_reuse_and_query_scope
         bad.contract.schema_version = version;
         cases.push(bad);
     }
-    for version in ["owned-domain-operations-v10", "owned-domain-operations-v12"] {
+    for version in [
+        "owned-domain-operations-v10",
+        "owned-domain-operations-v999",
+    ] {
         let mut bad = valid.clone();
         bad.contract.operations_version = key(version);
         cases.push(bad);
@@ -812,12 +782,10 @@ fn migration_preflights_new_registry_rows_before_copying_the_prior_graph() {
     );
 }
 
-fn v3_header(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
+fn capability_header(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
     let mut input = header(prior);
-    input.schema_version = 3;
-    input.release = key("explicit-occurrence-input-contract");
-    input.reason = key("reviewed-occurrence-input-migration");
-    input.contract.schema_version = 5;
+    input.release = key("explicit-capability-contract");
+    input.reason = key("reviewed-capability-migration");
     input.contract.schema_semantics_version = prior.input().recipe.schema.semantics_version.clone();
     input.contract.operations_version = key(OWNED_RULE_OPERATIONS_V17);
     input.contract.rule_semantics_version = prior.input().recipe.rules.semantics_version.clone();
@@ -891,208 +859,16 @@ fn assert_source_inputs_preserved(prior: &StagedOwnedRelease, result: &StagedOwn
 }
 
 #[test]
-fn v3_migrates_only_reviewed_predecessors_and_preserves_partial_source_releases() {
-    let original = prior();
-    for schema in [4, 5] {
-        for operations in [
-            OWNED_RULE_OPERATIONS_V15,
-            OWNED_RULE_OPERATIONS_V16,
-            OWNED_RULE_OPERATIONS_V17,
-        ] {
-            let prior = v3_fixture::contract(
-                original.input().clone(),
-                schema,
-                operations,
-                "reviewed-prior",
-            );
-            let migration = v3_header(&prior);
-            // V5/V17 still requires an actual semantic edit; a release rename is
-            // not an excuse to mint another migration identity.
-            if schema == 5 && operations == OWNED_RULE_OPERATIONS_V17 {
-                assert!(matches!(
-                    compile_owned_release_migration(&prior, migration.clone(), Default::default()),
-                    Err(OwnedReleaseError::Invalid(
-                        "migration contains no semantic changes"
-                    ))
-                ));
-            }
-            let mut migration = migration;
-            migration.contract.rule_semantics_version = key("reviewed-v17-semantics");
-            let authoring =
-                digest_owned("owned-release-contract-migration-v3", &migration, 1_000_000).unwrap();
-            let result =
-                compile_owned_release_migration(&prior, migration.clone(), Default::default())
-                    .unwrap();
-            assert_eq!(result.input().schema_version, OWNED_RELEASE_VERSION);
-            assert_eq!(result.input().recipe.schema.schema_version, 5);
-            assert_eq!(
-                result.input().recipe.rules.operations_version.as_str(),
-                OWNED_RULE_OPERATIONS_V17
-            );
-            assert!(result.evaluation().is_none());
-            assert!(
-                result.input().recipe.schema.definitions == prior.input().recipe.schema.definitions,
-                "definition content changed"
-            );
-            assert!(
-                result.input().recipe.schema.slots == prior.input().recipe.schema.slots,
-                "slot content changed"
-            );
-            assert!(
-                result.input().recipe.registry == prior.input().recipe.registry,
-                "registry content changed"
-            );
-            assert!(
-                result.input().recipe.rules.owners == prior.input().recipe.rules.owners,
-                "program content changed"
-            );
-            assert!(
-                result.input().recipe.rules.tables == prior.input().recipe.rules.tables,
-                "table content changed"
-            );
-            assert!(
-                result.input().recipe.rules.receivers == prior.input().recipe.rules.receivers,
-                "receiver content changed"
-            );
-            let mut routing = result.input().recipe.routing.clone();
-            routing.definitions = prior.receipt().definitions.clone();
-            assert!(
-                routing == prior.input().recipe.routing,
-                "routing content changed"
-            );
-            assert_eq!(
-                result.input().provenance.last().unwrap().authoring_input,
-                authoring
-            );
-            assert_source_inputs_preserved(&prior, &result);
-            let repeated =
-                compile_owned_release_migration(&prior, migration, Default::default()).unwrap();
-            assert!(result.artifacts().eq(repeated.artifacts()));
-            let rebuilt =
-                assemble_owned_release(result.input().clone(), Default::default()).unwrap();
-            assert!(result.artifacts().eq(rebuilt.artifacts()));
-        }
-    }
-}
-
-#[test]
-fn v3_v18_is_explicit_preserves_prior_content_and_cannot_downgrade() {
-    let original = prior();
-    for (schema, operations) in [
-        (4, OWNED_RULE_OPERATIONS_V15),
-        (4, OWNED_RULE_OPERATIONS_V16),
-        (4, OWNED_RULE_OPERATIONS_V17),
-        (5, OWNED_RULE_OPERATIONS_V15),
-        (5, OWNED_RULE_OPERATIONS_V16),
-        (5, OWNED_RULE_OPERATIONS_V17),
-        (5, OWNED_RULE_OPERATIONS_V18),
-    ] {
-        let prior = v3_fixture::contract(
-            original.input().clone(),
-            schema,
-            operations,
-            "reviewed-source-property-prior",
-        );
-        let mut migration = v3_header(&prior);
-        migration.contract.operations_version = key(OWNED_RULE_OPERATIONS_V18);
-        migration.contract.rule_semantics_version = key("explicit-v18-semantics");
-        let authoring =
-            digest_owned("owned-release-contract-migration-v3", &migration, 1_000_000).unwrap();
-        let result =
-            compile_owned_release_migration(&prior, migration.clone(), Default::default()).unwrap();
-        assert_eq!(result.input().recipe.schema.schema_version, 5);
-        assert_eq!(
-            result.input().recipe.rules.operations_version.as_str(),
-            OWNED_RULE_OPERATIONS_V18
-        );
-        assert!(result.evaluation().is_none());
-        assert!(result.input().recipe.rules.owners == prior.input().recipe.rules.owners);
-        assert!(result.input().recipe.rules.tables == prior.input().recipe.rules.tables);
-        assert!(result.input().recipe.rules.receivers == prior.input().recipe.rules.receivers);
-        assert!(
-            result.input().recipe.schema.definitions == prior.input().recipe.schema.definitions
-        );
-        assert!(result.input().recipe.schema.slots == prior.input().recipe.schema.slots);
-        assert!(result.input().recipe.registry == prior.input().recipe.registry);
-        assert_eq!(
-            result.input().provenance.last().unwrap().authoring_input,
-            authoring
-        );
-        assert_source_inputs_preserved(&prior, &result);
-        let repeated =
-            compile_owned_release_migration(&prior, migration, Default::default()).unwrap();
-        assert!(result.artifacts().eq(repeated.artifacts()));
-        let rebuilt = assemble_owned_release(result.input().clone(), Default::default()).unwrap();
-        assert!(result.artifacts().eq(rebuilt.artifacts()));
-    }
-
-    let prior = v3_fixture::contract(
-        original.input().clone(),
-        5,
-        OWNED_RULE_OPERATIONS_V18,
-        "source-property-prior",
-    );
-    // The old explicit V17 endpoint remains V17; it never silently adopts the
-    // newest contract. It is now a forbidden downgrade for this V18 predecessor.
-    let mut migration = v3_header(&prior);
-    assert_eq!(
-        migration.contract.operations_version.as_str(),
-        OWNED_RULE_OPERATIONS_V17
-    );
-    assert!(matches!(
-        compile_owned_release_migration(&prior, migration.clone(), Default::default()),
-        Err(OwnedReleaseError::Invalid(
-            "migration cannot downgrade operations v18"
-        ))
-    ));
-    migration.contract.operations_version = key(OWNED_RULE_OPERATIONS_V18);
-    assert!(matches!(
-        compile_owned_release_migration(&prior, migration.clone(), Default::default()),
-        Err(OwnedReleaseError::Invalid(
-            "migration contains no semantic changes"
-        ))
-    ));
-
-    let mut promoted = prior
-        .input()
-        .recipe
-        .rules
-        .owners
-        .iter()
-        .find(|owner| !owner.programs.is_complete())
-        .unwrap()
-        .clone();
-    promoted.programs.closure = SchemaClosure::Complete;
-    migration.owners.push(promoted);
-    let error = compile_owned_release_migration(&prior, migration.clone(), Default::default())
-        .err()
-        .unwrap();
-    assert!(
-        error.to_string().contains("change prior closure"),
-        "{error}"
-    );
-
-    let mut wire = serde_json::to_value(&migration).unwrap();
-    wire["contract"]
-        .as_object_mut()
-        .unwrap()
-        .remove("operations_version");
-    assert!(serde_json::from_value::<OwnedReleaseMigrationInput>(wire).is_err());
-    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V14);
-}
-
-#[test]
-fn v3_explicit_authority_replaces_schema_appends_allocations_and_preserves_query_scope() {
+fn current_explicit_authority_replaces_schema_appends_allocations_and_preserves_query_scope() {
     for operations in [OWNED_RULE_OPERATIONS_V17, OWNED_RULE_OPERATIONS_V18] {
         let original = prior();
-        let prior = v3_fixture::contract(
+        let prior = migration_fixture::contract(
             original.input().clone(),
-            4,
             OWNED_RULE_OPERATIONS_V15,
             "prior-v15",
         );
         let mut migration = actor_migration(&prior);
-        let header = v3_header(&prior);
+        let header = capability_header(&prior);
         migration.schema_version = header.schema_version;
         migration.contract = header.contract;
         migration.contract.operations_version = key(operations);
@@ -1131,8 +907,8 @@ fn v3_explicit_authority_replaces_schema_appends_allocations_and_preserves_query
             Some(SkillInputAuthority::AuthoredOrProjected)
         );
         assert_eq!(parameter.sites, [ParameterSite::SkillParameter]);
-        // This authored authority cannot be reinterpreted by the old schema or
-        // operation contracts, even if someone manually rebuilds outer identities.
+        // An older schema wire is rejected; an insufficient operation subset
+        // cannot acquire this new input authority by rebinding identities.
         let mut old_schema = result.input().recipe.schema.clone();
         old_schema.schema_version = 4;
         assert!(OwnedDefinitionSchemaPackage::new(old_schema, Default::default()).is_err());
@@ -1176,9 +952,9 @@ fn v3_explicit_authority_replaces_schema_appends_allocations_and_preserves_query
         }
         let source_restored = assemble_owned_release(source_restored, Default::default()).unwrap();
         assert_source_inputs_preserved(&prior, &source_restored);
-        // The same V5 endpoint supports another explicitly reviewed declaration
+        // The same current endpoint supports another explicitly reviewed declaration
         // replacement, without requiring an artificial version increase.
-        let mut next = v3_header(&result);
+        let mut next = capability_header(&result);
         next.contract.operations_version = key(operations);
         let mut slot = result.input().recipe.schema.slots.iter().find(|row| matches!(row,
         SlotDescriptor::Parameter(entry) if matches!(&entry.schema, SchemaState::Known(schema) if schema.skill_input.is_some())
@@ -1196,143 +972,9 @@ fn v3_explicit_authority_replaces_schema_appends_allocations_and_preserves_query
 }
 
 #[test]
-fn v3_checks_exact_prior_endpoint_versions_and_existing_resource_limits() {
-    let original = prior();
-    let prior = v3_fixture::contract(
-        original.input().clone(),
-        4,
-        OWNED_RULE_OPERATIONS_V15,
-        "prior-v15",
-    );
-    let valid = v3_header(&prior);
-    let mut cases = vec![];
-    for version in [1, 2, 4] {
-        let mut bad = valid.clone();
-        bad.schema_version = version;
-        cases.push(bad);
-    }
-    for version in [3, 4, 6] {
-        let mut bad = valid.clone();
-        bad.contract.schema_version = version;
-        cases.push(bad);
-    }
-    for version in [
-        OWNED_RULE_OPERATIONS_V15,
-        OWNED_RULE_OPERATIONS_V16,
-        "owned-domain-operations-v19",
-        "owned-domain-operations-v018",
-    ] {
-        let mut bad = valid.clone();
-        bad.contract.operations_version = key(version);
-        cases.push(bad);
-    }
-    let mut bad = valid.clone();
-    bad.before = digest_owned("stale-v3-prior", &1, 100).unwrap();
-    cases.push(bad);
-    let mut bad = valid.clone();
-    bad.release = prior.input().recipe.schema.release.clone();
-    cases.push(bad);
-    for (index, bad) in cases.into_iter().enumerate() {
-        assert!(
-            compile_owned_release_migration(&prior, bad, Default::default()).is_err(),
-            "invalid endpoint case {index}"
-        );
-    }
-    for (schema, operations) in [
-        (3, OWNED_RULE_OPERATIONS_V15),
-        (4, OWNED_RULE_OPERATIONS_V13),
-        (5, OWNED_RULE_OPERATIONS_V14),
-        (4, OWNED_RULE_OPERATIONS_V18),
-    ] {
-        let unsupported = v3_fixture::contract(
-            original.input().clone(),
-            schema,
-            operations,
-            "unsupported-prior",
-        );
-        assert!(matches!(
-            compile_owned_release_migration(
-                &unsupported,
-                v3_header(&unsupported),
-                Default::default()
-            ),
-            Err(OwnedReleaseError::Invalid(
-                "migration prior contract is unsupported"
-            ))
-        ));
-    }
-    for limits in [
-        OwnedReleaseLimits {
-            max_input_bytes: 1,
-            ..Default::default()
-        },
-        OwnedReleaseLimits {
-            max_artifact_bytes: 1,
-            ..Default::default()
-        },
-        OwnedReleaseLimits {
-            max_validation_entries: 1,
-            ..Default::default()
-        },
-        OwnedReleaseLimits {
-            max_provenance_entries: 1,
-            ..Default::default()
-        },
-    ] {
-        assert!(compile_owned_release_migration(&prior, valid.clone(), limits).is_err());
-    }
-}
-
-#[test]
-fn v3_accepts_explicit_checked_metrics_and_never_drops_prior_evaluation() {
-    let original = prior();
-    let prior = v3_fixture::contract(
-        original.input().clone(),
-        4,
-        OWNED_RULE_OPERATIONS_V15,
-        "prior-v15",
-    );
-    let mut migration = v3_header(&prior);
-    migration.evaluation = Some(endpoint_metrics(&prior, &migration));
-    let result =
-        compile_owned_release_migration(&prior, migration.clone(), Default::default()).unwrap();
-    assert_eq!(
-        result.input().schema_version,
-        OWNED_EVALUATION_RELEASE_VERSION
-    );
-    assert_eq!(result.input().evaluation, migration.evaluation);
-    assert!(result.artifacts().any(|(name, _)| name == "metrics.json"));
-    assert_source_inputs_preserved(&prior, &result);
-    let mut next = v3_header(&result);
-    next.release = key("checked-next-metrics");
-    assert!(matches!(
-        compile_owned_release_migration(&result, next.clone(), Default::default()),
-        Err(OwnedReleaseError::Invalid(
-            "migration cannot drop prior evaluation artifacts"
-        ))
-    ));
-    next.evaluation = result.input().evaluation.clone();
-    assert!(matches!(
-        compile_owned_release_migration(&result, next.clone(), Default::default()),
-        Err(OwnedReleaseError::Invalid(
-            "migration contains no semantic changes"
-        ))
-    ));
-    // A semantic edit does not authorize silently repairing stale metric bindings.
-    next.contract.rule_semantics_version = key("changed-evaluation-rules");
-    assert!(matches!(
-        compile_owned_release_migration(&result, next.clone(), Default::default()),
-        Err(OwnedReleaseError::Evaluation(_))
-    ));
-    next.evaluation = Some(endpoint_metrics(&result, &next));
-    let updated = compile_owned_release_migration(&result, next, Default::default()).unwrap();
-    assert_source_inputs_preserved(&result, &updated);
-}
-
-#[test]
-fn v3_preserves_support_artifact_presence_and_does_not_relax_stage_validation() {
-    let prior = v3_fixture::evaluated_prior();
-    let valid = v3_header(&prior);
+fn current_preserves_support_artifact_presence_and_does_not_relax_stage_validation() {
+    let prior = migration_fixture::evaluated_prior();
+    let valid = capability_header(&prior);
     let mut missing_support = valid.clone();
     missing_support.evaluation = Some(endpoint_metrics(&prior, &valid));
     assert!(matches!(
@@ -1365,7 +1007,7 @@ fn v3_preserves_support_artifact_presence_and_does_not_relax_stage_validation() 
     // Rebind only immediate endpoint identities so the original V1 stages reach
     // the real V17 readiness gate. No readiness declarations are fabricated.
     let mut recipe = prior.input().recipe.clone();
-    recipe.schema.schema_version = 5;
+    recipe.schema.schema_version = 7;
     recipe.schema.release = incompatible_stages.release.clone();
     recipe.rules.definitions = endpoint.metrics.definitions.clone();
     recipe.rules.operations_version = key(OWNED_RULE_OPERATIONS_V17);

@@ -1,10 +1,10 @@
 {
-  "schema_version": 3,
+  "schema_version": 5,
   "before": "80c07986489bdac79d7b126d53be95cf1c55a204a2a408fccfacbe0d19e7b691",
   "release": "pob-3887ae68-sniper-reservation-v1",
   "reason": "sniper-requested-count-and-flat-reservation-component",
   "contract": {
-    "schema_version": 5,
+    "schema_version": 7,
     "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
     "operations_version": "owned-domain-operations-v17",
     "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
@@ -1761,23 +1761,23 @@
                 }
               },
               {
-              "id": "base-zero",
+                "id": "base-zero",
                 "expression": {
                   "kind": "compare",
-                "operation": "equal",
+                  "operation": "equal",
                   "left": "base-flat-val",
                   "right": "zero"
                 }
               },
-            {
-              "id": "base-nonzero",
-              "expression": {
-                "kind": "not",
-                "value": "base-zero"
-              }
-            },
-            {
-              "id": "nonzero-branch",
+              {
+                "id": "base-nonzero",
+                "expression": {
+                  "kind": "not",
+                  "value": "base-zero"
+                }
+              },
+              {
+                "id": "nonzero-branch",
                 "expression": {
                   "kind": "all",
                   "values": [
@@ -2002,8 +2002,8 @@
                 }
               },
               {
-              "id": "no-spirit-transfer",
-              "expression": {
+                "id": "no-spirit-transfer",
+                "expression": {
                   "kind": "not",
                   "value": "spirit-to-life-conversion-active"
                 }

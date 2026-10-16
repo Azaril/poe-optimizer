@@ -4,20 +4,20 @@
   "before_definitions": {
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
-    "content_sha256": "ac68e93e6dc158e4dea2c4e6eba3529e526a4d1d1c20c6c9669866fcbaa6293f",
+    "schema_version": 7,
+    "content_sha256": "16f6cfdafe97ec223cb7a6418fc3e4c9f395c525222086d9bdee4598beff857d",
     "semantics_version": "owned-mechanics-components-v1"
   },
   "after_definitions": {
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
-    "content_sha256": "6c07ade63e8c3072c400a6b8ec9633bde2a04727a217d7e70dc37a1d05b78fb2",
+    "schema_version": 7,
+    "content_sha256": "84c2f56f027e5a93c0bd6392072f051b97157374940699b7b3e3035467613d73",
     "semantics_version": "owned-mechanics-components-v1"
   },
-  "before_mapping": "b2d0f60e68fe999d9783e20c67109622a0a52a061b0c55a38d8ca21a9652df92",
-  "after_mapping": "f4666b2610e3c6a8c01a5da5948fc071fdf2a71d630d14bc0333ad30f8cff0f2",
-  "compiled_transition_sha256": "011f4aedcec6f931b71bf55f768e13020efe6fca1f5684919ca19452a1b255e4",
+  "before_mapping": "c53c7884b31e371531c47a4f3e45ee6d1e282e6db0a4e3eb6faa71fe75a062c4",
+  "after_mapping": "e43cbc95751fadaae7ed3d810fc16c5e8fa76f424052fa14a460a3ba5dbf0e65",
+  "compiled_transition_sha256": "3c736dcb95a776a1049bc4f25b259a73214872ee777d5dd3179059252fbad108",
   "preserved_definition_count": 105,
   "preserved_slot_count": 14,
   "source_execution": false,
@@ -25,22 +25,22 @@
   "artifacts": [
     {
       "path": "policies/item-source.json",
-      "sha256": "e9f34a865f89b10c4fdfd1514a79fca7c45d3e4f6957b4d3220f80596fbadfc8",
+      "sha256": "4a971ec051befba908e0d9c405c9abeac43b6839372fe5e60219f51259439113",
       "bytes": 4761
     },
     {
       "path": "policies/items.json",
-      "sha256": "c7beeb8d0ad7ed3ffcd2de809d04a7b0b2c54b0d2ca8e9388f66bda2a4767265",
+      "sha256": "88f87a9205f1eab5a1ff565a813005c42e2fc00dd98fe40b7c42cd8bb8caf62a",
       "bytes": 453
     },
     {
       "path": "policies/normalization.json",
-      "sha256": "3bd26694a2932efe6aa40bce453796a04945eb10a4c8edcb3d0a888337d95ed0",
+      "sha256": "9583aa4d12b62cda4dc47593c06048f801c93e7e9ba832d3c58c8cf689ce38b6",
       "bytes": 13068
     },
     {
       "path": "policies/rewards.json",
-      "sha256": "33b1269587b996206eb993e0ffb51eaf67a7b1d307e3f331a93c5e82d5688479",
+      "sha256": "7b8f987fc1a97bda3248202c8c58662b420233da424a93f7f074663876a71b8e",
       "bytes": 61843
     }
   ]

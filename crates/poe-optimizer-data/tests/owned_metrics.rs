@@ -138,6 +138,28 @@ fn error(input: MetricMappingInput, schema: &OwnedDefinitionSchemaPackage) -> St
         .to_string()
 }
 #[test]
+fn scenario_actor_mapping_requires_its_explicit_role_without_a_fake_provider() {
+    let mut raw_schema = schema_input();
+    metric(&mut raw_schema).actor_roles = vec![MetricActorRole::ScenarioEnemy];
+    metric(&mut raw_schema).provider_roles.clear();
+    let admitted = schema(raw_schema.clone());
+    let mut mapping = input(&admitted);
+    mapping.bindings = vec![MetricStatBinding {
+        metric: id("metric"),
+        role: MetricBindingRole::ScenarioEnemyActor,
+        stat: id("actor"),
+    }];
+    let result = package(mapping.clone(), &admitted);
+    assert_eq!(
+        result.stat_for(&id("metric"), MetricBindingRole::ScenarioEnemyActor),
+        Some(&id("actor"))
+    );
+    metric(&mut raw_schema).actor_roles = vec![MetricActorRole::Owned, MetricActorRole::Player];
+    let wrong = schema(raw_schema);
+    mapping.definitions = wrong.identity().clone();
+    assert!(error(mapping, &wrong).contains("metric actor role mismatch"));
+}
+#[test]
 fn canonical_roundtrip_and_exact_lookup_preserve_role_distinctions_without_claiming_values() {
     let s = schema(schema_input());
     let original = input(&s);

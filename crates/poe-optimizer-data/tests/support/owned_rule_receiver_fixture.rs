@@ -138,7 +138,7 @@ pub fn input(s: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
         namespace: ns(),
         release: key("rules"),
         semantics_version: key("receiver-v1"),
-        operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+        operations_version: key(OWNED_RULE_OPERATIONS_V14),
         definitions: s.identity().clone(),
         tables: vec![],
         owners: vec![DefinitionRules {

@@ -84,7 +84,7 @@ pub fn check_authored() {
         assert_eq!(def["value"]["value"]["id"], value(&input.value_input));
         assert_eq!(
             def["value"]["value"]["schema"]["value"]["targets"],
-            json!(["enemy"])
+            json!(["scenario_enemy_actor"])
         );
         let range = &def["value"]["value"]["schema"]["value"]["value"]["value"];
         for (side, bound) in [("minimum", -1_000_000.), ("maximum", 1_000_000.)] {

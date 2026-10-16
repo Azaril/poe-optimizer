@@ -8,11 +8,11 @@
   "definitions": {
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
-    "content_sha256": "6c07ade63e8c3072c400a6b8ec9633bde2a04727a217d7e70dc37a1d05b78fb2",
+    "schema_version": 7,
+    "content_sha256": "84c2f56f027e5a93c0bd6392072f051b97157374940699b7b3e3035467613d73",
     "semantics_version": "owned-mechanics-components-v1"
   },
-  "mapping": "f4666b2610e3c6a8c01a5da5948fc071fdf2a71d630d14bc0333ad30f8cff0f2",
+  "mapping": "e43cbc95751fadaae7ed3d810fc16c5e8fa76f424052fa14a460a3ba5dbf0e65",
   "rules": [
     {
       "recipe": {

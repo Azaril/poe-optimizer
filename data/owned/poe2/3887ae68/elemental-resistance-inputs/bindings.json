@@ -124,10 +124,10 @@
     "system": "path_of_building2"
   },
   "definitions": {
-    "content_sha256": "6ea88c2f53a19017e0d1edf8606fcaa54d069e6c8e685860416409050f085042",
+    "content_sha256": "7d2534f029f2fabdc06cd334844eec14025efe845a6266288bf453ef7ff9cb8f",
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
+    "schema_version": 7,
     "semantics_version": "owned-mechanics-components-v1"
   },
   "families": [
@@ -1175,10 +1175,10 @@
   "membership_scope": "structural_raw_modifier_family_only",
   "numerical_eligibility": "partial",
   "prior_definitions": {
-    "content_sha256": "6e84fa807ad443d35f150574f288c141f318588c14ea942e5d85c4287a6b1a58",
+    "content_sha256": "d91a65fb173f21607db86ffd8b94bdc2fbe609d611e516bb4dc5a490d7965cca",
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
+    "schema_version": 7,
     "semantics_version": "owned-mechanics-components-v1"
   },
   "refined_templates": 1756,

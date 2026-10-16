@@ -47,10 +47,10 @@ fn default_fixture() -> DefaultFixture {
         },
     ];
     let targets = [
-        AssumptionTargetKind::Enemy,
+        AssumptionTargetKind::ScenarioEnemyActor,
         AssumptionTargetKind::Environment,
-        AssumptionTargetKind::Actor,
-        AssumptionTargetKind::Enemy,
+        AssumptionTargetKind::PlayerActor,
+        AssumptionTargetKind::ScenarioEnemyActor,
     ];
     let mut inputs = Vec::new();
     for (value, target) in values.into_iter().zip(targets) {
@@ -81,7 +81,7 @@ fn default_fixture() -> DefaultFixture {
                 value: ValueSchema::Option {
                     allowed: DeclaredSet::complete(options.clone()),
                 },
-                targets: vec![AssumptionTargetKind::Enemy],
+                targets: vec![AssumptionTargetKind::ScenarioEnemyActor],
             }),
         }));
     for descriptor in &mut schema.definitions {
@@ -230,7 +230,7 @@ fn configuration_receipts_distinguish_authored_values_constructor_defaults_and_i
         );
         assert!(assumptions(&result, 0).contains(&(
             fixture.inputs[0].clone(),
-            DraftAssumptionTarget::Enemy,
+            DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy),
             ParameterValue::Integer(BoundedInteger::new(expected).unwrap())
         )));
         if expected == 0 {
@@ -278,10 +278,10 @@ fn expected(
     values: Vec<ParameterValue>,
 ) -> Vec<(ExternalInputDefId, DraftAssumptionTarget, ParameterValue)> {
     let targets = [
-        DraftAssumptionTarget::Enemy,
+        DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy),
         DraftAssumptionTarget::Environment,
         DraftAssumptionTarget::Actor(DraftActorKey::Player),
-        DraftAssumptionTarget::Enemy,
+        DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy),
     ];
     f.inputs
         .iter()

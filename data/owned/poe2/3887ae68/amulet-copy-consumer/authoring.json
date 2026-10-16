@@ -33,6 +33,6 @@
     "bindings": "ec4b5742aaa35ff540ff99c618439b639493f320b69b3153152a667bc6c65e34",
     "coverage": "ce4cd2b4adea6ad2faf780625750139e3a2019eb8c42397582315ac364fa8211",
     "dependencies": "5be96ab3166f4dba6925fe042c4059b6258d20a1f9ab671543d4be1a93d14a32",
-    "source-vectors": "726581b4ff8b26283e7b1db275b842a7c24d46cef32c913b602c0886b90d4343"
+    "source-vectors": "400b975e6cf76efe6d0bbc457a85ebfd705a81a6b077af1b2ec24badcd5bdd3c"
   }
 }

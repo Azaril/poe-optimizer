@@ -175,7 +175,7 @@ impl Fixture {
         let migration: OwnedReleaseMigrationInput = read(packet.join("migration.json"));
         let dependencies: Value = read(packet.join("dependencies.json"));
         let recipe = &endpoint.input().recipe;
-        assert_eq!(recipe.schema.schema_version, 6);
+        assert_eq!(recipe.schema.schema_version, 7);
         assert_eq!(
             recipe.rules.operations_version.as_str(),
             OWNED_RULE_OPERATIONS_V21

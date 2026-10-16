@@ -83,7 +83,7 @@
   "new_tables": 0,
   "new_scalar_values": 0,
   "artifact_sha256": {
-    "migration": "45bd5581159b1de89001bb5d09743c684d5f3a3b751e00bfa550a6b474a08167",
+    "migration": "869fccb65c205ea686a6c7ea06703e2a3eb2d53637b9893c734d44b1edf37e52",
     "bindings": "d0f1c4308dd0567d1e1d6910eac5bde023e465a31a8a86d4a45f064def51407c",
     "dispositions": "cc1a3e5cab9c097ef6dee6259b31ea81e70e428e3fa00f18b76ba9e40dae7a80"
   },

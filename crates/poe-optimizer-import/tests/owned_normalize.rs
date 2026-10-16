@@ -3179,22 +3179,22 @@ fn skill_scope_policy_limits_and_wire_shape_reject_before_source_inference() {
 }
 
 #[test]
-fn omitted_skill_policy_preserves_legacy_canonical_bytes_and_tree_binding() {
+fn omitted_skill_policy_preserves_current_bootstrap_bytes_and_tree_binding() {
     use poe_optimizer_core::owned_content::digest_owned;
-    const LEGACY: &str =
+    const BASELINE: &str =
         include_str!("../../../data/owned/poe2/3887ae68/current/normalization.json");
-    let restored: NormalizationPolicy = serde_json::from_str(LEGACY).unwrap();
+    let restored: NormalizationPolicy = serde_json::from_str(BASELINE).unwrap();
     assert!(restored.skill_scopes.is_none());
-    assert_eq!(serde_json::to_string(&restored).unwrap(), LEGACY.trim());
-    let legacy_digest = digest_owned(
+    assert_eq!(serde_json::to_string(&restored).unwrap(), BASELINE.trim());
+    let baseline_digest = digest_owned(
         "owned-normalization-policy-v3",
         &restored,
         NormalizationLimits::default().max_policy_bytes,
     )
     .unwrap();
     assert_eq!(
-        legacy_digest.to_string(),
-        "a194afb11f92394cda0025f6fd0663f150bbf53e8dab50aea5ee568acb33d003"
+        baseline_digest.to_string(),
+        "e33c710c8427bc3e60e9f81cb659ae525b072b686bc9e5e9fadd985dafdd1a4a"
     );
     let mut changed = restored.clone();
     changed.skill_scopes = Some(SkillScopePolicy {
@@ -3208,7 +3208,7 @@ fn omitted_skill_policy_preserves_legacy_canonical_bytes_and_tree_binding() {
             NormalizationLimits::default().max_policy_bytes,
         )
         .unwrap(),
-        legacy_digest
+        baseline_digest
     );
     let a = artifacts(true);
     let xml = group(ACTIVE);

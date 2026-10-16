@@ -396,7 +396,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -447,7 +447,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }

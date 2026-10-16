@@ -250,6 +250,7 @@ impl PresetUsageScope {
             ActorKey::Owned(key) => self.root(path, &key.provider.root),
             ActorKey::Player if allow_player => Ok(()),
             ActorKey::Player => Err(error(path, StructuralErrorKind::WrongProviderOwner)),
+            ActorKey::ScenarioEnemy => Err(error(path, StructuralErrorKind::WrongProviderOwner)),
         }
     }
     pub(crate) fn skill(&self, path: &str, skill: &SkillTarget) -> Result {
@@ -963,7 +964,7 @@ impl<'a> StructuralCheck<'a> {
             self.definition(&path, &assumption.input)?;
             self.value(&path, &assumption.value)?;
             match &assumption.target {
-                AssumptionTarget::Environment | AssumptionTarget::Enemy => {}
+                AssumptionTarget::Environment => {}
                 AssumptionTarget::Actor(actor) => self.actor(&path, actor)?,
                 AssumptionTarget::Skill(skill) => self.skill(&path, skill)?,
             }

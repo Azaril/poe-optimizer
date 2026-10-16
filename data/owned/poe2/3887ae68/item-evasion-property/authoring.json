@@ -11,7 +11,7 @@
     {
       "name": "dependencies.json",
       "bytes": 3930590,
-      "sha256": "e7435641468ccdad7e4417ab67146d3a2918eaef56f79f948e042d1c0c0a3b04"
+      "sha256": "8e0e97074a48dbf3a5866d8b8befa3d7696f7164e09c39afbb18b5c62e9398f6"
     },
     {
       "name": "source-evidence.json",
@@ -31,7 +31,7 @@
     {
       "name": "migration.json",
       "bytes": 4233,
-      "sha256": "ef393563d4e64d761b5a6a7d34e5c5a302f1e049e9de0c643739b1ba0bbaf987"
+      "sha256": "bcedd097b77069cdb09782212948a6aa096b334bd475535f9ba1d781855f468c"
     }
   ],
   "scope": {

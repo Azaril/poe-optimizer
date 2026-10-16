@@ -100,7 +100,7 @@ fn compare_original(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path)
         .map(|input| {
             json!({
                 "input":{"kind":"known","value":input.presence_input},
-                "target":{"kind":"enemy"},
+                "target":{"kind":"actor","value":{"kind":"scenario_enemy"}},
                 "value":{"kind":"known","value":{"kind":"boolean","value":false}}
             })
         })

@@ -96,12 +96,21 @@ require deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
 The current fixture has **957 definitions, 625 owners and 37 stages**.
-It is 139,878 compressed bytes and 5,442,599 JSON bytes. Gzip SHA-256:
-`792c80a684d68009fa5b14071a5a71c329b29ae2233470c819fd2439c30f2e67`.
+It is 139,830 compressed bytes and 5,442,843 JSON bytes. Gzip SHA-256:
+`96e32a6b7e44c265200563f0bd56f9dc86cd73783ded8be186cd4ea5668bf0ea`.
 Decoded JSON SHA-256:
-`fa6e2d89882ac62792f819214db41ec246a954f6f1b670fc6d6e1a6ad8bf60b0`.
+`60a66d425d65361dd885676165ac31e11320d1ea327375112660974f094b18b0`.
 
-The refresh passes the public-input export and full-report equality check
+The October 15 Actor migration updates the current format to schema 7, rule
+package 4 and operations V28. Its exact inverse checks all 51 declared format
+edits and 16 dependency commitments against the authenticated prior gzip.
+Build, Scenario, queries, formulas, closures and all other semantic contents
+restore exactly. The Rust replay rebuild verifies full-report equality and
+deterministic re-encoding. Evidence: `runs/generic-actor-fixtures-rebuild-01.log`
+and `runs/generic-actor-format-final-inverse.json`. Ordinary current-format
+regressions are recorded in the implementation checkpoint.
+
+The preceding physical-base refresh passed the public-input export and full-report equality check
 (`runs/owned-selected-physical-base-export-01.log`). Its exact inverse at
 `runs/owned-selected-physical-base-replay-inverse-01.json` preserves Build,
 Scenario and saved queries. It adds 29 exact current descriptors, four empty
@@ -110,7 +119,7 @@ four freezes, plus three previously published Life guards. Sixteen dependent
 identities rebind; every other semantic field restores exactly. This is not a
 physical-only snapshot change.
 
-All **45 ordinary Engine tests pass** in 12.99 seconds
+At that preceding checkpoint, **45 ordinary Engine tests passed** in 12.99 seconds
 (`runs/owned-selected-physical-base-engine-replay-03.log`). The first execution
 exposed obsolete test-side Life guard installers; exact published-body assertions
 now replace those installers. The physical negative also recognizes Data's

@@ -276,7 +276,7 @@ fn every_composite_variant_has_a_lossless_complete_conversion() {
     }
     for value in [
         AssumptionTarget::Environment,
-        AssumptionTarget::Enemy,
+        AssumptionTarget::Actor(ActorKey::ScenarioEnemy),
         AssumptionTarget::Actor(actor()),
         AssumptionTarget::Skill(skill()),
     ] {

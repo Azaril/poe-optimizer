@@ -69,7 +69,7 @@ fn check_registry_and_contract(
         assert_eq!(actual.target, authored.subject());
     }
     let schema: SchemaPackageInput = load(output.join("schema.json"));
-    assert_eq!(schema.schema_version, 3);
+    assert_eq!(schema.schema_version, 7);
     assert_eq!(schema.release, migration.release);
     assert_eq!(
         schema.semantics_version,
@@ -157,12 +157,12 @@ pub(super) fn check_actor_ability_supply(cwd: &Path, prior: &Path) -> PathBuf {
         receipt["provenance"][0]["kind"],
         serde_json::to_value(&migration.reason).unwrap()
     );
-    assert_eq!(migration.schema_version, 1);
+    assert_eq!(migration.schema_version, 5);
     assert_eq!(
         receipt["provenance"][0]["authoring_input"],
         serde_json::to_value(
             digest_owned(
-                "owned-release-contract-migration-v1",
+                "owned-release-contract-migration-v5",
                 &migration,
                 OwnedReleaseLimits::default().max_artifact_bytes,
             )

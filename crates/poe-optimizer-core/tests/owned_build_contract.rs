@@ -455,7 +455,7 @@ fn scenario_input() -> ScenarioInput {
         },
         assumptions: vec![ExternalAssumption {
             input: definition("external-enemy-condition"),
-            target: AssumptionTarget::Enemy,
+            target: AssumptionTarget::Actor(ActorKey::ScenarioEnemy),
             value: ParameterValue::Boolean(false),
         }],
         usage: vec![UsagePolicySelection {

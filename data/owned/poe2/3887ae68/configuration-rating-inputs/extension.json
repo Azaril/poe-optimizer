@@ -172,7 +172,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -223,7 +223,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -260,7 +260,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "actor"
               ]
             }
           }
@@ -287,7 +287,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -338,7 +338,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -375,7 +375,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "actor"
               ]
             }
           }
@@ -2826,7 +2826,7 @@
         "members": [
           {
             "id": "configured-enemy-armour-base",
-            "context": "enemy",
+            "context": "actor",
             "reads": [
               {
                 "id": "present",
@@ -3031,7 +3031,7 @@
           },
           {
             "id": "configured-enemy-evasion-base",
-            "context": "enemy",
+            "context": "actor",
             "reads": [
               {
                 "id": "present",

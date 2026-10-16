@@ -490,6 +490,7 @@ impl DraftSkillTarget {
 )]
 pub enum DraftActorKey {
     Player,
+    ScenarioEnemy,
     Owned(Box<OwnedActorKeyDraft>),
     Pending(PendingValue<ActorKey>),
 }
@@ -497,6 +498,7 @@ impl From<ActorKey> for DraftActorKey {
     fn from(value: ActorKey) -> Self {
         match value {
             ActorKey::Player => Self::Player,
+            ActorKey::ScenarioEnemy => Self::ScenarioEnemy,
             ActorKey::Owned(value) => Self::Owned(Box::new((*value).into())),
         }
     }
@@ -506,6 +508,7 @@ impl ResolveDraft for DraftActorKey {
     fn to_resolved(&self) -> Option<ActorKey> {
         Some(match self {
             Self::Player => ActorKey::Player,
+            Self::ScenarioEnemy => ActorKey::ScenarioEnemy,
             Self::Owned(value) => ActorKey::Owned(Box::new(value.to_resolved()?)),
             Self::Pending(_) => return None,
         })
@@ -574,7 +577,6 @@ impl DraftChoiceOwner {
 )]
 pub enum DraftAssumptionTarget {
     Environment,
-    Enemy,
     Actor(DraftActorKey),
     Skill(DraftSkillTarget),
     Pending(PendingValue<AssumptionTarget>),
@@ -583,7 +585,6 @@ impl From<AssumptionTarget> for DraftAssumptionTarget {
     fn from(value: AssumptionTarget) -> Self {
         match value {
             AssumptionTarget::Environment => Self::Environment,
-            AssumptionTarget::Enemy => Self::Enemy,
             AssumptionTarget::Actor(value) => Self::Actor(value.into()),
             AssumptionTarget::Skill(value) => Self::Skill(value.into()),
         }
@@ -594,7 +595,6 @@ impl ResolveDraft for DraftAssumptionTarget {
     fn to_resolved(&self) -> Option<AssumptionTarget> {
         Some(match self {
             Self::Environment => AssumptionTarget::Environment,
-            Self::Enemy => AssumptionTarget::Enemy,
             Self::Actor(value) => AssumptionTarget::Actor(value.to_resolved()?),
             Self::Skill(value) => AssumptionTarget::Skill(value.to_resolved()?),
             Self::Pending(_) => return None,

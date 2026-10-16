@@ -499,7 +499,9 @@ impl Fixture {
         &self,
         limits: PlanLimits,
     ) -> Result<OwnedEffectPlan<OwnedDefinitionSchemaPackage>, PlanError> {
-        self.compile_with_operations(limits, OWNED_RULE_OPERATIONS_VERSION)
+        // This finite fixture has no preparation stages. Its V14 capability
+        // subset still uses the current package/schema and unified Actor model.
+        self.compile_with_operations(limits, OWNED_RULE_OPERATIONS_V14)
     }
     pub fn compile_with_operations(
         &self,

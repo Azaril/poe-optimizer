@@ -116,7 +116,7 @@ fn finite_flags(row: &Value, unobserved_mask: u8) -> World {
     assert!(dot || row["category"] == "Average");
     world.f.scenario.assumptions.push(ExternalAssumption {
         input: game(0x3251),
-        target: AssumptionTarget::Enemy,
+        target: AssumptionTarget::Actor(poe_optimizer_core::owned_build::ActorKey::ScenarioEnemy),
         value: ParameterValue::Option(game(if dot { 0x3254 } else { 0x3252 })),
     });
     for (index, id, directory) in [
@@ -130,7 +130,9 @@ fn finite_flags(row: &Value, unobserved_mask: u8) -> World {
             .unwrap_or_else(|| constructor_default(directory));
         world.f.scenario.assumptions.push(ExternalAssumption {
             input: game(id),
-            target: AssumptionTarget::Enemy,
+            target: AssumptionTarget::Actor(
+                poe_optimizer_core::owned_build::ActorKey::ScenarioEnemy,
+            ),
             value: quantity(amount),
         });
     }
@@ -146,11 +148,7 @@ fn finite_flags(row: &Value, unobserved_mask: u8) -> World {
             .members
             .push(RuleProgram {
                 id: key(&format!("fixture-dependency-{index}")),
-                context: if enemy {
-                    RuleEntityKind::Enemy
-                } else {
-                    RuleEntityKind::Actor
-                },
+                context: RuleEntityKind::Actor,
                 reads: vec![],
                 nodes: vec![node(
                     "value",

@@ -8,8 +8,8 @@
   "definitions": {
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
-    "content_sha256": "9ee542bb473f7c215e973ccf80b3b85a09f7ccf483a8ab689255fcf4a60bcda2",
+    "schema_version": 7,
+    "content_sha256": "5eaf7a89b6712bf2feb46e643254382b65264abeed87c91f119d6073d1fb3ffd",
     "semantics_version": "owned-mechanics-components-v1"
   },
   "costs": [

@@ -416,7 +416,7 @@ fn v8_is_explicit_and_prior_versions_retain_old_program_bytes_and_identities() {
         "owned-domain-operations-v8"
     );
     let mut current = quantizer(1.0, RuleRounding::Floor);
-    current.rules.operations_version = key(OWNED_RULE_OPERATIONS_VERSION);
+    current.rules.operations_version = key(OWNED_RULE_OPERATIONS_V14);
     let compiled_current = compile(&current);
     assert_eq!(
         evaluate(
@@ -438,7 +438,7 @@ fn v8_is_explicit_and_prior_versions_retain_old_program_bytes_and_identities() {
         program(&mut unchanged).nodes[1] = literal("result", integer(7));
         let bytes = serde_json::to_vec(&unchanged.rules).unwrap();
         let expected = digest_owned(
-            "owned-rule-programs-v4",
+            "owned-rule-programs-v5",
             &unchanged.rules,
             RuleLimits::default().max_wire_bytes,
         )

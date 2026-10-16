@@ -324,7 +324,7 @@ fn storage_and_compiler_reject_invalid_target_scope_context_and_old_versions() {
                     vec![StatReceiverTarget::EquipmentTemplate { template }];
             }
         }
-        let (schema, input) = rules(&f, OWNED_RULE_OPERATIONS_VERSION);
+        let (schema, input) = rules(&f, OWNED_RULE_OPERATIONS_V14);
         assert!(
             OwnedRulePackage::new(input.clone(), &schema, Default::default()).is_err(),
             "storage case {case}"
@@ -358,7 +358,7 @@ fn receiver_does_not_acquire_template_level_quality_or_modifier_read_authority()
                 value_type: ComputedValueType::Integer,
                 source,
             });
-        let (schema, input) = rules(&f, OWNED_RULE_OPERATIONS_VERSION);
+        let (schema, input) = rules(&f, OWNED_RULE_OPERATIONS_V14);
         assert!(CompiledRulePackage::compile(&input, &schema, Default::default()).is_err());
     }
 }
@@ -383,7 +383,7 @@ fn actor_wire_and_v6_v7_v8_subsets_roundtrip_current_contract_identities() {
         assert_eq!(
             compiled.identity(),
             digest_owned(
-                "owned-rule-programs-v4",
+                "owned-rule-programs-v5",
                 &canonical,
                 RuleLimits::default().max_wire_bytes
             )
@@ -410,7 +410,7 @@ fn receiver_expansion_is_bounded_and_worker_scratch_is_independent() {
         })
         .is_err()
     );
-    let (schema, input) = rules(&f, OWNED_RULE_OPERATIONS_VERSION);
+    let (schema, input) = rules(&f, OWNED_RULE_OPERATIONS_V14);
     assert!(
         OwnedRulePackage::new(
             input.clone(),

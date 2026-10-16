@@ -94,7 +94,7 @@ fn application_groups<'a, I: DefinitionSchemaIndex>(
                 || application.targets.is_empty()
                 || application.targets.iter().any(|target| match target {
                     EffectApplicationTarget::Player => context != RuleEntityKind::Actor,
-                    EffectApplicationTarget::Enemy => context != RuleEntityKind::Enemy,
+                    EffectApplicationTarget::Enemy => context != RuleEntityKind::Actor,
                     EffectApplicationTarget::OwnedSlot { slot } => {
                         context != RuleEntityKind::Actor
                             || !matches!(index.slot(slot), SchemaLookup::Known(_))
@@ -445,6 +445,7 @@ fn order<I: DefinitionSchemaIndex>(
     let extended = matches!(
         producer.origin,
         ContributionOrigin::ExistingActor { .. }
+            | ContributionOrigin::Encounter
             | ContributionOrigin::Reward
             | ContributionOrigin::SuppliedActor { .. }
     );
@@ -467,6 +468,18 @@ fn order<I: DefinitionSchemaIndex>(
             ));
         }
         match &producer.origin {
+            ContributionOrigin::Encounter => {
+                let SchemaSubject::Definition(DefinitionAddress::Encounter(encounter)) =
+                    &producer.owner
+                else {
+                    return Err(invalid(
+                        "Encounter contribution requires an Encounter owner",
+                    ));
+                };
+                if !matches!(index.definition(encounter), SchemaLookup::Known(_)) {
+                    return Err(invalid("Encounter contribution requires a known Encounter"));
+                }
+            }
             ContributionOrigin::ExistingActor { application } => {
                 let SchemaSubject::Definition(DefinitionAddress::Actor(actor)) = &producer.owner
                 else {
@@ -593,6 +606,7 @@ fn order<I: DefinitionSchemaIndex>(
             Some((true, slots)),
         ),
         ContributionOrigin::ExistingActor { .. }
+        | ContributionOrigin::Encounter
         | ContributionOrigin::Reward
         | ContributionOrigin::SuppliedActor { .. }
         | ContributionOrigin::Skill { .. }
@@ -721,19 +735,14 @@ fn read<I: DefinitionSchemaIndex>(
         .is_some_and(RuleOperationsVersion::supports_skill_contribution_queries);
     let action_allowed = RuleOperationsVersion::parse(input.operations_version.as_str())
         .is_some_and(RuleOperationsVersion::supports_action_contribution_queries);
-    let enemy_allowed = catalog.queries[query].contribution == ContributionKind::Flag
-        && RuleOperationsVersion::parse(input.operations_version.as_str())
-            .is_some_and(RuleOperationsVersion::supports_boolean_contributions);
     let valid = match entity {
-        RuleEntity::Player => true,
-        RuleEntity::Enemy => enemy_allowed,
+        RuleEntity::Player | RuleEntity::Enemy => true,
         RuleEntity::Actor => matches!(p.context, RuleEntityKind::Actor | RuleEntityKind::Action),
         RuleEntity::Current => {
             matches!(
                 p.context,
                 RuleEntityKind::Actor | RuleEntityKind::EquipmentUse
-            ) || (p.context == RuleEntityKind::Enemy && enemy_allowed)
-                || (p.context == RuleEntityKind::Skill && skill_allowed)
+            ) || (p.context == RuleEntityKind::Skill && skill_allowed)
                 || (p.context == RuleEntityKind::Action && action_allowed)
         }
         _ => false,
@@ -745,8 +754,6 @@ fn read<I: DefinitionSchemaIndex>(
     }
     let target = if *entity == RuleEntity::Current {
         p.context
-    } else if *entity == RuleEntity::Enemy {
-        RuleEntityKind::Enemy
     } else {
         RuleEntityKind::Actor
     };
@@ -1115,12 +1122,19 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                         "Action contribution membership admits only the exact current Action recipient",
                     ));
                 }
+                if matches!(producer.origin, ContributionOrigin::Encounter)
+                    && !matches!(
+                        entity,
+                        RuleEntity::Current | RuleEntity::Actor | RuleEntity::Enemy
+                    )
+                {
+                    return Err(RuleStorageError::Structure(
+                        "Encounter contributions require their exact scenario Actor recipient",
+                    ));
+                }
                 let target = match entity {
-                    RuleEntity::Player | RuleEntity::Actor => RuleEntityKind::Actor,
-                    RuleEntity::Enemy
-                        if boolean_enabled && query.contribution == ContributionKind::Flag =>
-                    {
-                        RuleEntityKind::Enemy
+                    RuleEntity::Player | RuleEntity::Actor | RuleEntity::Enemy => {
+                        RuleEntityKind::Actor
                     }
                     RuleEntity::Current => program.context,
                     _ => {

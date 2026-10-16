@@ -274,8 +274,8 @@
   "artifacts": [
     {
       "path": "data/owned/poe2/3887ae68/configuration-resistance-penalty/closure.json",
-      "bytes": 25153,
-      "sha256": "1a20ef4392140ebb0fa1f5e70dc628e74d47f6d45c046b89c72fcbc54b964940"
+      "bytes": 25189,
+      "sha256": "fea497782e7a119550d368cf8532f055259b443d7ec0a7a9ec7bad2838eabd47"
     },
     {
       "path": "data/owned/poe2/3887ae68/configuration-resistance-penalty/dependencies.json",

@@ -168,7 +168,7 @@ fn absent_and_off_loadout_providers_do_not_invoke_assembly_or_retarget_another_c
 #[test]
 fn authored_and_generated_forms_share_final_skill_stats_without_sharing_source_ownership() {
     let mut f = generated::fixture();
-    f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V5;
+    f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
     for descriptor in &mut f.schema.definitions {
         if let DefinitionDescriptor::Skill(row) = descriptor
             && row.id == def::<poe_optimizer_core::owned_definitions::SkillDefinition>("summon")
@@ -511,7 +511,7 @@ fn preset_generated_quality_feeds_source_assembly_without_an_invented_stage() {
     };
     let mut f = generated::fixture();
     add_shared_final_stat(&mut f);
-    f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V6;
+    f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
     let raw = readiness::summon_parameter("preset-quality");
     for definition in &mut f.schema.definitions {
         if let DefinitionDescriptor::Skill(row) = definition

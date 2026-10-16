@@ -371,7 +371,7 @@ fn component() -> (OwnedDefinitionSchemaPackage, CompiledRulePackage) {
     let dependencies: Value = player_life_family::read("dependencies.json");
     let schema = OwnedDefinitionSchemaPackage::new(
         SchemaPackageInput {
-            schema_version: 6,
+            schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: d::<ActorDefinition>(0x332a).namespace().clone(),
             release: key("finite-inherent-life-bridge"),
             semantics_version: key("finite-inherent-life-bridge"),

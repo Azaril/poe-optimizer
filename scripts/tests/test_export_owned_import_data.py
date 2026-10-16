@@ -36,8 +36,12 @@ class ImportExportTests(unittest.TestCase):
             self.assertEqual(data, (DATA / "import" / name).read_bytes(), name)
 
     def test_rule_registry_survives_with_no_implicit_old_wire_migration(self):
+        old = EXPORT.decode(self.inputs[1])
+        old["schema"]["schema_version"] = 6
+        with self.assertRaisesRegex(ValueError, "owned definition schema"):
+            self.produce_changed(1, old)
         for value in [EXPORT.decode(self.inputs[1]), EXPORT.decode(self.outputs["recipe-seed.json"])]:
-            self.assertEqual(value["rules"]["schema_version"], 3)
+            self.assertEqual(value["rules"]["schema_version"], 4)
             self.assertEqual(value["rules"]["receivers"], {"members": [], "closure": {"kind": "complete"}})
         original = EXPORT.decode(self.inputs[1])["rules"]
         for changed in ["missing", "old_version", "old_operations"]:

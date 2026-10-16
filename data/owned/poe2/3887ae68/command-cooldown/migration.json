@@ -1,10 +1,10 @@
 {
-  "schema_version": 3,
+  "schema_version": 5,
   "before": "3d125227980142c7b9d046d5d5b73bcc1bdf20c1a3b2502b4c5571df1c1887a0",
   "release": "pob-3887ae68-command-cooldown-v1",
   "reason": "command-cooldown-receiving-and-gas-stat-sets",
   "contract": {
-    "schema_version": 5,
+    "schema_version": 7,
     "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
     "operations_version": "owned-domain-operations-v18",
     "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"

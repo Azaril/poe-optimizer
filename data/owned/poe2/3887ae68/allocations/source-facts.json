@@ -34,17 +34,17 @@
   "source_manifest_sha256": "27d143967927d0705eefd5879e17946b30bfe8e69a92718bd44ace50428923a1",
   "export_policy_sha256": "83d79d4fe0cd36dcc1192d7664638d92d8b7ea8d3ca49292836a84a94d1838c3",
   "catalog_sha256": "37db1255f28d05f67a6d81dfe286bcc698a9811e907c67d29cf640d9c28e5557",
-  "bundle_transition_sha256": "dca0b6382b0bbf577e6f5a0d669fe647d68a341fbf47e7e6018c5576fdfe4213",
+  "bundle_transition_sha256": "92a7d96ff7224b39392b8bb7bee5728fa2e27f6953f80056b93586515d725428",
   "bindings": {
     "registry": "4628e3941e6cfd735b0ed97357e11f13339d03c0e119525e3bafdebc816aeb15",
-    "mapping": "54653ea98cea642cd6f3c434fccf60257c9ec1e6a3298e81e6de33d9a63c3203",
-    "normalization": "a194afb11f92394cda0025f6fd0663f150bbf53e8dab50aea5ee568acb33d003",
-    "tree": "fb22b945a916b1e7c5145e5bb76c8d359f62bfaec597f3304301dc0cab624211",
+    "mapping": "b1b92e6109f1a64bd1e6efc5841743f75df8d37bd3558817f9d52815c8cce9b1",
+    "normalization": "e33c710c8427bc3e60e9f81cb659ae525b072b686bc9e5e9fadd985dafdd1a4a",
+    "tree": "76ca5b4deebe07189254647b6bbeea3971cb3980e66cad698ede5cb9e224c784",
     "definitions": {
       "game": "poe2",
       "release": "pob-3887ae68-components",
-      "schema_version": 2,
-      "content_sha256": "9ee542bb473f7c215e973ccf80b3b85a09f7ccf483a8ab689255fcf4a60bcda2",
+      "schema_version": 7,
+      "content_sha256": "5eaf7a89b6712bf2feb46e643254382b65264abeed87c91f119d6073d1fb3ffd",
       "semantics_version": "owned-mechanics-components-v1"
     }
   },
@@ -72,6 +72,6 @@
   "artifact": {
     "file": "rules.json",
     "bytes": 1909831,
-    "sha256": "30a79be0d556a022ac30e60edf2beabb6d8e32bd16a101e0c10ecb40ca6898b3"
+    "sha256": "f7f70904f659f665603478e6b9560b387c3128251acb227558e969b852779103"
   }
 }

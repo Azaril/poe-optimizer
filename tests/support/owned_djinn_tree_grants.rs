@@ -36,8 +36,8 @@ pub fn check_authored() {
     let b = bindings();
     let dependencies: Value = read("dependencies.json");
     let m: OwnedReleaseMigrationInput = read("migration.json");
-    assert_eq!(m.schema_version, 3);
-    assert_eq!(m.contract.schema_version, 5);
+    assert_eq!(m.schema_version, 5);
+    assert_eq!(m.contract.schema_version, 7);
     assert_eq!(
         m.contract.operations_version.as_str(),
         "owned-domain-operations-v17"

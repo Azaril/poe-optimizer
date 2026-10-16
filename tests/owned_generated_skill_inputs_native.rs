@@ -109,7 +109,7 @@ impl Fixture {
             "published mechanics remain Partial"
         );
         let recipe = &endpoint.input().recipe;
-        assert_eq!(recipe.schema.schema_version, 6);
+        assert_eq!(recipe.schema.schema_version, 7);
         assert_eq!(
             recipe.rules.operations_version.as_str(),
             OWNED_RULE_OPERATIONS_V19
@@ -356,7 +356,7 @@ impl Fixture {
             )));
         }
         let schema = SchemaPackageInput {
-            schema_version: 6,
+            schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: namespace.clone(),
             release: key("unpublished-generated-input-component"),
             semantics_version: recipe.schema.semantics_version.clone(),

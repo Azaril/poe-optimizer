@@ -89,7 +89,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                     ..
                 }
             )
-            || context.actor != ActorKey::Player
+            || context.actor != Some(ActorKey::Player)
             || context.entity != ConcreteEntity::Actor(ActorKey::Player)
         {
             return Err(PlanError::Invalid(

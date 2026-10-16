@@ -335,7 +335,7 @@ fn author(
         .validate_successor(&registry)
         .unwrap();
     input.recipe.registry = registry.input().clone();
-    input.recipe.schema.schema_version = 4;
+    input.recipe.schema.schema_version = 7;
     input.recipe.schema.release = policy.release.clone();
     input.recipe.schema.semantics_version = key("owned-mechanics-effective-gem-inputs-v1");
     input.recipe.rules.semantics_version = key("owned-mechanics-effective-gem-inputs-v1");

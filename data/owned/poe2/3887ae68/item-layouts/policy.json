@@ -3,14 +3,14 @@
   "version": "constructed-item-layouts-v1",
   "catalog_sha256": "6c8a0ddcfda0e04ad2f6c10e808e10a36f59d56e9b066750c03b30ff4983ca79",
   "definitions": {
+    "content_sha256": "82d1a0783251f3f76670409f3d50ff16b4b90b1c9eebf1515b368e24875020d0",
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
-    "content_sha256": "acdefc94830bfd5b6d7d4b9af8f83b4db0838589c2ec4a1170ee86e0e3f7795a",
+    "schema_version": 7,
     "semantics_version": "owned-mechanics-components-v1"
   },
-  "items": "d9aee12950064674d55e9c547bed1117c96cd4a13c6cd24a909dbe3ca171295c",
-  "item_source": "343e4d661b1a17805b121ddba237c73a11f644567a12b574681fddb6fc573d26",
+  "items": "d61a06650b3ee5d9109aa08c5e21cf9dff08b85899929e6c05ecfad3822698a6",
+  "item_source": "562be49b4abd46801e63c14b07e7af9762fe3a9afec5603f9e27e65ffb5b5409",
   "templates": [
     {
       "source_base": "Aberrant Sledge",

@@ -253,7 +253,7 @@ pub(crate) fn usage_sources(target: &UsageTarget) -> Vec<ProviderRoot> {
         UsageTarget::Actor(ActorKey::Owned(actor)) => {
             roots.insert(actor.provider.root.clone());
         }
-        UsageTarget::Actor(ActorKey::Player) => {}
+        UsageTarget::Actor(ActorKey::Player | ActorKey::ScenarioEnemy) => {}
         UsageTarget::Action(action) => {
             roots.insert(action.action.provider.root.clone());
             if let ActorKey::Owned(actor) = &action.action.actor {

@@ -186,7 +186,7 @@ fn inherited_source_readiness_requires_v3_stages_through_v21() {
 }
 #[test]
 fn omission_is_legacy_only_and_explicit_null_never_requests_early_authority() {
-    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V14);
+    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V28);
     assert_eq!(OWNED_EVALUATION_STAGES_VERSION, 1);
     assert_eq!(OWNED_SUPPORT_RECEIVING_VERSION, 1);
     let f = Fixture::new();
@@ -566,7 +566,7 @@ fn v4_retains_source_operations_gate_and_has_its_own_identity_domain() {
         );
     }
     assert_eq!(OWNED_EVALUATION_STAGES_VERSION, 1);
-    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V14);
+    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V28);
 }
 
 #[test]

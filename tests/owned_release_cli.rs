@@ -522,12 +522,12 @@ fn migration_policy(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
         unreachable!();
     }
     OwnedReleaseMigrationInput {
-        schema_version: 1,
+        schema_version: 5,
         before: prior.receipt().input,
         release: OwnedDefinitionKey::new("cli-explicit-migration").unwrap(),
         reason: OwnedDefinitionKey::new("reviewed-contract-upgrade").unwrap(),
         contract: OwnedReleaseContractMigration {
-            schema_version: 3,
+            schema_version: 7,
             schema_semantics_version: OwnedDefinitionKey::new("cli-schema-v3").unwrap(),
             operations_version: OwnedDefinitionKey::new("owned-domain-operations-v11").unwrap(),
             rule_semantics_version: OwnedDefinitionKey::new("cli-rules-v11").unwrap(),
@@ -565,7 +565,7 @@ fn explicit_migration_matches_library_contracts_artifacts_and_checked_roundtrip(
     );
     let published = read_files(&output);
     assert_eq!(published, owned(expected.artifacts()));
-    assert_eq!(expected.input().recipe.schema.schema_version, 3);
+    assert_eq!(expected.input().recipe.schema.schema_version, 7);
     assert_eq!(
         expected.input().recipe.rules.operations_version.as_str(),
         "owned-domain-operations-v11"

@@ -28,7 +28,7 @@ fn input() -> SchemaPackageInput {
                         minimum: FiniteQuantity::new(0.0, id("distance")).unwrap(),
                         maximum: FiniteQuantity::new(50.0, id("distance")).unwrap(),
                     }),
-                    targets: vec![AssumptionTargetKind::Enemy],
+                    targets: vec![AssumptionTargetKind::ScenarioEnemyActor],
                 }),
             }),
             DefinitionDescriptor::Unit(DefinitionEntry {

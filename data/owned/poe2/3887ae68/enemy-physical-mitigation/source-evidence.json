@@ -146,8 +146,8 @@
   "existing_armour_producer": [
     {
       "path": "data/owned/poe2/3887ae68/configuration-rating-inputs/extension.json",
-      "bytes": 84661,
-      "sha256": "e49664451157156fc21841baebc73a4fb2eefcd5949fa005513e8bd1a597c226"
+      "bytes": 84721,
+      "sha256": "82393c68a40c923671488a58a2ea147a4f740a48438e5030896dd9b493cc4226"
     },
     {
       "path": "data/owned/poe2/3887ae68/configuration-rating-inputs/native-inputs.json",

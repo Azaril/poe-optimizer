@@ -25,7 +25,7 @@ pub fn ignored_enemy(default: f64) -> Expectations {
     Expectations {
         outputs: vec![Output {
             policy_target: "enemy",
-            draft_target: json!({"kind":"enemy"}),
+            draft_target: json!({"kind":"actor","value":{"kind":"scenario_enemy"}}),
             selection: None,
             ignore_placeholder: true,
         }],
@@ -84,7 +84,7 @@ pub fn distance() -> Expectations {
             .into_iter()
             .map(|selection| Output {
                 policy_target: "enemy",
-                draft_target: json!({"kind":"enemy"}),
+                draft_target: json!({"kind":"actor","value":{"kind":"scenario_enemy"}}),
                 selection: Some(selection),
                 ignore_placeholder: false,
             })

@@ -225,7 +225,7 @@ fn fixture() -> Fixture {
         namespace: ns(),
         release: key("fixture"),
         semantics_version: key("actor-projection-rules-v1"),
-        operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+        operations_version: key(OWNED_RULE_OPERATIONS_V14),
         definitions: schema.identity().clone(),
         owners,
     };
@@ -563,7 +563,7 @@ fn storage_and_compile_count_projection_edges_and_gate_operation_version() {
         f.rules.operations_version = key(version);
         f.rejects("unsupported operation version");
     }
-    f.rules.operations_version = key(OWNED_RULE_OPERATIONS_VERSION);
+    f.rules.operations_version = key(OWNED_RULE_OPERATIONS_V14);
     let RuleEffectKind::ProjectActorStat { value, .. } = &mut f.program().effects[0].effect else {
         panic!()
     };

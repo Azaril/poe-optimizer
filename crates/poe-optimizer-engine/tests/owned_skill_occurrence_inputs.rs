@@ -3,7 +3,7 @@
 #[path = "support/owned_preparation_readiness_fixture.rs"]
 mod support;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*};
-use poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V5;
+use poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
 use poe_optimizer_engine::owned_plan::*;
 use rayon::prelude::*;
 use support::delivery::integer;
@@ -23,7 +23,7 @@ fn direct_action(action: &mut ActionSelection) {
 }
 fn mixed() -> Fixture {
     let mut f = fixture();
-    f.schema.schema_version = OWNED_SCHEMA_PACKAGE_V5;
+    f.schema.schema_version = OWNED_SCHEMA_PACKAGE_VERSION;
     for row in &mut f.schema.definitions {
         if let DefinitionDescriptor::Skill(row) = row
             && row.id == def::<SkillDefinition>("summon")

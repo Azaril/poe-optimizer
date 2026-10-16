@@ -141,10 +141,10 @@
   },
   "compound_all_attributes": "one_owned_occurrence_with_one_amount; source Str/Dex/Int/All expansion retained as evidence; actor projection pending",
   "definitions": {
-    "content_sha256": "a5ced241f994c45eb43dfa157be21c6e89298c0f635bbd0b8be9cd1b1602db71",
+    "content_sha256": "681ee6c87f2ab7463ec11b988b1565a7b83b69e1931a7cf3df80fd7c2b653424",
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
+    "schema_version": 7,
     "semantics_version": "owned-mechanics-components-v1"
   },
   "families": [
@@ -2243,10 +2243,10 @@
   "membership_scope": "structural_raw_modifier_family_only",
   "numerical_eligibility": "partial",
   "prior_definitions": {
-    "content_sha256": "6ea88c2f53a19017e0d1edf8606fcaa54d069e6c8e685860416409050f085042",
+    "content_sha256": "7d2534f029f2fabdc06cd334844eec14025efe845a6266288bf453ef7ff9cb8f",
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
+    "schema_version": 7,
     "semantics_version": "owned-mechanics-components-v1"
   },
   "refined_templates": 1756,

@@ -151,9 +151,9 @@ fn fixture() -> Fixture {
         .programs
         .members
         .push(predicates(RuleEntityKind::EquipmentUse));
-    for context in [RuleEntityKind::Enemy, RuleEntityKind::Environment] {
+    for context in [RuleEntityKind::Actor, RuleEntityKind::Environment] {
         let mut p = predicates(context);
-        p.id = key(if context == RuleEntityKind::Enemy {
+        p.id = key(if context == RuleEntityKind::Actor {
             "character-predicates-enemy"
         } else {
             "character-predicates-environment"
@@ -198,7 +198,7 @@ fn rules(f: &Fixture, schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput
         namespace: ns(),
         release: key("identity-test"),
         semantics_version: key("v1"),
-        operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+        operations_version: key(OWNED_RULE_OPERATIONS_V14),
         definitions: schema.identity().clone(),
         tables: f.tables.clone(),
         owners: f.owners.clone(),
@@ -417,7 +417,7 @@ fn v7_is_explicit_and_v6_cannot_admit_either_new_predicate() {
     input.operations_version = key(OWNED_RULE_OPERATIONS_V7);
     assert!(CompiledRulePackage::compile(&input, &checked, RuleLimits::default()).is_ok());
     let mut current = input.clone();
-    current.operations_version = key(OWNED_RULE_OPERATIONS_VERSION);
+    current.operations_version = key(OWNED_RULE_OPERATIONS_V14);
     assert!(CompiledRulePackage::compile(&current, &checked, RuleLimits::default()).is_ok());
     for source in [
         RuleReadSource::CharacterClassIs {
@@ -468,7 +468,7 @@ fn v7_is_explicit_and_v6_cannot_admit_either_new_predicate() {
 }
 
 #[test]
-fn current_snapshot_preserves_v6_semantics_and_refuses_retired_wire_version() {
+fn current_snapshot_uses_unified_actor_identity_and_refuses_retired_wire_version() {
     let path =
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../data/owned/poe2/3887ae68/current");
     let schema = OwnedDefinitionSchemaPackage::new(
@@ -494,7 +494,7 @@ fn current_snapshot_preserves_v6_semantics_and_refuses_retired_wire_version() {
     assert_eq!(
         compiled.identity(),
         digest_owned(
-            "owned-rule-programs-v4",
+            "owned-rule-programs-v5",
             compiled.input(),
             RuleLimits::default().max_wire_bytes
         )

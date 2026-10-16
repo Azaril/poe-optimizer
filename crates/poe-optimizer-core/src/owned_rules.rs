@@ -12,10 +12,12 @@ use crate::{
 };
 use serde::{Deserialize, Serialize};
 
-pub const OWNED_RULE_PACKAGE_VERSION: u32 = 3;
-/// Baseline operation subset used when authors do not opt into newer capabilities.
-/// Package schema and content identity domains always use the current format.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+pub const OWNED_RULE_PACKAGE_VERSION: u32 = 4;
+/// Current operation capabilities. Earlier capability subsets still use the
+/// current package format and unified Actor semantics, not an older entity model.
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V28;
+/// Unified Actor identity with explicit role applicability and Encounter origins.
+pub const OWNED_RULE_OPERATIONS_V28: &str = "owned-domain-operations-v28";
 /// Coherent numeric selection, checked numeric domains and exact integer sums.
 pub const OWNED_RULE_OPERATIONS_V27: &str = "owned-domain-operations-v27";
 /// Exact Action self-contributions and checked current-Action query reads.
@@ -40,7 +42,7 @@ pub const OWNED_RULE_OPERATIONS_V18: &str = "owned-domain-operations-v18";
 pub const OWNED_RULE_OPERATIONS_V17: &str = "owned-domain-operations-v17";
 /// Explicit readiness on one occurrence graph requires stages V2.
 pub const OWNED_RULE_OPERATIONS_V16: &str = "owned-domain-operations-v16";
-/// Explicit opt-in to source/recipient effect applications. The default remains V14.
+/// Source/recipient effect applications require an explicit inventory.
 pub const OWNED_RULE_OPERATIONS_V15: &str = "owned-domain-operations-v15";
 /// Supported operation subsets with frozen semantic capabilities. All use the
 /// current package schema; this does not promise old artifact compatibility.
@@ -87,6 +89,7 @@ pub enum RuleOperationsVersion {
     V25,
     V26,
     V27,
+    V28,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -113,6 +116,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V25 => Self::V25,
             OWNED_RULE_OPERATIONS_V26 => Self::V26,
             OWNED_RULE_OPERATIONS_V27 => Self::V27,
+            OWNED_RULE_OPERATIONS_V28 => Self::V28,
             _ => return None,
         })
     }
@@ -140,6 +144,7 @@ impl RuleOperationsVersion {
             Self::V25 => 25,
             Self::V26 => 26,
             Self::V27 => 27,
+            Self::V28 => 28,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -241,6 +246,7 @@ impl RuleOperationsVersion {
             Self::V25 => "owned-effect-plan-v22",
             Self::V26 => "owned-effect-plan-v23",
             Self::V27 => "owned-effect-plan-v24",
+            Self::V28 => "owned-effect-plan-v25",
         }
     }
 }
@@ -317,10 +323,15 @@ pub struct ExistingActorRuleApplication {
     pub owner: ActorDefId,
     pub targets: Vec<ExistingActorRuleTarget>,
 }
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum ExistingActorRuleTarget {
     Player,
+    ScenarioEnemy,
+    /// Only actual discovered occurrences of this exact supply are targets.
+    OwnedSlot {
+        slot: DeclaredSlot<ActorSlotDefId>,
+    },
 }
 
 /// A finite partition of one recipient's contribution channel. Every discovered
@@ -425,6 +436,8 @@ pub struct ContributionOrder {
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum ContributionOrigin {
     Character,
+    /// The exact selected Scenario Encounter, without a fabricated build provider.
+    Encounter,
     Allocation,
     EquipmentUse {
         slots: Vec<EquipmentSlotDefId>,

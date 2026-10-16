@@ -162,6 +162,7 @@ impl<'a> SkillOccurrence<'a> {
 #[derive(Clone, Debug)]
 pub enum ActorOccurrence<'a> {
     Player,
+    ScenarioEnemy,
     Owned {
         key: Box<OwnedActorKey>,
         parent_actor: ActorKey,
@@ -172,12 +173,13 @@ impl ActorOccurrence<'_> {
     pub fn key(&self) -> ActorKey {
         match self {
             Self::Player => ActorKey::Player,
+            Self::ScenarioEnemy => ActorKey::ScenarioEnemy,
             Self::Owned { key, .. } => ActorKey::Owned(key.clone()),
         }
     }
     pub fn subject(&self) -> Option<SchemaSubject> {
         match self {
-            Self::Player => None,
+            Self::Player | Self::ScenarioEnemy => None,
             Self::Owned { key, .. } => {
                 Some(SchemaSubject::Slot(ActorSlotDefId::address(&key.slot)))
             }
@@ -455,7 +457,7 @@ impl<'a, I: DefinitionSchemaIndex> OwnedOccurrenceResolver<'a, I> {
             &BindingSite::new(BindingLocation::Occurrence, BindingFacet::Target),
             Purpose::Query,
         )?;
-        let status = if *key == ActorKey::Player {
+        let status = if matches!(key, ActorKey::Player | ActorKey::ScenarioEnemy) {
             SelectorBindingStatus::SchemaBound
         } else {
             SelectorBindingStatus::PendingResolution

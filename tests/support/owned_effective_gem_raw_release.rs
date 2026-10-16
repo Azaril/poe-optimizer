@@ -232,7 +232,7 @@ pub(super) fn check(prior_path: &Path) {
         serde_json::to_value(prior.receipt().input).unwrap(),
         manifest["before"]
     );
-    assert_eq!(prior.input().recipe.schema.schema_version, 4);
+    assert_eq!(prior.input().recipe.schema.schema_version, 7);
     assert_eq!(
         prior.input().recipe.rules.operations_version.as_str(),
         "owned-domain-operations-v13"

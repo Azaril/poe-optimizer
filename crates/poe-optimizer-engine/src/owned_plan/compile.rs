@@ -2,6 +2,7 @@ use super::*;
 use poe_optimizer_core::owned_readiness::ReadinessPhase;
 use poe_optimizer_core::owned_routing::*;
 use poe_optimizer_data::owned_stages::OwnedEvaluationStages;
+mod authority;
 #[cfg(test)]
 mod deferred_tests;
 mod effect_applications;
@@ -124,7 +125,7 @@ struct Context {
     property_owner: Option<SkillTarget>,
     origin: RuleOrigin,
     provider: Option<ProviderKey>,
-    actor: ActorKey,
+    actor: Option<ActorKey>,
     skill: Option<GeneratedSkillKey>,
     receiving_skill: Option<SkillTarget>,
     assigned_skill: Option<SkillTarget>,
@@ -171,6 +172,8 @@ struct Builder<'a, I> {
     actors: BTreeMap<OwnedActorKey, Vec<PlanValueKey>>,
     /// Actual discovered actors, distinct from merely declared grant targets.
     receiver_actors: BTreeSet<ActorKey>,
+    /// Default supplied owners and shared applicability may not bind twice.
+    actor_owner_bindings: BTreeSet<(ActorDefId, ActorKey)>,
     unsupported_roots: BTreeSet<ProviderRoot>,
     potential_skills: BTreeSet<(ProviderKey, SkillDefId)>,
     skill_supplies: BTreeMap<GeneratedSkillKey, ProviderKey>,
@@ -263,9 +266,11 @@ fn entity(relative: RuleEntity, context: &Context) -> Result<ConcreteEntity> {
             }
             ConcreteEntity::Modifier(provider.clone())
         }
-        RuleEntity::Actor => ConcreteEntity::Actor(context.actor.clone()),
+        RuleEntity::Actor => ConcreteEntity::Actor(context.actor.clone().ok_or_else(|| {
+            PlanError::Invalid("relative Actor requires an actual Actor context".into())
+        })?),
         RuleEntity::Player => ConcreteEntity::Actor(ActorKey::Player),
-        RuleEntity::Enemy => ConcreteEntity::Enemy,
+        RuleEntity::Enemy => ConcreteEntity::Actor(ActorKey::ScenarioEnemy),
         RuleEntity::Environment => ConcreteEntity::Environment,
     })
 }
@@ -610,6 +615,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     let ordered_sources = ordered::Sources {
         rules: rules.input(),
         build: request.build().input(),
+        encounter: &request.scenario().input().enemy.encounter,
         actor_supplies: &b.actor_supplies,
         skill_supplies: &b.skill_supplies,
         effects: &ordered_effects,
@@ -905,6 +911,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             providers: BTreeSet::new(),
             actors: BTreeMap::new(),
             receiver_actors: BTreeSet::from([ActorKey::Player]),
+            actor_owner_bindings: BTreeSet::new(),
             unsupported_roots: BTreeSet::new(),
             potential_skills: BTreeSet::new(),
             skill_supplies: BTreeMap::new(),
@@ -1265,7 +1272,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             return Err(PlanError::Limit("owner bindings"));
         }
         let actor_depth = match actor {
-            ActorKey::Player => 0,
+            ActorKey::Player | ActorKey::ScenarioEnemy => 0,
             ActorKey::Owned(actor) => actor.provider.grant_path.len(),
         };
         charge(
@@ -1276,6 +1283,15 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 + 1,
         )?;
         self.check_support_domain(&subject, Some(provider))?;
+        if let SchemaSubject::Definition(DefinitionAddress::Actor(definition)) = &subject
+            && !self
+                .actor_owner_bindings
+                .insert((definition.clone(), actor.clone()))
+        {
+            return Err(PlanError::Invalid(
+                "duplicate Actor owner applicability".into(),
+            ));
+        }
         owners.push(DeferredOwner {
             subject,
             provider: provider.clone(),
@@ -1539,7 +1555,6 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     ) => vec![ConcreteEntity::EquipmentUse(*id)],
                     _ => vec![],
                 },
-                RuleEntityKind::Enemy => vec![ConcreteEntity::Enemy],
                 RuleEntityKind::Environment => vec![ConcreteEntity::Environment],
                 RuleEntityKind::Action => {
                     charge(&mut self.work, self.actions.len() + 1)?;
@@ -1591,7 +1606,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         provider: key.clone(),
                     },
                     provider: Some(key.clone()),
-                    actor: actor.clone(),
+                    actor: (!matches!(entity, ConcreteEntity::Environment)).then(|| actor.clone()),
                     skill: skill.cloned(),
                     receiving_skill: None,
                     assigned_skill: if let ProviderRoot::SupportAssignment(id) = key.root {
@@ -1619,7 +1634,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         )?;
                         continue;
                     }
-                    context.actor = a.action.actor.clone();
+                    context.actor = Some(a.action.actor.clone());
                 }
                 self.instantiate(subject.clone(), program, &context)?;
             }
@@ -1648,6 +1663,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         if self.invocations.iter().any(|v| v.key == key) {
             return Ok(());
         }
+        self.program_authority(program, context)?;
         let prepared = self.rules.prepare_program(&owner, &program.id)?;
         let authored: BTreeMap<_, _> = program.reads.iter().map(|r| (&r.id, &r.source)).collect();
         let mut reads = Vec::with_capacity(program.reads.len());
@@ -1799,9 +1815,28 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         if resolved.into_value().is_none() {
             return Ok((status, None));
         }
+        // The scenario opponent is an actual providerless Actor. Never resolve
+        // it through the Character root or borrow Player's declaration gates.
+        if *actor == ActorKey::ScenarioEnemy {
+            charge(&mut self.work, 1)?;
+            return Ok((
+                status,
+                Some(Context {
+                    property_owner: None,
+                    origin: RuleOrigin::Encounter,
+                    provider: None,
+                    actor: Some(actor.clone()),
+                    skill: None,
+                    receiving_skill: None,
+                    assigned_skill: None,
+                    entity: ConcreteEntity::Actor(actor.clone()),
+                }),
+            ));
+        }
         let provider = match actor {
             ActorKey::Player => root(ProviderRoot::Character),
             ActorKey::Owned(actor) => actor.provider.clone(),
+            ActorKey::ScenarioEnemy => unreachable!("providerless Actor handled above"),
         };
         let parent = self.resolver.provider(&provider)?;
         charge(&mut self.work, parent.work_used())?;
@@ -1818,7 +1853,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 _ => None,
             },
             provider: Some(provider),
-            actor: actor.clone(),
+            actor: Some(actor.clone()),
             entity: ConcreteEntity::Actor(actor.clone()),
         });
         Ok((parent_status, context))
@@ -1843,7 +1878,6 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 _ => None,
             })
             .collect();
-        let (status, context) = self.actor_context(&ActorKey::Player)?;
         for application in &registry.members {
             charge(&mut self.work, application.targets.len())?;
             let subject = SchemaSubject::Definition(application.owner.address());
@@ -1855,28 +1889,53 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 self.gap(None, Some(subject.clone()), PlanGapReason::PartialPrograms)?;
             }
             for target in &application.targets {
-                if owner_count >= self.limits.max_owner_bindings {
-                    return Err(PlanError::Limit("owner bindings"));
-                }
-                owner_count += 1;
-                let ExistingActorRuleTarget::Player = target;
-                let Some(mut context) = context.clone() else {
-                    if status != SelectorBindingStatus::Unavailable {
-                        self.gap(
-                            None,
-                            Some(subject.clone()),
-                            PlanGapReason::UnresolvedTopology,
-                        )?;
+                let actors: Vec<ActorKey> = match target {
+                    ExistingActorRuleTarget::Player => vec![ActorKey::Player],
+                    ExistingActorRuleTarget::ScenarioEnemy => vec![ActorKey::ScenarioEnemy],
+                    ExistingActorRuleTarget::OwnedSlot { slot } => {
+                        charge(&mut self.work, self.receiver_actors.len())?;
+                        self.receiver_actors
+                            .iter()
+                            .filter(
+                                |actor| matches!(actor, ActorKey::Owned(key) if key.slot == *slot),
+                            )
+                            .cloned()
+                            .collect()
                     }
-                    continue;
                 };
-                context.origin = RuleOrigin::ExistingActor {
-                    application: application.id.clone(),
-                    actor: ActorKey::Player,
-                };
-                charge(&mut self.work, owner.programs.members.len())?;
-                for program in &owner.programs.members {
-                    self.instantiate(subject.clone(), program, &context)?;
+                for actor in actors {
+                    if owner_count >= self.limits.max_owner_bindings {
+                        return Err(PlanError::Limit("owner bindings"));
+                    }
+                    owner_count += 1;
+                    charge(&mut self.work, 1)?;
+                    if !self
+                        .actor_owner_bindings
+                        .insert((application.owner.clone(), actor.clone()))
+                    {
+                        return Err(PlanError::Invalid(
+                            "duplicate Actor owner applicability".into(),
+                        ));
+                    }
+                    let (status, context) = self.actor_context(&actor)?;
+                    let Some(mut context) = context else {
+                        if status != SelectorBindingStatus::Unavailable {
+                            self.gap(
+                                None,
+                                Some(subject.clone()),
+                                PlanGapReason::UnresolvedTopology,
+                            )?;
+                        }
+                        continue;
+                    };
+                    context.origin = RuleOrigin::ExistingActor {
+                        application: application.id.clone(),
+                        actor,
+                    };
+                    charge(&mut self.work, owner.programs.members.len())?;
+                    for program in &owner.programs.members {
+                        self.instantiate(subject.clone(), program, &context)?;
+                    }
                 }
             }
         }
@@ -1925,6 +1984,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 ActorKey::Owned(actor) => ActorReceiverTarget::OwnedSlot {
                     slot: actor.slot.clone(),
                 },
+                ActorKey::ScenarioEnemy => continue,
             };
             let Some(receivers) = applicable.get(&target) else {
                 continue;
@@ -2021,7 +2081,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                             equipment_use: id,
                         },
                         provider: Some(provider.clone()),
-                        actor: resolved.actor().clone(),
+                        actor: Some(resolved.actor().clone()),
                         skill: None,
                         entity: ConcreteEntity::EquipmentUse(id),
                     };
@@ -2053,7 +2113,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                             provider: action.action.provider.clone(),
                         },
                         provider: Some(action.action.provider.clone()),
-                        actor: resolved.expected_actor().clone(),
+                        actor: Some(resolved.expected_actor().clone()),
                         skill: match resolved.provider().exposure() {
                             ProviderExposure::Skill { key, .. } => Some(key.clone()),
                             _ => None,
@@ -2150,7 +2210,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 }));
             }
         }
-        if let ActorKey::Owned(actor) = &context.actor {
+        if let Some(ActorKey::Owned(actor)) = &context.actor {
             match self.actors.get(actor.as_ref()).map(Vec::as_slice) {
                 Some([grant]) => gates.push(PendingRead::Value(grant.clone())),
                 _ => gates.push(missing(PlanGapReason::UnresolvedActivation)),
@@ -2253,7 +2313,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             }
             for program in &row.programs.members {
                 let entity = match program.context {
-                    RuleEntityKind::Enemy => ConcreteEntity::Enemy,
+                    RuleEntityKind::Actor => ConcreteEntity::Actor(ActorKey::ScenarioEnemy),
                     RuleEntityKind::Environment => ConcreteEntity::Environment,
                     _ => {
                         self.gap(
@@ -2273,7 +2333,10 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         assigned_skill: None,
                         origin: RuleOrigin::Encounter,
                         provider: None,
-                        actor: ActorKey::Player,
+                        actor: match &entity {
+                            ConcreteEntity::Actor(actor) => Some(actor.clone()),
+                            _ => None,
+                        },
                         skill: None,
                         entity,
                     },
@@ -2313,7 +2376,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     provider: action.action.provider.clone(),
                 },
                 provider: Some(action.action.provider.clone()),
-                actor: resolved.expected_actor().clone(),
+                actor: Some(resolved.expected_actor().clone()),
                 skill,
                 entity: ConcreteEntity::Action(Box::new(action.clone())),
             };
@@ -2443,7 +2506,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         route: route.id.clone(),
                     },
                     provider: Some(action.action.provider.clone()),
-                    actor: action.action.actor.clone(),
+                    actor: Some(action.action.actor.clone()),
                     skill: skill.clone(),
                     entity: ConcreteEntity::Action(Box::new(action.clone())),
                 };
@@ -2487,6 +2550,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     ordered: ordered::Sources {
                         rules: self.rules.input(),
                         build: self.request.build().input(),
+                        encounter: &self.request.scenario().input().enemy.encounter,
                         actor_supplies: &self.actor_supplies,
                         skill_supplies: &self.skill_supplies,
                         effects: &[],

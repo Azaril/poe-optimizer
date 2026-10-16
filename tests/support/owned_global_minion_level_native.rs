@@ -604,7 +604,7 @@ impl Fixture {
         }
         let schema = OwnedDefinitionSchemaPackage::new(
             SchemaPackageInput {
-                schema_version: 4,
+                schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
                 namespace: namespace.clone(),
                 release: key(release),
                 semantics_version: key("unpublished-finite-component"),

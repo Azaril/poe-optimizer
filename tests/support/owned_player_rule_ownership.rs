@@ -154,7 +154,7 @@ pub fn check_authored() {
         m.contract.operations_version.as_str(),
         OWNED_RULE_OPERATIONS_V21
     );
-    assert_eq!(m.contract.schema_version, 6);
+    assert_eq!(m.contract.schema_version, 7);
     assert_eq!(json!(m.release), b["release"]);
     assert!(
         m.owners.is_empty()

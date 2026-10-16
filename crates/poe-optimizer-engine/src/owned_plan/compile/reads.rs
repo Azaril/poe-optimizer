@@ -546,7 +546,6 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             } => {
                 let target = match entity(*relative, c)? {
                     ConcreteEntity::Actor(actor) => AssumptionTarget::Actor(actor),
-                    ConcreteEntity::Enemy => AssumptionTarget::Enemy,
                     ConcreteEntity::Environment => AssumptionTarget::Environment,
                     _ => return Ok(missing(PlanGapReason::UnsupportedContext)),
                 };

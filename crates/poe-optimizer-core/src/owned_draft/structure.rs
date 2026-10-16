@@ -155,6 +155,7 @@ fn scoped_actor(
 ) -> Result {
     match actor {
         DraftActorKey::Player => scope.actor(path, &ActorKey::Player, allow_player),
+        DraftActorKey::ScenarioEnemy => scope.actor(path, &ActorKey::ScenarioEnemy, allow_player),
         DraftActorKey::Owned(key) => scoped_root(scope, path, &key.provider.root),
         DraftActorKey::Pending(value) => {
             for actor in &value.candidates {
@@ -533,7 +534,7 @@ impl Visit<'_> {
     fn actor(&mut self, path: &str, value: &DraftActorKey) -> Result {
         let p = format!("{path}.value");
         match value {
-            DraftActorKey::Player => Ok(()),
+            DraftActorKey::Player | DraftActorKey::ScenarioEnemy => Ok(()),
             DraftActorKey::Owned(value) => {
                 self.provider(&format!("{p}.provider"), &value.provider)?;
                 self.slot(&format!("{p}.slot"), &value.slot)
@@ -570,12 +571,12 @@ impl Visit<'_> {
     fn assumption_target(&mut self, path: &str, value: &DraftAssumptionTarget) -> Result {
         let p = format!("{path}.value");
         match value {
-            DraftAssumptionTarget::Environment | DraftAssumptionTarget::Enemy => Ok(()),
+            DraftAssumptionTarget::Environment => Ok(()),
             DraftAssumptionTarget::Actor(value) => self.actor(&p, value),
             DraftAssumptionTarget::Skill(value) => self.skill_target(&p, value),
             DraftAssumptionTarget::Pending(value) => {
                 self.pending(&p, value, |v, p, value| match value {
-                    AssumptionTarget::Environment | AssumptionTarget::Enemy => Ok(()),
+                    AssumptionTarget::Environment => Ok(()),
                     AssumptionTarget::Actor(value) => v.checked(|c| c.actor(p, value)),
                     AssumptionTarget::Skill(value) => v.checked(|c| c.skill(p, value)),
                 })

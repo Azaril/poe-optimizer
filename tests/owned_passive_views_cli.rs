@@ -798,7 +798,7 @@ fn receiver_fixture(
                 namespace: namespace.clone(),
                 release: key("synthetic-receiver-rules"),
                 semantics_version: key("synthetic-v1"),
-                operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+                operations_version: key(OWNED_RULE_OPERATIONS_V14),
                 definitions: schema.identity().clone(),
                 tables: vec![],
                 owners,

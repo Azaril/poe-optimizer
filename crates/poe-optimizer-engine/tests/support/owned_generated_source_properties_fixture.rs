@@ -94,7 +94,7 @@ pub fn relation(
 
 pub fn fixture() -> Fixture {
     let mut f = source::fixture();
-    f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V5;
+    f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
     for slot in &mut f.schema.slots {
         if let SlotDescriptor::Parameter(row) = slot
             && row.id == source::final_parameter()

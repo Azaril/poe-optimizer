@@ -43,7 +43,7 @@
       "path": "data/owned/poe2/3887ae68/life-contribution-queries/queries.json"
     },
     {
-      "after_sha256": "57180fde3123f35025140b6b0b6c73164a430c5306a860fdd82357cee528773e",
+      "after_sha256": "02330b0d3c107ab1159336fbef5afd86318de121c7376d423d73722cb66b307b",
       "before_sha256": "6240e87dceeee6690f77e8d17b688f14ea741b8fcaa2752c305d0035d3e61c6b",
       "members": 0,
       "path": "data/owned/poe2/3887ae68/inherent-attribute-flag-membership/source-vectors.json",

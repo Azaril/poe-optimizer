@@ -1,10 +1,10 @@
 {
   "before": "bdfb1811f1707b493a2d2277b6ac714cc7a5b91df1a5b4b0ce07518c78948a73",
   "contract": {
-    "operations_version": "owned-domain-operations-v27",
+    "operations_version": "owned-domain-operations-v28",
     "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1",
     "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
-    "schema_version": 6
+    "schema_version": 7
   },
   "owners": [],
   "query_targets": [],

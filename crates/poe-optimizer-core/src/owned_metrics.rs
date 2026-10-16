@@ -21,6 +21,8 @@ pub struct MetricMappingInput {
 pub enum MetricBindingRole {
     PlayerActor,
     OwnedActor,
+    /// The explicit, providerless opponent declared by the selected scenario.
+    ScenarioEnemyActor,
     /// Player/owned actor and concrete provider compatibility bind with the
     /// actual action selector; this is not an unrestricted action proof.
     Action,

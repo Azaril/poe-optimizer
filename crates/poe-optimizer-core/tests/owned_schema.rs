@@ -403,7 +403,6 @@ fn computed_stat_kinds_and_capability_targets_have_strict_owned_wire_shapes() {
                 RuleEntityKind::Action,
                 RuleEntityKind::EquipmentUse,
                 RuleEntityKind::Modifier,
-                RuleEntityKind::Enemy,
                 RuleEntityKind::Environment,
             ],
         }),

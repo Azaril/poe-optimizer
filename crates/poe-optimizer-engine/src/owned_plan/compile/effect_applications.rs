@@ -174,7 +174,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                             provider: provider.clone(),
                         },
                         provider: Some(provider),
-                        actor: resolved.provider().actor().clone(),
+                        actor: Some(resolved.provider().actor().clone()),
                         skill,
                         receiving_skill: None,
                         assigned_skill: None,
@@ -211,16 +211,12 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         for target in targets {
             charge(&mut self.work, 1)?;
             if matches!(target, EffectApplicationTarget::Enemy) {
-                result.push(Context {
-                    property_owner: None,
-                    origin: RuleOrigin::Encounter,
-                    provider: None,
-                    actor: ActorKey::Player,
-                    skill: None,
-                    receiving_skill: None,
-                    assigned_skill: None,
-                    entity: ConcreteEntity::Enemy,
-                });
+                let (status, context) = self.actor_context(&ActorKey::ScenarioEnemy)?;
+                if let Some(context) = context {
+                    result.push(context);
+                } else if status != SelectorBindingStatus::Unavailable {
+                    self.gap(None, None, PlanGapReason::UnresolvedTopology)?;
+                }
                 continue;
             }
             let actors = match target {
@@ -346,6 +342,25 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
             program: row.program.id.clone(),
             entity: recipient.entity.clone(),
         };
+        // Validate every authored input lane before dead-read elimination. Source
+        // and recipient roles remain distinct even when a branch is not demanded.
+        for read in &row.program.reads {
+            if let RuleReadSource::External {
+                entity: RuleEntity::EffectSource,
+                input,
+            } = &read.source
+            {
+                self.external_authority(
+                    &RuleReadSource::External {
+                        entity: RuleEntity::Current,
+                        input: input.clone(),
+                    },
+                    source,
+                )?;
+            } else {
+                self.external_authority(&read.source, recipient)?;
+            }
+        }
         let prepared = self.rules.prepare_effect_application(&row.id)?;
         let authored: BTreeMap<_, _> = row
             .program

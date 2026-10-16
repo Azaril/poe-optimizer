@@ -39,7 +39,7 @@ pub fn check_authored() {
     assert_eq!(migration.schema_version, 5);
     assert_eq!(
         migration.contract.operations_version.as_str(),
-        "owned-domain-operations-v27"
+        "owned-domain-operations-v28"
     );
     assert_eq!(migration.schema.len(), 16);
     assert!(

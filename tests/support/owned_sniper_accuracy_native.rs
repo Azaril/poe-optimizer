@@ -53,14 +53,18 @@ impl World {
         if let Some(present) = present {
             self.block.assumptions.push(ExternalAssumption {
                 input: d(0x3216),
-                target: AssumptionTarget::Enemy,
+                target: AssumptionTarget::Actor(
+                    poe_optimizer_core::owned_build::ActorKey::ScenarioEnemy,
+                ),
                 value: ParameterValue::Boolean(present),
             });
         }
         if let Some(raw) = raw {
             self.block.assumptions.push(ExternalAssumption {
                 input: d(0x3217),
-                target: AssumptionTarget::Enemy,
+                target: AssumptionTarget::Actor(
+                    poe_optimizer_core::owned_build::ActorKey::ScenarioEnemy,
+                ),
                 value: quantity(raw, &d(2)),
             });
         }
@@ -279,7 +283,10 @@ fn boolean_accuracy_keeps_false_duplicate_sources_and_exact_recipients() {
             unreachable!()
         };
         assert_eq!(key.kind, ContributionKind::Flag);
-        assert_eq!(key.entity, ConcreteEntity::Enemy);
+        assert_eq!(
+            key.entity,
+            ConcreteEntity::Actor(poe_optimizer_core::owned_build::ActorKey::ScenarioEnemy)
+        );
         assert_eq!(
             flag.key.invocation.origin,
             RuleOrigin::Provider {

@@ -25,7 +25,7 @@
     {
       "file": "dependencies.json",
       "bytes": 648,
-      "sha256": "4992416a2a6606cd4abcdc99dceecb0af66d268e26f61abc9f2b411a7c8a3284"
+      "sha256": "78491db051fa089c78569dd632cdcaa6f8db974c5feb86ca74db291972ea2f53"
     }
   ],
   "proof": "Exact typed reachable dependency subsequences and reversible original-index reconstruction. Full publication inverse reconstructs the entire authenticated predecessor input. Existing numerical program IDs, numerical rows, effect targets, owner closures, definitions and imports remain unchanged.",

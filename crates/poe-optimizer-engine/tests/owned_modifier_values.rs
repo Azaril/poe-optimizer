@@ -29,7 +29,7 @@ fn rules_rejected(f: &Fixture, expected: &str) {
         namespace: ns(),
         release: key("test"),
         semantics_version: key("test"),
-        operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+        operations_version: key(OWNED_RULE_OPERATIONS_V14),
         definitions: schema.identity().clone(),
         owners: f.owners.clone(),
         tables: f.tables.clone(),
@@ -230,7 +230,6 @@ fn modifier_relative_scope_rejects_wrong_owner_context_and_stat_target() {
         RuleEntityKind::Actor,
         RuleEntityKind::Action,
         RuleEntityKind::Modifier,
-        RuleEntityKind::Enemy,
         RuleEntityKind::Environment,
     ] {
         let mut f = fixture();

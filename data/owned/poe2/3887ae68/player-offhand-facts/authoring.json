@@ -220,7 +220,7 @@
   },
   "artifact_sha256": {
     "bindings": "551dba83451856e8b3d70d43a7034f2f77f745c49880f59b92aca053d339837c",
-    "migration": "a49c904c946341bab60e13fd23a029b63fba6dcd8997a82b9ad26c154e672e88",
+    "migration": "b081a50162d60f0b462d9e0960f45afe1d443527fe73ec5bbb7de26de4eb0a4d",
     "dependencies": "98ecbf703e692eaf484635598923db2d688827b743d58fe68f04f072b8854b5e",
     "source-vectors": "8f2c857c925cf61e8fd5dc7fd3b81fa51ad1d68799a9e4797c18dae69236ba3e"
   }

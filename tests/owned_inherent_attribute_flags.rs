@@ -146,7 +146,7 @@ impl World {
             )));
         }
         let schema = SchemaPackageInput {
-            schema_version: 6,
+            schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: ns(),
             release: key("finite-inherent-flags"),
             semantics_version: key("finite-inherent-flags"),

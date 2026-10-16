@@ -46,7 +46,7 @@ fn raw_schema() -> SchemaPackageInput {
         }));
     }
     SchemaPackageInput {
-        schema_version: 4,
+        schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
         namespace: ns(),
         release: key("fixture"),
         semantics_version: key("inputs"),

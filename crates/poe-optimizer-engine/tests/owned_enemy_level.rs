@@ -52,7 +52,6 @@ fn fixture() -> Fixture {
                     RuleEntityKind::Actor,
                     RuleEntityKind::EquipmentUse,
                     RuleEntityKind::Action,
-                    RuleEntityKind::Enemy,
                     RuleEntityKind::Environment,
                 ],
             }),
@@ -60,7 +59,7 @@ fn fixture() -> Fixture {
     f.owner_mut(&encounter_owner())
         .programs
         .members
-        .push(observer(RuleEntityKind::Enemy));
+        .push(observer(RuleEntityKind::Actor));
     f
 }
 
@@ -172,7 +171,7 @@ fn enemy_level_is_request_global_across_legitimate_program_contexts() {
     let plan = f.compile().unwrap();
     let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
     for entity in [
-        ConcreteEntity::Enemy,
+        ConcreteEntity::Actor(ActorKey::ScenarioEnemy),
         ConcreteEntity::Environment,
         ConcreteEntity::Actor(ActorKey::Player),
         ConcreteEntity::Actor(child_actor(30)),
@@ -400,11 +399,15 @@ fn enemy_level_does_not_activate_other_encounters_or_close_partial_owners() {
     let plan = f.compile().unwrap();
     let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
     assert_eq!(
-        observed_effect(&report, &encounter_owner(), ConcreteEntity::Enemy),
+        observed_effect(
+            &report,
+            &encounter_owner(),
+            ConcreteEntity::Actor(ActorKey::ScenarioEnemy)
+        ),
         &EffectValue::Known { value: integer(20) }
     );
     assert!(matches!(
-        observation(&report, ConcreteEntity::Enemy),
+        observation(&report, ConcreteEntity::Actor(ActorKey::ScenarioEnemy)),
         EffectValue::Unresolved {
             reason: PlanGapReason::IncompleteContributors,
             ..
@@ -427,7 +430,7 @@ fn enemy_level_does_not_activate_other_encounters_or_close_partial_owners() {
     f.scenario.enemy.encounter = def("other-encounter");
     let plan = f.compile().unwrap();
     let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
-    assert_level(&report, ConcreteEntity::Enemy, 20);
+    assert_level(&report, ConcreteEntity::Actor(ActorKey::ScenarioEnemy), 20);
     assert!(
         report
             .effects
@@ -441,19 +444,14 @@ fn enemy_level_does_not_activate_other_encounters_or_close_partial_owners() {
         .programs
         .members[0]
         .context = RuleEntityKind::EquipmentUse;
-    let plan = f.compile().unwrap();
-    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    let schema = schema(&f);
+    let error = CompiledRulePackage::compile(&rules(&f, &schema), &schema, RuleLimits::default())
+        .unwrap_err();
     assert!(
-        report
-            .gaps
-            .iter()
-            .any(|gap| gap.reason == PlanGapReason::UnsupportedContext)
-    );
-    assert!(
-        report
-            .effects
-            .iter()
-            .all(|row| row.key.effect != key("observed"))
+        error
+            .to_string()
+            .contains("Encounter requires scenario Actor or Environment context"),
+        "{error}"
     );
 }
 
@@ -472,8 +470,16 @@ fn level_changes_rebind_identity_scratch_and_parallel_evaluations() {
     let mut scratch = a.new_scratch();
     let expected_a = a.evaluate(&mut scratch).unwrap();
     let expected_b = b.evaluate(&mut scratch).unwrap();
-    assert_level(&expected_a, ConcreteEntity::Enemy, 82);
-    assert_level(&expected_b, ConcreteEntity::Enemy, 83);
+    assert_level(
+        &expected_a,
+        ConcreteEntity::Actor(ActorKey::ScenarioEnemy),
+        82,
+    );
+    assert_level(
+        &expected_b,
+        ConcreteEntity::Actor(ActorKey::ScenarioEnemy),
+        83,
+    );
     assert_eq!(a.evaluate(&mut scratch).unwrap(), expected_a);
     let handles: Vec<_> = (0..4)
         .map(|worker| {

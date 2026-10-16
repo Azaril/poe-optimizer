@@ -229,7 +229,7 @@
     "bindings": "25cbb06215e087ecc05babd378c34933c80a4753168b58ab3cd25a4b8b392682",
     "closure": "d7695fa84c94c42f7bf0773ab65f7f5cb7de8064adbdff76ebfa583b2a0c686c",
     "dependencies": "8dad0ef8c4440da32dd6917a3c85ae1a4b35e9b3ee5ae321cedcedd2191ae462",
-    "migration": "2604ed6cea6c9b88f0e2e84f44c831dd75ad6cbb418d4cb96346188294051a83",
+    "migration": "61195dc3588ac6e0ee8f3b5bcff78d6268caedf8ca4b66637c5797af473e0953",
     "source-vectors": "1fa659d3092125cb77cfaa9a4d1a87ad298e35350c0984c39fbff4da4dc9654a"
   }
 }

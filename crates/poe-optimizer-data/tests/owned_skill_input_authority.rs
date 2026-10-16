@@ -97,7 +97,7 @@ fn all_explicit_authorities_roundtrip_with_distinct_producer_permissions() {
         let schema = parameter(Some(authority), sites.clone());
         assert_eq!(schema.permits_authored_skill_input(), authored);
         assert_eq!(schema.permits_projected_skill_input(), projected);
-        let p = package(input(Some(authority), sites, OWNED_SCHEMA_PACKAGE_V5));
+        let p = package(input(Some(authority), sites, OWNED_SCHEMA_PACKAGE_VERSION));
         let bytes = encode_schema_package(&p, Default::default()).unwrap();
         let decoded = decode_schema_package(&bytes, Default::default()).unwrap();
         assert_eq!(p.input(), decoded.input());
@@ -106,7 +106,7 @@ fn all_explicit_authorities_roundtrip_with_distinct_producer_permissions() {
             bytes,
             encode_schema_package(&decoded, Default::default()).unwrap()
         );
-        assert_eq!(p.identity().schema_version, 5);
+        assert_eq!(p.identity().schema_version, OWNED_SCHEMA_PACKAGE_VERSION);
     }
 }
 
@@ -139,41 +139,26 @@ fn explicit_authority_is_not_a_null_or_open_ended_wire_extension() {
 }
 
 #[test]
-fn schema_v5_is_required_without_moving_the_default_or_reinterpreting_legacy_slots() {
-    assert_eq!(OWNED_SCHEMA_PACKAGE_VERSION, OWNED_SCHEMA_PACKAGE_V4);
-    for version in [
-        OWNED_SCHEMA_PACKAGE_V2,
-        OWNED_SCHEMA_PACKAGE_V3,
-        OWNED_SCHEMA_PACKAGE_V4,
-    ] {
-        for (authority, sites) in [
-            (
-                Some(SkillInputAuthority::Authored),
-                vec![ParameterSite::SkillParameter],
-            ),
-            (Some(SkillInputAuthority::Projected), vec![]),
-            (
-                Some(SkillInputAuthority::AuthoredOrProjected),
-                vec![ParameterSite::SkillParameter],
-            ),
-            (None, vec![ParameterSite::SkillParameter]),
-        ] {
-            reject(
-                input(authority, sites, version),
-                SchemaPackageErrorKind::UnsupportedSchemaFeature,
-            );
-        }
-        let legacy = package(input(None, vec![], version));
-        assert_eq!(legacy.input().schema_version, version);
+fn current_schema_rejects_old_formats_without_inventing_authored_permissions() {
+    assert_eq!(OWNED_SCHEMA_PACKAGE_VERSION, OWNED_SCHEMA_PACKAGE_V7);
+    for version in 2..OWNED_SCHEMA_PACKAGE_VERSION {
+        let old = input(
+            Some(SkillInputAuthority::Authored),
+            vec![ParameterSite::SkillParameter],
+            version,
+        );
+        assert!(
+            matches!(OwnedDefinitionSchemaPackage::new(old, Default::default()), Err(SchemaPackageError::UnsupportedVersion(v)) if v == version)
+        );
     }
-    let legacy = parameter(None, vec![]);
-    assert!(!legacy.permits_authored_skill_input());
-    assert!(legacy.permits_projected_skill_input());
+    let implicit = parameter(None, vec![]);
+    assert!(!implicit.permits_authored_skill_input());
+    assert!(implicit.permits_projected_skill_input());
     reject(
         input(
             None,
             vec![ParameterSite::SkillParameter],
-            OWNED_SCHEMA_PACKAGE_V5,
+            OWNED_SCHEMA_PACKAGE_VERSION,
         ),
         SchemaPackageErrorKind::WrongParameterSite,
     );
@@ -202,7 +187,7 @@ fn skill_authority_and_authored_site_must_agree_exactly() {
         ),
     ] {
         reject(
-            input(authority, sites, OWNED_SCHEMA_PACKAGE_V5),
+            input(authority, sites, OWNED_SCHEMA_PACKAGE_VERSION),
             SchemaPackageErrorKind::WrongParameterSite,
         );
     }
@@ -210,7 +195,7 @@ fn skill_authority_and_authored_site_must_agree_exactly() {
         input(
             Some(SkillInputAuthority::Authored),
             vec![ParameterSite::SkillParameter, ParameterSite::SkillParameter],
-            OWNED_SCHEMA_PACKAGE_V5,
+            OWNED_SCHEMA_PACKAGE_VERSION,
         ),
         SchemaPackageErrorKind::DuplicateMember,
     );
@@ -260,7 +245,7 @@ fn non_skill_owners_cannot_claim_any_skill_input_authority() {
                 ),
                 _ => unreachable!(),
             };
-            let mut candidate = input(None, vec![], OWNED_SCHEMA_PACKAGE_V5);
+            let mut candidate = input(None, vec![], OWNED_SCHEMA_PACKAGE_VERSION);
             candidate.definitions = vec![definition];
             candidate.slots = vec![SlotDescriptor::Parameter(DefinitionEntry {
                 id: slot,
@@ -272,12 +257,12 @@ fn non_skill_owners_cannot_claim_any_skill_input_authority() {
 }
 
 #[test]
-fn omitted_legacy_parameter_bytes_stay_exact_and_explicit_authority_changes_identity() {
+fn omitted_parameter_roundtrips_and_explicit_authority_changes_identity() {
     const LEGACY: &str = r#"{"value":{"kind":"boolean"},"presence":"required_once","sites":[]}"#;
     let schema: ParameterSlotSchema = serde_json::from_str(LEGACY).unwrap();
     assert_eq!(schema, parameter(None, vec![]));
     assert_eq!(serde_json::to_string(&schema).unwrap(), LEGACY);
-    let legacy_input = input(None, vec![], OWNED_SCHEMA_PACKAGE_V4);
+    let legacy_input = input(None, vec![], OWNED_SCHEMA_PACKAGE_VERSION);
     let legacy_bytes = serde_json::to_vec(&legacy_input).unwrap();
     assert!(
         !String::from_utf8(legacy_bytes.clone())
@@ -295,24 +280,24 @@ fn omitted_legacy_parameter_bytes_stay_exact_and_explicit_authority_changes_iden
             .identity(),
         legacy.identity()
     );
-    let implicit = package(input(None, vec![], OWNED_SCHEMA_PACKAGE_V5));
+    let implicit = package(input(None, vec![], OWNED_SCHEMA_PACKAGE_VERSION));
     let projected = package(input(
         Some(SkillInputAuthority::Projected),
         vec![],
-        OWNED_SCHEMA_PACKAGE_V5,
+        OWNED_SCHEMA_PACKAGE_VERSION,
     ));
     let authored = package(input(
         Some(SkillInputAuthority::Authored),
         vec![ParameterSite::SkillParameter],
-        OWNED_SCHEMA_PACKAGE_V5,
+        OWNED_SCHEMA_PACKAGE_VERSION,
     ));
     let both = package(input(
         Some(SkillInputAuthority::AuthoredOrProjected),
         vec![ParameterSite::SkillParameter],
-        OWNED_SCHEMA_PACKAGE_V5,
+        OWNED_SCHEMA_PACKAGE_VERSION,
     ));
     assert_ne!(implicit.identity(), projected.identity());
     assert_ne!(projected.identity(), authored.identity());
     assert_ne!(authored.identity(), both.identity());
-    assert_ne!(legacy.identity(), implicit.identity());
+    assert_eq!(legacy.identity(), implicit.identity());
 }

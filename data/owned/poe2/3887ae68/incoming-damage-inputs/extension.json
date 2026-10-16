@@ -1232,7 +1232,7 @@
       "programs": {
         "members": [
           {
-            "context": "enemy",
+            "context": "actor",
             "effects": [
               {
                 "when": null,
@@ -3389,7 +3389,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "boolean"
@@ -3416,7 +3416,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -3467,7 +3467,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "boolean"
@@ -3494,7 +3494,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -3545,7 +3545,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "boolean"
@@ -3572,7 +3572,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -3623,7 +3623,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "boolean"
@@ -3650,7 +3650,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -3701,7 +3701,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "boolean"
@@ -3728,7 +3728,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -3779,7 +3779,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "boolean"
@@ -3806,7 +3806,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -3857,7 +3857,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "boolean"
@@ -3884,7 +3884,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -3935,7 +3935,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "boolean"
@@ -3962,7 +3962,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4013,7 +4013,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4050,7 +4050,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4087,7 +4087,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4124,7 +4124,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4161,7 +4161,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4198,7 +4198,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4235,7 +4235,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4272,7 +4272,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4309,7 +4309,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4346,7 +4346,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4383,7 +4383,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4420,7 +4420,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4457,7 +4457,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4494,7 +4494,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4531,7 +4531,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4568,7 +4568,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4605,7 +4605,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4642,7 +4642,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4679,7 +4679,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "actor"
               ],
               "value": {
                 "kind": "quantity",
@@ -4716,7 +4716,7 @@
             "kind": "known",
             "value": {
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ],
               "value": {
                 "kind": "option",

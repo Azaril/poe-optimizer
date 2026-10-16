@@ -119,7 +119,7 @@ fn compile(f: &Fixture) -> OwnedEffectPlan<OwnedDefinitionSchemaPackage> {
         namespace: ns(),
         release: key("lookup-tests"),
         semantics_version: key("v1"),
-        operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+        operations_version: key(OWNED_RULE_OPERATIONS_V14),
         definitions: definitions.identity().clone(),
         tables: vec![
             table("levels", ComputedValueType::Integer, integer(40)),

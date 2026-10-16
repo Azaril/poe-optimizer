@@ -33,7 +33,7 @@
   "identity_mapping": {
     "path": "data/owned/poe2/3887ae68/import/compiled/mapping.json",
     "hash_encoding": "utf8_lf",
-    "sha256": "ad5f0dc7106d3785ed0cce670a302441a5de528d7fc8b998ef6977b56c16a11d"
+    "sha256": "8dfc61c0f857c2c0994251851ffcb8f72ca8918a523a23917c2802515f34c79f"
   },
   "source_test": "crates/poe-optimizer-pob/tests/owned_single_support_inventory.rs",
   "reviewed_definitions": 514,

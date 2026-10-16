@@ -423,7 +423,7 @@ fn ability_input_projection_type_mismatch_is_invalid_before_evaluation() {
         namespace: ns(),
         release: key("test"),
         semantics_version: key("test"),
-        operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+        operations_version: key(OWNED_RULE_OPERATIONS_V14),
         definitions: schema.identity().clone(),
         owners: f.owners,
         tables: vec![],
@@ -1094,7 +1094,7 @@ fn actor_potential_members_include_abilities_supplied_by_another_current_actor_a
 #[test]
 fn operation_subsets_share_discovery_cutover_and_preserve_actor_results() {
     let mut f = Fixture::new();
-    f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V2;
+    f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
     f.add_generated_actors();
     let new = f
         .compile_with_operations(PlanLimits::default(), OWNED_RULE_OPERATIONS_V11)
@@ -1216,7 +1216,7 @@ fn equal_dimension_does_not_allow_wrong_unit_ability_projection() {
         namespace: ns(),
         release: key("test"),
         semantics_version: key("test"),
-        operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+        operations_version: key(OWNED_RULE_OPERATIONS_V14),
         definitions: schema.identity().clone(),
         owners: f.owners,
         tables: vec![],

@@ -347,7 +347,7 @@ fn package(f: &Fixture, schema: &OwnedDefinitionSchemaPackage) -> RulePackageInp
         namespace: ns(),
         release: key("timing"),
         semantics_version: key("test"),
-        operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+        operations_version: key(OWNED_RULE_OPERATIONS_V14),
         definitions: schema.identity().clone(),
         owners: f.owners.clone(),
     }
@@ -361,7 +361,7 @@ fn timing_references_are_validated_by_storage_and_execution_is_worker_local() {
     let stored = OwnedRulePackage::new(p.clone(), &schema, RuleStorageLimits::default()).unwrap();
     assert_eq!(
         stored.input().operations_version.as_str(),
-        OWNED_RULE_OPERATIONS_VERSION
+        OWNED_RULE_OPERATIONS_V14
     );
     let expression = RuleExpression::OrdinaryTiming {
         recipe: Box::new(recipe(OrdinaryTimingChannel::ActionRate)),

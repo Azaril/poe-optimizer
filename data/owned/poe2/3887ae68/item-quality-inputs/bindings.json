@@ -4,17 +4,17 @@
   "base_catalog_sha256": "6dda4b5aa9371050b72343542219ad54d6b469ce16af7ede3c0e9cacbbec9554",
   "defence_catalog_sha256": "154e613cedf17a6601a2e775e7608f2be5ccfcafe20b299cfbf893986d0cff18",
   "definitions": {
-    "content_sha256": "97c825552340a7fd0291298c351e0c95fe4549e7182d6315d8306a65c2cbe475",
+    "content_sha256": "ed335a31addcd3a76578fb864a939873e7c0772b5a8de3b3fd8fb6d5f468bedd",
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
+    "schema_version": 7,
     "semantics_version": "owned-mechanics-components-v1"
   },
   "prior_definitions": {
-    "content_sha256": "9d338e4c20a52f01a16288982356a887bb8a52840db6592c433fa8780ab6b4f7",
+    "content_sha256": "a0225693e5e181c1af0c17f5880fdfd8f02147c61c5aa3088da92dd2a4f74ef6",
     "game": "poe2",
     "release": "pob-3887ae68-components",
-    "schema_version": 2,
+    "schema_version": 7,
     "semantics_version": "owned-mechanics-components-v1"
   },
   "program": "declared-standard-item-quality",

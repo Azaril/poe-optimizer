@@ -31,7 +31,7 @@ fn generated_with(
     let raw_input = slot(parent(), "raw-level");
     let mut f = fixture_with_stages(
         |schema| {
-            schema.schema_version = OWNED_SCHEMA_PACKAGE_V6;
+            schema.schema_version = OWNED_SCHEMA_PACKAGE_VERSION;
             let mut declarations = ports();
             for name in ["source", "sibling"] {
                 let slot = slot(provider(context), name);

@@ -317,7 +317,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     let e: Value = read("extension.json");
     let b: Value = read("bindings.json");
     let m: OwnedReleaseMigrationInput = decode(
-        &json!({"schema_version":5,"before":prior.receipt().input,"release":b["release"],"reason":"requested-skill-participation","contract":{"schema_version":6,"schema_semantics_version":prior.input().recipe.schema.semantics_version,"operations_version":"owned-domain-operations-v21","rule_semantics_version":prior.input().recipe.rules.semantics_version},"schema":e["schema"],"owners":e["owners"],"tables":[],"receivers":[],"query_targets":[]}),
+        &json!({"schema_version":5,"before":prior.receipt().input,"release":b["release"],"reason":"requested-skill-participation","contract":{"schema_version":7,"schema_semantics_version":prior.input().recipe.schema.semantics_version,"operations_version":"owned-domain-operations-v21","rule_semantics_version":prior.input().recipe.rules.semantics_version},"schema":e["schema"],"owners":e["owners"],"tables":[],"receivers":[],"query_targets":[]}),
     );
     let migrated = compile_owned_release_migration(prior, m, Default::default()).unwrap();
     super::migration_preservation::assert_import_rebindings_only(prior, &migrated);

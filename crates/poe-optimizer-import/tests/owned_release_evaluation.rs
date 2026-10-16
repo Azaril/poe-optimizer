@@ -263,7 +263,7 @@ fn aggregate_nested_semantics_depth_constituent_and_output_limits_apply() {
 }
 
 #[test]
-fn legacy_revision_and_migration_cannot_silently_rebind_evaluation_artifacts() {
+fn revision_and_current_migration_cannot_silently_rebind_evaluation_artifacts() {
     let prior = stage(fixture().input.clone());
     let revision = OwnedReleaseRevisionInput {
         schema_version: 1,
@@ -279,28 +279,12 @@ fn legacy_revision_and_migration_cannot_silently_rebind_evaluation_artifacts() {
             "schema revision needs an explicit evaluation-artifact migration"
         ))
     ));
-    let migration = OwnedReleaseMigrationInput {
-        schema_version: 1,
-        before: prior.receipt().input,
-        release: key("changed-release"),
-        reason: key("test"),
-        contract: OwnedReleaseContractMigration {
-            schema_version: 3,
-            schema_semantics_version: key("test"),
-            operations_version: key("owned-domain-operations-v11"),
-            rule_semantics_version: key("test"),
-        },
-        schema: vec![],
-        tables: vec![],
-        owners: vec![],
-        receivers: vec![],
-        query_targets: vec![],
-        evaluation: None,
-    };
+    let mut migration = evaluation_migration(&prior);
+    migration.evaluation = None;
     assert!(matches!(
         compile_owned_release_migration(&prior, migration, Default::default()),
         Err(OwnedReleaseError::Invalid(
-            "contract migration needs an explicit evaluation-artifact migration"
+            "migration cannot drop prior evaluation artifacts"
         ))
     ));
 }
@@ -313,7 +297,7 @@ fn endpoint() -> &'static fixture::Fixture {
 fn evaluation_migration(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
     let target = &endpoint().input;
     OwnedReleaseMigrationInput {
-        schema_version: 2,
+        schema_version: 5,
         before: prior.receipt().input,
         release: target.recipe.schema.release.clone(),
         reason: key("explicit-evaluation-migration"),
@@ -333,18 +317,14 @@ fn evaluation_migration(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInpu
 }
 
 #[test]
-fn explicit_v2_replacement_preserves_prior_and_uses_only_authored_endpoint_packages() {
+fn explicit_current_replacement_preserves_prior_and_uses_only_authored_endpoint_packages() {
     let prior = stage(fixture().input.clone());
     let old_files = files(&prior);
     let old_receipt = prior.receipt().clone();
     let migration = evaluation_migration(&prior);
     let expected = migration.evaluation.clone().unwrap();
-    let v2_authoring =
-        digest_owned("owned-release-contract-migration-v2", &migration, 1_000_000).unwrap();
-    assert_ne!(
-        v2_authoring,
-        digest_owned("owned-release-contract-migration-v1", &migration, 1_000_000).unwrap()
-    );
+    let authoring =
+        digest_owned("owned-release-contract-migration-v5", &migration, 1_000_000).unwrap();
     let result =
         compile_owned_release_migration(&prior, migration.clone(), Default::default()).unwrap();
     assert_eq!(result.input().evaluation.as_ref(), Some(&expected));
@@ -384,7 +364,7 @@ fn explicit_v2_replacement_preserves_prior_and_uses_only_authored_endpoint_packa
         &OwnedReleaseProvenance {
             kind: migration.reason,
             prior_input: old_receipt.input,
-            authoring_input: v2_authoring,
+            authoring_input: authoring,
         }
     );
     assert_eq!(prior.receipt(), &old_receipt);
@@ -394,12 +374,14 @@ fn explicit_v2_replacement_preserves_prior_and_uses_only_authored_endpoint_packa
 }
 
 #[test]
-fn v2_attachment_is_a_semantic_change_even_without_changing_schema_or_rule_contracts() {
+fn current_attachment_is_a_semantic_change_without_changing_schema_or_rule_contracts() {
     // Use a different release header, but retain the same actual contracts.
     let mut original = fixture().input.clone();
     original.schema_version = 1;
     original.evaluation = None;
     let prior = stage(original);
+    let prior_files = files(&prior);
+    let prior_receipt = prior.receipt().clone();
     let mut migration = evaluation_migration(&prior);
     migration.contract.rule_semantics_version =
         prior.input().recipe.rules.semantics_version.clone();
@@ -408,6 +390,7 @@ fn v2_attachment_is_a_semantic_change_even_without_changing_schema_or_rule_contr
         prior.input().recipe.rules.semantics_version.as_str(),
     );
     migration.evaluation = no_semantic_change.input.evaluation;
+    let expected_evaluation = migration.evaluation.clone().unwrap();
     assert_eq!(
         migration.contract.schema_version,
         prior.input().recipe.schema.schema_version
@@ -422,6 +405,11 @@ fn v2_attachment_is_a_semantic_change_even_without_changing_schema_or_rule_contr
     );
     let result = compile_owned_release_migration(&prior, migration, Default::default()).unwrap();
     assert_eq!(result.input().schema_version, 2);
+    assert_eq!(
+        result.input().evaluation.as_ref(),
+        Some(&expected_evaluation)
+    );
+    assert_eq!(result.evaluation().unwrap().input(), &expected_evaluation);
     assert!(
         result
             .evaluation()
@@ -432,6 +420,8 @@ fn v2_attachment_is_a_semantic_change_even_without_changing_schema_or_rule_contr
             .is_some()
     );
     assert!(prior.evaluation().is_none());
+    assert_eq!(prior.receipt(), &prior_receipt);
+    assert_eq!(files(&prior), prior_files);
 }
 
 #[test]
@@ -491,19 +481,6 @@ fn migration_rejects_missing_or_stale_evaluation_and_unreviewed_contracts() {
             .remove(field);
         assert!(serde_json::from_value::<OwnedReleaseMigrationInput>(wire).is_err());
     }
-    // A v1 predecessor does not make a v1 document containing new artifacts legal.
-    let mut input = prior.input().clone();
-    input.schema_version = 1;
-    input.evaluation = None;
-    let legacy = stage(input);
-    let mut bad = evaluation_migration(&legacy);
-    bad.schema_version = 1;
-    assert!(matches!(
-        compile_owned_release_migration(&legacy, bad, Default::default()),
-        Err(OwnedReleaseError::Invalid(
-            "migration version or evaluation group"
-        ))
-    ));
 }
 
 #[test]

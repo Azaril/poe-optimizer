@@ -2,11 +2,11 @@
 use super::*;
 
 fn header(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
-    let mut migration = v3_header(prior);
+    let mut migration = capability_header(prior);
     migration.schema_version = 5;
     migration.release = key("action-selection-contract");
     migration.reason = key("typed-action-selection-reads");
-    migration.contract.schema_version = 6;
+    migration.contract.schema_version = 7;
     migration.contract.operations_version = key(OWNED_RULE_OPERATIONS_V20);
     migration
 }
@@ -15,12 +15,8 @@ fn header(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
 fn current_boolean_operation_contract_migrates_once_and_cannot_downgrade() {
     let mut input = prior().input().clone();
     input.recipe.rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
-    let prior = v3_fixture::contract(
-        input,
-        6,
-        OWNED_RULE_OPERATIONS_V21,
-        "before-boolean-contract",
-    );
+    let prior =
+        migration_fixture::contract(input, OWNED_RULE_OPERATIONS_V21, "before-boolean-contract");
     let mut migration = header(&prior);
     migration.release = key("boolean-contract");
     migration.contract.operations_version = key(OWNED_RULE_OPERATIONS_V22);
@@ -58,7 +54,8 @@ fn current_boolean_operation_contract_migrates_once_and_cannot_downgrade() {
 #[test]
 fn exact_v19_and_v20_predecessors_preserve_source_queries_and_rebuilds() {
     for operations in [OWNED_RULE_OPERATIONS_V19, OWNED_RULE_OPERATIONS_V20] {
-        let prior = v3_fixture::contract(prior().input().clone(), 6, operations, "selection-prior");
+        let prior =
+            migration_fixture::contract(prior().input().clone(), operations, "selection-prior");
         let original = prior.receipt().input;
         let mut migration = header(&prior);
         if operations == OWNED_RULE_OPERATIONS_V20 {
@@ -74,7 +71,7 @@ fn exact_v19_and_v20_predecessors_preserve_source_queries_and_rebuilds() {
             digest_owned("owned-release-contract-migration-v5", &migration, 1_000_000).unwrap();
         let result =
             compile_owned_release_migration(&prior, migration.clone(), Default::default()).unwrap();
-        assert_eq!(result.input().recipe.schema.schema_version, 6);
+        assert_eq!(result.input().recipe.schema.schema_version, 7);
         assert_eq!(
             result.input().recipe.rules.operations_version.as_str(),
             OWNED_RULE_OPERATIONS_V20
@@ -108,10 +105,11 @@ fn contribution_contracts_preserve_membership_and_reject_downgrades() {
         (OWNED_RULE_OPERATIONS_V23, OWNED_RULE_OPERATIONS_V24),
         (OWNED_RULE_OPERATIONS_V25, OWNED_RULE_OPERATIONS_V26),
         (OWNED_RULE_OPERATIONS_V26, OWNED_RULE_OPERATIONS_V27),
+        (OWNED_RULE_OPERATIONS_V27, OWNED_RULE_OPERATIONS_V28),
     ] {
         let mut input = prior().input().clone();
         input.recipe.rules.contribution_queries = Some(DeclaredSet::complete(vec![]));
-        let prior = v3_fixture::contract(input, 6, old, "contribution-prior");
+        let prior = migration_fixture::contract(input, old, "contribution-prior");
         let mut migration = header(&prior);
         migration.release = key("contribution-contract");
         migration.contract.operations_version = key(new);
@@ -164,11 +162,10 @@ fn contribution_contracts_preserve_membership_and_reject_downgrades() {
 }
 
 #[test]
-fn v5_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
+fn current_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
     let original = prior();
-    let prior = v3_fixture::contract(
+    let prior = migration_fixture::contract(
         original.input().clone(),
-        6,
         OWNED_RULE_OPERATIONS_V19,
         "selection-prior",
     );
@@ -178,38 +175,37 @@ fn v5_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
         bad.schema_version = version;
         assert!(compile_owned_release_migration(&prior, bad, Default::default()).is_err());
     }
-    for (schema, operations) in [
-        (5, OWNED_RULE_OPERATIONS_V20),
-        (6, OWNED_RULE_OPERATIONS_V19),
-        (6, "owned-domain-operations-v999"),
-    ] {
+    for schema in [2, 3, 4, 5, 6, 8] {
         let mut bad = valid.clone();
         bad.contract.schema_version = schema;
+        assert!(matches!(
+            compile_owned_release_migration(&prior, bad, Default::default()),
+            Err(OwnedReleaseError::Invalid(
+                "migration requires the current schema contract"
+            ))
+        ));
+    }
+    for operations in [
+        "owned-domain-operations-v999",
+        "owned-domain-operations-v028",
+    ] {
+        let mut bad = valid.clone();
         bad.contract.operations_version = key(operations);
         assert!(matches!(
             compile_owned_release_migration(&prior, bad, Default::default()),
             Err(OwnedReleaseError::Invalid(
-                "current migration requires schema v6 and operations v20 through v27"
+                "migration operations are unsupported"
             ))
         ));
     }
-    for (schema, operations) in [
-        (5, OWNED_RULE_OPERATIONS_V19),
-        (6, OWNED_RULE_OPERATIONS_V18),
-    ] {
-        let unsupported = v3_fixture::contract(
-            original.input().clone(),
-            schema,
-            operations,
-            "unsupported-selection-prior",
-        );
-        assert!(matches!(
-            compile_owned_release_migration(&unsupported, header(&unsupported), Default::default()),
-            Err(OwnedReleaseError::Invalid(
-                "migration prior contract is unsupported"
-            ))
-        ));
-    }
+    let mut downgrade = valid.clone();
+    downgrade.contract.operations_version = key(OWNED_RULE_OPERATIONS_V18);
+    assert!(matches!(
+        compile_owned_release_migration(&prior, downgrade, Default::default()),
+        Err(OwnedReleaseError::Invalid(
+            "migration cannot downgrade current operations"
+        ))
+    ));
     let mut stale = valid.clone();
     stale.before = digest_owned("stale-selection-prior", &1, 100).unwrap();
     assert!(compile_owned_release_migration(&prior, stale, Default::default()).is_err());
@@ -250,9 +246,8 @@ fn v5_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
 #[test]
 fn current_v21_schema_append_preserves_ordered_queries_and_actor_applicability() {
     use poe_optimizer_import::owned_mapping::OwnedIdRegistry;
-    let before = v3_fixture::contract(
+    let before = migration_fixture::contract(
         prior().input().clone(),
-        6,
         OWNED_RULE_OPERATIONS_V20,
         "before-existing-actor",
     );
@@ -430,10 +425,9 @@ fn current_v21_schema_append_preserves_ordered_queries_and_actor_applicability()
 }
 
 #[test]
-fn v5_cannot_drop_or_silently_rebind_existing_evaluation_artifacts() {
-    let prior = v3_fixture::contract(
+fn current_cannot_drop_or_silently_rebind_existing_evaluation_artifacts() {
+    let prior = migration_fixture::contract(
         prior().input().clone(),
-        6,
         OWNED_RULE_OPERATIONS_V19,
         "selection-metrics-prior",
     );
@@ -457,5 +451,106 @@ fn v5_cannot_drop_or_silently_rebind_existing_evaluation_artifacts() {
     ));
     next.evaluation = Some(endpoint_metrics(&result, &next));
     let updated = compile_owned_release_migration(&result, next, Default::default()).unwrap();
+    assert_source_inputs_preserved(&result, &updated);
+}
+
+#[test]
+fn explicit_permission_refinement_rebinds_without_replacing_provider_programs() {
+    let original = prior();
+    let before = migration_fixture::contract(
+        original.input().clone(),
+        OWNED_RULE_OPERATIONS_V17,
+        "provider-prior",
+    );
+    let mut provider = actor_migration(&before);
+    provider.schema_version = 5;
+    provider.contract = capability_header(&before).contract;
+    for row in &mut provider.schema {
+        if let SchemaExtensionEntry::Slot(SlotDescriptor::Parameter(entry)) = row {
+            let SchemaState::Known(schema) = &mut entry.schema else {
+                unreachable!()
+            };
+            schema.skill_input = Some(SkillInputAuthority::Projected);
+        }
+    }
+    let prior =
+        compile_owned_release_migration(&before, provider.clone(), Default::default()).unwrap();
+    let parameter = provider
+        .schema
+        .iter()
+        .find_map(|row| match row {
+            SchemaExtensionEntry::Slot(SlotDescriptor::Parameter(entry)) => Some(entry.id.clone()),
+            _ => None,
+        })
+        .unwrap();
+    let mut supply = provider
+        .schema
+        .iter()
+        .find_map(|row| match row {
+            SchemaExtensionEntry::Slot(SlotDescriptor::SkillGrant(entry)) => Some(entry.clone()),
+            _ => None,
+        })
+        .unwrap();
+    let SchemaState::Known(schema) = &mut supply.schema else {
+        unreachable!()
+    };
+    assert!(schema.preset_inputs.is_none());
+    schema.preset_inputs = Some(PresetSkillInputPermission {
+        schema_version: PRESET_SKILL_INPUT_PERMISSION_V1,
+        parameters: DeclaredSet::complete(vec![parameter]),
+    });
+    let mut migration = header(&prior);
+    migration.schema = vec![SchemaExtensionEntry::Slot(SlotDescriptor::SkillGrant(
+        supply.clone(),
+    ))];
+    let result =
+        compile_owned_release_migration(&prior, migration.clone(), Default::default()).unwrap();
+    let mut restored = result.input().recipe.schema.slots.clone();
+    let changed = restored
+        .iter_mut()
+        .find(|row| row.address() == SkillGrantSlotDefId::address(&supply.id))
+        .unwrap();
+    assert!(*changed == SlotDescriptor::SkillGrant(supply.clone()));
+    *changed = prior
+        .input()
+        .recipe
+        .schema
+        .slots
+        .iter()
+        .find(|row| row.address() == SkillGrantSlotDefId::address(&supply.id))
+        .unwrap()
+        .clone();
+    assert!(restored == prior.input().recipe.schema.slots);
+    assert!(result.input().recipe.rules.owners == prior.input().recipe.rules.owners);
+    assert!(result.input().recipe.registry == prior.input().recipe.registry);
+    assert_source_inputs_preserved(&prior, &result);
+    let mut historical = migration;
+    historical.schema_version = 3;
+    assert!(compile_owned_release_migration(&prior, historical, Default::default()).is_err());
+    let mut old_schema = result.input().recipe.schema.clone();
+    old_schema.schema_version = 5;
+    assert!(OwnedDefinitionSchemaPackage::new(old_schema, Default::default()).is_err());
+
+    // Authorization changes are explicit same-contract schema replacements;
+    // removing permission does not remove the provider's existing program.
+    let mut next = header(&result);
+    next.release = key("reviewed-preset-permission-removal");
+    let SchemaState::Known(schema) = &mut supply.schema else {
+        unreachable!()
+    };
+    schema.preset_inputs.as_mut().unwrap().parameters = DeclaredSet::complete(vec![]);
+    next.schema = vec![SchemaExtensionEntry::Slot(SlotDescriptor::SkillGrant(
+        supply.clone(),
+    ))];
+    let updated = compile_owned_release_migration(&result, next, Default::default()).unwrap();
+    assert!(
+        updated
+            .input()
+            .recipe
+            .schema
+            .slots
+            .contains(&SlotDescriptor::SkillGrant(supply))
+    );
+    assert!(updated.input().recipe.rules.owners == result.input().recipe.rules.owners);
     assert_source_inputs_preserved(&result, &updated);
 }

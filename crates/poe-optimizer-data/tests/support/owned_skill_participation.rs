@@ -20,7 +20,7 @@ fn participation_channel() -> StageChannel {
 fn fixture() -> Fixture {
     let mut f = Fixture::new();
     let mut schema = f.schema.input().clone();
-    schema.schema_version = OWNED_SCHEMA_PACKAGE_V4;
+    schema.schema_version = OWNED_SCHEMA_PACKAGE_VERSION;
     schema.definitions.extend([
         DefinitionDescriptor::Stat(entry(
             id("requested-participation"),

@@ -20,9 +20,10 @@ The latter preserves imported raw count `3390`, skips a zero candidate, clamps
 the count to 0-20, and divides by two only for the emitted magnitude. Its
 independent Boolean condition remains unresolved. An inactive or zero effect
 does not remove its potential membership. The current public checked-query
-origin cannot yet name this Encounter; `bindings.json` records the exact
-pending member rather than replacing it with a computed term. Numeric Enemy
-query authority is also pending. All 16 query groups and both new owners remain
+origin now includes this Encounter through the accepted generic Actor migration;
+`bindings.json` records the exact member still to install in this packet's
+executable stage. Numeric reads use the same checked Actor query contract.
+All 16 query groups and both new owners remain
 Partial. This draft is not yet an executable admitted component.
 
 The ordinary nodes retain cap/override order, accuracy confirmation from
@@ -120,8 +121,11 @@ native compiler/evaluator, including an admitted/outside/missing/admitted
 scratch sequence and lazy bypass. This finite numerical test does not compile
 or admit the complete pending critical consumer.
 
-The next runtime requirements are explicit Encounter contribution membership
-and numeric Enemy reads, shared Enemy ownership, and candidate-bound Boolean
-and special-branch coverage. No query or owner is promoted to Complete, and no
-successor is published. Checked publication follows the pending contract
-decision and remaining validation.
+The generic Actor migration implements explicit Encounter contribution
+membership, numeric scenario-Enemy reads and shared Actor ownership. Rebase this
+unpublished packet's dependency pins and pending-contract binding markers onto
+that endpoint, bind the real Encounter source and execute the complete consumer.
+Candidate-bound Boolean and special-branch coverage still require validation;
+no query or owner is promoted to Complete, and no successor is published.
+The [implementation plan](../../../../../docs/implementation.md#next-damage-checkpoint-outgoing-critical-calculation-and-enemy-mitigation)
+records the next controls and the unresolved Sand Djinn responsibility.

@@ -28,7 +28,7 @@
   "token_mapping": {
     "path": "data/owned/poe2/3887ae68/current/tree-normalization.json",
     "hash_encoding": "utf8_lf",
-    "sha256": "14b3631b5068be0ddeaa1216364898403a29a633af77e1a255a1340ad5ef6fd1"
+    "sha256": "6384b05d546ea38bb48227594755d3bcaa66eeff42fad9ea8727f022786a5be1"
   },
   "source_manifest": {
     "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",

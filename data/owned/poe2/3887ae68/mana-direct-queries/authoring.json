@@ -4,7 +4,7 @@
   "before": "aedc17306523ec3c513f6e04c2d1937774705585b9c33c9c1cc9006b0c6452a1",
   "release": "pob-3887ae68-mana-direct-queries-v1",
   "contract": {
-    "schema_version": 6,
+    "schema_version": 7,
     "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
     "operations_version": "owned-domain-operations-v27",
     "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"

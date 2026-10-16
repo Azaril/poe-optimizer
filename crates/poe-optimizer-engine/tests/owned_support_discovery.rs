@@ -18,7 +18,7 @@ fn direct(
 ) -> OwnedEffectPlan<OwnedDefinitionSchemaPackage> {
     let schema =
         Arc::new(OwnedDefinitionSchemaPackage::new(f.schema.clone(), Default::default()).unwrap());
-    let mut input = raw_rules(f, &schema, OWNED_RULE_OPERATIONS_VERSION);
+    let mut input = raw_rules(f, &schema, OWNED_RULE_OPERATIONS_V14);
     input.support_discovery = domains;
     let rules = Arc::new(
         CompiledRulePackage::compile(&input, schema.as_ref(), Default::default()).unwrap(),
@@ -245,7 +245,7 @@ fn coverage_failures_are_deterministic_with_reused_scratch_and_parallel_workers(
 fn raw_and_stored_compilers_reject_the_same_invalid_source_declarations() {
     let f = Fixture::new();
     let schema = OwnedDefinitionSchemaPackage::new(f.schema.clone(), Default::default()).unwrap();
-    let mut input = raw_rules(&f, &schema, OWNED_RULE_OPERATIONS_VERSION);
+    let mut input = raw_rules(&f, &schema, OWNED_RULE_OPERATIONS_V14);
     let original = input.support_discovery.clone().unwrap();
     let invalid = [
         SupportDiscoveryInput {

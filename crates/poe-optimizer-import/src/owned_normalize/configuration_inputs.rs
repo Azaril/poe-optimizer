@@ -260,8 +260,12 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             limits,
         )?;
         if presence.value != ValueSchema::Boolean
-            || !presence.targets.contains(&AssumptionTargetKind::Enemy)
-            || !raw.targets.contains(&AssumptionTargetKind::Enemy)
+            || !presence
+                .targets
+                .contains(&AssumptionTargetKind::ScenarioEnemyActor)
+            || !raw
+                .targets
+                .contains(&AssumptionTargetKind::ScenarioEnemyActor)
         {
             return Err(NormalizationError::Policy(
                 "configuration input target or type",
@@ -563,7 +567,7 @@ pub(super) fn materialize(
     for input in &proof.inputs {
         b.charge(output.len())?;
         if output.iter().any(|a| {
-            a.target == DraftAssumptionTarget::Enemy
+            a.target == DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy)
                 && a.input
                     .to_resolved()
                     .is_some_and(|id| id == input.presence_input || id == input.value_input)
@@ -574,13 +578,13 @@ pub(super) fn materialize(
         }
         output.push(ExternalAssumptionDraft {
             input: input.presence_input.clone().into(),
-            target: DraftAssumptionTarget::Enemy,
+            target: DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy),
             value: ParameterValue::Boolean(input.raw.is_some()).into(),
         });
         if let Some((origin, value)) = &input.raw {
             output.push(ExternalAssumptionDraft {
                 input: input.value_input.clone().into(),
-                target: DraftAssumptionTarget::Enemy,
+                target: DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy),
                 value: value.clone().into(),
             });
             b.link(*origin, OwnedOriginTarget::ScenarioPreset(scenario.id))?;

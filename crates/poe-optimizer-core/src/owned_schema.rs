@@ -154,13 +154,29 @@ schema_enum!(ScopePolicy {
 });
 schema_enum!(SocketKind { Item, Passive });
 schema_enum!(MetricTargetKind { Actor, Action });
-schema_enum!(MetricActorRole { Player, Owned });
+schema_enum!(MetricActorRole {
+    Player,
+    Owned,
+    ScenarioEnemy
+});
 schema_enum!(AssumptionTargetKind {
     Environment,
-    Enemy,
-    Actor,
+    PlayerActor,
+    OwnedActor,
+    ScenarioEnemyActor,
     Skill
 });
+impl AssumptionTargetKind {
+    /// Classifies an exact actor address; the input's target list still grants
+    /// or refuses authority independently of this mechanical classification.
+    pub fn for_actor(actor: &crate::owned_build::ActorKey) -> Self {
+        match actor {
+            crate::owned_build::ActorKey::Player => Self::PlayerActor,
+            crate::owned_build::ActorKey::ScenarioEnemy => Self::ScenarioEnemyActor,
+            crate::owned_build::ActorKey::Owned(_) => Self::OwnedActor,
+        }
+    }
+}
 schema_enum!(UsageTargetKind {
     Actor,
     Action,
@@ -173,7 +189,6 @@ schema_enum!(RuleEntityKind {
     Action,
     EquipmentUse,
     Modifier,
-    Enemy,
     Environment,
     // One physical support assignment, independent of its receiving actor/action.
     SupportOrigin,

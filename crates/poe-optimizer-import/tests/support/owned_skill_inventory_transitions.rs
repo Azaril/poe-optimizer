@@ -268,12 +268,12 @@ fn checked_contract_migration_rebinds_actual_direct_recipes_before_inventory_dig
     let prior = prior(true);
     let revision = correction(&prior);
     let migration = OwnedReleaseMigrationInput {
-        schema_version: 3,
+        schema_version: 5,
         before: prior.receipt().input,
         release: key("authored-root-contract-migration"),
         reason: key("reviewed-finite-raw-domain"),
         contract: OwnedReleaseContractMigration {
-            schema_version: 5,
+            schema_version: 7,
             schema_semantics_version: prior.input().recipe.schema.semantics_version.clone(),
             operations_version: key(OWNED_RULE_OPERATIONS_V17),
             rule_semantics_version: prior.input().recipe.rules.semantics_version.clone(),

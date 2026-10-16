@@ -39,8 +39,8 @@ pub fn check_authored() {
     let inventory: PrimarySkillGemInventory = read("inventory.json");
     let native: Value = read("native-inputs.json");
     let authoring: Value = read("authoring.json");
-    assert_eq!(migration.schema_version, 3);
-    assert_eq!(migration.contract.schema_version, 5);
+    assert_eq!(migration.schema_version, 5);
+    assert_eq!(migration.contract.schema_version, 7);
     assert_eq!(
         migration.contract.operations_version.as_str(),
         "owned-domain-operations-v17"

@@ -515,7 +515,7 @@ pub fn direct_parameter() -> DeclaredSlot<ParameterSlotDefId> {
 }
 pub fn direct_fixture() -> Fixture {
     let mut f = fixture();
-    f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V5;
+    f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
     f.schema
         .definitions
         .push(integer_stat("direct-final", RuleEntityKind::Skill));

@@ -79,6 +79,18 @@ fn check_roundtrip(
     version: &str,
 ) {
     raw.operations_version = key(version);
+    if RuleOperationsVersion::parse(version)
+        .is_some_and(RuleOperationsVersion::supports_effect_applications)
+        && raw.effect_applications.is_none()
+    {
+        raw.effect_applications = Some(DeclaredSet::complete(vec![]));
+    }
+    if RuleOperationsVersion::parse(version)
+        .is_some_and(RuleOperationsVersion::supports_contribution_queries)
+        && raw.contribution_queries.is_none()
+    {
+        raw.contribution_queries = Some(DeclaredSet::complete(vec![]));
+    }
     let limits = RuleStorageLimits::default();
     let package = OwnedRulePackage::new(raw, schema, limits).unwrap();
     let bytes = encode_rule_package(&package, limits).unwrap();
@@ -351,7 +363,7 @@ fn historical_packages_keep_exact_canonical_bytes_and_rule_identity_domain() {
         // These prior contracts remain canonical as authored, independent of the
         // moving latest alias. V14 does not add a field to historical packages.
         let bytes = serde_json::to_vec(&raw).unwrap();
-        let identity = digest_owned("owned-rule-package-v3", &raw, limits.max_wire_bytes).unwrap();
+        let identity = digest_owned("owned-rule-package-v4", &raw, limits.max_wire_bytes).unwrap();
         let stored = decode_rule_package(&bytes, &schema, limits).unwrap();
         assert_eq!(stored.input(), &raw);
         assert_eq!(*stored.identity(), identity);

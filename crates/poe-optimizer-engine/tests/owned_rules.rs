@@ -1614,7 +1614,7 @@ fn authored_skill_parameter_read_alone_requires_v17_without_any_projection() {
         slot: id::<ParameterSlotDefinition>(&f, "parameter.authored-input"),
     };
     let mut schema = f.schema.input().clone();
-    schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V5;
+    schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
     schema
         .definitions
         .push(DefinitionDescriptor::Skill(DefinitionEntry {

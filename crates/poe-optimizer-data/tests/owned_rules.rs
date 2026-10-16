@@ -49,7 +49,7 @@ fn input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
         namespace: ns(),
         release: key("rules"),
         semantics_version: key("integer-stat-v1"),
-        operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+        operations_version: key(OWNED_RULE_OPERATIONS_V14),
         definitions: schema.identity().clone(),
         owners: vec![DefinitionRules {
             owner: owner(),
@@ -252,12 +252,14 @@ fn unknown_duplicate_missing_fields_and_foreign_bindings_reject() {
         OwnedRulePackage::new(i, &s, l),
         Err(RuleStorageError::Binding)
     ));
-    let mut i = input(&s);
-    i.schema_version += 1;
-    assert!(matches!(
-        OwnedRulePackage::new(i, &s, l),
-        Err(RuleStorageError::Version(_))
-    ));
+    for version in (0..OWNED_RULE_PACKAGE_VERSION).chain([OWNED_RULE_PACKAGE_VERSION + 1]) {
+        let mut i = input(&s);
+        i.schema_version = version;
+        assert!(matches!(
+            OwnedRulePackage::new(i, &s, l),
+            Err(RuleStorageError::Version(actual)) if actual == version
+        ));
+    }
 }
 #[test]
 fn local_duplicates_dangling_edges_and_owner_gaps_remain_errors() {

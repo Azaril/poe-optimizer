@@ -1,12 +1,12 @@
 {
-  "schema_version": 1,
+  "schema_version": 5,
   "before": "36b82e2924aa5a34cd2a35d01d395d462ea637527e24b39f64d84cf2a0deb07f",
   "release": "pob-3887ae68-cleric-ability-supply-v1",
   "reason": "explicit-cleric-ability-supply",
   "contract": {
     "rule_semantics_version": "owned-mechanics-actor-supply-v1",
     "schema_semantics_version": "owned-mechanics-actor-supply-v1",
-    "schema_version": 3,
+    "schema_version": 7,
     "operations_version": "owned-domain-operations-v11"
   },
   "schema": [

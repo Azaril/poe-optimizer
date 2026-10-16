@@ -17,12 +17,12 @@
     {
       "path": "data/owned/poe2/3887ae68/gigantic-following/migration.json",
       "bytes": 6464,
-      "sha256": "015b2423352be94b1145cbdddcf0ed2abdb1b5712699881ecbc2a43e5ecdf1f5"
+      "sha256": "3e3a336274670ba61f3828877c5cd2540e200ec69a7803fb75763a51d196e5c0"
     },
     {
       "path": "data/owned/poe2/3887ae68/gigantic-following/authoring.json",
       "bytes": 7851,
-      "sha256": "6ccc46b52621fbfbe798cc6ecdac2fd468d3605f12635be29810d8d923ff6283"
+      "sha256": "e5b6077d456a66b5d87b85b54dc7b175fe5e732f9d0ebc895858892d030337b1"
     },
     {
       "path": "data/owned/poe2/3887ae68/gigantic-following/source-vectors.json",
@@ -32,12 +32,12 @@
     {
       "path": "data/owned/poe2/3887ae68/gigantic-benefits/migration.json",
       "bytes": 7272,
-      "sha256": "ac3b1d3110feb2d9123a3764f591356a291328f756edf9ba04c077fa8274ba37"
+      "sha256": "eeb1e34eecbbcb054ec44965959bdd31173f63ed15435c152afad6a119c72942"
     },
     {
       "path": "data/owned/poe2/3887ae68/gigantic-benefits/authoring.json",
       "bytes": 7373,
-      "sha256": "11a89de35db18e76e6b258f9729e1cdf4ce9b7b024b2057ea1293624b1c4a022"
+      "sha256": "1dedcaf4f1b0e4aa0335d5a93e57809ce05f1c298c919b39336d95efe14c13e3"
     },
     {
       "path": "data/owned/poe2/3887ae68/gigantic-benefits/source-vectors.json",

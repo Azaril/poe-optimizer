@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-15. The owned path imports an external build into explicit
+Snapshot: 2026-10-16. The owned path imports an external build into explicit
 occurrences, validates it against injected definitions and rules, and executes
 the resulting graph in Rust. The CLI, future UI and optimizer share those public
 contracts. Native calculation has no Lua state or PoB subprocess. Optional
@@ -61,27 +61,38 @@ source rounding anomaly without adding Lua-compatible native arithmetic.
 
 The unpublished outgoing-critical work now has a checked selected-source
 supplier review and executable tests of its six authored rounding fragments.
-Its full consumer still needs Enemy contribution authority and complete native
-condition coverage. The review also found an untranslated Sand Djinn on-hit
+Its full consumer still needs actual Encounter producer binding and complete
+native condition coverage; the generic query authority is now implemented.
+The review also found an untranslated Sand Djinn on-hit
 Critical Weakness stat: source construction absence cannot stand in for game
 semantics or a false native condition. Exact participation and Enemy delivery
 remain an explicit [investigation](legacy-retirement.md#sand-djinn-critical-weakness-responsibility-2026-10-15).
 
 The outgoing-critical and armour work exposed a shared boundary gap: checked
-queries cannot yet name existing Encounter producers or consume numeric Enemy
-groups. The [accepted extension](owned-encounter-contribution-queries-proposal.md)
+queries previously could not name existing Encounter producers or consume numeric
+Enemy groups. The [accepted extension](owned-encounter-contribution-queries-proposal.md)
 keeps those sources in the same contribution graph, with exact selected
-Encounter and recipient validation. It is included in the approved Actor
-migration; implementation and validation remain pending.
+Encounter and recipient validation. This contract is implemented in the Actor
+migration. Configured Critical Weakness and Armour still need their real
+producer/query adoption; generic authority alone does not admit those numerical
+consumers.
 
 Shared baseline rules are a distinct source from configured Encounter rules.
 The [generic Actor migration](owned-existing-enemy-rule-ownership-proposal.md)
 was approved on October 15. It gives Player, supplied units and the actual
 scenario Enemy one identity/local-rule model, with explicit role-specific data,
 permissions and shared applicability. It removes separate mechanical Enemy
-contexts and placeholder Player identities. Current runtime still has those
-old contracts until the coordinated Core/Data, Engine and Import/artifact
-cutover passes validation. There will be no compatibility reader. Existing
+contexts and placeholder Player identities. Core/Data/Engine and current
+artifacts are migrated: Core has 312 existing and 25 focused passing tests,
+Data has 205, and Engine has 718 with seven intentional ignored tests. Strict
+Engine Clippy passes for the library and all 73 owned integration targets;
+Core/Data strict checks also pass. Exact package/replay inverses and all-five
+imports preserve 110 queries and unresolved counts 106/117/109/123/4. The scoped
+Import/CLI regressions, full CLI publication chain, catalog reproduction and
+strict Clippy checks pass; exact scopes and logs are in the
+[implementation plan](implementation.md). Hosted CI remains separate. The current contract uses schema 7, rule
+package 4 and full operations V28. Older operation capability subsets use the
+same Actor semantics; older wire formats are rejected. Existing
 Player final receiver ownership stays unchanged, and this structural change
 does not itself admit a new metric or complete build.
 
@@ -420,9 +431,9 @@ inventory. Its Class and passive-root relations were already known and remain
 unchanged. The raw/constructed source metadata and actual selected root are
 authenticated offline. Its selected Puppet, Archon, Djinn and other passive
 mechanics remain separate incomplete owners, as does shared Player initialization.
-The existing publisher handles the typed Ascendancy refinement; native rules,
-operations V27, input-obligation counts and the 0/5 complete-build result remain
-unchanged. No numerical result or general resource absence follows from this
+The existing publisher handles the typed Ascendancy refinement; that checkpoint
+preserved native rules, operations V27, input-obligation counts and the 0/5
+complete-build result. No numerical result or general resource absence follows from this
 metadata closure.
 
 Ordinary native CI now includes a serialized replay of the joined Sniper
@@ -475,14 +486,15 @@ a real nonzero fractional conversion input and its interaction with a zero
 override. Native conversion supplier admission and complete-build Mana evaluation
 are still unfinished; the final arithmetic consumer is published.
 The approved [optional numeric selection](owned-numeric-selection-proposal.md)
-is now a current Core/Data/Engine API in operations V27. `Override` contributions
+was introduced as a Core/Data/Engine API in operations V27 and is retained in
+current V28. `Override` contributions
 feed an unordered `RequireAgreement` group with no numeric empty identity.
 Presence/value read one cached native result: absent, present including zero,
 or unavailable. Conflicts and unknown sources block both projections. Exact
 units, occurrence membership, stages and worker isolation are checked; signed
 zero is normalized to positive zero. The staged result uses the channel's
-explicit freeze. No Lua insertion-order behavior is a selection law. The current
-canonical package now uses V27 and includes the
+explicit freeze. No Lua insertion-order behavior is a selection law. The V27
+checkpoint introduced the
 [real Mana override packet](../data/owned/poe2/3887ae68/mana-override/README.md):
 one allocated passive emits a zero Mana quantity into a checked selection group.
 The complete PoB source witness covers duplicate zeros and the allocated passive,
@@ -491,8 +503,8 @@ refusal. The passive's cost-conversion effect, item-granted origins, other resou
 suppliers and complete-plan admission remain separate coverage obligations.
 Data adoption adds no resource-specific native engine behavior and does not finish Mana.
 
-An independent generic `ExactIntegerSum` reduction is implemented and validated
-in current V27. Data admits it only for checked Integer Add queries
+An independent generic `ExactIntegerSum` reduction was implemented and validated
+in V27 and remains in V28. Data admits it only for checked Integer Add queries
 with unordered membership, zero identity and no ranks. Engine accumulates all
 admitted occurrences in checked `i128`, then checks the final public Integer
 range. It preserves canonical failures and existing source, stage and coverage
@@ -817,10 +829,10 @@ responsibility, so this witness cannot retire another configuration fallback.
 Syntax guards named `inert_fields` do not establish mechanical non-applicability.
 See the [checkpoint](implementation.md#source-checkpoint-manual-djinn-admission-accounting).
 
-Offering's three source-Skill scaling producers now use four checked incoming
-queries in the active V24 package. The accepted
+Offering's three source-Skill scaling producers adopted four checked incoming
+queries at the V24 checkpoint. The accepted
 [exact Skill query extension](owned-skill-contribution-queries-proposal.md) reuses
-the existing graph. V24 now admits Current Skill reads and explicitly permitted
+the existing graph. V24 introduced Current Skill reads and explicitly permitted
 direct/generated Skill self-contributions using validated supply relations;
 The writers initially admit only empty domains; nonempty potential sources
 reject, and Partial coverage remains unresolved. Joining the existing usage-policy
@@ -828,7 +840,7 @@ activation and application to these values is the next numerical connection.
 The separate application witness's measured 62% is not yet a joined damage result.
 Inherited/support memberships remain pending.
 Actor/reward contribution membership is implemented in operations V23. The
-active game package adopts V24 with all five imports and 110 query rows preserved;
+V24 checkpoint preserved all five imports and 110 query rows;
 composed support-source discovery has a common native coverage gate, with game-data
 adoption and Import accounting pending. See the linked proposals and implementation
 plan for their separate delivery gates. The focused
@@ -844,9 +856,10 @@ participation and does not establish that later integration's coverage.
 
 The preceding native checkpoint implements typed Boolean `Flag` contributions and
 unordered `Any` on the existing graph. Source membership and numeric ranks are
-separate; missing coverage remains unresolved even beside true. The current
-rule format is schema3; no historical DTO loading path exists. Operations22
-introduced flags; the current Life query packet adopts operations23.
+separate; missing coverage remains unresolved even beside true. That checkpoint
+used rule format 3; the current strict contract is rule format 4/schema 7, with
+no historical DTO loading path. Operations22 introduced flags, and the Life
+query packet then adopted operations23.
 The original [flag packet](../data/owned/poe2/3887ae68/inherent-attribute-flags/README.md)
 published two real passive producers and five reducers with Partial memberships.
 The subsequent [bounded membership packet](../data/owned/poe2/3887ae68/inherent-attribute-flag-membership/README.md)
@@ -1215,7 +1228,8 @@ to assignments. The checked data migration removes 568 support associations from
 568 Known Gem descriptors across the full 966-Gem census. Additional non-support
 capabilities remain, including hidden unresolved helpers. IDs, rules, other
 descriptor fields and Partial closures are preserved. The converter has one
-current path; old immutable packages remain readable for migration/reference.
+current path; old immutable packages remain retained reference evidence, while
+the typed reader accepts only the current format.
 No native coverage check is bypassed and no Lua flag enters the evaluator.
 
 Import can also bind a support to an already authenticated manual Direct root
@@ -1636,7 +1650,8 @@ distribution separation from adapter tooling remains a migration gate.
 
 The latest checked development release is eighteen files, about 60 MB. It is a
 Partial data release with no evaluation bundle; it cannot be passed off as a
-complete runnable game database. It uses schema V6 and operations V27 for
+complete runnable game database. It uses schema 7, rule package 4 and full
+operations V28 for
 reviewed occurrence inputs, exact generated preset inputs, source-property preparation and the published
 physical/actor/action families, including ordered attribute queries, through
 checked release migrations and successors.
@@ -1740,7 +1755,7 @@ actual dependencies and all potential support templates are checked during cold
 compilation; phase labels cannot erase a late read. The reviewed Direct-input
 migration introduced operations V17; V18 adds source-property preparation, and
 V19 adds generated preset input producers; V20 adds typed Action selection
-predicates; the current V21 release also adds ordered contribution queries.
+predicates; V21 introduced ordered contribution queries, retained in current V28.
 Changing its contract version
 does not add missing readiness declarations or mechanics automatically.
 Usage preferences follow the separately accepted composition contract below.
@@ -1753,8 +1768,9 @@ Intrinsic inputs on manual skills now have a separate, typed home on the exact
 permits authored values, a provider projection, or either at the appropriate
 occurrence. Operations V17 binds those values into the same native graph and
 retains V16 readiness. The component tests exercise independent Direct uses and
-a generated sibling of one definition, including parallel evaluation. Omitted
-fields preserve old wire bytes; schema V4 and operations V14 remain defaults.
+a generated sibling of one definition, including parallel evaluation. The
+current schema is 7 and full operations are V28; older operation capability
+subsets still require the current wire format and unified Actor identity.
 
 The source-property component adds receiving V3 relations, stages V3 and operations
 V18 without changing that raw-input storage. It discovers exact authored sources

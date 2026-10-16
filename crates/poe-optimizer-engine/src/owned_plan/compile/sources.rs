@@ -118,7 +118,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                     selector: selector.id.clone(),
                 },
                 provider: Some(action.action.provider.clone()),
-                actor: action.action.actor.clone(),
+                actor: Some(action.action.actor.clone()),
                 skill: skill.cloned(),
                 entity: ConcreteEntity::Action(Box::new(action.clone())),
             };

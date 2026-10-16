@@ -77,7 +77,7 @@ pub fn check_authored() {
     );
     assert_eq!(
         value(&e.schema[1])["value"]["value"]["schema"]["value"]["targets"],
-        json!(["enemy"])
+        json!(["scenario_enemy_actor"])
     );
     let rows = accounting();
     assert_eq!(rows.len(), 2);

@@ -178,7 +178,7 @@ impl Fixture {
             def("external"),
             ExternalInputSchema {
                 value: ValueSchema::Boolean,
-                targets: vec![AssumptionTargetKind::Enemy],
+                targets: vec![AssumptionTargetKind::ScenarioEnemyActor],
             },
         )));
         index.put(DefinitionDescriptor::Reward(known(
@@ -293,7 +293,7 @@ impl Fixture {
                 },
                 assumptions: vec![ExternalAssumption {
                     input: def("external"),
-                    target: AssumptionTarget::Enemy,
+                    target: AssumptionTarget::Actor(ActorKey::ScenarioEnemy),
                     value: ParameterValue::Boolean(false),
                 }],
                 usage: vec![UsagePolicySelection {
@@ -373,6 +373,48 @@ fn valid(r: &DefinitionBindingReport) {
 }
 fn has(r: &DefinitionBindingReport, code: BindingIssueCode) -> bool {
     r.issues().iter().any(|v| v.code == code)
+}
+#[test]
+fn scenario_actor_resolves_without_player_fallback_and_keeps_exact_input_role() {
+    let mut fixture = Fixture::new();
+    valid(&fixture.bind());
+    let request = fixture.owned();
+    let resolver =
+        OwnedOccurrenceResolver::new(&fixture.index, &request, Default::default()).unwrap();
+    let opponent = resolver.actor(&ActorKey::ScenarioEnemy).unwrap();
+    assert!(matches!(
+        opponent.value(),
+        Some(ActorOccurrence::ScenarioEnemy)
+    ));
+    assert_eq!(opponent.value().unwrap().key(), ActorKey::ScenarioEnemy);
+    assert!(matches!(
+        resolver.actor(&ActorKey::Player).unwrap().value(),
+        Some(ActorOccurrence::Player)
+    ));
+    fixture.scenario.assumptions[0].target = AssumptionTarget::Actor(ActorKey::Player);
+    assert!(has(&fixture.bind(), BindingIssueCode::IncompatibleRole));
+    let DefinitionDescriptor::ExternalInput(entry) = fixture
+        .index
+        .definitions
+        .get_mut(&def::<ExternalInputDefinition>("external").address())
+        .unwrap()
+    else {
+        unreachable!()
+    };
+    let SchemaState::Known(schema) = &mut entry.schema else {
+        unreachable!()
+    };
+    schema.targets = vec![AssumptionTargetKind::PlayerActor];
+    valid(&fixture.bind());
+    fixture.scenario.assumptions[0].target = AssumptionTarget::Actor(ActorKey::ScenarioEnemy);
+    assert!(has(&fixture.bind(), BindingIssueCode::IncompatibleRole));
+}
+
+#[test]
+fn scenario_actor_does_not_inherit_actor_usage_permission() {
+    let mut fixture = Fixture::new();
+    fixture.scenario.usage[0].target = UsageTarget::Actor(ActorKey::ScenarioEnemy);
+    assert!(has(&fixture.bind(), BindingIssueCode::IncompatibleRole));
 }
 #[test]
 fn all_five_parameter_sites_preserve_false_and_enforce_kind_presence_and_declaring_site() {

@@ -1,8 +1,8 @@
 {
   "artifacts": {
     "dependencies.json": {
-      "bytes": 34451,
-      "sha256": "ac93706fd321f7bfa4784a3140fddcc17e5dc3ff89fc2147b02b492792a65f37"
+      "bytes": 34496,
+      "sha256": "56e78fa0f9133cfecddddd9fb5666efb4db1b69695734ace1476534d56f12a62"
     },
     "bindings.json": {
       "bytes": 2947,
@@ -10,7 +10,7 @@
     },
     "extension.json": {
       "bytes": 11055,
-      "sha256": "47cbe4b708044f8bc0b3ad8a1c1f3e2b6b228bdbb58a7062cd573b2eecf5af32"
+      "sha256": "a2f0dd3bf566e680ac8bdc791673000182594bf6975c445108baaa876add94d7"
     },
     "consumer.json": {
       "bytes": 44719,
@@ -27,7 +27,7 @@
   "before": "1b7cc8d01e7b54a698240ca6fbf6f628b590b161df41ac2a909542af58c9de90",
   "kind": "player-critical-receivers",
   "contract": {
-    "schema_version": 6,
+    "schema_version": 7,
     "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1",
     "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
     "operations_version": "owned-domain-operations-v27"

@@ -577,7 +577,7 @@ pub fn review_definitions(definitions: &Value, bindings: &Value) -> Result<(), S
         let targets = match offset {
             0 | 2 | 3 => json!(["actor", "action"]),
             1 => json!(["action"]),
-            _ => json!(["enemy"]),
+            _ => json!(["actor"]),
         };
         expected.push(json!({"kind":"stat","value":{"id":id,"schema":{
             "kind":"known","value":{"value":value,"targets":targets}}}}));

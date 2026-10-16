@@ -15,6 +15,7 @@ use poe_optimizer_core::{
 use serde::Serialize;
 use std::collections::BTreeSet;
 
+mod actor_inputs;
 mod applications;
 mod existing_actors;
 mod ordered;
@@ -370,7 +371,7 @@ impl OwnedRulePackage {
             return Err(RuleStorageError::Binding);
         }
         // Size bound before secondary indexes or serialization buffers.
-        digest_owned("owned-rule-package-v3", &input, limits.max_wire_bytes)?;
+        digest_owned("owned-rule-package-v4", &input, limits.max_wire_bytes)?;
         let resources = validate_structure(&input, index, limits)?;
         if let Some(discovery) = &mut input.support_discovery {
             discovery
@@ -388,7 +389,7 @@ impl OwnedRulePackage {
                 application.stacking.sort_by(|a, b| a.effect.cmp(&b.effect));
             }
         }
-        let identity = digest_owned("owned-rule-package-v3", &input, limits.max_wire_bytes)?;
+        let identity = digest_owned("owned-rule-package-v4", &input, limits.max_wire_bytes)?;
         let canonical = serde_json::to_vec(&input)?;
         Ok(Self {
             input,
@@ -795,7 +796,7 @@ fn validate_receivers<I: DefinitionSchemaIndex>(
     limits: RuleStorageLimits,
     usage: &mut RuleStorageUse,
 ) -> Result<(), RuleStorageError> {
-    use poe_optimizer_core::owned_schema::RuleEntityKind;
+    use poe_optimizer_core::owned_schema::{AssumptionTargetKind, RuleEntityKind};
     let invalid = RuleStorageError::Structure;
     let program_count = usage.programs;
     let mut work = |n| {
@@ -899,6 +900,14 @@ fn validate_receivers<I: DefinitionSchemaIndex>(
             return Err(invalid(
                 "receiver requires exactly one context-matching final derive to its stat",
             ));
+        }
+        for target in &receiver.targets {
+            let role = match target {
+                StatReceiverTarget::Player => Some(AssumptionTargetKind::PlayerActor),
+                StatReceiverTarget::OwnedSlot { .. } => Some(AssumptionTargetKind::OwnedActor),
+                StatReceiverTarget::EquipmentTemplate { .. } => None,
+            };
+            actor_inputs::validate(program, index, role, None, &mut work)?;
         }
     }
     if let SchemaClosure::Partial { gaps } = &input.receivers.closure {

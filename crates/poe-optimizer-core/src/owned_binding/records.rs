@@ -464,10 +464,9 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             }
             let kind = match &assumption.target {
                 AssumptionTarget::Environment => AssumptionTargetKind::Environment,
-                AssumptionTarget::Enemy => AssumptionTargetKind::Enemy,
                 AssumptionTarget::Actor(actor) => {
                     self.bind_actor(actor, &site, Purpose::Authored)?;
-                    AssumptionTargetKind::Actor
+                    AssumptionTargetKind::for_actor(actor)
                 }
                 AssumptionTarget::Skill(skill) => {
                     self.bind_skill_target(skill, &site, Purpose::Authored)?;
@@ -496,6 +495,14 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         usage: &UsagePolicySelection,
         site: &BindingSite,
     ) -> Result {
+        if matches!(usage.target, UsageTarget::Actor(ActorKey::ScenarioEnemy)) {
+            return self.issue(
+                site,
+                IssueClass::Invalid,
+                BindingIssueCode::IncompatibleRole,
+                Some(SchemaSubject::Definition(usage.policy.address())),
+            );
+        }
         let kind = match &usage.target {
             UsageTarget::Actor(actor) => {
                 self.bind_actor(actor, site, Purpose::Authored)?;

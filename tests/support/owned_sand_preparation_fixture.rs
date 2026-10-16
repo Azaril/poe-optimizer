@@ -268,7 +268,7 @@ impl World {
             )),
         ]);
         let schema = SchemaPackageInput {
-            schema_version: 6,
+            schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: ns(),
             release: key("finite-sand-preparation"),
             semantics_version: key("owned-mechanics-skill-inputs-v1"),

@@ -445,7 +445,7 @@ fn entity<I: DefinitionSchemaIndex>(
             RuleEntityKind::Modifier
         }
         RuleEntity::Player => RuleEntityKind::Actor,
-        RuleEntity::Enemy => RuleEntityKind::Enemy,
+        RuleEntity::Enemy => RuleEntityKind::Actor,
         RuleEntity::Environment => RuleEntityKind::Environment,
         RuleEntity::SupportOrigin | RuleEntity::AssignedSkill => {
             support_owner(owner, index, path)?;
@@ -844,17 +844,27 @@ fn read<I: DefinitionSchemaIndex>(
         }
         RuleReadSource::External { entity: e, input } => {
             let s = known(index.definition(input), path)?;
-            let target = match entity(*e, p.context, owner, index, path)? {
-                RuleEntityKind::Actor => AssumptionTargetKind::Actor,
-                RuleEntityKind::Enemy => AssumptionTargetKind::Enemy,
-                RuleEntityKind::Environment => AssumptionTargetKind::Environment,
+            let permitted = match entity(*e, p.context, owner, index, path)? {
+                RuleEntityKind::Actor => match e {
+                    RuleEntity::Player => s.targets.contains(&AssumptionTargetKind::PlayerActor),
+                    RuleEntity::Enemy => s
+                        .targets
+                        .contains(&AssumptionTargetKind::ScenarioEnemyActor),
+                    _ => s.targets.iter().any(|target| {
+                        matches!(
+                            target,
+                            AssumptionTargetKind::PlayerActor
+                                | AssumptionTargetKind::OwnedActor
+                                | AssumptionTargetKind::ScenarioEnemyActor
+                        )
+                    }),
+                },
+                RuleEntityKind::Environment => {
+                    s.targets.contains(&AssumptionTargetKind::Environment)
+                }
                 _ => return Err(fail(path, "external read has unsupported target context")),
             };
-            check(
-                s.targets.contains(&target),
-                path,
-                "external input target mismatch",
-            )?;
+            check(permitted, path, "external input target mismatch")?;
             constraint = Some(s.value.clone());
             schema_type(&s.value, index, path, l, b)?
         }
@@ -2077,7 +2087,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     // Streaming bound before cloning/index allocation. Source order of effects and
     // boolean operands remains meaningful; declaration tables are canonicalized.
     applications::preflight(input, index, l, &mut b)?;
-    digest_owned("owned-rule-input-v3", input, l.max_wire_bytes)
+    digest_owned("owned-rule-input-v4", input, l.max_wire_bytes)
         .map_err(|e| RuleError::new("wire", e.to_string()))?;
     receivers(input, index, l, &mut b)?;
     let mut table_ids = BTreeSet::new();
@@ -2207,7 +2217,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             );
         }
     }
-    let identity = digest_owned("owned-rule-programs-v4", &input, l.max_wire_bytes)
+    let identity = digest_owned("owned-rule-programs-v5", &input, l.max_wire_bytes)
         .map_err(|e| RuleError::new("wire", e.to_string()))?;
     Ok(CompiledRulePackage {
         input,

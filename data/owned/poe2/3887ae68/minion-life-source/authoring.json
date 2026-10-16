@@ -213,7 +213,7 @@
   "artifact_sha256": {
     "bindings": "55f3e4a07cdd32543877a5f678e34f4757643fb3fb43a55b7e8def4343d54e1a",
     "dependencies": "0fa8d1f8644108bb4cc6ea1d1015ca58188250817d0b3b1c9e8e592d8ff00c96",
-    "migration": "8d238d734907b63792c38e59c4c1f3fe0536a5b722ecb9a31d5ac9af4538fa52",
+    "migration": "fee3ac75dc5c69b33b61c903d40dea77c6a71d163b8271126872d7e63c02a6e6",
     "replacement": "e066cd74d06f21d31a48963eef0a8be05fa53438021a0b6b6fc9f24f03e0ed41",
     "source-vectors": "31780b42511dce71ec82b5a637308b1f5db345098c2c1bac0aa8c4f8f082549d"
   }

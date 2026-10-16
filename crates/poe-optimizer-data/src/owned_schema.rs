@@ -14,12 +14,8 @@ use std::{
     io,
 };
 
-pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = OWNED_SCHEMA_PACKAGE_V4;
-pub const OWNED_SCHEMA_PACKAGE_V6: u32 = 6;
-pub const OWNED_SCHEMA_PACKAGE_V5: u32 = 5;
-pub const OWNED_SCHEMA_PACKAGE_V4: u32 = 4;
-pub const OWNED_SCHEMA_PACKAGE_V3: u32 = 3;
-pub const OWNED_SCHEMA_PACKAGE_V2: u32 = 2;
+pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = OWNED_SCHEMA_PACKAGE_V7;
+pub const OWNED_SCHEMA_PACKAGE_V7: u32 = 7;
 pub const DEFAULT_SCHEMA_MAX_ENTRIES: usize = 1_000_000;
 pub const DEFAULT_SCHEMA_MAX_COLLECTION_ENTRIES: usize = 100_000;
 pub const DEFAULT_SCHEMA_MAX_WIRE_BYTES: usize = 64 * 1024 * 1024;
@@ -145,17 +141,10 @@ pub struct OwnedDefinitionSchemaPackage {
 impl OwnedDefinitionSchemaPackage {
     pub fn new(mut input: SchemaPackageInput, limits: OwnedSchemaLimits) -> Result<Self> {
         limits.validate()?;
-        if !matches!(
-            input.schema_version,
-            OWNED_SCHEMA_PACKAGE_V2
-                | OWNED_SCHEMA_PACKAGE_V3
-                | OWNED_SCHEMA_PACKAGE_V4
-                | OWNED_SCHEMA_PACKAGE_V5
-                | OWNED_SCHEMA_PACKAGE_V6
-        ) {
+        if input.schema_version != OWNED_SCHEMA_PACKAGE_VERSION {
             return Err(SchemaPackageError::UnsupportedVersion(input.schema_version));
         }
-        validate_version_features(&input, limits)?;
+        validate_shape_limits(&input, limits)?;
         let resources = validate_and_canonicalize(&mut input, limits)?;
         let canonical_bytes = bounded_json(&input, limits.max_wire_bytes)?;
         let identity = DataIdentity {
@@ -669,117 +658,13 @@ impl Check<'_> {
     }
 }
 
-fn validate_version_features(input: &SchemaPackageInput, limits: OwnedSchemaLimits) -> Result {
-    let mut entries = input
-        .definitions
-        .len()
-        .checked_add(input.slots.len())
-        .filter(|entries| *entries <= limits.max_entries)
-        .ok_or_else(|| SchemaPackageError::Invalid {
-            path: "definitions/slots".into(),
-            kind: SchemaPackageErrorKind::LimitExceeded,
-        })?;
-    if input.definitions.len() > limits.max_collection_entries
+fn validate_shape_limits(input: &SchemaPackageInput, limits: OwnedSchemaLimits) -> Result {
+    let entries = input.definitions.len().checked_add(input.slots.len());
+    if entries.is_none_or(|entries| entries > limits.max_entries)
+        || input.definitions.len() > limits.max_collection_entries
         || input.slots.len() > limits.max_collection_entries
     {
         return invalid("definitions/slots", SchemaPackageErrorKind::LimitExceeded);
-    }
-    if input.schema_version < OWNED_SCHEMA_PACKAGE_V6 {
-        for (i, slot) in input.slots.iter().enumerate() {
-            if let SlotDescriptor::SkillGrant(DefinitionEntry {
-                schema: SchemaState::Known(schema),
-                ..
-            }) = slot
-                && schema.preset_inputs.is_some()
-            {
-                return invalid(
-                    &format!("slots[{i}].preset_inputs"),
-                    SchemaPackageErrorKind::UnsupportedSchemaFeature,
-                );
-            }
-        }
-    }
-    if input.schema_version < OWNED_SCHEMA_PACKAGE_V5 {
-        for (i, slot) in input.slots.iter().enumerate() {
-            if let SlotDescriptor::Parameter(DefinitionEntry {
-                schema: SchemaState::Known(schema),
-                ..
-            }) = slot
-                && (schema.skill_input.is_some()
-                    || schema.sites.contains(&ParameterSite::SkillParameter))
-            {
-                return invalid(
-                    &format!("slots[{i}].skill_input"),
-                    SchemaPackageErrorKind::UnsupportedSchemaFeature,
-                );
-            }
-        }
-    }
-    if input.schema_version < OWNED_SCHEMA_PACKAGE_V4 {
-        for (i, definition) in input.definitions.iter().enumerate() {
-            let targets = match definition {
-                DefinitionDescriptor::Stat(DefinitionEntry {
-                    schema: SchemaState::Known(schema),
-                    ..
-                }) => &schema.targets,
-                DefinitionDescriptor::Capability(DefinitionEntry {
-                    schema: SchemaState::Known(schema),
-                    ..
-                }) => &schema.targets,
-                _ => continue,
-            };
-            entries = entries
-                .checked_add(targets.len())
-                .filter(|entries| *entries <= limits.max_entries)
-                .ok_or_else(|| SchemaPackageError::Invalid {
-                    path: format!("definitions[{i}].targets"),
-                    kind: SchemaPackageErrorKind::LimitExceeded,
-                })?;
-            if targets.len() > limits.max_collection_entries {
-                return invalid(
-                    &format!("definitions[{i}].targets"),
-                    SchemaPackageErrorKind::LimitExceeded,
-                );
-            }
-            if targets.iter().any(|target| {
-                matches!(
-                    target,
-                    RuleEntityKind::SupportOrigin | RuleEntityKind::Skill
-                )
-            }) {
-                return invalid(
-                    &format!("definitions[{i}].targets"),
-                    SchemaPackageErrorKind::UnsupportedSchemaFeature,
-                );
-            }
-        }
-    }
-    if input.schema_version == OWNED_SCHEMA_PACKAGE_V2 {
-        for (i, definition) in input.definitions.iter().enumerate() {
-            if matches!(definition, DefinitionDescriptor::Actor(_)) {
-                return invalid(
-                    &format!("definitions[{i}]"),
-                    SchemaPackageErrorKind::UnsupportedSchemaFeature,
-                );
-            }
-        }
-        for (i, slot) in input.slots.iter().enumerate() {
-            if matches!(
-                slot,
-                SlotDescriptor::Actor(DefinitionEntry {
-                    schema: SchemaState::Known(ActorSlotSchema {
-                        provider_definition: Some(_),
-                        ..
-                    }),
-                    ..
-                })
-            ) {
-                return invalid(
-                    &format!("slots[{i}].provider_definition"),
-                    SchemaPackageErrorKind::UnsupportedSchemaFeature,
-                );
-            }
-        }
     }
     Ok(())
 }

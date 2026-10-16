@@ -49,7 +49,7 @@ fn option_fixture() -> OptionFixture {
                 value: ValueSchema::Option {
                     allowed: DeclaredSet::complete(options.clone()),
                 },
-                targets: vec![AssumptionTargetKind::Enemy],
+                targets: vec![AssumptionTargetKind::ScenarioEnemyActor],
             }),
         }));
     for entry in &mut schema.definitions {
@@ -405,7 +405,7 @@ fn option_target_schema_and_every_mapped_or_default_definition_must_be_known() {
                             panic!()
                         };
                         match mutation {
-                            1 => raw.targets = vec![AssumptionTargetKind::Actor],
+                            1 => raw.targets = vec![AssumptionTargetKind::PlayerActor],
                             2 => raw.value = ValueSchema::Boolean,
                             5 | 6 => {
                                 let ValueSchema::Option { allowed } = &mut raw.value else {

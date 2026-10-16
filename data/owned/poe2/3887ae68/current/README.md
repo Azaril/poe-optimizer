@@ -6,7 +6,7 @@ regression tests. Use the canonical endpoint in the
 [implementation plan](../../../../../docs/implementation.md) for new mechanics
 work; that endpoint includes the later owned-model and rule migrations.
 
-The 2026-10-07 contribution-contract cutover reauthored these maintained inputs with rule-package schema **3**. Their explicit operations **V6**, rule bodies, owned IDs, source pins and Partial coverage are unchanged; manifests and transition commitments were regenerated through the production publishers. Old rule-package formats are rejected, with no runtime compatibility path.
+The 2026-10-15 generic Actor cutover uses definition schema **7** and rule-package schema **4**. The explicit operations **V6** capability subset, rule bodies, owned IDs, source pins and Partial coverage remain unchanged. Manifests and dependency commitments are regenerated through the production publishers. Older wire formats are rejected; this bootstrap uses the same Actor semantics as the current evaluator.
 
 This tree baseline has registry watermark **7469**, with the complete earlier
 2589-entry prefix retained. Its `recipe.json` and `mapping.json` are inputs to

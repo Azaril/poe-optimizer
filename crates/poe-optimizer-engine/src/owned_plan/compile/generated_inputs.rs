@@ -109,7 +109,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                     property_owner: None,
                     origin: origin.clone(),
                     provider: Some(binding.target.provider.clone()),
-                    actor: parent.actor().clone(),
+                    actor: Some(parent.actor().clone()),
                     skill: match parent.exposure() {
                         ProviderExposure::Skill { key, .. } => Some(key.clone()),
                         _ => None,

@@ -825,7 +825,7 @@ fn typed_invocation(value_type: ComputedValueType) -> Invocation {
                     id: stat.clone(),
                     schema: SchemaState::Known(StatSchema {
                         value: value_type.clone(),
-                        targets: vec![RuleEntityKind::Enemy],
+                        targets: vec![RuleEntityKind::Actor],
                     }),
                 }),
             ],
@@ -844,7 +844,7 @@ fn typed_invocation(value_type: ComputedValueType) -> Invocation {
             namespace: namespace(),
             release: key("rules"),
             semantics_version: key("v1"),
-            operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+            operations_version: key(OWNED_RULE_OPERATIONS_V14),
             definitions: schema.identity().clone(),
             tables: vec![],
             receivers: DeclaredSet::complete(vec![]),
@@ -852,7 +852,7 @@ fn typed_invocation(value_type: ComputedValueType) -> Invocation {
                 owner: owner.clone(),
                 programs: DeclaredSet::complete(vec![RuleProgram {
                     id: key("copy"),
-                    context: RuleEntityKind::Enemy,
+                    context: RuleEntityKind::Actor,
                     reads: vec![RuleRead {
                         id: key("input"),
                         value_type: value_type.clone(),
@@ -888,7 +888,7 @@ fn typed_invocation(value_type: ComputedValueType) -> Invocation {
             origin: RuleOrigin::Encounter,
             owner: owner.clone(),
             program: key("copy"),
-            entity: ConcreteEntity::Enemy,
+            entity: ConcreteEntity::Actor(ActorKey::ScenarioEnemy),
         },
         program: package.prepare_program(&owner, &key("copy")).unwrap(),
         reads: vec![literal(integer(-1))],

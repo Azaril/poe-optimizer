@@ -403,6 +403,9 @@ pub struct ProviderKey {
 )]
 pub enum ActorKey {
     Player,
+    /// The single opponent declared by this request's ScenarioInput.
+    /// This actor is not supplied by a build provider.
+    ScenarioEnemy,
     Owned(Box<OwnedActorKey>),
 }
 
@@ -510,7 +513,6 @@ pub struct ExternalAssumption {
 )]
 pub enum AssumptionTarget {
     Environment,
-    Enemy,
     Actor(ActorKey),
     Skill(SkillTarget),
 }

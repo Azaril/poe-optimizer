@@ -249,7 +249,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             )?;
             let context = match target {
                 EffectApplicationTarget::Player => RuleEntityKind::Actor,
-                EffectApplicationTarget::Enemy => RuleEntityKind::Enemy,
+                EffectApplicationTarget::Enemy => RuleEntityKind::Actor,
                 EffectApplicationTarget::OwnedSlot { slot } => {
                     known(index.slot(slot), &path)?;
                     RuleEntityKind::Actor

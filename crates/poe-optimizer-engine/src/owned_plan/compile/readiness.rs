@@ -9,7 +9,7 @@ mod tests;
 #[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub(super) struct GateContextKey {
     provider: Option<ProviderKey>,
-    actor: ActorKey,
+    actor: Option<ActorKey>,
     skill: Option<GeneratedSkillKey>,
     entity: ConcreteEntity,
     phase: ReadinessPhase,
@@ -69,7 +69,7 @@ fn effect_phase(stages: &OwnedEvaluationStages, node: &EffectNode) -> ReadinessP
 }
 fn actor_work(actor: &ActorKey) -> usize {
     match actor {
-        ActorKey::Player => 1,
+        ActorKey::Player | ActorKey::ScenarioEnemy => 1,
         ActorKey::Owned(actor) => actor.provider.grant_path.len() + 2,
     }
 }
@@ -155,7 +155,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 .skill
                 .as_ref()
                 .map_or(0, |s| s.provider.grant_path.len())
-            + actor_work(&context.actor)
+            + context.actor.as_ref().map_or(0, actor_work)
             + entity_work(&context.entity)
             + 4;
         charge(&mut self.work, copy_work)?;

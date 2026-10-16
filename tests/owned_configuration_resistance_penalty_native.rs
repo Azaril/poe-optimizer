@@ -46,7 +46,8 @@ fn missing_player_penalty_cannot_be_filled_from_enemy_or_from_a_native_default()
     for wrong_target in [false, true] {
         let mut w = World::new(wrong_target.then_some(-60.0), false);
         if wrong_target {
-            w.scenario.assumptions[0].target = AssumptionTarget::Enemy;
+            w.scenario.assumptions[0].target =
+                AssumptionTarget::Actor(poe_optimizer_core::owned_build::ActorKey::ScenarioEnemy);
             assert!(w.plan().is_err());
             continue;
         }

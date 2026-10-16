@@ -137,7 +137,7 @@ fn compare_original(
         .map(|input| {
             json!({
                 "input":{"kind":"known","value":input.presence_input},
-                "target":{"kind":"enemy"},
+                "target":{"kind":"actor","value":{"kind":"scenario_enemy"}},
                 "value":{"kind":"known","value":{"kind":"boolean","value":false}},
             })
         })
@@ -146,7 +146,7 @@ fn compare_original(
     let option = &option_inputs[0];
     additions.push(json!({
         "input":{"kind":"known","value":option.value_input},
-        "target":{"kind":"enemy"},
+        "target":{"kind":"actor","value":{"kind":"scenario_enemy"}},
         "value":{"kind":"known","value":{"kind":"option","value":option.constructor_default}},
     }));
     let aa = a["draft"]["scenario_presets"]["members"]

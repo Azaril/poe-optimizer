@@ -49,7 +49,7 @@ pub fn check_authored() {
     let c = consumer();
     assert_eq!(a["before"], json!(m.before));
     assert_eq!(m.schema.len(), 2);
-    assert_eq!(m.contract.schema_version, 6);
+    assert_eq!(m.contract.schema_version, 7);
     assert_eq!(
         m.contract.operations_version.as_str(),
         OWNED_RULE_OPERATIONS_V25

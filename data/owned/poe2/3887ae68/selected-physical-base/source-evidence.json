@@ -130,7 +130,7 @@
     {
       "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/authoring.json",
       "bytes": 1432,
-      "sha256": "4d19ffcda248398eedd40d75b193c2e22c8a2df01fc79deec501bd7764933a03"
+      "sha256": "48bc3a6685d3879ce2300b4884004544821c795105cccab802f26592bda962eb"
     },
     {
       "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/bindings.json",
@@ -150,7 +150,7 @@
     {
       "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/migration.json",
       "bytes": 1086,
-      "sha256": "1c20425753674c8d469df187297a46dc82d8b2a98c69e1548fc7bfa9e1ed0430"
+      "sha256": "5824db45902a1315b23c67be18eb1381174ce4de22b2efc6e24cf4622beeaef3"
     },
     {
       "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/queries.json",
@@ -215,7 +215,7 @@
     {
       "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/authoring.json",
       "bytes": 2784,
-      "sha256": "3c0cdee94ffdc47a1fbb39a4a44c1cf0c3cb2f835c19952ed7600542c5933a6b"
+      "sha256": "c753f2ce6568549621efbfc4e8aee30b9e69a13cc682317536d8751081580ff2"
     },
     {
       "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/bindings.json",
@@ -235,7 +235,7 @@
     {
       "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/migration.json",
       "bytes": 2277,
-      "sha256": "fb46bc5de8e3b8d93c371b12b5f0f272993b9ac4150fea7612b1fb03f570e373"
+      "sha256": "bcdc756f85f3736d82ff66fe4119066547501f66600a165d00a22c58adba4fa8"
     },
     {
       "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/routes.json",

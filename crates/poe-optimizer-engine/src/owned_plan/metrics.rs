@@ -62,7 +62,11 @@ impl MetricProjection {
                     MetricBindingRole::PlayerActor,
                     ConcreteEntity::Actor(ActorKey::Player),
                 ),
-                MetricTarget::Actor(actor) => (
+                MetricTarget::Actor(ActorKey::ScenarioEnemy) => (
+                    MetricBindingRole::ScenarioEnemyActor,
+                    ConcreteEntity::Actor(ActorKey::ScenarioEnemy),
+                ),
+                MetricTarget::Actor(actor @ ActorKey::Owned(_)) => (
                     MetricBindingRole::OwnedActor,
                     ConcreteEntity::Actor(actor.clone()),
                 ),

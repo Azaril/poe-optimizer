@@ -41,7 +41,7 @@ impl Fixture {
             unreachable!()
         };
         let mut schema = base.schema.input().clone();
-        schema.schema_version = OWNED_SCHEMA_PACKAGE_V5;
+        schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
         // Catalog-only identities have no physical Gem schema or physical
         // projection authority. Keep the allocated IDs as historical registry
         // entries, but remove the synthetic physical slots from this package.

@@ -36028,7 +36028,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36052,7 +36052,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36076,7 +36076,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36100,7 +36100,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36124,7 +36124,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36148,7 +36148,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36172,7 +36172,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36196,7 +36196,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36220,7 +36220,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36244,7 +36244,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36268,7 +36268,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36292,7 +36292,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36316,7 +36316,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36340,7 +36340,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36364,7 +36364,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36453,7 +36453,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36501,7 +36501,8 @@
                 }
               },
               "targets": [
-                "actor"
+                "player_actor",
+                "owned_actor"
               ]
             }
           }
@@ -36549,7 +36550,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36597,7 +36598,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36645,7 +36646,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36693,7 +36694,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36741,7 +36742,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36789,7 +36790,8 @@
                 }
               },
               "targets": [
-                "actor"
+                "player_actor",
+                "owned_actor"
               ]
             }
           }
@@ -36837,7 +36839,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36885,7 +36887,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36933,7 +36935,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -36981,7 +36983,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -37029,7 +37031,8 @@
                 }
               },
               "targets": [
-                "actor"
+                "player_actor",
+                "owned_actor"
               ]
             }
           }
@@ -37077,7 +37080,8 @@
                 }
               },
               "targets": [
-                "actor"
+                "player_actor",
+                "owned_actor"
               ]
             }
           }
@@ -37125,7 +37129,8 @@
                 }
               },
               "targets": [
-                "actor"
+                "player_actor",
+                "owned_actor"
               ]
             }
           }
@@ -37173,7 +37178,8 @@
                 }
               },
               "targets": [
-                "actor"
+                "player_actor",
+                "owned_actor"
               ]
             }
           }
@@ -37221,7 +37227,8 @@
                 }
               },
               "targets": [
-                "actor"
+                "player_actor",
+                "owned_actor"
               ]
             }
           }
@@ -37269,7 +37276,8 @@
                 }
               },
               "targets": [
-                "actor"
+                "player_actor",
+                "owned_actor"
               ]
             }
           }
@@ -95949,7 +95957,7 @@
           "members": [
             {
               "id": "configured-fire-resistance-base",
-              "context": "enemy",
+              "context": "actor",
               "reads": [
                 {
                   "id": "present",
@@ -96070,7 +96078,7 @@
             },
             {
               "id": "configured-cold-resistance-base",
-              "context": "enemy",
+              "context": "actor",
               "reads": [
                 {
                   "id": "present",
@@ -96191,7 +96199,7 @@
             },
             {
               "id": "configured-lightning-resistance-base",
-              "context": "enemy",
+              "context": "actor",
               "reads": [
                 {
                   "id": "present",
@@ -96312,7 +96320,7 @@
             },
             {
               "id": "configured-chaos-resistance-base",
-              "context": "enemy",
+              "context": "actor",
               "reads": [
                 {
                   "id": "present",
@@ -96433,7 +96441,7 @@
             },
             {
               "id": "configured-enemy-armour-base",
-              "context": "enemy",
+              "context": "actor",
               "reads": [
                 {
                   "id": "present",
@@ -96638,7 +96646,7 @@
             },
             {
               "id": "configured-enemy-evasion-base",
-              "context": "enemy",
+              "context": "actor",
               "reads": [
                 {
                   "id": "present",
@@ -96843,7 +96851,7 @@
             },
             {
               "id": "configured-enemy-block-base",
-              "context": "enemy",
+              "context": "actor",
               "reads": [
                 {
                   "id": "present",
@@ -96964,7 +96972,7 @@
             },
             {
               "id": "configured-incoming-hit-base",
-              "context": "enemy",
+              "context": "actor",
               "reads": [
                 {
                   "id": "enemy-level",

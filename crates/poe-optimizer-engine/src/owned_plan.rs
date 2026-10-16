@@ -149,7 +149,6 @@ pub enum ConcreteEntity {
     SupportOrigin(SupportOrigin),
     /// Exact authored or generated skill occurrence, not its actor or output.
     Skill(Box<SkillTarget>),
-    Enemy,
     Environment,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]

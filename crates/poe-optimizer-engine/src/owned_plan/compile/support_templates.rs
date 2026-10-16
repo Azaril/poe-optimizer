@@ -209,7 +209,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                         provider: origin_provider.clone(),
                     },
                     provider: Some(origin_provider.clone()),
-                    actor: actor.clone(),
+                    actor: Some(actor.clone()),
                     skill: None,
                     receiving_skill: receiver.context.skill.clone(),
                     assigned_skill: Some(binding.target.clone()),
@@ -268,7 +268,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                             provider: receiver.context.provider.clone(),
                         },
                         provider: Some(receiver.context.provider.clone()),
-                        actor,
+                        actor: Some(actor),
                         skill,
                         receiving_skill: receiver.context.skill.clone(),
                         assigned_skill: Some(binding.target.clone()),
@@ -429,6 +429,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 .checked_mul(path_work)
                 .ok_or(PlanError::Limit("support template work"))?,
         )?;
+        self.program_authority(program, source)?;
         let prepared = self.rules.prepare_program(owner, &program.id)?;
         let authored: BTreeMap<_, _> = program
             .reads

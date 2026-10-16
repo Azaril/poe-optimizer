@@ -81,7 +81,7 @@ def fields(value, expected, label):
 def validate_rule_wire(rules):
     """Require the current explicit wire shape; never migrate absent roots on load."""
     fields(rules, "schema_version namespace release semantics_version operations_version definitions tables owners receivers", "owned rules")
-    if rules["schema_version"] != 3 or rules["operations_version"] != "owned-domain-operations-v6":
+    if rules["schema_version"] != 4 or rules["operations_version"] != "owned-domain-operations-v6":
         raise ValueError("unsupported owned rule package version/operations")
 
 
@@ -138,6 +138,8 @@ def produce(snapshot_bytes, base_bytes, ids_bytes, mechanics_bytes, facts_bytes,
         raise ValueError("input byte bound exceeded")
     base, ids, mechanics, facts, rewards, queries, authoring = map(decode,
         [base_bytes, ids_bytes, mechanics_bytes, facts_bytes, reward_bytes, query_bytes, authoring_bytes])
+    if base["schema"]["schema_version"] != 7:
+        raise ValueError("unsupported owned definition schema")
     fields(authoring, "schema_version scope catalog_policy seed_bindings equipment_slots extra_source_files quality_label quality_unit_label normalization_version reward_version item_version item_source_version", "authoring")
     if authoring["schema_version"] != 1 or authoring["scope"] != "reviewed-owned-import-seed":
         raise ValueError("unsupported authoring format")

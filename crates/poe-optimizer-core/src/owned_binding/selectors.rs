@@ -63,7 +63,9 @@ impl<'a> Context<'a> {
             Exposure::Actor { schema, owner } => ProviderExposure::Actor {
                 key: match &self.actor {
                     ActorKey::Owned(key) => key.as_ref().clone(),
-                    ActorKey::Player => unreachable!("entered actor has an owned occurrence"),
+                    ActorKey::Player | ActorKey::ScenarioEnemy => {
+                        unreachable!("entered actor has an owned occurrence")
+                    }
                 },
                 parent_actor: self.actor_parent.expect("entered actor has a parent"),
                 schema,
@@ -815,8 +817,10 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         site: &BindingSite,
         purpose: Purpose,
     ) -> Result<Option<ActorOccurrence<'a>>> {
-        let ActorKey::Owned(owned) = key else {
-            return Ok(Some(ActorOccurrence::Player));
+        let owned = match key {
+            ActorKey::Player => return Ok(Some(ActorOccurrence::Player)),
+            ActorKey::ScenarioEnemy => return Ok(Some(ActorOccurrence::ScenarioEnemy)),
+            ActorKey::Owned(owned) => owned,
         };
         let Some(context) = self.bind_provider(&owned.provider, site, purpose)? else {
             return Ok(None);
@@ -1277,14 +1281,15 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                 MetricTarget::Actor(actor) => {
                     self.bind_actor(actor, &site, Purpose::Query)?;
                     let role = match actor {
-                        ActorKey::Player => ProviderRole::Character,
-                        ActorKey::Owned(key) => provider_role(&key.provider.root),
+                        ActorKey::Player => Some(ProviderRole::Character),
+                        ActorKey::ScenarioEnemy => None,
+                        ActorKey::Owned(key) => Some(provider_role(&key.provider.root)),
                     };
                     (
                         MetricTargetKind::Actor,
                         actor,
                         role,
-                        !matches!(actor, ActorKey::Player),
+                        matches!(actor, ActorKey::Owned(_)),
                     )
                 }
                 MetricTarget::Action(action) => {
@@ -1292,7 +1297,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                     (
                         MetricTargetKind::Action,
                         &action.action.actor,
-                        provider_role(&action.action.provider.root),
+                        Some(provider_role(&action.action.provider.root)),
                         true,
                     )
                 }
@@ -1310,20 +1315,22 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                 )?;
                 self.role(
                     &schema.actor_roles,
-                    &if matches!(actor, ActorKey::Player) {
-                        MetricActorRole::Player
-                    } else {
-                        MetricActorRole::Owned
+                    &match actor {
+                        ActorKey::Player => MetricActorRole::Player,
+                        ActorKey::ScenarioEnemy => MetricActorRole::ScenarioEnemy,
+                        ActorKey::Owned(_) => MetricActorRole::Owned,
                     },
                     subject.clone(),
                     &site.at(BindingFacet::Role),
                 )?;
-                self.role(
-                    &schema.provider_roles,
-                    &role,
-                    subject,
-                    &site.at(BindingFacet::Provider),
-                )?;
+                if let Some(role) = role {
+                    self.role(
+                        &schema.provider_roles,
+                        &role,
+                        subject,
+                        &site.at(BindingFacet::Provider),
+                    )?;
+                }
             }
             let issues = &self.issues[start..];
             let schema = schema_status(issues);

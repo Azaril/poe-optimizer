@@ -106,7 +106,7 @@ fn target_depth(target: &SkillTarget) -> usize {
 }
 fn actor_depth(actor: &ActorKey) -> usize {
     match actor {
-        ActorKey::Player => 0,
+        ActorKey::Player | ActorKey::ScenarioEnemy => 0,
         ActorKey::Owned(actor) => actor.provider.grant_path.len(),
     }
 }
@@ -765,8 +765,10 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         if !self.receiver_actors.contains(actor) {
             return Ok(false);
         }
-        let ActorKey::Owned(actor) = actor else {
-            return Ok(true);
+        let actor = match actor {
+            ActorKey::Player => return Ok(true),
+            ActorKey::ScenarioEnemy => return Ok(false),
+            ActorKey::Owned(actor) => actor,
         };
         if let Some(entered) = self.actor_supplies.get(actor.as_ref()) {
             return Ok(self.providers.contains(entered));

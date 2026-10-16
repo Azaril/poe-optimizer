@@ -24,7 +24,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "actor"
               ]
             }
           }
@@ -51,7 +51,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "actor"
               ]
             }
           }
@@ -152,7 +152,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "actor"
               ]
             }
           }
@@ -226,7 +226,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "actor"
               ]
             }
           }
@@ -263,7 +263,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "actor"
               ]
             }
           }

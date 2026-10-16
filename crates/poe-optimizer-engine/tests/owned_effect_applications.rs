@@ -428,8 +428,45 @@ fn different_recipients_do_not_share_group_state_and_pairs_are_bounded() {
     let mut row = application("a");
     row.targets
         .push(EffectApplicationTarget::OwnedSlot { slot: child_slot() });
+    row.targets.push(EffectApplicationTarget::Enemy);
     let report = evaluate(&f, vec![row.clone()]);
-    assert_eq!(report.application_groups.len(), 6);
+    assert_eq!(report.application_groups.len(), 8);
+    assert_eq!(
+        report
+            .application_groups
+            .iter()
+            .map(|group| group.key.invocation.entity.clone())
+            .collect::<std::collections::BTreeSet<_>>(),
+        [
+            ActorKey::Player,
+            child_actor(30),
+            child_actor(31),
+            ActorKey::ScenarioEnemy
+        ]
+        .map(ConcreteEntity::Actor)
+        .into_iter()
+        .collect()
+    );
+    for group in &report.application_groups {
+        let expected = if group.key.effect == key("damage") {
+            20
+        } else {
+            89
+        };
+        assert_eq!(
+            group.value,
+            EffectValue::Known {
+                value: integer(expected)
+            }
+        );
+        for candidate in &group.candidates {
+            assert!(matches!(
+                &candidate.invocation.origin,
+                RuleOrigin::EffectApplication { source: ConcreteEntity::Actor(ActorKey::Owned(_)), recipient, .. }
+                    if *recipient == group.key.invocation.entity
+            ));
+        }
+    }
     assert!(
         report
             .application_groups

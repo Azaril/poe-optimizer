@@ -163,9 +163,9 @@ fn selection_authority_is_not_available_in_old_or_unknown_operations() {
             ))
         ));
     }
-    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V14);
+    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V28);
     let mut legacy = input;
-    legacy.operations_version = key(OWNED_RULE_OPERATIONS_VERSION);
+    legacy.operations_version = key(OWNED_RULE_OPERATIONS_V14);
     legacy.effect_applications = None;
     let program = &mut legacy.owners[0].programs.members[0];
     program.reads.clear();

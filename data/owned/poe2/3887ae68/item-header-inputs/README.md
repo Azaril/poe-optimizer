@@ -2,7 +2,8 @@
 
 These injected item-line/source policies replace the prior opaque `Quality:` and
 `Item Level:` metadata rules with explicit values. They are bound to the owned
-local-weapon schema `c3a3851df20d87b52ce786a35d33757b267a20e801bf95961f5dd09a28f89caf`.
+current local-weapon schema `c15b995b5b31fda9bbe3454aeff5eaeeb03fa4d5dae9ead0fe8e7ad16c32b90a`
+(definition schema 7, rebuilt during the generic Actor migration).
 The source policy remains v3. Existing line rules, source layout evidence and all
 other semantics are preserved.
 
@@ -25,10 +26,12 @@ The source policy carries the exact item-line digest; neither binding is silentl
 rewritten when supplied. The empty recipe extension deliberately allocates no new
 schema or calculation data.
 
-Publish after the local weapon recipe checkpoint:
+Publish after rebuilding the local weapon recipe checkpoint in the current
+format. Set `$LocalWeaponRelease` to that rebuilt package; archived schema-2
+packages are reference evidence and are no longer accepted runtime inputs.
 
 ```powershell
-cargo run --release -- extend-owned-recipe runs/owned-local-weapon-01/package `
+cargo run --release -- extend-owned-recipe $LocalWeaponRelease `
   --extension data/owned/poe2/3887ae68/item-header-inputs/extension.json `
   --items data/owned/poe2/3887ae68/item-header-inputs/items.json `
   --item-source data/owned/poe2/3887ae68/item-header-inputs/item-source.json `

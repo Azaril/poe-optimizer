@@ -1,8 +1,9 @@
 # Generic Actor identity and shared local mechanics
 
-Status: **accepted by the project owner, 2026-10-15; implementation in progress**.
-Date: 2026-10-15. Decider: project owner. Acceptance does not imply that the
-runtime or generated artifacts have already migrated.
+Status: **accepted 2026-10-15; implemented and locally validated**.
+Updated: 2026-10-16. Decider: project owner. Scoped Core/Data/Engine/Import/CLI
+validation, strict Clippy, full CLI publication and artifact inverses pass.
+Numerical Encounter producer adoption remains separate work.
 
 The owner requested generic actor properties and mechanics across Player,
 Enemy and other units wherever their game semantics agree. This proposal
@@ -15,16 +16,16 @@ migration requirements are retained below.
 
 ## Accepted decision
 
-Unify the current scenario opponent into the existing Actor identity domain and
-use one Actor-local mechanical rule context. For the current single-opponent
-request, add an explicit `ActorKey::ScenarioEnemy` address and replace
-`ConcreteEntity::Enemy` with `ConcreteEntity::Actor(ActorKey::ScenarioEnemy)`. Do not add
+The current scenario opponent now uses the existing Actor identity domain and
+one Actor-local mechanical rule context. For the current single-opponent
+request, `ActorKey::ScenarioEnemy` replaces the separate concrete Enemy address
+with `ConcreteEntity::Actor(ActorKey::ScenarioEnemy)`. This does not add
 an arbitrary combatant collection, battle simulator, fake owned-minion provider,
-or a second Combatant wrapper. The `ScenarioEnemy` name denotes the absolute, request-local opponent; it is
-not a relative opponent lookup.
+or a second Combatant wrapper. The `ScenarioEnemy` name denotes the absolute,
+request-local opponent; it is not a relative opponent lookup.
 
-Then extend the existing shared-Actor applicability seam so the **same authored
-local rule inventory** can bind Player, the scenario opponent and explicit
+The existing shared-Actor applicability seam lets the **same authored
+local rule inventory** bind Player, the scenario opponent and explicit
 already-discovered supplied Actor slots. Keep exact source identity, recipient
 identity, explicit applicability and coverage. Split common mechanics from
 role-specific baseline data; do not split the common formula by role.
@@ -63,9 +64,9 @@ Current native `RuleEntity::Enemy` is absolute. Do not silently reinterpret it a
 "this actor's opponent" during this migration. A future opponent/owner relation
 must be explicit and checked when a mechanic actually needs it.
 
-## Current contracts and the reason a rename is insufficient
+## Pre-migration contracts and the reason a rename was insufficient
 
-| Contract | Current implementation | Required treatment |
+| Contract | Pre-migration implementation | Required treatment |
 | --- | --- | --- |
 | Actor identity | `owned_build/records.rs`: Player or provider-supplied Owned Actor; `ActorOccurrence` mirrors this | Add the real scenario singleton, with explicit resolver behavior; it has no build provider |
 | Scenario ownership | `ScenarioInput.enemy` contains Encounter and level | Keep this data owner; resolve it to the new Actor address, not Character or an invented supply |
@@ -89,20 +90,16 @@ Relevant implementation points:
   `owned_plan/compile/{ordered,reads,effect_applications,equipment_slots}.rs`,
   `owned_plan/metrics.rs`, and `owned_rules/compile.rs`.
 
-`RuleEntityKind::Enemy` is currently **both** a semantic value target and an
-execution/permission boundary. Engine's typed `entity()` resolution maps it to
-a concrete Enemy; schema checking uses it for Stat targets; Data uses it to
-restrict queries and effect applications. It is not merely an ontology label
-that can be dropped without replacing its authority checks.
+Before migration, `RuleEntityKind::Enemy` was both a semantic value target and an
+execution/permission boundary. Removing it therefore required replacing its
+authority checks, not merely renaming a type. The current Actor model checks
+the exact bound role and source permissions separately from mechanical typing.
 
-There is a specific migration hazard: Engine `Context` always has an `actor`,
-and current Enemy/Environment contexts fill it with `ActorKey::Player`.
-`RuleEntity::Actor` is currently rejected in Enemy contexts, fencing that fallback.
-Adding generic Actor permissions first would expose Player values through Enemy
-rules. Construct Enemy contexts with the actual Enemy Actor, and make contexts
-without an Actor represent that absence explicitly. Remove fallback behavior
-before broadening any context. Core `actor_occurrence` also treats every non-Owned
-key as Player today; adding a variant without replacing this fallthrough is wrong.
+The former Enemy/Environment contexts supplied a placeholder `ActorKey::Player`;
+the old Enemy permission boundary fenced that fallback. Engine `Context.actor`
+now represents absence explicitly, and scenario-Enemy contexts carry their real
+Actor identity. Core occurrence resolution is exhaustive; a non-Owned key no
+longer falls through to Player.
 
 ## Reuse mechanics, retain authority
 
@@ -120,11 +117,15 @@ object model or permissive all-entities registry is needed.
    `(owner, concrete Actor)` invocations and keep complete/Partial applicability
    independent of each owner's complete/Partial rule inventory.
 3. Player-specific baseline owners retain Character/class/ascendancy and Player
-   equipment authority. An Enemy binding does not gain those reads. Encounter
+   equipment authority. A shared Enemy binding does not gain those reads. Encounter
    programs retain selected-Encounter authority and the actual Enemy input
    bindings. Supplied Actors retain their checked provider/parent relation.
    Validate each whole bound inventory, including unused programs; do not rely
    on a runtime branch being false to hide an unauthorized read.
+   Existing explicit absolute CharacterClassIs/CharacterAscendancyIs reads by
+   Encounter programs remain authorized under their source contract; they do
+   not acquire that authority from the local Actor. Likewise the explicit
+   EnemyLevel selector retains its existing meaning, never a generic ActorLevel.
 4. Common formulas consume local semantic values. A Player producer may read
    CharacterLevel, an Encounter producer EnemyLevel, and a supplied-Actor producer
    its exact projected level. They can provide a common local input when the
@@ -149,15 +150,15 @@ applicability or calculation stages.
 
 This migration absorbs the **numeric Enemy query** part: Enemy becomes an exact
 Actor recipient, so it uses the existing checked Actor numeric, Boolean and
-optional-selection machinery. Implement the reviewed permission change explicitly; do not
-leave an Enemy-only query bypass or widen cross-Actor read privileges as a side
-effect. Enemy-specific source gaps remain blocking.
+optional-selection machinery. The implemented checks retain exact role/source
+authority without an Enemy-only query bypass. Enemy-specific source gaps remain
+blocking.
 
 The **Encounter producer origin remains necessary and distinct**. Configured
 Armour `31e0` is owned by the selected Encounter; shared Crushed/Intimidated rules
 are owned by their shared applicability. Identity unification must not disguise
-one as the other. Add checked Encounter origin membership once, with exact
-selected Encounter/program/effect/recipient authority. This is complementary to
+one as the other. Checked Encounter origin membership now authenticates the exact
+selected Encounter/program/effect and scenario-Enemy Actor recipient. This is complementary to
 shared baseline ownership, even though both feed Actor channels.
 
 ## Alternatives
@@ -165,11 +166,11 @@ shared baseline ownership, even though both feed Actor channels.
 | Option | Assessment |
 | --- | --- |
 | Keep separate Enemy identity and add generic local-actor dispatch over Actor-or-Enemy | Can share formulas if every type, read and query uses that abstraction; however, it introduces a second sum-type/adapter and retains two identities for the same mechanical category. More ongoing special cases than the current singleton requires. |
-| Unify Enemy into ActorKey, retain bounded role/source permissions | Recommended. Changes more current-format plumbing once, but preserves one mechanical identity/context and existing graph. No broad simulation feature is required. |
+| Unify Enemy into ActorKey, retain bounded role/source permissions | Accepted and implemented. Preserves one mechanical identity/context and existing graph. No broad simulation feature is required. |
 | Add only Enemy shared applicability with separate contexts | Small ownership extension, but duplicates common formulas and condition definitions across roles. Does not satisfy the new direction. |
 | Make every unit a provider-supplied Owned Actor | Incorrect. Scenario Enemy is not supplied by the Player build and must not inherit its provider permissions or lifecycle. |
 
-## Minimal migration and gates
+## Implemented migration requirements
 
 Make one reviewed current-format migration; do not retain aliases, two Enemy
 addresses, old-format readers or a parallel evaluator.
@@ -200,10 +201,9 @@ addresses, old-format readers or a parallel evaluator.
    critical Player receivers, deterministic fresh/reused/Rayon evaluations and
    all-five original imports. This change is structural, not new build coverage.
 
-Implementation proceeds in bounded checkpoints, but an
-intermediate package must not mix the old Enemy identity with generic Actor
-permissions. This is a worthwhile structural change before expanding Enemy
-mitigation and more shared conditions.
+Current packages use the unified identity throughout; no intermediate package
+mixes the old Enemy identity with generic Actor permissions. Numerical Enemy
+mitigation and additional shared conditions still require their own admission.
 
 ## Current-format contract details
 
@@ -224,12 +224,31 @@ mitigation and more shared conditions.
   its real identity. No Enemy or Environment context may borrow Player identity.
 - Validate role authority over each complete bound inventory, including unused
   programs and branches. The absolute `RuleEntity::Enemy` selector remains intact.
+- Current schema packages use version 7 and rule packages version 4; current
+  full operations use V28. Older operation capability subsets can still restrict
+  a new-format package, but every subset has the same unified Actor identity.
+  Historical schema-upgrade authoring branches are removed; one current migration
+  shape retains declaration changes, allocation checks, capability upgrade
+  checks and evaluation-artifact preservation.
 
-## Implementation sequencing
+## Implementation and validation status
 
-Finish and freeze the current-format Evasion slot/override publication before
-runtime edits. Then migrate Core/Data and Engine in parallel, with coordinated
-Import/CLI and authored-artifact changes. Rebuild the current corpus and prove
-the gates above before publishing the new format. There is no compatibility
-reader or partially migrated package. This checkpoint removes structural debt;
-it does not change the **0/5 complete-build** count.
+The Evasion slot/override publication was frozen before runtime migration.
+Core/Data/Engine, current packages and the portable replay now use the unified
+contract. Core has 312 existing and 25 focused passing tests; Data has 205;
+Engine has 718 passing tests and seven intentional ignored tests. Strict Engine
+Clippy passes for the library and all 73 owned integration targets; Core/Data
+strict checks also pass.
+
+The exact package/replay inverses preserve mechanics. All five imports retain
+110 queries and unresolved counts of 106/117/109/123/4. Scoped Import/CLI
+regressions, catalog reproduction, the full CLI publication chain and strict
+Clippy pass. The [implementation plan](implementation.md) records exact scopes,
+logs and the separate hosted-CI status. No compatibility reader or old Enemy
+identity path remains.
+
+This completes the structural contract, not its next numerical adoption.
+Binding real configured Critical Weakness and Armour suppliers into checked
+consumers remains tracked in the [Encounter query proposal](owned-encounter-contribution-queries-proposal.md).
+Existing Partial inventories, Player-only final receivers and the
+**0/5 complete-build** count remain unchanged.

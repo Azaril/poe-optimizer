@@ -61,7 +61,7 @@ class ResistanceExportTests(unittest.TestCase):
         self.assertEqual(self.ids["elemental-resistance-base-contributions"]["key"], "def.00000000000009d5")
 
     def test_rule_version_transition_adds_no_receiver_or_changes_operation_version(self):
-        self.assertEqual(self.recipe["rules"]["schema_version"], 3)
+        self.assertEqual(self.recipe["rules"]["schema_version"], 4)
         self.assertEqual(self.recipe["rules"]["operations_version"], "owned-domain-operations-v6")
         self.assertEqual(self.recipe["rules"]["receivers"], {"members": [], "closure": {"kind": "complete"}})
 
@@ -114,8 +114,8 @@ class ResistanceExportTests(unittest.TestCase):
             effect = rule["emissions"][0]["value"]
             self.assertIn(effect["definition"], [self.ids["nominal-cold-modifier"], self.ids["nominal-elemental-modifier"]])
             self.assertEqual(effect["rolls"][0]["value"]["value"]["rounding"], "symmetric_half_offset")
-        # Schema-v2 envelope migration preserves registry history and fixed programs.
-        self.assertEqual(EXPORT.sha(self.outputs["recipe.json"]), "b01c13e105b135ba75b59257f9341c09842239c7aee1503a8d18221a0e4b33ab")
+        # Current Actor format preserves registry history and fixed programs.
+        self.assertEqual(EXPORT.sha(self.outputs["recipe.json"]), "dac0e9b0876edd547a7a7bb84ccab59bc1ea09922e1130c0c317ec9b9f6fa217")
 
     def test_nominal_families_preserve_properties_without_effective_contributions(self):
         authoring = EXPORT.load(DEST / "authoring.json")

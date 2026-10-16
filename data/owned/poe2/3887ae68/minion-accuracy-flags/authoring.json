@@ -7,7 +7,7 @@
     {
       "file": "schemas.json",
       "bytes": 875,
-      "sha256": "31a5bb4d82436be56e32a84100afc6978a376fbd5fd1e38252d3a9dea2e68a21"
+      "sha256": "cb93b4ff7a8f6cfa174fa701149a138111391ec482f43f28924445e6b7f10475"
     },
     {
       "file": "programs.json",
@@ -22,7 +22,7 @@
     {
       "file": "dependencies.json",
       "bytes": 1018,
-      "sha256": "a033e50bd0c993067925b4cb22b5c42faccb1fa5468a72ab6ad0a347ca2fa2bf"
+      "sha256": "64d554b90291c9650e7bb8c31b10fafe1ecfa6995c3a8b8f6bad7fd27f45b75a"
     }
   ],
   "scope": {

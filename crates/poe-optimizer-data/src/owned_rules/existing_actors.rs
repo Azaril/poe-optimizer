@@ -1,5 +1,6 @@
 //! Applicability is checked once; evaluation uses existing typed actor programs.
 use super::*;
+use poe_optimizer_core::owned_schema::AssumptionTargetKind;
 use std::collections::BTreeMap;
 
 pub(super) fn validate<I: DefinitionSchemaIndex>(
@@ -16,6 +17,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
         usage.check(limits)?;
     }
     slot_reads(input, index, limits, usage)?;
+    encounter_rules(input, index, limits, usage)?;
     let Some(registry) = &input.existing_actor_rules else {
         return Ok(());
     };
@@ -66,6 +68,21 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             if !bound.insert((&application.owner, target)) {
                 return Err(invalid("duplicate existing actor owner applicability"));
             }
+            if let ExistingActorRuleTarget::OwnedSlot { slot } = target {
+                let SchemaLookup::Known(schema) = index.slot(slot) else {
+                    return Err(invalid(
+                        "existing actor target requires a known supplied slot",
+                    ));
+                };
+                if slot.slot.namespace() != &input.namespace
+                    || slot.declaration.namespace() != &input.namespace
+                    || schema.provider_definition.as_ref() == Some(&application.owner)
+                {
+                    return Err(invalid(
+                        "shared actor target is foreign or duplicates its profile owner",
+                    ));
+                }
+            }
         }
         let owner = owners
             .get(&application.owner)
@@ -75,45 +92,70 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             if program.context != RuleEntityKind::Actor {
                 return Err(invalid("existing actor rules require Actor context"));
             }
-            work(usage, limits, program.effects.len() + program.reads.len())?;
-            for effect in &program.effects {
-                let entity = match &effect.effect {
-                    RuleEffectKind::Contribute { entity, .. }
-                    | RuleEffectKind::Derive { entity, .. } => entity,
-                    _ => return Err(invalid("unsupported existing actor rule effect")),
-                };
-                if !actor_entity(*entity) {
-                    return Err(invalid(
-                        "existing actor rules cannot write outside their actor",
-                    ));
-                }
-            }
-            for read in &program.reads {
-                let admitted = match &read.source {
-                    RuleReadSource::CharacterLevel
-                    | RuleReadSource::EnemyLevel
-                    | RuleReadSource::CharacterClassIs { .. }
-                    | RuleReadSource::CharacterAscendancyIs { .. }
-                    | RuleReadSource::PlayerEquipmentSlot { .. } => true,
-                    RuleReadSource::Stat { entity, .. }
-                    | RuleReadSource::Capability { entity, .. }
-                    | RuleReadSource::Contributions { entity, .. }
-                    | RuleReadSource::ContributionQuery { entity, .. }
-                    | RuleReadSource::ContributionSelection { entity, .. } => actor_entity(*entity),
-                    RuleReadSource::External { entity, .. } => {
-                        actor_entity(*entity)
-                            || matches!(entity, RuleEntity::Enemy | RuleEntity::Environment)
+            for target in &application.targets {
+                work(usage, limits, program.effects.len() + program.reads.len())?;
+                for effect in &program.effects {
+                    let entity = match &effect.effect {
+                        RuleEffectKind::Contribute { entity, .. }
+                        | RuleEffectKind::Derive { entity, .. } => entity,
+                        _ => return Err(invalid("unsupported existing actor rule effect")),
+                    };
+                    if !actor_entity(*entity, target) {
+                        return Err(invalid(
+                            "existing actor rules cannot write outside their actor",
+                        ));
                     }
-                    _ => false,
-                };
-                if !admitted {
-                    return Err(invalid(
-                        "existing actor read requires unsupported provider authority",
-                    ));
                 }
+                for read in &program.reads {
+                    let admitted = match &read.source {
+                        RuleReadSource::CharacterLevel
+                        | RuleReadSource::CharacterClassIs { .. }
+                        | RuleReadSource::CharacterAscendancyIs { .. }
+                        | RuleReadSource::PlayerEquipmentSlot { .. } => {
+                            *target == ExistingActorRuleTarget::Player
+                        }
+                        RuleReadSource::EnemyLevel => matches!(
+                            target,
+                            ExistingActorRuleTarget::Player
+                                | ExistingActorRuleTarget::ScenarioEnemy
+                        ),
+                        RuleReadSource::Stat { entity, .. }
+                        | RuleReadSource::Capability { entity, .. }
+                        | RuleReadSource::Contributions { entity, .. }
+                        | RuleReadSource::ContributionQuery { entity, .. }
+                        | RuleReadSource::ContributionSelection { entity, .. } => {
+                            actor_entity(*entity, target)
+                        }
+                        RuleReadSource::External { entity, .. } => {
+                            actor_entity(*entity, target)
+                                || (*target == ExistingActorRuleTarget::Player
+                                    && matches!(
+                                        entity,
+                                        RuleEntity::Enemy | RuleEntity::Environment
+                                    ))
+                        }
+                        _ => false,
+                    };
+                    if !admitted {
+                        return Err(invalid(
+                            "existing actor read requires unsupported provider authority",
+                        ));
+                    }
+                }
+                let role = match target {
+                    ExistingActorRuleTarget::Player => AssumptionTargetKind::PlayerActor,
+                    ExistingActorRuleTarget::ScenarioEnemy => {
+                        AssumptionTargetKind::ScenarioEnemyActor
+                    }
+                    ExistingActorRuleTarget::OwnedSlot { .. } => AssumptionTargetKind::OwnedActor,
+                };
+                actor_inputs::validate(program, index, Some(role), None, |n| {
+                    work(usage, limits, n)
+                })?;
             }
         }
     }
+
     if let SchemaClosure::Partial { gaps } = &registry.closure {
         work(usage, limits, gaps.len())?;
         if gaps.is_empty() {
@@ -237,13 +279,95 @@ fn slot_reads<I: DefinitionSchemaIndex>(
     Ok(())
 }
 
-fn actor_entity(entity: RuleEntity) -> bool {
-    // The admitted target is exactly Player. Future owned-actor applicability
-    // must separately establish cross-actor read/write authority.
-    matches!(
-        entity,
-        RuleEntity::Current | RuleEntity::Actor | RuleEntity::Player
-    )
+fn actor_entity(entity: RuleEntity, target: &ExistingActorRuleTarget) -> bool {
+    matches!(entity, RuleEntity::Current | RuleEntity::Actor)
+        || (entity == RuleEntity::Player && *target == ExistingActorRuleTarget::Player)
+        || (entity == RuleEntity::Enemy && *target == ExistingActorRuleTarget::ScenarioEnemy)
+}
+
+/// An Encounter binds to the real scenario Actor or to Environment, never to
+/// the Player merely because both combatants have the same mechanical kind.
+fn encounter_rules<I: DefinitionSchemaIndex>(
+    input: &RulePackageInput,
+    index: &I,
+    limits: RuleStorageLimits,
+    usage: &mut RuleStorageUse,
+) -> Result<(), RuleStorageError> {
+    let invalid = RuleStorageError::Structure;
+    work(usage, limits, input.owners.len())?;
+    for owner in &input.owners {
+        if !matches!(
+            owner.owner,
+            SchemaSubject::Definition(DefinitionAddress::Encounter(_))
+        ) {
+            continue;
+        }
+        work(usage, limits, owner.programs.members.len())?;
+        for program in &owner.programs.members {
+            let local = match program.context {
+                RuleEntityKind::Actor => AssumptionTargetKind::ScenarioEnemyActor,
+                RuleEntityKind::Environment => AssumptionTargetKind::Environment,
+                _ => {
+                    return Err(invalid(
+                        "Encounter requires scenario Actor or Environment context",
+                    ));
+                }
+            };
+            let local_entity = |entity| match program.context {
+                RuleEntityKind::Actor => matches!(
+                    entity,
+                    RuleEntity::Current | RuleEntity::Actor | RuleEntity::Enemy
+                ),
+                RuleEntityKind::Environment => {
+                    matches!(entity, RuleEntity::Current | RuleEntity::Environment)
+                }
+                _ => false,
+            };
+            work(usage, limits, program.effects.len() + program.reads.len())?;
+            for effect in &program.effects {
+                let admitted = match &effect.effect {
+                    RuleEffectKind::Derive { entity, .. }
+                    | RuleEffectKind::Contribute { entity, .. }
+                    | RuleEffectKind::Capability { entity, .. } => local_entity(*entity),
+                    RuleEffectKind::Requirement { .. } => true,
+                    _ => false,
+                };
+                if !admitted {
+                    return Err(invalid(
+                        "Encounter effect requires its exact local recipient",
+                    ));
+                }
+            }
+            for read in &program.reads {
+                let admitted = match &read.source {
+                    // These are explicit request-global source selectors, not
+                    // permission to resolve the local Actor as Player.
+                    RuleReadSource::EnemyLevel
+                    | RuleReadSource::CharacterClassIs { .. }
+                    | RuleReadSource::CharacterAscendancyIs { .. } => true,
+                    RuleReadSource::Stat { entity, .. }
+                    | RuleReadSource::Capability { entity, .. }
+                    | RuleReadSource::Contributions { entity, .. }
+                    | RuleReadSource::ContributionQuery { entity, .. }
+                    | RuleReadSource::ContributionSelection { entity, .. } => local_entity(*entity),
+                    RuleReadSource::External { entity, .. } => {
+                        local_entity(*entity)
+                            || matches!(entity, RuleEntity::Enemy | RuleEntity::Environment)
+                    }
+                    _ => false,
+                };
+                if !admitted {
+                    return Err(invalid(
+                        "Encounter read requires unsupported actor or provider authority",
+                    ));
+                }
+            }
+            actor_inputs::validate(program, index, Some(local), None, |n| {
+                work(usage, limits, n)
+            })?;
+        }
+    }
+    Ok(())
 }
 
 fn work(

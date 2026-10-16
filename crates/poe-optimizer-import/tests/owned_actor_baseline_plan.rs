@@ -247,7 +247,7 @@ fn world() -> World {
                 namespace: ns(),
                 release: key("test"),
                 semantics_version: key("test"),
-                operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+                operations_version: key(OWNED_RULE_OPERATIONS_V14),
                 definitions: schema.identity().clone(),
                 tables: fixture.tables.clone(),
                 owners: fixture.owners.clone(),

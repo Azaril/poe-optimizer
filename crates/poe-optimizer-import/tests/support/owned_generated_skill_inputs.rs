@@ -89,7 +89,7 @@ fn generated_fixture() -> Fixture {
         .allocate_slot::<SkillGrantSlotDefinition>(SlotOwnerDefId::Modifier(modifier.clone()))
         .unwrap();
     let mut schema = f.artifacts.schema.input().clone();
-    schema.schema_version = OWNED_SCHEMA_PACKAGE_V6;
+    schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
     let mut declarations = ports();
     declarations.skill_grants.members.push(tree_supply.clone());
     schema

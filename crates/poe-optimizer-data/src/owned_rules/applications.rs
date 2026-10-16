@@ -1,7 +1,10 @@
 //! Structural admission of finite effect-application declarations. Runtime
 //! occurrence discovery, activation, types and graph cycles remain Engine work.
 use super::*;
-use poe_optimizer_core::{owned_definitions::*, owned_schema::RuleEntityKind};
+use poe_optimizer_core::{
+    owned_definitions::*,
+    owned_schema::{AssumptionTargetKind, RuleEntityKind},
+};
 use std::collections::BTreeMap;
 
 fn work(
@@ -101,7 +104,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             }
         }
         let context = row.program.context;
-        if !matches!(context, RuleEntityKind::Actor | RuleEntityKind::Enemy)
+        if context != RuleEntityKind::Actor
             || row.targets.is_empty()
             || row.program.effects.is_empty()
         {
@@ -117,7 +120,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             }
             let valid = match target {
                 EffectApplicationTarget::Player => context == RuleEntityKind::Actor,
-                EffectApplicationTarget::Enemy => context == RuleEntityKind::Enemy,
+                EffectApplicationTarget::Enemy => context == RuleEntityKind::Actor,
                 EffectApplicationTarget::OwnedSlot { slot } => {
                     context == RuleEntityKind::Actor && known_actor_slot(slot, input, index)
                 }
@@ -127,6 +130,18 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                     "effect target is foreign, unknown or context-incompatible",
                 ));
             }
+            let local = match target {
+                EffectApplicationTarget::Player => AssumptionTargetKind::PlayerActor,
+                EffectApplicationTarget::Enemy => AssumptionTargetKind::ScenarioEnemyActor,
+                EffectApplicationTarget::OwnedSlot { .. } => AssumptionTargetKind::OwnedActor,
+            };
+            let source = match row.source {
+                EffectApplicationSource::Skill { .. } => AssumptionTargetKind::Skill,
+                EffectApplicationSource::OwnedSlot { .. } => AssumptionTargetKind::OwnedActor,
+            };
+            actor_inputs::validate(&row.program, index, Some(local), Some(source), |n| {
+                work(usage, limits, n)
+            })?;
         }
         let mut transforms = BTreeSet::new();
         if row.program.uses_source_property_scopes() {

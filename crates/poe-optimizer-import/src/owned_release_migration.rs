@@ -61,9 +61,9 @@ pub struct OwnedReleaseMigrationInput {
     pub receivers: Vec<StatReceiver>,
     /// Unique canonical (query set, query ID) order. Other query content survives.
     pub query_targets: Vec<OwnedReleaseQueryTargetMigration>,
-    /// Version 2 requires the complete evaluation group authored for the exact
-    /// migrated endpoint. Versions 3 through 5 permit omission only when the predecessor
-    /// has no evaluation group. Its identities are checked, never rebound.
+    /// The complete evaluation group for the exact migrated endpoint. Omission
+    /// is permitted only when the predecessor has no group. Existing groups and
+    /// outputs cannot be dropped; supplied identities are checked, never rebound.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub evaluation: Option<OwnedReleaseEvaluationInput>,
 }
@@ -84,139 +84,21 @@ fn subject_key(subject: &SchemaSubject) -> &OwnedDefinitionKey {
     }
 }
 
-/// Version support is deliberately explicit. A future numeric suffix grants no
-/// permission to change an older contract's meaning.
+/// Every migration uses the current schema and unified Actor semantics. Older
+/// operation names describe capability subsets, not older runtime formats.
 fn check_contract(
     prior: &StagedOwnedRelease,
-    version: u32,
     contract: &OwnedReleaseContractMigration,
 ) -> Result<()> {
-    let old_schema = prior.input().recipe.schema.schema_version;
-    let old_operations = prior.input().recipe.rules.operations_version.as_str();
-    let legacy_operations = matches!(
-        old_operations,
-        "owned-domain-operations-v6"
-            | "owned-domain-operations-v7"
-            | "owned-domain-operations-v8"
-            | "owned-domain-operations-v9"
-            | "owned-domain-operations-v10"
-            | "owned-domain-operations-v11"
-    );
-    // The predecessor is already validated as a whole release. This whitelist
-    // admits only reviewed source contracts; it cannot launder invalid old data.
-    let supported_prior = match version {
-        1 => matches!(old_schema, 2 | 3) && legacy_operations,
-        2 => {
-            matches!(old_schema, 2..=4)
-                && (legacy_operations
-                    || matches!(
-                        old_operations,
-                        "owned-domain-operations-v12" | "owned-domain-operations-v13"
-                    ))
-        }
-        3 => {
-            (matches!(old_schema, 4 | 5)
-                && matches!(
-                    old_operations,
-                    "owned-domain-operations-v15"
-                        | "owned-domain-operations-v16"
-                        | "owned-domain-operations-v17"
-                ))
-                || (old_schema == 5 && old_operations == OWNED_RULE_OPERATIONS_V18)
-        }
-        4 => {
-            (old_schema == 5
-                && matches!(
-                    old_operations,
-                    OWNED_RULE_OPERATIONS_V17 | OWNED_RULE_OPERATIONS_V18
-                ))
-                || (old_schema == 6 && old_operations == OWNED_RULE_OPERATIONS_V19)
-        }
-        5 => {
-            old_schema == 6
-                && matches!(
-                    old_operations,
-                    OWNED_RULE_OPERATIONS_V19
-                        | OWNED_RULE_OPERATIONS_V20
-                        | OWNED_RULE_OPERATIONS_V21
-                        | OWNED_RULE_OPERATIONS_V22
-                        | OWNED_RULE_OPERATIONS_V23
-                        | OWNED_RULE_OPERATIONS_V24
-                        | OWNED_RULE_OPERATIONS_V25
-                        | OWNED_RULE_OPERATIONS_V26
-                        | OWNED_RULE_OPERATIONS_V27
-                )
-        }
-        _ => false,
-    };
-    if !supported_prior {
-        return Err(invalid("migration prior contract is unsupported"));
+    let current = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
+    if prior.input().recipe.schema.schema_version != current || contract.schema_version != current {
+        return Err(invalid("migration requires the current schema contract"));
     }
-    if version == 1
-        && (contract.schema_version != 3
-            || contract.operations_version.as_str() != "owned-domain-operations-v11")
-    {
-        return Err(invalid("migration requires schema v3 and operations v11"));
-    }
-    if version == 2
-        && (contract.schema_version != 4
-            || contract.operations_version.as_str() != "owned-domain-operations-v13")
-    {
-        return Err(invalid(
-            "evaluation migration requires schema v4 and operations v13",
-        ));
-    }
-    if version == 3
-        && (contract.schema_version != 5
-            || !matches!(
-                contract.operations_version.as_str(),
-                OWNED_RULE_OPERATIONS_V17 | OWNED_RULE_OPERATIONS_V18
-            ))
-    {
-        return Err(invalid(
-            "occurrence-input migration requires schema v5 and operations v17 or v18",
-        ));
-    }
-    if version == 3
-        && old_operations == OWNED_RULE_OPERATIONS_V18
-        && contract.operations_version.as_str() != OWNED_RULE_OPERATIONS_V18
-    {
-        return Err(invalid("migration cannot downgrade operations v18"));
-    }
-    if version == 4
-        && (contract.schema_version != 6
-            || contract.operations_version.as_str() != OWNED_RULE_OPERATIONS_V19)
-    {
-        return Err(invalid(
-            "preset-input migration requires schema v6 and operations v19",
-        ));
-    }
-    if version == 5
-        && (contract.schema_version != 6
-            || !matches!(
-                contract.operations_version.as_str(),
-                OWNED_RULE_OPERATIONS_V20
-                    | OWNED_RULE_OPERATIONS_V21
-                    | OWNED_RULE_OPERATIONS_V22
-                    | OWNED_RULE_OPERATIONS_V23
-                    | OWNED_RULE_OPERATIONS_V24
-                    | OWNED_RULE_OPERATIONS_V25
-                    | OWNED_RULE_OPERATIONS_V26
-                    | OWNED_RULE_OPERATIONS_V27
-            ))
-    {
-        return Err(invalid(
-            "current migration requires schema v6 and operations v20 through v27",
-        ));
-    }
-    if version == 5
-        && RuleOperationsVersion::parse(old_operations)
-            .unwrap()
-            .revision()
-            > RuleOperationsVersion::parse(contract.operations_version.as_str())
-                .unwrap()
-                .revision()
-    {
+    let old = RuleOperationsVersion::parse(prior.input().recipe.rules.operations_version.as_str())
+        .ok_or_else(|| invalid("migration prior operations are unsupported"))?;
+    let next = RuleOperationsVersion::parse(contract.operations_version.as_str())
+        .ok_or_else(|| invalid("migration operations are unsupported"))?;
+    if old.revision() > next.revision() {
         return Err(invalid("migration cannot downgrade current operations"));
     }
     Ok(())
@@ -578,44 +460,18 @@ pub fn compile_owned_release_migration(
     limits: OwnedReleaseLimits,
 ) -> Result<StagedOwnedRelease> {
     limits.validate()?;
-    if migration.schema_version == 1 && prior.evaluation().is_some() {
-        return Err(invalid(
-            "contract migration needs an explicit evaluation-artifact migration",
-        ));
+    if migration.schema_version != 5 {
+        return Err(invalid("migration requires current authoring version 5"));
     }
-    let (authoring_domain, budget_domain) =
-        match (migration.schema_version, migration.evaluation.is_some()) {
-            (1, false) => (
-                "owned-release-contract-migration-v1",
-                "owned-release-migration-budget-v1",
-            ),
-            (2, true) => (
-                "owned-release-contract-migration-v2",
-                "owned-release-migration-budget-v2",
-            ),
-            (3, _) => (
-                "owned-release-contract-migration-v3",
-                "owned-release-migration-budget-v3",
-            ),
-            (4, _) => (
-                "owned-release-contract-migration-v4",
-                "owned-release-migration-budget-v4",
-            ),
-            (5, _) => (
-                "owned-release-contract-migration-v5",
-                "owned-release-migration-budget-v5",
-            ),
-            _ => return Err(invalid("migration version or evaluation group")),
-        };
+    let authoring_domain = "owned-release-contract-migration-v5";
+    let budget_domain = "owned-release-migration-budget-v5";
     if migration.before != prior.receipt().input
         || migration.release == prior.input().recipe.schema.release
     {
         return Err(invalid("migration version or endpoint"));
     }
-    check_contract(prior, migration.schema_version, &migration.contract)?;
-    if matches!(migration.schema_version, 3..=5) {
-        preserve_evaluation_artifacts(prior, migration.evaluation.as_ref())?;
-    }
+    check_contract(prior, &migration.contract)?;
+    preserve_evaluation_artifacts(prior, migration.evaluation.as_ref())?;
     // Charge both complete graphs, including recursive supplied support semantics,
     // before serializing either for identity or cloning the predecessor. The old
     // evaluation group is still present and charged even when being replaced.

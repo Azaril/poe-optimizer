@@ -408,7 +408,7 @@
             }
           },
           "targets": [
-            "enemy"
+            "actor"
           ]
         }
       }

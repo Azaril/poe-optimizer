@@ -17,7 +17,7 @@ fn permission_input() -> SchemaPackageInput {
     let mut raw = input(
         Some(SkillInputAuthority::Projected),
         vec![],
-        OWNED_SCHEMA_PACKAGE_V6,
+        OWNED_SCHEMA_PACKAGE_VERSION,
     );
     let mut ports = declarations(raw_slot());
     ports.parameters.members.clear();
@@ -78,52 +78,21 @@ fn partial() -> SchemaClosure {
 }
 
 #[test]
-fn permission_is_v6_only_and_omission_preserves_legacy_supply_bytes() {
-    assert_eq!(OWNED_SCHEMA_PACKAGE_VERSION, OWNED_SCHEMA_PACKAGE_V4);
-    let mut old = permission_input();
-    let supply = grant(&mut old).clone();
-    let legacy = json!({"skill":supply.skill,"outputs":supply.outputs});
-    let decoded: SkillGrantSlotSchema = serde_json::from_value(legacy.clone()).unwrap();
+fn omitted_permission_is_distinct_from_explicit_empty_and_positive_permission() {
+    let mut omitted = permission_input();
+    let supply = grant(&mut omitted).clone();
+    let wire = json!({"skill":supply.skill,"outputs":supply.outputs});
+    let decoded: SkillGrantSlotSchema = serde_json::from_value(wire.clone()).unwrap();
     assert!(decoded.preset_inputs.is_none());
-    assert_eq!(serde_json::to_value(&decoded).unwrap(), legacy);
-    grant(&mut old).preset_inputs = None;
-    for version in [
-        OWNED_SCHEMA_PACKAGE_V2,
-        OWNED_SCHEMA_PACKAGE_V3,
-        OWNED_SCHEMA_PACKAGE_V4,
-        OWNED_SCHEMA_PACKAGE_V5,
-    ] {
-        let mut legacy = old.clone();
-        legacy.schema_version = version;
-        // Legacy projected slots use omission before V5; this does not grant the
-        // newly authored supply permission at any historical version.
-        if version < OWNED_SCHEMA_PACKAGE_V5 {
-            slot(&mut legacy).skill_input = None;
-        }
-        let stored = package(legacy.clone());
-        let bytes = encode_schema_package(&stored, Default::default()).unwrap();
-        assert!(
-            !String::from_utf8(bytes.clone())
-                .unwrap()
-                .contains("preset_inputs")
-        );
-        assert_eq!(
-            decode_schema_package(&bytes, Default::default())
-                .unwrap()
-                .identity(),
-            stored.identity()
-        );
-        grant(&mut legacy).preset_inputs = supply.preset_inputs.clone();
-        reject(legacy, SchemaPackageErrorKind::UnsupportedSchemaFeature);
-    }
+    assert_eq!(serde_json::to_value(&decoded).unwrap(), wire);
+    grant(&mut omitted).preset_inputs = None;
     let allowed = package(permission_input());
-    assert_ne!(allowed.identity(), package(old.clone()).identity());
-    grant(&mut old).preset_inputs = Some(PresetSkillInputPermission {
+    assert_ne!(allowed.identity(), package(omitted.clone()).identity());
+    grant(&mut omitted).preset_inputs = Some(PresetSkillInputPermission {
         schema_version: 1,
         parameters: DeclaredSet::complete(vec![]),
     });
-    let explicitly_empty = package(old);
-    assert_ne!(allowed.identity(), explicitly_empty.identity());
+    assert_ne!(allowed.identity(), package(omitted).identity());
 }
 
 #[test]

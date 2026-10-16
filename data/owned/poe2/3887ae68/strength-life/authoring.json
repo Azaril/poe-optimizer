@@ -35,7 +35,7 @@
   "artifact_sha256": {
     "bindings": "8d8a78307b96e802b0fcd17ac5b3d7174a6da78665bebfed936aeab86a4e7869",
     "dependencies": "9aee33bd5593ab1f6b58301ed213371d2eb761c7b80d312a3bf05bdc3307886f",
-    "migration": "aaa9c8435700c8ddaf40cc5f6606f474bd437c81eb5be9b54a18ba2157a241f6",
+    "migration": "cd852f4fbc20cb7ee2a135c1ecc7594a53257ebbfa834937c4b2fb6993c1ef4d",
     "source-vectors": "7b5046c47f4394ee4a6e3f43fd7b8fec5f1eaecbdb22a6e35dff038fc7676036"
   },
   "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",

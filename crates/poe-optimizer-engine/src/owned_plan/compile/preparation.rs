@@ -58,7 +58,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                         provider: provider.clone(),
                     },
                     provider: Some(provider),
-                    actor: resolved.provider().actor().clone(),
+                    actor: Some(resolved.provider().actor().clone()),
                     skill,
                     receiving_skill: None,
                     assigned_skill: None,

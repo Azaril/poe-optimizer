@@ -39,7 +39,7 @@ fn gap(subject: SchemaSubject) -> SchemaGap {
 }
 fn input() -> SchemaPackageInput {
     SchemaPackageInput {
-        schema_version: OWNED_SCHEMA_PACKAGE_V2,
+        schema_version: OWNED_SCHEMA_PACKAGE_VERSION,
         namespace: ns(),
         release: key("test"),
         semantics_version: key("v1"),
@@ -142,7 +142,8 @@ fn arrays(value: &serde_json::Value) -> (usize, usize) {
 }
 #[test]
 fn roots_are_canonical_references_with_changed_membership_bound_to_identity() {
-    for schema_version in [2, 3] {
+    {
+        let schema_version = OWNED_SCHEMA_PACKAGE_VERSION;
         let mut original = input();
         original.schema_version = schema_version;
         let mut reordered = original.clone();

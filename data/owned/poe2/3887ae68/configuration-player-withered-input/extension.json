@@ -404,7 +404,8 @@
                 }
               },
               "targets": [
-                "actor"
+                "player_actor",
+                "owned_actor"
               ]
             }
           }

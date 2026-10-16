@@ -27,8 +27,8 @@ pub fn check_authored() {
     let migration: OwnedReleaseMigrationInput = read("migration.json");
     let policy: GeneratedSkillInputPolicy = read("generated-inputs.json");
     let authoring: Value = read("authoring.json");
-    assert_eq!(migration.schema_version, 4);
-    assert_eq!(migration.contract.schema_version, 6);
+    assert_eq!(migration.schema_version, 5);
+    assert_eq!(migration.contract.schema_version, 7);
     assert_eq!(
         migration.contract.operations_version.as_str(),
         "owned-domain-operations-v19"

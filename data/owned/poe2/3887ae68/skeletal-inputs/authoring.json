@@ -69,7 +69,7 @@
     }
   ],
   "artifact_sha256": {
-    "migration": "198919719fa94606cf3823d015087bf0303d89e1fccd21beaf61851a957df587",
+    "migration": "780814d4d9101ab00657b096d26c7fe8c975eae6bf7289a4dfaeadac03f98fa2",
     "bindings": "99a80f60a6ec5a9e94485af7a0c3eacaa9f1babb310935ae75edd931aabb04e1",
     "dispositions": "a05972aaf70ad4201ccfed08ad4e8327430ac67091c079ac60ae730ba3e0a83e"
   },

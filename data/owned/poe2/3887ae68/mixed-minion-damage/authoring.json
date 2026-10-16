@@ -25,13 +25,13 @@
     {
       "path": "data/owned/poe2/3887ae68/gigantic-benefits/authoring.json",
       "bytes": 7373,
-      "sha256": "11a89de35db18e76e6b258f9729e1cdf4ce9b7b024b2057ea1293624b1c4a022"
+      "sha256": "1dedcaf4f1b0e4aa0335d5a93e57809ce05f1c298c919b39336d95efe14c13e3"
     }
   ],
   "artifacts": {
     "migration.json": {
       "bytes": 2375,
-      "sha256": "74312c823c70b57228c900211d5343e23afe2b26f6dea38ecfd7d585e54523cd"
+      "sha256": "6bce1c994193b2500d1536863bf7d68d6dc0e2352530bc019671debad3f87fc5"
     },
     "consumer.json": {
       "bytes": 16853,

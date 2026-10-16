@@ -2482,7 +2482,7 @@
         "members": [
           {
             "id": "configured-critical-weakness",
-            "context": "enemy",
+            "context": "actor",
             "reads": [
               {
                 "id": "enabled",

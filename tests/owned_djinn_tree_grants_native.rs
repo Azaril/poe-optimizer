@@ -99,7 +99,7 @@ impl Fixture {
         let migration: OwnedReleaseMigrationInput = read(packet.join("migration.json"));
         let dependencies: Value = read(packet.join("dependencies.json"));
         let recipe = &endpoint.input().recipe;
-        assert_eq!(recipe.schema.schema_version, 5);
+        assert_eq!(recipe.schema.schema_version, 7);
         assert_eq!(
             recipe.rules.operations_version.as_str(),
             OWNED_RULE_OPERATIONS_V17
@@ -276,7 +276,7 @@ impl Fixture {
             )),
         ]);
         let mut schema = SchemaPackageInput {
-            schema_version: 5,
+            schema_version: poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: namespace.clone(),
             release: key("unpublished-tree-grant-component"),
             semantics_version: key("finite-raw-transport"),

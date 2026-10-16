@@ -33,7 +33,7 @@ fn declarations() -> DeclaredSlots {
 fn base() -> (OwnedDefinitionSchemaPackage, RulePackageInput) {
     let original = fixture::fixture();
     let mut raw = original.schema.input().clone();
-    raw.schema_version = OWNED_SCHEMA_PACKAGE_V4;
+    raw.schema_version = OWNED_SCHEMA_PACKAGE_VERSION;
     for (name, target) in [
         ("origin-value", RuleEntityKind::SupportOrigin),
         ("skill-value", RuleEntityKind::Skill),

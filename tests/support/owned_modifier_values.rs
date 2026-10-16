@@ -150,7 +150,7 @@ pub fn check_modifier_values(cwd: &Path, prior: &Path) -> PathBuf {
     let checked_legacy = assemble_owned_recipe(legacy.successor, Default::default()).unwrap();
     assert_eq!(
         checked_legacy.schema().identity().content_sha256,
-        "2eb895ad1a08225f48a1b09d9f60a27ce03bdc10461c28b1b18bec795ccebd63"
+        "69c8238216e7ceb68203ea93771296e248eb80804154446d6fab4751b10516da"
     );
     assert!(
         extend_owned_recipe(&checked_legacy, &extension, Default::default()).is_err(),

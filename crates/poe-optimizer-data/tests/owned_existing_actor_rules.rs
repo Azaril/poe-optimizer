@@ -110,6 +110,124 @@ fn rejected(input: RulePackageInput, schema: &OwnedDefinitionSchemaPackage) {
     assert!(OwnedRulePackage::new(input, schema, Default::default()).is_err());
 }
 
+fn shared_role_schema(roles: Vec<AssumptionTargetKind>) -> OwnedDefinitionSchemaPackage {
+    let mut raw = schema(declarations()).input().clone();
+    let slot = poe_optimizer_core::owned_build::DeclaredSlot {
+        declaration: SlotOwnerDefId::Actor(id("supplier")),
+        slot: id("child"),
+    };
+    let mut supplier = declarations();
+    supplier.actors.members.push(slot.clone());
+    raw.definitions.extend([
+        DefinitionDescriptor::Actor(DefinitionEntry {
+            id: id("supplier"),
+            schema: SchemaState::Known(ActorSchema {
+                declarations: supplier,
+            }),
+        }),
+        DefinitionDescriptor::Actor(DefinitionEntry {
+            id: id("profile"),
+            schema: SchemaState::Known(ActorSchema {
+                declarations: declarations(),
+            }),
+        }),
+        DefinitionDescriptor::ExternalInput(DefinitionEntry {
+            id: id("local-condition"),
+            schema: SchemaState::Known(ExternalInputSchema {
+                value: ValueSchema::Boolean,
+                targets: roles,
+            }),
+        }),
+    ]);
+    raw.slots.push(SlotDescriptor::Actor(DefinitionEntry {
+        id: slot,
+        schema: SchemaState::Known(ActorSlotSchema {
+            skills: DeclaredSet::complete(vec![]),
+            outputs: DeclaredSet::complete(vec![]),
+            provider_definition: Some(id("profile")),
+        }),
+    }));
+    OwnedDefinitionSchemaPackage::new(raw, Default::default()).unwrap()
+}
+
+fn shared_role_input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
+    let mut raw = input(schema);
+    raw.existing_actor_rules.as_mut().unwrap().members[0].targets = vec![
+        ExistingActorRuleTarget::Player,
+        ExistingActorRuleTarget::ScenarioEnemy,
+        ExistingActorRuleTarget::OwnedSlot {
+            slot: poe_optimizer_core::owned_build::DeclaredSlot {
+                declaration: SlotOwnerDefId::Actor(id("supplier")),
+                slot: id("child"),
+            },
+        },
+    ];
+    // Deliberately unread: eligibility is an inventory property, not a reachable
+    // node or successful-value check.
+    raw.owners[0].programs.members[0].reads.push(RuleRead {
+        id: key("unused-local-condition"),
+        value_type: ComputedValueType::Boolean,
+        source: RuleReadSource::External {
+            entity: RuleEntity::Current,
+            input: id("local-condition"),
+        },
+    });
+    raw
+}
+
+#[test]
+fn one_local_inventory_applies_to_all_explicit_actor_roles_without_shared_permissions() {
+    let schema = shared_role_schema(vec![
+        AssumptionTargetKind::PlayerActor,
+        AssumptionTargetKind::OwnedActor,
+        AssumptionTargetKind::ScenarioEnemyActor,
+    ]);
+    let raw = shared_role_input(&schema);
+    OwnedRulePackage::new(raw.clone(), &schema, Default::default()).unwrap();
+    for source in [
+        RuleReadSource::CharacterLevel,
+        RuleReadSource::CharacterClassIs {
+            class: id("unused-class"),
+        },
+        RuleReadSource::EnemyLevel,
+    ] {
+        let mut bad = raw.clone();
+        bad.owners[0].programs.members[0].reads[0].source = source;
+        rejected(bad, &schema);
+    }
+    let mut bad = raw;
+    let RuleEffectKind::Contribute { entity, .. } =
+        &mut bad.owners[0].programs.members[0].effects[0].effect
+    else {
+        unreachable!()
+    };
+    *entity = RuleEntity::Player;
+    rejected(bad, &schema);
+}
+
+#[test]
+fn unused_wrong_role_input_and_duplicate_supplied_profile_owner_are_rejected() {
+    let schema = shared_role_schema(vec![AssumptionTargetKind::ScenarioEnemyActor]);
+    rejected(shared_role_input(&schema), &schema);
+    let mut raw = shared_role_input(&schema);
+    raw.existing_actor_rules.as_mut().unwrap().members[0].targets =
+        vec![ExistingActorRuleTarget::ScenarioEnemy];
+    OwnedRulePackage::new(raw, &schema, Default::default()).unwrap();
+
+    let mut wire = schema.input().clone();
+    let SlotDescriptor::Actor(entry) = &mut wire.slots[0] else {
+        unreachable!()
+    };
+    let SchemaState::Known(actor) = &mut entry.schema else {
+        unreachable!()
+    };
+    actor.provider_definition = Some(id("player-rules"));
+    let duplicate = OwnedDefinitionSchemaPackage::new(wire, Default::default()).unwrap();
+    let mut raw = shared_role_input(&duplicate);
+    raw.owners[0].programs.members[0].reads.clear();
+    rejected(raw, &duplicate);
+}
+
 #[test]
 fn current_empty_inventory_and_explicit_inventory_have_distinct_checked_identities() {
     let schema = schema(declarations());

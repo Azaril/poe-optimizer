@@ -343,7 +343,6 @@ fn semantic_validation_requires_known_typed_definitions_action_context_boolean_a
     );
     for context in [
         RuleEntityKind::Actor,
-        RuleEntityKind::Enemy,
         RuleEntityKind::Environment,
         RuleEntityKind::EquipmentUse,
         RuleEntityKind::Skill,

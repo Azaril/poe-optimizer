@@ -152,7 +152,7 @@ fn package(definitions: Vec<(&str, SupportPreparationDefinition)>) -> OwnedSuppo
             namespace: namespace(),
             release: key("rules"),
             semantics_version: key("v1"),
-            operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+            operations_version: key(OWNED_RULE_OPERATIONS_V14),
             definitions: schema.identity().clone(),
             tables: vec![],
             owners: vec![],

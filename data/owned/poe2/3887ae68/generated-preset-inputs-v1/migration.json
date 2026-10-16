@@ -1,10 +1,10 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "before": "e77ecaa55284d1dd888f3ad65145e735269fe589fc387076cbd711a8eb114244",
   "release": "pob-3887ae68-generated-preset-inputs-v1",
   "reason": "source-bound-generated-raw-quality",
   "contract": {
-    "schema_version": 6,
+    "schema_version": 7,
     "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
     "operations_version": "owned-domain-operations-v19",
     "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"

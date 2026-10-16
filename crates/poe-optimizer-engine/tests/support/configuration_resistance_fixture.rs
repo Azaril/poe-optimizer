@@ -131,7 +131,7 @@ impl Fixture {
         base.scenario = rebase(&base.scenario, &inputs.namespace);
         base.queries = rebase(&base.queries, &inputs.namespace);
         base.owners = rebase(&base.owners, &inputs.namespace);
-        base.schema.schema_version = 4;
+        base.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
         base.schema
             .definitions
             .retain(|row| !matches!(row, DefinitionDescriptor::Encounter(_)));
@@ -173,7 +173,7 @@ impl Fixture {
             assert!(owner.programs.members.iter().any(|p| p.id == row.program));
             owner.programs.members.push(RuleProgram {
                 id: key(&format!("component-sum-{}", row.program.as_str())),
-                context: RuleEntityKind::Enemy,
+                context: RuleEntityKind::Actor,
                 reads: vec![RuleRead {
                     id: key("sum"),
                     value_type: ComputedValueType::Quantity {
@@ -235,14 +235,14 @@ impl Fixture {
         if let Some(present) = present {
             self.scenario.assumptions.push(ExternalAssumption {
                 input: row.presence_input.clone(),
-                target: AssumptionTarget::Enemy,
+                target: AssumptionTarget::Actor(ActorKey::ScenarioEnemy),
                 value: ParameterValue::Boolean(present),
             });
         }
         if let Some(raw) = raw {
             self.scenario.assumptions.push(ExternalAssumption {
                 input: row.value_input.clone(),
-                target: AssumptionTarget::Enemy,
+                target: AssumptionTarget::Actor(ActorKey::ScenarioEnemy),
                 value: self.quantity(raw),
             });
         }
@@ -342,12 +342,15 @@ impl Fixture {
         assert_eq!(effects.len(), 1);
         let effect = effects[0];
         assert_eq!(effect.key.invocation.origin, RuleOrigin::Encounter);
-        assert_eq!(effect.key.invocation.entity, ConcreteEntity::Enemy);
+        assert_eq!(
+            effect.key.invocation.entity,
+            ConcreteEntity::Actor(ActorKey::ScenarioEnemy)
+        );
         assert_eq!(
             effect.target,
             BoundEffectTarget::Contribution {
                 key: ContributionKey {
-                    entity: ConcreteEntity::Enemy,
+                    entity: ConcreteEntity::Actor(ActorKey::ScenarioEnemy),
                     stat: row.contribution_stat.clone(),
                     kind: ContributionKind::Add,
                 }
@@ -358,7 +361,7 @@ impl Fixture {
 
     pub fn sum<'a>(&self, report: &'a OwnedEffectsReport, index: usize) -> &'a EffectValue {
         let key = PlanValueKey::Stat {
-            entity: ConcreteEntity::Enemy,
+            entity: ConcreteEntity::Actor(ActorKey::ScenarioEnemy),
             stat: self.inputs.inputs[index].contribution_stat.clone(),
         };
         let values: Vec<_> = report.values.iter().filter(|row| row.key == key).collect();

@@ -90,7 +90,7 @@ impl Fixture {
             namespace: ns(),
             release: key("rules"),
             semantics_version: key("tests-v1"),
-            operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+            operations_version: key(OWNED_RULE_OPERATIONS_V14),
             definitions: schema.identity().clone(),
             tables: vec![IntegerRuleTable {
                 id: key("curve"),

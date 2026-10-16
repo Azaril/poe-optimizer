@@ -327,7 +327,7 @@ impl Fixture {
             )));
         }
         let mut schema = SchemaPackageInput {
-            schema_version: OWNED_SCHEMA_PACKAGE_V4,
+            schema_version: OWNED_SCHEMA_PACKAGE_VERSION,
             namespace: ns(),
             release: key("schema"),
             semantics_version: key("v1"),

@@ -4,7 +4,9 @@ use crate::empty_support;
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*,
 };
-use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
+use poe_optimizer_data::owned_schema::{
+    OWNED_SCHEMA_PACKAGE_VERSION, OwnedDefinitionSchemaPackage,
+};
 use poe_optimizer_engine::owned_plan::*;
 use poe_optimizer_import::owned_recipe::OwnedRecipeInput;
 use serde::de::DeserializeOwned;
@@ -347,6 +349,9 @@ impl World {
         let c = read("closure.json");
         let b = read("bindings.json");
         let mut schema = d["headers"]["schema"].clone();
+        // The retained receipt authenticates historical source headers. This
+        // finite native fixture is rebuilt in the single current contract.
+        schema["schema_version"] = json!(OWNED_SCHEMA_PACKAGE_VERSION);
         schema["definitions"] = d["definitions"].clone();
         schema["definitions"].as_array_mut().unwrap().push(
             c["definitions"]

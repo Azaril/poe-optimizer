@@ -152,7 +152,7 @@ pub fn check_authored() {
         m.contract.operations_version,
         key(OWNED_RULE_OPERATIONS_V27)
     );
-    assert_eq!(m.contract.schema_version, 6);
+    assert_eq!(m.contract.schema_version, 7);
     assert_eq!(a["scope"], b["scope"]);
     assert_eq!(a["registry_last_issued_before"], 0x336a);
     assert_eq!(a["registry_last_issued_after"], 0x336d);

@@ -269,8 +269,11 @@ fn definition_census_rejects_missing_extra_duplicate_and_wrong_channel_members()
                 }),
             10 => bad.operations_version = key(OWNED_RULE_OPERATIONS_V24),
             11 => {
-                bad.effect_applications.as_mut().unwrap().members[0].targets =
-                    vec![EffectApplicationTarget::Enemy];
+                // Player and ScenarioEnemy share Actor mechanics. A genuinely
+                // different mechanical context must still fail this census.
+                bad.effect_applications.as_mut().unwrap().members[0]
+                    .program
+                    .context = RuleEntityKind::Action;
             }
             _ => unreachable!(),
         }

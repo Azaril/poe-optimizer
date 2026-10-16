@@ -10,7 +10,7 @@ use poe_optimizer_core::{
 use poe_optimizer_data::{
     owned_routing::{OwnedActionRouting, RoutingLimits},
     owned_rules::{OwnedRulePackage, RuleStorageLimits},
-    owned_schema::{OWNED_SCHEMA_PACKAGE_V4, OwnedDefinitionSchemaPackage, OwnedSchemaLimits},
+    owned_schema::{OWNED_SCHEMA_PACKAGE_VERSION, OwnedDefinitionSchemaPackage, OwnedSchemaLimits},
     owned_stages::{OwnedEvaluationStages, StageStorageLimits},
     owned_support_inputs::{OwnedSupportInputBindings, SupportInputStorageLimits},
     owned_supports::{OwnedSupportPreparation, SupportStorageLimits},
@@ -114,7 +114,7 @@ pub fn activation_program<'a>(f: &'a mut Fixture, name: &str) -> &'a mut RulePro
 }
 pub fn generated_fixture() -> Fixture {
     let mut f = Fixture::new();
-    f.schema.schema_version = OWNED_SCHEMA_PACKAGE_V4;
+    f.schema.schema_version = OWNED_SCHEMA_PACKAGE_VERSION;
     f.build.items.clear();
     f.build.equipment.clear();
     f.build.skills.clear();

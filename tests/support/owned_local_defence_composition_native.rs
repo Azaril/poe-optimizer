@@ -373,7 +373,7 @@ impl World {
             namespace: ns(),
             release: key("finite-local-defence"),
             semantics_version: key("finite-component"),
-            operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+            operations_version: key(OWNED_RULE_OPERATIONS_V14),
             definitions: schema.identity().clone(),
             owners: self.f.owners.clone(),
             tables: vec![],

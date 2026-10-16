@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-15 (EDT).
+Updated: 2026-10-16 (EDT).
 
 This is the active delivery plan. The [design](domain-architecture.md) defines
 the end state; the [execution overview](data-and-evaluation-overview.md) explains
@@ -67,36 +67,87 @@ exist only for backward compatibility.
 
 ## Route to the first complete build
 
-### Active structural checkpoint: one Actor model
+### Structural checkpoint: one Actor model
 
 The owner approved [generic Actor identity and local rules](owned-existing-enemy-rule-ownership-proposal.md)
-on October 15. This is the next structural dependency for shared conditions,
-outgoing critical calculations and Enemy mitigation. It does not add complete
+on October 15. The migration implements the structural dependency for shared
+conditions, outgoing critical calculations and Enemy mitigation. It does not add complete
 build coverage or change the closest-build priority.
 
-1. Finish/freeze the independent Evasion override publication on the existing
-   format; slot aggregation is already validated. Do not change runtime contracts
-   under an active publication test.
-2. Migrate Core/Data identities, role-specific inputs, shared applicability and
+1. Completed: freeze the independent Evasion override publication on the existing
+   format. Slot aggregation and override selection are committed and validated.
+2. Completed: migrate Core/Data identities, role-specific inputs, shared applicability and
    exact selected Encounter membership. In parallel migrate Engine contexts,
    invocation/value keys and checked query binding. Keep role authority explicit
    over whole inventories and remove all placeholder Player behavior.
-3. Migrate Import/CLI and current authored artifacts to the one new contract.
+3. Completed: migrate Import/CLI and current authored artifacts to the one new contract.
    Rebuild generated packages and portable fixtures, invalidating old hashes.
    Preserve original PoB archives/observations. No runtime compatibility branch.
-4. Validate one identical local rule on Player, two supplied occurrences and
+4. Completed: validate one identical local rule on Player, two supplied occurrences and
    ScenarioEnemy, with independent inputs and provenance; prove unauthorized
    reads/writes, unknown/inactive/unlisted/late sources and obsolete aliases fail.
    Preserve existing numerical controls and fresh/reused/Rayon determinism.
-5. Reimport all five originals, retain their exact queries and coverage gaps,
-   and checkpoint the new endpoint. Then resume the closest real calculation
+5. Completed: reimport all five originals and retain their exact queries and
+   coverage gaps; pass the final CLI/lint gates and validate the new endpoint.
+   Resume the closest real calculation
    blocker: shared conditions and configured Enemy contributions feeding critical
    damage/mitigation, alongside final Player defence admission.
 
-Current resume point: approval recorded and the independent override checkpoint
-has passed. Core/Data and Engine runtime migrations are underway in parallel;
-a separate agent owns cross-role integration tests. Cargo validation is serialized.
-Root owns Import/CLI/artifact coordination and the living documents.
+Current resume point: the Actor structural migration is implemented and locally
+validated. Resume the complete outgoing-critical consumer and its candidate-bound
+conditions through the existing graph, as detailed below.
+The new package and portable replay rebuild successfully. Exact inverses
+authenticate the prior artifacts and allow only declared format/role edits,
+checked dependency commitments and one provenance row. All five originals
+retain identical drafts after canonical Enemy-address and lineage conversion,
+all 110 queries, selections and issue counts **106/117/109/123/4**. No coverage
+gap was closed. The scoped regression and strict Clippy gates pass.
+Core's existing 312 tests and 25 focused role/wire checks pass. Data's 205
+focused checks and strict Core/Data all-target Clippy pass. Engine's 718 tests
+pass across the library and 73 integration targets, including all 45 portable
+Sniper replay tests; seven explicit offline tests remain intentionally ignored.
+Strict Engine Clippy passes for that scope. Import's 191 library, 357
+normalization, seven recipe, five catalog reproduction, 16 current migration
+and ten evaluation tests pass.
+Obsolete format commitments and compatibility-only assertions were corrected;
+dropping existing evaluation artifacts remains a tested refusal.
+Existing offline exporter suites pass (22/16/18/16/14 tests). These counts
+describe the migration gates, not build coverage.
+The 31 selected CLI regression targets and the full publication-chain target
+pass. Strict Import all-target and the 32 selected CLI-target Clippy checks pass;
+the chain's final helper corrections were linted again after its successful run.
+Final logs: `runs/generic-actor-catalog-recipe-tests-01.log` and
+`runs/generic-actor-extension-clippy-01.log`. Hosted CI is tracked separately below.
+The owned-library dependency/compiled-source boundary check also passes without
+Lua, PoB or Import in either owned Data or owned Engine. The CLI publication
+chain exposed stale intermediate item-policy dependencies. Current typed loaders
+rebuilt 51 exact dependency fields across 38 authoring files, including source
+policies, compiler metadata, membership patches, gem normalization inputs and
+derived item-layout bindings.
+Authenticated prior snapshots and full inverses preserve every other field and
+all source observations. The full ordinary CLI publication chain passes: two
+tests, one intentional offline ignore, 746.72 seconds. Its 41 shared helpers
+exercise the intermediate publications through selected Actions and supplied
+Actor abilities. Log: `runs/generic-actor-extension-tests-04.log`. One prior
+attempt failed early with Windows access denied; no numerical
+retry policy or weaker validation was introduced.
+Proofs: `runs/generic-actor-item-policy-final-audit-01.json` and
+`runs/generic-actor-policy-final-reference-audit-02.json`. Four filtered
+authoring checks pass and their temporary Cargo targets have been removed.
+The final audit finds no stale operational dependency references; retained old
+hashes identify historical evidence only.
+The [rebuild follow-up](legacy-retirement.md#generic-actor-cutover-and-rebuild-follow-up-2026-10-16)
+tracks reproducible regeneration of intermediate dependency identities. It is
+offline tooling debt; after this checkpoint, return to the closest-build
+calculation rather than starting another storage or runtime architecture.
+The current schema is 7, rule package is 4, and full operations are V28. Existing
+operation capability subsets use the new identity semantics. Current migration
+authoring retains one wire-5 shape; historical schema-upgrade branches and their
+compatibility-only tests were removed while declaration changes, allocation
+checks, capability upgrades and evaluation preservation remain tested.
+Current authored descriptors, bootstrap packages and the portable fixture are
+rebuilt. Temporary authoring scripts remain ignored evidence in `runs`; their
+Cargo hooks/targets have been removed. No runtime old-format reader was added.
 Existing Player final receivers remain unchanged; unsupported ScenarioEnemy
 usage/support/Action paths must reject explicitly. Pending resource-obligation,
 Scenario usage-intent and progression ownership questions remain separate.
@@ -245,7 +296,7 @@ are shared), as do strict Clippy and all-five publication/rebuild. Logs:
 All 110 queries, local identities and selected issues **106/117/109/123/4**
 are preserved; final/shared owner coverage is still Partial.
 
-Current validated package (before Actor migration):
+Validated predecessor before Actor migration:
 **`runs/owned-player-evasion-override-publication-01/package`**.
 
 - Input: `b3f2bcb73c780c4687fc868dd84a62db782ebe5bb39f0b1711a25e4e0ec5dfff`.
@@ -264,8 +315,29 @@ all-five publication/byte-identical rebuild pass. Logs:
 `runs/owned-player-evasion-override-{ordinary-03,clippy-01,publication-01}.log`.
 The 201 provenance entries, 90 queries and 8202 effective programs preserve all
 110 saved queries, exact local IDs and selected issues **106/117/109/123/4**.
-No input or owner gap is retired. This checkpoint releases the Actor migration;
-its new-format endpoint will receive new identities after full regeneration.
+No input or owner gap is retired. The following Actor migration preserves this
+checkpoint's mechanics and coverage with the new-format identities below.
+
+Validated current package after Actor migration:
+**`runs/owned-generic-actor-publication-01/package`**.
+
+- Input: `1b2603af5c5a6a698159c717e398a98e478316c9b3069f5310d9ccf35010d511`.
+- Registry: unchanged (`5773595c…`, last `33a9`).
+- Definitions: `503db6e507609da86faa880164bf6c4dd35ba34a93819dc2aebd6ea9438bb01b`.
+- Rules: `b8feb4e6679487da171b5d29016dc104f99caa1c589914264c9eb3bb157bd376`.
+- Compiled: `9bd71828333762be26224995600ab7f2a00520ee4078929dc1bb364aeca51509`.
+
+The 18 files total **64,571,852 bytes**, with 202 provenance entries and the
+same 90 queries, 59 receivers and 8202 effective programs. No new game rule or
+complete evaluation bundle is introduced. Full-release inverse checks validate
+91 declared format edits, two release names and 68 admitted dependency pointers
+(63 changed); the portable replay validates 51 edits and 16 dependency pointers.
+Original source observations and all other semantic fields restore exactly.
+Evidence: `runs/generic-actor-format-{preflight,final}-inverse.json`,
+`runs/generic-actor-fixtures-rebuild-01.log`,
+`runs/generic-actor-originals-inverse-02.log` and the package's parent
+`validation.json`. Bootstrap artifacts were regenerated through the existing
+offline exporters and production publishers, with no historical-format loader.
 
 The final Evasion receiver predecessor remains at
 **`runs/owned-player-evasion-final-publication-03/package`**:
@@ -376,6 +448,19 @@ The subsequent ailment packet preserves this input and its downstream gaps.
 
 ## Next damage checkpoint: outgoing critical calculation and Enemy mitigation
 
+After the Actor cutover, execute the existing outgoing-critical consumer first.
+Bind its actual selected Encounter producer `31d1` using the accepted Encounter
+origin, including zero/inactive potential membership. Reuse the seven reserved
+definitions `33aa`–`33b0`, two drafted programs, intrinsic `3215` and accuracy
+`321c`; no new Actor API is required. Validate the whole consumer with explicit
+true/false/unknown Weakness, raw/clamped counts, Diamond override presence,
+exact recipients, lazy overrides, stage freezes and fresh/reused/Rayon reports.
+Keep its sixteen query groups Partial until candidate-bound source and activation
+proofs justify closure. Sand Djinn's untranslated on-hit responsibility remains
+a concrete admission blocker; absent PoB mapping is not a false game condition.
+Enemy Armour follows through its existing Encounter producer `31e0`, with its
+own complete writer/branch census and distinct normal/critical mitigation paths.
+
 Physical hits and ordinary attack rate are published for their finite selected
 source domains. The rate proof authenticates both original JIT captures (6,981
 targeted occurrences / 124 complete records each), complete carrier records,
@@ -439,22 +524,28 @@ neither the absent source modifier nor the observed critical chance establishes
 native condition absence. No PoB defect exemption is approved. See the
 [cleanup investigation](legacy-retirement.md#sand-djinn-critical-weakness-responsibility-2026-10-15).
 The next critical gate is candidate-bound condition/special-branch admission
-and actual native membership/execution after the Encounter/query decision.
+and execution of the complete native consumer through the implemented generic
+Actor/Encounter query contract. No additional public API decision is needed.
 
-**New shared blocker, October 15:** Encounter programs already emit Enemy
-contributions, but checked membership has no Encounter origin and numeric Enemy
-queries are rejected. This blocks both conditional Critical Weakness and the
-next Armour consumer; existing configured Armour BASE `31e0` should be reused.
-The [Encounter/query proposal](owned-encounter-contribution-queries-proposal.md)
-recommends extending the existing graph, with exact selected-owner/recipient
-authority and unchanged completeness rules. Await owner review before changing
-the public contract. Do not substitute a separate computed-term aggregator or
-older direct numeric reduction to bypass this gap. Source supplier proofs and
-independent Player-defence work continue. Outgoing-critical Actor cap/bonus and
-Enemy chance/bonus/activation channels remain unpublished. The seven draft IDs
-are now `33aa`–`33b0`, following the equipment-Evasion allocations so pending
-Enemy contracts do not block unrelated publication. The current-format draft
-was rewritten in place; no filler definitions or compatibility aliases exist.
+**Resolved structural blocker, October 16:** checked membership now admits the
+exact selected Encounter owner, and the scenario Enemy uses ordinary Actor
+queries with explicit role authority. Rebase the unpublished outgoing-critical
+packet onto the generic-Actor endpoint, replacing its old dependency pins and
+pending-contract markers. Bind `31d1 / configured-critical-weakness /
+critical-weakness` with `ContributionOrigin::Encounter`, retaining zero and
+inactive membership. Reuse intrinsic chance `3215`, accuracy confirmation
+`321c`, raw stacks `3390`, the authenticated baseline append and reserved IDs
+`33aa`–`33b0`. Execute both full consumer programs, not just rounding fragments.
+
+Validate exact recipients, Weakness true/false/unknown and stack bounds,
+Diamond override presence/conflicts, missing operands and Partial/unlisted/late
+suppliers; compare the retained original 5% chance and 2× multiplier, with exact
+fresh/reused/Rayon equality. These controls do not replace candidate-bound
+condition coverage or resolve the Sand Djinn responsibility above. All sixteen
+query groups remain Partial until their actual domains are admitted. Then reuse
+configured Armour BASE `31e0` through the same graph for separate normal and
+critical mitigation. No filler definitions, alternate aggregator or compatibility
+aliases are needed.
 
 The unpublished [Enemy physical-mitigation reference packet](../data/owned/poe2/3887ae68/enemy-physical-mitigation/README.md)
 now retains five original source bodies, nine spans and all 39 observed Sniper
@@ -469,16 +560,15 @@ No mitigation consumer, complete supplier proof or publication is claimed.
 
 The [selected Enemy supplier review](../data/owned/poe2/3887ae68/enemy-physical-mitigation/source-domain-review.md)
 confirms that shared Enemy damage-taken/reduction channels contain conditional
-baseline rules. They are independent of Encounter configuration; the current
-existing-Actor applicability supports Player only. The separate
+baseline rules. They are independent of Encounter configuration. The
 [generic Actor decision](owned-existing-enemy-rule-ownership-proposal.md)
 was accepted on October 15: unify the scenario opponent with Player and supplied
 units under one Actor identity/local-rule context, retaining explicit role and
 source authority. The earlier separate-Enemy-context draft is superseded.
-The selected Encounter origin is included in this migration; shared baselines
-must retain their own owner. Runtime migration starts after the independent
-Evasion override checkpoint finishes. Maimed and Enemy mitigation then use the
-unified model; they must not introduce duplicate formulas or fake providers.
+The implemented contract includes selected Encounter origins and shared local
+rules for all three roles. Shared baselines retain their own owner. Actual
+Maimed and Enemy mitigation publication must now use that contract; the Actor
+migration itself does not establish their supplier coverage or numerical rules.
 Late Shock can also
 produce a zero-valued conditional record: Lua numeric truthiness is source
 evidence to classify, not native gameplay behavior to copy. This review narrows
@@ -500,7 +590,7 @@ source evidence proves a finite test domain, but is not runtime authority for a
 candidate's item properties or conditions. Its controlled graph can exercise
 the saved metric binding; ordinary complete planning must still refuse it.
 Native per-equipment Evasion properties and their Player slot contributions are
-published. Override selection is being validated; conditional Evasion channels
+published, including checked override selection. Conditional Evasion channels
 and transfer coverage remain. The published work uses the existing shared
 EquipmentUse local-defence pattern and the accepted shared-Player slot reads;
 no new public API is needed. Retained source controls produce local Evasion 75
@@ -529,9 +619,9 @@ zero term under the native finite-number and signed-zero rules.
 The associated [direct-reduction audit](legacy-retirement.md#direct-numeric-reductions-and-encounter-membership-2026-10-15)
 found 78 older direct numeric reads in 32 current programs, including eleven
 Enemy reads. These retain their existing validation but lack explicit checked
-query membership. During the accepted generic Actor/Encounter migration, migrate
-the touched Enemy block/incoming-hit consumers with their real source proofs;
-do not introduce more direct reads or remove the operation before its other
+query membership. The Actor migration preserves those formulas; migrate the
+touched Enemy block/incoming-hit consumers with their real source proofs next.
+Do not introduce more direct reads or remove the operation before its other
 live contexts are migrated.
 
 The portable Sniper replay now contains the published physical-base program;
@@ -1061,6 +1151,14 @@ profiles. The [cleanup register](legacy-retirement.md#other-current-compatibilit
 tracks profiling/cache/shared-helper investigation; preserving both profiles
 and all checks is mandatory. This is a maintenance follow-up, not a reason to
 interrupt the closest-build implementation.
+
+Read-only follow-up at 2026-10-16 04:03:59 UTC found `accd5040` run
+`38843640195` pending with no jobs. Older `61205e81` run `38825000935`
+had run for 4h23m, with two Windows CLI shards still active. Its three failures
+are the two lint jobs and Ubuntu Demonflame failure already fixed in `885b5d7d`;
+13 jobs had passed. No new actionable failure or hosted success is established.
+Status/annotation receipts are `runs/generic-actor-ci-{run,jobs,annotations}-*.json`.
+No workflow or run was changed by this inspection.
 
 ## Previous checkpoint: configured Player Withered input
 

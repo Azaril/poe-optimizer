@@ -71,7 +71,7 @@ pub fn schema() -> OwnedDefinitionSchemaPackage {
             let SchemaState::Known(schema) = &mut entry.schema else {
                 unreachable!()
             };
-            schema.targets.push(RuleEntityKind::Enemy);
+            assert!(schema.targets.contains(&RuleEntityKind::Actor));
         } else {
             input
                 .definitions
@@ -79,7 +79,7 @@ pub fn schema() -> OwnedDefinitionSchemaPackage {
                     id: id(name),
                     schema: SchemaState::Known(StatSchema {
                         value: ComputedValueType::Quantity { unit: id("factor") },
-                        targets: vec![RuleEntityKind::Actor, RuleEntityKind::Enemy],
+                        targets: vec![RuleEntityKind::Actor],
                     }),
                 }));
         }

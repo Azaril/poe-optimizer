@@ -130,7 +130,9 @@ fn duplicate_foreign_and_ambiguous_declarations_reject() {
                 "effect application needs recipient context, targets and effects"
             }
             3 => {
-                rows[0].targets.push(EffectApplicationTarget::Enemy);
+                rows[0].targets.push(EffectApplicationTarget::OwnedSlot {
+                    slot: slot("absent-target"),
+                });
                 "effect target is foreign, unknown or context-incompatible"
             }
             4 => {
@@ -265,7 +267,7 @@ fn actor_sources_enemy_recipients_and_partial_inventory_remain_explicit() {
         slot: slot("first"),
     };
     row.targets = vec![EffectApplicationTarget::Enemy];
-    row.program.context = RuleEntityKind::Enemy;
+    row.program.context = RuleEntityKind::Actor;
     row.program.reads.clear();
     row.program.nodes[0].expression = RuleExpression::Literal {
         value: ParameterValue::Boolean(false),

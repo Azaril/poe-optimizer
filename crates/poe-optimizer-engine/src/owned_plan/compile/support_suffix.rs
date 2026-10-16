@@ -521,6 +521,7 @@ impl SymbolicBindings {
             ordered: ordered::Sources {
                 rules: plan.rules.input(),
                 build: plan.request.build().input(),
+                encounter: &plan.request.scenario().input().enemy.encounter,
                 actor_supplies: &plan.actor_supplies,
                 skill_supplies: &plan.skill_supplies,
                 effects: &ordered_base,

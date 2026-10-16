@@ -188,7 +188,7 @@
                 "kind": "boolean"
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -239,7 +239,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "scenario_enemy_actor"
               ]
             }
           }
@@ -276,7 +276,7 @@
                 }
               },
               "targets": [
-                "enemy"
+                "actor"
               ]
             }
           }
@@ -306,7 +306,7 @@
         "members": [
           {
             "id": "configured-enemy-block-base",
-            "context": "enemy",
+            "context": "actor",
             "reads": [
               {
                 "id": "present",

@@ -41,7 +41,7 @@
             "kind": "boolean"
           },
           "targets": [
-            "enemy"
+            "actor"
           ]
         }
       }

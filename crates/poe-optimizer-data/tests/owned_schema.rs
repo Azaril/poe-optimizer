@@ -295,7 +295,7 @@ fn input() -> SchemaPackageInput {
             ExternalInputSchema {
                 value: ValueSchema::Boolean,
                 targets: vec![
-                    AssumptionTargetKind::Enemy,
+                    AssumptionTargetKind::ScenarioEnemyActor,
                     AssumptionTargetKind::Environment,
                 ],
             },
@@ -780,10 +780,10 @@ fn wire_rejects_unknown_duplicate_missing_and_wrong_kind_fields() {
     assert_ne!(overflow, encoded);
     assert!(decode_schema_package(overflow.as_bytes(), limits).is_err());
     let mut version = raw;
-    version.schema_version = OWNED_SCHEMA_PACKAGE_V6 + 1;
+    version.schema_version = OWNED_SCHEMA_PACKAGE_VERSION + 1;
     assert!(matches!(
         OwnedDefinitionSchemaPackage::new(version, limits),
-        Err(SchemaPackageError::UnsupportedVersion(v)) if v == OWNED_SCHEMA_PACKAGE_V6 + 1
+        Err(SchemaPackageError::UnsupportedVersion(v)) if v == OWNED_SCHEMA_PACKAGE_VERSION + 1
     ));
 }
 
@@ -1015,7 +1015,7 @@ fn computed_schema_validates_exact_unit_closure_targets_and_limits() {
         RuleEntityKind::Actor,
         RuleEntityKind::Action,
         RuleEntityKind::EquipmentUse,
-        RuleEntityKind::Enemy,
+        RuleEntityKind::Modifier,
         RuleEntityKind::Environment,
     ];
     let limits = OwnedSchemaLimits {
@@ -1027,36 +1027,23 @@ fn computed_schema_validates_exact_unit_closure_targets_and_limits() {
 }
 
 #[test]
-fn published_v2_schema_keeps_exact_bytes_and_identity_without_actor_supply() {
-    let bytes = std::fs::read(
-        std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../data/owned/poe2/3887ae68/current/schema.json"),
-    )
-    .unwrap();
-    let loaded = decode_schema_package(&bytes, OwnedSchemaLimits::default()).unwrap();
-    assert_eq!(loaded.identity().schema_version, OWNED_SCHEMA_PACKAGE_V2);
-    assert_eq!(
-        loaded.identity().content_sha256,
-        "9ee542bb473f7c215e973ccf80b3b85a09f7ccf483a8ab689255fcf4a60bcda2"
-    );
-    assert_eq!(
-        encode_schema_package(&loaded, OwnedSchemaLimits::default()).unwrap(),
-        bytes
-    );
-    for slot in &loaded.input().slots {
-        if let SlotDescriptor::Actor(DefinitionEntry {
-            schema: SchemaState::Known(actor),
-            ..
-        }) = slot
-        {
-            assert_eq!(actor.provider_definition, None);
-        }
+fn superseded_schema_formats_are_rejected_without_a_compatibility_loader() {
+    for version in 0..OWNED_SCHEMA_PACKAGE_VERSION {
+        let mut old = computed_input();
+        old.schema_version = version;
+        let bytes = serde_json::to_vec(&old).unwrap();
+        assert!(
+            matches!(OwnedDefinitionSchemaPackage::new(old, Default::default()), Err(SchemaPackageError::UnsupportedVersion(v)) if v == version)
+        );
+        assert!(
+            matches!(decode_schema_package(&bytes, Default::default()), Err(SchemaPackageError::UnsupportedVersion(v)) if v == version)
+        );
     }
 }
 
 fn actor_bound_input() -> SchemaPackageInput {
     let mut raw = input();
-    raw.schema_version = OWNED_SCHEMA_PACKAGE_V3;
+    raw.schema_version = OWNED_SCHEMA_PACKAGE_VERSION;
     raw.definitions.push(DefinitionDescriptor::Actor(known(
         id("companion"),
         ActorSchema {
@@ -1076,56 +1063,23 @@ fn actor_bound_input() -> SchemaPackageInput {
 }
 
 #[test]
-fn actor_definition_binding_roundtrips_only_in_explicit_v3_packages() {
-    let raw = actor_bound_input();
-    let loaded = package(raw.clone());
+fn actor_definition_binding_roundtrips_in_the_current_schema() {
+    let loaded = package(actor_bound_input());
     assert!(matches!(
         loaded.definition(&id::<ActorDefinition>("companion")),
         SchemaLookup::Known(_)
     ));
-    let encoded = encode_schema_package(&loaded, OwnedSchemaLimits::default()).unwrap();
+    let bytes = encode_schema_package(&loaded, Default::default()).unwrap();
     assert_eq!(
-        decode_schema_package(&encoded, OwnedSchemaLimits::default())
+        decode_schema_package(&bytes, Default::default())
             .unwrap()
             .identity(),
         loaded.identity()
     );
-    let mut old = raw.clone();
-    old.schema_version = OWNED_SCHEMA_PACKAGE_V2;
-    reject(old, SchemaPackageErrorKind::UnsupportedSchemaFeature);
-    // Even without an Actor definition, a v2 binding must not gain new semantics.
-    let mut old_binding = raw;
-    old_binding.schema_version = OWNED_SCHEMA_PACKAGE_V2;
-    old_binding
-        .definitions
-        .retain(|d| !matches!(d, DefinitionDescriptor::Actor(_)));
-    reject(
-        old_binding,
-        SchemaPackageErrorKind::UnsupportedSchemaFeature,
-    );
-    let mut old_unbound = input();
-    old_unbound.schema_version = OWNED_SCHEMA_PACKAGE_V2;
-    let old_unbound = package(old_unbound);
-    assert!(
-        !String::from_utf8(
-            encode_schema_package(&old_unbound, OwnedSchemaLimits::default()).unwrap()
-        )
-        .unwrap()
-        .contains("provider_definition")
-    );
 }
 
 #[test]
-fn preparation_target_scopes_require_v4_and_old_v3_bytes_remain_stable() {
-    let prior = package(actor_bound_input());
-    assert_eq!(prior.identity().schema_version, 3);
-    let bytes = encode_schema_package(&prior, OwnedSchemaLimits::default()).unwrap();
-    let replay = decode_schema_package(&bytes, OwnedSchemaLimits::default()).unwrap();
-    assert_eq!(replay.identity(), prior.identity());
-    assert_eq!(
-        encode_schema_package(&replay, OwnedSchemaLimits::default()).unwrap(),
-        bytes
-    );
+fn current_preparation_target_scopes_roundtrip_without_old_schema_paths() {
     for target in [RuleEntityKind::SupportOrigin, RuleEntityKind::Skill] {
         for capability in [false, true] {
             let descriptor = if capability {
@@ -1144,36 +1098,16 @@ fn preparation_target_scopes_require_v4_and_old_v3_bytes_remain_stable() {
                     },
                 ))
             };
-            for version in [
-                OWNED_SCHEMA_PACKAGE_V2,
-                OWNED_SCHEMA_PACKAGE_V3,
-                OWNED_SCHEMA_PACKAGE_V4,
-            ] {
-                let mut raw = input();
-                raw.schema_version = version;
-                raw.definitions.push(descriptor.clone());
-                let wire = serde_json::to_vec(&raw).unwrap();
-                if version < OWNED_SCHEMA_PACKAGE_V4 {
-                    reject(raw, SchemaPackageErrorKind::UnsupportedSchemaFeature);
-                    assert!(matches!(
-                        decode_schema_package(&wire, OwnedSchemaLimits::default()),
-                        Err(SchemaPackageError::Invalid {
-                            kind: SchemaPackageErrorKind::UnsupportedSchemaFeature,
-                            ..
-                        })
-                    ));
-                } else {
-                    let loaded = package(raw);
-                    let encoded =
-                        encode_schema_package(&loaded, OwnedSchemaLimits::default()).unwrap();
-                    assert_eq!(
-                        decode_schema_package(&encoded, OwnedSchemaLimits::default())
-                            .unwrap()
-                            .identity(),
-                        loaded.identity()
-                    );
-                }
-            }
+            let mut raw = input();
+            raw.definitions.push(descriptor);
+            let loaded = package(raw);
+            let bytes = encode_schema_package(&loaded, Default::default()).unwrap();
+            assert_eq!(
+                decode_schema_package(&bytes, Default::default())
+                    .unwrap()
+                    .identity(),
+                loaded.identity()
+            );
         }
     }
 }

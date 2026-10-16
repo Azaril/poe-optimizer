@@ -185,7 +185,7 @@ pub fn check_authored() {
     assert_eq!(m.release, overlay.release);
     assert_eq!(m.release.as_str(), "pob-3887ae68-ordinary-item-routing-v1");
     assert_eq!(overlay.schema_version, 1);
-    assert_eq!((m.schema_version, m.contract.schema_version), (5, 6));
+    assert_eq!((m.schema_version, m.contract.schema_version), (5, 7));
     assert_eq!(
         m.contract.operations_version.as_str(),
         OWNED_RULE_OPERATIONS_V20

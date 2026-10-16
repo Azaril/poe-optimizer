@@ -322,7 +322,10 @@ fn projection_targets_and_ranges_cannot_alias_receipts_or_split_the_source_censu
             .scenario
             .assumptions
             .members;
-        assert_eq!(assumptions[0].target, DraftAssumptionTarget::Enemy);
+        assert_eq!(
+            assumptions[0].target,
+            DraftAssumptionTarget::Actor(DraftActorKey::ScenarioEnemy)
+        );
         assert_eq!(assumptions[1].target, DraftAssumptionTarget::Environment);
         for kind in ["Input", "Placeholder"] {
             let leaf = accounting_tests::leaf(&source, &result, NAME, kind);

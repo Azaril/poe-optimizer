@@ -5,6 +5,7 @@ use super::*;
 pub(super) struct Sources<'a> {
     pub rules: &'a RulePackageInput,
     pub build: &'a BuildInput,
+    pub encounter: &'a EncounterDefId,
     pub actor_supplies: &'a BTreeMap<OwnedActorKey, ProviderKey>,
     pub skill_supplies: &'a BTreeMap<GeneratedSkillKey, ProviderKey>,
     pub effects: &'a [EffectOccurrenceKey],
@@ -29,6 +30,7 @@ fn owner(subject: &SchemaSubject) -> Owner<'_> {
 enum Source<'a> {
     Provider(&'a ProviderKey),
     ExistingActor(&'a OwnedDefinitionKey, &'a ActorKey),
+    Encounter(&'a EncounterDefId),
     ApplicationGroup(
         &'a ConcreteEntity,
         &'a OwnedDefinitionKey,
@@ -67,7 +69,6 @@ impl Sources<'_> {
                 ));
             };
             if actual != application
-                || actor != &ActorKey::Player
                 || effect.invocation.entity != ConcreteEntity::Actor(actor.clone())
             {
                 return Err(invalid(
@@ -86,14 +87,40 @@ impl Sources<'_> {
                 .find(|r| &r.id == actual)
                 .ok_or_else(|| invalid("existing Actor contribution application is absent"))?;
             charge(work, row.targets.len())?;
+            let target = match actor {
+                ActorKey::Player => ExistingActorRuleTarget::Player,
+                ActorKey::ScenarioEnemy => ExistingActorRuleTarget::ScenarioEnemy,
+                ActorKey::Owned(actor) => ExistingActorRuleTarget::OwnedSlot {
+                    slot: actor.slot.clone(),
+                },
+            };
             if member.owner != SchemaSubject::Definition(row.owner.address())
-                || !row.targets.contains(&ExistingActorRuleTarget::Player)
+                || !row.targets.contains(&target)
             {
                 return Err(invalid(
                     "existing Actor contribution applicability differs from membership",
                 ));
             }
             return Ok(Source::ExistingActor(actual, actor));
+        }
+        if matches!(origin, ContributionOrigin::Encounter) {
+            let SchemaSubject::Definition(DefinitionAddress::Encounter(encounter)) =
+                &effect.invocation.owner
+            else {
+                return Err(invalid(
+                    "Encounter contribution requires its exact Encounter owner",
+                ));
+            };
+            if !matches!(effect.invocation.origin, RuleOrigin::Encounter)
+                || encounter != self.encounter
+                || member.owner != effect.invocation.owner
+                || effect.invocation.entity != ConcreteEntity::Actor(ActorKey::ScenarioEnemy)
+            {
+                return Err(invalid(
+                    "Encounter contribution differs from the selected scenario Enemy",
+                ));
+            }
+            return Ok(Source::Encounter(encounter));
         }
         let RuleOrigin::Provider { provider } = &effect.invocation.origin else {
             return Err(invalid("contribution requires a reviewed provider origin"));
@@ -288,6 +315,7 @@ impl Sources<'_> {
         work: &mut usize,
     ) -> Result<Position> {
         let (slot, modifier) = match (origin, source) {
+            (ContributionOrigin::Encounter, Source::Encounter(_)) => (0, 0),
             (ContributionOrigin::ExistingActor { .. }, Source::ExistingActor(_, _))
             | (ContributionOrigin::SuppliedActor { .. }, Source::Provider(_))
             | (ContributionOrigin::Skill { .. }, Source::Provider(_)) => (0, 0),

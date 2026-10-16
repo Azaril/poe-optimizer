@@ -4,7 +4,7 @@
   "release": "pob-3887ae68-strength-life-v1",
   "reason": "derived-inherent-strength-life",
   "contract": {
-    "schema_version": 6,
+    "schema_version": 7,
     "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
     "operations_version": "owned-domain-operations-v20",
     "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"

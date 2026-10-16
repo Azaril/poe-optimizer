@@ -47,7 +47,7 @@
     }
   ],
   "artifact_sha256": {
-    "migration": "dd922e9953885571901b1d3d5204474b829db97acb397601f924a0248ff5a39b",
+    "migration": "7eb07a9486a44170230e42b84e123a724c4539f65e6a4b6440ff54c46448d779",
     "correspondence": "251686b69d9956730ef8af3897265d208d1265a4318e2f84833d4261f1bbac9b"
   },
   "new_definitions": 7,

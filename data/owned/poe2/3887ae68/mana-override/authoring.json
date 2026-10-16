@@ -13,7 +13,7 @@
   "artifacts": {
     "migration.json": {
       "bytes": 3114,
-      "sha256": "9cdb94c207cb4c69ec7ab3d9ebf4b156007668e66523d0b7f75ee22cf3270939"
+      "sha256": "722d046d715829cd675732e6a51dea556f9caeb473d43424ca7958b2a81932fe"
     },
     "queries.json": {
       "bytes": 1354,

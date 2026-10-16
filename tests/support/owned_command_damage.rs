@@ -81,7 +81,7 @@ pub fn check_authored() {
     assert_eq!(json!(m.before), a["before"]);
     assert_eq!(m.release.as_str(), "pob-3887ae68-command-damage-v1");
     assert_eq!(m.schema_version, 5);
-    assert_eq!(m.contract.schema_version, 6);
+    assert_eq!(m.contract.schema_version, 7);
     assert_eq!(
         m.contract.operations_version.as_str(),
         "owned-domain-operations-v20"

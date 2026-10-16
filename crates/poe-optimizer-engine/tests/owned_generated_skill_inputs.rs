@@ -8,7 +8,7 @@ use poe_optimizer_core::{
     build_identity::InstanceAllocator, owned_build::*, owned_definitions::*, owned_readiness::*,
     owned_rules::*, owned_schema::*, owned_stages::*,
 };
-use poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V6;
+use poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_VERSION;
 use poe_optimizer_engine::owned_plan::*;
 use rayon::prelude::*;
 use support::delivery::fixture as base;
@@ -83,7 +83,7 @@ fn declare(
 }
 fn fixture_with_inputs() -> Fixture {
     let mut f = fixture();
-    f.schema.schema_version = OWNED_SCHEMA_PACKAGE_V6;
+    f.schema.schema_version = OWNED_SCHEMA_PACKAGE_VERSION;
     for slot in &mut f.schema.slots {
         if let SlotDescriptor::Parameter(row) = slot
             && matches!(row.id.declaration, SlotOwnerDefId::Skill(_))

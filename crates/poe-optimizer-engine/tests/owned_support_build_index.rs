@@ -90,7 +90,7 @@ fn package() -> OwnedSupportPreparation {
             namespace: namespace(),
             release: key("test"),
             semantics_version: key("test"),
-            operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+            operations_version: key(OWNED_RULE_OPERATIONS_V14),
             definitions: schema.identity().clone(),
             tables: vec![],
             owners: vec![],

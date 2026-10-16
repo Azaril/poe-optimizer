@@ -647,7 +647,7 @@ fn earlier_operation_subsets_use_current_wire_domain_with_omitted_query_fields()
         };
         let old_bytes = serde_json::to_vec(&old).unwrap();
         let old_digest = digest_owned(
-            "owned-rule-package-v3",
+            "owned-rule-package-v4",
             &old,
             RuleStorageLimits::default().max_wire_bytes,
         )
@@ -940,12 +940,12 @@ fn boolean_queries_retain_exact_member_and_partial_inventory_evidence() {
 }
 
 #[test]
-fn enemy_boolean_recipient_authority_is_explicit_and_versioned() {
-    let schema = boolean_schema(vec![RuleEntityKind::Actor, RuleEntityKind::Enemy]);
+fn absolute_enemy_queries_use_actor_stats_and_reject_non_actor_targets() {
+    let schema = boolean_schema(vec![RuleEntityKind::Actor]);
     let mut raw = boolean_input(&schema);
     raw.receivers.members.clear();
     let consumer = &mut raw.owners[0].programs.members[0];
-    consumer.context = RuleEntityKind::Enemy;
+    consumer.context = RuleEntityKind::Actor;
     consumer.reads[0].source = RuleReadSource::ContributionQuery {
         entity: RuleEntity::Current,
         query: key("query"),
@@ -965,11 +965,11 @@ fn enemy_boolean_recipient_authority_is_explicit_and_versioned() {
         group: key("base"),
     };
     check(raw.clone(), &schema);
-    let actor_only = boolean_schema(vec![RuleEntityKind::Actor]);
-    raw.definitions = actor_only.identity().clone();
+    let action_only = boolean_schema(vec![RuleEntityKind::Action]);
+    raw.definitions = action_only.identity().clone();
     reject(
         raw,
-        &actor_only,
+        &action_only,
         "ordered producer recipient is not admitted by its stat",
     );
 }
@@ -1021,18 +1021,8 @@ fn raw_query_validation_bounds_program_scans_before_visiting_unused_reads() {
 }
 
 #[test]
-fn v22_does_not_expand_numeric_query_enemy_authority() {
-    let mut schema_input = schema().input().clone();
-    for definition in &mut schema_input.definitions {
-        if let DefinitionDescriptor::Stat(entry) = definition
-            && entry.id == id("final")
-            && let SchemaState::Known(stat) = &mut entry.schema
-        {
-            stat.targets.push(RuleEntityKind::Enemy);
-        }
-    }
-    let schema =
-        OwnedDefinitionSchemaPackage::new(schema_input, OwnedSchemaLimits::default()).unwrap();
+fn numeric_queries_use_one_actor_kind_in_current_format_capability_subsets() {
+    let schema = schema();
     let mut raw = input(&schema);
     raw.operations_version = key(OWNED_RULE_OPERATIONS_V22);
     raw.owners[0].programs.members[0].reads[0].source = RuleReadSource::ContributionQuery {
@@ -1040,11 +1030,7 @@ fn v22_does_not_expand_numeric_query_enemy_authority() {
         query: key("query"),
         group: key("base"),
     };
-    reject(
-        raw,
-        &schema,
-        "ordered read has an unsupported relative recipient scope",
-    );
+    OwnedRulePackage::new(raw, &schema, Default::default()).unwrap();
     let mut raw = input(&schema);
     raw.operations_version = key(OWNED_RULE_OPERATIONS_V22);
     if let RuleEffectKind::Contribute { entity, .. } =
@@ -1052,9 +1038,71 @@ fn v22_does_not_expand_numeric_query_enemy_authority() {
     {
         *entity = RuleEntity::Enemy;
     }
-    reject(
-        raw,
-        &schema,
-        "ordered producer has unsupported recipient scope",
-    );
+    OwnedRulePackage::new(raw, &schema, Default::default()).unwrap();
+}
+
+#[test]
+fn encounter_membership_requires_exact_owner_local_recipient_and_no_equipment_rank() {
+    let mut schema_input = schema().input().clone();
+    schema_input
+        .definitions
+        .push(DefinitionDescriptor::Encounter(known(
+            id("encounter"),
+            EncounterSchema {
+                enemy_level: IntegerRange {
+                    minimum: BoundedInteger::new(1).unwrap(),
+                    maximum: BoundedInteger::new(100).unwrap(),
+                },
+                external_inputs: DeclaredSet::complete(vec![]),
+            },
+        )));
+    let schema = OwnedDefinitionSchemaPackage::new(schema_input, Default::default()).unwrap();
+    let mut raw = input(&schema);
+    raw.operations_version = key(OWNED_RULE_OPERATIONS_V28);
+    raw.owners[1].owner = SchemaSubject::Definition(DefinitionAddress::Encounter(id("encounter")));
+    let RuleEffectKind::Contribute { entity, .. } =
+        &mut raw.owners[1].programs.members[0].effects[0].effect
+    else {
+        unreachable!()
+    };
+    *entity = RuleEntity::Current;
+    let ContributionProducer::ProgramEffect(member) =
+        &mut raw.contribution_queries.as_mut().unwrap().members[0].groups[0]
+            .members
+            .members[0]
+            .producer
+    else {
+        unreachable!()
+    };
+    member.owner = raw.owners[1].owner.clone();
+    member.origin = ContributionOrigin::Encounter;
+    OwnedRulePackage::new(raw.clone(), &schema, Default::default()).unwrap();
+    let mut bad = raw.clone();
+    let RuleEffectKind::Contribute { entity, .. } =
+        &mut bad.owners[1].programs.members[0].effects[0].effect
+    else {
+        unreachable!()
+    };
+    *entity = RuleEntity::Player;
+    assert!(OwnedRulePackage::new(bad, &schema, Default::default()).is_err());
+    let mut bad = raw.clone();
+    let ContributionProducer::ProgramEffect(member) =
+        &mut bad.contribution_queries.as_mut().unwrap().members[0].groups[0]
+            .members
+            .members[0]
+            .producer
+    else {
+        unreachable!()
+    };
+    member.origin = ContributionOrigin::Character;
+    assert!(OwnedRulePackage::new(bad, &schema, Default::default()).is_err());
+    let mut bad = raw;
+    bad.contribution_queries.as_mut().unwrap().members[0].groups[0]
+        .members
+        .members[0]
+        .order
+        .as_mut()
+        .unwrap()
+        .slot_ranks = slots();
+    assert!(OwnedRulePackage::new(bad, &schema, Default::default()).is_err());
 }

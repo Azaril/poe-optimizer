@@ -163,6 +163,30 @@ multi-name conversion accumulator remains a distinct unresolved domain; the
 BASE proof cannot authorize independent unbounded floating-point bucket sums.
 This changes owned data and proof scope, not runtime language semantics.
 
+## Generic Actor cutover and rebuild follow-up (2026-10-16)
+
+The accepted Actor migration removes the separate mechanical Enemy entity,
+placeholder Player contexts, old definition-schema readers and historical
+release-migration branches. Current operation capability subsets share the same
+Actor semantics. Source selectors and role-specific permissions retain their
+meaning; immutable old receipts are evidence, not executable compatibility data.
+
+The intermediate CLI publication chain exposed stale dependency identities in
+authored item policies and compiler metadata. The repair uses authenticated
+schema snapshots, current typed loaders and exact inverses; it changes bindings,
+not rule bodies. Do not keep the temporary authoring harness in the runtime or
+normal test suite.
+
+Follow up on reproducible regeneration of the entire owned authoring dependency
+chain. Inventory which identities are reviewed input commitments and which are
+generated references; automate the latter without weakening the former. Include
+all intermediate policies, metadata and compiler receipts in validation, including
+opaque derived policy hashes as well as structured definition identities. Retain
+the complete inputs needed to reproduce each compiled dependency, not only
+the final package. This is offline tooling debt, not a reason to add an old-format
+loader, database or second evaluator, and must not displace the closest-build
+calculation work after this migration is validated.
+
 ## Retention rule
 
 **Physical-source ports, 2026-10-09:** remove the unpublished consumer's two

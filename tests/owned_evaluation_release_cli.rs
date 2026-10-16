@@ -347,7 +347,7 @@ fn evaluation_migration(
     endpoint: &fixture::Fixture,
 ) -> OwnedReleaseMigrationInput {
     OwnedReleaseMigrationInput {
-        schema_version: 2,
+        schema_version: 5,
         before: prior.receipt().input,
         release: endpoint.input.recipe.schema.release.clone(),
         reason: poe_optimizer_core::owned_definitions::OwnedDefinitionKey::new(

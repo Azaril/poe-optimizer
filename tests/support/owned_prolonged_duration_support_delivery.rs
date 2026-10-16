@@ -73,7 +73,7 @@ pub fn check_authored() {
     );
     assert_eq!(json!(m.before), a["before"]);
     assert_eq!(json!(m.release), b["release"]);
-    assert_eq!((m.schema_version, m.contract.schema_version), (5, 6));
+    assert_eq!((m.schema_version, m.contract.schema_version), (5, 7));
     assert_eq!(
         m.contract.operations_version.as_str(),
         OWNED_RULE_OPERATIONS_V20
