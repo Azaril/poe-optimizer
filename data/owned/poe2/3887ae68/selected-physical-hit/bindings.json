@@ -1,0 +1,123 @@
+{
+  "kind": "selected-physical-hit",
+  "owner": {
+    "kind": "slot",
+    "value": {
+      "kind": "action_output",
+      "value": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000021"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000022"
+        }
+      }
+    }
+  },
+  "program": "selected-physical-hit",
+  "source_endpoints": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000339c"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000339d"
+    }
+  ],
+  "increased_subtotal": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000335c"
+  },
+  "quality_factor": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000001d"
+  },
+  "unrounded_more_query": "owned-minion-unconditional-more-contributions",
+  "conditions": [
+    {
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000339e"
+      },
+      "query": "selected-actor-intimidated",
+      "name": "intimidated"
+    },
+    {
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000339f"
+      },
+      "query": "selected-actor-debilitated",
+      "name": "debilitated"
+    }
+  ],
+  "outputs": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033a0"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000033a1"
+    }
+  ],
+  "source_scope": {
+    "conversion_identity": "Exact selected source inputs and factories; no generic conversion support.",
+    "physical_type_and_endpoint_modifiers": "No selected additional PhysicalDamage/MinPhysicalDamage/MaxPhysicalDamage sources.",
+    "intimidation": "Self and party source spellings represent one native non-stacking Actor condition.",
+    "debilitation": "Fold before quality/Gigantic MORE bucket rounding.",
+    "unavailable_coverage": "Unreviewed condition suppliers and all unrelated owner/query/input gaps remain blocking."
+  },
+  "source_arithmetic": {
+    "minimum": "round(summed_min * increased_factor * more_factor * minimum_more + add_min)",
+    "maximum": "round(summed_max * increased_factor * more_factor * maximum_more + add_max)",
+    "source_line": 230,
+    "outputs_before_critical_and_mitigation": true
+  }
+}

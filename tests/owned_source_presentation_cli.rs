@@ -9,29 +9,41 @@ mod release;
 #[allow(dead_code)]
 #[path = "support/owned_selected_request.rs"]
 mod selected;
+#[path = "support/owned_source_trade_preferences.rs"]
+mod trade_preferences;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Slice {
     CachedBuffs,
     EmptyParty,
+    TradeWeights,
 }
 impl Slice {
     fn directory(self) -> &'static str {
         match self {
             Self::CachedBuffs => "source-presentation-v1",
             Self::EmptyParty => "source-empty-party",
+            Self::TradeWeights => "source-trade-preferences",
         }
     }
     fn disposition(self) -> &'static str {
         match self {
             Self::CachedBuffs => "source-cached-build-buffs",
             Self::EmptyParty => "source-empty-party",
+            Self::TradeWeights => "source-trade-search-weights",
         }
     }
     fn config_count(self) -> usize {
         match self {
             Self::CachedBuffs => 27,
             Self::EmptyParty => 26,
+            Self::TradeWeights => 19,
+        }
+    }
+    fn changed_origins(self, case: usize) -> usize {
+        match self {
+            Self::CachedBuffs | Self::EmptyParty => 1,
+            Self::TradeWeights => [1, 1, 1, 0, 3][case - 1],
         }
     }
 }
@@ -45,8 +57,11 @@ use poe_optimizer_import::{
     decode_build,
     owned_normalize::{NormalizationPolicy, SourcePresentationPolicy},
     owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
-    owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
+    owned_source::{
+        SourceContentEvidence, SourceEvidenceLimits, SourceEvidenceRow, SourceProjectEvidence,
+    },
     owned_successor::{SuccessorBundleInput, transition_owned_normalization_with_tree_compact},
+    source_xml::{PobContentEntry, SourceContentKind},
 };
 use serde::{Serialize, de::DeserializeOwned};
 use serde_json::{Value, json};
@@ -97,8 +112,13 @@ fn check_authoring(slice: Slice) {
             ..
         }
     ));
-    let SourcePresentationPolicy::PobFreshPresentationV1 { empty_party, .. } = &policy;
-    assert_eq!(*empty_party, slice == Slice::EmptyParty);
+    let SourcePresentationPolicy::PobFreshPresentationV1 {
+        empty_party,
+        trade_search_weights,
+        ..
+    } = &policy;
+    assert_eq!(*empty_party, slice != Slice::CachedBuffs);
+    assert_eq!(*trade_search_weights, slice == Slice::TradeWeights);
     for (field, file) in [
         ("policy", "policy.json"),
         ("source_facts", "source-facts.json"),
@@ -121,6 +141,11 @@ fn check_authoring(slice: Slice) {
     assert_eq!(facts["runtime_observations"], "none");
     if slice == Slice::EmptyParty {
         empty_party::authenticate(&facts);
+        return;
+    }
+    if slice == Slice::TradeWeights {
+        assert_eq!(data(slice), trade_preferences::data());
+        trade_preferences::authenticate(&facts);
         return;
     }
     for excerpt in facts["excerpts"].as_array().unwrap() {
@@ -170,8 +195,8 @@ fn verify_source(slice: Slice) {
     }
 }
 
-fn stage_party(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
-    let slice = Slice::EmptyParty;
+fn stage_presentation(prior: &StagedOwnedRelease, slice: Slice) -> StagedOwnedRelease {
+    assert!(slice != Slice::CachedBuffs);
     check_authoring(slice);
     let authoring: Value = read(data(slice).join("authoring.json"));
     assert_eq!(authoring["before"], json!(prior.receipt().input));
@@ -180,9 +205,18 @@ fn stage_party(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     let mut policy = before.normalization.clone();
     let proposed: SourcePresentationPolicy = read(data(slice).join("policy.json"));
     let mut inherited = proposed.clone();
-    let SourcePresentationPolicy::PobFreshPresentationV1 { empty_party, .. } = &mut inherited;
-    assert!(*empty_party);
-    *empty_party = false;
+    let SourcePresentationPolicy::PobFreshPresentationV1 {
+        empty_party,
+        trade_search_weights,
+        ..
+    } = &mut inherited;
+    let new_flag = match slice {
+        Slice::EmptyParty => empty_party,
+        Slice::TradeWeights => trade_search_weights,
+        Slice::CachedBuffs => unreachable!(),
+    };
+    assert!(*new_flag);
+    *new_flag = false;
     assert_eq!(
         policy.source_presentation,
         Some(inherited),
@@ -190,10 +224,18 @@ fn stage_party(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     );
     policy.source_presentation = Some(proposed);
     let provenance = OwnedReleaseProvenance {
-        kind: key("reviewed-empty-party"),
+        kind: key(match slice {
+            Slice::EmptyParty => "reviewed-empty-party",
+            Slice::TradeWeights => "reviewed-trade-search-preferences",
+            Slice::CachedBuffs => unreachable!(),
+        }),
         prior_input: prior.receipt().input,
         authoring_input: digest_owned(
-            "owned-source-empty-party",
+            match slice {
+                Slice::EmptyParty => "owned-source-empty-party",
+                Slice::TradeWeights => "owned-source-trade-preferences",
+                Slice::CachedBuffs => unreachable!(),
+            },
             &(authoring, &policy.source_presentation),
             1024 * 1024,
         )
@@ -286,6 +328,91 @@ fn audit_lineages(value: &Value, lineage: &Value) {
         _ => {}
     }
 }
+
+fn plain_source_row(row: &SourceEvidenceRow<'_>, allowed: &[&str], leaf: bool) {
+    assert!(!row.occurrence().has_namespace_context());
+    if leaf {
+        assert!(row.children().is_empty());
+    }
+    let mut names = std::collections::BTreeSet::new();
+    for attribute in row.attributes() {
+        assert!(attribute.origin().namespace.is_none());
+        assert!(allowed.contains(&attribute.origin().name.as_str()));
+        assert!(names.insert(attribute.origin().name.as_str()));
+        assert!(attribute.decoded().is_ok());
+    }
+    let SourceContentEvidence::Available(content) = row.content() else {
+        panic!("source content unavailable")
+    };
+    assert!(content.fragments().iter().all(|fragment| matches!(
+        fragment.kind(),
+        SourceContentKind::Text | SourceContentKind::Element
+    )));
+    assert!(content.consumed().iter().all(|entry| match entry {
+        PobContentEntry::Text { text, .. } => text.trim_ascii().is_empty(),
+        PobContentEntry::Element { .. } => !leaf,
+    }));
+}
+
+/// Independently census the complete saved preference frame. This does not
+/// resolve the named stats into native metrics, units or objectives.
+fn trade_origins(
+    evidence: &SourceProjectEvidence<'_>,
+) -> std::collections::BTreeMap<u64, &'static str> {
+    let root = &evidence.rows()[0];
+    assert_eq!(root.occurrence().name(), "PathOfBuilding2");
+    plain_source_row(root, &[], false);
+    let items: Vec<_> = root
+        .children()
+        .iter()
+        .map(|id| &evidence.rows()[id.ordinal() as usize])
+        .filter(|row| row.occurrence().name() == "Items")
+        .collect();
+    assert_eq!(items.len(), 1);
+    let items = items[0];
+    assert_eq!(items.occurrence().parent(), Some(root.occurrence().id()));
+    plain_source_row(
+        items,
+        &["activeItemSet", "showStatDifferences", "useSecondWeaponSet"],
+        false,
+    );
+    let frames: Vec<_> = items
+        .children()
+        .iter()
+        .map(|id| &evidence.rows()[id.ordinal() as usize])
+        .filter(|row| row.occurrence().name() == "TradeSearchWeights")
+        .collect();
+    assert!(frames.len() <= 1, "one complete saved frame required");
+    let Some(frame) = frames.first() else {
+        return Default::default();
+    };
+    assert_eq!(frame.occurrence().parent(), Some(items.occurrence().id()));
+    plain_source_row(frame, &[], false);
+    let mut expected = std::collections::BTreeMap::from([(
+        u64::from(frame.occurrence().id().ordinal()),
+        "source-trade-search-weights",
+    )]);
+    for child in frame.children() {
+        let row = &evidence.rows()[child.ordinal() as usize];
+        assert_eq!(row.occurrence().name(), "Stat");
+        assert_eq!(row.occurrence().parent(), Some(frame.occurrence().id()));
+        plain_source_row(row, &["label", "stat", "weightMult"], true);
+        assert_eq!(row.attributes().len(), 3);
+        for name in ["label", "stat"] {
+            assert!(!row.attribute(name).unwrap().decoded().unwrap().is_empty());
+        }
+        let weight = row.attribute("weightMult").unwrap().decoded().unwrap();
+        assert!(!weight.is_empty() && weight.trim_ascii() == weight);
+        assert!(weight.parse::<f64>().unwrap().is_finite());
+        assert!(
+            expected
+                .insert(u64::from(child.ordinal()), "source-trade-search-weight")
+                .is_none()
+        );
+    }
+    expected
+}
+
 fn compare(
     case: usize,
     xml: &[u8],
@@ -351,8 +478,16 @@ fn compare(
     .unwrap();
     let evidence =
         SourceProjectEvidence::collect(&instance, SourceEvidenceLimits::default()).unwrap();
-    let mut expected = std::collections::BTreeMap::new();
-    for row in evidence.rows() {
+    let mut expected = if slice == Slice::TradeWeights {
+        trade_origins(&evidence)
+    } else {
+        Default::default()
+    };
+    for row in evidence
+        .rows()
+        .iter()
+        .filter(|_| slice != Slice::TradeWeights)
+    {
         let parent = row
             .occurrence()
             .parent()
@@ -398,8 +533,36 @@ fn compare(
             expected.insert(u64::from(row.occurrence().id().ordinal()), reason);
         }
     }
-    assert_eq!(expected.len(), 1);
-    let expected_leaf = *expected.keys().next().unwrap() as usize;
+    let expected_count = slice.changed_origins(case);
+    assert_eq!(expected.len(), expected_count);
+    if slice == Slice::TradeWeights && case == 5 {
+        assert_eq!(
+            expected.keys().copied().collect::<Vec<_>>(),
+            [741, 742, 743]
+        );
+        for (ordinal, label, stat, weight) in [
+            (742, "Full DPS", "FullDPS", "1.00"),
+            (743, "Effective Hit Pool", "TotalEHP", "0.50"),
+        ] {
+            let row = &evidence.rows()[ordinal];
+            for (name, value) in [("label", label), ("stat", stat), ("weightMult", weight)] {
+                assert_eq!(row.attribute(name).unwrap().decoded().unwrap(), value);
+            }
+        }
+    }
+    let configuration_issues: std::collections::BTreeSet<_> =
+        before["draft"]["choice_presets"]["members"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter_map(|preset| {
+                let c = &preset["choices"]["completion"];
+                (c["kind"] == "pending" && c["code"] == "configuration-roles-not-converted")
+                    .then(|| c["id"]["local"].as_str().unwrap().to_owned())
+            })
+            .collect();
+    assert_eq!(configuration_issues.len(), 1);
+    let issue_local = configuration_issues.into_iter().next().unwrap();
     assert_eq!(
         old_origins.as_array().unwrap().len(),
         new_origins.as_array().unwrap().len()
@@ -416,13 +579,10 @@ fn compare(
         }
         assert_eq!(old["source"], new["source"]);
         assert_eq!(old["disposition"]["kind"], "contributes");
-        assert!(
-            old["links"]
-                .as_array()
-                .unwrap()
-                .iter()
-                .all(|link| link["kind"] == "issue")
-        );
+        let links = old["links"].as_array().unwrap();
+        assert_eq!(links.len(), 1);
+        assert_eq!(links[0]["kind"], "issue");
+        assert_eq!(links[0]["value"]["local"], issue_local);
         assert_eq!(new["disposition"]["kind"], "source_only");
         assert!(new["links"].as_array().unwrap().is_empty());
         let reason = new["disposition"]["value"].as_str().unwrap().to_owned();
@@ -434,7 +594,7 @@ fn compare(
     }
     assert!(
         expected.is_empty(),
-        "the one independently censused presentation leaf is accounted for"
+        "every independently censused presentation origin is accounted for"
     );
     if case == 5 {
         let count = |side: &Value| {
@@ -463,14 +623,8 @@ fn compare(
             .count();
         assert_eq!(owned_ranges, 101);
         assert_eq!(count(&before_side), slice.config_count());
-        assert_eq!(count(&after_side), slice.config_count() - 1);
+        assert_eq!(count(&after_side), slice.config_count() - expected_count);
     }
-    let links = before_side["origins"][expected_leaf]["links"]
-        .as_array()
-        .unwrap();
-    assert_eq!(links.len(), 1);
-    assert_eq!(links[0]["kind"], "issue");
-    let issue_local = links[0]["value"]["local"].clone();
     let census = |side: &Value| {
         let mut total = 0usize;
         let mut inside = 0usize;
@@ -504,11 +658,19 @@ fn compare(
     let counts_after = census(&after_side);
     assert_eq!(
         counts_after,
-        (counts_before.0 - 1, counts_before.1, counts_before.2 - 1)
+        (
+            counts_before.0 - expected_count,
+            counts_before.1,
+            counts_before.2 - expected_count
+        )
     );
     if slice == Slice::EmptyParty && case == 5 {
         assert_eq!(counts_before, (26, 11, 15));
         assert_eq!(counts_after, (25, 11, 14));
+    }
+    if slice == Slice::TradeWeights && case == 5 {
+        assert_eq!(counts_before, (19, 5, 14));
+        assert_eq!(counts_after, (16, 5, 11));
     }
     let mut old_side = before_side;
     for field in [
@@ -574,7 +736,7 @@ fn compare(
     selected::canonical(&mut old_final);
     selected::canonical(&mut new_final);
     assert_eq!(old_final, new_final, "every selected obligation survives");
-    if slice == Slice::EmptyParty {
+    if slice != Slice::CachedBuffs {
         assert_eq!(
             new_final["issues"].as_array().unwrap().len(),
             [106, 117, 109, 123, 4][case - 1]
@@ -594,7 +756,7 @@ fn presentation_publication_preserves_all_five_original_requests() {
     cached_buffs_roundtrip();
 }
 
-fn run_party_publication() {
+fn run_presentation_publication(slice: Slice) {
     let prior_path = PathBuf::from(
         std::env::var_os("POE_OPTIMIZER_TEST_PRESENTATION_PRIOR").expect("explicit prior package"),
     );
@@ -603,8 +765,8 @@ fn run_party_publication() {
     );
     assert!(!out.exists());
     let prior = release::load(&prior_path);
-    let next = stage_party(&prior);
-    publish_checked(&prior_path, &out, &prior, &next, Slice::EmptyParty);
+    let next = stage_presentation(&prior, slice);
+    publish_checked(&prior_path, &out, &prior, &next, slice);
 }
 
 fn publish_checked(
@@ -716,7 +878,125 @@ fn empty_party_source_proof_rejects_changed_authority_and_scope() {
 #[test]
 #[ignore = "requires the checked current release; source archives are portable"]
 fn empty_party_publication_preserves_all_five_original_requests() {
-    run_party_publication();
+    run_presentation_publication(Slice::EmptyParty);
+}
+
+#[test]
+fn trade_preferences_authoring_is_source_bound_without_native_objectives() {
+    check_authoring(Slice::TradeWeights);
+}
+
+#[test]
+fn trade_preferences_source_proof_rejects_changed_authority_and_scope() {
+    let original = trade_preferences::facts();
+    for index in 0..8 {
+        let mut changed = original.clone();
+        match index {
+            0 => changed["archives"][0]["sha256"] = json!("0".repeat(64)),
+            1 => changed["archives"][0]["path"] = json!("src/Classes/Other.lua"),
+            2 => changed["excerpts"][0]["first"] = json!(35),
+            3 => changed["excerpts"][0]["sha256"] = json!("0".repeat(64)),
+            4 => changed["scope"]["native_objective_inference"] = json!(true),
+            5 => changed["scope"]["native_inventory_completion"] = json!(true),
+            6 => changed["review"]["duplicate_stat_choices"] = json!("collapse by stat"),
+            7 => changed["review"]["saved_fields"] = json!(["stat", "weightMult"]),
+            _ => unreachable!(),
+        }
+        assert!(
+            std::panic::catch_unwind(|| trade_preferences::authenticate(&changed)).is_err(),
+            "control {index}"
+        );
+    }
+}
+
+fn trade_census(xml: &[u8]) -> std::collections::BTreeMap<u64, &'static str> {
+    let instance = ImportedBuildInstance::from_decoded(
+        decode_build(xml).unwrap(),
+        BuildLineage::from_bytes([118; 16]),
+        InstanceImportLimits::default(),
+    )
+    .unwrap();
+    let evidence =
+        SourceProjectEvidence::collect(&instance, SourceEvidenceLimits::default()).unwrap();
+    trade_origins(&evidence)
+}
+
+#[test]
+fn trade_preferences_census_includes_empty_absent_and_every_saved_weight() {
+    for case in 1..=5 {
+        let xml = fs::read(root().join(format!(
+            "tests/fixtures/builds/breadth-20260908/build-{case:02}.xml"
+        )))
+        .unwrap();
+        let census = trade_census(&xml);
+        assert_eq!(census.len(), Slice::TradeWeights.changed_origins(case));
+        if case == 5 {
+            assert_eq!(
+                census,
+                std::collections::BTreeMap::from([
+                    (741, "source-trade-search-weights"),
+                    (742, "source-trade-search-weight"),
+                    (743, "source-trade-search-weight"),
+                ])
+            );
+        }
+    }
+    let original =
+        fs::read_to_string(root().join("tests/fixtures/builds/breadth-20260908/build-05.xml"))
+            .unwrap();
+    for weight in ["0", "-1.5", "-0"] {
+        let xml = original.replacen(
+            "weightMult=\"0.50\"",
+            &format!("weightMult=\"{weight}\""),
+            1,
+        );
+        assert_ne!(xml, original);
+        assert_eq!(
+            trade_census(xml.as_bytes()),
+            trade_census(original.as_bytes())
+        );
+    }
+}
+
+#[test]
+fn trade_preferences_census_rejects_incomplete_or_ambiguous_saved_frames() {
+    let original =
+        fs::read_to_string(root().join("tests/fixtures/builds/breadth-20260908/build-05.xml"))
+            .unwrap();
+    for (from, to) in [
+        ("weightMult=\"0.50\"", "weightMult=\"NaN\""),
+        ("weightMult=\"0.50\"", "weightMult=\" 0.50\""),
+        ("weightMult=\"0.50\"", "future=\"0.50\""),
+        (
+            "<TradeSearchWeights>",
+            "<TradeSearchWeights><!-- hidden -->",
+        ),
+        (
+            "</TradeSearchWeights>",
+            "</TradeSearchWeights><TradeSearchWeights/>",
+        ),
+        (
+            "<TradeSearchWeights>",
+            "<TradeSearchWeights xmlns=\"future\">",
+        ),
+        (
+            "<Stat label=\"Full DPS\"",
+            "<Stat future=\"x\" label=\"Full DPS\"",
+        ),
+    ] {
+        let xml = original.replacen(from, to, 1);
+        assert_ne!(xml, original);
+        assert!(
+            std::panic::catch_unwind(|| trade_census(xml.as_bytes())).is_err(),
+            "{to}"
+        );
+    }
+}
+
+#[test]
+#[ignore = "requires the checked physical-base successor; portable trade source archives"]
+fn trade_preferences_publication_preserves_all_five_original_requests() {
+    run_presentation_publication(Slice::TradeWeights);
 }
 
 #[test]

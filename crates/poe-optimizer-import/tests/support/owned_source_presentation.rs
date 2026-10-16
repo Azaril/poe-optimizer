@@ -3,6 +3,8 @@ use super::*;
 
 #[path = "owned_source_presentation_frames.rs"]
 mod frame_tests;
+#[path = "owned_source_trade_preferences.rs"]
+mod trade_tests;
 
 const EMPTY_URL: &str = r#"<SocketIdURL nodeId="123" itemPbURL="" name="Caller label"/>"#;
 
@@ -16,6 +18,7 @@ fn enabled_policy(a: &Artifacts) -> NormalizationPolicy {
         empty_notes: true,
         cached_build_buffs: true,
         empty_party: false,
+        trade_search_weights: false,
     });
     p
 }

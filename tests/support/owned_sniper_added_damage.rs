@@ -10,7 +10,11 @@ const PROFILE_STAGE: &str = "intrinsic-added-damage-profile";
 const ACTION_STAGE: &str = "intrinsic-added-damage-action";
 const COMBINED_STAGE: &str = "combined-added-attack-damage";
 
-pub(super) fn install(w: &mut sniper::World, endpoint: &StagedOwnedRelease) {
+pub(super) fn install(
+    w: &mut sniper::World,
+    endpoint: &StagedOwnedRelease,
+    appended: &[DefinitionRules],
+) {
     added_damage_family::assert_component(endpoint);
     let inner = &mut w.base.source.base.inner;
     for entry in added_damage_family::migration().schema {
@@ -48,7 +52,7 @@ pub(super) fn install(w: &mut sniper::World, endpoint: &StagedOwnedRelease) {
             existing.routes.members.push(member);
         }
     }
-    combined_added_damage_family::assert_component(endpoint);
+    combined_added_damage_family::assert_component_after_program_append(endpoint, appended);
     let inner = &mut w.base.source.base.inner;
     for entry in combined_added_damage_family::migration().schema {
         let SchemaExtensionEntry::Definition(descriptor) = entry else {

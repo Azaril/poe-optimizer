@@ -89,6 +89,11 @@ use passive_damage_evidence::family as plain_damage_source;
 mod life_base_domain_family;
 #[path = "support/owned_sniper_passive_damage_native.rs"]
 mod passive_damage_native;
+#[allow(dead_code)]
+#[path = "support/owned_selected_physical_base.rs"]
+mod physical_base_family;
+#[path = "support/owned_sniper_physical_base.rs"]
+mod physical_base_native;
 #[path = "support/owned_sniper_player_life_contribution.rs"]
 mod player_life_contribution_native;
 #[allow(dead_code)]
@@ -239,11 +244,16 @@ impl World {
         let path = path();
         let before = release::inventory(&path);
         let endpoint = release::load(&path);
+        physical_base_family::assert_component(&endpoint);
         activation_family::assert_component(&endpoint);
         accuracy_family::assert_component(&endpoint);
         attack_selection_family::assert_component_after_program_append(
             &endpoint,
-            &combined_added_damage_family::consumer().owners,
+            &combined_added_damage_family::consumer()
+                .owners
+                .into_iter()
+                .chain(physical_base_family::consumer().owners)
+                .collect::<Vec<_>>(),
         );
         evidence::assert_current(&endpoint);
         player_life_inputs_native::check_current_packet(&endpoint);
@@ -552,7 +562,8 @@ impl World {
         let offering = offering_application_native::install(&mut w, &endpoint, &draft, &selection);
         mixed_damage_native::install(&mut w, &endpoint);
         let command = action_damage_native::install(&mut w, &endpoint, &path);
-        added_damage_native::install(&mut w, &endpoint);
+        added_damage_native::install(&mut w, &endpoint, &physical_base_family::consumer().owners);
+        physical_base_native::install(&mut w, &endpoint);
         assert_eq!(before, release::inventory(&path));
         Self {
             sniper: w,
@@ -708,6 +719,7 @@ impl World {
             mixed_damage_native::configure(stages);
             action_damage_native::configure(stages);
             added_damage_native::configure(stages);
+            physical_base_native::configure(stages);
             configure(stages);
         })
     }

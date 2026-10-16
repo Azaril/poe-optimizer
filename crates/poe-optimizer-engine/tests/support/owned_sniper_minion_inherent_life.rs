@@ -210,19 +210,29 @@ fn published_minion_receivers_preserve_player_and_explicit_zero_sources() {
         );
     }
     let bridge: RuleProgram = serde_json::from_value(packet("program.json")).unwrap();
-    for owner in [
-        owner(),
-        SchemaSubject::Definition(DefinitionAddress::Actor(def(0x332a))),
+    let player_bridge: RuleProgram = serde_json::from_slice(
+        &fs::read(root().join("data/owned/poe2/3887ae68/life-base-domain/program.json")).unwrap(),
+    )
+    .unwrap();
+    assert_eq!(player_bridge.id, bridge.id);
+    for (owner, expected) in [
+        (owner(), &bridge),
+        (
+            SchemaSubject::Definition(DefinitionAddress::Actor(def(0x332a))),
+            &player_bridge,
+        ),
     ] {
         let actual = i.rules.owners.iter().find(|o| o.owner == owner).unwrap();
-        assert_eq!(
-            actual
-                .programs
-                .members
-                .iter()
-                .filter(|p| **p == bridge)
-                .count(),
-            1
+        let matches: Vec<_> = actual
+            .programs
+            .members
+            .iter()
+            .filter(|p| p.id == expected.id)
+            .collect();
+        assert_eq!(matches.len(), 1);
+        assert!(
+            matches[0] == expected,
+            "exact current Actor-specific inherent Life bridge"
         );
     }
     let r = run(&i);

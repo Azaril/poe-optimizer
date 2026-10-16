@@ -1,0 +1,751 @@
+{
+  "schema_version": 1,
+  "kind": "selected-physical-flat-source-authority",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "xml": {
+    "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+    "bytes": 106378,
+    "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+  },
+  "proofs": [
+    {
+      "family": "self-flat-skill-construction",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/review.json",
+        "bytes": 69320,
+        "sha256": "b2c444e057d10a0a18308b3cbed3a2a52abd5f811f087800b6dcb56591b04533"
+      }
+    },
+    {
+      "family": "self-flat-inherited-minion-delivery",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/review.json",
+        "bytes": 5985,
+        "sha256": "a02bb22eb2d5a0ade8b9c4be9551e047d9c976d249d615e9d8b8616b9239814f"
+      }
+    },
+    {
+      "family": "self-flat-minion-store",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/self-flat-minion-store/review.json",
+        "bytes": 5024,
+        "sha256": "743bf794c227a577ae97a92e3823541f734af31046788b9f04db35e988f38b0d"
+      }
+    },
+    {
+      "family": "self-flat-flask-keystone",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/self-flat-flask-keystone/review.json",
+        "bytes": 9880,
+        "sha256": "9fdb17a822784740afc540b5ab1ca5d1904e78300d92eaaba37b0360b012bb72"
+      }
+    },
+    {
+      "family": "self-flat-later-aura-delivery",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/review.json",
+        "bytes": 1369,
+        "sha256": "ffa26fd3dbe56a0f9560a1abde997a66be5e1b3681440fccf5601199fcaa560c"
+      }
+    },
+    {
+      "family": "self-flat-later-helpers",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/self-flat-later-helpers/review.json",
+        "bytes": 2762,
+        "sha256": "c24d61a546f9827be308232da9c8cccc4e7086995520b11784f2f3595ac7c3e2"
+      }
+    },
+    {
+      "family": "self-flat-action-factories",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/self-flat-action-factories/review.json",
+        "bytes": 1559,
+        "sha256": "ed8519376438e4fdc3721f183e08daf11d6b74c3b54f45ddec6610e47116cffc"
+      }
+    },
+    {
+      "family": "self-flat-runtime-gates",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/report.json",
+        "bytes": 3589,
+        "sha256": "7b3d1971be77acfa1a9166659e7e06df26cf95e669d6b60305e7138940e51640"
+      }
+    },
+    {
+      "family": "self-flat-selected-bindings",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/bindings.json",
+        "bytes": 1813607,
+        "sha256": "3579dd01d1e5365a41fa256adde82e4c5f20f47e49f789eda76f999c9fe7562c"
+      }
+    },
+    {
+      "family": "enemy-flat-attack-damage",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/enemy-flat-attack-damage/source-evidence.json",
+        "bytes": 148383,
+        "sha256": "02ff224a7ea4842694ea5039aae2db84043245e4aced95445d04418497ecfab6"
+      }
+    },
+    {
+      "family": "intrinsic-attack-coefficient",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-evidence.json",
+        "bytes": 9211,
+        "sha256": "dac011e001b25674daea686c69d2df427d42804b798d479cc972a0b143105c5e"
+      }
+    },
+    {
+      "family": "minion-attack-selection",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/minion-attack-selection/source-evidence.json",
+        "bytes": 1718168,
+        "sha256": "a2daf1e5c6c058ae2ce32f434feee325d06344a96a5ccbf29ed7320df2c63ec3"
+      }
+    },
+    {
+      "family": "combined-added-attack-damage",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/source-evidence.json",
+        "bytes": 2602949,
+        "sha256": "6c33fe128a0f6622785e70ef26843d47b8da33cc652f29ccf11246180e34fd45"
+      }
+    },
+    {
+      "family": "intrinsic-added-attack-damage",
+      "review": {
+        "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/bindings.json",
+        "bytes": 2176,
+        "sha256": "df46d3c7fe6dcccc2c4b5a49fd3867f3aa8b8dd609b4271a0edcee1dcefd7983"
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+      "bytes": 217603,
+      "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/authoring.json",
+      "bytes": 1432,
+      "sha256": "4d19ffcda248398eedd40d75b193c2e22c8a2df01fc79deec501bd7764933a03"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/bindings.json",
+      "bytes": 2415,
+      "sha256": "3780ff8e16c3e0baac35053d2046e4330268021af037a34ed9d804fc83f6dc8a"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/consumer.json",
+      "bytes": 2375,
+      "sha256": "61b59348ea447e5dd56c9d1c875946573562b5a4e2f854999b9b21ba5e639de0"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/dependencies.json",
+      "bytes": 113358,
+      "sha256": "8a8a3daf1c29dc0cbfef51527935d66311e37348dcd0750596d063dc5330836a"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/migration.json",
+      "bytes": 1086,
+      "sha256": "1c20425753674c8d469df187297a46dc82d8b2a98c69e1548fc7bfa9e1ed0430"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/queries.json",
+      "bytes": 1306,
+      "sha256": "d7483667c87392dbac51ace17e33a50cc398923e43b4b7c5601591027af6baed"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/source-evidence.json",
+      "bytes": 2602949,
+      "sha256": "6c33fe128a0f6622785e70ef26843d47b8da33cc652f29ccf11246180e34fd45"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/combined-added-attack-damage/source-review.md",
+      "bytes": 6484,
+      "sha256": "b512952ee5f934c5282e4a03533dc8b0c38def33e2d17bcd676beef26b7896a8"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-accounting/evidence/pob/src/Modules/ConfigOptions.lua",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcActiveSkill.lua.gz",
+      "bytes": 10868,
+      "sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcOffence.lua.gz",
+      "bytes": 64248,
+      "sha256": "3ee439d6209cd88adbca368dd7b3e741e9ed537531a37fcc0a8f4b1863e56147"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+      "bytes": 34408,
+      "sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+      "bytes": 7158,
+      "sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-enemy-critical-damage-inputs/Data.lua.gz",
+      "bytes": 10599,
+      "sha256": "38cd62af46c9f291240d5a33f20779bd101766d9f62b2165b929737380586c46"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/CalcDefence.lua.gz",
+      "bytes": 39593,
+      "sha256": "9e232710732a7223b87b7174c7bd8a0531309675b76c605e07df55b0f72d6bf3"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/enemy-flat-attack-damage/source-evidence.json",
+      "bytes": 148383,
+      "sha256": "02ff224a7ea4842694ea5039aae2db84043245e4aced95445d04418497ecfab6"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/enemy-flat-attack-damage/source-review.md",
+      "bytes": 8716,
+      "sha256": "bdb35e3369afc801311c7f2ba2db0460d1a6ebeef5f25ac37c4637a7e5ae59ad"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/authoring.json",
+      "bytes": 2784,
+      "sha256": "3c0cdee94ffdc47a1fbb39a4a44c1cf0c3cb2f835c19952ed7600542c5933a6b"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/bindings.json",
+      "bytes": 2176,
+      "sha256": "df46d3c7fe6dcccc2c4b5a49fd3867f3aa8b8dd609b4271a0edcee1dcefd7983"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/consumer.json",
+      "bytes": 4492,
+      "sha256": "e59f440a4954104c3ad7a1d23f26a065c9c75dbfb6e21ac05e38ee7552a6622e"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/dependencies.json",
+      "bytes": 39302,
+      "sha256": "7570940075e4f05b97e5623f4199c082abfce969c8a4d16421b34e3aec63d152"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/migration.json",
+      "bytes": 2277,
+      "sha256": "fb46bc5de8e3b8d93c371b12b5f0f272993b9ac4150fea7612b1fb03f570e373"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/routes.json",
+      "bytes": 1962,
+      "sha256": "432934da9751a8bc84a917d2f938e9439826749b89c3848dca211cfce782b506"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/source-vectors.json",
+      "bytes": 156668,
+      "sha256": "8ce7fe430ab74a5c2832f6d6d646ec17fd428083f4c76728e3fc08fea586644b"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-evidence.json",
+      "bytes": 9211,
+      "sha256": "dac011e001b25674daea686c69d2df427d42804b798d479cc972a0b143105c5e"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-review.md",
+      "bytes": 6789,
+      "sha256": "70c5441c8951f35cad401f2a35dbf1ad003626fb5e36e1caa1d427987fa4e3c7"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/life-base-domain/ModDB.lua.gz",
+      "bytes": 2575,
+      "sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/CalcSetup.lua.gz",
+      "bytes": 21347,
+      "sha256": "6cf68ffe3f750e1b0670c54f4152fa2cbd88db2c1092d16c7541f773582a708c"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/passive-ModList.lua.gz",
+      "bytes": 2020,
+      "sha256": "7b1b25081e088b45c6a28ba5449faf44409641ad0d6688518ba07bc2b36dc815"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/source-comparison.json",
+      "bytes": 4549,
+      "sha256": "be695bc423aeb637b6d5eb8343246cf6c9879eb4549f82cc7c8ba4b046ab8155"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/upstream-LICENSE.md.gz",
+      "bytes": 14946,
+      "sha256": "978e927bb815ad02b2f26bf8a602ba5bd79293fd611da90becfb136993126339"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/minion-attack-flat-modifier/source-evidence.json",
+      "bytes": 178816,
+      "sha256": "4cd007e7fb6bea22b27968aa8270eeeeb357b5cc05ac75126a800a96522bb09f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/minion-attack-flat-modifier/source-review.md",
+      "bytes": 3807,
+      "sha256": "d956e6650d9b93a48300c5858e63db3b6f6bcbac0e63d412ccce433f892f1a9f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/authoring.json",
+      "bytes": 1329,
+      "sha256": "33c33f4629b12bc42362ce7e9c8dbca75e4abc5e4192a2904412b8f10595c108"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/bindings.json",
+      "bytes": 2480,
+      "sha256": "f1db08ca4d9ee7dc1848da4dbf4ddbd45894e5e8658c4c095e407b6055da87db"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/dependencies.json",
+      "bytes": 149157,
+      "sha256": "3068622d51fcbc8ce00423f862a51784e0e70dae777babf04481b1815389a6b0"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/routes.json",
+      "bytes": 5970,
+      "sha256": "a098b39ce2538e5bc071d30f65fcc25878bb2ecb8ee53433c516404505cc3332"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/source-evidence.json",
+      "bytes": 1718168,
+      "sha256": "a2daf1e5c6c058ae2ce32f434feee325d06344a96a5ccbf29ed7320df2c63ec3"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/source-review.md",
+      "bytes": 7872,
+      "sha256": "50d4be17c7a0278e39d8cf2e7db35033ed343e59d42f1e91d9ea8e0665f728c8"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/minion-life-source/source-vectors.json",
+      "bytes": 3130500,
+      "sha256": "31780b42511dce71ec82b5a637308b1f5db345098c2c1bac0aa8c4f8f082549d"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/minion-preconversion-source/report.json",
+      "bytes": 4041068,
+      "sha256": "7a723a4eece7b297737006b08d1dc61ec0047d13cfd2b9fbfeaee94eb52397cb"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/physical-base-damage/consumer.json",
+      "bytes": 11352,
+      "sha256": "b45839862e3cb5c365e178ac0da1ca1760e771794d95a55f6261019814b87b5c"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/reporting-inclusion/Calcs.lua.gz",
+      "bytes": 8318,
+      "sha256": "7b90df1e4e63d65e14be2d272fc7800fc3a512c1e8380c6c277ee25f510bc1f6"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-action-factories/Global.lua.gz",
+      "bytes": 6786,
+      "sha256": "4ee175ea53486f4330b619638828937636a5cebc352dc7c57e5c57929542b05b"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-action-factories/bodies.json",
+      "bytes": 32176,
+      "sha256": "0dc1667f104bb5d88409e00142642fd5855ab3f6a624540757b632991e85c6a8"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-action-factories/minion.lua.gz",
+      "bytes": 13323,
+      "sha256": "d9230f161fc09142f4e79e0e30d65a7dbff0b6c079caf6472e4324841b8c58ae"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-action-factories/review.json",
+      "bytes": 1559,
+      "sha256": "ed8519376438e4fdc3721f183e08daf11d6b74c3b54f45ddec6610e47116cffc"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/bindings.json",
+      "bytes": 5424,
+      "sha256": "6337e3bd6f8c9ebde88c920cd9105cf34a57d56e81cb268947c53136d6337ea3"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/definitions.json",
+      "bytes": 8685,
+      "sha256": "a91c5b3ba48ba031eedb475a5becd234fc7ce7a45d7ff5dfef59c186c8a7503f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/programs.json",
+      "bytes": 13751,
+      "sha256": "7b88549507a8453d7711301c682c7704359bb6da21442eb5d276645aa3ad5b60"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/queries.json",
+      "bytes": 62101,
+      "sha256": "fab01d3c4245e75abaa92b83f8417c2af07d385242e3f58cee7a01619f7d1565"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/receivers.json",
+      "bytes": 1981,
+      "sha256": "3adfcf945705231c9af3a2bde305c9aa2b5ca0c624a057739d8f937cf83cb44a"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/routes.json",
+      "bytes": 4472,
+      "sha256": "1b6e7e623300987a63158e9141aa5145f8079b53e3fe737d578111a2b8c9e353"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain.json",
+      "bytes": 471969,
+      "sha256": "ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/slots.json",
+      "bytes": 6207,
+      "sha256": "07c9ec51b73cdd60868a7ba9ef31e23a7968387f72d2a7942d5da640bbb3a72a"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/source-evidence.json",
+      "bytes": 209378,
+      "sha256": "2a07ddefddd45cdd01a8593c506412428997eff3c618ba2fc365b6e0d93c5ba8"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-flask-keystone/CalcBreakdown.lua.gz",
+      "bytes": 2589,
+      "sha256": "52cda3872e4dc3b4f9efab3d173552244e978d9fbe4c862225f76e05848b8977"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-flask-keystone/bodies.json",
+      "bytes": 107453,
+      "sha256": "737a4b750c6f1d8e41bd771676b0e06af552f02c2cc1c6556bd4b228e3782546"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-flask-keystone/review.json",
+      "bytes": 9880,
+      "sha256": "9fdb17a822784740afc540b5ab1ca5d1904e78300d92eaaba37b0360b012bb72"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/acquisition-bootstrap.rs.gz",
+      "bytes": 4202,
+      "sha256": "56914cc879d8db78d2e65ac02e51dbbf4241060208a585f5a9ac83466db57ee6"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/acquisition-driver.rs.gz",
+      "bytes": 3851,
+      "sha256": "ab851f25bc8c6cf35d9f808e13a9501efe4df89ab85fe79d48447b66e53144da"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/acquisition-failure.log.gz",
+      "bytes": 699,
+      "sha256": "83db2a5d9400ee30083753fa8cdcfce675269a1d4fae9197b4f136e2ac6307c5"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/acquisition-helpers.lua.gz",
+      "bytes": 19230,
+      "sha256": "8d59530ec3b8341a68ad5a2081568059e1e5d67ef8da95873d0bed23f9736b34"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/acquisition-observer.lua.gz",
+      "bytes": 4162,
+      "sha256": "f28a58c5fe16594f8348a4b62f67fd7589d81bb2a566b680f7d45b17c8723954"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/bodies.json",
+      "bytes": 16875,
+      "sha256": "be50b1e712c3a3f87c9b8ec91460487f985a480a4baafb0679704386dbe9dee9"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/observed-a.json.gz",
+      "bytes": 55488,
+      "sha256": "3e68cffec4c8c78c9b8c9ed0295fd68fa2354216f33c10c55c0569189e0a4f04"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/observed-b.json.gz",
+      "bytes": 55492,
+      "sha256": "7f1c9a23942fea90a214719e727b9279ffe414c3729e67406f2cc15659268ab1"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/plain-off.json.gz",
+      "bytes": 13379,
+      "sha256": "0c9476573e1a3223637fd4e9b0cbb393e4b9de7066fdd9af5ef98141708cc7e3"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/plain-on.json.gz",
+      "bytes": 13380,
+      "sha256": "9e20a04aefccfce237f78b470c8708a0ee54a44e0c347ff15459261ecef8eac8"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/review.json",
+      "bytes": 5985,
+      "sha256": "a02bb22eb2d5a0ade8b9c4be9551e047d9c976d249d615e9d8b8616b9239814f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/source-evidence.json",
+      "bytes": 4099,
+      "sha256": "03a2c140246a44644fb9bfa7552c543259d41b5bed8b04201d29031b2f4bcf6c"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-inherited-minion-delivery/strict-differences.json",
+      "bytes": 4963,
+      "sha256": "c3a672b410d72316e723dc151a7b756e97fd5439ae7b1cc97eb9f2bdbe720c62"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-assessment.rs.gz",
+      "bytes": 3428,
+      "sha256": "bcf027910a35d48d4340f89c38bbbe445f460b2d8926072853d2280cb7027017"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-bootstrap.rs.gz",
+      "bytes": 4202,
+      "sha256": "56914cc879d8db78d2e65ac02e51dbbf4241060208a585f5a9ac83466db57ee6"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-driver.rs.gz",
+      "bytes": 3006,
+      "sha256": "bbdbc5d2d35c70208b71d89125ac4ba763ba2e31ed8790c54b25ef0047cdaafc"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-failure.log.gz",
+      "bytes": 711,
+      "sha256": "414907d3747314c2a5106ba15678a521f7a3f09c1097e8079d42c07ccc0cdfe7"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-helpers.lua.gz",
+      "bytes": 19230,
+      "sha256": "8d59530ec3b8341a68ad5a2081568059e1e5d67ef8da95873d0bed23f9736b34"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/acquisition-observer.lua.gz",
+      "bytes": 4801,
+      "sha256": "9e9a3ef17085a7bc039ca3b710fe899bf8aa8d12bc21f9888981167332484026"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/capture-seal.json.gz",
+      "bytes": 748,
+      "sha256": "97c23029c3abcb07710b02e2e0d6b080a77a9853d692ab47669b47a8d71e1066"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/observed-a.json.gz",
+      "bytes": 58339,
+      "sha256": "851f89d170c5b68bddc04e670bdcbc8bed87891503dce99b8aa93e27e9fc40ea"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/observed-b.json.gz",
+      "bytes": 58340,
+      "sha256": "167999cd16fa08af98b4197c5c81d5ae5f4e3bcac03f90e67f86d276f588e64e"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/plain-off.json.gz",
+      "bytes": 13379,
+      "sha256": "d8c1c5cb4e95815ec016861f6282f2fc664ed7a1a83fc7acbd9d74c90b04dd5b"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/plain-on.json.gz",
+      "bytes": 13380,
+      "sha256": "2f895ab195ce4a1e4ac551e792937961a7e910586aa659241caf8b76adf3c8e9"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/review.json",
+      "bytes": 1369,
+      "sha256": "ffa26fd3dbe56a0f9560a1abde997a66be5e1b3681440fccf5601199fcaa560c"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-aura-delivery/source-evidence.json",
+      "bytes": 7298,
+      "sha256": "73b49ea936730bdbc322576fca970eb01cd8946a2000a6f5758ef45005367931"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-helpers/CalcTriggers.lua.gz",
+      "bytes": 14074,
+      "sha256": "a99e0837a5c68c3fb8f0724b82756e9926571eb2e20cf32f17fe693a5d361f0f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-helpers/bodies.json",
+      "bytes": 585087,
+      "sha256": "c8b99d9a6d63ce813641a07969baa4a8bf3a417f02545b917849fd1da5b858ef"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-later-helpers/review.json",
+      "bytes": 2762,
+      "sha256": "c24d61a546f9827be308232da9c8cccc4e7086995520b11784f2f3595ac7c3e2"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-minion-store/Minions.lua.gz",
+      "bytes": 4752,
+      "sha256": "7abe2ddb8b83894af28484642a7fed90cc5367d8dda2bbb57e54f0f03650aa59"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-minion-store/act_int.lua.gz",
+      "bytes": 141617,
+      "sha256": "076f9caf8f271b4faf456497f254b69d6cab0c7864f15b9f63dd3ba475df39ac"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-minion-store/bodies.json",
+      "bytes": 49354,
+      "sha256": "4135bdc54032242addb41942ec79d93b8557cb9b71e5d223db7c90f769badab5"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-minion-store/review.json",
+      "bytes": 5024,
+      "sha256": "743bf794c227a577ae97a92e3823541f734af31046788b9f04db35e988f38b0d"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/acquisition-jit-on.json",
+      "bytes": 768031,
+      "sha256": "ba4f7af0e465fc6dba4796c028696ce92f66670b44115cf050091523bd34d818"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/evidence/bootstrap.rs",
+      "bytes": 14535,
+      "sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/evidence/driver.rs",
+      "bytes": 10034,
+      "sha256": "ad28b27dd14193bfd97cd114e0906f16eeecccbcc06c7386a0a5c3cd42f8a9c1"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/evidence/observer.lua",
+      "bytes": 11780,
+      "sha256": "e915fc456a4c932bd77a6bb2bfc89680755034a02d0461f4901f48e8a262e65a"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/evidence/shared-helper.lua",
+      "bytes": 81347,
+      "sha256": "9c6af9dd3261cf196dbd5182cce05e7eb87a9c2033090d96047fad7d4feeb7f0"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/jit-off-observed-raw.json",
+      "bytes": 774183,
+      "sha256": "4a96e13f81f915f962611efc77dd31e974a82b6756ef793d6b09d424369a4170"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/jit-off-plain-raw.json",
+      "bytes": 136085,
+      "sha256": "4ba40065b5f34a14d170a83d953a55b8b7298ba7d8799f60093a2e598c6b69fa"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/jit-off-repeat-raw.json",
+      "bytes": 774181,
+      "sha256": "3e0083d3d1690d340f27fa097d6d2c8ee470c498859c27e1df73047267963c87"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/jit-on-observed-raw.json",
+      "bytes": 774191,
+      "sha256": "8da8338c02a784fa7beab244f342272ed790b6969b95c5980229abe929b36883"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/jit-on-plain-raw.json",
+      "bytes": 136085,
+      "sha256": "b3c61d61c98a483c597233f0e484fada809d74069585fb591d1be470b995265d"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/jit-on-repeat-raw.json",
+      "bytes": 774183,
+      "sha256": "242b981c297714d717c1f28baa3862e304be94fa29437c57ea0812680e0db457"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-runtime-gates/report.json",
+      "bytes": 3589,
+      "sha256": "7b3d1971be77acfa1a9166659e7e06df26cf95e669d6b60305e7138940e51640"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/bindings.json",
+      "bytes": 1813607,
+      "sha256": "3579dd01d1e5365a41fa256adde82e4c5f20f47e49f789eda76f999c9fe7562c"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/draft.json.gz",
+      "bytes": 25245,
+      "sha256": "2d6c255036855ce7b3e627378df3db83f6dbfeef005171f8ec95df41ecd2ab05"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/import-report.json.gz",
+      "bytes": 950,
+      "sha256": "87a15ffcbdf91910159dc2c40291eda200671c4d90f66933436a91b3f7c9e29b"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/inputs.json",
+      "bytes": 2324,
+      "sha256": "408dc2824e950269ecc9215885b438d61b72cfd7b85f762628daf1649208a095"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/manifest.json.gz",
+      "bytes": 801,
+      "sha256": "4bf3dae992442f90a4e23c5b60b728feed7d1948446f7ff9181bc68b0782c1c3"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/mapping.json.gz",
+      "bytes": 102019,
+      "sha256": "721f99dc73b5e94190f41e1e1e6d16872acc7c4aa440566e3cd7e7ad32e40eec"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/release.json.gz",
+      "bytes": 21135,
+      "sha256": "282ebbe081bbb255607e2f5a2d7d6fa75fe132e51d361db18dd9c1e0693235a9"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/selection.json.gz",
+      "bytes": 186,
+      "sha256": "f431b0fd608ed975fa81a5d5c075c6de50717bb084aeadf2d8da2fc7b6b9d7ea"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-selected-bindings/sidecar.json.gz",
+      "bytes": 40669,
+      "sha256": "d0fa57435f66ab2584eff79e64a5e25c0177020573d1eb0225a87e611f153ae2"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/authority.json",
+      "bytes": 1861,
+      "sha256": "105b36b7a75e02cb33a5882c1d2fcc5ba75661399702f5cac815cf6592045ef9"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/bodies.json",
+      "bytes": 29244,
+      "sha256": "ee541f7ca6c6ea48901f08eecca6ac964297643431767c8b120a158bd353c55c"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/child-CalcTools.lua.gz",
+      "bytes": 3321,
+      "sha256": "b4b896d49bbe5f0d2006b1b03cd6f1d4e5274c061e46e52fd21787b7eabcf67a"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/child-bodies.json",
+      "bytes": 46896,
+      "sha256": "c67310c81596483cff115e4e0fb435b5abb069e3375794c33360a3ebe3c1930f"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/child-review.json",
+      "bytes": 1856,
+      "sha256": "40e23023267135a3c23a2a6f3bf71140f6209ca554e0123edab3c187605dacb1"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-skill-construction/review.json",
+      "bytes": 69320,
+      "sha256": "b2c444e057d10a0a18308b3cbed3a2a52abd5f811f087800b6dcb56591b04533"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "bytes": 106378,
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "scope": {
+    "exact_selected_source_and_current_native_inventory": true,
+    "all_future_basic_actions": false,
+    "all_build_mechanics": false,
+    "whole_build": false,
+    "spell_suppliers_absent": false,
+    "numeric_reassociation": false,
+    "source_vm_execution": false
+  },
+  "late_extra_aura": {
+    "current_original_calls": 18,
+    "raw_and_returned_candidates": 0,
+    "after_consumer_creation_not_retroactive": true,
+    "future_reused_pass_absence": false
+  },
+  "vectors": {
+    "path": "data/owned/poe2/3887ae68/intrinsic-added-attack-damage/source-vectors.json",
+    "bytes": 156668,
+    "sha256": "8ce7fe430ab74a5c2832f6d6d646ec17fd428083f4c76728e3fc08fea586644b"
+  }
+}

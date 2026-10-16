@@ -1,0 +1,183 @@
+{
+  "kind": "selected-physical-base",
+  "owner": {
+    "kind": "slot",
+    "value": {
+      "kind": "action_output",
+      "value": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000021"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000022"
+        }
+      }
+    }
+  },
+  "program": "selected-physical-base",
+  "self_flat": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000339a"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000339b"
+    }
+  ],
+  "outputs": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000339c"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000339d"
+    }
+  ],
+  "source_endpoints": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003212"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003213"
+    }
+  ],
+  "combined_factor": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000336e"
+  },
+  "units": {
+    "damage": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001d3a"
+    },
+    "factor": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000001"
+    }
+  },
+  "source_selection_prerequisite": {
+    "meaning": "The exact published Fixed intrinsic source supplies the complete source range for this binding. These endpoints are not generic aliases for every possible damage source.",
+    "bindings": {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/bindings.json",
+      "sha256": "f1db08ca4d9ee7dc1848da4dbf4ddbd45894e5e8658c4c095e407b6055da87db"
+    },
+    "routes": {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/routes.json",
+      "sha256": "a098b39ce2538e5bc071d30f65fcc25878bb2ecb8ee53433c516404505cc3332"
+    },
+    "evidence": {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/source-evidence.json",
+      "sha256": "a2daf1e5c6c058ae2ce32f434feee325d06344a96a5ccbf29ed7320df2c63ec3"
+    },
+    "review": {
+      "path": "data/owned/poe2/3887ae68/minion-attack-selection/source-review.md",
+      "sha256": "50d4be17c7a0278e39d8cf2e7db35033ed343e59d42f1e91d9ea8e0665f728c8"
+    },
+    "endpoint_stats": [
+      {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003212"
+      },
+      {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003213"
+      }
+    ],
+    "alternative_sources": "A future admitted source must prepare its own coherent range and bind the consumer through reviewed data and the existing source routes; it cannot inherit this intrinsic-only proof."
+  },
+  "coefficient_prerequisite": {
+    "value": 1,
+    "unit": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000001"
+    },
+    "node": "base-coefficient",
+    "evidence": {
+      "path": "data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-evidence.json",
+      "sha256": "dac011e001b25674daea686c69d2df427d42804b798d479cc972a0b143105c5e"
+    },
+    "review": {
+      "path": "data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-review.md",
+      "sha256": "70c5441c8951f35cad401f2a35dbf1ad003626fb5e36e1caa1d427987fa4e3c7"
+    },
+    "meaning": "The exact Basic ability has no declared level or effective modifier coefficient supplier under the reviewed pinned normal-import domain. Its factor one is authored data, never a fallback for an unknown input."
+  },
+  "enemy_flat_prerequisite": {
+    "evidence": {
+      "path": "data/owned/poe2/3887ae68/enemy-flat-attack-damage/source-evidence.json",
+      "sha256": "02ff224a7ea4842694ea5039aae2db84043245e4aced95445d04418497ecfab6"
+    },
+    "review": {
+      "path": "data/owned/poe2/3887ae68/enemy-flat-attack-damage/source-review.md",
+      "sha256": "bdb35e3369afc801311c7f2ba2db0460d1a6ebeef5f25ac37c4637a7e5ae59ad"
+    },
+    "meaning": "The exact selected non-hostile intrinsic Basic source has no Enemy flat physical supplier under the reviewed pinned domain with accounted inputs and no imported Party payload. Remove the unused ports and identity addition; never infer absence from an unresolved source or an observed zero. This adds no query, producer, input disposition or coverage closure."
+  },
+  "formula": "(source + (self_flat * added_multiplier)) * base_coefficient",
+  "coefficient": 1.0
+}

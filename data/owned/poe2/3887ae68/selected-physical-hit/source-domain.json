@@ -1,0 +1,3984 @@
+{
+  "kind": "selected-physical-hit-source-domain",
+  "complete_bodies": [
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/mana-supplier-sources/CalcSetup.lua.gz",
+        "bytes": 21347,
+        "sha256": "6cf68ffe3f750e1b0670c54f4152fa2cbd88db2c1092d16c7541f773582a708c"
+      },
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312",
+      "scan": [
+        {
+          "line": 75,
+          "text": "\tmodDB:NewMod(\"DamageTaken\", \"INC\", 10, \"Base\", { type = \"Condition\", var = \"Intimidated\"})"
+        },
+        {
+          "line": 76,
+          "text": "\tmodDB:NewMod(\"DamageTaken\", \"INC\", 10, \"Base\", { type = \"Condition\", var = \"Intimidated\", neg = true}, { type = \"Condition\", var = \"Party:Intimidated\"})"
+        },
+        {
+          "line": 77,
+          "text": "\tmodDB:NewMod(\"Damage\", \"INC\", -10, \"Base\", { type = \"Condition\", var = \"Intimidated\"})"
+        },
+        {
+          "line": 78,
+          "text": "\tmodDB:NewMod(\"Damage\", \"INC\", -10, \"Base\", { type = \"Condition\", var = \"Intimidated\", neg = true}, { type = \"Condition\", var = \"Party:Intimidated\"})"
+        },
+        {
+          "line": 81,
+          "text": "\tmodDB:NewMod(\"Damage\", \"MORE\", -10, \"Base\", { type = \"Condition\", var = \"Debilitated\"})"
+        },
+        {
+          "line": 82,
+          "text": "\tmodDB:NewMod(\"DamageGainAsRandom\", \"BASE\", 2, \"Faerie Fire\", { type = \"Multiplier\", var = \"FaerieFireStack\", limit = 10, actor = \"enemy\" })"
+        },
+        {
+          "line": 111,
+          "text": "\tmodDB.conditions[\"Buffed\"] = env.mode_buffs"
+        },
+        {
+          "line": 112,
+          "text": "\tmodDB.conditions[\"Combat\"] = env.mode_combat"
+        },
+        {
+          "line": 113,
+          "text": "\tmodDB.conditions[\"Effective\"] = env.mode_effective"
+        },
+        {
+          "line": 860,
+          "text": "\t\tmodDB:NewMod(\"Damage\", \"INC\", data.characterConstants[\"damage_+%_per_10_rampage_stacks\"], \"Base\", { type = \"Multiplier\", var = \"Rampage\", limit = data.characterConstants[\"max_rampage_stacks\"] / 20, div = 20 })"
+        },
+        {
+          "line": 925,
+          "text": "\t\t\tmodDB.conditions[flag] = true"
+        },
+        {
+          "line": 1383,
+          "text": "\t\t\t\t\tif not env.itemModDB.conditions[cond] then"
+        },
+        {
+          "line": 1384,
+          "text": "\t\t\t\t\t\tenv.itemModDB.conditions[cond] = true"
+        },
+        {
+          "line": 1388,
+          "text": "\t\t\t\t\t\tenv.itemModDB.conditions[cond..\"In\"..slot.parentSlot.slotName] = true"
+        },
+        {
+          "line": 1404,
+          "text": "\t\t\t\telseif (slotName == \"Weapon 1\" or slotName == \"Weapon 2\") and modDB.conditions[\"AffectedByEnergyBlade\"] then"
+        },
+        {
+          "line": 1534,
+          "text": "\t\t\t\t\tenv.itemModDB.conditions[item.title:gsub(\" \", \"\")] = item.classRestriction"
+        },
+        {
+          "line": 1555,
+          "text": "\t\t\t\t\tenv.itemModDB.conditions[key .. \"In\" .. slotName] = true"
+        },
+        {
+          "line": 1626,
+          "text": "\t\t\t\tif env.itemModDB.conditions[\"ForbiddenFlesh\"] == env.spec.curClassName and env.itemModDB.conditions[\"ForbiddenFlame\"] == env.spec.curClassName then"
+        },
+        {
+          "line": 1866,
+          "text": "\t\t\t\t\t\tenv.player.modDB.conditions[\"HollowPalm\"] = true -- Had to add condition here because it was otherwise not recognized correctly when \"DisableSkill\" is processed"
+        },
+        {
+          "line": 2184,
+          "text": "\t\t\tif not modDB.conditions[\"AffectedByEnergyBlade\"] and group.enabled and group.slotEnabled then"
+        },
+        {
+          "line": 2292,
+          "text": "\t\tenv.modDB.conditions[\"MajorityRedSocketedSupports\"] = true;"
+        },
+        {
+          "line": 2294,
+          "text": "\t\tenv.modDB.conditions[\"MajorityGreenSocketedSupports\"] = true;"
+        },
+        {
+          "line": 2296,
+          "text": "\t\tenv.modDB.conditions[\"MajorityBlueSocketedSupports\"] = true;"
+        },
+        {
+          "line": 2301,
+          "text": "\t\tenv.modDB.conditions[\"MostNumerousRedSocketedSupports\"] = true;"
+        },
+        {
+          "line": 2303,
+          "text": "\t\tenv.modDB.conditions[\"MostNumerousGreenSocketedSupports\"] = true;"
+        },
+        {
+          "line": 2305,
+          "text": "\t\tenv.modDB.conditions[\"MostNumerousBlueSocketedSupports\"] = true;"
+        }
+      ]
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcActiveSkill.lua.gz",
+        "bytes": 10868,
+        "sha256": "160781bcc6f6b0b23ee9601af4eff48e2c07ac386d78f480e89ad1c459a53f48"
+      },
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04",
+      "scan": [
+        {
+          "line": 687,
+          "text": "\t\tskillCond = { },"
+        },
+        {
+          "line": 693,
+          "text": "\t\tactiveSkill.weapon1Cfg.skillCond = setmetatable({ [\"MainHandAttack\"] = true }, { __index = activeSkill.skillCfg.skillCond })"
+        },
+        {
+          "line": 698,
+          "text": "\t\tactiveSkill.weapon2Cfg.skillCond = setmetatable({ [\"OffHandAttack\"] = true }, { __index = activeSkill.skillCfg.skillCond })"
+        },
+        {
+          "line": 706,
+          "text": "\t\t\tskillModList:NewMod(\"Damage\", \"MORE\", -100 * activeSkill.actor.minionData.damageFixup, \"Damage Fixup\", ModFlag.Attack)"
+        },
+        {
+          "line": 776,
+          "text": "\t\tactiveSkill.skillCfg.skillCond[\"GemCorrupted\"] = true"
+        },
+        {
+          "line": 817,
+          "text": "\t\tskillModList:NewMod(\"Damage\", \"MORE\", level.damageMultiplier, activeEffect.grantedEffect.modSource, ModFlag.Attack)"
+        }
+      ]
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcPerform.lua.gz",
+        "bytes": 34408,
+        "sha256": "7a5fd43ebed36bbc17bbc46da449f8871940e3476b1bd11450e7050f31dec575"
+      },
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae",
+      "scan": [
+        {
+          "line": 245,
+          "text": "\t\tcondList[\"TwoHighestAttributesEqual\"] = stats[2] == stats[3]"
+        },
+        {
+          "line": 247,
+          "text": "\t\tcondList[\"DexHigherThanInt\"] = output.Dex > output.Int"
+        },
+        {
+          "line": 248,
+          "text": "\t\tcondList[\"StrHigherThanInt\"] = output.Str > output.Int"
+        },
+        {
+          "line": 249,
+          "text": "\t\tcondList[\"IntHigherThanDex\"] = output.Int > output.Dex"
+        },
+        {
+          "line": 250,
+          "text": "\t\tcondList[\"StrHigherThanDex\"] = output.Str > output.Dex"
+        },
+        {
+          "line": 251,
+          "text": "\t\tcondList[\"IntHigherThanStr\"] = output.Int > output.Str"
+        },
+        {
+          "line": 252,
+          "text": "\t\tcondList[\"DexHigherThanStr\"] = output.Dex > output.Str"
+        },
+        {
+          "line": 254,
+          "text": "\t\tcondList[\"StrHighestAttribute\"] = output.Str >= output.Dex and output.Str >= output.Int"
+        },
+        {
+          "line": 255,
+          "text": "\t\tcondList[\"IntHighestAttribute\"] = output.Int >= output.Str and output.Int >= output.Dex"
+        },
+        {
+          "line": 256,
+          "text": "\t\tcondList[\"DexHighestAttribute\"] = output.Dex >= output.Str and output.Dex >= output.Int"
+        },
+        {
+          "line": 257,
+          "text": "\t\tcondList[\"IntSingleHighestAttribute\"] = output.Int > output.Str and output.Int > output.Dex"
+        },
+        {
+          "line": 258,
+          "text": "\t\tcondList[\"DexSingleHighestAttribute\"] = output.Dex > output.Str and output.Dex > output.Int"
+        },
+        {
+          "line": 274,
+          "text": "\t\tcondList[\"UsingShield\"] = true"
+        },
+        {
+          "line": 276,
+          "text": "\t\tcondList[\"UsingFocus\"] = true"
+        },
+        {
+          "line": 278,
+          "text": "\t\tcondList[\"OffHandIsEmpty\"] = true"
+        },
+        {
+          "line": 281,
+          "text": "\t\tcondList[\"Unarmed\"] = true"
+        },
+        {
+          "line": 283,
+          "text": "\t\t\tcondList[\"Unencumbered\"] = true"
+        },
+        {
+          "line": 287,
+          "text": "\t\tcondList[\"Using\"..info.flag] = true"
+        },
+        {
+          "line": 289,
+          "text": "\t\t\tactor.weaponData1[\"AddedUsingAxe\"] = not condList[\"UsingAxe\"]"
+        },
+        {
+          "line": 290,
+          "text": "\t\t\tcondList[\"UsingAxe\"] = true"
+        },
+        {
+          "line": 291,
+          "text": "\t\t\tactor.weaponData1[\"AddedUsingSword\"] = actor.weaponData1.name:match(\"Varunastra\") or not condList[\"UsingSword\"] --Varunastra is a sword"
+        },
+        {
+          "line": 292,
+          "text": "\t\t\tcondList[\"UsingSword\"] = true"
+        },
+        {
+          "line": 293,
+          "text": "\t\t\tactor.weaponData1[\"AddedUsingDagger\"] = not condList[\"UsingDagger\"]"
+        },
+        {
+          "line": 294,
+          "text": "\t\t\tcondList[\"UsingDagger\"] = true"
+        },
+        {
+          "line": 295,
+          "text": "\t\t\tactor.weaponData1[\"AddedUsingMace\"] = not condList[\"UsingMace\"]"
+        },
+        {
+          "line": 296,
+          "text": "\t\t\tcondList[\"UsingMace\"] = true"
+        },
+        {
+          "line": 297,
+          "text": "\t\t\tactor.weaponData1[\"AddedUsingClaw\"] = not condList[\"UsingClaw\"]"
+        },
+        {
+          "line": 298,
+          "text": "\t\t\tcondList[\"UsingClaw\"] = true"
+        },
+        {
+          "line": 299,
+          "text": "\t\t\tactor.weaponData1[\"AddedUsingSpear\"] = not condList[\"UsingSpear\"]"
+        },
+        {
+          "line": 300,
+          "text": "\t\t\tcondList[\"UsingSpear\"] = true"
+        },
+        {
+          "line": 302,
+          "text": "\t\t\tcondList[\"WieldingDifferentWeaponTypes\"] = true"
+        },
+        {
+          "line": 305,
+          "text": "\t\t\tcondList[\"UsingMeleeWeapon\"] = true"
+        },
+        {
+          "line": 308,
+          "text": "\t\t\tcondList[\"UsingOneHandedWeapon\"] = true"
+        },
+        {
+          "line": 310,
+          "text": "\t\t\tcondList[\"UsingTwoHandedWeapon\"] = true"
+        },
+        {
+          "line": 315,
+          "text": "\t\t\tcondList[\"UsingMartialWeapon\"] = true"
+        },
+        {
+          "line": 322,
+          "text": "\t\t\tcondList[\"Using\"..slotName] = true"
+        },
+        {
+          "line": 328,
+          "text": "\t\t\tcondList[\"Using\"..info.flag] = true"
+        },
+        {
+          "line": 330,
+          "text": "\t\t\t\tactor.weaponData2[\"AddedUsingAxe\"] = not condList[\"UsingAxe\"]"
+        },
+        {
+          "line": 331,
+          "text": "\t\t\t\tcondList[\"UsingAxe\"] = true"
+        },
+        {
+          "line": 332,
+          "text": "\t\t\t\tactor.weaponData2[\"AddedUsingSword\"] = actor.weaponData2.name:match(\"Varunastra\") or not condList[\"UsingSword\"] --Varunastra is a sword"
+        },
+        {
+          "line": 333,
+          "text": "\t\t\t\tcondList[\"UsingSword\"] = true"
+        },
+        {
+          "line": 334,
+          "text": "\t\t\t\tactor.weaponData2[\"AddedUsingDagger\"] = not condList[\"UsingDagger\"]"
+        },
+        {
+          "line": 335,
+          "text": "\t\t\t\tcondList[\"UsingDagger\"] = true"
+        },
+        {
+          "line": 336,
+          "text": "\t\t\t\tactor.weaponData2[\"AddedUsingMace\"] = not condList[\"UsingMace\"]"
+        },
+        {
+          "line": 337,
+          "text": "\t\t\t\tcondList[\"UsingMace\"] = true"
+        },
+        {
+          "line": 338,
+          "text": "\t\t\t\tactor.weaponData2[\"AddedUsingClaw\"] = not condList[\"UsingClaw\"]"
+        },
+        {
+          "line": 339,
+          "text": "\t\t\t\tcondList[\"UsingClaw\"] = true"
+        },
+        {
+          "line": 340,
+          "text": "\t\t\t\tactor.weaponData2[\"AddedUsingSpear\"] = not condList[\"UsingSpear\"]"
+        },
+        {
+          "line": 341,
+          "text": "\t\t\t\tcondList[\"UsingSpear\"] = true"
+        },
+        {
+          "line": 343,
+          "text": "\t\t\t\tcondList[\"WieldingDifferentWeaponTypes\"] = true"
+        },
+        {
+          "line": 346,
+          "text": "\t\t\t\tcondList[\"UsingMeleeWeapon\"] = true"
+        },
+        {
+          "line": 349,
+          "text": "\t\t\t\tcondList[\"UsingOneHandedWeapon\"] = true"
+        },
+        {
+          "line": 351,
+          "text": "\t\t\t\tcondList[\"UsingTwoHandedWeapon\"] = true"
+        },
+        {
+          "line": 356,
+          "text": "\t\tcondList[\"DualWielding\"] = true"
+        },
+        {
+          "line": 358,
+          "text": "\t\t\tcondList[\"DualWieldingClaws\"] = true"
+        },
+        {
+          "line": 361,
+          "text": "\t\t\tcondList[\"DualWieldingDaggers\"] = true"
+        },
+        {
+          "line": 367,
+          "text": "\t\t\t\tcondList[\"WieldingDifferentWeaponTypes\"] = true"
+        },
+        {
+          "line": 380,
+          "text": "\t\t\t\tcondList[\"AttackedRecently\"] = true"
+        },
+        {
+          "line": 382,
+          "text": "\t\t\t\tcondList[\"CastSpellRecently\"] = true"
+        },
+        {
+          "line": 385,
+          "text": "\t\t\t\tcondList[\"UsedMovementSkillRecently\"] = true"
+        },
+        {
+          "line": 388,
+          "text": "\t\t\t\tcondList[\"UsedMinionSkillRecently\"] = true"
+        },
+        {
+          "line": 391,
+          "text": "\t\t\t\tcondList[\"UsedVaalSkillRecently\"] = true"
+        },
+        {
+          "line": 394,
+          "text": "\t\t\t\tcondList[\"Channelling\"] = true"
+        },
+        {
+          "line": 399,
+          "text": "\t\t\tcondList[\"Shapeshifted\"] = true"
+        },
+        {
+          "line": 400,
+          "text": "\t\t\tcondList[\"BearForm\"] = true"
+        },
+        {
+          "line": 407,
+          "text": "\t\t\tcondList[\"Shapeshifted\"] = true"
+        },
+        {
+          "line": 408,
+          "text": "\t\t\tcondList[\"WolfForm\"] = true"
+        },
+        {
+          "line": 412,
+          "text": "\t\t\tcondList[\"Shapeshifted\"] = true"
+        },
+        {
+          "line": 413,
+          "text": "\t\t\tcondList[\"WyvernForm\"] = true"
+        },
+        {
+          "line": 419,
+          "text": "\t\t\tcondList[\"HitRecently\"] = true"
+        },
+        {
+          "line": 421,
+          "text": "\t\t\t\tcondList[\"HitSpellRecently\"] = true"
+        },
+        {
+          "line": 425,
+          "text": "\t\t\tcondList[\"HaveTotem\"] = true"
+        },
+        {
+          "line": 426,
+          "text": "\t\t\tcondList[\"SummonedTotemRecently\"] = true"
+        },
+        {
+          "line": 428,
+          "text": "\t\t\t\tcondList[\"TotemsHitRecently\"] = true"
+        },
+        {
+          "line": 430,
+          "text": "\t\t\t\t\tcondList[\"TotemsSpellHitRecently\"] = true"
+        },
+        {
+          "line": 435,
+          "text": "\t\t\tcondList[\"DetonatedMinesRecently\"] = true"
+        },
+        {
+          "line": 438,
+          "text": "\t\t\tcondList[\"TriggeredTrapsRecently\"] = true"
+        },
+        {
+          "line": 441,
+          "text": "\t\t\tcondList[\"CanInflictScorch\"] = true"
+        },
+        {
+          "line": 444,
+          "text": "\t\t\tcondList[\"CanInflictBrittle\"] = true"
+        },
+        {
+          "line": 447,
+          "text": "\t\t\tcondList[\"CanInflictSap\"] = true"
+        },
+        {
+          "line": 456,
+          "text": "\t\t\tmodDB:NewMod(\"Damage\", \"INC\", m_floor(20 * shrineEffectMod), \"Lesser Brutal Shrine\")"
+        },
+        {
+          "line": 469,
+          "text": "\t\t\tmodDB:NewMod(\"Damage\", \"MORE\", 20, \"Gigantic\")"
+        },
+        {
+          "line": 474,
+          "text": "\t\t\tcondList[\"CanApplyFireExposure\"] = true"
+        },
+        {
+          "line": 478,
+          "text": "\t\t\tcondList[\"CanApplyColdExposure\"] = true"
+        },
+        {
+          "line": 482,
+          "text": "\t\t\tcondList[\"CanApplyLightningExposure\"] = true"
+        },
+        {
+          "line": 526,
+          "text": "\tcondList[\"EnemyInPresence\"] = output.PresenceRadius >= enemyDistance"
+        },
+        {
+          "line": 527,
+          "text": "\tcondList[\"Surrounded\"] = surroundedMinimum == 1 and output.SurroundedRadius >= enemyDistance"
+        },
+        {
+          "line": 603,
+          "text": "\t\t\tcondList[\"Fortified\"] = true"
+        },
+        {
+          "line": 662,
+          "text": "\t\t\tmodDB:NewMod(\"DamageGainAsChaos\", \"BASE\", 0.3 * effect, \"Unholy Might\", { type = \"Multiplier\", var = \"UnholyMightMagnitude\" })"
+        },
+        {
+          "line": 666,
+          "text": "\t\t\tmodDB:NewMod(\"PhysicalDamageGainAsChaos\", \"BASE\", effect, \"Chaotic Might\")"
+        },
+        {
+          "line": 670,
+          "text": "\t\t\tmodDB:NewMod(\"Damage\", \"INC\", m_floor(100 * effectMod), \"Adrenaline\")"
+        },
+        {
+          "line": 681,
+          "text": "\t\t\tcondList[\"HerEmbrace\"] = true"
+        },
+        {
+          "line": 683,
+          "text": "\t\t\tmodDB:NewMod(\"PhysicalDamageGainAsFire\", \"BASE\", 123, \"Her Embrace\", ModFlag.Sword)"
+        },
+        {
+          "line": 710,
+          "text": "\t\t\tcondList[\"Elusive\"] = true"
+        },
+        {
+          "line": 777,
+          "text": "\t\t\tcondList[\"Leeching\"] = true"
+        },
+        {
+          "line": 778,
+          "text": "\t\t\tcondList[\"LeechingLife\"] = true"
+        },
+        {
+          "line": 781,
+          "text": "\t\t\tcondList[\"Leeching\"] = true"
+        },
+        {
+          "line": 782,
+          "text": "\t\t\tcondList[\"LeechingEnergyShield\"] = true"
+        },
+        {
+          "line": 795,
+          "text": "\t\t\t\tmodDB:NewMod(\"Damage\", \"MORE\", output.RageEffect, \"Rage\", ModFlag.Spell)"
+        },
+        {
+          "line": 797,
+          "text": "\t\t\t\tmodDB:NewMod(\"Damage\", \"MORE\", output.RageEffect, \"Rage\", ModFlag.Attack)"
+        },
+        {
+          "line": 829,
+          "text": "\t\t\tmodDB:NewMod(\"Damage\", \"INC\", -10, \"Malediction\")"
+        },
+        {
+          "line": 833,
+          "text": "\t\t\tmodDB:NewMod(\"Damage\", \"INC\", -10, \"Maddening Presence\")"
+        },
+        {
+          "line": 1093,
+          "text": "\tminion.modDB:NewMod(\"Damage\", \"MORE\", minion.hiddenDamageFixup * 100, \"Hidden Level Scaling\")"
+        },
+        {
+          "line": 1371,
+          "text": "\t\t\t\t\t\tmodDB:NewMod(\"Damage\", \"INC\", buffValue * count, sourceName..\" - \".. buffValue ..\"% per \"..minionName, ModFlag.Attack, nil, { type = \"GlobalEffect\", effectType = \"Buff\" })"
+        },
+        {
+          "line": 1379,
+          "text": "\t\t\t\t\t\tmodDB:NewMod(\"Damage\", \"INC\", buffValue * count, sourceName..\" - \".. buffValue ..\"% per \"..minionName, ModFlag.Spell, nil, { type = \"GlobalEffect\", effectType = \"Buff\" })"
+        },
+        {
+          "line": 1420,
+          "text": "\t\t\t\tactiveSkill.skillModList:NewMod(\"Damage\", \"INC\", value.mod.value, value.mod.source, value.mod.flags, value.mod.keywordFlags, unpack(value.mod))"
+        },
+        {
+          "line": 1423,
+          "text": "\t\t\t\tactiveSkill.skillModList:NewMod(\"Damage\", \"MORE\", value.mod.value, value.mod.source, value.mod.flags, value.mod.keywordFlags, unpack(value.mod))"
+        },
+        {
+          "line": 1446,
+          "text": "\t\tmodDB:NewMod(\"DamageGainAsChaos\", \"BASE\", maxPurpleFlameChaosGain * purpleFlameCount, \"Into the Breach\", { type = \"GlobalEffect\", effectType = \"Buff\", effectName = \"Into the Breach\" })"
+        },
+        {
+          "line": 1454,
+          "text": "\t\tmodDB.conditions[\"OnlyMinion\"] = true"
+        },
+        {
+          "line": 1738,
+          "text": "\t\t\t\tmodDB.conditions[flaskCond] = status"
+        },
+        {
+          "line": 1748,
+          "text": "\t\t\t\t\tminionModDB.conditions[flaskCond] = status"
+        },
+        {
+          "line": 1756,
+          "text": "\t\t\t\t\tminionModDB.conditions[\"UsingQuicksilverFlask\"] = flaskConditions[\"UsingQuicksilverFlask\"]"
+        },
+        {
+          "line": 1757,
+          "text": "\t\t\t\t\tminionModDB.conditions[\"UsingFlask\"] = flaskConditions[\"UsingFlask\"]"
+        },
+        {
+          "line": 1825,
+          "text": "\t\t\tmodDB.conditions[charmCond] = status"
+        },
+        {
+          "line": 1976,
+          "text": "\t\t\t\tmodDB.conditions[\"AffectedByHerald\"] = true"
+        },
+        {
+          "line": 2132,
+          "text": "\t\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2144,
+          "text": "\t\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2211,
+          "text": "\t\t\t\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..warcryName] = true"
+        },
+        {
+          "line": 2224,
+          "text": "\t\t\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedBy\"..warcryName] = true"
+        },
+        {
+          "line": 2285,
+          "text": "\t\t\t\t\t\t\tmodDB.conditions[\"AffectedByAura\"] = true"
+        },
+        {
+          "line": 2287,
+          "text": "\t\t\t\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..buff.name:sub(6):gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2289,
+          "text": "\t\t\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2303,
+          "text": "\t\t\t\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2304,
+          "text": "\t\t\t\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedByAura\"] = true"
+        },
+        {
+          "line": 2330,
+          "text": "\t\t\t\t\t\tenv.player.mainSkill.skillModList.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2331,
+          "text": "\t\t\t\t\t\tenv.player.mainSkill.skillModList.conditions[\"AffectedByAura\"] = true"
+        },
+        {
+          "line": 2410,
+          "text": "\t\t\t\t\tenemyDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2411,
+          "text": "\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2467,
+          "text": "\t\t\t\tmodDB.conditions[\"SelfCast\"..buff.name:gsub(\" \",\"\")] = not (activeSkill.skillTypes[SkillType.Triggered] or activeSkill.skillTypes[SkillType.Aura])"
+        },
+        {
+          "line": 2548,
+          "text": "\t\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2549,
+          "text": "\t\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedByLink\"] = true"
+        },
+        {
+          "line": 2597,
+          "text": "\t\t\t\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2618,
+          "text": "\t\t\t\t\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2620,
+          "text": "\t\t\t\t\t\t\t\t\tactiveSkill.minion.modDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2651,
+          "text": "\t\t\t\t\t\t\t\tif not modDB:Flag(nil, \"AlliesAurasCannotAffectSelf\") and not modDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] then"
+        },
+        {
+          "line": 2657,
+          "text": "\t\t\t\t\t\t\t\t\t\tmodDB.conditions[\"AffectedByAura\"] = true"
+        },
+        {
+          "line": 2659,
+          "text": "\t\t\t\t\t\t\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..buff.name:sub(6):gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2661,
+          "text": "\t\t\t\t\t\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2669,
+          "text": "\t\t\t\t\t\t\t\tif env.minion and not env.minion.modDB:Flag(nil, \"HiddenMonster\") and not env.minion.modDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] and (env.minion ~= activeSkill.minion or not activeSkill.skillData.auraCannotAffectSelf)  then"
+        },
+        {
+          "line": 2675,
+          "text": "\t\t\t\t\t\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2676,
+          "text": "\t\t\t\t\t\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedByAura\"] = true"
+        },
+        {
+          "line": 2701,
+          "text": "\t\t\t\t\t\t\t\tif totemFlag and not env.player.mainSkill.skillModList.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] then"
+        },
+        {
+          "line": 2703,
+          "text": "\t\t\t\t\t\t\t\t\tenv.player.mainSkill.skillModList.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2704,
+          "text": "\t\t\t\t\t\t\t\t\tenv.player.mainSkill.skillModList.conditions[\"AffectedByAura\"] = true"
+        },
+        {
+          "line": 2768,
+          "text": "\t\t\t\t\t\t\t\t\tif not enemyDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] then"
+        },
+        {
+          "line": 2778,
+          "text": "\t\t\t\t\t\t\tenemyDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2780,
+          "text": "\t\t\t\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedBy\"..buff.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2800,
+          "text": "\t\t\tmodDB.conditions[\"AffectedBy\"..buffName:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2807,
+          "text": "\t\t\t\tenv.minion.modDB.conditions[\"AffectedBy\"..buffName:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2820,
+          "text": "\t\t\t\tif not modDB:Flag(nil, \"AlliesAurasCannotAffectSelf\") and not modDB.conditions[\"AffectedBy\"..auraNameCompressed] then"
+        },
+        {
+          "line": 2821,
+          "text": "\t\t\t\t\tmodDB.conditions[\"AffectedByAura\"] = true"
+        },
+        {
+          "line": 2822,
+          "text": "\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..auraNameCompressed] = true"
+        },
+        {
+          "line": 2827,
+          "text": "\t\t\t\tif env.minion and not env.minion.modDB:Flag(nil, \"HiddenMonster\") and not env.minion.modDB.conditions[\"AffectedBy\"..auraNameCompressed] then"
+        },
+        {
+          "line": 2828,
+          "text": "\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedByAura\"] = true"
+        },
+        {
+          "line": 2829,
+          "text": "\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedBy\"..auraNameCompressed] = true"
+        },
+        {
+          "line": 2839,
+          "text": "\t\t\t\tif not modDB:Flag(nil, \"AlliesAurasCannotAffectSelf\") and not modDB.conditions[\"AffectedBy\"..auraNameCompressed] then"
+        },
+        {
+          "line": 2840,
+          "text": "\t\t\t\t\tmodDB.conditions[\"AffectedByAura\"] = true"
+        },
+        {
+          "line": 2841,
+          "text": "\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..auraName:sub(6):gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 2842,
+          "text": "\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..auraNameCompressed] = true"
+        },
+        {
+          "line": 2847,
+          "text": "\t\t\t\tif env.minion and not env.minion.modDB:Flag(nil, \"HiddenMonster\") and not env.minion.modDB.conditions[\"AffectedBy\"..auraNameCompressed] then"
+        },
+        {
+          "line": 2848,
+          "text": "\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedByAura\"] = true"
+        },
+        {
+          "line": 2849,
+          "text": "\t\t\t\t\tenv.minion.modDB.conditions[\"AffectedBy\"..auraNameCompressed] = true"
+        },
+        {
+          "line": 2861,
+          "text": "\t\t\t\tif not enemyDB.conditions[\"AffectedBy\"..auraNameCompressed] then"
+        },
+        {
+          "line": 2862,
+          "text": "\t\t\t\t\tenemyDB.conditions[\"AffectedBy\"..auraNameCompressed] = true"
+        },
+        {
+          "line": 2863,
+          "text": "\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..auraNameCompressed] = true"
+        },
+        {
+          "line": 2873,
+          "text": "\t\t\t\tif not enemyDB.conditions[\"AffectedBy\"..auraNameCompressed] then"
+        },
+        {
+          "line": 2874,
+          "text": "\t\t\t\t\tenemyDB.conditions[\"AffectedBy\"..auraNameCompressed] = true"
+        },
+        {
+          "line": 2875,
+          "text": "\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..auraNameCompressed] = true"
+        },
+        {
+          "line": 2886,
+          "text": "\t\t\tif not modDB.conditions[\"AffectedBy\"..warcryNameCompressed] then"
+        },
+        {
+          "line": 2887,
+          "text": "\t\t\t\tmodDB.conditions[\"AffectedByWarcry\"] = true"
+        },
+        {
+          "line": 2888,
+          "text": "\t\t\t\tmodDB.conditions[\"AffectedBy\"..warcryNameCompressed] = true"
+        },
+        {
+          "line": 2895,
+          "text": "\t\t\tif env.minion and not env.minion.modDB:Flag(nil, \"HiddenMonster\") and not env.minion.modDB.conditions[\"AffectedBy\"..warcryNameCompressed] then"
+        },
+        {
+          "line": 2896,
+          "text": "\t\t\t\tenv.minion.modDB.conditions[\"AffectedByWarcry\"] = true"
+        },
+        {
+          "line": 2897,
+          "text": "\t\t\t\tenv.minion.modDB.conditions[\"AffectedBy\"..warcryNameCompressed] = true"
+        },
+        {
+          "line": 2909,
+          "text": "\t\t\tif not modDB.conditions[\"AffectedBy\"..linkNameCompressed] then"
+        },
+        {
+          "line": 2910,
+          "text": "\t\t\t\tmodDB.conditions[\"AffectedByLink\"] = true"
+        },
+        {
+          "line": 2911,
+          "text": "\t\t\t\tmodDB.conditions[\"AffectedBy\"..linkNameCompressed] = true"
+        },
+        {
+          "line": 2954,
+          "text": "\t\t\t\t\t\tmodDB.conditions[\"Cursed\"] = true"
+        },
+        {
+          "line": 2956,
+          "text": "\t\t\t\t\t\tmodDB.conditions[\"AffectedBy\"..grantedEffect.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 3108,
+          "text": "\t\tmodDB.conditions[\"AffectedByNonVaalGuardSkill\"] = true"
+        },
+        {
+          "line": 3111,
+          "text": "\t\tmodDB.conditions[\"AffectedByGuardSkill\"] = true"
+        },
+        {
+          "line": 3112,
+          "text": "\t\tmodDB.conditions[\"AffectedBy\"..guard.name:gsub(\" \",\"\")] = true"
+        },
+        {
+          "line": 3142,
+          "text": "\t\tenemyDB.conditions[\"Cursed\"] = true"
+        },
+        {
+          "line": 3144,
+          "text": "\t\t\tenemyDB.conditions[\"Marked\"] = true"
+        },
+        {
+          "line": 3231,
+          "text": "\t\tmodDB.conditions[\"Unarmed\"] = true"
+        },
+        {
+          "line": 3233,
+          "text": "\t\t\tmodDB.conditions[\"Unencumbered\"] = true"
+        }
+      ]
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/CalcOffence.lua.gz",
+        "bytes": 64248,
+        "sha256": "3ee439d6209cd88adbca368dd7b3e741e9ed537531a37fcc0a8f4b1863e56147"
+      },
+      "bytes": 364029,
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94",
+      "scan": [
+        {
+          "line": 79,
+          "text": "\t\t\t\t\"SkillDamageConvertTo\"..toType,"
+        },
+        {
+          "line": 80,
+          "text": "\t\t\t\t\"Skill\"..fromType..\"DamageConvertTo\"..toType), 0)"
+        },
+        {
+          "line": 83,
+          "text": "\t\t\t\t\"DamageConvertTo\"..toType,"
+        },
+        {
+          "line": 84,
+          "text": "\t\t\t\tfromType..\"DamageConvertTo\"..toType,"
+        },
+        {
+          "line": 85,
+          "text": "\t\t\t\tisElemental[fromType] and \"ElementalDamageConvertTo\"..toType or nil,"
+        },
+        {
+          "line": 86,
+          "text": "\t\t\t\tfromType ~= \"Chaos\" and \"NonChaosDamageConvertTo\"..toType or nil), 0)"
+        },
+        {
+          "line": 495,
+          "text": "\t\t\ttempCfg.overrideCond = { [\"No\" .. resource .. \"LeechFromPhysicalDamage\"] = false } -- Need to force Condition to `false`, to calculate original phys leech values"
+        },
+        {
+          "line": 728,
+          "text": "\tskillCfg.skillCond[\"SkillIsTriggered\"] = skillData.triggered"
+        },
+        {
+          "line": 729,
+          "text": "\tif skillCfg.skillCond[\"SkillIsTriggered\"] then"
+        },
+        {
+          "line": 732,
+          "text": "\tskillCfg.skillCond[\"SkillIsFocused\"] = skillData.chanceToTriggerOnFocus"
+        },
+        {
+          "line": 733,
+          "text": "\tif skillCfg.skillCond[\"SkillIsFocused\"] then"
+        },
+        {
+          "line": 748,
+          "text": "\t\tskillModList:NewMod(\"Damage\", \"INC\", m_floor(skillModList:Sum(\"INC\", nil, \"Life\") * data.misc.Transfiguration), \"Transfiguration of Body\", ModFlag.Attack)"
+        },
+        {
+          "line": 751,
+          "text": "\t\tskillModList:NewMod(\"Damage\", \"INC\", m_floor(skillModList:Sum(\"INC\", nil, \"Mana\") * data.misc.Transfiguration), \"Transfiguration of Mind\")"
+        },
+        {
+          "line": 754,
+          "text": "\t\tskillModList:NewMod(\"Damage\", \"INC\", m_floor(skillModList:Sum(\"INC\", nil, \"EnergyShield\") * data.misc.Transfiguration), \"Transfiguration of Soul\", ModFlag.Spell)"
+        },
+        {
+          "line": 774,
+          "text": "\tif modDB.conditions[\"AffectedByEnergyBlade\"] then"
+        },
+        {
+          "line": 861,
+          "text": "\t\t\tskillModList:NewMod(\"Damage\", \"INC\", redSupportCount * modData.value, modData.source)"
+        },
+        {
+          "line": 881,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", \"INC\", mod.value * multiplier, mod.source, mod.flags, mod.keywordFlags, unpack(modifiers))"
+        },
+        {
+          "line": 892,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", \"INC\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 914,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", \"INC\", mod.value * multiplier, mod.source, bor(band(mod.flags, bnot(ModFlag.Spell)), ModFlag.Attack), mod.keywordFlags, unpack(modifiers))"
+        },
+        {
+          "line": 927,
+          "text": "\t\t\tskillModList:NewMod(\"Damage\", \"INC\", mod.value, mod.source, bor(band(mod.flags, bnot(ModFlag.Thorns)), ModFlag.Attack), mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 957,
+          "text": "\t\t\tskillModList:NewMod(\"Damage\", mod.type, mod.value, mod.source, bor(ModFlag.Bow, ModFlag.Hit), mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 965,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", mod.type, mod.value, mod.source, mod.flags, band(mod.keywordFlags, bnot(KeywordFlag.Warcry)), unpack(mod))"
+        },
+        {
+          "line": 971,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", mod.type, mod.value, mod.source, mod.flags, band(mod.keywordFlags, bnot(KeywordFlag.Warcry)), unpack(mod))"
+        },
+        {
+          "line": 1001,
+          "text": "\t\t\tskillModList:NewMod(\"Damage\", mod.type, mod.value, mod.source, ModFlag.Projectile, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1009,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", mod.type, mod.value, mod.source, bor(band(mod.flags, bnot(ModFlag.Claw)), ModFlag.Unarmed, ModFlag.Melee), mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1095,
+          "text": "\t\t\tskillModList:NewMod(\"Damage\", \"INC\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1185,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", \"MORE\", modValue, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1200,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", \"MORE\", modValue, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1215,
+          "text": "\t\t\t\t\t\tskillModList:NewMod(\"Damage\", \"MORE\", value.mod.value, value.mod.source, value.mod.flags, value.mod.keywordFlags, unpack(value.mod))"
+        },
+        {
+          "line": 1221,
+          "text": "\t\t\t\t\tskillModList:NewMod(\"Damage\", \"MORE\", (DamageMoreValueTotal / output.Repeats + 100) / (1 + DamageFinalMoreValueTotal / output.Repeats / 100) - 100, lastMod.source, lastMod.flags, lastMod.keywordFlags, unpack(lastMod))"
+        },
+        {
+          "line": 1226,
+          "text": "\t\t\t\t\tskillModList:NewMod(\"Damage\", \"MORE\", (100 * output.Repeats + DamageFinalMoreValueTotal) / (1 + DamageFinalMoreValueTotal / 100) - 100, value.mod.source, value.mod.flags, value.mod.keywordFlags, unpack(value.mod))"
+        },
+        {
+          "line": 1337,
+          "text": "\tif skillModList:Sum(\"BASE\", skillCfg, \"PhysicalDamageGainAsRandom\", \"PhysicalDamageConvertToRandom\", \"PhysicalDamageGainAsColdOrLightning\", \"DamageGainAsRandom\") > 0 then"
+        },
+        {
+          "line": 1340,
+          "text": "\t\tfor i, value in ipairs(skillModList:Tabulate(\"BASE\", skillCfg, \"DamageGainAsRandom\")) do"
+        },
+        {
+          "line": 1344,
+          "text": "\t\t\t\tskillModList:NewMod(\"DamageGainAsFire\", \"BASE\", effVal, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1345,
+          "text": "\t\t\t\tskillModList:NewMod(\"DamageGainAsCold\", \"BASE\", effVal, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1346,
+          "text": "\t\t\t\tskillModList:NewMod(\"DamageGainAsLightning\", \"BASE\", effVal, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1348,
+          "text": "\t\t\t\tskillModList:NewMod(\"DamageGainAsFire\", \"BASE\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1350,
+          "text": "\t\t\t\tskillModList:NewMod(\"DamageGainAsCold\", \"BASE\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1352,
+          "text": "\t\t\t\tskillModList:NewMod(\"DamageGainAsLightning\", \"BASE\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1355,
+          "text": "\t\tfor i, value in ipairs(skillModList:Tabulate(\"BASE\", skillCfg, \"PhysicalDamageGainAsRandom\")) do"
+        },
+        {
+          "line": 1359,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageGainAsFire\", \"BASE\", effVal, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1360,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageGainAsCold\", \"BASE\", effVal, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1361,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageGainAsLightning\", \"BASE\", effVal, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1363,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageGainAsFire\", \"BASE\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1365,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageGainAsCold\", \"BASE\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1367,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageGainAsLightning\", \"BASE\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1370,
+          "text": "\t\tfor i, value in ipairs(skillModList:Tabulate(\"BASE\", skillCfg, \"PhysicalDamageConvertToRandom\")) do"
+        },
+        {
+          "line": 1374,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageConvertToFire\", \"BASE\", effVal, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1375,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageConvertToCold\", \"BASE\", effVal, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1376,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageConvertToLightning\", \"BASE\", effVal, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1378,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageConvertToFire\", \"BASE\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1380,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageConvertToCold\", \"BASE\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1382,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageConvertToLightning\", \"BASE\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1385,
+          "text": "\t\tfor i, value in ipairs(skillModList:Tabulate(\"BASE\", skillCfg, \"PhysicalDamageGainAsColdOrLightning\")) do"
+        },
+        {
+          "line": 1389,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageGainAsCold\", \"BASE\", effVal, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1390,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageGainAsLightning\", \"BASE\", effVal, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1392,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageGainAsCold\", \"BASE\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1394,
+          "text": "\t\t\t\tskillModList:NewMod(\"PhysicalDamageGainAsLightning\", \"BASE\", mod.value, mod.source, mod.flags, mod.keywordFlags, unpack(mod))"
+        },
+        {
+          "line": 1443,
+          "text": "\t\t\tskillModList:NewMod(\"Damage\", \"MORE\", 30, \"Point Blank\", bor(ModFlag.Attack, ModFlag.Projectile), { type = \"DistanceRamp\", ramp = {{10,1},{35,0},{120,-1}} })"
+        },
+        {
+          "line": 1446,
+          "text": "\t\t\tskillModList:NewMod(\"Damage\", \"MORE\", 100, \"Far Shot\", bor(ModFlag.Attack, ModFlag.Projectile), { type = \"DistanceRamp\", ramp = {{10, -0.2}, {25, 0}, {70, 0.6}} })"
+        },
+        {
+          "line": 2845,
+          "text": "\t\tskillModList.conditions[condName] = ( output.Accuracy and output.Accuracy or 0 ) > env.player.output.Life"
+        },
+        {
+          "line": 3507,
+          "text": "\t\t\t\t\t\t\tskillModList:NewMod(\"DamageGainAsFire\", \"BASE\", infernalGainAsFire * infernalUptime / 100, \"Uptime Scaled Infernal Cry\", ModFlag.Melee)"
+        },
+        {
+          "line": 3677,
+          "text": "\t\t\tif ruthlessBlowMaxCount > 0 and ( not skillCfg.skillCond[\"usedByMirage\"] or (skillData.mirageUses or 0) > ruthlessBlowMaxCount ) then"
+        },
+        {
+          "line": 3753,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", \"INC\", incExertedAttacks, \"Empowered Attacks\", ModFlag.Attack)"
+        },
+        {
+          "line": 3755,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", \"INC\", incExertedAttacks * globalOutput.ExertedAttackUptimeRatio / 100, \"Uptime Scaled Empowered Attacks\", ModFlag.Attack)"
+        },
+        {
+          "line": 3789,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", \"INC\", incBoostedAttacks, \"Ancestrally Boosted Attacks\", ModFlag.Attack)"
+        },
+        {
+          "line": 3792,
+          "text": "\t\t\t\tskillModList:NewMod(\"Damage\", \"INC\", incBoostedAttacks * globalOutput.BoostedAttackUptimeRatio / 100, \"Uptime Scaled Ancestrally Boosted Attacks\", ModFlag.Attack)"
+        },
+        {
+          "line": 4106,
+          "text": "\t\t\t\t\t\"DamageAs\"..toType,"
+        },
+        {
+          "line": 4107,
+          "text": "\t\t\t\t\t\"DamageGainAs\"..toType,"
+        },
+        {
+          "line": 4108,
+          "text": "\t\t\t\t\tdamageType..\"DamageAs\"..toType,"
+        },
+        {
+          "line": 4109,
+          "text": "\t\t\t\t\tdamageType..\"DamageGainAs\"..toType,"
+        },
+        {
+          "line": 4110,
+          "text": "\t\t\t\t\tisElemental[damageType] and \"ElementalDamageAs\"..toType or nil,"
+        },
+        {
+          "line": 4111,
+          "text": "\t\t\t\t\tisElemental[damageType] and \"ElementalDamageGainAs\"..toType or nil,"
+        },
+        {
+          "line": 4112,
+          "text": "\t\t\t\t\tdamageType ~= \"Chaos\" and \"NonChaosDamageAs\"..toType or nil,"
+        },
+        {
+          "line": 4113,
+          "text": "\t\t\t\t\tdamageType ~= \"Chaos\" and \"NonChaosDamageGainAs\"..toType or nil), 0)"
+        },
+        {
+          "line": 4115,
+          "text": "\t\t\t\t\t\"SkillDamageGainAs\"..toType,"
+        },
+        {
+          "line": 4116,
+          "text": "\t\t\t\t\t\"Skill\"..damageType..\"DamageGainAs\"..toType,"
+        },
+        {
+          "line": 4117,
+          "text": "\t\t\t\t\tisElemental[damageType] and \"SkillElementalDamageGainAs\"..toType or nil,"
+        },
+        {
+          "line": 4118,
+          "text": "\t\t\t\t\tdamageType ~= \"Chaos\" and \"SkillNonChaosDamageGainAs\"..toType or nil), 0)"
+        },
+        {
+          "line": 4205,
+          "text": "\t\t\tcfg.skillCond[\"CriticalStrike\"] = (pass == 1)"
+        },
+        {
+          "line": 5191,
+          "text": "\t\tlocal critMetatable = { __index = |_, key| -> skillCfg.skillCond[key] or cfg.skillCond[key] }"
+        },
+        {
+          "line": 5214,
+          "text": "\t\t\t\tskillCond = setmetatable({ [\"CriticalStrike\"] = true },critMetatable ),"
+        },
+        {
+          "line": 5539,
+          "text": "\t\t\t\t\tcritCfg.skillCond.CriticalStrike = val == \"OnCrit\" -- force crit config to be true for \"OnCrit\" chance calculation"
+        }
+      ]
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+        "bytes": 7158,
+        "sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b"
+      },
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62",
+      "scan": [
+        {
+          "line": 410,
+          "text": "\tif (cfg and cfg.overrideCond and cfg.overrideCond[var] ~= nil) then"
+        },
+        {
+          "line": 411,
+          "text": "\t\treturn cfg.overrideCond[var]"
+        },
+        {
+          "line": 413,
+          "text": "\t\treturn  self.conditions[var] or (self.parent and self.parent:GetCondition(var, cfg, true)) or (not noMod and self:Flag(cfg, conditionName[var]))"
+        },
+        {
+          "line": 753,
+          "text": "\t\t\t\t\telseif GetCondition(self, var, cfg) or (cfg and cfg.skillCond and cfg.skillCond[var]) then"
+        },
+        {
+          "line": 764,
+          "text": "\t\t\t\t\tmatch = GetCondition(self, tag.var, cfg) or (cfg and cfg.skillCond and cfg.skillCond[tag.var])"
+        }
+      ]
+    }
+  ],
+  "selected": [
+    {
+      "mode": "main",
+      "source_occurrence": {
+        "matches": [
+          {
+            "enable_global_1": true,
+            "enable_global_2": true,
+            "gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "gem_index": 1,
+            "group_enabled": true,
+            "group_index": 3,
+            "group_is_active_socket_group": true,
+            "group_label": "",
+            "physical_gem_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+            "raw_level": 20,
+            "raw_quality": 0,
+            "source_enabled": true
+          }
+        ],
+        "source_present": true
+      },
+      "actor_profile": "RaisedSkeletonSniper",
+      "profile": {
+        "accuracy": 1,
+        "attackRange": 80,
+        "attackTime": 1.5,
+        "baseDamageIgnoresAttackSpeed": true,
+        "baseMovementSpeed": 37,
+        "chaosResist": 0,
+        "coldResist": 0,
+        "companionChaosResist": 0,
+        "companionColdResist": 0,
+        "companionFireResist": 0,
+        "companionLightningResist": 0,
+        "companionReservation": 30,
+        "critChance": 5,
+        "damage": 1.15,
+        "damageSpread": 0.3,
+        "fireResist": 0,
+        "life": 0.55,
+        "lightningResist": 0,
+        "limit": "ActiveSkeletonLimit",
+        "monsterCategory": "Undead",
+        "name": "Skeletal Sniper",
+        "spectreReservation": 50,
+        "weaponType1": "Bow"
+      },
+      "hidden_damage_fixup": 0,
+      "label": "Main Hand",
+      "inputs": {
+        "actor_gigantic": true,
+        "base_coefficient": {
+          "level_present": false,
+          "skill_data_present": false
+        },
+        "bases": {
+          "Chaos": {
+            "added_increased": {
+              "names": [
+                "AddedChaosDamage",
+                "AddedDamage"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "added_more": {
+              "names": [
+                "AddedChaosDamage",
+                "AddedDamage"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 1,
+                    "keyword_flags": 0,
+                    "name": "AddedDamage",
+                    "source": "Skeletal Sniper Damage Multiplier",
+                    "tags": [
+                      {
+                        "neg": true,
+                        "partialMatch": true,
+                        "skillNameList": [
+                          "Spectre",
+                          "Companion"
+                        ],
+                        "summonSkill": true,
+                        "type": "SkillName"
+                      }
+                    ],
+                    "type": "MORE",
+                    "value": 14.999999999999991
+                  },
+                  "value": 14.999999999999991
+                }
+              ],
+              "value": 1.15
+            },
+            "can_deal": true,
+            "enemy_maximum": {
+              "names": [
+                "SelfChaosMax"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "enemy_minimum": {
+              "names": [
+                "SelfChaosMin"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "maximum": {
+              "names": [
+                "ChaosMax"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "minimum": {
+              "names": [
+                "ChaosMin"
+              ],
+              "records": {},
+              "value": 0
+            }
+          },
+          "Cold": {
+            "added_increased": {
+              "names": [
+                "AddedColdDamage",
+                "AddedDamage"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "added_more": {
+              "names": [
+                "AddedColdDamage",
+                "AddedDamage"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 1,
+                    "keyword_flags": 0,
+                    "name": "AddedDamage",
+                    "source": "Skeletal Sniper Damage Multiplier",
+                    "tags": [
+                      {
+                        "neg": true,
+                        "partialMatch": true,
+                        "skillNameList": [
+                          "Spectre",
+                          "Companion"
+                        ],
+                        "summonSkill": true,
+                        "type": "SkillName"
+                      }
+                    ],
+                    "type": "MORE",
+                    "value": 14.999999999999991
+                  },
+                  "value": 14.999999999999991
+                }
+              ],
+              "value": 1.15
+            },
+            "can_deal": true,
+            "enemy_maximum": {
+              "names": [
+                "SelfColdMax"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "enemy_minimum": {
+              "names": [
+                "SelfColdMin"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "maximum": {
+              "names": [
+                "ColdMax"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "minimum": {
+              "names": [
+                "ColdMin"
+              ],
+              "records": {},
+              "value": 0
+            }
+          },
+          "Fire": {
+            "added_increased": {
+              "names": [
+                "AddedFireDamage",
+                "AddedDamage"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "added_more": {
+              "names": [
+                "AddedFireDamage",
+                "AddedDamage"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 1,
+                    "keyword_flags": 0,
+                    "name": "AddedDamage",
+                    "source": "Skeletal Sniper Damage Multiplier",
+                    "tags": [
+                      {
+                        "neg": true,
+                        "partialMatch": true,
+                        "skillNameList": [
+                          "Spectre",
+                          "Companion"
+                        ],
+                        "summonSkill": true,
+                        "type": "SkillName"
+                      }
+                    ],
+                    "type": "MORE",
+                    "value": 14.999999999999991
+                  },
+                  "value": 14.999999999999991
+                }
+              ],
+              "value": 1.15
+            },
+            "can_deal": true,
+            "enemy_maximum": {
+              "names": [
+                "SelfFireMax"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "enemy_minimum": {
+              "names": [
+                "SelfFireMin"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "maximum": {
+              "names": [
+                "FireMax"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "minimum": {
+              "names": [
+                "FireMin"
+              ],
+              "records": {},
+              "value": 0
+            }
+          },
+          "Lightning": {
+            "added_increased": {
+              "names": [
+                "AddedLightningDamage",
+                "AddedDamage"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "added_more": {
+              "names": [
+                "AddedLightningDamage",
+                "AddedDamage"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 1,
+                    "keyword_flags": 0,
+                    "name": "AddedDamage",
+                    "source": "Skeletal Sniper Damage Multiplier",
+                    "tags": [
+                      {
+                        "neg": true,
+                        "partialMatch": true,
+                        "skillNameList": [
+                          "Spectre",
+                          "Companion"
+                        ],
+                        "summonSkill": true,
+                        "type": "SkillName"
+                      }
+                    ],
+                    "type": "MORE",
+                    "value": 14.999999999999991
+                  },
+                  "value": 14.999999999999991
+                }
+              ],
+              "value": 1.15
+            },
+            "can_deal": true,
+            "enemy_maximum": {
+              "names": [
+                "SelfLightningMax"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "enemy_minimum": {
+              "names": [
+                "SelfLightningMin"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "maximum": {
+              "names": [
+                "LightningMax"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "minimum": {
+              "names": [
+                "LightningMin"
+              ],
+              "records": {},
+              "value": 0
+            }
+          },
+          "Physical": {
+            "added_increased": {
+              "names": [
+                "AddedPhysicalDamage",
+                "AddedDamage"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "added_more": {
+              "names": [
+                "AddedPhysicalDamage",
+                "AddedDamage"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 1,
+                    "keyword_flags": 0,
+                    "name": "AddedDamage",
+                    "source": "Skeletal Sniper Damage Multiplier",
+                    "tags": [
+                      {
+                        "neg": true,
+                        "partialMatch": true,
+                        "skillNameList": [
+                          "Spectre",
+                          "Companion"
+                        ],
+                        "summonSkill": true,
+                        "type": "SkillName"
+                      }
+                    ],
+                    "type": "MORE",
+                    "value": 14.999999999999991
+                  },
+                  "value": 14.999999999999991
+                }
+              ],
+              "value": 1.15
+            },
+            "can_deal": true,
+            "enemy_maximum": {
+              "names": [
+                "SelfPhysicalMax"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "enemy_minimum": {
+              "names": [
+                "SelfPhysicalMin"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "maximum": {
+              "names": [
+                "PhysicalMax"
+              ],
+              "records": {},
+              "value": 0
+            },
+            "minimum": {
+              "names": [
+                "PhysicalMin"
+              ],
+              "records": {},
+              "value": 0
+            }
+          }
+        },
+        "cfg": {
+          "flags": 42949813253,
+          "keywordFlags": 330752,
+          "skillDist": 20,
+          "skillName": "Basic Attack",
+          "summonSkillName": "Skeletal Sniper Minion"
+        },
+        "conversion": {
+          "Chaos": {
+            "Chaos": {
+              "global": {
+                "names": [
+                  "DamageConvertToChaos",
+                  "ChaosDamageConvertToChaos"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToChaos",
+                  "SkillChaosDamageConvertToChaos"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Cold": {
+              "global": {
+                "names": [
+                  "DamageConvertToCold",
+                  "ChaosDamageConvertToCold"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToCold",
+                  "SkillChaosDamageConvertToCold"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Fire": {
+              "global": {
+                "names": [
+                  "DamageConvertToFire",
+                  "ChaosDamageConvertToFire"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToFire",
+                  "SkillChaosDamageConvertToFire"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Lightning": {
+              "global": {
+                "names": [
+                  "DamageConvertToLightning",
+                  "ChaosDamageConvertToLightning"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToLightning",
+                  "SkillChaosDamageConvertToLightning"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Physical": {
+              "global": {
+                "names": [
+                  "DamageConvertToPhysical",
+                  "ChaosDamageConvertToPhysical"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToPhysical",
+                  "SkillChaosDamageConvertToPhysical"
+                ],
+                "records": {},
+                "value": 0
+              }
+            }
+          },
+          "Cold": {
+            "Chaos": {
+              "global": {
+                "names": [
+                  "DamageConvertToChaos",
+                  "ColdDamageConvertToChaos",
+                  "ElementalDamageConvertToChaos",
+                  "NonChaosDamageConvertToChaos"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToChaos",
+                  "SkillColdDamageConvertToChaos"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Cold": {
+              "global": {
+                "names": [
+                  "DamageConvertToCold",
+                  "ColdDamageConvertToCold",
+                  "ElementalDamageConvertToCold",
+                  "NonChaosDamageConvertToCold"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToCold",
+                  "SkillColdDamageConvertToCold"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Fire": {
+              "global": {
+                "names": [
+                  "DamageConvertToFire",
+                  "ColdDamageConvertToFire",
+                  "ElementalDamageConvertToFire",
+                  "NonChaosDamageConvertToFire"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToFire",
+                  "SkillColdDamageConvertToFire"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Lightning": {
+              "global": {
+                "names": [
+                  "DamageConvertToLightning",
+                  "ColdDamageConvertToLightning",
+                  "ElementalDamageConvertToLightning",
+                  "NonChaosDamageConvertToLightning"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToLightning",
+                  "SkillColdDamageConvertToLightning"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Physical": {
+              "global": {
+                "names": [
+                  "DamageConvertToPhysical",
+                  "ColdDamageConvertToPhysical",
+                  "ElementalDamageConvertToPhysical",
+                  "NonChaosDamageConvertToPhysical"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToPhysical",
+                  "SkillColdDamageConvertToPhysical"
+                ],
+                "records": {},
+                "value": 0
+              }
+            }
+          },
+          "Fire": {
+            "Chaos": {
+              "global": {
+                "names": [
+                  "DamageConvertToChaos",
+                  "FireDamageConvertToChaos",
+                  "ElementalDamageConvertToChaos",
+                  "NonChaosDamageConvertToChaos"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToChaos",
+                  "SkillFireDamageConvertToChaos"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Cold": {
+              "global": {
+                "names": [
+                  "DamageConvertToCold",
+                  "FireDamageConvertToCold",
+                  "ElementalDamageConvertToCold",
+                  "NonChaosDamageConvertToCold"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToCold",
+                  "SkillFireDamageConvertToCold"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Fire": {
+              "global": {
+                "names": [
+                  "DamageConvertToFire",
+                  "FireDamageConvertToFire",
+                  "ElementalDamageConvertToFire",
+                  "NonChaosDamageConvertToFire"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToFire",
+                  "SkillFireDamageConvertToFire"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Lightning": {
+              "global": {
+                "names": [
+                  "DamageConvertToLightning",
+                  "FireDamageConvertToLightning",
+                  "ElementalDamageConvertToLightning",
+                  "NonChaosDamageConvertToLightning"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToLightning",
+                  "SkillFireDamageConvertToLightning"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Physical": {
+              "global": {
+                "names": [
+                  "DamageConvertToPhysical",
+                  "FireDamageConvertToPhysical",
+                  "ElementalDamageConvertToPhysical",
+                  "NonChaosDamageConvertToPhysical"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToPhysical",
+                  "SkillFireDamageConvertToPhysical"
+                ],
+                "records": {},
+                "value": 0
+              }
+            }
+          },
+          "Lightning": {
+            "Chaos": {
+              "global": {
+                "names": [
+                  "DamageConvertToChaos",
+                  "LightningDamageConvertToChaos",
+                  "ElementalDamageConvertToChaos",
+                  "NonChaosDamageConvertToChaos"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToChaos",
+                  "SkillLightningDamageConvertToChaos"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Cold": {
+              "global": {
+                "names": [
+                  "DamageConvertToCold",
+                  "LightningDamageConvertToCold",
+                  "ElementalDamageConvertToCold",
+                  "NonChaosDamageConvertToCold"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToCold",
+                  "SkillLightningDamageConvertToCold"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Fire": {
+              "global": {
+                "names": [
+                  "DamageConvertToFire",
+                  "LightningDamageConvertToFire",
+                  "ElementalDamageConvertToFire",
+                  "NonChaosDamageConvertToFire"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToFire",
+                  "SkillLightningDamageConvertToFire"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Lightning": {
+              "global": {
+                "names": [
+                  "DamageConvertToLightning",
+                  "LightningDamageConvertToLightning",
+                  "ElementalDamageConvertToLightning",
+                  "NonChaosDamageConvertToLightning"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToLightning",
+                  "SkillLightningDamageConvertToLightning"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Physical": {
+              "global": {
+                "names": [
+                  "DamageConvertToPhysical",
+                  "LightningDamageConvertToPhysical",
+                  "ElementalDamageConvertToPhysical",
+                  "NonChaosDamageConvertToPhysical"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToPhysical",
+                  "SkillLightningDamageConvertToPhysical"
+                ],
+                "records": {},
+                "value": 0
+              }
+            }
+          },
+          "Physical": {
+            "Chaos": {
+              "global": {
+                "names": [
+                  "DamageConvertToChaos",
+                  "PhysicalDamageConvertToChaos",
+                  "NonChaosDamageConvertToChaos"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToChaos",
+                  "SkillPhysicalDamageConvertToChaos"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Cold": {
+              "global": {
+                "names": [
+                  "DamageConvertToCold",
+                  "PhysicalDamageConvertToCold",
+                  "NonChaosDamageConvertToCold"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToCold",
+                  "SkillPhysicalDamageConvertToCold"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Fire": {
+              "global": {
+                "names": [
+                  "DamageConvertToFire",
+                  "PhysicalDamageConvertToFire",
+                  "NonChaosDamageConvertToFire"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToFire",
+                  "SkillPhysicalDamageConvertToFire"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Lightning": {
+              "global": {
+                "names": [
+                  "DamageConvertToLightning",
+                  "PhysicalDamageConvertToLightning",
+                  "NonChaosDamageConvertToLightning"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToLightning",
+                  "SkillPhysicalDamageConvertToLightning"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Physical": {
+              "global": {
+                "names": [
+                  "DamageConvertToPhysical",
+                  "PhysicalDamageConvertToPhysical",
+                  "NonChaosDamageConvertToPhysical"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageConvertToPhysical",
+                  "SkillPhysicalDamageConvertToPhysical"
+                ],
+                "records": {},
+                "value": 0
+              }
+            }
+          }
+        },
+        "conversion_table": {
+          "Chaos": {
+            "Chaos": 0,
+            "Cold": 0,
+            "Fire": 0,
+            "Lightning": 0,
+            "Physical": 0,
+            "mult": 1
+          },
+          "Cold": {
+            "Chaos": 0,
+            "Cold": 0,
+            "Fire": 0,
+            "Lightning": 0,
+            "Physical": 0,
+            "mult": 1
+          },
+          "Fire": {
+            "Chaos": 0,
+            "Cold": 0,
+            "Fire": 0,
+            "Lightning": 0,
+            "Physical": 0,
+            "mult": 1
+          },
+          "Lightning": {
+            "Chaos": 0,
+            "Cold": 0,
+            "Fire": 0,
+            "Lightning": 0,
+            "Physical": 0,
+            "mult": 1
+          },
+          "Physical": {
+            "Chaos": 0,
+            "Cold": 0,
+            "Fire": 0,
+            "Lightning": 0,
+            "Physical": 0,
+            "mult": 1
+          }
+        },
+        "gain": {
+          "Chaos": {
+            "Chaos": {
+              "global": {
+                "names": [
+                  "DamageAsChaos",
+                  "DamageGainAsChaos",
+                  "ChaosDamageAsChaos",
+                  "ChaosDamageGainAsChaos"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsChaos",
+                  "SkillChaosDamageGainAsChaos"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Cold": {
+              "global": {
+                "names": [
+                  "DamageAsCold",
+                  "DamageGainAsCold",
+                  "ChaosDamageAsCold",
+                  "ChaosDamageGainAsCold"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsCold",
+                  "SkillChaosDamageGainAsCold"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Fire": {
+              "global": {
+                "names": [
+                  "DamageAsFire",
+                  "DamageGainAsFire",
+                  "ChaosDamageAsFire",
+                  "ChaosDamageGainAsFire"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsFire",
+                  "SkillChaosDamageGainAsFire"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Lightning": {
+              "global": {
+                "names": [
+                  "DamageAsLightning",
+                  "DamageGainAsLightning",
+                  "ChaosDamageAsLightning",
+                  "ChaosDamageGainAsLightning"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsLightning",
+                  "SkillChaosDamageGainAsLightning"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Physical": {
+              "global": {
+                "names": [
+                  "DamageAsPhysical",
+                  "DamageGainAsPhysical",
+                  "ChaosDamageAsPhysical",
+                  "ChaosDamageGainAsPhysical"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsPhysical",
+                  "SkillChaosDamageGainAsPhysical"
+                ],
+                "records": {},
+                "value": 0
+              }
+            }
+          },
+          "Cold": {
+            "Chaos": {
+              "global": {
+                "names": [
+                  "DamageAsChaos",
+                  "DamageGainAsChaos",
+                  "ColdDamageAsChaos",
+                  "ColdDamageGainAsChaos",
+                  "ElementalDamageAsChaos",
+                  "ElementalDamageGainAsChaos",
+                  "NonChaosDamageAsChaos",
+                  "NonChaosDamageGainAsChaos"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsChaos",
+                  "SkillColdDamageGainAsChaos",
+                  "SkillElementalDamageGainAsChaos",
+                  "SkillNonChaosDamageGainAsChaos"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Cold": {
+              "global": {
+                "names": [
+                  "DamageAsCold",
+                  "DamageGainAsCold",
+                  "ColdDamageAsCold",
+                  "ColdDamageGainAsCold",
+                  "ElementalDamageAsCold",
+                  "ElementalDamageGainAsCold",
+                  "NonChaosDamageAsCold",
+                  "NonChaosDamageGainAsCold"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsCold",
+                  "SkillColdDamageGainAsCold",
+                  "SkillElementalDamageGainAsCold",
+                  "SkillNonChaosDamageGainAsCold"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Fire": {
+              "global": {
+                "names": [
+                  "DamageAsFire",
+                  "DamageGainAsFire",
+                  "ColdDamageAsFire",
+                  "ColdDamageGainAsFire",
+                  "ElementalDamageAsFire",
+                  "ElementalDamageGainAsFire",
+                  "NonChaosDamageAsFire",
+                  "NonChaosDamageGainAsFire"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsFire",
+                  "SkillColdDamageGainAsFire",
+                  "SkillElementalDamageGainAsFire",
+                  "SkillNonChaosDamageGainAsFire"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Lightning": {
+              "global": {
+                "names": [
+                  "DamageAsLightning",
+                  "DamageGainAsLightning",
+                  "ColdDamageAsLightning",
+                  "ColdDamageGainAsLightning",
+                  "ElementalDamageAsLightning",
+                  "ElementalDamageGainAsLightning",
+                  "NonChaosDamageAsLightning",
+                  "NonChaosDamageGainAsLightning"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsLightning",
+                  "SkillColdDamageGainAsLightning",
+                  "SkillElementalDamageGainAsLightning",
+                  "SkillNonChaosDamageGainAsLightning"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Physical": {
+              "global": {
+                "names": [
+                  "DamageAsPhysical",
+                  "DamageGainAsPhysical",
+                  "ColdDamageAsPhysical",
+                  "ColdDamageGainAsPhysical",
+                  "ElementalDamageAsPhysical",
+                  "ElementalDamageGainAsPhysical",
+                  "NonChaosDamageAsPhysical",
+                  "NonChaosDamageGainAsPhysical"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsPhysical",
+                  "SkillColdDamageGainAsPhysical",
+                  "SkillElementalDamageGainAsPhysical",
+                  "SkillNonChaosDamageGainAsPhysical"
+                ],
+                "records": {},
+                "value": 0
+              }
+            }
+          },
+          "Fire": {
+            "Chaos": {
+              "global": {
+                "names": [
+                  "DamageAsChaos",
+                  "DamageGainAsChaos",
+                  "FireDamageAsChaos",
+                  "FireDamageGainAsChaos",
+                  "ElementalDamageAsChaos",
+                  "ElementalDamageGainAsChaos",
+                  "NonChaosDamageAsChaos",
+                  "NonChaosDamageGainAsChaos"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsChaos",
+                  "SkillFireDamageGainAsChaos",
+                  "SkillElementalDamageGainAsChaos",
+                  "SkillNonChaosDamageGainAsChaos"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Cold": {
+              "global": {
+                "names": [
+                  "DamageAsCold",
+                  "DamageGainAsCold",
+                  "FireDamageAsCold",
+                  "FireDamageGainAsCold",
+                  "ElementalDamageAsCold",
+                  "ElementalDamageGainAsCold",
+                  "NonChaosDamageAsCold",
+                  "NonChaosDamageGainAsCold"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsCold",
+                  "SkillFireDamageGainAsCold",
+                  "SkillElementalDamageGainAsCold",
+                  "SkillNonChaosDamageGainAsCold"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Fire": {
+              "global": {
+                "names": [
+                  "DamageAsFire",
+                  "DamageGainAsFire",
+                  "FireDamageAsFire",
+                  "FireDamageGainAsFire",
+                  "ElementalDamageAsFire",
+                  "ElementalDamageGainAsFire",
+                  "NonChaosDamageAsFire",
+                  "NonChaosDamageGainAsFire"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsFire",
+                  "SkillFireDamageGainAsFire",
+                  "SkillElementalDamageGainAsFire",
+                  "SkillNonChaosDamageGainAsFire"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Lightning": {
+              "global": {
+                "names": [
+                  "DamageAsLightning",
+                  "DamageGainAsLightning",
+                  "FireDamageAsLightning",
+                  "FireDamageGainAsLightning",
+                  "ElementalDamageAsLightning",
+                  "ElementalDamageGainAsLightning",
+                  "NonChaosDamageAsLightning",
+                  "NonChaosDamageGainAsLightning"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsLightning",
+                  "SkillFireDamageGainAsLightning",
+                  "SkillElementalDamageGainAsLightning",
+                  "SkillNonChaosDamageGainAsLightning"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Physical": {
+              "global": {
+                "names": [
+                  "DamageAsPhysical",
+                  "DamageGainAsPhysical",
+                  "FireDamageAsPhysical",
+                  "FireDamageGainAsPhysical",
+                  "ElementalDamageAsPhysical",
+                  "ElementalDamageGainAsPhysical",
+                  "NonChaosDamageAsPhysical",
+                  "NonChaosDamageGainAsPhysical"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsPhysical",
+                  "SkillFireDamageGainAsPhysical",
+                  "SkillElementalDamageGainAsPhysical",
+                  "SkillNonChaosDamageGainAsPhysical"
+                ],
+                "records": {},
+                "value": 0
+              }
+            }
+          },
+          "Lightning": {
+            "Chaos": {
+              "global": {
+                "names": [
+                  "DamageAsChaos",
+                  "DamageGainAsChaos",
+                  "LightningDamageAsChaos",
+                  "LightningDamageGainAsChaos",
+                  "ElementalDamageAsChaos",
+                  "ElementalDamageGainAsChaos",
+                  "NonChaosDamageAsChaos",
+                  "NonChaosDamageGainAsChaos"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsChaos",
+                  "SkillLightningDamageGainAsChaos",
+                  "SkillElementalDamageGainAsChaos",
+                  "SkillNonChaosDamageGainAsChaos"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Cold": {
+              "global": {
+                "names": [
+                  "DamageAsCold",
+                  "DamageGainAsCold",
+                  "LightningDamageAsCold",
+                  "LightningDamageGainAsCold",
+                  "ElementalDamageAsCold",
+                  "ElementalDamageGainAsCold",
+                  "NonChaosDamageAsCold",
+                  "NonChaosDamageGainAsCold"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsCold",
+                  "SkillLightningDamageGainAsCold",
+                  "SkillElementalDamageGainAsCold",
+                  "SkillNonChaosDamageGainAsCold"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Fire": {
+              "global": {
+                "names": [
+                  "DamageAsFire",
+                  "DamageGainAsFire",
+                  "LightningDamageAsFire",
+                  "LightningDamageGainAsFire",
+                  "ElementalDamageAsFire",
+                  "ElementalDamageGainAsFire",
+                  "NonChaosDamageAsFire",
+                  "NonChaosDamageGainAsFire"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsFire",
+                  "SkillLightningDamageGainAsFire",
+                  "SkillElementalDamageGainAsFire",
+                  "SkillNonChaosDamageGainAsFire"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Lightning": {
+              "global": {
+                "names": [
+                  "DamageAsLightning",
+                  "DamageGainAsLightning",
+                  "LightningDamageAsLightning",
+                  "LightningDamageGainAsLightning",
+                  "ElementalDamageAsLightning",
+                  "ElementalDamageGainAsLightning",
+                  "NonChaosDamageAsLightning",
+                  "NonChaosDamageGainAsLightning"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsLightning",
+                  "SkillLightningDamageGainAsLightning",
+                  "SkillElementalDamageGainAsLightning",
+                  "SkillNonChaosDamageGainAsLightning"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Physical": {
+              "global": {
+                "names": [
+                  "DamageAsPhysical",
+                  "DamageGainAsPhysical",
+                  "LightningDamageAsPhysical",
+                  "LightningDamageGainAsPhysical",
+                  "ElementalDamageAsPhysical",
+                  "ElementalDamageGainAsPhysical",
+                  "NonChaosDamageAsPhysical",
+                  "NonChaosDamageGainAsPhysical"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsPhysical",
+                  "SkillLightningDamageGainAsPhysical",
+                  "SkillElementalDamageGainAsPhysical",
+                  "SkillNonChaosDamageGainAsPhysical"
+                ],
+                "records": {},
+                "value": 0
+              }
+            }
+          },
+          "Physical": {
+            "Chaos": {
+              "global": {
+                "names": [
+                  "DamageAsChaos",
+                  "DamageGainAsChaos",
+                  "PhysicalDamageAsChaos",
+                  "PhysicalDamageGainAsChaos",
+                  "NonChaosDamageAsChaos",
+                  "NonChaosDamageGainAsChaos"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsChaos",
+                  "SkillPhysicalDamageGainAsChaos",
+                  "SkillNonChaosDamageGainAsChaos"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Cold": {
+              "global": {
+                "names": [
+                  "DamageAsCold",
+                  "DamageGainAsCold",
+                  "PhysicalDamageAsCold",
+                  "PhysicalDamageGainAsCold",
+                  "NonChaosDamageAsCold",
+                  "NonChaosDamageGainAsCold"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsCold",
+                  "SkillPhysicalDamageGainAsCold",
+                  "SkillNonChaosDamageGainAsCold"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Fire": {
+              "global": {
+                "names": [
+                  "DamageAsFire",
+                  "DamageGainAsFire",
+                  "PhysicalDamageAsFire",
+                  "PhysicalDamageGainAsFire",
+                  "NonChaosDamageAsFire",
+                  "NonChaosDamageGainAsFire"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsFire",
+                  "SkillPhysicalDamageGainAsFire",
+                  "SkillNonChaosDamageGainAsFire"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Lightning": {
+              "global": {
+                "names": [
+                  "DamageAsLightning",
+                  "DamageGainAsLightning",
+                  "PhysicalDamageAsLightning",
+                  "PhysicalDamageGainAsLightning",
+                  "NonChaosDamageAsLightning",
+                  "NonChaosDamageGainAsLightning"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsLightning",
+                  "SkillPhysicalDamageGainAsLightning",
+                  "SkillNonChaosDamageGainAsLightning"
+                ],
+                "records": {},
+                "value": 0
+              }
+            },
+            "Physical": {
+              "global": {
+                "names": [
+                  "DamageAsPhysical",
+                  "DamageGainAsPhysical",
+                  "PhysicalDamageAsPhysical",
+                  "PhysicalDamageGainAsPhysical",
+                  "NonChaosDamageAsPhysical",
+                  "NonChaosDamageGainAsPhysical"
+                ],
+                "records": {},
+                "value": 0
+              },
+              "skill": {
+                "names": [
+                  "SkillDamageGainAsPhysical",
+                  "SkillPhysicalDamageGainAsPhysical",
+                  "SkillNonChaosDamageGainAsPhysical"
+                ],
+                "records": {},
+                "value": 0
+              }
+            }
+          }
+        },
+        "gain_only_cold": false,
+        "gain_table": {
+          "Chaos": {
+            "Chaos": 0,
+            "Cold": 0,
+            "Fire": 0,
+            "Lightning": 0,
+            "Physical": 0
+          },
+          "Cold": {
+            "Chaos": 0,
+            "Cold": 0,
+            "Fire": 0,
+            "Lightning": 0,
+            "Physical": 0
+          },
+          "Fire": {
+            "Chaos": 0,
+            "Cold": 0,
+            "Fire": 0,
+            "Lightning": 0,
+            "Physical": 0
+          },
+          "Lightning": {
+            "Chaos": 0,
+            "Cold": 0,
+            "Fire": 0,
+            "Lightning": 0,
+            "Physical": 0
+          },
+          "Physical": {
+            "Chaos": 0,
+            "Cold": 0,
+            "Fire": 0,
+            "Lightning": 0,
+            "Physical": 0
+          }
+        },
+        "gigantic_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Gigantic",
+              "source": "Tree:46365",
+              "tags": {},
+              "type": "FLAG",
+              "value": true
+            },
+            "value": true
+          }
+        ],
+        "granted_effect_level": {
+          "actorLevel": 1,
+          "levelRequirement": 0
+        },
+        "query_state_preserved": true,
+        "raw_player_minion_modifiers": [
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Condition:averageRepeat",
+                  "source": "Config",
+                  "type": "FLAG",
+                  "value": true
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:6077",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": [
+                  {
+                    "type": "Condition",
+                    "var": "CommandableSkill"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:19006",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Life",
+                  "source": "Tree:19006",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:19006",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Damage",
+                  "source": "Tree:19006",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:14598",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Damage",
+                  "source": "Tree:14598",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:14598",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": [
+                  {
+                    "type": "Condition",
+                    "var": "CommandableSkill"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:54453",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Life",
+                  "source": "Tree:54453",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:54453",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Damage",
+                  "source": "Tree:54453",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:95",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Damage",
+                  "source": "Tree:95",
+                  "type": "INC",
+                  "value": 10
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:39461",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Life",
+                  "source": "Tree:39461",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:39461",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Damage",
+                  "source": "Tree:39461",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:35560",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": [
+                  {
+                    "type": "Condition",
+                    "var": "CommandableSkill"
+                  },
+                  {
+                    "type": "Multiplier",
+                    "var": "PersistentMinionTypes"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:41511",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": [
+                  {
+                    "type": "Condition",
+                    "var": "CommandableSkill"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:8737",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Damage",
+                  "source": "Tree:8737",
+                  "type": "INC",
+                  "value": 10
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:1218",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Life",
+                  "source": "Tree:1218",
+                  "type": "INC",
+                  "value": 10
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:229",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Life",
+                  "source": "Tree:229",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:229",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Damage",
+                  "source": "Tree:229",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:25927",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": [
+                  {
+                    "type": "Condition",
+                    "var": "CommandableSkill"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:46365",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Gigantic",
+                  "source": "Tree:46365",
+                  "type": "FLAG",
+                  "value": true
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:14945",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "AreaOfEffect",
+                  "source": "Tree:14945",
+                  "type": "INC",
+                  "value": 20
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:14945",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "type": "INC",
+                  "value": 20
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:50837",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Damage",
+                  "source": "Tree:50837",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:50837",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": [
+                  {
+                    "type": "Condition",
+                    "var": "CommandableSkill"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:4345",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Damage",
+                  "source": "Tree:4345",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:4345",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": [
+                  {
+                    "type": "Condition",
+                    "var": "CommandableSkill"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:40894",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Life",
+                  "source": "Tree:40894",
+                  "type": "INC",
+                  "value": 10
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:43979",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": {
+                  "flags": 0,
+                  "keywordFlags": 0,
+                  "name": "Damage",
+                  "source": "Tree:43979",
+                  "type": "INC",
+                  "value": 6
+                }
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:43979",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": [
+                  {
+                    "type": "Condition",
+                    "var": "CommandableSkill"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:32847",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": [
+                  {
+                    "type": "Condition",
+                    "var": "CommandableSkill"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "MinionModifier",
+              "source": "Tree:35645",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "mod": [
+                  {
+                    "type": "Condition",
+                    "var": "CommandableSkill"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "raw_skill_modifiers": [
+          {
+            "ancestor_depth": 0,
+            "mod": {
+              "flags": 1,
+              "keyword_flags": 0,
+              "name": "AddedDamage",
+              "source": "Skeletal Sniper Damage Multiplier",
+              "tags": [
+                {
+                  "neg": true,
+                  "partialMatch": true,
+                  "skillNameList": [
+                    "Spectre",
+                    "Companion"
+                  ],
+                  "summonSkill": true,
+                  "type": "SkillName"
+                }
+              ],
+              "type": "MORE",
+              "value": 14.999999999999991
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Base",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Intimidated"
+                }
+              ],
+              "type": "INC",
+              "value": -10
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Base",
+              "tags": [
+                {
+                  "neg": true,
+                  "type": "Condition",
+                  "var": "Intimidated"
+                },
+                {
+                  "type": "Condition",
+                  "var": "Party:Intimidated"
+                }
+              ],
+              "type": "INC",
+              "value": -10
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Base",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Debilitated"
+                }
+              ],
+              "type": "MORE",
+              "value": -10
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Hidden Level Scaling",
+              "tags": {},
+              "type": "MORE",
+              "value": 0
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:19006",
+              "tags": {},
+              "type": "INC",
+              "value": 6
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:14598",
+              "tags": {},
+              "type": "INC",
+              "value": 6
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:54453",
+              "tags": {},
+              "type": "INC",
+              "value": 6
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:95",
+              "tags": {},
+              "type": "INC",
+              "value": 10
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:39461",
+              "tags": {},
+              "type": "INC",
+              "value": 6
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:35560",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "CommandableSkill"
+                },
+                {
+                  "type": "Multiplier",
+                  "var": "PersistentMinionTypes"
+                }
+              ],
+              "type": "INC",
+              "value": 10
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:41511",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "CommandableSkill"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:8737",
+              "tags": {},
+              "type": "INC",
+              "value": 10
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:229",
+              "tags": {},
+              "type": "INC",
+              "value": 6
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:25927",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "CommandableSkill"
+                }
+              ],
+              "type": "INC",
+              "value": 20
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:50837",
+              "tags": {},
+              "type": "INC",
+              "value": 6
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:4345",
+              "tags": {},
+              "type": "INC",
+              "value": 6
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:43979",
+              "tags": {},
+              "type": "INC",
+              "value": 6
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Tree:32847",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "CommandableSkill"
+                }
+              ],
+              "type": "INC",
+              "value": 20
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Gigantic",
+              "tags": {},
+              "type": "MORE",
+              "value": 20
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Damage",
+              "source": "Skill:PainOfferingPlayer",
+              "tags": [
+                {
+                  "effectType": "Buff",
+                  "type": "GlobalEffect"
+                }
+              ],
+              "type": "INC",
+              "value": 62
+            }
+          },
+          {
+            "ancestor_depth": 1,
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Gigantic",
+              "source": "Tree:46365",
+              "tags": {},
+              "type": "FLAG",
+              "value": true
+            }
+          }
+        ],
+        "skill_conditions": {
+          "CriticalStrike": true,
+          "MainHandAttack": true
+        },
+        "skill_data": {
+          "damageEffectiveness": 1,
+          "summonSpeed": 0.8666666666666667
+        },
+        "skill_flags": {},
+        "skill_types": [
+          {
+            "id": 1,
+            "value": true
+          },
+          {
+            "id": 3,
+            "value": true
+          },
+          {
+            "id": 20,
+            "value": true
+          },
+          {
+            "id": 21,
+            "value": true
+          },
+          {
+            "id": 41,
+            "value": true
+          },
+          {
+            "id": 57,
+            "value": true
+          },
+          {
+            "id": 58,
+            "value": true
+          },
+          {
+            "id": 83,
+            "value": true
+          }
+        ],
+        "source": {
+          "AttackRate": 0.6666666666666666,
+          "CritChance": 5,
+          "PhysicalMax": 387,
+          "PhysicalMin": 208,
+          "range": 80,
+          "type": "Bow"
+        }
+      }
+    }
+  ],
+  "review": [
+    {
+      "family": "condition lookup",
+      "sites": [
+        "ModStore.lua:409-415",
+        "ModStore.lua:742-768"
+      ],
+      "finding": "Exact own/parent modifier store, cfg override and skill conditions only. The friendly minion root store is independent of Player; Actor parent does not imply modifier-store parent."
+    },
+    {
+      "family": "condition producers",
+      "sites": [
+        "CalcSetup.lua:75-81",
+        "CalcPerform.lua:565-579"
+      ],
+      "finding": "The three base Damage records consume self Intimidated, its negation plus Party:Intimidated, and Debilitated. Selected complete raw inputs contain no supplying Condition flags, explicit overrides or direct state entries. EnemyModifier delivery targets the enemy, not the friendly recipient. Party data is separately accounted and empty."
+    },
+    {
+      "family": "dynamic condition writers",
+      "sites": [
+        "CalcPerform.lua",
+        "CalcActiveSkill.lua",
+        "CalcOffence.lua"
+      ],
+      "finding": "Complete body scan covers literal and dynamic assignments. Dynamic names are weapon/slot, flask/charm, AffectedBy, SelfCast, NeverCrit and local attack flags; none can synthesize Intimidated or Debilitated under the pinned selected input closure."
+    },
+    {
+      "family": "hidden scaling",
+      "sites": [
+        "CalcActiveSkill.lua:930-966",
+        "CalcPerform.lua:1093"
+      ],
+      "finding": "The selected explicit RaisedSkeletonSniper profile uses the friendly intrinsic table, not monsterDamage; hiddenDamageFixup is zero by the selected factory branch. This is not inferred from zero numerical output alone."
+    },
+    {
+      "family": "conversion and physical gain",
+      "sites": [
+        "CalcOffence.lua:70-101",
+        "CalcOffence.lua:141-175",
+        "CalcOffence.lua:2434-2521",
+        "CalcOffence.lua:4103-4119"
+      ],
+      "finding": "Complete selected pass census enumerates both skill/global conversion names for every damage pair and both gain-name families. No selected raw conversion or gain-as-Physical source exists. SkillPhysicalDamageConvertToFire on Arsonist recipes is a different exact skill recipient and is not admitted to this Action."
+    },
+    {
+      "family": "random gain and conversion factories",
+      "sites": [
+        "CalcOffence.lua:1337-1396"
+      ],
+      "finding": "DamageGainAsRandom is a base Faerie Fire source whose name is not included in the historical raw pass whitelist. Its factory produces Fire/Cold/Lightning gain only; none changes a Physical endpoint under the admitted identity conversion domain. PhysicalDamageConvertToRandom is also omitted by that whitelist and is rejected recursively from the complete selected constructor and recipe inputs, including zero/inactive records. Random elemental gain remains required for later elemental and full damage outputs."
+    },
+    {
+      "family": "type and endpoint scaling",
+      "sites": [
+        "CalcOffence.lua:178-230"
+      ],
+      "finding": "Physical calculation combines Damage and PhysicalDamage; selected raw census includes potential inactive and zero records and contains no PhysicalDamage or Min/MaxPhysicalDamage suppliers. Generic conditional factories are bounded by the complete selected source inputs and captured final raw records; native package publication also authenticates all selected occurrence definitions and all potential writers."
+    },
+    {
+      "family": "rounding and stacking",
+      "sites": [
+        "CalcSetup.lua:77-81",
+        "CalcOffence.lua:207-230"
+      ],
+      "finding": "Self/party intimidation is one OR penalty. Debilitation is the first Damage MORE source, before quality and Gigantic; fold the unrounded source factors then round the MORE bucket once before the final damage rounding. Native uses semantic booleans and explicit numeric rounding, not Lua truthiness."
+    }
+  ]
+}

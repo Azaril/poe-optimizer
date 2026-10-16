@@ -10,6 +10,7 @@ mod source_evidence;
 const GRANT: &str = "grant-minion-attack-flat";
 const CONTRIBUTE: &str = "minion-attack-flat-contributors";
 const RECEIVE: &str = "minion-attack-flat-receivers";
+const BRIDGE: &str = "synthetic-item-flat-action";
 const MODIFIERS: [u64; 2] = [0x3377, 0x337a];
 
 fn data(file: &str) -> Value {
@@ -23,11 +24,73 @@ fn data(file: &str) -> Value {
     )
     .unwrap()
 }
+// The retained fragment predates canonical IDs in this range. Its finite
+// provider/recipient tests use named synthetic identities, never those IDs in
+// the live owned namespace. Only these ten exact typed definitions are rebound.
+fn flat_def<K: DefinitionDomain>(n: u64) -> DefId<K> {
+    assert!((0x3373..=0x337c).contains(&n));
+    DefId::parse(
+        GameVersionNamespace::new("poe2", "owned-mechanics-v1").unwrap(),
+        format!("synthetic.item-flat-{n:x}"),
+    )
+    .unwrap()
+}
+fn fixture_data(file: &str) -> Value {
+    assert!(
+        [
+            "definitions.json",
+            "slots.json",
+            "programs.json",
+            "queries.json",
+            "receivers.json",
+            "routes.json"
+        ]
+        .contains(&file)
+    );
+    fn rebind(value: &mut Value) {
+        match value {
+            Value::Object(object) => {
+                for n in 0x3373..=0x337c {
+                    if object.get("key").and_then(Value::as_str)
+                        == Some(format!("def.{n:016x}").as_str())
+                    {
+                        assert_eq!(object.len(), 3);
+                        assert_eq!(
+                            object["namespace"],
+                            serde_json::json!({"game":"poe2", "version":"owned-mechanics-v1"})
+                        );
+                        assert_eq!(
+                            object["kind"],
+                            match n {
+                                0x3373..=0x3376 => "stat",
+                                0x3377 | 0x337a => "modifier",
+                                _ => "parameter_slot",
+                            }
+                        );
+                        object.insert("key".into(), format!("synthetic.item-flat-{n:x}").into());
+                    }
+                }
+                for child in object.values_mut() {
+                    rebind(child);
+                }
+            }
+            Value::Array(rows) => {
+                for row in rows {
+                    rebind(row);
+                }
+            }
+            _ => {}
+        }
+    }
+    let mut value = data(file);
+    rebind(&mut value);
+    value
+}
 fn authored_queries() -> Vec<ContributionQuery> {
-    serde_json::from_value(data("queries.json")).unwrap()
+    serde_json::from_value(fixture_data("queries.json")).unwrap()
 }
 fn is_new_query(q: &ContributionQuery) -> bool {
-    q.stat == def(0x3373) || q.stat == def(0x3374)
+    q.stat == flat_def(0x3373) || q.stat == flat_def(0x3374)
 }
 fn known(n: f64) -> ParameterValue {
     ParameterValue::Quantity(FiniteQuantity::new(n, def(0x1d3a)).unwrap())
@@ -67,7 +130,7 @@ fn install_owner(i: &mut ReplayInput, owner: DefinitionRules, stage: &str) {
 fn fixture() -> ReplayInput {
     let mut i = composed(false);
     let selection: Value = serde_json::from_slice(&authenticated(
-        &packet("bindings.json")["source_selection_prerequisite"]["evidence"],
+        &source_packet("bindings.json")["source_selection_prerequisite"]["evidence"],
     ))
     .unwrap();
     assert_eq!(
@@ -79,8 +142,9 @@ fn fixture() -> ReplayInput {
         "the exact routed Basic stat set is an Attack"
     );
     let definitions: Vec<DefinitionDescriptor> =
-        serde_json::from_value(data("definitions.json")).unwrap();
-    let owners: Vec<DefinitionRules> = serde_json::from_value(data("programs.json")).unwrap();
+        serde_json::from_value(fixture_data("definitions.json")).unwrap();
+    let owners: Vec<DefinitionRules> =
+        serde_json::from_value(fixture_data("programs.json")).unwrap();
     for definition in definitions {
         let subject = SchemaSubject::Definition(definition.address());
         if !owners.iter().any(|o| o.owner == subject) {
@@ -93,11 +157,17 @@ fn fixture() -> ReplayInput {
                 CONTRIBUTE,
             );
         }
+        assert!(
+            !i.schema
+                .definitions
+                .iter()
+                .any(|d| d.address() == definition.address())
+        );
         i.schema.definitions.push(definition);
     }
     i.schema
         .slots
-        .extend(serde_json::from_value::<Vec<SlotDescriptor>>(data("slots.json")).unwrap());
+        .extend(serde_json::from_value::<Vec<SlotDescriptor>>(fixture_data("slots.json")).unwrap());
     i.stages.stages.extend([
         EvaluationStage {
             id: key(CONTRIBUTE),
@@ -160,11 +230,16 @@ fn fixture() -> ReplayInput {
         .unwrap()
         .members
         .extend(queries);
-    i.rules
-        .receivers
-        .members
-        .extend(serde_json::from_value::<Vec<StatReceiver>>(data("receivers.json")).unwrap());
-    let routes: ActionOutputRoutes = serde_json::from_value(data("routes.json")).unwrap();
+    i.rules.receivers.members.extend(
+        serde_json::from_value::<Vec<StatReceiver>>(fixture_data("receivers.json")).unwrap(),
+    );
+    let mut routes: ActionOutputRoutes =
+        serde_json::from_value(fixture_data("routes.json")).unwrap();
+    assert_eq!(routes.routes.members.len(), 2);
+    for (index, route) in routes.routes.members.iter_mut().enumerate() {
+        assert_eq!(route.target, def(0x3371 + index as u64));
+        route.target = routed_flat(index);
+    }
     assert!(!routes.routes.is_complete());
     i.routing
         .outputs
@@ -179,7 +254,7 @@ fn fixture() -> ReplayInput {
             FrozenStageChannel {
                 channel: StageChannel::Contributions {
                     scope: RuleEntityKind::Actor,
-                    stat: def(0x3373 + n),
+                    stat: flat_def(0x3373 + n),
                     contribution: ContributionKind::Add,
                 },
                 stage: key(CONTRIBUTE),
@@ -187,26 +262,132 @@ fn fixture() -> ReplayInput {
             FrozenStageChannel {
                 channel: StageChannel::Stat {
                     scope: RuleEntityKind::Actor,
-                    stat: def(0x3375 + n),
+                    stat: flat_def(0x3375 + n),
                 },
                 stage: key(RECEIVE),
             },
         ]);
-        i.stages
+    }
+    // The item test retains its Actor subtotal and exact Action route. Only an
+    // explicit synthetic bridge delivers that subtotal to the published query.
+    // This does not publish an item family or introduce scalar runtime inputs.
+    i.stages.stages.push(EvaluationStage {
+        id: key(BRIDGE),
+        predecessors: vec![i.stages.routing_stage.clone()],
+    });
+    i.stages
+        .stages
+        .iter_mut()
+        .find(|s| s.id == key(OUTPUT_STAGE))
+        .unwrap()
+        .predecessors
+        .push(key(BRIDGE));
+    let mut bridge = RuleProgram {
+        id: key(BRIDGE),
+        context: RuleEntityKind::Action,
+        reads: vec![],
+        nodes: vec![],
+        effects: vec![],
+    };
+    for (index, channel) in FLAT_CHANNELS.into_iter().enumerate() {
+        let stat = routed_flat(index);
+        let mut descriptor = i
+            .schema
+            .definitions
+            .iter()
+            .find(|d| d.address() == def::<StatDefinition>(channel).address())
+            .unwrap()
+            .clone();
+        let DefinitionDescriptor::Stat(entry) = &mut descriptor else {
+            unreachable!()
+        };
+        entry.id = stat.clone();
+        assert!(
+            !i.schema
+                .definitions
+                .iter()
+                .any(|d| d.address() == stat.address())
+        );
+        i.schema.definitions.push(descriptor);
+        i.rules.owners.push(DefinitionRules {
+            owner: SchemaSubject::Definition(stat.address()),
+            programs: DeclaredSet::complete(vec![]),
+        });
+        i.stages.frozen_channels.push(FrozenStageChannel {
+            channel: StageChannel::Stat {
+                scope: RuleEntityKind::Action,
+                stat: stat.clone(),
+            },
+            stage: i.stages.routing_stage.clone(),
+        });
+        let id = key(if index == 0 { "minimum" } else { "maximum" });
+        bridge.reads.push(RuleRead {
+            id: id.clone(),
+            value_type: ComputedValueType::Quantity { unit: def(0x1d3a) },
+            source: RuleReadSource::Stat {
+                entity: RuleEntity::Current,
+                stat,
+            },
+        });
+        bridge.nodes.push(RuleNode {
+            id: id.clone(),
+            expression: RuleExpression::Read { input: id.clone() },
+        });
+        bridge.effects.push(RuleEffect {
+            id: id.clone(),
+            when: None,
+            effect: RuleEffectKind::Contribute {
+                entity: RuleEntity::Current,
+                stat: def(channel),
+                contribution: ContributionKind::Add,
+                value: id,
+            },
+        });
+        let frozen = i
+            .stages
             .frozen_channels
             .iter_mut()
             .find(|f| {
                 f.channel
-                    == StageChannel::Stat {
+                    == StageChannel::Contributions {
                         scope: RuleEntityKind::Action,
-                        stat: def(0x3371 + n),
+                        stat: def(channel),
+                        contribution: ContributionKind::Add,
                     }
             })
-            .unwrap()
-            .stage = i.stages.routing_stage.clone();
+            .unwrap();
+        assert_eq!(frozen.stage, key(INPUT_STAGE));
+        frozen.stage = key(BRIDGE);
     }
+    declare_flat(&mut i, BRIDGE, ["minimum", "maximum"]);
+    install(&mut i, bridge, BRIDGE);
     i.rebind_test_edit().unwrap();
     i
+}
+fn routed_flat(index: usize) -> StatDefId {
+    DefId::parse(
+        GameVersionNamespace::new("poe2", "owned-mechanics-v1").unwrap(),
+        format!("synthetic.item-flat-routed-{index}"),
+    )
+    .unwrap()
+}
+fn routed_value<'a>(
+    r: &'a SupportEffectsReport,
+    a: &ActionSelection,
+    index: usize,
+) -> &'a EffectValue {
+    &effects(r)
+        .values
+        .iter()
+        .find(|row| {
+            row.key
+                == PlanValueKey::Stat {
+                    entity: ConcreteEntity::Action(Box::new(a.clone())),
+                    stat: routed_flat(index),
+                }
+        })
+        .unwrap()
+        .value
 }
 fn synthetic_item_admission(
     i: &mut ReplayInput,
@@ -238,7 +419,7 @@ fn synthetic_item_admission(
     schema
         .modifiers
         .members
-        .extend(MODIFIERS.map(def::<ModifierDefinition>));
+        .extend(MODIFIERS.map(flat_def::<ModifierDefinition>));
     let mut allocator = InstanceAllocator::from_state(i.build.allocator);
     let mut ids = vec![];
     for (family, amounts) in rolls {
@@ -247,14 +428,14 @@ fn synthetic_item_admission(
         ids.push(id);
         item.modifiers.push(RolledModifier {
             id,
-            definition: def(n),
+            definition: flat_def(n),
             rolls: amounts
                 .iter()
                 .enumerate()
                 .map(|(endpoint, amount)| ParameterAssignment {
                     slot: DeclaredSlot {
-                        declaration: SlotOwnerDefId::Modifier(def(n)),
-                        slot: def(n + 1 + endpoint as u64),
+                        declaration: SlotOwnerDefId::Modifier(flat_def(n)),
+                        slot: flat_def(n + 1 + endpoint as u64),
                     },
                     value: known(*amount),
                 })
@@ -278,7 +459,7 @@ fn synthetic_ranges(i: &mut ReplayInput) {
         };
         if !MODIFIERS
             .iter()
-            .any(|n| entry.id.declaration == SlotOwnerDefId::Modifier(def(*n)))
+            .any(|n| entry.id.declaration == SlotOwnerDefId::Modifier(flat_def(*n)))
         {
             continue;
         }
@@ -294,8 +475,26 @@ fn synthetic_ranges(i: &mut ReplayInput) {
 }
 fn contributions(r: &SupportEffectsReport) -> Vec<&BoundEffectResult> {
     effects(r).effects.iter().filter(|e| matches!(&e.target,
-        BoundEffectTarget::Contribution {key} if key.stat == def(0x3373) || key.stat == def(0x3374)
+        BoundEffectTarget::Contribution {key} if key.stat == flat_def(0x3373) || key.stat == flat_def(0x3374)
     )).collect()
+}
+fn actor_flat_value<'a>(
+    r: &'a SupportEffectsReport,
+    actor: &ActorKey,
+    index: usize,
+) -> &'a EffectValue {
+    &effects(r)
+        .values
+        .iter()
+        .find(|row| {
+            row.key
+                == PlanValueKey::Stat {
+                    entity: ConcreteEntity::Actor(actor.clone()),
+                    stat: flat_def(0x3375 + index as u64),
+                }
+        })
+        .unwrap()
+        .value
 }
 fn check_path(i: &ReplayInput, r: &SupportEffectsReport, expected: [f64; 2], count: usize) {
     assert_eq!(contributions(r).len(), count * 2);
@@ -332,7 +531,7 @@ fn check_path(i: &ReplayInput, r: &SupportEffectsReport, expected: [f64; 2], cou
     for actor in actors(i) {
         for (endpoint, amount) in expected.into_iter().enumerate() {
             assert_eq!(
-                value(r, &actor, 0x3375 + endpoint as u64),
+                actor_flat_value(r, &actor, endpoint),
                 &EffectValue::Known {
                     value: known(amount)
                 }
@@ -346,25 +545,53 @@ fn check_path(i: &ReplayInput, r: &SupportEffectsReport, expected: [f64; 2], cou
     assert_eq!(exact.len(), 2);
     for a in exact {
         for (endpoint, amount) in expected.into_iter().enumerate() {
-            assert_eq!(number(r, a, 0x3371 + endpoint as u64), amount);
+            assert_eq!(
+                routed_value(r, a, endpoint),
+                &EffectValue::Known {
+                    value: known(amount)
+                }
+            );
             let intrinsic = number(r, a, 0x3212 + endpoint as u64);
             assert_eq!(
-                number(r, a, 0x336f + endpoint as u64).to_bits(),
+                number(r, a, 0x339c + endpoint as u64).to_bits(),
                 (intrinsic + amount * 1.15).to_bits()
             );
         }
+    }
+    let delivered: Vec<_> = effects(r)
+        .effects
+        .iter()
+        .filter(|e| e.key.invocation.program == key(BRIDGE))
+        .collect();
+    assert_eq!(delivered.len(), 4);
+    for row in delivered {
+        let BoundEffectTarget::Contribution { key: destination } = &row.target else {
+            panic!()
+        };
+        let ConcreteEntity::Action(a) = &destination.entity else {
+            panic!()
+        };
+        assert_eq!(row.key.invocation.entity, destination.entity);
+        assert_eq!(row.key.invocation.owner, owner());
+        assert_eq!(a.action.output.slot, def(0x22));
+        assert!(actions(i).contains(&a.as_ref()));
+        assert!(
+            FLAT_CHANNELS
+                .map(def::<StatDefinition>)
+                .contains(&destination.stat)
+        );
     }
     // Gas and the Player never receive the minion's Attack subtotal/final result.
     for a in actions(i)
         .into_iter()
         .filter(|a| a.action.output.slot != def(0x22))
     {
-        for n in [0x3371, 0x3372, 0x336f, 0x3370] {
-            assert!(!effects(r).values.iter().any(|v| v.key
-                == PlanValueKey::Stat {
-                    entity: ConcreteEntity::Action(Box::new(a.clone())),
-                    stat: def(n),
-                }));
+        for stat in [routed_flat(0), routed_flat(1), def(0x339c), def(0x339d)] {
+            let target = PlanValueKey::Stat {
+                entity: ConcreteEntity::Action(Box::new(a.clone())),
+                stat,
+            };
+            assert!(!effects(r).values.iter().any(|v| v.key == target));
         }
     }
     assert!(
@@ -457,7 +684,8 @@ fn explicit_synthetic_zero_inactive_and_unqualified_controls_keep_provider_ident
         .owners
         .iter_mut()
         .find(|o| {
-            o.owner == SchemaSubject::Definition(def::<ModifierDefinition>(MODIFIERS[0]).address())
+            o.owner
+                == SchemaSubject::Definition(flat_def::<ModifierDefinition>(MODIFIERS[0]).address())
         })
         .unwrap()
         .programs
@@ -569,7 +797,7 @@ fn partial_membership_missing_rolls_and_early_receipt_are_never_neutral_defaults
             gap.provider.is_none()
                 && gap.subject
                     == Some(SchemaSubject::Definition(
-                        def::<StatDefinition>(n).address(),
+                        flat_def::<StatDefinition>(n).address(),
                     ))
                 && gap.reason == PlanGapReason::IncompleteContributors
         }));
@@ -580,7 +808,7 @@ fn partial_membership_missing_rolls_and_early_receipt_are_never_neutral_defaults
         .items
         .iter_mut()
         .flat_map(|t| &mut t.modifiers)
-        .find(|m| m.definition == def(MODIFIERS[0]))
+        .find(|m| m.definition == flat_def(MODIFIERS[0]))
         .unwrap()
         .rolls
         .pop();
@@ -610,7 +838,7 @@ fn partial_membership_missing_rolls_and_early_receipt_are_never_neutral_defaults
         .routes
         .members
         .iter_mut()
-        .find(|r| r.target == def(0x3371))
+        .find(|r| r.target == routed_flat(0))
         .unwrap();
     let ActionRouteSelection::Exact(selection) = &mut route.selection else {
         panic!()

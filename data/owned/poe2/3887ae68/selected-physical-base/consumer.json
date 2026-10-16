@@ -1,0 +1,440 @@
+{
+  "owners": [
+    {
+      "owner": {
+        "kind": "slot",
+        "value": {
+          "kind": "action_output",
+          "value": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000021"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000022"
+            }
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "selected-physical-base",
+            "context": "action",
+            "reads": [
+              {
+                "id": "source-min",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d3a"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003212"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "source-max",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d3a"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003213"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "self-flat-min",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d3a"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "selected-physical-self-flat-minimum",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "self-flat-max",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000001d3a"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "selected-physical-self-flat-maximum",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "added-multiplier",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000336e"
+                    }
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "source-min",
+                "expression": {
+                  "kind": "read",
+                  "input": "source-min"
+                }
+              },
+              {
+                "id": "source-max",
+                "expression": {
+                  "kind": "read",
+                  "input": "source-max"
+                }
+              },
+              {
+                "id": "self-flat-min",
+                "expression": {
+                  "kind": "read",
+                  "input": "self-flat-min"
+                }
+              },
+              {
+                "id": "self-flat-max",
+                "expression": {
+                  "kind": "read",
+                  "input": "self-flat-max"
+                }
+              },
+              {
+                "id": "added-multiplier",
+                "expression": {
+                  "kind": "read",
+                  "input": "added-multiplier"
+                }
+              },
+              {
+                "id": "base-coefficient",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "added-min",
+                "expression": {
+                  "kind": "scale",
+                  "value": "self-flat-min",
+                  "factor": "added-multiplier"
+                }
+              },
+              {
+                "id": "unscaled-min",
+                "expression": {
+                  "kind": "add",
+                  "left": "source-min",
+                  "right": "added-min"
+                }
+              },
+              {
+                "id": "base-min",
+                "expression": {
+                  "kind": "scale",
+                  "value": "unscaled-min",
+                  "factor": "base-coefficient"
+                }
+              },
+              {
+                "id": "added-max",
+                "expression": {
+                  "kind": "scale",
+                  "value": "self-flat-max",
+                  "factor": "added-multiplier"
+                }
+              },
+              {
+                "id": "unscaled-max",
+                "expression": {
+                  "kind": "add",
+                  "left": "source-max",
+                  "right": "added-max"
+                }
+              },
+              {
+                "id": "base-max",
+                "expression": {
+                  "kind": "scale",
+                  "value": "unscaled-max",
+                  "factor": "base-coefficient"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "base-min",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000339c"
+                  },
+                  "value": "base-min"
+                }
+              },
+              {
+                "id": "base-max",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000339d"
+                  },
+                  "value": "base-max"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "slot",
+                  "value": {
+                    "kind": "action_output",
+                    "value": {
+                      "declaration": {
+                        "kind": "skill",
+                        "definition": {
+                          "kind": "skill",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000021"
+                        }
+                      },
+                      "slot": {
+                        "kind": "action_output",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000022"
+                      }
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "remaining-game-effects-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "queries": [
+    {
+      "id": "selected-physical-self-flat-minimum",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000339a"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001d3a"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "selected-physical-self-flat-maximum",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000339b"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001d3a"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

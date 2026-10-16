@@ -3,6 +3,7 @@ use super::source_shape::{charge_row, container_text, plain_row, value};
 use super::*;
 
 mod presentation_frames;
+mod trade_search;
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
@@ -22,6 +23,10 @@ pub enum SourcePresentationPolicy {
         /// A childless Party frame stores future import and display preferences.
         #[serde(default, skip_serializing_if = "is_false")]
         empty_party: bool,
+        /// Saved trade-tool preferences retain source provenance without
+        /// becoming gameplay inputs or native optimization objectives.
+        #[serde(default, skip_serializing_if = "is_false")]
+        trade_search_weights: bool,
     },
 }
 
@@ -36,6 +41,7 @@ pub(super) struct CompiledSourcePresentation {
     empty_notes: bool,
     cached_build_buffs: bool,
     empty_party: bool,
+    trade_search_weights: bool,
 }
 
 pub(super) fn compile(
@@ -51,6 +57,7 @@ pub(super) fn compile(
         empty_notes,
         cached_build_buffs,
         empty_party,
+        trade_search_weights,
     }) = &policy.source_presentation
     else {
         return Ok(None);
@@ -71,6 +78,7 @@ pub(super) fn compile(
         empty_notes: *empty_notes,
         cached_build_buffs: *cached_build_buffs,
         empty_party: *empty_party,
+        trade_search_weights: *trade_search_weights,
     }))
 }
 
@@ -159,6 +167,9 @@ pub(super) fn apply(
     } else {
         vec![]
     };
+    if policy.trade_search_weights {
+        candidates.extend(trade_search::collect(b)?);
+    }
     candidates.extend(presentation_frames::collect(
         b,
         policy.calcs_sections,

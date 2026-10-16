@@ -1,4 +1,4 @@
-//! Unpublished arithmetic, composed with real intrinsic endpoint producers.
+//! Published selected physical endpoints, composed with real intrinsic producers.
 //! Source comparisons retain the real combined factor. Arithmetic controls
 //! replace only that exact producer and the proved coefficient literal. Their
 //! synthetic values are not game producers.
@@ -9,18 +9,31 @@ use sha2::{Digest, Sha256};
 #[path = "owned_sniper_flat_collection.rs"]
 mod flat_collection;
 
-const PROGRAM: &str = "physical-base-damage";
+const PROGRAM: &str = "selected-physical-base";
 const OPERANDS: &str = "finite-physical-base-operands";
-const INPUT_STAGE: &str = "finite-physical-base-inputs";
-const OUTPUT_STAGE: &str = "physical-base-damage";
+const INPUT_STAGE: &str = "deliver";
+const OUTPUT_STAGE: &str = "selected-physical-base-final";
 const NEUTRAL: [f64; 4] = [0., 0., 1.15, 1.];
-const OPERAND_STATS: [u64; 3] = [0x3371, 0x3372, 0x336e];
-const OUTPUT_STATS: [u64; 2] = [0x336f, 0x3370];
+const FLAT_CHANNELS: [u64; 2] = [0x339a, 0x339b];
+const OPERAND_STATS: [u64; 3] = [0x339a, 0x339b, 0x336e];
+const OUTPUT_STATS: [u64; 2] = [0x339c, 0x339d];
 
 fn key(s: &str) -> OwnedDefinitionKey {
     s.parse().unwrap()
 }
 fn packet(file: &str) -> Value {
+    serde_json::from_slice(
+        &fs::read(
+            root()
+                .join("data/owned/poe2/3887ae68/selected-physical-base")
+                .join(file),
+        )
+        .unwrap(),
+    )
+    .unwrap()
+}
+/// Historical source certificates remain evidence; their draft formula is not installed.
+fn source_packet(file: &str) -> Value {
     serde_json::from_slice(
         &fs::read(
             root()
@@ -79,7 +92,7 @@ fn enemy_basis_matches(evidence: &Value, bindings: &Value, selection: &Value) ->
 fn source_basis() -> ActionOutputRoutes {
     // Reuse the published proof, rather than repeating its upstream source
     // checker or treating the finite vectors' absent fields as a proof.
-    let bindings = packet("bindings.json");
+    let bindings = source_packet("bindings.json");
     let prerequisite = &bindings["source_selection_prerequisite"];
     let source_bindings: Value =
         serde_json::from_slice(&authenticated(&prerequisite["bindings"])).unwrap();
@@ -189,9 +202,99 @@ fn install(i: &mut ReplayInput, p: RuleProgram, stage: &str) {
         .members
         .push(p);
 }
+fn assert_published(i: &ReplayInput) {
+    let consumer = packet("consumer.json");
+    let authored: DefinitionRules = serde_json::from_value(consumer["owners"][0].clone()).unwrap();
+    assert_eq!(authored.programs.members.len(), 1);
+    let current = i
+        .rules
+        .owners
+        .iter()
+        .find(|o| o.owner == authored.owner)
+        .unwrap();
+    assert_eq!(
+        current
+            .programs
+            .members
+            .iter()
+            .filter(|p| p.id == key(PROGRAM))
+            .collect::<Vec<_>>(),
+        vec![&authored.programs.members[0]]
+    );
+    // The replay has explicitly finite owner coverage; the published owner remains Partial.
+    assert!(matches!(
+        authored.programs.closure,
+        SchemaClosure::Partial { .. }
+    ));
+    assert!(current.programs.is_complete());
+    for query in
+        serde_json::from_value::<Vec<ContributionQuery>>(consumer["queries"].clone()).unwrap()
+    {
+        assert_eq!(
+            i.rules
+                .contribution_queries
+                .as_ref()
+                .unwrap()
+                .members
+                .iter()
+                .filter(|q| q.id == query.id)
+                .collect::<Vec<_>>(),
+            vec![&query]
+        );
+    }
+    for entry in packet("migration.json")["schema"].as_array().unwrap() {
+        assert_eq!(entry["kind"], "definition");
+        let definition: DefinitionDescriptor =
+            serde_json::from_value(entry["value"].clone()).unwrap();
+        assert_eq!(
+            i.schema
+                .definitions
+                .iter()
+                .filter(|d| d.address() == definition.address())
+                .collect::<Vec<_>>(),
+            vec![&definition]
+        );
+    }
+    assert_eq!(
+        i.stages
+            .programs
+            .members
+            .iter()
+            .filter(|p| p.owner == owner() && p.program == key(PROGRAM))
+            .collect::<Vec<_>>(),
+        vec![&StagedRuleProgram {
+            owner: owner(),
+            program: key(PROGRAM),
+            stage: key(OUTPUT_STAGE)
+        }]
+    );
+    for n in FLAT_CHANNELS {
+        assert_eq!(
+            i.stages
+                .frozen_channels
+                .iter()
+                .filter(|f| f.channel
+                    == StageChannel::Contributions {
+                        scope: RuleEntityKind::Action,
+                        stat: def(n),
+                        contribution: ContributionKind::Add
+                    })
+                .collect::<Vec<_>>(),
+            vec![&FrozenStageChannel {
+                channel: StageChannel::Contributions {
+                    scope: RuleEntityKind::Action,
+                    stat: def(n),
+                    contribution: ContributionKind::Add
+                },
+                stage: key(INPUT_STAGE)
+            }]
+        );
+    }
+}
 fn composed(synthetic_factor: bool) -> ReplayInput {
     let mut i = load();
     assert!(source_basis_matches(&i, &source_basis()));
+    assert_published(&i);
     let authored: DefinitionRules =
         serde_json::from_value(combined_packet("consumer.json")["owners"][0].clone()).unwrap();
     assert_eq!(authored.owner, owner());
@@ -232,87 +335,90 @@ fn composed(synthetic_factor: bool) -> ReplayInput {
         readiness.retain(|p| !(p.owner == authored.owner && p.program == factor.id));
         assert_eq!(before - readiness.len(), 1);
     }
-    let definitions: Vec<DefinitionDescriptor> =
-        serde_json::from_value(packet("definitions.json")).unwrap();
-    assert_eq!(definitions.len(), 4);
-    let factor_binding = packet("bindings.json")["adopted_factor_definition"].clone();
-    let migration: Value = serde_json::from_slice(
-        &fs::read(root().join(factor_binding["path"].as_str().unwrap())).unwrap(),
-    )
-    .unwrap();
-    assert_eq!(migration["schema"].as_array().unwrap().len(), 1);
-    let real_factor: DefinitionDescriptor = serde_json::from_value(
-        migration
-            .pointer(factor_binding["pointer"].as_str().unwrap())
-            .unwrap()
-            .clone(),
-    )
-    .unwrap();
-    assert!(matches!(&real_factor, DefinitionDescriptor::Stat(s) if s.id == def(0x336e)));
-    let existing = i
-        .schema
-        .definitions
-        .iter()
-        .find(|d| matches!(d, DefinitionDescriptor::Stat(s) if s.id == def(0x336e)))
-        .expect("the canonical replay must include the real combined-factor Stat");
-    assert_eq!(existing, &real_factor, "exact adopted combined-factor Stat");
-    for (n, definition) in (0x336f..=0x3372).zip(definitions) {
-        let DefinitionDescriptor::Stat(entry) = &definition else {
-            panic!("only reserved draft Stats")
-        };
-        assert_eq!(entry.id, def(n));
-        assert!(!i.schema.definitions.contains(&definition));
-        // These are computed value declarations in this finite test graph, not
-        // game source inventories or closures copied into a release.
-        i.rules.owners.push(DefinitionRules {
-            owner: SchemaSubject::Definition(DefinitionAddress::Stat(entry.id.clone())),
-            programs: DeclaredSet::complete(vec![]),
-        });
-        i.schema.definitions.push(definition);
-    }
-    i.stages.stages.extend([
-        EvaluationStage {
-            id: key(INPUT_STAGE),
-            predecessors: vec![i.stages.routing_stage.clone(), factor_stage.clone()],
-        },
-        EvaluationStage {
-            id: key(OUTPUT_STAGE),
-            predecessors: vec![key(INPUT_STAGE)],
-        },
-    ]);
-    for n in [0x3212, 0x3213].into_iter().chain(OPERAND_STATS) {
+    if synthetic_factor {
         let channel = StageChannel::Stat {
             scope: RuleEntityKind::Action,
-            stat: def(n),
+            stat: def(0x336e),
         };
-        let stage = if n < 0x3300 {
-            i.stages.routing_stage.clone()
-        } else if n == 0x336e && !synthetic_factor {
-            factor_stage.clone()
-        } else {
-            key(INPUT_STAGE)
-        };
-        if n == 0x336e
-            && let Some(existing) = i
-                .stages
-                .frozen_channels
-                .iter_mut()
-                .find(|f| f.channel == channel)
-        {
-            assert_eq!(existing.stage, factor_stage);
-            existing.stage = stage;
-        } else {
-            i.stages
-                .frozen_channels
-                .push(FrozenStageChannel { channel, stage });
-        }
+        let frozen = i
+            .stages
+            .frozen_channels
+            .iter_mut()
+            .find(|f| f.channel == channel)
+            .unwrap();
+        assert_eq!(frozen.stage, factor_stage);
+        frozen.stage = key(INPUT_STAGE);
     }
-    install(&mut i, program(), OUTPUT_STAGE);
     i.rebind_test_edit().unwrap();
     i
 }
 fn fixture() -> ReplayInput {
     composed(true)
+}
+fn declare_flat(i: &mut ReplayInput, program: &str, names: [&str; 2]) {
+    for (stat, effect) in FLAT_CHANNELS.into_iter().zip(names) {
+        let query = i
+            .rules
+            .contribution_queries
+            .as_mut()
+            .unwrap()
+            .members
+            .iter_mut()
+            .find(|q| q.stat == def(stat))
+            .unwrap();
+        assert!(query.groups[0].members.members.is_empty());
+        query.groups[0].members.members.push(ContributionMember {
+            producer: ContributionProducer::ProgramEffect(ProgramContributionProducer {
+                owner: owner(),
+                program: key(program),
+                effect: key(effect),
+                origin: ContributionOrigin::Action {
+                    authored: false,
+                    supplies: vec![DeclaredSlot {
+                        declaration: SlotOwnerDefId::Actor(def(0x3091)),
+                        slot: def(0x3092),
+                    }],
+                },
+            }),
+            order: Some(ContributionOrder {
+                source_rank: 0,
+                program_rank: 0,
+                effect_rank: 0,
+                slot_ranks: vec![],
+            }),
+        });
+    }
+}
+fn unknown_flat_stat(i: &mut ReplayInput, index: usize) -> StatDefId {
+    let id = DefId::parse(
+        GameVersionNamespace::new("poe2", "owned-mechanics-v1").unwrap(),
+        format!("synthetic.physical-missing-{index}"),
+    )
+    .unwrap();
+    let mut descriptor = i
+        .schema
+        .definitions
+        .iter()
+        .find(|d| d.address() == def::<StatDefinition>(FLAT_CHANNELS[index]).address())
+        .unwrap()
+        .clone();
+    let DefinitionDescriptor::Stat(entry) = &mut descriptor else {
+        unreachable!()
+    };
+    entry.id = id.clone();
+    i.schema.definitions.push(descriptor);
+    i.rules.owners.push(DefinitionRules {
+        owner: SchemaSubject::Definition(id.address()),
+        programs: DeclaredSet::complete(vec![]),
+    });
+    i.stages.frozen_channels.push(FrozenStageChannel {
+        channel: StageChannel::Stat {
+            scope: RuleEntityKind::Action,
+            stat: id.clone(),
+        },
+        stage: key("prepare"),
+    });
+    id
 }
 fn inject(i: &mut ReplayInput, operands: [Option<f64>; 3]) {
     let mut p = RuleProgram {
@@ -322,27 +428,54 @@ fn inject(i: &mut ReplayInput, operands: [Option<f64>; 3]) {
         nodes: vec![],
         effects: vec![],
     };
-    for (n, amount) in OPERAND_STATS.into_iter().zip(operands) {
-        let Some(amount) = amount else { continue };
+    for (index, (n, amount)) in OPERAND_STATS.into_iter().zip(operands).enumerate() {
+        if index == 2 && amount.is_none() {
+            continue;
+        }
         let id = key(&format!("operand-{n:x}"));
-        p.nodes.push(RuleNode {
-            id: id.clone(),
-            expression: RuleExpression::Literal {
+        let expression = if let Some(amount) = amount {
+            RuleExpression::Literal {
                 value: ParameterValue::Quantity(
                     FiniteQuantity::new(amount, def(if n == 0x336e { 1 } else { 0x1d3a })).unwrap(),
                 ),
-            },
+            }
+        } else {
+            // A declared supplier with an unknown amount is not an empty query.
+            let stat = unknown_flat_stat(i, index);
+            p.reads.push(RuleRead {
+                id: id.clone(),
+                value_type: ComputedValueType::Quantity { unit: def(0x1d3a) },
+                source: RuleReadSource::Stat {
+                    entity: RuleEntity::Current,
+                    stat,
+                },
+            });
+            RuleExpression::Read { input: id.clone() }
+        };
+        p.nodes.push(RuleNode {
+            id: id.clone(),
+            expression,
         });
         p.effects.push(RuleEffect {
             id: id.clone(),
             when: None,
-            effect: RuleEffectKind::Derive {
-                entity: RuleEntity::Current,
-                stat: def(n),
-                value: id,
+            effect: if index == 2 {
+                RuleEffectKind::Derive {
+                    entity: RuleEntity::Current,
+                    stat: def(n),
+                    value: id,
+                }
+            } else {
+                RuleEffectKind::Contribute {
+                    entity: RuleEntity::Current,
+                    stat: def(n),
+                    contribution: ContributionKind::Add,
+                    value: id,
+                }
             },
         });
     }
+    declare_flat(i, OPERANDS, ["operand-339a", "operand-339b"]);
     install(i, p, INPUT_STAGE);
     i.rebind_test_edit().unwrap();
 }
@@ -431,7 +564,7 @@ fn check(i: &ReplayInput, r: &SupportEffectsReport, expected: [f64; 2]) {
 
 #[test]
 fn enemy_absence_binding_requires_exact_source_and_accounted_input_scope() {
-    let bindings = packet("bindings.json");
+    let bindings = source_packet("bindings.json");
     let original: Value = serde_json::from_slice(&authenticated(
         &bindings["enemy_flat_prerequisite"]["evidence"],
     ))
@@ -505,8 +638,8 @@ fn changed_source_choice_requires_a_new_data_binding() {
 
 #[test]
 fn retained_original_operands_match_the_native_arithmetic_boundary() {
-    let bindings = packet("bindings.json");
-    assert_eq!(bindings["status"], "unpublished-arithmetic-fragment");
+    let bindings = source_packet("bindings.json");
+    // The retained observation is compared with the current published consumer.
     let pin = &bindings["source_vectors"];
     let bytes = authenticated(pin);
     let evidence: Value = serde_json::from_slice(&bytes).unwrap();
@@ -516,7 +649,7 @@ fn retained_original_operands_match_the_native_arithmetic_boundary() {
         evidence["reports"][0]["sha256"],
         evidence["reports"][1]["sha256"]
     );
-    let neutral = real_supplied([0., 0.]);
+    let neutral = composed(false);
     let flat = real_supplied([3., 7.]);
     let reports = [run(&neutral), run(&flat)];
     let inputs = [&neutral, &flat];
@@ -655,7 +788,7 @@ fn missing_operands_remain_unresolved_even_when_the_coefficient_is_zero() {
             .filter(|a| a.action.output.slot == def(0x22))
         {
             assert!(matches!(
-                action_value(&r, a, stat - 0x3212 + 0x336f),
+                action_value(&r, a, stat - 0x3212 + 0x339c),
                 EffectValue::Unresolved { .. }
             ));
         }
@@ -691,8 +824,8 @@ fn exact_repeated_actions_survive_input_order_scratch_reuse_and_parallel_workers
         number(&fresh[1], exact[1], 0x3212)
     );
     assert_ne!(
-        number(&fresh[1], exact[0], 0x336f),
-        number(&fresh[1], exact[1], 0x336f)
+        number(&fresh[1], exact[0], 0x339c),
+        number(&fresh[1], exact[1], 0x339c)
     );
     let mut reordered = b.clone();
     reordered.build.skills.reverse();
@@ -733,15 +866,17 @@ fn data_binding_units_staging_and_partial_scope_are_checked() {
         "partial"
     );
     let p = program();
-    let bindings = packet("bindings.json");
-    let inputs = bindings["inputs"].as_array().unwrap();
     assert_eq!(p.reads.len(), 5);
-    assert_eq!(inputs.len(), p.reads.len());
-    for (read, input) in p.reads.iter().zip(inputs) {
-        assert_eq!(serde_json::to_value(&read.id).unwrap(), input["name"]);
+    let queries: Vec<ContributionQuery> =
+        serde_json::from_value(consumer["queries"].clone()).unwrap();
+    for (read, query) in p.reads[2..4].iter().zip(&queries) {
         assert_eq!(
-            serde_json::to_value(&read.source).unwrap()["value"]["stat"],
-            input["stat"]
+            read.source,
+            RuleReadSource::ContributionQuery {
+                entity: RuleEntity::Current,
+                query: query.id.clone(),
+                group: key("sources")
+            }
         );
     }
     assert_eq!(p.reads[0].id, key("source-min"));
@@ -759,20 +894,10 @@ fn data_binding_units_staging_and_partial_scope_are_checked() {
     assert_eq!(i.build, original.build);
     assert_eq!(i.scenario, original.scenario);
     assert_eq!(i.queries, original.queries);
-    for previous in &original.rules.owners {
-        let current = i
-            .rules
-            .owners
-            .iter()
-            .find(|o| o.owner == previous.owner)
-            .unwrap();
-        assert_eq!(current.programs.closure, previous.programs.closure);
-        let mut inverse = current.clone();
-        if current.owner == owner() {
-            assert_eq!(inverse.programs.members.pop().unwrap(), program());
-        }
-        assert_eq!(inverse, *previous);
-    }
+    assert_eq!(i.schema, original.schema);
+    assert_eq!(i.rules, original.rules);
+    assert_eq!(i.routing, original.routing);
+    assert_eq!(i.stages, original.stages);
     let mut wrong_unit = i.clone();
     let p = wrong_unit
         .rules
@@ -810,4 +935,120 @@ fn data_binding_units_staging_and_partial_scope_are_checked() {
             .unwrap_err()
             .contains("frozen channel read")
     );
+}
+
+#[test]
+fn published_flat_queries_refuse_partial_unlisted_and_late_contributions() {
+    for stat in FLAT_CHANNELS {
+        let mut partial = composed(false);
+        partial
+            .rules
+            .contribution_queries
+            .as_mut()
+            .unwrap()
+            .members
+            .iter_mut()
+            .find(|q| q.stat == def(stat))
+            .unwrap()
+            .groups[0]
+            .members
+            .closure = SchemaClosure::Partial {
+            gaps: vec![SchemaGap {
+                subject: SchemaSubject::Definition(def::<StatDefinition>(stat).address()),
+                facet: SchemaFacet::GameRules,
+                code: key("synthetic-unreviewed-flat-supplier"),
+            }],
+        };
+        partial.rebind_test_edit().unwrap();
+        assert_eq!(
+            run(&partial).outcome,
+            SupportEffectsOutcome::Unavailable {
+                cause: EffectValue::Unresolved {
+                    reason: PlanGapReason::IncompleteContributors,
+                    read: None
+                },
+                input: None,
+            }
+        );
+        let mut late = composed(false);
+        late.stages.stages.push(EvaluationStage {
+            id: key("synthetic.flat-too-late"),
+            predecessors: vec![key(OUTPUT_STAGE)],
+        });
+        late.stages
+            .frozen_channels
+            .iter_mut()
+            .find(|f| {
+                f.channel
+                    == StageChannel::Contributions {
+                        scope: RuleEntityKind::Action,
+                        stat: def(stat),
+                        contribution: ContributionKind::Add,
+                    }
+            })
+            .unwrap()
+            .stage = key("synthetic.flat-too-late");
+        assert!(
+            late.rebind_test_edit()
+                .unwrap_err()
+                .contains("frozen channel read")
+        );
+    }
+    for active in [false, true] {
+        let mut i = real_supplied([0., 0.]);
+        let p = i
+            .rules
+            .owners
+            .iter_mut()
+            .find(|o| o.owner == owner())
+            .unwrap()
+            .programs
+            .members
+            .iter_mut()
+            .find(|p| p.id == key(OPERANDS))
+            .unwrap();
+        p.nodes.push(RuleNode {
+            id: key("active"),
+            expression: RuleExpression::Literal {
+                value: ParameterValue::Boolean(active),
+            },
+        });
+        for effect in &mut p.effects {
+            effect.when = Some(key("active"));
+        }
+        i.rebind_test_edit().unwrap();
+        check(&i, &run(&i), [208., 387.]);
+        let mut late = i.clone();
+        late.stages
+            .programs
+            .members
+            .iter_mut()
+            .find(|p| p.program == key(OPERANDS))
+            .unwrap()
+            .stage = key(OUTPUT_STAGE);
+        assert!(
+            late.rebind_test_edit()
+                .unwrap_err()
+                .contains("potential writer occurs after or outside frozen stage")
+        );
+        i.rules
+            .contribution_queries
+            .as_mut()
+            .unwrap()
+            .members
+            .iter_mut()
+            .find(|q| q.stat == def(FLAT_CHANNELS[0]))
+            .unwrap()
+            .groups[0]
+            .members
+            .members
+            .clear();
+        let error = i
+            .rebind_test_edit()
+            .expect_err("potential Action supplier requires exact membership");
+        assert!(
+            error.contains("potential Action contribution has no declared membership"),
+            "{error}"
+        );
+    }
 }

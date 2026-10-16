@@ -1,4 +1,7 @@
 //! Actual injected Life-copy rules; finite component controls, not a whole build.
+#[allow(dead_code)]
+#[path = "support/owned_life_equipment_domain.rs"]
+mod equipment_domain;
 #[path = "support/owned_amulet_life_copy.rs"]
 mod family;
 #[path = "support/owned_release_migration_preservation.rs"]
@@ -25,10 +28,12 @@ use poe_optimizer_core::{
     owned_stages::*,
 };
 use poe_optimizer_engine::owned_plan::*;
-use poe_optimizer_engine::owned_rules::NumericalFailure;
+use poe_optimizer_engine::owned_rules::{NumericalFailure, UnsupportedDomainCause};
 use rayon::prelude::*;
 use serde_json::{Value, json};
-use std::{fs, path::PathBuf};
+use std::{fs, path::PathBuf, sync::OnceLock};
+
+const BOUND: f64 = 137_438_953_472.;
 fn def<K: DefinitionDomain>(n: u64) -> DefId<K> {
     DefId::parse(
         GameVersionNamespace::new("poe2", "owned-mechanics-v1").unwrap(),
@@ -83,23 +88,54 @@ fn staged(
     r.programs.members.push(s);
 }
 fn retained_copy_rules(w: &replay::ReplayInput, c: &family::Consumer) {
+    static AUTHENTICATED: OnceLock<()> = OnceLock::new();
+    AUTHENTICATED.get_or_init(equipment_domain::check_authored);
+    let mut expected_owner = equipment_domain::dependencies().owner;
+    assert_eq!(expected_owner.owner, life());
+    for program in equipment_domain::programs() {
+        let matches: Vec<_> = expected_owner
+            .programs
+            .members
+            .iter_mut()
+            .filter(|p| p.id == program.id)
+            .collect();
+        assert_eq!(matches.len(), 1);
+        *matches.into_iter().next().unwrap() = program;
+    }
+    let actual: Vec<_> = w
+        .rules
+        .owners
+        .iter()
+        .filter(|o| o.owner == life())
+        .collect();
+    assert_eq!(actual.len(), 1);
+    assert!(
+        actual[0].programs.members == expected_owner.programs.members,
+        "retain the exact published Life owner programs, including both guards"
+    );
+    let copy = expected_owner
+        .programs
+        .members
+        .iter()
+        .find(|p| p.id == c.program.id)
+        .unwrap();
     let readiness = &w.stages.readiness.as_ref().unwrap().programs.members;
     let expected =
-        std::iter::once((life(), &c.program, false)).chain(c.eligibility.iter().map(|owner| {
+        std::iter::once((life(), copy, false)).chain(c.eligibility.iter().map(|owner| {
             assert_eq!(owner.programs.members.len(), 1);
             (owner.owner.clone(), &owner.programs.members[0], true)
         }));
     for (owner, program, eligibility) in expected {
         let owners: Vec<_> = w.rules.owners.iter().filter(|o| o.owner == owner).collect();
         assert_eq!(owners.len(), 1);
-        assert_eq!(
+        assert!(
             owners[0]
                 .programs
                 .members
                 .iter()
                 .filter(|p| p.id == program.id)
-                .collect::<Vec<_>>(),
-            vec![program],
+                .collect::<Vec<_>>()
+                == vec![program],
             "retained copy program must exist exactly once and match authored data"
         );
         let stage = StagedRuleProgram {
@@ -188,7 +224,36 @@ fn current_life_query(w: &replay::ReplayInput) -> ContributionQuery {
         family::consumer().query,
         "only the exact supplied-Actor inherent membership extends the historical query"
     );
-    query
+    let player: RuleProgram = serde_json::from_slice(
+        &fs::read(family::root().join("data/owned/poe2/3887ae68/life-base-domain/program.json"))
+            .unwrap(),
+    )
+    .unwrap();
+    let actual: Vec<_> = w
+        .rules
+        .owners
+        .iter()
+        .filter(|o| o.owner == SchemaSubject::Definition(def::<ActorDefinition>(0x332a).address()))
+        .flat_map(|o| o.programs.members.iter().filter(|p| p.id == player.id))
+        .collect();
+    assert!(
+        actual == vec![&player],
+        "retain the guarded Player Life bridge"
+    );
+    let mut expected = query;
+    let equipment = expected
+        .groups
+        .iter_mut()
+        .find(|g| g.id.as_str() == "equipment")
+        .unwrap();
+    assert!(!equipment.members.is_complete());
+    equipment.members.closure = SchemaClosure::Complete;
+    let published = equipment_domain::query();
+    assert!(
+        published == expected,
+        "the published numeric-domain proof changes only equipment closure"
+    );
+    published
 }
 fn world() -> replay::ReplayInput {
     let mut w = replay::ReplayInput::decode(
@@ -226,16 +291,18 @@ fn world() -> replay::ReplayInput {
     // scheduling declarations. Assert their identity instead of reinserting them
     // or silently accepting a conflicting implementation from a newer fixture.
     retained_copy_rules(&w, &c);
-    let mut query = current_life_query(&w);
-    // Only this finite component's controlled input cases assert equipment
-    // closure. Publication retains the actual Partial domain and order gap.
-    query
-        .groups
-        .iter_mut()
-        .find(|g| g.id.as_str() == "equipment")
-        .unwrap()
-        .members
-        .closure = SchemaClosure::Complete;
+    // The published equipment group is now checked Complete. The finite replay
+    // still does not establish global supplier or whole-owner completeness.
+    let query = current_life_query(&w);
+    assert!(
+        !w.rules
+            .contribution_queries
+            .as_ref()
+            .unwrap()
+            .members
+            .iter()
+            .any(|q| q.id == query.id)
+    );
     w.rules
         .contribution_queries
         .as_mut()
@@ -564,23 +631,59 @@ fn missing_effective_is_unknown_only_for_eligible_copies() {
     );
 }
 #[test]
-fn overflow_is_explicit_and_identity_or_bypass_skips_unused_arithmetic() {
+fn published_range_guards_and_lazy_copy_branches_preserve_exact_refusals() {
+    let unsupported = |node: &str, value: f64, unit: u64| EffectValue::UnsupportedDomain {
+        node: key(node),
+        domain: UnsupportedDomainCause::NumericRange {
+            value: ParameterValue::Quantity(FiniteQuantity::new(value, def(unit)).unwrap()),
+            domain: Box::new(NumericDomain::Quantity(QuantityRange {
+                minimum: FiniteQuantity::new(-BOUND, def(unit)).unwrap(),
+                maximum: FiniteQuantity::new(BOUND, def(unit)).unwrap(),
+            })),
+        },
+    };
+    for value in [-f64::MAX, (-BOUND).next_down(), BOUND.next_up(), f64::MAX] {
+        for (percentage, unscalable) in [(25., false), (100., false), (25., true)] {
+            let mut w = world();
+            add_life(&mut w, &[17.]);
+            effective(&mut w, value);
+            percent(&mut w, percentage);
+            if unscalable {
+                bypass(&mut w);
+            }
+            assert_eq!(
+                active(&report(w)),
+                vec![&unsupported("effective", value, 0x295a)]
+            );
+        }
+    }
+    for value in [-BOUND, BOUND] {
+        let mut identity = world();
+        add_life(&mut identity, &[17.]);
+        effective(&mut identity, value);
+        percent(&mut identity, 100.);
+        assert_eq!(active(&report(identity.clone())), vec![&known(value)]);
+        percent(&mut identity, 200.);
+        assert_eq!(
+            active(&report(identity)),
+            vec![&unsupported("bounded-life-points", value * 2., 0x3119)]
+        );
+    }
+    // The input is supported, but the selected arithmetic can still overflow.
+    // An unscalable copy skips that arithmetic while retaining both guards.
     let mut w = world();
     add_life(&mut w, &[17.]);
-    effective(&mut w, f64::MAX);
-    percent(&mut w, 25.);
+    effective(&mut w, BOUND);
+    percent(&mut w, f64::MAX);
     assert_eq!(
         active(&report(w.clone())),
         vec![&EffectValue::NumericalError {
-            node: key("scaled-hundred"),
+            node: key("scaled"),
             reason: NumericalFailure::NonFinite
         }]
     );
-    let mut identity = w.clone();
-    percent(&mut identity, 100.);
-    assert_eq!(active(&report(identity)), vec![&known(f64::MAX)]);
     bypass(&mut w);
-    assert_eq!(active(&report(w)), vec![&known(f64::MAX)]);
+    assert_eq!(active(&report(w)), vec![&known(BOUND)]);
     for n in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
         assert!(FiniteQuantity::new(n, def(0x295a)).is_err());
     }
@@ -698,7 +801,7 @@ fn current_partial_coverage_missing_membership_and_stage_refusals_remain() {
     );
 }
 #[test]
-fn published_partial_equipment_query_cannot_be_read_as_a_known_total() {
+fn historical_partial_equipment_mutation_cannot_be_read_as_a_known_total() {
     let mut w = world();
     add_life(&mut w, &[17., 19.]);
     percent(&mut w, 25.);
@@ -738,6 +841,8 @@ fn published_partial_equipment_query_cannot_be_read_as_a_known_total() {
             .value
     };
     assert_eq!(total(report(w.clone())), known(107.));
+    // Explicit negative: restore the earlier incomplete equipment domain.
+    // Current publication uses the independently checked Complete group.
     let actual = family::consumer().query;
     let equipment = actual
         .groups

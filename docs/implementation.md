@@ -81,7 +81,7 @@ These reference observations are not evidence of native metric completion.
 | 02, 18, 19: Player ES, Armour, Evasion | Selected item magnitude/local-defence intermediates and global/passive contributions | Final item properties, complete receiving, transformations and final Actor totals |
 | 03–06: four capped Player resistances | Item/passive/reward inputs and configured penalty | Complete contributor inventories, aggregation and cap/override calculations |
 | 07–12: total EHP and five maximum hits | Encounter and incoming-damage components | Complete resource/defence dependencies, mitigation and final survivability calculations |
-| 14: exact Sniper Basic Attack hit DPS | Prepared skill, intrinsic damage/rate, accuracy, inherited/Offering/Gigantic/quality factors and exact-Action Command | Pre-conversion damage assembly, remaining modifier domains, critical/speed/enemy mitigation and final DPS binding |
+| 14: exact Sniper Basic Attack hit DPS | Prepared skill, intrinsic damage/rate, accuracy, inherited/Offering/Gigantic/quality factors and exact-Action Command | Conditional/type/conversion damage domains, critical/speed/enemy mitigation and final DPS binding |
 | 13, 15, 16: Player hit DPS/average hit and Sniper average hit | Exact typed query identities | Reviewed unavailable results matching the reference; no fabricated numerical defaults |
 | 17: Player Spirit | Actual Amulet/reward inputs, explicit Amulet-copy contribution and guarded final Player consumer | Supplier, suppression and numeric-order admission plus complete-plan binding; unreserved Spirit and legality are separate |
 | 20, 21: Player movement/action speed | Movement contribution channel and typed metric declarations | Complete contributors, interactions and final calculations; observed action speed 100 is not a native constant |
@@ -107,40 +107,62 @@ availability/value checks pass, begin D4 immediately.
 
 ## Current checkpoint: configuration admission
 
-The [Current Energy Shield packet](../data/owned/poe2/3887ae68/configuration-current-energy-shield-input/README.md)
-publishes Player percentage-point input `3399` using the existing checked
-projection: nonzero Input, then Placeholder, then authenticated constructor 100.
-The complete source callback has two responsibilities: a nonzero candidate emits
-the source-local `UseCurrentEnergyShield` flag and the unchanged percentage.
-Zero emits neither record; it does not establish that the global condition is
-false. Both actual ordered writes and the complete surrounding callback state
-are checked. No native flag writer, cap, effect or complete supplier inventory
-is implied; those consumers remain downstream work.
+The [selected physical-base packet](../data/owned/poe2/3887ae68/selected-physical-base/README.md)
+publishes the actual pre-conversion Basic Attack formula and two checked
+self-flat contribution queries. Its original selected endpoints are **208–387**.
+All potential native writers, including zero/inactive and application writers,
+are checked against the finite source proof; existing global, owner and input
+Partial boundaries remain intact. Four ordinary checks, all-five publication,
+102 distinct joined tests, strict Clippy and public replay export pass. The
+[packet](../data/owned/poe2/3887ae68/selected-physical-base/README.md#checks)
+records the test-helper failures and exact validation scope.
 
-The production CLI preserves all five originals, all 110 queries, earlier IDs,
-values and preferences, and exactly rebuilds all eighteen artifacts. Original05
-configuration origins fall **20 → 19** (6 → 5 inside Config; 14 outside unchanged),
-and known assumptions rise **32 → 33**. Its 35 usage preferences, 20 usage links
-and four selected input obligations remain unchanged. Selected issue counts stay
-**106/117/109/123/4**, and complete native builds remain **0/5**.
-The preceding [Demonflame checkpoint](implementation-history.md#archived-2026-10-15-checkpoint-demonflame-input)
-and earlier source/input publications remain preserved in history.
+The following [trade-search preference packet](../data/owned/poe2/3887ae68/source-trade-preferences/README.md)
+accounts for saved trade weights through the existing opt-in import policy.
+It preserves names, duplicate rows and finite signed weights as source
+preferences; these do not become native gameplay inputs or inferred optimizer
+objectives. Complete loader and trade-entry-point evidence keeps future trade
+intent distinct from gameplay. All five originals and 110 queries reproduce
+exactly. Original05 configuration origins fall **19 → 16** (five inside Config
+unchanged; fourteen → eleven outside). Its **33 known assumptions, 35 usage
+preferences, 20 usage links and four Pending input inventories** are unchanged.
+Selected issue counts remain **106/117/109/123/4**; complete native builds remain
+**0/5**, with no complete evaluation bundle published.
 
-Current package: **`runs/owned-configuration-current-energy-shield-publication-01/package`**.
+The subsequent [selected physical-hit packet](../data/owned/poe2/3887ae68/selected-physical-hit/README.md)
+now computes **574–1068** before critical multipliers and enemy mitigation.
+It applies semantic Intimidated/Debilitated conditions through existing Boolean
+queries, preserves the single MORE-bucket rounding point, and proves the finite
+selected conversion/type/suppression domain from complete source and native
+writer censuses. Eight ordinary tests, strict Clippy and all-five publication
+pass, including fresh/reused/Rayon equality, duplicate/unknown conditions,
+zero/inactive supplier refusals and a fractional-quality rounding control.
+Source-call snapshots remain test evidence rather than runtime operands.
 
-- Input: `5f4eac0385d5785bf5534f8ae0be00e4a7c718dcf87c18057eeeabb7391a75f0`.
-- Registry: `55eda3108b622c111d7a8ad19ebbead6de941b3f02987704e12ceda0b2e6ffcc` (last `3399`).
-- Definitions: `fa84eb1d95fac7382d1247df46656d7163fabdb3b872fc669c249c8b7af0e339`.
-- Rules: `cf578ce6da3ddac7bec11c5bc25d3cfb19c7235cda481298d17e3277c9846ca2`.
-- Compiled: `dd7767bc2570b79774a3912f83cc4dc3ff73558d8ed2bc161ea32ba60813006b`.
+Current package: **`runs/owned-selected-physical-hit-publication-01/package`**.
 
-The package has **64,457,998 bytes**, 193 provenance rows and unchanged
-8187/8192 program use. Four ordinary tests pass (2.06s), strict target Clippy
-passes (1.10s), and all-five publication/rebuild plus 20 source/Encounter and
-two duplicate-lane controls pass (62.44s). Logs:
-`runs/owned-configuration-current-energy-shield-{ordinary,clippy,publication}-01.log`.
-No runtime or shared-helper changes, archive duplication, source VM run or
-raised package/evaluator limits were needed.
+- Input: `d935e89968280f49c6a6eb75463107858e44bd736ca3e96902707a42916c4b59`.
+- Registry: `0a1566c921fce3029d46681f26507b5436e511003dafae18a0ce0ce1ea38757e` (last `33a1`).
+- Definitions: `66054dc33148174ac81994d65c6903f63bda1bd6d7044c8369c0cf3ebd79e9d2`.
+- Rules: `24e8228d28ed7beade1936d37d04875a19f174bca5758220f4623fa24e1d22fe`.
+- Compiled: `1284bee1e2474a4f696d8bb4d9022dae5e5e1cf1ccdd160e43f974656a91b5cd`.
+
+The eighteen files total **64,474,322 bytes**, with 196 provenance rows and
+**8189/8192** effective programs (8188 owner programs plus one application).
+The separate serialized endpoint is **64,462,764 bytes**. The hit publication
+adds four definitions, one program and two queries; its exact typed inverse,
+all-five preservation and byte-identical rebuild pass (330.48s). Evidence:
+`runs/owned-selected-physical-hit-publication-01/{validation,receipt}.json`.
+Package-file totals and serialized endpoint sizes are different measurements.
+Trade preferences add no definitions, native programs, slots or tables.
+Twenty-one focused Import tests, eight ordinary CLI tests, all-five CLI
+publication/rebuild and strict Clippy pass. Evidence:
+`runs/owned-trade-preferences-import-{01,clippy-01}.log`,
+`runs/owned-trade-and-ci-cli-{01,clippy-01}.log`, and
+`runs/owned-trade-preferences-publication-01.log`.
+The earlier [Current Energy Shield input](implementation-history.md#archived-2026-10-15-checkpoint-current-energy-shield-input)
+and [source boundaries](implementation-history.md#archived-2026-10-15-checkpoint-final-selected-flat-damage-boundaries)
+remain preserved with their evidence.
 
 **Next input blockers:** the remaining saved controls have distinct responsibilities:
 
@@ -160,6 +182,28 @@ windows and inventory limits remain downstream work. The source's preview mode
 is not a gameplay flag. Complete configuration, usage and assumption inventories
 remain mandatory; a smaller source-link count cannot close them.
 
+The actual remaining sixteen configuration-origin rows have been audited against
+the current import and source XML:
+
+| Source ordinals | Remaining responsibility |
+| --- | --- |
+| 1 | Build level/class/ascendancy, main skill selection and format/view fields |
+| 123, 124 | TimelessData variants/search preferences and active Tree selection |
+| 166 | Skills active preset, constructor level/quality and browser fields |
+| 174, 175 | Archived item-granted Firebolt group/Gem correspondence and deferred usage |
+| 422, 423, 437, 442, 450 | Config containers, Corrupting Cry stages, Sigil stages and campaign progression |
+| 467 | Items active preset, weapon-loadout and display fields |
+| 744–746 | Calcs context and its distinct skill/mode selection |
+| 797 | Import export-Party behavior and account/league UI fields |
+
+The archived Firebolt pair can eventually reuse existing exact generated-input
+and deferred-usage contracts, but retiring those two links would leave all four
+selected obligations unchanged. It is not the next numerical milestone. Calcs
+selects a distinct reference context and export-Party has a calculation branch;
+neither may be dismissed as presentation solely by its UI location. Finish the
+selected numerical consumers while preparing a complete remaining configuration
+and default-accounting proof with the separate usage/progression decisions.
+
 The apparent Chill breakdown use of Shock stack names remains an investigation
 with ailment-effect admission, not an accepted parity exception. The bounded
 source review's lack of a direct Scorch-stack reader is not an absence proof.
@@ -172,52 +216,63 @@ the raw Enemy count uses checked source selection and constructor 20. All-five
 preservation, 22 controls, strict Clippy and immutable source receipt checks pass.
 The subsequent ailment packet preserves this input and its downstream gaps.
 
-## Source checkpoint: final selected flat-damage boundaries
+## Next damage checkpoint: Offering speed and ordinary attack rate
 
-The preceding [minion-store checkpoint](implementation-history.md#archived-2026-10-15-checkpoint-selected-minion-store-suppliers)
-remains authenticated. Follow-up work now closes its explicitly enumerated
-source boundaries before publishing native self-flat membership and the final
-physical endpoints together:
+The physical-hit consumer is now published for its finite selected source domain.
+The next positive numerical slice is **Pain Offering Speed → ordinary Basic
+Attack rate**, reusing the current effect application, independent Maximum
+stacking selection and existing `OrdinaryTiming` operation. Use the actual
+40-row injected level table; Speed cannot borrow Damage's winning Offering.
+Current source controls give baseline rate 0.8666666666666667/s and disabled
+Offering 0.6666666666666666/s. Raw level 1 resolves to final level 3 in its
+retained control, so its Speed is 21%, not the table's level-1 20%.
 
-| Boundary | Current evidence and limit |
-| --- | --- |
-| Flask/Charm and Keystone | [Offline proof](../data/owned/poe2/3887ae68/self-flat-flask-keystone/README.md): all 112 actual candidates across each of 21 fresh environments exclude Flask/Charm providers. Complete dispatch and early destination review plus two exact 30-record Sniper deliveries exclude primary Keystone candidates. The secondary query is unexecuted, not observed empty. |
-| Later Party and aura delivery | [Fixed acquisition](../data/owned/poe2/3887ae68/self-flat-later-aura-delivery/README.md): all 18 original performs contain the exact Party gate and AffectedByAuraMod List call, with complete empty raw ancestry/returns and no delivery. All four numerical snapshots agree. The initial validator's path assertion failed; its capture/code/log remain sealed and the corrected offline assessment required no source rerun. |
-| Later Actor/defence/trigger helpers | [Validated offline proof](../data/owned/poe2/3887ae68/self-flat-later-helpers/README.md): complete destination and computed-name review retains arbitrary EnemyModifier payloads targeting the actual Enemy relation. Late ExtraAura creation remains explicit and is only excluded from same-pass delivery; original 3169 query evidence supplies the separate finite captured-call authority. Seven ordinary tests, retention and strict Clippy pass. |
-| Action factories and callbacks | [Validated offline proof](../data/owned/poe2/3887ae68/self-flat-action-factories/README.md): complete factory/filter bodies and exact Basic Attack configuration establish that twenty Spell-only write sites are inapplicable, not absent. Parent-weapon and callbacks retain separate source authority. Seven ordinary tests, offline retention and strict Clippy pass. |
+The new `offering-speed-rate` packet is an unpublished draft. Definitions
+33a2/33a3 are reserved for recipient Speed INC and exact Action rate. Before
+rate admission, prove all eight timing inputs, the selfCast/ActionSpeed path,
+real server tick rate and every alternate timing branch. An empty captured
+flags object does not prove false. Neutral factors require complete supplier
+proofs. Preserve unknown, Partial, unlisted and late-write failures; do not
+replace the timing operation with a convenient multiplication.
 
-The final shared suite passes **48 ordinary tests** and strict Clippy across
-inherited delivery, later aura, radius, Flask/Keystone, minion-store and skill
-construction. New Flask/Keystone offline retention passes (26.01s), and the
-later-aura retention passes (10.57s). Independent source reviews found no
-blocking issue. Logs:
-`runs/owned-self-flat-flask-keystone-{retain-02,ordinary-chain-01,clippy-chain-01}.log`
-and `runs/owned-later-aura-{retain,ordinary,clippy,source-clippy}-01.log`.
-The separate Action target passes seven tests (14.15s), retention (10.87s) and
-strict Clippy (1.19s): `runs/owned-self-flat-action-factories-{retain,ordinary,clippy}-01.log`.
-The later-helper target passes seven tests (15.33s), retention (12.13s) and
-strict Clippy (1.32s): `runs/owned-self-flat-later-helpers-{retain,ordinary,clippy}-01.log`.
-The preserved first aura assessment failure and earlier inherited raw-order
-failure grant no numerical tolerance or native Lua ordering behavior.
+After rate, finish **outgoing critical chance/multiplier**, distinct from the
+existing incoming-Player critical calculations, then **Enemy armour/physical
+mitigation** separately for normal and critical hits. The retained reference
+normal/critical averages after armour are 414.2081976279727 and
+1101.2392272188865; their weighted value is 448.55974910751837. The final saved
+Sniper hit-DPS reference is 388.7517825598493. These are validation targets,
+never operands or defaults. Multiplying mitigated normal damage by a single
+average critical factor is invalid because armour is nonlinear. Keep the
+saved unavailable Sniper average-hit query and FullDPS/count reporting separate.
+The outgoing-critical preflight must retain the conditional Critical Weakness
+supplier even while inactive, and resolve the source-call anomaly recorded in
+[cleanup tracking](legacy-retirement.md#other-current-compatibility-investigations).
+The isolated `outgoing-critical` draft reserves 33a4/33a5 for final Action chance
+and multiplier. Intrinsic chance is 3215; accuracy confirmation is 321c, distinct
+from after-block hit chance 3220. Shared minion bonus/cap ownership, Critical
+Weakness applicability and crit-specific dynamic producers remain unclosed.
+Additional supplier definitions/programs must be justified before allocation;
+no new runtime contract or source-argument compatibility behavior is approved.
 
-These source packets change no canonical package, allocator ID, program, query,
-native coverage or complete-build count. Current package and input checkpoint
-remain the Current Energy Shield publication above; complete builds are **0/5**.
+The portable Sniper replay now contains the published physical-base program;
+all **45 ordinary Engine tests** and **40 tests across six direct CLI consumers**
+pass, with strict Clippy for every affected target. The old arithmetic installer
+is removed. Life test helpers authenticate the already published guarded bodies
+instead of reinstalling them; the Amulet test rejects unsupported inputs even
+on identity/bypass paths while preserving lazy arithmetic, all nine source
+vectors and recipient/order/zero/missing controls. Historical Partial coverage
+survives only as an explicit negative control. Earlier failing logs remain
+retained; no production rule or source observation changed for these repairs.
 
-**Resume:** publish the checked native writer census and final physical consumer
-together. All four source follow-ups above are validated. Use the current imported
-preparation graph and existing exact Action contribution queries, intrinsic
-3212/3213 endpoints, real 336e multiplier, coefficient and Enemy-source proofs.
-Allocate fresh IDs after 3399. The old arithmetic draft's IDs collide and cannot
-be reused. Avoid forwarding collectors and absent positive item families.
-
-The complete writer census must include every potential program, including
-application producers, and exact source/recipient/receiver boundaries. A zero
-captured result is insufficient. Keep global, owner and input Partial gates;
-validate missing/unknown members, late writes, fresh/reused/Rayon equality, all
-five imports and all 110 queries. The source proof remains finite to its actual
-input domain. No production build selector or hard-coded example dispatch may
-replace injected data or checked preparation.
+The fixture refresh also includes three previously published Life guards and
+29 canonical descriptors; its exact inverse is not physical-only. Build,
+Scenario and saved queries remain unchanged. Evidence:
+`runs/owned-selected-physical-base-engine-replay-03.log`,
+`runs/owned-selected-physical-base-replay-consumers-02.log`,
+`runs/owned-selected-physical-base-amulet-replay-01.log`, and corresponding
+`engine-replay-clippy-01`, `replay-consumers-clippy-01`, `amulet-clippy-01` logs.
+See the [fixture receipt](../tests/fixtures/owned-sniper-replay.md) and
+[retirement tracking](legacy-retirement.md#other-current-compatibility-investigations).
 
 ## Previous checkpoint: Skill support and exact aggregation
 
@@ -597,8 +652,9 @@ and migrate existing reservation data, removing the superseded live
 Action-owned path. Prove invariance to unrelated metric-query changes alongside
 participation, repeated sources, counts, payer identity, dependency cycles and
 Action-sensitive controls. Existing numerical and complete-plan gaps remain
-until independently closed. Sniper physical-base assembly remains behind its missing self-flat supplier
-authority, and its unpublished draft IDs must be reconciled before adoption.
+until independently closed. The selected physical-base publication now supplies
+the previously missing checked self-flat groups and uses fresh identities.
+Conditional/type/conversion damage and final DPS remain downstream.
 
 Native-only writer census
 could make Life's adjustment groups Complete-empty, as Mana's already are, but
@@ -615,12 +671,13 @@ an implicit way around the current complete-plan contract.
 The Life predecessor's read-only capacity audit found programs to be the only
 nearly exhausted compiler collection, at 8190/8192 including one application.
 The Mana cleanup reduced that to 8185/8192 and receivers from 60 to 55. The
-Spirit component now uses **8187/8192**, leaving five program slots, with 56
-receivers. Other measured Life-predecessor compiler counts are
+current selected physical-hit successor uses **8189/8192**, leaving three
+program slots, with 56 receivers. Other measured Life-predecessor compiler counts are
 6548 owners, 23517 effects, 4249 reads, 32814 nodes and 41600 edges, comfortably
 within their separate caps.
-The Current Energy Shield release is **64,457,998/67,108,864 bytes**,
-leaving 2,650,866 bytes. These are separate limits. The common
+The current serialized endpoint is **64,462,764/67,108,864 bytes**,
+leaving 2,646,100 bytes. Its eighteen package files separately total 64,474,322
+bytes; earlier checkpoints reported file totals. These are separate measurements. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
 
@@ -658,116 +715,33 @@ domain gaps remain explicit. Pushed as `ba33003d`.
 
 ## CI receipt repair (2026-10-15)
 
-The same run's Engine jobs `116297674753` (Ubuntu) and `116297675032` (Windows)
-subsequently exposed two obsolete
-preparation-scope expectations after exact Skill support receiving was added.
-Tests now recognize Skill-context support programs and their actual version
-gates, while rejecting unrelated owners and unauthorized assigned-Skill aliases.
-The concrete no-binding regression covers both Actor and Skill recipients:
-preparation and ordinary execution remain unavailable without a checked support
-binding. No production code or admission rule changed. All 54 relevant tests
-pass across preparation scopes/readiness, computed supports and support delivery;
-strict Clippy passes for all four targets. Evidence:
-`runs/ci-owned-preparation-scopes-{02,03,clippy-01}.log` and
-`runs/ci-job-116297674753.log` / `runs/ci-job-116297675032.log`.
-The earlier local scope run exposed an incorrect
-test expectation below the Skill-context version gate; that assertion was fixed
-before the final passing run. These local results do not establish hosted success.
+Inspection of main `61205e81`, run `38825000935`, exposed a remaining Import
+`items_after_test_module` lint in both validation jobs. The preceding `1ec92252`
+run `38722502273` also exposed a Linux-only Demonflame evidence lookup failure.
+The test module now follows production functions without changing either body.
+The shared offline source checker resolves repository-relative archive components
+portably, retaining the exact evidence packet and compressed/decompressed hashes.
+No runtime rule, native path or current package identity changes.
 
-Run `38695918235` (`b81bae66`) subsequently exposed one remaining derived
-receipt mismatch in both platform validation jobs: `import/policies/transition.json`
-still named the pre-repair compiled transition. The offline exporter regenerates
-all 22 seed/policy artifacts; 21 are byte-identical and the remaining artifact
-changes only `compiled_transition_sha256` to
-`011f4aedcec6f931b71bf55f768e13020efe6fca1f5684919ca19452a1b255e4`.
-All 16 existing import-export tests now pass. The downstream resistance, tree
-and allocation export suites also pass (18/16/14 tests), using workspace-local
-temporary files for the sandboxed mutation cases. No test assertion, source
-mechanic, generated policy body or runtime code changed. Evidence:
-`runs/ci-job-116297674{329,741}.log`,
-`runs/ci-import-policy-{regeneration,regression}-01.log`, and
-`runs/ci-test_export_owned_{resistance-01,tree-02,allocations-02}.log`.
-The hosted run is still active with failed validation; the local repair is not
-a hosted green result.
-
-At the 09:23 UTC October 15 check, both platform workspace and Import jobs pass,
-as do Ubuntu CLI shards 1 and 3. The newly failed Ubuntu CLI shard 0
-(`116297674792`) contains only three configured-Enemy source checks and Player
-Withered failing the same overwritten evidence hash in both feature profiles.
-The immutable evidence repair below, pushed in `4f4445d0`, already corrects all
-four failures; no additional code change is needed. The complete job log is
-`runs/ci-job-116297674792.log`. The later October 15 check adds passing Ubuntu
-PoB and two failed jobs: Windows CLI shard 0 (`116297674677`, the same four
-source tests) and Ubuntu CLI shard 2 (`116297675064`, the distance-input source
-test). Their complete logs independently confirm only the same overwritten
-`configuration-review.json` hash in both feature profiles. Current bytes match
-the expected `d8f7abf2…`; `4f4445d0` already fixes every observed failure in
-those two jobs. No additional implementation or test rerun was needed.
-Logs: `runs/ci-job-116297674677.log` and `runs/ci-job-116297675064.log`.
-Remaining Windows CLI/PoB jobs were still active. The latest inspected queued
-revision was `0c8f61c8`, run `38717516697`; intervening pending revisions were
-coalesced. Newer pushes can replace that pending run. Local repair validation is
-not a completed hosted run of the repaired revision.
-
-The new input's source checks also exposed overwritten historical evidence:
-quest reconciliation had replaced `configuration-review.json`, which five
-earlier input packets authenticate. Restore its exact original 150,147 bytes
-(`d8f7abf2…`), and retain the complete expanded report as
-`configuration-reward-review.json` (183,350 bytes, `929e8805…`). The dedicated
-quest proof now reconstructs that separate artifact; its test seals both reports
-and proves their non-quest content is identical. All 24 constructor dependencies
-across the five historical packets and the new input match without changing
-historical authoring identities. This is immutable source evidence, not runtime
-compatibility or a hash fallback. The four affected Rust targets pass 19 ordinary
-tests and strict Clippy, with the explicit retention test still opt-in. Logs:
-`runs/owned-configuration-immutable-evidence-{tests,clippy}-01.log`.
-
-Hosted run `38675971601` for older revision `c4a62464` exposed another stale
-derived receipt in `owned_catalog_recipe`. The compiler-domain change updated
-the active tree seed but missed `import/compiled/manifest.json`. The existing
-`extend-owned-skill-catalog` CLI reproduces all nine artifacts from unchanged
-inputs: seven are identical, while the manifest's compiled identity and its
-transition hash change. The expected compiled identity is
-`18ac3accd9995e8006a11707adbdd11827d0bb8b039b7814fb0232c515fa722f`.
-No source mechanics, test expectations or allocation code change. Independent
-inverse review confirms exactly those two digest changes and unchanged LF bytes.
-All five Import `owned_catalog_recipe` tests pass (0.35s), using the unchanged
-strict artifact comparisons. Hosted success is not yet confirmed.
-The subsequent job-log audit explains four more failing CLI targets in that old
-run: `owned_item_bases_cli`, `owned_attribute_cli` and `owned_extension_cli`
-reject the former current-manifest receipt; `owned_catalog_cli` rejects the
-former generated catalog manifest. Those are covered by `47fa0592` and
-`7aebbde1` respectively. All 19 current and eight import/compiled artifact
-receipts now match their exact hash and size. The later Ubuntu cli-0/cli-1 logs
-show the same old current-manifest failure in `owned_weapon_profiles_cli`,
-`owned_class_bases_cli`, `owned_intrinsic_cli` and `owned_passive_views_cli`, plus
-the old `current/transition.json` byte mismatch in `owned_tree_cli`. These are
-the receipt family regenerated by `47fa0592`; no additional code defect was
-found. A fresh local `owned_tree_cli` run passes all three tests in 6.98s,
-including exact twenty-artifact reproduction, all-five XML censuses and failure
-controls (`runs/ci-owned-tree-receipts-01.log`).
-The completed Windows cli-0 job reports the same old weapon-profile manifest
-receipt failure in both feature profiles, with no new defect
-(`runs/ci-job-116230401591.log`). At 07:26 UTC, revision `b81bae66` has active
-run `38695918235`, while the latest inspected push `26c5cd1a` has pending run
-`38698549720`. Main concurrency preserves the running revision and coalesces
-pending revisions. Live job logs are unavailable, so individual long steps have
-not been diagnosed as hung. Do not report either newer revision as green.
-The subsequent Windows cli-2 job repeats only the already-repaired item-base
-manifest receipt failure in both profiles (`runs/ci-job-116230401646.log`).
-Windows cli-1 also completed with only the same old class/intrinsic/passive-view
-manifest and tree-transition failures in both profiles
-(`runs/ci-job-116230401733.log`). The last Windows cli-3 job completed at
-07:15 UTC with only the already-repaired attribute/extension current-manifest
-and generated-catalog manifest mismatches in both profiles
-(`runs/ci-job-116230401699.log`). The old run is terminal with failure;
-no new failure class was found.
-The older revision's Windows and Ubuntu PoB jobs have completed successfully; this is not a
-hosted result for the current main revision.
-Evidence: `runs/ci-import-c4a62464-job116230401602.log` and
-`runs/ci-catalog-republication-01-diff.json`, plus
-`runs/ci-job-116230401634.log` and `runs/ci-job-116230401669.log`; validation:
-`runs/ci-owned-catalog-recipe-receipts-01.log`.
+Focused validation passes: the exact Import receipt test, strict Import
+Clippy, five ordinary Demonflame controls, four Current Energy Shield controls
+and strict CLI Clippy. The archive-locator regression reads the same sealed
+1,172,527-byte source through either slash convention and rejects unsafe relative
+components. Logs: `runs/ci-configuration-receipt-order-{01,clippy-01}.log`
+and `runs/owned-trade-and-ci-cli-{01,clippy-01}.log`. Hosted validation of
+the repair is pending: commit `885b5d7d` is pushed, and run `38829485175`
+was queued behind the still-running predecessor at inspection. Full previous
+job logs are retained in
+`runs/ci-job-116730283{203,414}.log` and
+`runs/ci-job-116410446{698,998,809}.log`. The current hosted run was still active
+at inspection, with failed validation; do not claim hosted success.
+The [earlier receipt and source-evidence repairs](implementation-history.md#archived-2026-10-15-checkpoint-earlier-ci-receipt-repairs)
+remain recorded separately. They are not unresolved failures of this checkpoint.
+The subsequent read-only follow-up found no additional failure: completed Import,
+workspace and Ubuntu Engine jobs pass, while the remaining jobs are still active.
+Public job status and annotations are retained under
+`runs/ci-followup-20261015-38825000935/`. No runs were cancelled; the pushed
+repair still awaits its own hosted validation.
 
 ## Previous checkpoint: configured Player Withered input
 
@@ -1047,9 +1021,8 @@ build.
 The current input audit found no existing-authority shortcut to close the
 four obligations. Preset usage `0505` retains unresolved global switches,
 action selection and FullDPS responsibilities despite known preferences.
-`01f2` retains 29 origins after the published correspondence and configuration
-accounting steps; known values and remaining Firebolt correspondence are separate.
-`0207`'s 24
+`01f2` retains the configuration origins counted at the current checkpoint;
+known values and remaining Firebolt correspondence are separate. `0207`'s
 known assumptions do not prove the constructor/default catalogue complete;
 `0208`'s empty saved usage does not account for seven default child-effect enables.
 Known scalar values cannot certify these inventories. Checked configuration

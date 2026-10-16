@@ -17,12 +17,38 @@ build support.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
 
-The latest [Current Energy Shield input](../data/owned/poe2/3887ae68/configuration-current-energy-shield-input/README.md)
+The latest [selected physical-base component](../data/owned/poe2/3887ae68/selected-physical-base/README.md)
+publishes the actual Basic Attack pre-conversion formula and checked self-flat
+contribution queries. The finite original source domain and complete native
+potential-writer census establish empty self-flat groups; the existing intrinsic
+and combined-factor producers yield 208–387 for the unchanged selection.
+All-five publication and joined native checks pass.
+
+The subsequent [physical-hit component](../data/owned/poe2/3887ae68/selected-physical-hit/README.md)
+adds checked semantic Intimidated/Debilitated conditions and one correctly
+ordered increased/MORE calculation. Complete source and native writer censuses
+establish the finite selected type/conversion/suppression domain. Native results
+match the retained original physical range **574–1068**, before critical damage
+and mitigation; all-five publication, eight ordinary tests and strict Clippy
+pass. Offering Speed and ordinary attack rate are next, followed by outgoing
+critical calculation and separate normal/critical armour mitigation. Final DPS
+and complete-build coverage remain unfinished.
+
+Its [trade-search preference successor](../data/owned/poe2/3887ae68/source-trade-preferences/README.md)
+accounts for saved trade weights in import provenance without inferring gameplay
+inputs or optimizer objectives. All-five preservation and exact package rebuild
+pass. Original05 now has **16 remaining configuration origins and 33 known
+assumptions**; its four complete input inventories remain Pending. The current
+physical-hit successor has 8189 effective programs and complete native builds
+remain **0/5**.
+See the [current endpoint](implementation.md#current-checkpoint-configuration-admission).
+
+The preceding [Current Energy Shield input](../data/owned/poe2/3887ae68/configuration-current-energy-shield-input/README.md)
 preserves raw Player percentage points and accounts for both source callback
 responsibilities. A nonzero candidate emits a source-local flag and percentage;
 zero emits neither and cannot establish global flag absence. Native flag/effect
 production, downstream caps and complete contributor coverage remain unfinished.
-All-five publication, exact rebuild and 22 controls pass. Original05 now has
+All-five publication, exact rebuild and 22 controls pass. Original05 then had
 **19 remaining configuration origins and 33 known assumptions**; its four
 complete input inventories remain Pending. See the
 [current endpoint](implementation.md#current-checkpoint-configuration-admission).
@@ -1278,9 +1304,10 @@ the source domain; native workers consume typed routing data without executing
 Lua or reading that evidence. Independent numerical and rule coverage remains
 Partial. Source choice does not provide missing endpoint values or defaults.
 
-The [draft physical-base consumer](../data/owned/poe2/3887ae68/physical-base-damage/README.md)
-combines the complete selected intrinsic endpoints, self-flat inputs and the
-real combined factor. Separate weapon-bonus ports were removed:
+The [published physical-base consumer](../data/owned/poe2/3887ae68/selected-physical-base/README.md)
+combines the selected intrinsic endpoints, checked self-flat queries and the
+real combined factor. It supersedes the old arithmetic draft's installer with
+fresh identities 339a–339d. Separate weapon-bonus ports were removed:
 the proved intrinsic constructor already supplies a coherent range. A separate
 [coefficient proof](../data/owned/poe2/3887ae68/intrinsic-attack-coefficient/source-review.md)
 permits a typed literal one in this exact ability's injected rule, replacing an
@@ -1294,9 +1321,12 @@ source bindings and exercise missing inputs and parallel reuse. The
 authenticates constructed suppliers and transport, including boss configuration
 and the accounted absence of Party payloads. It justifies removing the unused
 ports and addition nodes without installing zero-producing subsystems.
-The two self-flat producers remain unfinished; finite test inputs are not
-canonical data or proof of whole-build support. A future real Enemy-derived
-addition must preserve its source ownership and consuming-Action eligibility.
+The self-flat queries now carry checked Complete-empty potential membership in
+the exact published domain. Complete source and native writer censuses include
+inactive and zero candidates. Synthetic positive suppliers remain test-only;
+no positive item family or whole-build support is implied. A future real
+Enemy-derived addition must preserve its source ownership and consuming-Action
+eligibility. Partial owner/global/input gates still prevent complete evaluation.
 
 The [selected skill-construction proof](../data/owned/poe2/3887ae68/self-flat-skill-construction/README.md)
 now accounts for the finite local recipe boundary: 40 skill/support definitions,

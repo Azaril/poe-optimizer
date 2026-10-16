@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "kind": "selected-physical-hit-source-authority",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "report": {
+    "archive": {
+      "path": "data/owned/poe2/3887ae68/selected-physical-hit/physical-source.json.gz",
+      "bytes": 1381535,
+      "sha256": "4357fd49f43210a1afa6435a2c383a469cd1811042606ae5f719f180edf078ec"
+    },
+    "bytes": 19612949,
+    "sha256": "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935",
+    "original_reports": [
+      {
+        "path": "runs/owned-minion-physical-damage-source-02/source-jit-off.json",
+        "bytes": 19612949,
+        "sha256": "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935"
+      },
+      {
+        "path": "runs/owned-minion-physical-damage-source-02/source-jit-on.json",
+        "bytes": 19612949,
+        "sha256": "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935"
+      }
+    ]
+  },
+  "vectors": {
+    "path": "data/owned/poe2/3887ae68/selected-physical-hit/source-vectors.json",
+    "bytes": 410822,
+    "sha256": "224a635a942cce603cfeabeb6dc4e3bccd1c6e8d1934f29abe871b1dafe03fd5"
+  },
+  "domain": {
+    "path": "data/owned/poe2/3887ae68/selected-physical-hit/source-domain.json",
+    "bytes": 127861,
+    "sha256": "197766f44adb08649232dabf7cb90e77b8f0870cb49ec9e05d315922e1bf814e"
+  },
+  "scope": {
+    "complete_build": false,
+    "positive_condition_source_parity": false,
+    "source_vm_execution": false,
+    "all_future_basic_actions": false
+  },
+  "selected_inputs": [
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/source-jit-off.json.gz",
+      "bytes": 1290374,
+      "sha256": "eb3e2f5df46d7c7f7e55b5968d1609ab7c6010f2b93b24137dec3d925e65b842"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/mana-supplier-sources/source-jit-on.json.gz",
+      "bytes": 1289531,
+      "sha256": "f895dff33823fa7dd6a33dc874b6f66bdc424291e0fd45216761691cd5777242"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/self-flat-attack-damage/selected-domain.json",
+      "bytes": 471969,
+      "sha256": "ebe5ed14555ef4200f843dbf2972e3d3bd5fe82b4d3c4b558e07f187d0c1681f"
+    }
+  ],
+  "pending": []
+}

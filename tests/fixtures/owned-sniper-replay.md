@@ -2,8 +2,8 @@
 
 `owned-sniper-replay.json.gz` contains the public typed inputs of the existing
 joined Sniper test graph, exported from
-`runs/owned-numeric-domain-publication-01/package`, input
-`690169b8e0303ca02ae9a49139a8446c6b470675c28914e7f06e69e09b4d8a54`.
+`runs/owned-selected-physical-base-publication-02/package`, input
+`3207283619e0224714b005bfbf352c5f92d40e598e4bd8be4c837013664a5851`.
 It is test data, not a production release or an admitted complete build.
 Original05 still has four selected input obligations and incomplete mechanics
 coverage. Previous refreshes are recorded in the
@@ -52,24 +52,25 @@ Fourteen Command vectors cover every mode and branch-removal control on both
 recipients. Gas level projection comes from the real population graph.
 These are component checks, not final damage or complete-build parity.
 
-The [physical-base draft](../../data/owned/poe2/3887ae68/physical-base-damage/README.md)
-is composed by ordinary Engine tests without adding that draft to the gzip. It
-reuses the coherent native endpoints and real combined-factor consumer; two
-unfinished self-flat inputs are supplied for thirteen retained source comparisons.
-Its exact ability coefficient is authored in rule data with separate source
-proof. The separately authenticated Enemy supplier proof removes two unused
-ports and declarations; it retains the required Party exclusion. Arithmetic-only
-controls authenticate and remove the combined consumer, supply three operands
-and edit the exact coefficient literal in copied test data.
-They preserve missing-input refusal even with a known zero coefficient and
-publish no final damage metric or coverage closure.
+The [published physical-base program](../../data/owned/poe2/3887ae68/selected-physical-base/README.md)
+is now part of the gzip, with current definitions 339a–339d and its two checked
+self-flat queries. Ordinary Engine tests authenticate that program and exercise
+its complete-empty baseline, thirteen retained source comparisons and explicit
+synthetic positive/signed controls. They no longer install the old arithmetic
+draft or its colliding identities. The coefficient and Enemy-supplier proofs
+remain independent offline evidence. Missing inputs stay unresolved, including
+when a coefficient is zero; no final DPS or whole-build coverage is implied.
 
-Six additional flat-collection tests compose the real native item-roll producers
-and exact source/recipient contributions. They authenticate source evidence and
+The additional flat-collection tests compose the real native item-roll producers
+and exact source/recipient contributions. An explicit synthetic bridge carries
+the finite Actor subtotal to the exact Basic Action; source identity, recipient
+and numeric order remain checked. Ten old draft fixture IDs are replaced by
+named synthetic identities because current owned definitions now occupy those
+numeric IDs. They authenticate source evidence and
 exercise independent rolls, explicit modifier order, missing/Partial inputs,
 early receipt and fresh/reused/four-worker equality. These tests retain the
 production supplier and input-accounting gaps documented in the
-[implementation checkpoint](../../docs/implementation.md#current-implementation-checkpoint-checked-numeric-domains).
+[implementation checkpoint](../../docs/implementation.md#current-checkpoint-configuration-admission).
 
 Run ordinary replay tests with:
 
@@ -94,25 +95,34 @@ with fixed timestamp and OS header. Decoding is bounded to 8 MiB; ordinary tests
 require deterministic re-encoding. Compression is a test dependency only.
 Numerical JSON uses the workspace's exact float-roundtrip configuration.
 
-The V27 fixture has **928 definitions, 621 owners and 36 stages**.
-It is 139,113 compressed bytes and 5,423,891 JSON bytes. Gzip SHA-256:
-`2416f092732e32cf9f8d16dc97482f5c80ac294bc46189f065e6726db7b560ad`.
+The current fixture has **957 definitions, 625 owners and 37 stages**.
+It is 139,878 compressed bytes and 5,442,599 JSON bytes. Gzip SHA-256:
+`792c80a684d68009fa5b14071a5a71c329b29ae2233470c819fd2439c30f2e67`.
 Decoded JSON SHA-256:
-`42ff215d5dad6e50610d05baaff0b3dbfc712b622650babb981a140f040735ca`.
+`fa6e2d89882ac62792f819214db41ec246a954f6f1b670fc6d6e1a6ad8bf60b0`.
 
-The October 14 compiler-domain rebuild exported this fixture again through the
-normal joined graph. Both compressed and decoded bytes remain identical: the
-fixture stores public inputs, not a compiled identity. Export validation passes
-(`runs/owned-numeric-domain-replay-export-01.log`), and **37 ordinary Engine
-replay tests** pass against current code
-(`runs/owned-numeric-domain-sniper-replay-01.log`). These include native flat
-collection, missing/Partial coverage and fresh/reused/parallel-worker controls.
-Strict Engine Clippy passes (`runs/owned-numeric-domain-clippy-03.log`).
-At the preceding data regeneration, **93 joined native tests** passed.
-Prior regeneration and affected
-CLI validation are retained in `runs/owned-sniper-combined-added-joined-01.log`
-and `runs/owned-sniper-combined-added-cli-clippy-01.log`.
-The separate full-JSON inverse in
-`runs/owned-sniper-combined-added-replay-inverse-01.log` authenticates exactly
-one Stat/owner/support domain, program/query, stage with readiness/freezes and
-sixteen dependent identity changes. Every other JSON value is unchanged.
+The refresh passes the public-input export and full-report equality check
+(`runs/owned-selected-physical-base-export-01.log`). Its exact inverse at
+`runs/owned-selected-physical-base-replay-inverse-01.json` preserves Build,
+Scenario and saved queries. It adds 29 exact current descriptors, four empty
+Stat owners/support domains, the physical program/two queries, one stage and
+four freezes, plus three previously published Life guards. Sixteen dependent
+identities rebind; every other semantic field restores exactly. This is not a
+physical-only snapshot change.
+
+All **45 ordinary Engine tests pass** in 12.99 seconds
+(`runs/owned-selected-physical-base-engine-replay-03.log`). The first execution
+exposed obsolete test-side Life guard installers; exact published-body assertions
+now replace those installers. The physical negative also recognizes Data's
+earlier precise membership refusal, including zero/inactive writers. All six
+direct CLI fixture consumers pass **40 tests**; the Amulet helper now validates
+the exact published guarded program and its current domain refusals. Strict
+Clippy passes the Engine target and all six CLI targets. Logs:
+`runs/owned-selected-physical-base-replay-consumers-02.log`,
+`runs/owned-selected-physical-base-amulet-replay-01.log`,
+`runs/owned-selected-physical-base-engine-replay-clippy-01.log`,
+`runs/owned-selected-physical-base-replay-consumers-clippy-01.log`, and
+`runs/owned-selected-physical-base-amulet-clippy-01.log`.
+Source observations, numerical rules and immutable evidence have not been
+changed to accommodate these test failures. Older refresh results remain in
+Git history and the implementation archive.

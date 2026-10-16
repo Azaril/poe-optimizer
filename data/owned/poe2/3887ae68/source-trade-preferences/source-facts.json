@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "archives": [
+    {
+      "path": "src/Modules/Build.lua",
+      "archive": "../source-empty-party/evidence/Build.lua.gz",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d",
+      "bytes": 116017,
+      "compressed_sha256": "3f6a44249269eeb28cde364af74eadcc293d28aa3e2807f321cf3382aef8e0b6",
+      "compressed_bytes": 26180
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "archive": "../mana-supplier-sources/equipment-ItemsTab.lua.gz",
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d",
+      "bytes": 180248,
+      "compressed_sha256": "42bea0ca39380f004cdb748a09f2b005604ad2a13d8790f1d6665e466f7c4ff4",
+      "compressed_bytes": 38782
+    },
+    {
+      "path": "src/Classes/TradeQuery.lua",
+      "archive": "evidence/TradeQuery.lua.gz",
+      "sha256": "a4cbecf0b834140b9c28c119e72429bf97613fc99136375e246d0ae0c7781ba9",
+      "bytes": 61974,
+      "compressed_sha256": "0cd3f24006f6113898f5709c69f8626368af79ee31896f499c50c7a4ef623342",
+      "compressed_bytes": 15931
+    },
+    {
+      "path": "src/Classes/TradeQueryGenerator.lua",
+      "archive": "evidence/TradeQueryGenerator.lua.gz",
+      "sha256": "430e42176b7a570cc4ed93d060b05232ad029f5d1da5554c57125013f3096e10",
+      "bytes": 59145,
+      "compressed_sha256": "4f0d6d3d30bb0f95f414f257c49088cf0d8e3d995e726a84961e048655c428a5",
+      "compressed_bytes": 15995
+    },
+    {
+      "path": "src/Classes/ButtonControl.lua",
+      "archive": "evidence/ButtonControl.lua.gz",
+      "sha256": "58524ebbc5f627b5bc8e0d77c86f02420033283a61065bfe2695be095e344d3c",
+      "bytes": 3417,
+      "compressed_sha256": "92635bc4c9154e69f4337d4cc4b1c326a93078832690639e83719219133f43bf",
+      "compressed_bytes": 955
+    }
+  ],
+  "excerpts": [
+    {
+      "path": "src/Modules/Build.lua",
+      "first": 34,
+      "last": 635,
+      "role": "fresh_build_construction_and_saver_load",
+      "sha256": "2cb5cb8e2cc4efc889a92a0e29d1c4355286f2477de667603e884faeb53fd1e1"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "first": 140,
+      "last": 188,
+      "role": "fresh_trade_object_and_explicit_price_button",
+      "sha256": "6ef360eff5fd2431fd0ac588bef3075307b8883ba2544e0637d17b6fd69e433f"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "first": 1193,
+      "last": 1320,
+      "role": "complete_items_load",
+      "sha256": "fe07d238f17c557bc010d543156f60f17a95c14d5ce2d788f3b854599f87eb84"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "first": 1322,
+      "last": 1411,
+      "role": "complete_items_save",
+      "sha256": "e3af278250cfdced758e0a821b137065070d31a7466b99040ac3790092e5a980"
+    },
+    {
+      "path": "src/Classes/TradeQuery.lua",
+      "first": 30,
+      "last": 71,
+      "role": "fresh_trade_constructor",
+      "sha256": "118e7ecd469ee74e762cf5930553312518e05927a9112de336c1b8da5605072a"
+    },
+    {
+      "path": "src/Classes/TradeQuery.lua",
+      "first": 276,
+      "last": 696,
+      "role": "explicit_trade_pane",
+      "sha256": "ba777a581ad51f8bb75b469fe6cb3e288b3963e2e23f93468b1892c4c568c280"
+    },
+    {
+      "path": "src/Classes/TradeQuery.lua",
+      "first": 698,
+      "last": 801,
+      "role": "weight_editor",
+      "sha256": "006d3230249b4eebe48882c9b28eb2dd394a85b5f332270f2fe1a6c57b429077"
+    },
+    {
+      "path": "src/Classes/TradeQuery.lua",
+      "first": 814,
+      "last": 932,
+      "role": "trade_result_reduction_and_comparison",
+      "sha256": "644e60eef8b5a4abbe532e9129e04352767c4d8408e8c5bc9bf91309f090cac8"
+    },
+    {
+      "path": "src/Classes/TradeQuery.lua",
+      "first": 1103,
+      "last": 1484,
+      "role": "explicit_search_controls",
+      "sha256": "051c078a5e6511a013023b80cd487bddfc2ac60a0e214294f79e72ee43ef78bb"
+    },
+    {
+      "path": "src/Classes/TradeQueryGenerator.lua",
+      "first": 118,
+      "last": 143,
+      "role": "generator_constructor",
+      "sha256": "c24fc053d4a1f940c50cae7917b61ebcb1cd97039c12b59380155817d3b96817"
+    },
+    {
+      "path": "src/Classes/TradeQueryGenerator.lua",
+      "first": 164,
+      "last": 200,
+      "role": "weighted_result_comparison",
+      "sha256": "42f2017a95ff0be052937828681c79255f7eca1e2e3c37a8a1d38562c263e713"
+    },
+    {
+      "path": "src/Classes/TradeQueryGenerator.lua",
+      "first": 1144,
+      "last": 1530,
+      "role": "explicit_request_controls",
+      "sha256": "9e5d0c8a2fa9b10effe9b437f98f97a7f7dd61e2adac40e9d874a113ec0407b2"
+    },
+    {
+      "path": "src/Classes/ButtonControl.lua",
+      "first": 9,
+      "last": 23,
+      "role": "button_constructor_and_click",
+      "sha256": "4b0836a7ed65727c719633a94179a9491ae3714c195bc1c6d94426a87d87f5d7"
+    },
+    {
+      "path": "src/Classes/ButtonControl.lua",
+      "first": 107,
+      "last": 130,
+      "role": "button_input_dispatch",
+      "sha256": "d2fafb6d9fe56edd12ba4074149ef6980d8caadfe97bef50526f8c22e1c7d234"
+    }
+  ],
+  "runtime_observations": "none",
+  "upstream_license": {
+    "path": "../configuration-accounting/evidence/pob/LICENSE.md",
+    "sha256": "22d2d075c1d361971764fbbd1e12e1485bdf35f0769ffac4eca8a79afc60dda8"
+  },
+  "scope": {
+    "fresh_load_only": true,
+    "unique_ordinary_items_frame": true,
+    "complete_weight_frame_required": true,
+    "source_preferences_preserved": true,
+    "native_gameplay_inputs": false,
+    "native_objective_inference": false,
+    "native_inventory_completion": false,
+    "future_trade_actions_implemented": false
+  },
+  "review": {
+    "load_destination": "tradeQuery.statSortSelectionList",
+    "saved_fields": [
+      "label",
+      "stat",
+      "weightMult"
+    ],
+    "source_normalization": "known power-stat names refresh label/transform; unmatched names are not inserted",
+    "entry_point": "ItemsTab priceDisplayItem onClick -> TradeQuery.PriceItem",
+    "consumer": "explicit trade result comparison and query weighting",
+    "native_policy": "source-only metadata; no objective or metric mapping",
+    "duplicate_stat_choices": "preserve every source occurrence",
+    "unsupported_frames": "retain fallback obligations"
+  }
+}

@@ -298,10 +298,40 @@ pub fn check_authored() {
     check_source(false);
 }
 pub fn assert_component(endpoint: &StagedOwnedRelease) {
+    assert_component_after_program_append(endpoint, &[]);
+}
+/// Authenticate each appended body before restoring the exact prior component
+/// in a local proof copy. Runtime rules are never rewritten.
+pub fn assert_component_after_program_append(
+    endpoint: &StagedOwnedRelease,
+    appended: &[DefinitionRules],
+) {
     check_authored();
-    attack_selection_family::assert_component_after_program_append(endpoint, &consumer().owners);
+    let mut known = consumer().owners;
+    known.extend_from_slice(appended);
+    attack_selection_family::assert_component_after_program_append(endpoint, &known);
     let d: Dependencies = read("dependencies.json");
     let r = &endpoint.input().recipe;
+    let mut prior_owners = r.rules.owners.clone();
+    for row in appended {
+        let owner = prior_owners
+            .iter_mut()
+            .find(|o| o.owner == row.owner)
+            .unwrap();
+        assert_eq!(owner.programs.closure, row.programs.closure);
+        for program in &row.programs.members {
+            let indices: Vec<_> = owner
+                .programs
+                .members
+                .iter()
+                .enumerate()
+                .filter(|(_, p)| p.id == program.id)
+                .map(|(i, _)| i)
+                .collect();
+            assert_eq!(indices.len(), 1);
+            assert_eq!(owner.programs.members.remove(indices[0]), *program);
+        }
+    }
     for def in migration().schema {
         let SchemaExtensionEntry::Definition(def) = def else {
             unreachable!()
@@ -345,7 +375,7 @@ pub fn assert_component(endpoint: &StagedOwnedRelease) {
     }
     check_dependencies(
         &json!(r.schema),
-        &json!(r.rules.owners),
+        &json!(prior_owners),
         &json!(r.routing.outputs),
     );
     assert_eq!(

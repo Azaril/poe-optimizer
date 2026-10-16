@@ -967,6 +967,33 @@ records the independent full-build consumer observations and their exact scope.
 
 ### Other current compatibility investigations
 
+**Physical-damage draft retirement (2026-10-15):** the selected physical-base
+publication supersedes the old unpublished arithmetic installer. The portable
+Sniper replay and ordinary Engine tests now use its actual published program
+and current channels; the old installer is removed. Independent source vectors
+and item-origin, recipient and ordering controls remain, using named synthetic
+fixture identities where old draft IDs now collide with real definitions.
+Already published Life guards are authenticated directly instead of reinstalled.
+All 45 Engine replay tests, 40 tests across six CLI consumers and their strict
+Clippy checks pass. Historical formula/source packets still have authenticated
+evidence consumers and remain source evidence only. See the
+[fixture receipt](../tests/fixtures/owned-sniper-replay.md) for the exact inverse,
+retained failures and validation; this retirement does not close a whole build.
+
+**Outgoing-critical source-call audit (2026-10-15):** pinned
+`CalcOffence.lua:3985` passes `"MORE"` as the first argument to
+`More`, but the inherited `ModStore:More(cfg, ...)` / `MoreInternalMulti`
+path treats that argument as the filter configuration and the actual configuration
+table as another modifier name. This is a verified call-shape anomaly, not an
+accepted native compatibility rule or numerical parity exception. The retained
+source report has no CritMultiplier MORE record, but complete selected-recipient
+and dynamic-factory exclusions are still needed before treating it as irrelevant
+to this build. If positive suppliers make it relevant, establish the actual
+discrepancy and request design direction instead of copying Lua argument behavior
+into native rules. Separately, the current Enemy has a potential SelfCritChance
+BASE 10 supplier from configured Critical Weakness, conditional on applicability;
+inactive observation cannot justify an empty native supplier group.
+
 **Action-routing format (identified 2026-10-09):** Core still exposes V1 without
 source selectors alongside V2, and Data branches on both validation and identity
 domains (`owned_routing.rs`). This is a format-retention path, not a minion or

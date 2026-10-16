@@ -45,25 +45,26 @@ fn probe_stat() -> StatDefId {
 }
 fn world() -> ReplayInput {
     let mut i = load();
-    let before: DefinitionRules =
+    let mut expected: DefinitionRules =
         serde_json::from_value(packet("dependencies.json")["owner"].clone()).unwrap();
-    let actual = i
-        .rules
-        .owners
-        .iter_mut()
-        .find(|o| o.owner == owner())
-        .unwrap();
-    // The fixture's finite closure is not production source-completeness proof.
-    assert_eq!(actual.programs.members, before.programs.members);
-    for p in serde_json::from_value::<Vec<RuleProgram>>(packet("programs.json")).unwrap() {
-        let id = p.id.clone();
-        *actual
+    assert_eq!(expected.owner, owner());
+    for program in serde_json::from_value::<Vec<RuleProgram>>(packet("programs.json")).unwrap() {
+        let matches: Vec<_> = expected
             .programs
             .members
             .iter_mut()
-            .find(|old| old.id == id)
-            .unwrap() = p;
+            .filter(|p| p.id == program.id)
+            .collect();
+        assert_eq!(matches.len(), 1);
+        *matches.into_iter().next().unwrap() = program;
     }
+    let actual = i.rules.owners.iter().find(|o| o.owner == owner()).unwrap();
+    // The fixture's finite closure is not production source-completeness proof.
+    // Published guards are already present; authenticate instead of reinstalling.
+    assert!(
+        actual.programs.members == expected.programs.members,
+        "exact published equipment Life owner programs"
+    );
     let definitions: Value = serde_json::from_slice(
         &fs::read(
             root().join("data/owned/poe2/3887ae68/life-contribution-queries/dependencies.json"),

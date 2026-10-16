@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "selected-physical-base",
+  "before": "5f4eac0385d5785bf5534f8ae0be00e4a7c718dcf87c18057eeeabb7391a75f0",
+  "registry_last_before": 13209,
+  "registry_last_after": 13213,
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v27",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "artifacts": {
+    "migration.json": {
+      "bytes": 4207,
+      "sha256": "19b6589d25a5d2a1cd2763235a5e0c78668fd8f4816fc67a3eedd0ddc2114e24"
+    },
+    "consumer.json": {
+      "bytes": 12885,
+      "sha256": "d21cd22bfa2444e68c81ad7edabf504abbb272ef51dc23a12a5a2a070f81bb6a"
+    },
+    "dependencies.json": {
+      "bytes": 3429433,
+      "sha256": "79a7d788d11a41dd1ad2f5d6c5a16cfa3a6dfe185eb9ee8f7ea20f2d146ffe73"
+    },
+    "source-evidence.json": {
+      "bytes": 29836,
+      "sha256": "5070a46ee9941334ec0f6f559f135a6b83413519ab0c9da763eba5eaf58260b3"
+    },
+    "bindings.json": {
+      "bytes": 5653,
+      "sha256": "174a3ab0fe76feb2c2c1ae9ff00cb75536b7cc0ec8307b7ddf7456cbdc0149a9"
+    }
+  },
+  "scope": {
+    "new_definitions": 4,
+    "new_programs": 1,
+    "new_queries": 2,
+    "new_receivers": 0,
+    "complete_selected_self_flat_groups": 2,
+    "closed_existing_owners": 0,
+    "complete_build": false,
+    "new_evaluation_bundle": false
+  }
+}
