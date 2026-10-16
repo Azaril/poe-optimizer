@@ -46,8 +46,12 @@ adds intrinsic Evasion and a final receiver using the actual selected quest
 contributions. The controlled native graph produces 10, including the saved
 metric binding, while production complete planning remains unavailable because
 the final owner is Partial. Nine native/source checks, strict Clippy and
-all-five publication/rebuild pass. Equipment properties and their shared-Player
-slot reads are the next runtime dependencies, followed by conditional and
+all-five publication/rebuild pass. The subsequent
+[item Evasion property](../data/owned/poe2/3887ae68/item-evasion-property/README.md)
+now calculates local and final EquipmentUse values with checked suppliers and
+explicit unsupported domains. Nine ordinary controls, strict Clippy and an
+all-five publication/rebuild pass; a positive source control reproduces 75.
+Shared-Player slot aggregation is being validated, followed by conditional and
 transformation coverage. The existing numeric-domain operation excludes a
 source rounding anomaly without adding Lua-compatible native arithmetic.
 
@@ -78,7 +82,7 @@ accounts for saved trade weights in import provenance without inferring gameplay
 inputs or optimizer objectives. All-five preservation and exact package rebuild
 pass. Original05 now has **16 remaining configuration origins and 33 known
 assumptions**; its four complete input inventories remain Pending. The current
-Player Evasion successor has 8192 effective programs and complete native builds
+item Evasion successor has 8201 effective programs and complete native builds
 remain **0/5**.
 See the [current endpoint](implementation.md#current-checkpoint-configuration-admission).
 

@@ -1,0 +1,57 @@
+{
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "complete_bodies": [
+    {
+      "source_path": "src/Classes/Item.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/mana-supplier-sources/equipment-Item.lua.gz",
+        "bytes": 24823,
+        "sha256": "6516fbadac285868e4b3e824f1539bda8b1458f248ed657483fe4568ee46c392"
+      },
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "source_path": "src/Modules/Common.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/outgoing-critical/Common.lua.gz",
+        "bytes": 9574,
+        "sha256": "ea41c886396a83d09569d75e0c7ad6b0b60e39bb9ca8e9d9680d0dca12190d8e"
+      },
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    }
+  ],
+  "mechanic_spans": [
+    {
+      "role": "source-rounding",
+      "source_path": "src/Modules/Common.lua",
+      "first": 722,
+      "last": 728,
+      "body": "function round(val, dec)\n\tif dec then\n\t\treturn m_floor(val * 10 ^ dec + 0.5) / 10 ^ dec\n\telse\n\t\treturn m_floor(val + 0.5)\n\tend\nend\n",
+      "sha256": "90585272c160e302702e5071f1ad55c649b8da02e83ef2d776d89a449250e1f2"
+    },
+    {
+      "role": "local-item-defence",
+      "source_path": "src/Classes/Item.lua",
+      "first": 2521,
+      "last": 2567,
+      "body": "\telseif self.base.armour then\n\t\tlocal armourData = self.armourData\n\t\tlocal armourBase = calcLocal(modList, \"Armour\", \"BASE\", 0) + (self.base.armour.Armour or 0)\n\t\tlocal armourEvasionBase = calcLocal(modList, \"ArmourAndEvasion\", \"BASE\", 0)\n\t\tlocal evasionBase = calcLocal(modList, \"Evasion\", \"BASE\", 0) + (self.base.armour.Evasion or 0)\n\t\tlocal evasionEnergyShieldBase = calcLocal(modList, \"EvasionAndEnergyShield\", \"BASE\", 0)\n\t\tlocal energyShieldBase = calcLocal(modList, \"EnergyShield\", \"BASE\", 0) + (self.base.armour.EnergyShield or 0)\n\t\tlocal armourEnergyShieldBase = calcLocal(modList, \"ArmourAndEnergyShield\", \"BASE\", 0)\n\t\tlocal wardBase = calcLocal(modList, \"Ward\", \"BASE\", 0) + (self.base.armour.Ward or 0)\n\t\tlocal evasionPerLevel = calcLocal(modList, \"EvasionPerLevel\", \"BASE\", 0)\n\t\tlocal energyShieldPerLevel = calcLocal(modList, \"EnergyShieldPerLevel\", \"BASE\", 0)\n\t\tlocal wardPerLevel = calcLocal(modList, \"WardPerLevel\", \"BASE\", 0)\n\t\tlocal armourInc = calcLocal(modList, \"Armour\", \"INC\", 0)\n\t\tlocal armourEvasionInc = calcLocal(modList, \"ArmourAndEvasion\", \"INC\", 0)\n\t\tlocal evasionInc = calcLocal(modList, \"Evasion\", \"INC\", 0)\n\t\tlocal evasionEnergyShieldInc = calcLocal(modList, \"EvasionAndEnergyShield\", \"INC\", 0)\n\t\tlocal energyShieldInc = calcLocal(modList, \"EnergyShield\", \"INC\", 0)\n\t\tlocal wardInc = calcLocal(modList, \"Ward\", \"INC\", 0)\n\t\tlocal armourEnergyShieldInc = calcLocal(modList, \"ArmourAndEnergyShield\", \"INC\", 0)\n\t\tlocal defencesInc = calcLocal(modList, \"Defences\", \"INC\", 0)\n\t\tlocal qualityScalar = self.quality\n\t\tif calcLocal(modList, \"AlternateQualityArmour\", \"BASE\", 0) > 0 then\n\t\t\tqualityScalar = 0\n\t\tend\n\n\t\tarmourData.ArmourBase = self.base.armour.Armour or 0\n\t\tarmourData.Armour = round((armourBase + armourEvasionBase + armourEnergyShieldBase) * (1 + (armourInc + armourEvasionInc + armourEnergyShieldInc + defencesInc) / 100) * (1 + (qualityScalar / 100)))\n\t\tarmourData.EvasionBase = self.base.armour.Evasion or 0\n\t\tarmourData.Evasion = round((evasionBase + armourEvasionBase + evasionEnergyShieldBase) * (1 + (evasionInc + armourEvasionInc + evasionEnergyShieldInc + defencesInc) / 100) * (1 + (qualityScalar / 100)))\n\t\tarmourData.EnergyShieldBase = self.base.armour.EnergyShield or 0\n\t\tarmourData.EnergyShield = round((energyShieldBase + evasionEnergyShieldBase + armourEnergyShieldBase) * (1 + (energyShieldInc + armourEnergyShieldInc + evasionEnergyShieldInc + defencesInc) / 100) * (1 + (qualityScalar / 100)))\n\t\tarmourData.WardBase = self.base.armour.Ward or 0\n\t\tarmourData.Ward = round((wardBase) * (1 + (wardInc + defencesInc) / 100) * (1 + (qualityScalar / 100)))\n\t\tarmourData.EvasionPerLevel = evasionPerLevel * (1 + (evasionInc + armourEvasionInc + evasionEnergyShieldInc + defencesInc) / 100) * (1 + (qualityScalar / 100))\n\t\tarmourData.EnergyShieldPerLevel = energyShieldPerLevel * (1 + (energyShieldInc + armourEnergyShieldInc + evasionEnergyShieldInc + defencesInc) / 100) * (1 + (qualityScalar / 100))\n\t\tarmourData.WardPerLevel = wardPerLevel * (1 + (wardInc + defencesInc) / 100) * (1 + (qualityScalar / 100))\n\n\t\tif self.base.armour.BlockChance then\n\t\t\tarmourData.BlockChance = m_floor((self.base.armour.BlockChance + calcLocal(modList, \"BlockChance\", \"BASE\", 0)) * (1 + calcLocal(modList, \"BlockChance\", \"INC\", 0) / 100))\n\t\tend\n\t\tif self.base.armour.MovementPenalty then\n\t\t\tmodList:NewMod(\"MovementSpeed\", \"BASE\", -self.base.armour.MovementPenalty, self.modSource, { type = \"Condition\", var = \"IgnoreMovementPenalties\", neg = true })\n\t\tend\n\t\tfor _, value in ipairs(modList:List(nil, \"ArmourData\")) do\n\t\t\tarmourData[value.key] = value.value\n\t\tend\n\telseif self.base.flask then\n",
+      "sha256": "8b51ec84eab44edeae0f5e025d36ab454d32cbd2f4ad8cdd3c7cb91095bb17e6"
+    },
+    {
+      "role": "final-item-property",
+      "source_path": "src/Classes/Item.lua",
+      "first": 2373,
+      "last": 2379,
+      "body": "function ItemClass:GetArmourDataValue(name, level)\n\tlocal armourData = self.armourData\n\tif not armourData then\n\t\treturn 0\n\tend\n\treturn (armourData[name] or 0) + round((armourData[name..\"PerLevel\"] or 0) * (level or 0))\nend\n",
+      "sha256": "6699fe4c66040e5b07b0dbeb8dafb2a5c9446144a61865c45369b5b90831c067"
+    }
+  ],
+  "scope": {
+    "runtime_source_language": false,
+    "positive_modifier_source_admission": false,
+    "nonzero_per_level_supported": false,
+    "positive_property_replacement_supported": false
+  }
+}

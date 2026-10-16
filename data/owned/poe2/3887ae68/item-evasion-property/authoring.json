@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "before": "e282b4bb142200944d84f30aaf35ccc77eb3fae9d6084be2c0229b9960489af9",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "artifacts": [
+    {
+      "name": "consumer.json",
+      "bytes": 103759,
+      "sha256": "08edc27dccf182dfa4b6315aaa2b94e73e8669c240113fe3a8b97ac92ca79f60"
+    },
+    {
+      "name": "dependencies.json",
+      "bytes": 3930590,
+      "sha256": "e7435641468ccdad7e4417ab67146d3a2918eaef56f79f948e042d1c0c0a3b04"
+    },
+    {
+      "name": "source-evidence.json",
+      "bytes": 6036,
+      "sha256": "e27c23831b703a983a4076a6f567ab1cc348266d5cc41b47061d3c4e318f8c43"
+    },
+    {
+      "name": "source-vectors.json",
+      "bytes": 327935,
+      "sha256": "b0f8f4708b96d547a4dcdb72e5403dc16141e74c9486382b54c58d4690e6e1c4"
+    },
+    {
+      "name": "source-report.json.gz",
+      "bytes": 461911,
+      "sha256": "eeecc1d941eb22b01865a8539bdcc7a2cb1eae6a0f33bf3ba2232ed9adafc184"
+    },
+    {
+      "name": "migration.json",
+      "bytes": 4233,
+      "sha256": "ef393563d4e64d761b5a6a7d34e5c5a302f1e049e9de0c643739b1ba0bbaf987"
+    }
+  ],
+  "scope": {
+    "publication_ready": true,
+    "whole_build_complete": false,
+    "selected_template_owners_closed": false,
+    "canonical_modifier_owners_closed": false,
+    "positive_local_controls_authorize_source_admission": false,
+    "nonzero_per_level_supported": false,
+    "positive_property_replacement_supported": false
+  }
+}

@@ -1,0 +1,3473 @@
+{
+  "definitions": [
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033a5"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000029ee"
+                }
+              }
+            },
+            "targets": [
+              "equipment_use"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033a6"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000029ee"
+                }
+              }
+            },
+            "targets": [
+              "equipment_use"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033a7"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000029ee"
+                }
+              }
+            },
+            "targets": [
+              "equipment_use"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033a8"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000029ee"
+                }
+              }
+            },
+            "targets": [
+              "equipment_use"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "owners": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033a5"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "resolve-item-local-evasion",
+            "context": "equipment_use",
+            "reads": [
+              {
+                "id": "intrinsic",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029fe"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "quality",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000002427"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "single-base",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "item-evasion-single-base",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "paired-armour-base",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "item-evasion-paired-armour-base",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "paired-shield-base",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000295a"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "item-evasion-paired-shield-base",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "single-increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "item-evasion-single-increase",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "paired-armour-increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "item-evasion-paired-armour-increase",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "paired-shield-increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "item-evasion-paired-shield-increase",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "defences-increase",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "item-evasion-defences-increase",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "alternate-quality",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "item-evasion-alternate-quality",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "crafted-quality",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000002"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "item-evasion-crafted-quality",
+                    "group": "sources"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "intrinsic",
+                "expression": {
+                  "kind": "read",
+                  "input": "intrinsic"
+                }
+              },
+              {
+                "id": "quality",
+                "expression": {
+                  "kind": "read",
+                  "input": "quality"
+                }
+              },
+              {
+                "id": "single-base",
+                "expression": {
+                  "kind": "read",
+                  "input": "single-base"
+                }
+              },
+              {
+                "id": "paired-armour-base",
+                "expression": {
+                  "kind": "read",
+                  "input": "paired-armour-base"
+                }
+              },
+              {
+                "id": "paired-shield-base",
+                "expression": {
+                  "kind": "read",
+                  "input": "paired-shield-base"
+                }
+              },
+              {
+                "id": "single-increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "single-increase"
+                }
+              },
+              {
+                "id": "paired-armour-increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "paired-armour-increase"
+                }
+              },
+              {
+                "id": "paired-shield-increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "paired-shield-increase"
+                }
+              },
+              {
+                "id": "defences-increase",
+                "expression": {
+                  "kind": "read",
+                  "input": "defences-increase"
+                }
+              },
+              {
+                "id": "alternate-quality",
+                "expression": {
+                  "kind": "read",
+                  "input": "alternate-quality"
+                }
+              },
+              {
+                "id": "crafted-quality",
+                "expression": {
+                  "kind": "read",
+                  "input": "crafted-quality"
+                }
+              },
+              {
+                "id": "zero-factor",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "zero-percent",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-factor",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-count",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000295a"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "one-rating",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "crafted-guard",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "crafted-quality",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000002"
+                        }
+                      },
+                      "maximum": {
+                        "value": 0,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000002"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "alternate",
+                "expression": {
+                  "kind": "compare",
+                  "operation": "greater",
+                  "left": "alternate-quality",
+                  "right": "zero-factor"
+                }
+              },
+              {
+                "id": "effective-quality",
+                "expression": {
+                  "kind": "select",
+                  "condition": "alternate",
+                  "when_true": "zero-percent",
+                  "when_false": "quality"
+                }
+              },
+              {
+                "id": "quality-with-guard",
+                "expression": {
+                  "kind": "add",
+                  "left": "effective-quality",
+                  "right": "crafted-guard"
+                }
+              },
+              {
+                "id": "quality-fraction",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "quality-with-guard",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "quality-factor",
+                "expression": {
+                  "kind": "add",
+                  "left": "one-factor",
+                  "right": "quality-fraction"
+                }
+              },
+              {
+                "id": "base-0",
+                "expression": {
+                  "kind": "add",
+                  "left": "single-base",
+                  "right": "intrinsic"
+                }
+              },
+              {
+                "id": "base-1",
+                "expression": {
+                  "kind": "add",
+                  "left": "base-0",
+                  "right": "paired-armour-base"
+                }
+              },
+              {
+                "id": "shield-factor",
+                "expression": {
+                  "kind": "ratio",
+                  "numerator": "paired-shield-base",
+                  "denominator": "one-count",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "shield-rating",
+                "expression": {
+                  "kind": "scale",
+                  "value": "one-rating",
+                  "factor": "shield-factor"
+                }
+              },
+              {
+                "id": "base",
+                "expression": {
+                  "kind": "add",
+                  "left": "base-1",
+                  "right": "shield-rating"
+                }
+              },
+              {
+                "id": "increase-0",
+                "expression": {
+                  "kind": "add",
+                  "left": "single-increase",
+                  "right": "paired-armour-increase"
+                }
+              },
+              {
+                "id": "increase-1",
+                "expression": {
+                  "kind": "add",
+                  "left": "increase-0",
+                  "right": "paired-shield-increase"
+                }
+              },
+              {
+                "id": "increase",
+                "expression": {
+                  "kind": "add",
+                  "left": "increase-1",
+                  "right": "defences-increase"
+                }
+              },
+              {
+                "id": "fraction",
+                "expression": {
+                  "kind": "percent_as_factor",
+                  "percent": "increase",
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              {
+                "id": "increase-factor",
+                "expression": {
+                  "kind": "add",
+                  "left": "one-factor",
+                  "right": "fraction"
+                }
+              },
+              {
+                "id": "increased",
+                "expression": {
+                  "kind": "scale",
+                  "value": "base",
+                  "factor": "increase-factor"
+                }
+              },
+              {
+                "id": "unrounded",
+                "expression": {
+                  "kind": "scale",
+                  "value": "increased",
+                  "factor": "quality-factor"
+                }
+              },
+              {
+                "id": "half",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0.5,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "lower",
+                "expression": {
+                  "kind": "compare",
+                  "operation": "less",
+                  "left": "unrounded",
+                  "right": "half"
+                }
+              },
+              {
+                "id": "lower-checked",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "unrounded",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": -4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.00000000000029ee"
+                        }
+                      },
+                      "maximum": {
+                        "value": 0.4999999999999999,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.00000000000029ee"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "upper-checked",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "unrounded",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0.5,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.00000000000029ee"
+                        }
+                      },
+                      "maximum": {
+                        "value": 4503599627370496,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.00000000000029ee"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "checked",
+                "expression": {
+                  "kind": "select",
+                  "condition": "lower",
+                  "when_true": "lower-checked",
+                  "when_false": "upper-checked"
+                }
+              },
+              {
+                "id": "rounded",
+                "expression": {
+                  "kind": "round",
+                  "value": "checked",
+                  "quantum": {
+                    "value": 1,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  },
+                  "mode": "nearest_ties_positive"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "local-evasion",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033a5"
+                  },
+                  "value": "rounded"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "complete"
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "stat",
+          "value": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033a6"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "resolve-item-final-evasion",
+            "context": "equipment_use",
+            "reads": [
+              {
+                "id": "local",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000033a5"
+                    }
+                  }
+                }
+              },
+              {
+                "id": "per-level",
+                "value_type": {
+                  "kind": "quantity",
+                  "value": {
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                },
+                "source": {
+                  "kind": "contribution_query",
+                  "value": {
+                    "entity": "current",
+                    "query": "item-evasion-per-level",
+                    "group": "sources"
+                  }
+                }
+              },
+              {
+                "id": "replacement-present",
+                "value_type": {
+                  "kind": "boolean"
+                },
+                "source": {
+                  "kind": "contribution_selection",
+                  "value": {
+                    "entity": "current",
+                    "query": "item-evasion-replacement",
+                    "group": "sources",
+                    "projection": "present"
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "local",
+                "expression": {
+                  "kind": "read",
+                  "input": "local"
+                }
+              },
+              {
+                "id": "per-level",
+                "expression": {
+                  "kind": "read",
+                  "input": "per-level"
+                }
+              },
+              {
+                "id": "per-level-guard",
+                "expression": {
+                  "kind": "check_numeric_domain",
+                  "value": "per-level",
+                  "domain": {
+                    "kind": "quantity",
+                    "value": {
+                      "minimum": {
+                        "value": 0,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.00000000000029ee"
+                        }
+                      },
+                      "maximum": {
+                        "value": 0,
+                        "unit": {
+                          "kind": "unit",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.00000000000029ee"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "replacement-present",
+                "expression": {
+                  "kind": "read",
+                  "input": "replacement-present"
+                }
+              },
+              {
+                "id": "guarded",
+                "expression": {
+                  "kind": "add",
+                  "left": "local",
+                  "right": "per-level-guard"
+                }
+              },
+              {
+                "id": "no-replacement",
+                "expression": {
+                  "kind": "not",
+                  "value": "replacement-present"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "final-evasion",
+                "when": "no-replacement",
+                "effect": {
+                  "kind": "derive",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033a6"
+                  },
+                  "value": "guarded"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "complete"
+        }
+      }
+    }
+  ],
+  "receivers": [
+    {
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a5"
+      },
+      "program": "resolve-item-local-evasion",
+      "targets": [
+        {
+          "kind": "equipment_template",
+          "value": {
+            "template": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001e0e"
+            }
+          }
+        },
+        {
+          "kind": "equipment_template",
+          "value": {
+            "template": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001f1c"
+            }
+          }
+        },
+        {
+          "kind": "equipment_template",
+          "value": {
+            "template": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001fde"
+            }
+          }
+        },
+        {
+          "kind": "equipment_template",
+          "value": {
+            "template": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000002007"
+            }
+          }
+        },
+        {
+          "kind": "equipment_template",
+          "value": {
+            "template": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000238c"
+            }
+          }
+        }
+      ],
+      "id": "resolve-item-local-evasion"
+    },
+    {
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a6"
+      },
+      "program": "resolve-item-final-evasion",
+      "targets": [
+        {
+          "kind": "equipment_template",
+          "value": {
+            "template": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001e0e"
+            }
+          }
+        },
+        {
+          "kind": "equipment_template",
+          "value": {
+            "template": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001f1c"
+            }
+          }
+        },
+        {
+          "kind": "equipment_template",
+          "value": {
+            "template": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000001fde"
+            }
+          }
+        },
+        {
+          "kind": "equipment_template",
+          "value": {
+            "template": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000002007"
+            }
+          }
+        },
+        {
+          "kind": "equipment_template",
+          "value": {
+            "template": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000238c"
+            }
+          }
+        }
+      ],
+      "id": "resolve-item-final-evasion"
+    }
+  ],
+  "delivery": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "modifier",
+          "value": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000002a1b"
+          }
+        }
+      },
+      "program": {
+        "id": "deliver-local-evasion-single-base",
+        "context": "equipment_use",
+        "reads": [
+          {
+            "id": "amount",
+            "value_type": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000295a"
+                }
+              }
+            },
+            "source": {
+              "kind": "stat",
+              "value": {
+                "entity": "modifier",
+                "stat": {
+                  "key": "def.000000000000295b",
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "amount",
+            "expression": {
+              "kind": "read",
+              "input": "amount"
+            }
+          },
+          {
+            "id": "one-input",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "value": 1,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000295a"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "one-output",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "value": 1,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000029ee"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "factor",
+            "expression": {
+              "kind": "ratio",
+              "numerator": "amount",
+              "denominator": "one-input",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          },
+          {
+            "id": "converted",
+            "expression": {
+              "kind": "scale",
+              "value": "one-output",
+              "factor": "factor"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "local",
+            "when": null,
+            "effect": {
+              "kind": "contribute",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000033a5"
+              },
+              "contribution": "add",
+              "value": "converted"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "modifier",
+          "value": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000002a63"
+          }
+        }
+      },
+      "program": {
+        "id": "deliver-local-evasion-paired-armour-base",
+        "context": "equipment_use",
+        "reads": [
+          {
+            "id": "amount",
+            "value_type": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000295a"
+                }
+              }
+            },
+            "source": {
+              "kind": "stat",
+              "value": {
+                "entity": "modifier",
+                "stat": {
+                  "key": "def.000000000000295b",
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "amount",
+            "expression": {
+              "kind": "read",
+              "input": "amount"
+            }
+          },
+          {
+            "id": "one-input",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "value": 1,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000295a"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "one-output",
+            "expression": {
+              "kind": "literal",
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "value": 1,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000029ee"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "factor",
+            "expression": {
+              "kind": "ratio",
+              "numerator": "amount",
+              "denominator": "one-input",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          },
+          {
+            "id": "converted",
+            "expression": {
+              "kind": "scale",
+              "value": "one-output",
+              "factor": "factor"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "local",
+            "when": null,
+            "effect": {
+              "kind": "contribute",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000330e"
+              },
+              "contribution": "add",
+              "value": "converted"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "modifier",
+          "value": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000002a97"
+          }
+        }
+      },
+      "program": {
+        "id": "deliver-local-evasion-paired-shield-base",
+        "context": "equipment_use",
+        "reads": [
+          {
+            "id": "amount",
+            "value_type": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000295a"
+                }
+              }
+            },
+            "source": {
+              "kind": "stat",
+              "value": {
+                "entity": "modifier",
+                "stat": {
+                  "key": "def.000000000000295b",
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "amount",
+            "expression": {
+              "kind": "read",
+              "input": "amount"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "local",
+            "when": null,
+            "effect": {
+              "kind": "contribute",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003310"
+              },
+              "contribution": "add",
+              "value": "amount"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "modifier",
+          "value": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000002afa"
+          }
+        }
+      },
+      "program": {
+        "id": "deliver-local-evasion-single-increase",
+        "context": "equipment_use",
+        "reads": [
+          {
+            "id": "amount",
+            "value_type": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            },
+            "source": {
+              "kind": "stat",
+              "value": {
+                "entity": "modifier",
+                "stat": {
+                  "key": "def.000000000000253e",
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "amount",
+            "expression": {
+              "kind": "read",
+              "input": "amount"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "local",
+            "when": null,
+            "effect": {
+              "kind": "contribute",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000033a5"
+              },
+              "contribution": "increase",
+              "value": "amount"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "modifier",
+          "value": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000002b45"
+          }
+        }
+      },
+      "program": {
+        "id": "deliver-local-evasion-paired-armour-increase",
+        "context": "equipment_use",
+        "reads": [
+          {
+            "id": "amount",
+            "value_type": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            },
+            "source": {
+              "kind": "stat",
+              "value": {
+                "entity": "modifier",
+                "stat": {
+                  "key": "def.000000000000253e",
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "amount",
+            "expression": {
+              "kind": "read",
+              "input": "amount"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "local",
+            "when": null,
+            "effect": {
+              "kind": "contribute",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000330e"
+              },
+              "contribution": "increase",
+              "value": "amount"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "modifier",
+          "value": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000002b77"
+          }
+        }
+      },
+      "program": {
+        "id": "deliver-local-evasion-paired-shield-increase",
+        "context": "equipment_use",
+        "reads": [
+          {
+            "id": "amount",
+            "value_type": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            },
+            "source": {
+              "kind": "stat",
+              "value": {
+                "entity": "modifier",
+                "stat": {
+                  "key": "def.000000000000253e",
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "amount",
+            "expression": {
+              "kind": "read",
+              "input": "amount"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "local",
+            "when": null,
+            "effect": {
+              "kind": "contribute",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003310"
+              },
+              "contribution": "increase",
+              "value": "amount"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "modifier",
+          "value": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000002ba9"
+          }
+        }
+      },
+      "program": {
+        "id": "deliver-local-evasion-defences-increase",
+        "context": "equipment_use",
+        "reads": [
+          {
+            "id": "amount",
+            "value_type": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            },
+            "source": {
+              "kind": "stat",
+              "value": {
+                "entity": "modifier",
+                "stat": {
+                  "key": "def.000000000000253e",
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "id": "amount",
+            "expression": {
+              "kind": "read",
+              "input": "amount"
+            }
+          }
+        ],
+        "effects": [
+          {
+            "id": "local",
+            "when": null,
+            "effect": {
+              "kind": "contribute",
+              "entity": "current",
+              "stat": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003311"
+              },
+              "contribution": "increase",
+              "value": "amount"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "queries": [
+    {
+      "id": "item-evasion-single-base",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a5"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ee"
+              }
+            }
+          },
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "modifier",
+                      "value": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000002a1b"
+                      }
+                    }
+                  },
+                  "program": "deliver-local-evasion-single-base",
+                  "effect": "local",
+                  "origin": {
+                    "kind": "item_modifier",
+                    "slots": [
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      }
+                    ]
+                  }
+                },
+                "order": {
+                  "source_rank": 0,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": [
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      "rank": 0
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      "rank": 1
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      "rank": 2
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      "rank": 3
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      },
+                      "rank": 4
+                    }
+                  ]
+                }
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "item-evasion-paired-armour-base",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000330e"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ee"
+              }
+            }
+          },
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "modifier",
+                      "value": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000002a63"
+                      }
+                    }
+                  },
+                  "program": "deliver-local-evasion-paired-armour-base",
+                  "effect": "local",
+                  "origin": {
+                    "kind": "item_modifier",
+                    "slots": [
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      }
+                    ]
+                  }
+                },
+                "order": {
+                  "source_rank": 0,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": [
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      "rank": 0
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      "rank": 1
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      "rank": 2
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      "rank": 3
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      },
+                      "rank": 4
+                    }
+                  ]
+                }
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "item-evasion-paired-shield-base",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003310"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              }
+            }
+          },
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "modifier",
+                      "value": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000002a97"
+                      }
+                    }
+                  },
+                  "program": "deliver-local-evasion-paired-shield-base",
+                  "effect": "local",
+                  "origin": {
+                    "kind": "item_modifier",
+                    "slots": [
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      }
+                    ]
+                  }
+                },
+                "order": {
+                  "source_rank": 0,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": [
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      "rank": 0
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      "rank": 1
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      "rank": 2
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      "rank": 3
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      },
+                      "rank": 4
+                    }
+                  ]
+                }
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "item-evasion-single-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a5"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "modifier",
+                      "value": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000002afa"
+                      }
+                    }
+                  },
+                  "program": "deliver-local-evasion-single-increase",
+                  "effect": "local",
+                  "origin": {
+                    "kind": "item_modifier",
+                    "slots": [
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      }
+                    ]
+                  }
+                },
+                "order": {
+                  "source_rank": 0,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": [
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      "rank": 0
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      "rank": 1
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      "rank": 2
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      "rank": 3
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      },
+                      "rank": 4
+                    }
+                  ]
+                }
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "item-evasion-paired-armour-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000330e"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "modifier",
+                      "value": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000002b45"
+                      }
+                    }
+                  },
+                  "program": "deliver-local-evasion-paired-armour-increase",
+                  "effect": "local",
+                  "origin": {
+                    "kind": "item_modifier",
+                    "slots": [
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      }
+                    ]
+                  }
+                },
+                "order": {
+                  "source_rank": 0,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": [
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      "rank": 0
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      "rank": 1
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      "rank": 2
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      "rank": 3
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      },
+                      "rank": 4
+                    }
+                  ]
+                }
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "item-evasion-paired-shield-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003310"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "modifier",
+                      "value": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000002b77"
+                      }
+                    }
+                  },
+                  "program": "deliver-local-evasion-paired-shield-increase",
+                  "effect": "local",
+                  "origin": {
+                    "kind": "item_modifier",
+                    "slots": [
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      }
+                    ]
+                  }
+                },
+                "order": {
+                  "source_rank": 0,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": [
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      "rank": 0
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      "rank": 1
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      "rank": 2
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      "rank": 3
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      },
+                      "rank": 4
+                    }
+                  ]
+                }
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "item-evasion-defences-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003311"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "modifier",
+                      "value": {
+                        "kind": "modifier",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000002ba9"
+                      }
+                    }
+                  },
+                  "program": "deliver-local-evasion-defences-increase",
+                  "effect": "local",
+                  "origin": {
+                    "kind": "item_modifier",
+                    "slots": [
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      }
+                    ]
+                  }
+                },
+                "order": {
+                  "source_rank": 0,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": [
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000065"
+                      },
+                      "rank": 0
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000066"
+                      },
+                      "rank": 1
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000067"
+                      },
+                      "rank": 2
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000068"
+                      },
+                      "rank": 3
+                    },
+                    {
+                      "slot": {
+                        "kind": "equipment_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000069"
+                      },
+                      "rank": 4
+                    }
+                  ]
+                }
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "item-evasion-alternate-quality",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003312"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "item-evasion-crafted-quality",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003313"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "item-evasion-per-level",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a7"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ee"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "item-evasion-replacement",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a8"
+      },
+      "contribution": "override",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "require_agreement",
+          "ordering": "unordered",
+          "empty": null,
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "channels": [
+    {
+      "scope": "equipment_use",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a5"
+      },
+      "contribution": "add"
+    },
+    {
+      "scope": "equipment_use",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000330e"
+      },
+      "contribution": "add"
+    },
+    {
+      "scope": "equipment_use",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003310"
+      },
+      "contribution": "add"
+    },
+    {
+      "scope": "equipment_use",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a5"
+      },
+      "contribution": "increase"
+    },
+    {
+      "scope": "equipment_use",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000330e"
+      },
+      "contribution": "increase"
+    },
+    {
+      "scope": "equipment_use",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003310"
+      },
+      "contribution": "increase"
+    },
+    {
+      "scope": "equipment_use",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003311"
+      },
+      "contribution": "increase"
+    },
+    {
+      "scope": "equipment_use",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003312"
+      },
+      "contribution": "add"
+    },
+    {
+      "scope": "equipment_use",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003313"
+      },
+      "contribution": "add"
+    },
+    {
+      "scope": "equipment_use",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a7"
+      },
+      "contribution": "add"
+    },
+    {
+      "scope": "equipment_use",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000033a8"
+      },
+      "contribution": "override"
+    }
+  ],
+  "scope": {
+    "whole_build": false,
+    "template_owners_complete": false,
+    "modifier_owners_complete": false,
+    "per_level_positive": false,
+    "armour_data_replacement": false,
+    "local_delivery_eligibility_complete": false
+  }
+}

@@ -156,7 +156,37 @@ transformation coverage must be completed before the unchanged original can
 evaluate. Nine ordinary tests, strict target Clippy and all-five publication/
 byte-identical rebuild pass; no complete metric or build is claimed.
 
-Current package: **`runs/owned-player-evasion-final-publication-03/package`**.
+The subsequent [item Evasion property](../data/owned/poe2/3887ae68/item-evasion-property/README.md)
+publishes actual local arithmetic and the final EquipmentUse property through
+four definitions, nine programs, eleven checked queries and two receivers.
+Seven exact Modifier deliveries preserve hybrid/Defences contributions and
+the prior Armour/ES streams. The retained positive source control reproduces
+75; injected base/quality controls, signed rounding bounds, missing/unknown/
+late suppliers and demanded unavailability for replacements also pass.
+Original template/Modifier coverage stays Partial: numeric family identity
+alone cannot establish local applicability.
+
+Current package: **`runs/owned-item-evasion-property-publication-02/package`**.
+
+- Input: `d70eb4fefe8e4cefdddf123f545424b83f9247d41e7ac7c8a00429938363cfbf`.
+- Registry: `608b251388dca735a38b52ad0b11b7e30ade326c7a7f1c8893c76c4b1e173bb3` (last `33a8`).
+- Definitions: `9e2782eeda887808140128f4795040cc5e0892857ffe19000a73de4ef12db48f`.
+- Rules: `081b16a6c286e7984352e1afcb65016931695484a40105460fcf5d972ac55531`.
+- Compiled: `a067e0767fd0d97d45288b9fca7b7227e157115aad6f50e5dbae40668bc64c56`.
+
+The eighteen files total **64,559,809 bytes**, with 199 provenance rows,
+8201 effective programs, 89 checked queries and 59 receivers. Nine ordinary
+tests, strict target Clippy and all-five publication/byte-identical rebuild
+pass. Publication's exact inverse authenticates 2817 predecessor potential
+writers and preserves every original input, query and local identity; selected
+issue counts stay **106/117/109/123/4**, with no complete build or evaluation
+bundle. Logs: `runs/item-evasion-property-{ordinary-13,clippy-02,publication-02}.log`.
+The first publication rejected unsorted receiver-template targets; the repair
+uses the existing loader's canonical ordering without changing game semantics.
+Player slot aggregation and final conditional/transformation coverage are next.
+
+The final Evasion receiver predecessor remains at
+**`runs/owned-player-evasion-final-publication-03/package`**:
 
 - Input: `e282b4bb142200944d84f30aaf35ccc77eb3fae9d6084be2c0229b9960489af9`.
 - Registry: `5874684bd9ac6570c132fada76e8e459a5c11534c248de1dfd4df25d06da41b6` (last `33a4`).
@@ -396,7 +426,7 @@ The reviewed route is `runs/owned-evasion-runtime-route-01.md`. Do not leave a
 test-only completion as the final solution or publish observed zero item values
 as implicit defaults.
 
-The in-flight item property uses four contiguous definitions (`33a5`–`33a8`)
+The published item property uses four contiguous definitions (`33a5`–`33a8`)
 for local Evasion, its final EquipmentUse property, per-level contributions and
 property replacements. The following shared Player subtotal reserves `33a9`.
 Local modifier eligibility remains a real coverage obligation: a matching
@@ -407,7 +437,9 @@ direct reductions there. Replacement presence must leave an unsupported final
 property unavailable, including a present zero. Do not encode that Boolean as
 an invented Rating and run it through a numeric guard. Exact empty-group
 membership, missing final-property propagation and the whole-plan coverage gate
-remain distinct checks. These successor packets are not yet published.
+remain distinct checks. The following Player slot successor is still being
+validated; its source-only Weapon3 zero term can be omitted under the native
+finite-number and signed-zero rules rather than becoming a phantom slot.
 
 The associated [direct-reduction audit](legacy-retirement.md#direct-numeric-reductions-and-encounter-membership-2026-10-15)
 found 78 older direct numeric reads in 32 current programs, including eleven
@@ -834,13 +866,13 @@ an implicit way around the current complete-plan contract.
 The Life predecessor's read-only capacity audit found programs to be the only
 nearly exhausted compiler collection, at 8190/8192 including one application.
 The Mana cleanup reduced that to 8185/8192 and receivers from 60 to 55. The
-current Player Evasion successor uses **8192/16384** after the bounded capacity
-change below, with 57 receivers. Its serialized inventories contain 6546 owners,
-23522 effects, 4275 reads, 32952 nodes and 78 checked queries. The measurement is
-bound to input `e282b4bb…` in `runs/owned-evasion-program-capacity-01.json`; these
+current item Evasion successor uses **8201/16384** after the bounded capacity
+change below, with 59 receivers. Its serialized inventories contain 6548 owners,
+23531 effects, 4296 reads, 33013 nodes and 89 checked queries. The measurement is
+bound to input `d70eb4fe…` in `runs/owned-item-evasion-program-capacity-01.json`; these
 are serialized inventory counts, not private compiler edge/work counters.
-The current serialized endpoint is **64,508,858/67,108,864 bytes**,
-leaving 2,600,006 bytes. Its eighteen package files separately total 64,520,414
+The current serialized endpoint is **64,548,251/67,108,864 bytes**,
+leaving 2,560,613 bytes. Its eighteen package files separately total 64,559,809
 bytes; earlier checkpoints reported file totals. These are separate measurements. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
@@ -932,6 +964,13 @@ and `07275d22`. At the latest read-only inspection the Player Evasion revision
 `dd524416` has run `38839048945` pending behind the same still-active older run
 `38825000935`. The repair and newer checkpoints still await their own hosted
 validation; a queued revision is not a green hosted check.
+The later completed Ubuntu CLI shard 3 (`116730283816`) fails only the same
+Demonflame archive lookup, in both feature profiles, on old `61205e81`.
+Authenticated job logs are retained at `runs/ci-job-116730283816.log`; the
+failing path and line match the portable-locator fix already in `885b5d7d`.
+Windows PoB has also completed successfully. The other active Windows CLI
+shards and the queued current revision remain unverified; no new runtime fix
+or repeated broad local test run is justified by this old-head failure.
 
 ## Previous checkpoint: configured Player Withered input
 
