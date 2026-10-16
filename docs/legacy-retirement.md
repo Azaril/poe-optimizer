@@ -106,6 +106,27 @@ all live runtime and useful parity consumers are accounted for. Retain source
 evidence and rebuild current data instead of adding old/new format branches.
 Do not displace the first complete build with an unrelated blanket rewrite.
 
+## Shock factory numeric truthiness (2026-10-15)
+
+The retained Enemy supplier review found a concrete source-language boundary:
+`CalcPerform.lua:3302–3304` uses a numeric Sum directly inside `or`. Lua treats
+zero as true, so the factory can append an inactive or zero-valued conditional
+DamageTaken record even when no positive Shock effect exists. Do not describe
+the late supplier inventory as empty from a zero scalar, or copy truthiness into
+the native rule model. Preserve the source occurrence in parity evidence, prove
+its actual activation/magnitude domain, and represent the game condition and
+numeric effect explicitly. If deleting a source-only zero record changes queried
+game results or coverage, investigate that dependency before admitting the
+native simplification. No new parity exception or native behavior is approved.
+See the [complete source review](../data/owned/poe2/3887ae68/enemy-physical-mitigation/source-domain-review.md).
+
+Shared Enemy baseline ownership is independently awaiting the
+[existing-binding extension](owned-existing-enemy-rule-ownership-proposal.md).
+It must not be worked around by putting universal rules into each Encounter or
+by broadening shared Player permissions. The current-format migration should
+replace the binding spelling in place and regenerate useful current artifacts;
+no old-format alias or parallel applicability mechanism is planned.
+
 ## Ailment calculation and display separation (2026-10-15)
 
 The ailment-input source review found a possible display-only discrepancy:

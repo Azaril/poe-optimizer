@@ -808,6 +808,198 @@ fn resource_bounds_cover_whole_package_including_unreachable_nodes_and_wire() {
     }
 }
 
+fn program_capacity_fixture(count: usize) -> Fixture {
+    let mut f = fixture();
+    let owner = f.rules.owners[0].owner.clone();
+    f.rules.owners = vec![DefinitionRules {
+        owner,
+        programs: DeclaredSet::complete(
+            (0..count)
+                .map(|n| RuleProgram {
+                    id: key(&format!("capacity-program-{n:05}")),
+                    context: RuleEntityKind::Actor,
+                    reads: vec![],
+                    nodes: vec![literal("satisfied", ParameterValue::Boolean(true))],
+                    effects: vec![requirement("requirement", "satisfied", None)],
+                })
+                .collect(),
+        ),
+    }];
+    f
+}
+
+#[test]
+fn compiler_program_budget_retains_old_limit_refusal() {
+    let f = program_capacity_fixture(8193);
+    let limits = RuleLimits {
+        max_programs: 8192,
+        ..RuleLimits::default()
+    };
+    let error = CompiledRulePackage::compile(&f.rules, &f.schema, limits).unwrap_err();
+    assert_eq!(error.path, "programs", "{error}");
+    assert_eq!(error.message, "resource limit exceeded");
+    let compiled = compile(&f);
+    assert_eq!(compiled.input().owners[0].programs.members.len(), 8193);
+}
+
+#[test]
+fn compiler_program_budget_admits_exact_ceiling_and_rejects_next_program() {
+    let maximum = RuleLimits::default().max_programs;
+    assert_eq!(maximum, 16384);
+    assert_eq!(RuleLimits::default().max_effects, 65536);
+    let mut f = program_capacity_fixture(maximum);
+    let compiled = compile(&f);
+    let owner = &f.rules.owners[0].owner;
+    let mut scratch = compiled.new_scratch();
+    for index in [0, maximum - 1] {
+        let program = &f.rules.owners[0].programs.members[index];
+        let result = compiled
+            .evaluate(owner, &program.id, &[], &f.schema, &mut scratch)
+            .unwrap();
+        assert_eq!(result.effects.len(), 1);
+        assert_eq!(
+            result.effects[0].disposition,
+            EffectDisposition::Applied {
+                value: ParameterValue::Boolean(true),
+            }
+        );
+    }
+    let mut extra = f.rules.owners[0].programs.members[0].clone();
+    extra.id = key("capacity-over-limit");
+    f.rules.owners[0].programs.members.push(extra);
+    let error =
+        CompiledRulePackage::compile(&f.rules, &f.schema, RuleLimits::default()).unwrap_err();
+    assert_eq!(error.path, "programs", "{error}");
+    assert_eq!(error.message, "resource limit exceeded");
+}
+
+#[test]
+fn compiler_program_budget_preserves_identity_and_evaluation_at_smaller_limits() {
+    let f = fixture();
+    let count = f
+        .rules
+        .owners
+        .iter()
+        .map(|o| o.programs.members.len())
+        .sum();
+    let stored =
+        OwnedRulePackage::new(f.rules.clone(), &f.schema, RuleStorageLimits::default()).unwrap();
+    let baseline = compile(&f);
+    for max_programs in [count, 8192, 16384] {
+        let compiled = CompiledRulePackage::compile_stored(
+            &stored,
+            &f.schema,
+            RuleLimits {
+                max_programs,
+                ..RuleLimits::default()
+            },
+        )
+        .unwrap();
+        assert_eq!(compiled.identity(), baseline.identity());
+        assert_eq!(compiled.source_identity(), Some(*stored.identity()));
+        assert_eq!(compiled.input(), baseline.input());
+        let mut scratch = compiled.new_scratch();
+        let mut baseline_scratch = baseline.new_scratch();
+        for case in &f.cases {
+            let input = facts(&case.facts);
+            assert_eq!(
+                compiled
+                    .evaluate(&case.owner, &case.program, &input, &f.schema, &mut scratch)
+                    .unwrap(),
+                baseline
+                    .evaluate(
+                        &case.owner,
+                        &case.program,
+                        &input,
+                        &f.schema,
+                        &mut baseline_scratch,
+                    )
+                    .unwrap(),
+            );
+        }
+    }
+    for (max_programs, path) in [(count - 1, "programs"), (0, "limits"), (16385, "limits")] {
+        let error = CompiledRulePackage::compile_stored(
+            &stored,
+            &f.schema,
+            RuleLimits {
+                max_programs,
+                ..RuleLimits::default()
+            },
+        )
+        .unwrap_err();
+        assert_eq!(error.path, path, "{error}");
+    }
+}
+
+fn checked_query_capacity_fixture(count: usize) -> Fixture {
+    let mut f = program_capacity_fixture(1);
+    f.rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
+    f.rules.effect_applications = Some(DeclaredSet::complete(vec![]));
+    let stat = id(&f, "stat.damage");
+    let unit = id(&f, "unit.damage");
+    f.rules.contribution_queries = Some(DeclaredSet::complete(
+        (0..count)
+            .map(|n| ContributionQuery {
+                id: key(&format!("capacity-query-{n:05}")),
+                stat: stat.clone(),
+                contribution: ContributionKind::Add,
+                groups: vec![ContributionGroup {
+                    id: key("empty"),
+                    reduction: ContributionReduction::Sum,
+                    ordering: ContributionOrdering::Ordered,
+                    empty: Some(quantity(0.0, &unit)),
+                    members: DeclaredSet::complete(vec![]),
+                }],
+            })
+            .collect(),
+    ));
+    f
+}
+
+#[test]
+fn compiler_program_budget_does_not_raise_checked_query_capacity() {
+    let f = checked_query_capacity_fixture(8192);
+    let stored =
+        OwnedRulePackage::new(f.rules.clone(), &f.schema, RuleStorageLimits::default()).unwrap();
+    let old = CompiledRulePackage::compile_stored(
+        &stored,
+        &f.schema,
+        RuleLimits {
+            max_programs: 8192,
+            ..RuleLimits::default()
+        },
+    )
+    .unwrap();
+    let current =
+        CompiledRulePackage::compile_stored(&stored, &f.schema, RuleLimits::default()).unwrap();
+    assert_eq!(current.identity(), old.identity());
+    assert_eq!(current.input(), old.input());
+
+    let f = checked_query_capacity_fixture(8193);
+    // Storage accepts these valid queries; only the independent compiler bound
+    // refuses them, despite the now-larger program ceiling.
+    let stored =
+        OwnedRulePackage::new(f.rules.clone(), &f.schema, RuleStorageLimits::default()).unwrap();
+    let error =
+        CompiledRulePackage::compile_stored(&stored, &f.schema, RuleLimits::default()).unwrap_err();
+    assert_eq!(error.path, "contribution_queries", "{error}");
+    assert!(error.message.contains("ordered queries"), "{error}");
+
+    let f = checked_query_capacity_fixture(3);
+    let error = CompiledRulePackage::compile(
+        &f.rules,
+        &f.schema,
+        RuleLimits {
+            max_programs: 2,
+            ..RuleLimits::default()
+        },
+    )
+    .unwrap_err();
+    assert_eq!(error.path, "contribution_queries", "{error}");
+    assert!(error.message.contains("ordered queries"), "{error}");
+}
+
 #[test]
 fn compiler_wire_budget_preserves_lower_limits_and_execution_identity() {
     let f = fixture();

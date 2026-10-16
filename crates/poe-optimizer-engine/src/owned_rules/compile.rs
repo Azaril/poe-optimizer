@@ -7,6 +7,10 @@ mod applications;
 #[cfg(test)]
 mod boolean_tests;
 
+// Raising program capacity must not also raise the checked-query ceiling.
+// Smaller program budgets retain the previous caller-imposed query bound.
+const MAX_CHECKED_QUERIES: usize = 8192;
+
 fn known<'a, T>(lookup: SchemaLookup<'a, T>, path: &str) -> Result<&'a T, RuleError> {
     match lookup {
         SchemaLookup::Known(v) => Ok(v),
@@ -1923,7 +1927,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         input,
         index,
         poe_optimizer_data::owned_rules::RuleStorageLimits {
-            max_ordered_queries: l.max_programs,
+            max_ordered_queries: l.max_programs.min(MAX_CHECKED_QUERIES),
             max_ordered_groups: l.max_reads,
             max_ordered_members: l.max_effects,
             max_ordered_slots: l.max_receiver_targets,

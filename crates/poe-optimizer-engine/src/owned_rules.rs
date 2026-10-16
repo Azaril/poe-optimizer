@@ -48,7 +48,9 @@ impl Default for RuleLimits {
             max_gaps: 65536,
             // A complete passive catalog needs thousands of explicit partial owners.
             max_owners: 8192,
-            max_programs: 8192,
+            // Program inventories can outnumber owners; expression, effect,
+            // checked-query, wire and execution budgets remain independently bounded.
+            max_programs: 16384,
             max_tables: 8192,
             max_table_cells: 262144,
             max_reads: 65536,

@@ -48,6 +48,13 @@ keeps those sources in the same contribution graph, with exact selected
 Encounter and recipient validation. This is awaiting owner review; no new
 authority, separate aggregator or complete-coverage claim is implemented.
 
+Shared Enemy baseline rules are a distinct source from configured Encounter
+rules. A [second proposed extension](owned-existing-enemy-rule-ownership-proposal.md)
+would bind those definitions once to the actual scenario Enemy through the
+existing shared-rule mechanism. It preserves separate Player/Enemy permissions
+and current stat-owned final receivers. That ownership change is also awaiting
+review; the current runtime still supports only shared Player applicability.
+
 Its [trade-search preference successor](../data/owned/poe2/3887ae68/source-trade-preferences/README.md)
 accounts for saved trade weights in import provenance without inferring gameplay
 inputs or optimizer objectives. All-five preservation and exact package rebuild

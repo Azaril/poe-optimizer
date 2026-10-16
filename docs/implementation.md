@@ -157,7 +157,9 @@ Current package: **`runs/owned-offering-speed-rate-publication-01/package`**.
 - Compiled: `e0148d25324ff034b3fb9f63b3cb67346484d0a63dbcf1fd5f850898edac2f6f`.
 
 The eighteen files total **64,487,868 bytes**, with 197 provenance rows and
-**8190/8192** effective programs (8189 owner programs plus one application).
+**8190** effective programs (8189 owner programs plus one application). The
+publication used the former 8192 ceiling; the subsequent program-only capacity
+checkpoint below raises that ceiling to 16384 without changing this package.
 The Speed publication adds two definitions, one program and one query, appending
 one independently selected effect to the existing application. Fifteen ordinary
 tests, all-five publication/rebuild (32.83s) and strict Clippy pass. Native tests
@@ -255,7 +257,7 @@ saved unavailable Sniper average-hit query and FullDPS/count reporting separate.
 The outgoing-critical preflight must retain the conditional Critical Weakness
 supplier even while inactive, and resolve the source-call anomaly recorded in
 [cleanup tracking](legacy-retirement.md#other-current-compatibility-investigations).
-The isolated `outgoing-critical` draft reserves 33a4/33a5 for final Action chance
+The isolated `outgoing-critical` draft reserves 33a5/33a6 for final Action chance
 and multiplier. Intrinsic chance is 3215; accuracy confirmation is 321c, distinct
 from after-block hit chance 3220. Shared minion bonus/cap ownership, Critical
 Weakness applicability and crit-specific dynamic producers remain unclosed.
@@ -271,7 +273,7 @@ recommends extending the existing graph, with exact selected-owner/recipient
 authority and unchanged completeness rules. Await owner review before changing
 the public contract. Do not substitute a separate computed-term aggregator or
 older direct numeric reduction to bypass this gap. Source supplier proofs and
-independent Player-defence work continue. Outgoing-critical channels `33a6–33aa`
+independent Player-defence work continue. Outgoing-critical channels `33a7–33ab`
 are reserved for Actor cap/bonus and Enemy chance/bonus/activation; they are not
 published definitions or completed producers.
 
@@ -289,11 +291,35 @@ No mitigation consumer, complete supplier proof or publication is claimed.
 The [selected Enemy supplier review](../data/owned/poe2/3887ae68/enemy-physical-mitigation/source-domain-review.md)
 confirms that shared Enemy damage-taken/reduction channels contain conditional
 baseline rules. They are independent of Encounter configuration; the current
-existing-Actor applicability supports Player only. A separate reviewed Enemy
-binding is needed before publishing those baseline sources. Late Shock can also
+existing-Actor applicability supports Player only. The separate
+[shared Enemy ownership proposal](owned-existing-enemy-rule-ownership-proposal.md)
+is awaiting owner review: generalize the existing binding in place, with a
+bounded Player/Enemy origin target and distinct local permissions. No fake
+Actor, duplicated Encounter baseline or broader Player permissions are proposed.
+Late Shock can also
 produce a zero-valued conditional record: Lua numeric truthiness is source
 evidence to classify, not native gameplay behavior to copy. This review narrows
 the next checks but does not complete source admission or native membership.
+
+**Independent next saved metric:** Player Evasion (query 19, Metric `313e`).
+The actual positive sources are shared Player intrinsic BASE 7 and two selected
+Reward increases of 30% and 15%; both retained reference contexts yield 10.
+Reuse channel `29f1`, Rating `29ee` and shared Player owner `332a`, with final
+Stat `33a4` reserved ahead of the unpublished critical IDs. The draft must prove
+slot-local zero domains, conditional baseline/dynamic suppliers, overrides and
+conversion exclusions before admitting the final rounding/zero-floor formula.
+Observed 10 is only a comparison target. This route avoids waiting for Enemy
+authority and does not require finishing all positive Armour/ES item properties
+first. Two planned programs would have consumed the former compiler ceiling;
+the program-only capacity change below provides room for these real mechanics.
+The initial Evasion draft deliberately keeps its final owner Partial: retained
+source evidence proves a finite test domain, but is not runtime authority for a
+candidate's item properties or conditions. Its controlled graph can exercise
+the saved metric binding; ordinary complete planning must still refuse it.
+The next runtime dependency is native per-equipment Evasion properties and
+their Player contributions, followed by the conditional Evasion channels and
+transfer/override guards. Do not leave a test-only completion as the final
+solution or publish observed zero item values as implicit defaults.
 
 The associated [direct-reduction audit](legacy-retirement.md#direct-numeric-reductions-and-encounter-membership-2026-10-15)
 found 78 older direct numeric reads in 32 current programs, including eleven
@@ -720,10 +746,11 @@ an implicit way around the current complete-plan contract.
 The Life predecessor's read-only capacity audit found programs to be the only
 nearly exhausted compiler collection, at 8190/8192 including one application.
 The Mana cleanup reduced that to 8185/8192 and receivers from 60 to 55. The
-current Offering Speed successor uses **8190/8192**, leaving two
-program slots, with 56 receivers. Other measured Life-predecessor compiler counts are
-6548 owners, 23517 effects, 4249 reads, 32814 nodes and 41600 edges, comfortably
-within their separate caps.
+current Offering Speed successor uses **8190/16384** after the bounded capacity
+change below, with 56 receivers. Its serialized inventories contain 6545 owners,
+23520 effects, 4272 reads, 32934 nodes and 75 checked queries. The measurement is
+bound to input `b6c757ff…` in `runs/owned-speed-program-capacity-01.json`; these
+are serialized inventory counts, not private compiler edge/work counters.
 The current serialized endpoint is **64,476,314/67,108,864 bytes**,
 leaving 2,632,550 bytes. Its eighteen package files separately total 64,487,868
 bytes; earlier checkpoints reported file totals. These are separate measurements. The common
@@ -735,6 +762,27 @@ checking all rule/application readers, saved metrics and retained query contract
 Their existing guarded Complete-empty membership is unchanged; broader supplier
 and whole-plan coverage remains open. Do not split catalogs by the selected build or remove
 legitimate per-item programs to meet a budget.
+
+The next Evasion and outgoing-critical consumers would exceed 8192 programs.
+The compiler program ceiling is now **16384**, with an explicit independent
+checked-query ceiling still at **8192** and lower caller limits still honored.
+Owners, nodes, reads, edges, effects, work, wire size and all plan limits remain
+unchanged. The pre-change test demonstrates refusal of 8193 otherwise valid
+programs. New tests admit exactly 16384, refuse 16385 and invalid custom limits,
+retain exact source/execution identities and numerical results at smaller
+budgets, and independently test actual Data-valid 8192/8193-query boundaries.
+All 34 `owned_rules` tests and strict Clippy pass in
+`runs/compiler-program-capacity-{after-03,clippy-01}.log`. The initial fixture
+version/error-message failures remain recorded; no gameplay semantics or
+coverage requirement was relaxed to make those checks pass.
+
+The public CLI subsequently rebuilt the current real release under the new
+budget into `runs/owned-program-capacity-release-01/package`. All eighteen files
+are byte-identical to the published Speed package; the full receipt and compiled
+identity `e0148d25…` are unchanged. The comparison is recorded in that run's
+`validation.json`. The 15 ordinary Speed and three mitigation-evidence checks
+also pass against the new compiler; critical draft evidence remains a separate
+validation target and cannot establish native critical support.
 
 Track compiler/schema validation work and release byte totals at subsequent
 publications; private aggregate work counters need bounded diagnostics before
@@ -787,10 +835,13 @@ at inspection, with failed validation; do not claim hosted success.
 The [earlier receipt and source-evidence repairs](implementation-history.md#archived-2026-10-15-checkpoint-earlier-ci-receipt-repairs)
 remain recorded separately. They are not unresolved failures of this checkpoint.
 The subsequent read-only follow-up found no additional failure: completed Import,
-workspace and Ubuntu Engine jobs pass, while the remaining jobs are still active.
+workspace and both Engine jobs pass. Ubuntu CLI shards 0, 1 and 2 also pass;
+the remaining jobs are still active.
 Public job status and annotations are retained under
-`runs/ci-followup-20261015-38825000935/`. No runs were cancelled; the pushed
-repair still awaits its own hosted validation.
+`runs/ci-followup-20261015-38825000935/`. No runs were cancelled by this task.
+The scheduler coalesced pending revisions `885b5d7d` and `247fe562`; the pushed
+Speed revision `6e1d6eb0` has run `38835158702` pending behind the same older
+run. The repair and newer checkpoints still await their own hosted validation.
 
 ## Previous checkpoint: configured Player Withered input
 
@@ -2110,6 +2161,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
 | Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Bounded equipment ordering, combined Player BASE accumulation and the guarded final Life consumer are published; magnitude/routing, conversion arithmetic and global/owner coverage remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
 | Encounter contributions and numeric Enemy queries | [Proposal](owned-encounter-contribution-queries-proposal.md) awaiting owner review, October 15. Reuse existing Encounter invocations in checked membership and admit typed numeric Enemy groups under existing owner read limits. Needed for configured Critical Weakness and Armour `31e0`; no separate source-term aggregator or unchecked reduction workaround is approved. Core/Data/Engine authority, real-producer tests, numerical publication and all-five regression remain pending. |
+| Shared baseline rules on Enemy | [Proposal](owned-existing-enemy-rule-ownership-proposal.md) awaiting owner review, October 15. Generalize the existing shared applicability seam in place, retaining Actor definitions and bounded Player/Enemy runtime targets. Keep local permissions distinct, preserve exact contribution identity and mandatory Partial coverage, and retain accepted stat-owned Player receivers. This is separate from Encounter source membership; baseline Intimidate/Crushed rules must not be copied into Encounter definitions. |
 | Composed support discovery | Accepted October 8. The common native gate, current authored-order DTO and source-input accounting are implemented; Original05 `01de` is retired. The Gem packet publishes 937 Known and 29 Unmapped domains with all-five preservation; all 23 selected physical Gem domains are covered. Existing typed identities fixed 111 false stat-set blockers. Pinned generated export metadata classifies eight missing runtime effects as active without implementing their Command mechanics. Continue other owner domains and exact provider exclusions; keep Command action/usage gaps separate. Unsupported positive and archived source relationships remain blocking. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Application-group contribution queries | Accepted and implemented October 8 in Core/Data/Engine V25. Typed program-effect/application-group addresses preserve exact recipients, potential-source census, stacking, unknowns and explicit numeric order in one checked reduction path. Current artifacts are rebuilt with no old-format compatibility. Mixed inherited/applied damage data now adopts this capability; MORE and final hit consumers remain next. [Accepted contract](owned-application-group-contribution-queries-proposal.md). |

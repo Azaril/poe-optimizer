@@ -76,10 +76,16 @@ Validation passed:
 The successor contains 18 files totaling 64,487,868 bytes and 197 provenance rows.
 It adds two definitions, one owner program and one query, and extends one existing
 application with one independently selected effect. There are 8,189 owner programs
-plus one application, using 8,190 of the unchanged 8,192 compiler program budget.
+plus one application, using 8,190 of the then-current 8,192 compiler program budget.
 The compiled-rules digest is
 `e0148d25324ff034b3fb9f63b3cb67346484d0a63dbcf1fd5f850898edac2f6f`.
 Selected issue counts remain `[106, 117, 109, 123, 4]`; no existing owner is closed,
 no input issue is retired and no evaluation bundle is added. Complete original
 builds remain zero of five. Earlier failed logs retain only fixture/assertion
 corrections; no source rerun or arithmetic-policy relaxation was needed.
+
+The subsequent program-capacity checkpoint raises only that compiler ceiling to
+16,384, preserving the independent query/effect/work limits. Rebuilding this
+release through the public CLI produces all eighteen artifacts byte for byte,
+with the same receipt and compiled identity; see
+`runs/owned-program-capacity-release-01/validation.json` and the living plan.

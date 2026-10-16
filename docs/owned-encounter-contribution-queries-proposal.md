@@ -19,6 +19,12 @@ from the injected monster table and canonical Enemy level, with a separate raw
 override. Reusing it avoids another imported level, armour default, or table.
 Other armour suppliers and transformations still need their own coverage.
 
+Subsequent source review also found shared Enemy baseline rules that exist
+independently of Encounter selection. Their separate
+[applicability proposal](owned-existing-enemy-rule-ownership-proposal.md) is not
+included in this decision. Encounter membership must not be used to disguise
+those baseline owners.
+
 Both are ordinary contributions from the selected Encounter. Native Engine
 already instantiates its Enemy/Environment programs once, using
 `RuleOrigin::Encounter`, the selected Encounter definition and the scenario's
@@ -108,6 +114,7 @@ It does not imply acceptance of PoB's anomalous critical-MORE function call.
   unresolved coverage. Update the implementation and cleanup records at the
   runtime and numerical publication checkpoints.
 
-Independent Offering Speed and source-supplier review can continue while this
-decision is pending. The first complete build and all-five parity remain the
+Offering Speed is now published. Independent Player-defence work and source
+supplier review can continue while this decision is pending. The first complete
+build and all-five parity remain the
 delivery goals; this proposal closes no numerical or whole-build gate itself.
