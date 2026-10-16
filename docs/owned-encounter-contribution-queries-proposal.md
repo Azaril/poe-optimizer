@@ -1,7 +1,17 @@
 # Checked Encounter contributions and numeric Enemy queries
 
-Status: **proposed, awaiting owner review**. Date: 2026-10-15.
-Decider: project owner. No new runtime authority has been implemented.
+Status: **accepted within the generic Actor migration, 2026-10-15**.
+Decider: project owner. Implementation and validation remain pending.
+
+**Reconciliation after the owner's generic-actor direction:** the revised
+[Actor identity proposal](owned-existing-enemy-rule-ownership-proposal.md)
+makes the scenario Enemy an exact Actor recipient. That absorbs the
+numeric Enemy-query permission work below into one Actor query contract.
+The explicit Encounter producer origin is still required and is included in
+the revised migration; configured contributions must retain their actual
+selected Encounter owner. The owner approved these as one coherent identity,
+local-rule and role-authority contract. Implement the unified Actor query path;
+do not implement or retain the earlier Enemy-specific numeric path.
 
 ## Concrete blockers
 
@@ -21,8 +31,8 @@ Other armour suppliers and transformations still need their own coverage.
 
 Subsequent source review also found shared Enemy baseline rules that exist
 independently of Encounter selection. Their separate
-[applicability proposal](owned-existing-enemy-rule-ownership-proposal.md) is not
-included in this decision. Encounter membership must not be used to disguise
+[applicability decision](owned-existing-enemy-rule-ownership-proposal.md) is
+included in the same migration. Encounter membership must not be used to disguise
 those baseline owners.
 
 Both are ordinary contributions from the selected Encounter. Native Engine
@@ -90,7 +100,7 @@ infer missing modifiers from a known baseline scalar.
 
 The recommendation follows the previously accepted Actor/reward, exact Skill,
 Action and application-group extensions. It is a new public source/recipient
-contract, so it requires discussion under the owner's standing instruction.
+contract, approved with the generic Actor migration under the owner's standing instruction.
 It does not imply acceptance of PoB's anomalous critical-MORE function call.
 
 ## Implementation and validation after acceptance
@@ -115,6 +125,6 @@ It does not imply acceptance of PoB's anomalous critical-MORE function call.
   runtime and numerical publication checkpoints.
 
 Offering Speed is now published. Independent Player-defence work and source
-supplier review can continue while this decision is pending. The first complete
+supplier review can continue during the coordinated migration. The first complete
 build and all-five parity remain the
 delivery goals; this proposal closes no numerical or whole-build gate itself.

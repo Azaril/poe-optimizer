@@ -1,6 +1,6 @@
 //! Actual authored programs and saved metric in a finite controlled replay.
 //! Explicit test completions never alter the published Partial owners.
-use super::{family, replay::ReplayInput};
+use super::{evasion_family as family, replay::ReplayInput};
 use poe_optimizer_core::{
     build_identity::InstanceAllocator,
     owned_build::*,
@@ -30,7 +30,7 @@ fn def<K: DefinitionDomain>(n: u64) -> DefId<K> {
 fn quantity(v: f64) -> ParameterValue {
     ParameterValue::Quantity(FiniteQuantity::new(v, def(family::UNIT)).unwrap())
 }
-fn declare(i: &mut ReplayInput, owner: SchemaSubject, p: RuleProgram, stage: &str) {
+pub(crate) fn declare(i: &mut ReplayInput, owner: SchemaSubject, p: RuleProgram, stage: &str) {
     let existing = i
         .rules
         .owners
@@ -58,7 +58,7 @@ fn declare(i: &mut ReplayInput, owner: SchemaSubject, p: RuleProgram, stage: &st
         });
     existing.programs.members.push(p);
 }
-fn fixture() -> ReplayInput {
+pub(crate) fn fixture() -> ReplayInput {
     let path = family::root().join("tests/fixtures/owned-sniper-replay.json.gz");
     assert!(fs::metadata(&path).unwrap().len() < 256 * 1024);
     let mut i = ReplayInput::decode(&fs::read(path).unwrap());
@@ -190,11 +190,11 @@ fn fixture() -> ReplayInput {
     i.rebind_test_edit().unwrap();
     i
 }
-fn evaluate(i: &ReplayInput) -> SupportEffectsReport {
+pub(crate) fn evaluate(i: &ReplayInput) -> SupportEffectsReport {
     let p = i.compile().unwrap();
     p.evaluate(&mut p.new_scratch()).unwrap()
 }
-fn value(r: &SupportEffectsReport) -> EffectValue {
+pub(crate) fn value(r: &SupportEffectsReport) -> EffectValue {
     assert!(r.gaps.is_empty(), "finite graph gaps: {:?}", r.gaps);
     let SupportEffectsOutcome::Evaluated { effects } = &r.outcome else {
         panic!("finite graph unavailable")
@@ -213,7 +213,7 @@ fn value(r: &SupportEffectsReport) -> EffectValue {
         .value
         .clone()
 }
-fn known(r: &SupportEffectsReport, n: f64) {
+pub(crate) fn known(r: &SupportEffectsReport, n: f64) {
     assert_eq!(value(r), EffectValue::Known { value: quantity(n) });
 }
 #[test]

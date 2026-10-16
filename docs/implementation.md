@@ -67,6 +67,41 @@ exist only for backward compatibility.
 
 ## Route to the first complete build
 
+### Active structural checkpoint: one Actor model
+
+The owner approved [generic Actor identity and local rules](owned-existing-enemy-rule-ownership-proposal.md)
+on October 15. This is the next structural dependency for shared conditions,
+outgoing critical calculations and Enemy mitigation. It does not add complete
+build coverage or change the closest-build priority.
+
+1. Finish/freeze the independent Evasion override publication on the existing
+   format; slot aggregation is already validated. Do not change runtime contracts
+   under an active publication test.
+2. Migrate Core/Data identities, role-specific inputs, shared applicability and
+   exact selected Encounter membership. In parallel migrate Engine contexts,
+   invocation/value keys and checked query binding. Keep role authority explicit
+   over whole inventories and remove all placeholder Player behavior.
+3. Migrate Import/CLI and current authored artifacts to the one new contract.
+   Rebuild generated packages and portable fixtures, invalidating old hashes.
+   Preserve original PoB archives/observations. No runtime compatibility branch.
+4. Validate one identical local rule on Player, two supplied occurrences and
+   ScenarioEnemy, with independent inputs and provenance; prove unauthorized
+   reads/writes, unknown/inactive/unlisted/late sources and obsolete aliases fail.
+   Preserve existing numerical controls and fresh/reused/Rayon determinism.
+5. Reimport all five originals, retain their exact queries and coverage gaps,
+   and checkpoint the new endpoint. Then resume the closest real calculation
+   blocker: shared conditions and configured Enemy contributions feeding critical
+   damage/mitigation, alongside final Player defence admission.
+
+Current resume point: approval recorded; Core/Data and Engine impact analysis
+is complete, but runtime edits wait for the override validation to release its
+Cargo lane. Root owns Import/CLI/artifact coordination and the living documents.
+Existing Player final receivers remain unchanged; unsupported ScenarioEnemy
+usage/support/Action paths must reject explicitly. Pending resource-obligation,
+Scenario usage-intent and progression ownership questions remain separate.
+
+### Saved output contract
+
 The current Original05 package preserves **22 queries with 20 metric names**.
 The retained reference contract expects **19 finite values and three unavailable
 results**, not 22 invented numbers. The query list is
@@ -166,7 +201,7 @@ late suppliers and demanded unavailability for replacements also pass.
 Original template/Modifier coverage stays Partial: numeric family identity
 alone cannot establish local applicability.
 
-Current package: **`runs/owned-item-evasion-property-publication-02/package`**.
+Item-property predecessor: **`runs/owned-item-evasion-property-publication-02/package`**.
 
 - Input: `d70eb4fefe8e4cefdddf123f545424b83f9247d41e7ac7c8a00429938363cfbf`.
 - Registry: `608b251388dca735a38b52ad0b11b7e30ade326c7a7f1c8893c76c4b1e173bb3` (last `33a8`).
@@ -183,7 +218,32 @@ issue counts stay **106/117/109/123/4**, with no complete build or evaluation
 bundle. Logs: `runs/item-evasion-property-{ordinary-13,clippy-02,publication-02}.log`.
 The first publication rejected unsorted receiver-template targets; the repair
 uses the existing loader's canonical ordering without changing game semantics.
-Player slot aggregation and final conditional/transformation coverage are next.
+The following Player slot aggregation is now published; final conditional and
+transformation coverage remains incomplete.
+
+Current package: **`runs/owned-player-evasion-equipment-publication-02/package`**.
+
+- Input: `cb52e5b9de49d5e8aea9e7d8bb603a92e839ee6e5c5635e83f32364c4869cc78`.
+- Registry: `5773595cb2c607d0a2bdc419e67d2f6d19f3af529561741e951861e279be91f0` (last `33a9`).
+- Definitions: `baa118a44dc6c47216cc5aec2866e7a82f918a72ca48f42b7a59c35e861e76b9`.
+- Rules: `db8001412284bcfa9518040853ff80b2552ff73976d9d4000a2b6cec619d830d`.
+- Compiled: `a94cdc7faf57507e83a143c8e69771cd36a291019b0a302fa99454924cf9e440`.
+
+The [slot packet](../data/owned/poe2/3887ae68/player-evasion-equipment/README.md)
+reads the real final item property in Helmet, Gloves, Boots, Body and offhand,
+applies each slot's factors in order and supplies subtotal `33a9` to the final
+receiver. Empty slots contribute zero; occupied unsupported items remain
+unavailable. The source-only unconstructed Weapon3 term is omitted under the
+proved finite arithmetic rules, without introducing a phantom slot.
+The eighteen files total **64,569,789 bytes**, with 200 provenance rows,
+8202 effective programs, 89 queries and 59 receivers. Original Evasion remains
+10; positive joined controls exercise nonzero item values and slot factors.
+The new target's 22 tests and predecessor target's ten tests pass (some helpers
+are shared), as do strict Clippy and all-five publication/rebuild. Logs:
+`runs/owned-player-evasion-equipment-{ordinary-06,clippy-02,publication-02}.log`.
+All 110 queries, local identities and selected issues **106/117/109/123/4**
+are preserved; final/shared owner coverage is still Partial. Override selection
+is the final independent Evasion checkpoint before the Actor migration below.
 
 The final Evasion receiver predecessor remains at
 **`runs/owned-player-evasion-final-publication-03/package`**:
@@ -389,10 +449,14 @@ The [selected Enemy supplier review](../data/owned/poe2/3887ae68/enemy-physical-
 confirms that shared Enemy damage-taken/reduction channels contain conditional
 baseline rules. They are independent of Encounter configuration; the current
 existing-Actor applicability supports Player only. The separate
-[shared Enemy ownership proposal](owned-existing-enemy-rule-ownership-proposal.md)
-is awaiting owner review: generalize the existing binding in place, with a
-bounded Player/Enemy origin target and distinct local permissions. No fake
-Actor, duplicated Encounter baseline or broader Player permissions are proposed.
+[generic Actor decision](owned-existing-enemy-rule-ownership-proposal.md)
+was accepted on October 15: unify the scenario opponent with Player and supplied
+units under one Actor identity/local-rule context, retaining explicit role and
+source authority. The earlier separate-Enemy-context draft is superseded.
+The selected Encounter origin is included in this migration; shared baselines
+must retain their own owner. Runtime migration starts after the independent
+Evasion override checkpoint finishes. Maimed and Enemy mitigation then use the
+unified model; they must not introduce duplicate formulas or fake providers.
 Late Shock can also
 produce a zero-valued conditional record: Lua numeric truthiness is source
 evidence to classify, not native gameplay behavior to copy. This review narrows
@@ -413,9 +477,9 @@ The Evasion component deliberately keeps its final owner Partial: retained
 source evidence proves a finite test domain, but is not runtime authority for a
 candidate's item properties or conditions. Its controlled graph can exercise
 the saved metric binding; ordinary complete planning must still refuse it.
-The next runtime dependency is native per-equipment Evasion properties and
-their Player contributions, followed by the conditional Evasion channels and
-transfer/override guards. Parallel implementation uses the existing shared
+Native per-equipment Evasion properties and their Player slot contributions are
+published. Override selection is being validated; conditional Evasion channels
+and transfer coverage remain. The published work uses the existing shared
 EquipmentUse local-defence pattern and the accepted shared-Player slot reads;
 no new public API is needed. Retained source controls produce local Evasion 75
 from positive hybrid inputs, providing a check beyond the original's four zero
@@ -428,7 +492,7 @@ as implicit defaults.
 
 The published item property uses four contiguous definitions (`33a5`–`33a8`)
 for local Evasion, its final EquipmentUse property, per-level contributions and
-property replacements. The following shared Player subtotal reserves `33a9`.
+property replacements. The published shared Player subtotal uses `33a9`.
 Local modifier eligibility remains a real coverage obligation: a matching
 numeric modifier family does not establish local rather than global delivery.
 Shared Armour/Evasion, Evasion/ES and Defences contributions must be emitted
@@ -437,14 +501,13 @@ direct reductions there. Replacement presence must leave an unsupported final
 property unavailable, including a present zero. Do not encode that Boolean as
 an invented Rating and run it through a numeric guard. Exact empty-group
 membership, missing final-property propagation and the whole-plan coverage gate
-remain distinct checks. The following Player slot successor is still being
-validated; its source-only Weapon3 zero term can be omitted under the native
-finite-number and signed-zero rules rather than becoming a phantom slot.
+remain distinct checks. The Player slot successor omits the source-only Weapon3
+zero term under the native finite-number and signed-zero rules.
 
 The associated [direct-reduction audit](legacy-retirement.md#direct-numeric-reductions-and-encounter-membership-2026-10-15)
 found 78 older direct numeric reads in 32 current programs, including eleven
 Enemy reads. These retain their existing validation but lack explicit checked
-query membership. After the proposed Encounter contract is accepted, migrate
+query membership. During the accepted generic Actor/Encounter migration, migrate
 the touched Enemy block/incoming-hit consumers with their real source proofs;
 do not introduce more direct reads or remove the operation before its other
 live contexts are migrated.
@@ -866,13 +929,13 @@ an implicit way around the current complete-plan contract.
 The Life predecessor's read-only capacity audit found programs to be the only
 nearly exhausted compiler collection, at 8190/8192 including one application.
 The Mana cleanup reduced that to 8185/8192 and receivers from 60 to 55. The
-current item Evasion successor uses **8201/16384** after the bounded capacity
-change below, with 59 receivers. Its serialized inventories contain 6548 owners,
-23531 effects, 4296 reads, 33013 nodes and 89 checked queries. The measurement is
-bound to input `d70eb4fe…` in `runs/owned-item-evasion-program-capacity-01.json`; these
+current slot Evasion successor uses **8202/16384** after the bounded capacity
+change below, with 59 receivers. Its serialized inventories contain 6549 owners,
+23532 effects, 4309 reads, 33051 nodes and 89 checked queries. The measurement is
+bound to input `cb52e5b9…` in `runs/owned-player-evasion-equipment-capacity-01.json`; these
 are serialized inventory counts, not private compiler edge/work counters.
-The current serialized endpoint is **64,548,251/67,108,864 bytes**,
-leaving 2,560,613 bytes. Its eighteen package files separately total 64,559,809
+The current serialized endpoint is **64,558,225/67,108,864 bytes**,
+leaving 2,550,639 bytes. Its eighteen package files separately total 64,569,789
 bytes; earlier checkpoints reported file totals. These are separate measurements. The common
 content digest also enforces the 64 MiB envelope, so increasing only release
 input limits would not address package growth.
@@ -971,6 +1034,11 @@ failing path and line match the portable-locator fix already in `885b5d7d`.
 Windows PoB has also completed successfully. The other active Windows CLI
 shards and the queued current revision remain unverified; no new runtime fix
 or repeated broad local test run is justified by this old-head failure.
+The same log measures 56m04s and 55m04s compilation for its two feature
+profiles. The [cleanup register](legacy-retirement.md#other-current-compatibility-investigations)
+tracks profiling/cache/shared-helper investigation; preserving both profiles
+and all checks is mandatory. This is a maintenance follow-up, not a reason to
+interrupt the closest-build implementation.
 
 ## Previous checkpoint: configured Player Withered input
 
@@ -2289,8 +2357,8 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Typed Boolean contributions | Accepted 2026-10-07: add typed Boolean contributions and unordered Any to the existing occurrence/query graph. Separate complete membership from numeric ordering, preserve duplicate source identity and unknown propagation, and migrate actual inherent-attribute flag producers/consumers first. This is also a prerequisite for later critical-hit flags; Enemy recipient authority must be explicit. Core/Data/Engine schema3/operations22 are implemented; real halving/doubling passives and five reducers are published. Their five bounded membership groups are now Complete; global query coverage, donor owners and unrelated passive mechanics remain Partial. No false default or numeric stand-in. [Accepted contract](owned-boolean-contributions-proposal.md). |
 | Actor/reward contribution queries | Accepted October 8; Core/Data/Engine membership and canonical Life query data use operations V23. Eight exact writers populate seven groups; six zero/one-effect domains are bounded by semantic tie rejection. Bounded equipment ordering, combined Player BASE accumulation and the guarded final Life consumer are published; magnitude/routing, conversion arithmetic and global/owner coverage remain open. [Contract](owned-actor-reward-contribution-queries-proposal.md). |
-| Encounter contributions and numeric Enemy queries | [Proposal](owned-encounter-contribution-queries-proposal.md) awaiting owner review, October 15. Reuse existing Encounter invocations in checked membership and admit typed numeric Enemy groups under existing owner read limits. Needed for configured Critical Weakness and Armour `31e0`; no separate source-term aggregator or unchecked reduction workaround is approved. Core/Data/Engine authority, real-producer tests, numerical publication and all-five regression remain pending. |
-| Shared baseline rules on Enemy | [Proposal](owned-existing-enemy-rule-ownership-proposal.md) awaiting owner review, October 15. Generalize the existing shared applicability seam in place, retaining Actor definitions and bounded Player/Enemy runtime targets. Keep local permissions distinct, preserve exact contribution identity and mandatory Partial coverage, and retain accepted stat-owned Player receivers. This is separate from Encounter source membership; baseline Intimidate/Crushed rules must not be copied into Encounter definitions. |
+| Encounter contributions and numeric Enemy queries | [Accepted within the generic Actor migration](owned-encounter-contribution-queries-proposal.md), October 15. Authenticate selected Encounter invocations in the existing graph; the scenario Enemy becomes an exact Actor recipient using the same checked numeric/Boolean queries. Needed for configured Critical Weakness and Armour `31e0`. No separate aggregator or Enemy-specific numeric path. Runtime authority, real-producer tests, numerical publication and all-five regression remain pending. |
+| Generic Actor identity and shared local rules | [Accepted October 15](owned-existing-enemy-rule-ownership-proposal.md): add actual ScenarioEnemy Actor identity, unify local mechanical context, remove Player fallbacks and retain explicit role/source permissions. Shared applicability binds Player, ScenarioEnemy and discovered supplied Actor slots. Whole-inventory validation and current-format artifact rebuild are required; no compatibility alias. Player final receivers stay unchanged, common baselines remain separate from Encounter ownership, and Partial coverage stays blocking. Coordinated migration follows the independent Evasion override checkpoint. |
 | Composed support discovery | Accepted October 8. The common native gate, current authored-order DTO and source-input accounting are implemented; Original05 `01de` is retired. The Gem packet publishes 937 Known and 29 Unmapped domains with all-five preservation; all 23 selected physical Gem domains are covered. Existing typed identities fixed 111 false stat-set blockers. Pinned generated export metadata classifies eight missing runtime effects as active without implementing their Command mechanics. Continue other owner domains and exact provider exclusions; keep Command action/usage gaps separate. Unsupported positive and archived source relationships remain blocking. [Contract](owned-support-origin-composition-proposal.md). |
 | Exact Skill contribution queries | Accepted October 8; Core/Data/Engine V24 implements Current Skill reads and Skill-owned self-contributions with explicit direct-use and/or supplied-slot permission. Exact supply relations survive late support checks. Canonical Offering source writers use four checked empty domains and their activation/application join passes. Inherited Actor and support-delivery memberships remain pending; nonempty game-group meaning requires proof. Actor recipient writers also use guarded empty queries. [Accepted contract](owned-skill-contribution-queries-proposal.md). |
 | Application-group contribution queries | Accepted and implemented October 8 in Core/Data/Engine V25. Typed program-effect/application-group addresses preserve exact recipients, potential-source census, stacking, unknowns and explicit numeric order in one checked reduction path. Current artifacts are rebuilt with no old-format compatibility. Mixed inherited/applied damage data now adopts this capability; MORE and final hit consumers remain next. [Accepted contract](owned-application-group-contribution-queries-proposal.md). |

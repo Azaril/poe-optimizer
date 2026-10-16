@@ -827,6 +827,22 @@ Derive-only contract. Applicability currently admits only Player and requires
 Complete-empty declarations; other actor targets need separate activation,
 ancestry and readiness proof before adoption.
 
+**Accepted structural migration, October 15:** common properties and mechanics remain
+generic across Player, scenario opponents and supplied units wherever their
+game semantics agree. Roles determine applicable data, relationships and
+permitted reads; they must not require copies of an otherwise identical local
+condition or formula. Role-specific baselines and mechanics remain explicit.
+The [generic Actor decision](owned-existing-enemy-rule-ownership-proposal.md)
+adds the actual `ActorKey::ScenarioEnemy` singleton and one mechanical Actor
+context. Shared local rules bind explicit Player, scenario Enemy and discovered
+supplied Actor slots. Role-specific external-input eligibility and selected
+Encounter ownership remain explicit; absolute Enemy reads retain their meaning.
+Contexts without an Actor represent absence, and no Enemy context borrows Player
+identity. The migration replaces the old format in place, with no aliases or
+compatibility evaluator. Existing Player final receivers stay Player-only;
+unsupported Enemy Actions, support reception and usage fail explicitly. These
+are accepted end-state requirements; the implementation plan tracks the cutover.
+
 This is one current-format contract, with no compatibility execution branch.
 An omitted inventory represents a deliberately empty applicability domain;
 it does not prove that a game's shared mechanics are covered. Explicit Partial

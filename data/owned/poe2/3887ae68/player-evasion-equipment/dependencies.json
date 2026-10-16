@@ -1,0 +1,5344 @@
+{
+  "base_component_input": "d70eb4fefe8e4cefdddf123f545424b83f9247d41e7ac7c8a00429938363cfbf",
+  "shared_owner": {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "actor",
+        "value": {
+          "kind": "actor",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000332a"
+        }
+      }
+    },
+    "programs": {
+      "members": [
+        {
+          "id": "intrinsic-player-life",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "level",
+              "value_type": {
+                "kind": "integer"
+              },
+              "source": {
+                "kind": "character_level"
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "level",
+              "expression": {
+                "kind": "read",
+                "input": "level"
+              }
+            },
+            {
+              "id": "per-level",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 12.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003119"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "offset",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 16.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003119"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "leveled",
+              "expression": {
+                "kind": "scale_integer",
+                "value": "per-level",
+                "count": "level"
+              }
+            },
+            {
+              "id": "life",
+              "expression": {
+                "kind": "add",
+                "left": "leveled",
+                "right": "offset"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "intrinsic-life",
+              "when": null,
+              "effect": {
+                "kind": "contribute",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000311a"
+                },
+                "contribution": "add",
+                "value": "life"
+              }
+            }
+          ]
+        },
+        {
+          "id": "selected-player-offhand-facts",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "occupied",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "player_equipment_slot",
+                "value": {
+                  "slot": {
+                    "kind": "equipment_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000065"
+                  },
+                  "read": {
+                    "kind": "occupied"
+                  }
+                }
+              }
+            },
+            {
+              "id": "shield",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "player_equipment_slot",
+                "value": {
+                  "slot": {
+                    "kind": "equipment_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000065"
+                  },
+                  "read": {
+                    "kind": "capability",
+                    "value": {
+                      "capability": {
+                        "kind": "capability",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000332f"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "focus",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "player_equipment_slot",
+                "value": {
+                  "slot": {
+                    "kind": "equipment_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000065"
+                  },
+                  "read": {
+                    "kind": "capability",
+                    "value": {
+                      "capability": {
+                        "kind": "capability",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003330"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "absent",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "boolean",
+                  "value": false
+                }
+              }
+            },
+            {
+              "id": "occupied",
+              "expression": {
+                "kind": "read",
+                "input": "occupied"
+              }
+            },
+            {
+              "id": "empty",
+              "expression": {
+                "kind": "not",
+                "value": "occupied"
+              }
+            },
+            {
+              "id": "shield",
+              "expression": {
+                "kind": "read",
+                "input": "shield"
+              }
+            },
+            {
+              "id": "focus",
+              "expression": {
+                "kind": "read",
+                "input": "focus"
+              }
+            },
+            {
+              "id": "selected-shield",
+              "expression": {
+                "kind": "select",
+                "condition": "occupied",
+                "when_true": "shield",
+                "when_false": "absent"
+              }
+            },
+            {
+              "id": "selected-focus",
+              "expression": {
+                "kind": "select",
+                "condition": "occupied",
+                "when_true": "focus",
+                "when_false": "absent"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "selected-offhand-empty",
+              "when": null,
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003331"
+                },
+                "value": "empty"
+              }
+            },
+            {
+              "id": "selected-offhand-shield",
+              "when": null,
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003332"
+                },
+                "value": "selected-shield"
+              }
+            },
+            {
+              "id": "selected-offhand-focus",
+              "when": null,
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003333"
+                },
+                "value": "selected-focus"
+              }
+            }
+          ]
+        },
+        {
+          "id": "configured-player-resistance-penalty",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "penalty",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "source": {
+                "kind": "external",
+                "value": {
+                  "entity": "current",
+                  "input": {
+                    "kind": "external_input",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000334d"
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "penalty",
+              "expression": {
+                "kind": "read",
+                "input": "penalty"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "fire",
+              "when": null,
+              "effect": {
+                "kind": "contribute",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032e6"
+                },
+                "contribution": "add",
+                "value": "penalty"
+              }
+            },
+            {
+              "id": "cold",
+              "when": null,
+              "effect": {
+                "kind": "contribute",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000009d4"
+                },
+                "contribution": "add",
+                "value": "penalty"
+              }
+            },
+            {
+              "id": "lightning",
+              "when": null,
+              "effect": {
+                "kind": "contribute",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032e7"
+                },
+                "contribution": "add",
+                "value": "penalty"
+              }
+            }
+          ]
+        },
+        {
+          "id": "contribute-inherent-strength-life",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "amount",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003119"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000331a"
+                  }
+                }
+              }
+            },
+            {
+              "id": "all-disabled",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003315"
+                  }
+                }
+              }
+            },
+            {
+              "id": "strength-disabled",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003316"
+                  }
+                }
+              }
+            },
+            {
+              "id": "life-disabled",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003317"
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "amount",
+              "expression": {
+                "kind": "read",
+                "input": "amount"
+              }
+            },
+            {
+              "id": "all-disabled",
+              "expression": {
+                "kind": "read",
+                "input": "all-disabled"
+              }
+            },
+            {
+              "id": "strength-disabled",
+              "expression": {
+                "kind": "read",
+                "input": "strength-disabled"
+              }
+            },
+            {
+              "id": "life-disabled",
+              "expression": {
+                "kind": "read",
+                "input": "life-disabled"
+              }
+            },
+            {
+              "id": "disabled",
+              "expression": {
+                "kind": "any",
+                "values": [
+                  "all-disabled",
+                  "strength-disabled",
+                  "life-disabled"
+                ]
+              }
+            },
+            {
+              "id": "enabled",
+              "expression": {
+                "kind": "not",
+                "value": "disabled"
+              }
+            },
+            {
+              "id": "bounded-inherent-life",
+              "expression": {
+                "kind": "check_numeric_domain",
+                "value": "amount",
+                "domain": {
+                  "kind": "quantity",
+                  "value": {
+                    "minimum": {
+                      "value": -137438953472.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    },
+                    "maximum": {
+                      "value": 137438953472.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "inherent-life",
+              "when": "enabled",
+              "effect": {
+                "kind": "contribute",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000311a"
+                },
+                "contribution": "add",
+                "value": "bounded-inherent-life"
+              }
+            }
+          ]
+        },
+        {
+          "id": "intrinsic-player-mana",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "level",
+              "value_type": {
+                "kind": "integer"
+              },
+              "source": {
+                "kind": "character_level"
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "level",
+              "expression": {
+                "kind": "read",
+                "input": "level"
+              }
+            },
+            {
+              "id": "per-level",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 4.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000003"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "offset",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 30.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000003"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "leveled",
+              "expression": {
+                "kind": "scale_integer",
+                "value": "per-level",
+                "count": "level"
+              }
+            },
+            {
+              "id": "mana",
+              "expression": {
+                "kind": "add",
+                "left": "leveled",
+                "right": "offset"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "intrinsic-mana",
+              "when": null,
+              "effect": {
+                "kind": "contribute",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000029f9"
+                },
+                "contribution": "add",
+                "value": "mana"
+              }
+            }
+          ]
+        },
+        {
+          "id": "contribute-inherent-intelligence-mana",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "intelligence",
+              "value_type": {
+                "kind": "integer"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d30"
+                  }
+                }
+              }
+            },
+            {
+              "id": "all-disabled",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003315"
+                  }
+                }
+              }
+            },
+            {
+              "id": "intelligence-disabled",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003355"
+                  }
+                }
+              }
+            },
+            {
+              "id": "mana-disabled",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003356"
+                  }
+                }
+              }
+            },
+            {
+              "id": "doubled",
+              "value_type": {
+                "kind": "boolean"
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003318"
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "intelligence",
+              "expression": {
+                "kind": "read",
+                "input": "intelligence"
+              }
+            },
+            {
+              "id": "all-disabled",
+              "expression": {
+                "kind": "read",
+                "input": "all-disabled"
+              }
+            },
+            {
+              "id": "intelligence-disabled",
+              "expression": {
+                "kind": "read",
+                "input": "intelligence-disabled"
+              }
+            },
+            {
+              "id": "mana-disabled",
+              "expression": {
+                "kind": "read",
+                "input": "mana-disabled"
+              }
+            },
+            {
+              "id": "doubled",
+              "expression": {
+                "kind": "read",
+                "input": "doubled"
+              }
+            },
+            {
+              "id": "disabled",
+              "expression": {
+                "kind": "any",
+                "values": [
+                  "all-disabled",
+                  "intelligence-disabled",
+                  "mana-disabled"
+                ]
+              }
+            },
+            {
+              "id": "enabled",
+              "expression": {
+                "kind": "not",
+                "value": "disabled"
+              }
+            },
+            {
+              "id": "mana-per-intelligence",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 2.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000003"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "one",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "integer",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "id": "two",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "integer",
+                  "value": 2
+                }
+              }
+            },
+            {
+              "id": "base",
+              "expression": {
+                "kind": "scale_integer",
+                "value": "mana-per-intelligence",
+                "count": "intelligence"
+              }
+            },
+            {
+              "id": "multiplier",
+              "expression": {
+                "kind": "select",
+                "condition": "doubled",
+                "when_true": "two",
+                "when_false": "one"
+              }
+            },
+            {
+              "id": "amount",
+              "expression": {
+                "kind": "scale_integer",
+                "value": "base",
+                "count": "multiplier"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "inherent-mana",
+              "when": "enabled",
+              "effect": {
+                "kind": "contribute",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000029f9"
+                },
+                "contribution": "add",
+                "value": "amount"
+              }
+            }
+          ]
+        },
+        {
+          "id": "intrinsic-player-evasion",
+          "context": "actor",
+          "reads": [],
+          "nodes": [
+            {
+              "id": "base",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 7.0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "inherent-evasion",
+              "when": null,
+              "effect": {
+                "kind": "contribute",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000029f1"
+                },
+                "contribution": "add",
+                "value": "base"
+              }
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "partial",
+        "value": {
+          "gaps": [
+            {
+              "subject": {
+                "kind": "definition",
+                "value": {
+                  "kind": "actor",
+                  "value": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000332a"
+                  }
+                }
+              },
+              "facet": "game_rules",
+              "code": "shared-player-initialization-not-converted"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "final_owner": {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033a4"
+        }
+      }
+    },
+    "programs": {
+      "members": [
+        {
+          "id": "resolve-player-evasion",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "base",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000029ee"
+                  }
+                }
+              },
+              "source": {
+                "kind": "contribution_query",
+                "value": {
+                  "entity": "current",
+                  "query": "player-evasion-base",
+                  "group": "sources"
+                }
+              }
+            },
+            {
+              "id": "increase",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "source": {
+                "kind": "contribution_query",
+                "value": {
+                  "entity": "current",
+                  "query": "player-evasion-increase",
+                  "group": "sources"
+                }
+              }
+            },
+            {
+              "id": "more",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              "source": {
+                "kind": "contribution_query",
+                "value": {
+                  "entity": "current",
+                  "query": "player-evasion-more",
+                  "group": "sources"
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "base",
+              "expression": {
+                "kind": "read",
+                "input": "base"
+              }
+            },
+            {
+              "id": "increase",
+              "expression": {
+                "kind": "read",
+                "input": "increase"
+              }
+            },
+            {
+              "id": "more",
+              "expression": {
+                "kind": "read",
+                "input": "more"
+              }
+            },
+            {
+              "id": "zero-rating",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "one-factor",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 1,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "increase-fraction",
+              "expression": {
+                "kind": "percent_as_factor",
+                "percent": "increase",
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000001"
+                }
+              }
+            },
+            {
+              "id": "increase-factor",
+              "expression": {
+                "kind": "add",
+                "left": "one-factor",
+                "right": "increase-fraction"
+              }
+            },
+            {
+              "id": "increased",
+              "expression": {
+                "kind": "scale",
+                "value": "base",
+                "factor": "increase-factor"
+              }
+            },
+            {
+              "id": "multiplied",
+              "expression": {
+                "kind": "scale",
+                "value": "increased",
+                "factor": "more"
+              }
+            },
+            {
+              "id": "rounding-operand",
+              "expression": {
+                "kind": "add",
+                "left": "multiplied",
+                "right": "zero-rating"
+              }
+            },
+            {
+              "id": "half-rating",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0.5,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "below-half",
+              "expression": {
+                "kind": "compare",
+                "operation": "less",
+                "left": "rounding-operand",
+                "right": "half-rating"
+              }
+            },
+            {
+              "id": "checked-below-half",
+              "expression": {
+                "kind": "check_numeric_domain",
+                "value": "rounding-operand",
+                "domain": {
+                  "kind": "quantity",
+                  "value": {
+                    "minimum": {
+                      "value": -1.7976931348623157e+308,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    },
+                    "maximum": {
+                      "value": 0.4999999999999999,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "checked-above-half",
+              "expression": {
+                "kind": "check_numeric_domain",
+                "value": "rounding-operand",
+                "domain": {
+                  "kind": "quantity",
+                  "value": {
+                    "minimum": {
+                      "value": 0.5,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    },
+                    "maximum": {
+                      "value": 4503599627370496,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "bounded-rounding-operand",
+              "expression": {
+                "kind": "select",
+                "condition": "below-half",
+                "when_true": "checked-below-half",
+                "when_false": "checked-above-half"
+              }
+            },
+            {
+              "id": "rounded",
+              "expression": {
+                "kind": "round",
+                "value": "bounded-rounding-operand",
+                "quantum": {
+                  "value": 1,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000029ee"
+                  }
+                },
+                "mode": "nearest_ties_positive"
+              }
+            },
+            {
+              "id": "evasion",
+              "expression": {
+                "kind": "maximum",
+                "left": "rounded",
+                "right": "zero-rating"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "final-evasion",
+              "when": null,
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000033a4"
+                },
+                "value": "evasion"
+              }
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "partial",
+        "value": {
+          "gaps": [
+            {
+              "subject": {
+                "kind": "definition",
+                "value": {
+                  "kind": "stat",
+                  "value": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033a4"
+                  }
+                }
+              },
+              "facet": "game_rules",
+              "code": "unadmitted-evasion-slot-and-conversion-domains"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "existing_actor_rules": {
+    "members": [
+      {
+        "id": "shared-player-initialization",
+        "owner": {
+          "kind": "actor",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000332a"
+        },
+        "targets": [
+          "player"
+        ]
+      }
+    ],
+    "closure": {
+      "kind": "complete"
+    }
+  },
+  "equipment_slots": [
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000064"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "selected"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000065"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "selected"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000066"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000067"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000068"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000069"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000006a"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000006b"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000006c"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000006d"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000006e"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000006f"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000070"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000071"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000072"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000073"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000074"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000075"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000076"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    },
+    {
+      "kind": "equipment_slot",
+      "value": {
+        "id": {
+          "kind": "equipment_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000077"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "scope": "shared"
+          }
+        }
+      }
+    }
+  ],
+  "slot_mappings": [
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Amulet"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006a"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Arm 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000074"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Arm 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000075"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Belt"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006e"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Body Armour"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000067"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Boots"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000069"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Charm 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000071"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Charm 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000072"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Charm 3"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000073"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Flask 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006f"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Flask 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000070"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Gloves"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000068"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Helmet"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000066"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Leg 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000076"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Leg 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000077"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Ring 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006b"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Ring 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006c"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Ring 3"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000006d"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Weapon 1"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000064"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Weapon 1 Swap"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000064"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "weapon-swap-same-receiving-slot"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Weapon 2"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000065"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "catalog",
+        "value": {
+          "kind": "equipment_slot",
+          "key": {
+            "kind": "text",
+            "value": "Weapon 2 Swap"
+          },
+          "version": {
+            "kind": "missing"
+          },
+          "variant": {
+            "kind": "missing"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "equipment_slot",
+              "value": {
+                "kind": "equipment_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000065"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "weapon-swap-same-receiving-slot"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "equipment_loadouts": [
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Weapon 1"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000064"
+      },
+      "scope": {
+        "kind": "selected",
+        "value": {
+          "loadouts": [
+            "weapon-set-one"
+          ]
+        }
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Weapon 1 Swap"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000064"
+      },
+      "scope": {
+        "kind": "selected",
+        "value": {
+          "loadouts": [
+            "weapon-set-two"
+          ]
+        }
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Weapon 2"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000065"
+      },
+      "scope": {
+        "kind": "selected",
+        "value": {
+          "loadouts": [
+            "weapon-set-one"
+          ]
+        }
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Weapon 2 Swap"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000065"
+      },
+      "scope": {
+        "kind": "selected",
+        "value": {
+          "loadouts": [
+            "weapon-set-two"
+          ]
+        }
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Helmet"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000066"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Body Armour"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000067"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Gloves"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000068"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Boots"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000069"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Amulet"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006a"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Ring 1"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006b"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Ring 2"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006c"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Ring 3"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006d"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Belt"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006e"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Flask 1"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000006f"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Flask 2"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000070"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Charm 1"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000071"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Charm 2"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000072"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Charm 3"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000073"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Arm 1"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000074"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Arm 2"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000075"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Leg 1"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000076"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    },
+    {
+      "source_slot": {
+        "kind": "text",
+        "value": "Leg 2"
+      },
+      "destination": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000077"
+      },
+      "scope": {
+        "kind": "shared"
+      }
+    }
+  ],
+  "definitions": [
+    {
+      "kind": "unit",
+      "value": {
+        "id": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000001"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "dimension": "dimensionless_factor"
+          }
+        }
+      }
+    },
+    {
+      "kind": "unit",
+      "value": {
+        "id": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000002"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "dimension": "percentage_points"
+          }
+        }
+      }
+    },
+    {
+      "kind": "unit",
+      "value": {
+        "id": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000029ee"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "dimension": "rating"
+          }
+        }
+      }
+    },
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000029f1"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000029ee"
+                }
+              }
+            },
+            "targets": [
+              "actor"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033a4"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000029ee"
+                }
+              }
+            },
+            "targets": [
+              "actor"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "queries": [
+    {
+      "id": "player-evasion-base",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f1"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ee"
+              }
+            }
+          },
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "actor",
+                      "value": {
+                        "kind": "actor",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000332a"
+                      }
+                    }
+                  },
+                  "program": "intrinsic-player-evasion",
+                  "effect": "inherent-evasion",
+                  "origin": {
+                    "kind": "existing_actor",
+                    "application": "shared-player-initialization"
+                  }
+                },
+                "order": {
+                  "source_rank": 0,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "player-evasion-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f1"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "sum",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000a8a"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 0,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000ad3"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 1,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000af6"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 2,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000b13"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 3,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000b5c"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 4,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000b98"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 5,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000ba6"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 6,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000be9"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 7,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000c00"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 8,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000c0b"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 9,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000c2b"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 10,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000c36"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 11,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000c66"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 12,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000c67"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 13,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000cb9"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 14,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000cbf"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 15,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000cee"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 16,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000d97"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 17,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000e13"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 18,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000e24"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 19,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000e63"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 20,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000e81"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 21,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000ee2"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 22,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000f71"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 23,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000fd1"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 24,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000100a"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 25,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001061"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 26,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001096"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 27,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000010cf"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 28,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000010d2"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 29,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000010e9"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 30,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000010fa"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 31,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000110e"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 32,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001208"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 33,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001253"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 34,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001282"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 35,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000012a0"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 36,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000012d4"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 37,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000012dd"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 38,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000012ed"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 39,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001307"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 40,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000013ff"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 41,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000014ab"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 42,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000014f8"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 43,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001537"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 44,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001659"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 45,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000165d"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 46,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000016b7"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 47,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000016ce"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 48,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000016ea"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 49,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000017d5"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 50,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000184f"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 51,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000018da"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 52,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001952"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 53,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001989"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 54,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001a02"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 55,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001a1d"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 56,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001a26"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 57,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001a8f"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 58,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001abb"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 59,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001b95"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 60,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001ba6"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 61,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "passive_node",
+                      "value": {
+                        "kind": "passive_node",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001bbf"
+                      }
+                    }
+                  },
+                  "program": "passive-view",
+                  "effect": "default-effect-0",
+                  "origin": {
+                    "kind": "allocation"
+                  }
+                },
+                "order": {
+                  "source_rank": 62,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "reward",
+                      "value": {
+                        "kind": "reward",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000041"
+                      }
+                    }
+                  },
+                  "program": "permanent-reward-contributions",
+                  "effect": "grant-1",
+                  "origin": {
+                    "kind": "reward"
+                  }
+                },
+                "order": {
+                  "source_rank": 63,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              },
+              {
+                "producer": {
+                  "kind": "program_effect",
+                  "owner": {
+                    "kind": "definition",
+                    "value": {
+                      "kind": "reward",
+                      "value": {
+                        "kind": "reward",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000005a"
+                      }
+                    }
+                  },
+                  "program": "permanent-reward-contributions",
+                  "effect": "grant-1",
+                  "origin": {
+                    "kind": "reward"
+                  }
+                },
+                "order": {
+                  "source_rank": 64,
+                  "program_rank": 0,
+                  "effect_rank": 0,
+                  "slot_ranks": []
+                }
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "player-evasion-more",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f1"
+      },
+      "contribution": "multiply",
+      "groups": [
+        {
+          "id": "sources",
+          "reduction": "product",
+          "ordering": "ordered",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 1,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "complete"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

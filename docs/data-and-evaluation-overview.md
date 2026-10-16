@@ -51,8 +51,9 @@ all-five publication/rebuild pass. The subsequent
 now calculates local and final EquipmentUse values with checked suppliers and
 explicit unsupported domains. Nine ordinary controls, strict Clippy and an
 all-five publication/rebuild pass; a positive source control reproduces 75.
-Shared-Player slot aggregation is being validated, followed by conditional and
-transformation coverage. The existing numeric-domain operation excludes a
+Shared-Player slot aggregation is now published and validated, preserving exact
+item-property reads and unavailable occupied slots. Override selection is next,
+followed by conditional and transformation coverage. The existing numeric-domain operation excludes a
 source rounding anomaly without adding Lua-compatible native arithmetic.
 
 The unpublished outgoing-critical work now has a checked selected-source
@@ -65,24 +66,28 @@ remain an explicit [investigation](legacy-retirement.md#sand-djinn-critical-weak
 
 The outgoing-critical and armour work exposed a shared boundary gap: checked
 queries cannot yet name existing Encounter producers or consume numeric Enemy
-groups. The [proposed extension](owned-encounter-contribution-queries-proposal.md)
+groups. The [accepted extension](owned-encounter-contribution-queries-proposal.md)
 keeps those sources in the same contribution graph, with exact selected
-Encounter and recipient validation. This is awaiting owner review; no new
-authority, separate aggregator or complete-coverage claim is implemented.
+Encounter and recipient validation. It is included in the approved Actor
+migration; implementation and validation remain pending.
 
-Shared Enemy baseline rules are a distinct source from configured Encounter
-rules. A [second proposed extension](owned-existing-enemy-rule-ownership-proposal.md)
-would bind those definitions once to the actual scenario Enemy through the
-existing shared-rule mechanism. It preserves separate Player/Enemy permissions
-and current stat-owned final receivers. That ownership change is also awaiting
-review; the current runtime still supports only shared Player applicability.
+Shared baseline rules are a distinct source from configured Encounter rules.
+The [generic Actor migration](owned-existing-enemy-rule-ownership-proposal.md)
+was approved on October 15. It gives Player, supplied units and the actual
+scenario Enemy one identity/local-rule model, with explicit role-specific data,
+permissions and shared applicability. It removes separate mechanical Enemy
+contexts and placeholder Player identities. Current runtime still has those
+old contracts until the coordinated Core/Data, Engine and Import/artifact
+cutover passes validation. There will be no compatibility reader. Existing
+Player final receiver ownership stays unchanged, and this structural change
+does not itself admit a new metric or complete build.
 
 Its [trade-search preference successor](../data/owned/poe2/3887ae68/source-trade-preferences/README.md)
 accounts for saved trade weights in import provenance without inferring gameplay
 inputs or optimizer objectives. All-five preservation and exact package rebuild
 pass. Original05 now has **16 remaining configuration origins and 33 known
 assumptions**; its four complete input inventories remain Pending. The current
-item Evasion successor has 8201 effective programs and complete native builds
+slot Evasion successor has 8202 effective programs and complete native builds
 remain **0/5**.
 See the [current endpoint](implementation.md#current-checkpoint-configuration-admission).
 

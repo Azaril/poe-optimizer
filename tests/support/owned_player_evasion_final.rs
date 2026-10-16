@@ -360,12 +360,21 @@ pub fn check_native(schema: &Value, rules: &Value, published: bool) {
             json!(c.owner)
         );
         for q in c.queries.iter().rev() {
+            let matches: Vec<_> = r["contribution_queries"]["members"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .enumerate()
+                .filter(|(_, row)| row["id"] == json!(q.id))
+                .map(|(i, _)| i)
+                .collect();
+            assert_eq!(matches.len(), 1, "one exact query identity");
             assert_eq!(
                 r["contribution_queries"]["members"]
                     .as_array_mut()
                     .unwrap()
-                    .pop(),
-                Some(json!(q))
+                    .remove(matches[0]),
+                json!(q)
             );
         }
         let matches: Vec<_> = r["receivers"]["members"]

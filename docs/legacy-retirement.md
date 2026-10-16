@@ -1081,6 +1081,44 @@ changed candidates also require their own admitted mechanics.
 
 ### Other current compatibility investigations
 
+**Generic Actor structural cutover (accepted 2026-10-15):** replace the separate
+mechanical Enemy identity/context with actual `ActorKey::ScenarioEnemy`, and
+remove Enemy/Environment placeholder Player identities and Core's non-Owned
+fallback. Use one shared local-rule inventory with explicit Player, supplied-slot
+and scenario-opponent applicability. Preserve role-specific input and source
+authority, absolute Enemy selectors, selected Encounter ownership and existing
+Player final receivers. Validate entire bound inventories, not only demanded
+branches. Rewrite current authored artifacts and imports; reject obsolete
+addresses rather than retaining aliases. Raw source archives and observations
+remain evidence. The [accepted contract](owned-existing-enemy-rule-ownership-proposal.md)
+records cross-role isolation, determinism and all-five regression gates. This
+removes structural duplication without asserting new numerical coverage.
+
+**Unconstructed equipment slot term (2026-10-15):** the Evasion source resource
+loop mentions Weapon 3, but the complete pinned ItemsTab constructor and
+CalcSetup item-list assignment create no such slot. The native slot transport
+uses the five real slots and omits the resulting source-only zero term.
+`FiniteQuantity::new` canonicalizes signed zero; Scale/Add results pass through
+that constructor. For admitted finite factors the absent-slot product is zero
+and adding it leaves the finite subtotal unchanged. The five actual terms
+already require the same factors, preserving missing/invalid-input behavior.
+The [slot packet](../data/owned/poe2/3887ae68/player-evasion-equipment/README.md)
+retains constructor evidence and a signed-zero/extreme-value control. No new
+slot, compatibility operation or alternate runtime path is retained.
+
+**Integration-test compilation cost (2026-10-15):** hosted Ubuntu CLI shard 3
+on `61205e81` reports 56m04s and 55m04s compiling its two feature profiles
+(`runs/ci-job-116730283816.log`). Its failed test is the already fixed portable
+archive lookup, not a compilation failure. The workflow intentionally uses
+optimized tests with debug/overflow checks and preserves both feature profiles.
+Investigate Cargo timing data, cache effectiveness and repeated compilation of
+shared test helpers before choosing a consolidation. Helper duplication is a
+candidate cause, not yet a measured attribution. Any refactor must preserve
+the source/negative tests, package-independent ordinary checks and explicit
+all-five publication gates. Do not weaken checks or treat ignored publication
+tests as executed to shorten CI. This maintenance follow-up does not displace
+the closest-build calculation work.
+
 **Physical-damage draft retirement (2026-10-15):** the selected physical-base
 publication supersedes the old unpublished arithmetic installer. The portable
 Sniper replay and ordinary Engine tests now use its actual published program

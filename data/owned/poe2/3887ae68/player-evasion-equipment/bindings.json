@@ -1,0 +1,74 @@
+{
+  "shared_owner": {
+    "kind": "definition",
+    "value": {
+      "kind": "actor",
+      "value": {
+        "kind": "actor",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000332a"
+      }
+    }
+  },
+  "property": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000033a6"
+  },
+  "subtotal": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000033a9"
+  },
+  "final": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000033a4"
+  },
+  "unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000029ee"
+  },
+  "metric": {
+    "kind": "metric",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000313e"
+  },
+  "saved_request": "reference-19",
+  "property_stage": "item-evasion-final",
+  "slot_stage": "player-equipment-evasion",
+  "final_stage": "player-evasion-final",
+  "ordinary_source_slot_order": [
+    "Helmet",
+    "Gloves",
+    "Boots",
+    "Body Armour",
+    "Weapon 2",
+    "Weapon 3"
+  ],
+  "remaining": [
+    "slot-specific modifiers",
+    "conditions and dynamic factories",
+    "resource conversion and override",
+    "shared and global supplier coverage"
+  ]
+}

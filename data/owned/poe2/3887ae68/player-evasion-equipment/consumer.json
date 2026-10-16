@@ -1,0 +1,1223 @@
+{
+  "slot_program": {
+    "id": "player-equipment-evasion",
+    "context": "actor",
+    "reads": [
+      {
+        "id": "increase",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000002"
+            }
+          }
+        },
+        "source": {
+          "kind": "contribution_query",
+          "value": {
+            "entity": "current",
+            "query": "player-evasion-increase",
+            "group": "sources"
+          }
+        }
+      },
+      {
+        "id": "more",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000001"
+            }
+          }
+        },
+        "source": {
+          "kind": "contribution_query",
+          "value": {
+            "entity": "current",
+            "query": "player-evasion-more",
+            "group": "sources"
+          }
+        }
+      },
+      {
+        "id": "helmet-occupied",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000066"
+            },
+            "read": {
+              "kind": "occupied"
+            }
+          }
+        }
+      },
+      {
+        "id": "helmet-property",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000029ee"
+            }
+          }
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000066"
+            },
+            "read": {
+              "kind": "stat",
+              "value": {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000033a6"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "gloves-occupied",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000068"
+            },
+            "read": {
+              "kind": "occupied"
+            }
+          }
+        }
+      },
+      {
+        "id": "gloves-property",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000029ee"
+            }
+          }
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000068"
+            },
+            "read": {
+              "kind": "stat",
+              "value": {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000033a6"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "boots-occupied",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000069"
+            },
+            "read": {
+              "kind": "occupied"
+            }
+          }
+        }
+      },
+      {
+        "id": "boots-property",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000029ee"
+            }
+          }
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000069"
+            },
+            "read": {
+              "kind": "stat",
+              "value": {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000033a6"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "body-occupied",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000067"
+            },
+            "read": {
+              "kind": "occupied"
+            }
+          }
+        }
+      },
+      {
+        "id": "body-property",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000029ee"
+            }
+          }
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000067"
+            },
+            "read": {
+              "kind": "stat",
+              "value": {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000033a6"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "offhand-occupied",
+        "value_type": {
+          "kind": "boolean"
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000065"
+            },
+            "read": {
+              "kind": "occupied"
+            }
+          }
+        }
+      },
+      {
+        "id": "offhand-property",
+        "value_type": {
+          "kind": "quantity",
+          "value": {
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000029ee"
+            }
+          }
+        },
+        "source": {
+          "kind": "player_equipment_slot",
+          "value": {
+            "slot": {
+              "kind": "equipment_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000065"
+            },
+            "read": {
+              "kind": "stat",
+              "value": {
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000033a6"
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "id": "increase",
+        "expression": {
+          "kind": "read",
+          "input": "increase"
+        }
+      },
+      {
+        "id": "more",
+        "expression": {
+          "kind": "read",
+          "input": "more"
+        }
+      },
+      {
+        "id": "zero",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ee"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "one",
+        "expression": {
+          "kind": "literal",
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 1,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000001"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "increase-fraction",
+        "expression": {
+          "kind": "percent_as_factor",
+          "percent": "increase",
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000001"
+          }
+        }
+      },
+      {
+        "id": "increase-factor",
+        "expression": {
+          "kind": "add",
+          "left": "one",
+          "right": "increase-fraction"
+        }
+      },
+      {
+        "id": "helmet-occupied",
+        "expression": {
+          "kind": "read",
+          "input": "helmet-occupied"
+        }
+      },
+      {
+        "id": "helmet-property",
+        "expression": {
+          "kind": "read",
+          "input": "helmet-property"
+        }
+      },
+      {
+        "id": "helmet-base",
+        "expression": {
+          "kind": "select",
+          "condition": "helmet-occupied",
+          "when_true": "helmet-property",
+          "when_false": "zero"
+        }
+      },
+      {
+        "id": "helmet-increased",
+        "expression": {
+          "kind": "scale",
+          "value": "helmet-base",
+          "factor": "increase-factor"
+        }
+      },
+      {
+        "id": "helmet-scaled",
+        "expression": {
+          "kind": "scale",
+          "value": "helmet-increased",
+          "factor": "more"
+        }
+      },
+      {
+        "id": "helmet-sum",
+        "expression": {
+          "kind": "add",
+          "left": "zero",
+          "right": "helmet-scaled"
+        }
+      },
+      {
+        "id": "gloves-occupied",
+        "expression": {
+          "kind": "read",
+          "input": "gloves-occupied"
+        }
+      },
+      {
+        "id": "gloves-property",
+        "expression": {
+          "kind": "read",
+          "input": "gloves-property"
+        }
+      },
+      {
+        "id": "gloves-base",
+        "expression": {
+          "kind": "select",
+          "condition": "gloves-occupied",
+          "when_true": "gloves-property",
+          "when_false": "zero"
+        }
+      },
+      {
+        "id": "gloves-increased",
+        "expression": {
+          "kind": "scale",
+          "value": "gloves-base",
+          "factor": "increase-factor"
+        }
+      },
+      {
+        "id": "gloves-scaled",
+        "expression": {
+          "kind": "scale",
+          "value": "gloves-increased",
+          "factor": "more"
+        }
+      },
+      {
+        "id": "gloves-sum",
+        "expression": {
+          "kind": "add",
+          "left": "helmet-sum",
+          "right": "gloves-scaled"
+        }
+      },
+      {
+        "id": "boots-occupied",
+        "expression": {
+          "kind": "read",
+          "input": "boots-occupied"
+        }
+      },
+      {
+        "id": "boots-property",
+        "expression": {
+          "kind": "read",
+          "input": "boots-property"
+        }
+      },
+      {
+        "id": "boots-base",
+        "expression": {
+          "kind": "select",
+          "condition": "boots-occupied",
+          "when_true": "boots-property",
+          "when_false": "zero"
+        }
+      },
+      {
+        "id": "boots-increased",
+        "expression": {
+          "kind": "scale",
+          "value": "boots-base",
+          "factor": "increase-factor"
+        }
+      },
+      {
+        "id": "boots-scaled",
+        "expression": {
+          "kind": "scale",
+          "value": "boots-increased",
+          "factor": "more"
+        }
+      },
+      {
+        "id": "boots-sum",
+        "expression": {
+          "kind": "add",
+          "left": "gloves-sum",
+          "right": "boots-scaled"
+        }
+      },
+      {
+        "id": "body-occupied",
+        "expression": {
+          "kind": "read",
+          "input": "body-occupied"
+        }
+      },
+      {
+        "id": "body-property",
+        "expression": {
+          "kind": "read",
+          "input": "body-property"
+        }
+      },
+      {
+        "id": "body-base",
+        "expression": {
+          "kind": "select",
+          "condition": "body-occupied",
+          "when_true": "body-property",
+          "when_false": "zero"
+        }
+      },
+      {
+        "id": "body-increased",
+        "expression": {
+          "kind": "scale",
+          "value": "body-base",
+          "factor": "increase-factor"
+        }
+      },
+      {
+        "id": "body-scaled",
+        "expression": {
+          "kind": "scale",
+          "value": "body-increased",
+          "factor": "more"
+        }
+      },
+      {
+        "id": "body-sum",
+        "expression": {
+          "kind": "add",
+          "left": "boots-sum",
+          "right": "body-scaled"
+        }
+      },
+      {
+        "id": "offhand-occupied",
+        "expression": {
+          "kind": "read",
+          "input": "offhand-occupied"
+        }
+      },
+      {
+        "id": "offhand-property",
+        "expression": {
+          "kind": "read",
+          "input": "offhand-property"
+        }
+      },
+      {
+        "id": "offhand-base",
+        "expression": {
+          "kind": "select",
+          "condition": "offhand-occupied",
+          "when_true": "offhand-property",
+          "when_false": "zero"
+        }
+      },
+      {
+        "id": "offhand-increased",
+        "expression": {
+          "kind": "scale",
+          "value": "offhand-base",
+          "factor": "increase-factor"
+        }
+      },
+      {
+        "id": "offhand-scaled",
+        "expression": {
+          "kind": "scale",
+          "value": "offhand-increased",
+          "factor": "more"
+        }
+      },
+      {
+        "id": "offhand-sum",
+        "expression": {
+          "kind": "add",
+          "left": "body-sum",
+          "right": "offhand-scaled"
+        }
+      }
+    ],
+    "effects": [
+      {
+        "id": "scaled-equipment-evasion",
+        "when": null,
+        "effect": {
+          "kind": "derive",
+          "entity": "current",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000033a9"
+          },
+          "value": "offhand-sum"
+        }
+      }
+    ]
+  },
+  "final_owner": {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033a4"
+        }
+      }
+    },
+    "programs": {
+      "members": [
+        {
+          "id": "resolve-player-evasion",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "base",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000029ee"
+                  }
+                }
+              },
+              "source": {
+                "kind": "contribution_query",
+                "value": {
+                  "entity": "current",
+                  "query": "player-evasion-base",
+                  "group": "sources"
+                }
+              }
+            },
+            {
+              "id": "increase",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "source": {
+                "kind": "contribution_query",
+                "value": {
+                  "entity": "current",
+                  "query": "player-evasion-increase",
+                  "group": "sources"
+                }
+              }
+            },
+            {
+              "id": "more",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              "source": {
+                "kind": "contribution_query",
+                "value": {
+                  "entity": "current",
+                  "query": "player-evasion-more",
+                  "group": "sources"
+                }
+              }
+            },
+            {
+              "id": "equipment-subtotal",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000029ee"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033a9"
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "base",
+              "expression": {
+                "kind": "read",
+                "input": "base"
+              }
+            },
+            {
+              "id": "increase",
+              "expression": {
+                "kind": "read",
+                "input": "increase"
+              }
+            },
+            {
+              "id": "more",
+              "expression": {
+                "kind": "read",
+                "input": "more"
+              }
+            },
+            {
+              "id": "zero-rating",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "one-factor",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 1,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000001"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "increase-fraction",
+              "expression": {
+                "kind": "percent_as_factor",
+                "percent": "increase",
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000001"
+                }
+              }
+            },
+            {
+              "id": "increase-factor",
+              "expression": {
+                "kind": "add",
+                "left": "one-factor",
+                "right": "increase-fraction"
+              }
+            },
+            {
+              "id": "increased",
+              "expression": {
+                "kind": "scale",
+                "value": "base",
+                "factor": "increase-factor"
+              }
+            },
+            {
+              "id": "multiplied",
+              "expression": {
+                "kind": "scale",
+                "value": "increased",
+                "factor": "more"
+              }
+            },
+            {
+              "id": "equipment-subtotal",
+              "expression": {
+                "kind": "read",
+                "input": "equipment-subtotal"
+              }
+            },
+            {
+              "id": "equipment-and-global",
+              "expression": {
+                "kind": "add",
+                "left": "equipment-subtotal",
+                "right": "multiplied"
+              }
+            },
+            {
+              "id": "rounding-operand",
+              "expression": {
+                "kind": "add",
+                "left": "equipment-and-global",
+                "right": "zero-rating"
+              }
+            },
+            {
+              "id": "half-rating",
+              "expression": {
+                "kind": "literal",
+                "value": {
+                  "kind": "quantity",
+                  "value": {
+                    "value": 0.5,
+                    "unit": {
+                      "kind": "unit",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000029ee"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "below-half",
+              "expression": {
+                "kind": "compare",
+                "operation": "less",
+                "left": "rounding-operand",
+                "right": "half-rating"
+              }
+            },
+            {
+              "id": "checked-below-half",
+              "expression": {
+                "kind": "check_numeric_domain",
+                "value": "rounding-operand",
+                "domain": {
+                  "kind": "quantity",
+                  "value": {
+                    "minimum": {
+                      "value": -1.7976931348623157e+308,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    },
+                    "maximum": {
+                      "value": 0.4999999999999999,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "checked-above-half",
+              "expression": {
+                "kind": "check_numeric_domain",
+                "value": "rounding-operand",
+                "domain": {
+                  "kind": "quantity",
+                  "value": {
+                    "minimum": {
+                      "value": 0.5,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    },
+                    "maximum": {
+                      "value": 4503599627370496,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.00000000000029ee"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "bounded-rounding-operand",
+              "expression": {
+                "kind": "select",
+                "condition": "below-half",
+                "when_true": "checked-below-half",
+                "when_false": "checked-above-half"
+              }
+            },
+            {
+              "id": "rounded",
+              "expression": {
+                "kind": "round",
+                "value": "bounded-rounding-operand",
+                "quantum": {
+                  "value": 1,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000029ee"
+                  }
+                },
+                "mode": "nearest_ties_positive"
+              }
+            },
+            {
+              "id": "evasion",
+              "expression": {
+                "kind": "maximum",
+                "left": "rounded",
+                "right": "zero-rating"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "final-evasion",
+              "when": null,
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000033a4"
+                },
+                "value": "evasion"
+              }
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "partial",
+        "value": {
+          "gaps": [
+            {
+              "subject": {
+                "kind": "definition",
+                "value": {
+                  "kind": "stat",
+                  "value": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000033a4"
+                  }
+                }
+              },
+              "facet": "game_rules",
+              "code": "unadmitted-evasion-slot-and-conversion-domains"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "subtotal_owner": {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000033a9"
+        }
+      }
+    },
+    "programs": {
+      "members": [],
+      "closure": {
+        "kind": "complete"
+      }
+    }
+  },
+  "slots": [
+    {
+      "name": "Helmet",
+      "key": "helmet",
+      "slot": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000066"
+      }
+    },
+    {
+      "name": "Gloves",
+      "key": "gloves",
+      "slot": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000068"
+      }
+    },
+    {
+      "name": "Boots",
+      "key": "boots",
+      "slot": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000069"
+      }
+    },
+    {
+      "name": "Body Armour",
+      "key": "body",
+      "slot": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000067"
+      }
+    },
+    {
+      "name": "Weapon 2",
+      "key": "offhand",
+      "slot": {
+        "kind": "equipment_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000065"
+      }
+    }
+  ]
+}

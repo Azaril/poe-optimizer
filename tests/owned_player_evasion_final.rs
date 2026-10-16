@@ -2,6 +2,7 @@
 #[allow(dead_code)]
 #[path = "support/owned_player_evasion_final.rs"]
 mod family;
+use family as evasion_family;
 #[allow(dead_code)]
 #[path = "support/owned_release_migration_preservation.rs"]
 mod migration_preservation;
@@ -152,6 +153,40 @@ fn complete_native_writer_census_rejects_zero_inactive_and_application_additions
             std::panic::catch_unwind(|| family::check_native(&schema, &changed, false)).is_err()
         );
     }
+}
+
+#[test]
+fn component_query_lookup_preserves_exact_membership_with_later_queries() {
+    let (schema, mut rules) = fixture();
+    let c = family::consumer();
+    let d: Value = family::read("dependencies.json");
+    rules["owners"]
+        .as_array_mut()
+        .unwrap()
+        .iter_mut()
+        .find(|o| o["owner"] == d["shared_owner"]["owner"])
+        .unwrap()["programs"]["members"]
+        .as_array_mut()
+        .unwrap()
+        .push(json!(c.intrinsic));
+    rules["owners"].as_array_mut().unwrap().push(json!(c.owner));
+    rules["contribution_queries"]["members"] = json!(c.queries);
+    let mut unrelated = c.queries[2].clone();
+    unrelated.id = "unrelated-later-query".parse().unwrap();
+    rules["contribution_queries"]["members"]
+        .as_array_mut()
+        .unwrap()
+        .push(json!(unrelated));
+    rules["receivers"]["members"] = json!([c.receiver]);
+    family::check_native(&schema, &rules, true);
+    let mut duplicate = rules.clone();
+    duplicate["contribution_queries"]["members"]
+        .as_array_mut()
+        .unwrap()
+        .push(json!(c.queries[0]));
+    assert!(std::panic::catch_unwind(|| family::check_native(&schema, &duplicate, true)).is_err());
+    rules["contribution_queries"]["members"][0]["groups"][0]["members"]["members"] = json!([]);
+    assert!(std::panic::catch_unwind(|| family::check_native(&schema, &rules, true)).is_err());
 }
 
 #[test]
