@@ -93,9 +93,10 @@ build coverage or change the closest-build priority.
    blocker: shared conditions and configured Enemy contributions feeding critical
    damage/mitigation, alongside final Player defence admission.
 
-Current resume point: approval recorded; Core/Data and Engine impact analysis
-is complete, but runtime edits wait for the override validation to release its
-Cargo lane. Root owns Import/CLI/artifact coordination and the living documents.
+Current resume point: approval recorded and the independent override checkpoint
+has passed. Core/Data and Engine runtime migrations are underway in parallel;
+a separate agent owns cross-role integration tests. Cargo validation is serialized.
+Root owns Import/CLI/artifact coordination and the living documents.
 Existing Player final receivers remain unchanged; unsupported ScenarioEnemy
 usage/support/Action paths must reject explicitly. Pending resource-obligation,
 Scenario usage-intent and progression ownership questions remain separate.
@@ -221,7 +222,7 @@ uses the existing loader's canonical ordering without changing game semantics.
 The following Player slot aggregation is now published; final conditional and
 transformation coverage remains incomplete.
 
-Current package: **`runs/owned-player-evasion-equipment-publication-02/package`**.
+Slot predecessor: **`runs/owned-player-evasion-equipment-publication-02/package`**.
 
 - Input: `cb52e5b9de49d5e8aea9e7d8bb603a92e839ee6e5c5635e83f32364c4869cc78`.
 - Registry: `5773595cb2c607d0a2bdc419e67d2f6d19f3af529561741e951861e279be91f0` (last `33a9`).
@@ -242,8 +243,29 @@ The new target's 22 tests and predecessor target's ten tests pass (some helpers
 are shared), as do strict Clippy and all-five publication/rebuild. Logs:
 `runs/owned-player-evasion-equipment-{ordinary-06,clippy-02,publication-02}.log`.
 All 110 queries, local identities and selected issues **106/117/109/123/4**
-are preserved; final/shared owner coverage is still Partial. Override selection
-is the final independent Evasion checkpoint before the Actor migration below.
+are preserved; final/shared owner coverage is still Partial.
+
+Current validated package (before Actor migration):
+**`runs/owned-player-evasion-override-publication-01/package`**.
+
+- Input: `b3f2bcb73c780c4687fc868dd84a62db782ebe5bb39f0b1711a25e4e0ec5dfff`.
+- Registry/definitions: unchanged from the slot predecessor above.
+- Rules: `94cbb562efadb840766ca3ca21b7702e34ba5a78833a51046e796a1fd75a18cb`.
+- Compiled: `88c6da669e5bc49734b5687165fe9e1bb480177c8dffbf4f2657c799d32e083d`.
+
+The [override packet](../data/owned/poe2/3887ae68/player-evasion-override/README.md)
+adds one checked Override query and no definitions/programs. An agreeing selected
+value, including zero, replaces only the global base before scaling; item subtotal
+and final total retain their existing meaning. Conflicting, unknown and unlisted
+suppliers fail explicitly. Actual potential-writer census proves the finite native
+empty membership; it does not complete source coverage or the final owner.
+Twenty-six ordinary tests (including inherited components), strict Clippy and
+all-five publication/byte-identical rebuild pass. Logs:
+`runs/owned-player-evasion-override-{ordinary-03,clippy-01,publication-01}.log`.
+The 201 provenance entries, 90 queries and 8202 effective programs preserve all
+110 saved queries, exact local IDs and selected issues **106/117/109/123/4**.
+No input or owner gap is retired. This checkpoint releases the Actor migration;
+its new-format endpoint will receive new identities after full regeneration.
 
 The final Evasion receiver predecessor remains at
 **`runs/owned-player-evasion-final-publication-03/package`**:

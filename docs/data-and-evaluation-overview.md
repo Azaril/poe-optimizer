@@ -52,8 +52,11 @@ now calculates local and final EquipmentUse values with checked suppliers and
 explicit unsupported domains. Nine ordinary controls, strict Clippy and an
 all-five publication/rebuild pass; a positive source control reproduces 75.
 Shared-Player slot aggregation is now published and validated, preserving exact
-item-property reads and unavailable occupied slots. Override selection is next,
-followed by conditional and transformation coverage. The existing numeric-domain operation excludes a
+item-property reads and unavailable occupied slots. Checked Override selection
+is also published: it replaces only the global base before scaling, preserving
+present zero and rejecting conflicting/unknown suppliers. Its 26 ordinary tests,
+strict Clippy and all-five rebuild pass. Conditional and transformation coverage
+remain incomplete. The existing numeric-domain operation excludes a
 source rounding anomaly without adding Lua-compatible native arithmetic.
 
 The unpublished outgoing-critical work now has a checked selected-source

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "final_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000033a4"
+  },
+  "global_base_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000029f1"
+  },
+  "query": "player-evasion-global-base-override",
+  "equipment_subtotal": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000033a9"
+  },
+  "unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000029ee"
+  },
+  "replacement_edge": {
+    "node": "increased",
+    "field": "value",
+    "before": "base",
+    "after": "selected-global-base"
+  },
+  "scope": {
+    "new_definitions": 0,
+    "new_programs": 0,
+    "final_owner_complete": false,
+    "candidate_source_closure": false,
+    "positive_source_observations": false
+  }
+}

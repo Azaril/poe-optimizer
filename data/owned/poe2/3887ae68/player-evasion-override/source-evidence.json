@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "prior_source_domain": {
+    "path": "data/owned/poe2/3887ae68/player-evasion-final/source-domain.json",
+    "bytes": 1655131,
+    "sha256": "d9c15d9f26192082243d7f5dd5ce23bee9fe4af14c59ecb2e4591b988d19193f"
+  },
+  "complete_bodies": [
+    {
+      "source_path": "src/Modules/CalcDefence.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/CalcDefence.lua.gz",
+        "bytes": 39593,
+        "sha256": "9e232710732a7223b87b7174c7bd8a0531309675b76c605e07df55b0f72d6bf3"
+      },
+      "bytes": 239878,
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "source_path": "src/Classes/ModDB.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/life-base-domain/ModDB.lua.gz",
+        "bytes": 2575,
+        "sha256": "75f38959e920fd1819bdf86550e520a4b616ff0f05e3f6f02de6236672952bc9"
+      },
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "source_path": "src/Classes/ModStore.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/configuration-distance-inputs/ModStore.lua.gz",
+        "bytes": 7158,
+        "sha256": "efff4bda53c75fda5febd572242f5389c37827c178c93311bc31ee9d00fe6f8b"
+      },
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    }
+  ],
+  "spans": [
+    {
+      "source_path": "src/Modules/CalcDefence.lua",
+      "first": 1342,
+      "last": 1348,
+      "role": "resource-aliases",
+      "body": "\t\tlocal resourceList = {\n\t\t\t{ name = \"Armour\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"Armour\", \"ArmourAndEvasion\", \"Defences\" }, modsTotal = { \"ArmourTotal\" }, defence = true },\n\t\t\t{ name = \"Evasion\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"Evasion\", \"ArmourAndEvasion\", \"Defences\" }, modsTotal = { \"EvasionTotal\" }, defence = true },\n\t\t\t{ name = \"EnergyShield\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"EnergyShield\", \"Defences\" }, modsTotal = { \"EnergyShieldTotal\" }, defence = true },\n\t\t\t{ name = \"Life\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"Life\" }, modsTotal = { \"LifeTotal\" }, },\n\t\t\t{ name = \"Mana\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"Mana\" }, modsTotal = { \"ManaTotal\" }, },\n\t\t\t{ name = \"Ward\", basePerSlot = {}, globalBase = 0, conversionRate = { }, mods = { \"Ward\", \"Defences\" }, modsInc = modDB:Flag(nil, \"EnergyShieldToWard\") and { \"EnergyShield\" }, modsTotal = { \"WardTotal\" }, defence = true },\n",
+      "sha256": "8ba9a95d247c8fc4d0dd5e255819189de3efac2ead0371332d0aca68620371ac"
+    },
+    {
+      "source_path": "src/Modules/CalcDefence.lua",
+      "first": 1374,
+      "last": 1443,
+      "role": "override-before-transfers-and-ordered-scaling",
+      "body": "\t\tfor _, source in ipairs(resourceList) do\n\t\t\tlocal globalBase = modDB:Sum(\"BASE\", nil, unpack(source.mods)) + source.globalBase\n\t\t\tlocal globalOverride = modDB:Override(nil, unpack(source.mods))\n\t\t\tif globalOverride then\n\t\t\t\tglobalBase = globalOverride\n\t\t\tend\n\t\t\tlocal totalBase = source.totalBase\n\t\t\tfor _, target in ipairs(resourceList) do\n\t\t\t\tif source.name ~= target.name then\n\t\t\t\t\tif source.defence then\n\t\t\t\t\t\tlocal gainRate = modDB:Sum(\"BASE\", nil, source.name .. \"GainAs\" .. target.name)\n\t\t\t\t\t\tlocal rate = source.conversionRate[target.name] + gainRate\n\t\t\t\t\t\tif rate > 0 then\n\t\t\t\t\t\t\tfor _, slot in pairs({ \"Helmet\", \"Gloves\", \"Boots\", \"Body Armour\", \"Weapon 2\", \"Weapon 3\" }) do\n\t\t\t\t\t\t\t\tif source.basePerSlot[slot] > 0 then\n\t\t\t\t\t\t\t\t\tlocal targetBase = source.basePerSlot[slot] * rate / 100\n\t\t\t\t\t\t\t\t\tif target.defence then\n\t\t\t\t\t\t\t\t\t\ttarget.basePerSlot[slot] = target.basePerSlot[slot] + targetBase\n\t\t\t\t\t\t\t\t\telse\n\t\t\t\t\t\t\t\t\t\ttarget.globalBase = target.globalBase + targetBase\n\t\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\t\t\tif breakdown then\n\t\t\t\t\t\t\t\t\t\tbreakdown.slot(slot, source.name .. \" to \" .. target.name .. \" conversion\", { slotName = slot }, targetBase, nil, unpack(target.mods))\n\t\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\t\t\tsource.basePerSlot[slot] = source.basePerSlot[slot] * (100 - source.totalConversion) / 100\n\t\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\tlocal targetBase = globalBase * rate / 100\n\t\t\t\t\t\t\tlocal targetTotalBase = totalBase * rate / 100\n\t\t\t\t\t\t\ttarget.globalBase = target.globalBase + targetBase\n\t\t\t\t\t\t\ttarget.totalBase = target.totalBase + targetTotalBase\n\t\t\t\t\t\t\tif breakdown then\n\t\t\t\t\t\t\t\tbreakdown.slot(\"Global\", source.name .. \" to \" .. target.name .. \" conversion\", nil, targetBase, nil, unpack(target.mods))\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\telse\n\t\t\t\t\t\tlocal gainRate = modDB:Sum(\"BASE\", nil, source.name .. \"GainAs\" .. target.name)\n\t\t\t\t\t\tlocal rate = source.conversionRate[target.name] + gainRate\n\t\t\t\t\t\tif rate > 0 then\n\t\t\t\t\t\t\tlocal targetBase = round(globalBase * rate / 100)\n\t\t\t\t\t\t\tlocal targetTotalBase = round(totalBase * rate / 100)\n\t\t\t\t\t\t\ttarget.globalBase = target.globalBase + targetBase\n\t\t\t\t\t\t\ttarget.totalBase = target.totalBase + targetTotalBase\n\t\t\t\t\t\t\tif breakdown then\n\t\t\t\t\t\t\t\tbreakdown.slot(\"Conversion\", source.name .. \" to \" .. target.name, nil, targetBase, nil, unpack(target.mods))\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\t\tif source.defence then\n\t\t\t\tsource.globalBase = globalBase * (100 - source.totalConversion) / 100\n\t\t\t\tsource.totalBase = totalBase * (100 - source.totalConversion) / 100\n\t\t\tend\n\t\tend\n\t\tfor _, res in ipairs(resourceList) do\n\t\t\tif res.defence then\n\t\t\t\tfor _, slot in pairs({\"Helmet\",\"Gloves\",\"Boots\",\"Body Armour\",\"Weapon 2\",\"Weapon 3\"}) do\n\t\t\t\t\tlocal inc, more = calcLib.mods(modDB, { slotName = slot }, unpack(res.mods))\n\t\t\t\t\tinc = inc + (res.modsInc and modDB:Sum(\"INC\", { slotName = slot }, unpack(res.modsInc)) / 100 or 0)\n\t\t\t\t\toutput[res.name] = output[res.name] + res.basePerSlot[slot] * inc * more\n\t\t\t\tend\n\t\t\t\tlocal inc, more = calcLib.mods(modDB, nil, unpack(res.mods))\n\t\t\t\tinc = inc + (res.modsInc and modDB:Sum(\"INC\", nil, unpack(res.modsInc)) / 100 or 0)\n\t\t\t\toutput[res.name] = output[res.name] + res.globalBase * inc * more + res.totalBase\n\t\t\telse\n\t\t\t\tmodDB:NewMod(\"Extra\"..res.name, \"BASE\", res.globalBase, \"Conversion\")\n\t\t\t\tmodDB:NewMod(res.name..\"Total\", \"BASE\", res.totalBase, \"Conversion\")\n\t\t\tend\n\t\tend\n",
+      "sha256": "a32e6b77a42b0156e8e1780689591fa1d9313cbd4df51c57d911a670ceb3777f"
+    },
+    {
+      "source_path": "src/Modules/CalcDefence.lua",
+      "first": 1445,
+      "last": 1458,
+      "role": "final-evasion-rounding",
+      "body": "\t\toutput.MaximumEnergyShield = modDB:Override(nil, \"EnergyShield\") or m_max(round(output.EnergyShield), 0)\n\t\toutput.EnergyShield = output.MaximumEnergyShield\n\t\tif modDB:Flag(nil, \"CannotHaveES\") then\n\t\t\toutput.EnergyShield = 0\n\t\tend\n\n\t\toutput.Armour = m_max(round(output.Armour), 0)\n\t\toutput.ArmourDefense = (modDB:Max(nil, \"ArmourDefense\") or 0) / 100\n\t\toutput.RawArmourDefense = output.ArmourDefense > 0 and ((1 + output.ArmourDefense) * 100) or nil\n\t\toutput.Evasion = m_max(round(output.Evasion), 0)\n\t\toutput.MeleeEvasion = m_max(round(output.Evasion * calcLib.mod(modDB, nil, \"MeleeEvasion\")), 0)\n\t\toutput.ProjectileEvasion = m_max(round(output.Evasion * calcLib.mod(modDB, nil, \"ProjectileEvasion\")), 0)\n\t\toutput.SpellEvasion = m_max(round(output.Evasion * calcLib.mod(modDB, nil, \"SpellEvasion\")), 0)\n\t\toutput.SpellProjectileEvasion = m_max(round(output.Evasion * calcLib.mod(modDB, nil, \"SpellProjectileEvasion\")), 0)\n",
+      "sha256": "c63e2d9df501b2e4cbc71b88f0ebbb846c0f192a271432fb9be82ef009f75971"
+    },
+    {
+      "source_path": "src/Classes/ModStore.lua",
+      "first": 301,
+      "last": 316,
+      "role": "override-dispatch",
+      "body": "function ModStoreClass:Override(cfg, ...)\n\tlocal flags, keywordFlags = 0, 0\n\tlocal source\n\tif cfg then\n\t\tflags = cfg.flags or 0\n\t\tkeywordFlags = cfg.keywordFlags or 0\n\t\tsource = cfg.source\n\tend\n\tlocal n = select('#', ...)\n\tif n == 1 then\n\t\tlocal arg = ...\n\t\treturn self:OverrideInternal(self, cfg, flags, keywordFlags, source, arg)\n\tend\n\tlocal n1, n2, n3, n4, n5, n6, n7, n8 = ...\n\treturn self:OverrideInternalMulti(self, cfg, flags, keywordFlags, source, n, n1, n2, n3, n4, n5, n6, n7, n8)\nend\n",
+      "sha256": "815e39036c676d4cfcba1419e4b71f74bdd5a0e8014b7c1517a11deac3f51f65"
+    },
+    {
+      "source_path": "src/Classes/ModDB.lua",
+      "first": 344,
+      "last": 389,
+      "role": "override-membership-and-first-active-source",
+      "body": "function ModDBClass:OverrideInternal(context, cfg, flags, keywordFlags, source, modName)\n\tlocal modList = self.mods[modName]\n\tif modList then\n\t\tfor i = 1, #modList do\n\t\t\tlocal mod = modList[i]\n\t\t\tif mod.type == \"OVERRIDE\" and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\t\tif mod[1] then\n\t\t\t\t\tlocal value = context:EvalMod(mod, cfg)\n\t\t\t\t\tif value then\n\t\t\t\t\t\treturn value\n\t\t\t\t\tend\n\t\t\t\telseif mod.value then\n\t\t\t\t\treturn mod.value\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif self.parent then\n\t\treturn self.parent:OverrideInternal(context, cfg, flags, keywordFlags, source, modName)\n\tend\nend\n\nfunction ModDBClass:OverrideInternalMulti(context, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tfor nameIndex = 1, argCount do\n\t\tlocal modName = nameAt(nameIndex, n1, n2, n3, n4, n5, n6, n7, n8)\n\t\tlocal modList = self.mods[modName]\n\t\tif modList then\n\t\t\tfor i = 1, #modList do\n\t\t\t\tlocal mod = modList[i]\n\t\t\t\tif mod.type == \"OVERRIDE\" and band(flags, mod.flags) == mod.flags and MatchKeywordFlags(keywordFlags, mod.keywordFlags) and (not source or mod.source:match(\"[^:]+\") == source) then\n\t\t\t\t\tif mod[1] then\n\t\t\t\t\t\tlocal value = context:EvalMod(mod, cfg)\n\t\t\t\t\t\tif value then\n\t\t\t\t\t\t\treturn value\n\t\t\t\t\t\tend\n\t\t\t\t\telseif mod.value then\n\t\t\t\t\t\treturn mod.value\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\tif self.parent then\n\t\treturn self.parent:OverrideInternalMulti(context, cfg, flags, keywordFlags, source, argCount, n1, n2, n3, n4, n5, n6, n7, n8)\n\tend\nend\n",
+      "sha256": "1189f35fcf208c5e742b7b5ecba5a800c69bf55beb6a23db3083d39789affb24"
+    }
+  ],
+  "native_admissible_override_domain": [
+    "empty",
+    "one-active-value",
+    "multiple-equal-active-values"
+  ],
+  "scope": {
+    "source_global_base_only": true,
+    "zero_is_present": true,
+    "source_insertion_order_emulated": false,
+    "new_source_execution": false,
+    "candidate_source_closure": false,
+    "final_owner_complete": false
+  }
+}
