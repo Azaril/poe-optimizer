@@ -1,8 +1,18 @@
 //! Shared test-only exact source-group frames. No build data enters production.
-use crate::{family::sha, primary_counts::instance};
+use crate::{
+    family::{Output, checked_output, sha, write},
+    positive,
+    primary_counts::instance,
+    release,
+};
+use poe_optimizer_import::owned_release::StagedOwnedRelease;
 use poe_optimizer_import::owned_source::{SourceEvidenceLimits, SourceProjectEvidence};
 use serde_json::{Value, json};
 use std::ops::Range;
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 pub struct Frame {
     pub set: usize,
     pub group: usize,
@@ -137,4 +147,110 @@ pub fn splice(xml: &[u8], range: Range<usize>, replacement: &[u8]) -> Vec<u8> {
     assert_eq!(&out[..range.start], &xml[..range.start]);
     assert_eq!(&out[range.start + replacement.len()..], &xml[range.end..]);
     out
+}
+
+pub fn attribute(
+    xml: &[u8],
+    expected_skill: &str,
+    group: bool,
+    name: &str,
+    value: Option<&str>,
+) -> (Vec<u8>, Value) {
+    let frame = frame(xml, expected_skill);
+    let imported = positive::instance(xml);
+    let e = SourceProjectEvidence::collect(&imported, SourceEvidenceLimits::default()).unwrap();
+    let ordinal = if group { frame.group } else { frame.gems[0] };
+    let row = &e.rows()[ordinal];
+    let (range, bytes) = if let Some(a) = row.attribute(name) {
+        let range = a.range();
+        if let Some(v) = value {
+            (range, v.as_bytes().to_vec())
+        } else {
+            let range = range.start.checked_sub(name.len() + 2).unwrap()..range.end + 1;
+            assert_eq!(
+                &xml[range.clone()],
+                format!("{name}=\"{}\"", a.raw()).as_bytes()
+            );
+            (range, vec![])
+        }
+    } else {
+        let value = value.unwrap();
+        let rr = row.occurrence().range();
+        let end = rr.start + xml[rr].iter().position(|b| *b == b'>').unwrap();
+        let insert = if xml[end - 1] == b'/' { end - 1 } else { end };
+        (insert..insert, format!(" {name}=\"{value}\"").into_bytes())
+    };
+    let changed = splice(xml, range.clone(), &bytes);
+    assert_eq!(self::frame(&changed, expected_skill).gems, frame.gems);
+    let proof = json!({"source_ordinal":ordinal,"attribute":name,"group_attribute":group,"new":value,"original_range":[range.start,range.end],"replacement":String::from_utf8(bytes).unwrap(),"before":sha(xml),"after":sha(&changed),"other_bytes_exact":true});
+    (changed, proof)
+}
+
+fn usage(output: &Output) -> &Value {
+    positive::usage(&output.draft)
+}
+pub struct Context<'a> {
+    pub before_path: &'a Path,
+    pub before: &'a StagedOwnedRelease,
+    pub next_path: &'a Path,
+    pub next: &'a StagedOwnedRelease,
+    pub out: &'a Path,
+}
+impl Context<'_> {
+    pub fn execute(&self, name: &str, xml: &[u8]) -> (Output, Output, PathBuf) {
+        let directory = self.out.join(name);
+        fs::create_dir_all(&directory).unwrap();
+        let source = directory.join("source.xml");
+        fs::write(&source, xml).unwrap();
+        let old = directory.join("counterfactual");
+        let new = directory.join("reviewed");
+        let repeated = directory.join("repeated");
+        release::normalize(self.before_path, &source, 5, &old);
+        release::normalize(self.next_path, &source, 5, &new);
+        release::normalize(self.next_path, &source, 5, &repeated);
+        let before = checked_output(&old, self.before_path, 5, self.before, xml);
+        let after = checked_output(&new, self.next_path, 5, self.next, xml);
+        assert_eq!(
+            after,
+            checked_output(&repeated, self.next_path, 5, self.next, xml),
+            "independent fresh normalization"
+        );
+        assert_eq!(fs::read(&source).unwrap(), xml);
+        (before, after, directory)
+    }
+    pub fn negative(&self, name: &str, xml: &[u8], proof: &Value) -> Value {
+        let (before, after, directory) = self.execute(name, xml);
+        assert_eq!(usage(&before)["completion"]["kind"], "pending");
+        assert_eq!(usage(&after)["completion"]["kind"], "pending");
+        assert_eq!(
+            before, after,
+            "unproved input retains the entire draft, sidecar, diagnostics and allocator"
+        );
+        write(directory.join("derivation.json"), proof);
+        json!({"name":name,"usage":"pending","whole_checked_output_equal":true,"fresh_repeat":true})
+    }
+    pub fn source_refusal(&self, name: &str, xml: &[u8], proof: &Value) -> Value {
+        let (before, after, directory) = self.execute(name, xml);
+        assert_eq!(
+            before, after,
+            "unknown sources gain no authority from inventory declarations"
+        );
+        for collection in ["gems", "skills", "supports"] {
+            assert_eq!(after.draft["draft"][collection]["members"], json!([]));
+        }
+        assert_eq!(
+            usage(&after),
+            &json!({"members":[],"completion":{"kind":"complete"}})
+        );
+        let generated =
+            &after.draft["draft"]["skill_presets"]["members"][0]["intent"]["generated_inputs"];
+        assert_eq!(generated["members"], json!([]));
+        assert_eq!(generated["completion"]["kind"], "pending");
+        assert_eq!(
+            generated["completion"]["code"],
+            "generated-skill-inputs-not-converted"
+        );
+        write(directory.join("derivation.json"), proof);
+        json!({"name":name,"physical_materialization":"none","usage":"complete_empty_no_target","generated_source_inventory":"pending","whole_checked_output_equal":true,"fresh_repeat":true})
+    }
 }

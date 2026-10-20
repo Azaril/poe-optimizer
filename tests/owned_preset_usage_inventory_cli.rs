@@ -230,3 +230,18 @@ fn skeletal_inventory_changes_only_checked_destinations_and_keeps_absent_lanes()
 fn real_skeletal_groups_require_every_reference_and_typed_usage_consumer() {
     skeletal::run_controls();
 }
+
+#[path = "support/owned_preset_usage_inventory_manual_direct.rs"]
+mod manual_direct;
+
+#[test]
+fn manual_direct_inventory_preserves_source_dispatch_and_every_other_consumer() {
+    family::check();
+    manual_direct::mutation_controls();
+}
+
+#[test]
+#[ignore = "published packages; exact manual Direct source groups and independent refusal controls"]
+fn real_manual_direct_groups_require_reference_and_usage_accounting() {
+    manual_direct::run_controls();
+}

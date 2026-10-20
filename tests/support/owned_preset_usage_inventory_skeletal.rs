@@ -1,14 +1,13 @@
 //! Existing physical minion reference/input receipts, with no mechanical closure.
 //! Authored data remains generic. These four real source groups are test cases.
 use crate::{family, positive, preservation, release, selected, source_groups};
-use family::{Output, checked_output, data, read, root, sha, write};
+use family::{Output, data, read, root, sha, write};
 use poe_optimizer_import::{
-    owned_normalize::UsageInventoryPolicy,
-    owned_release::StagedOwnedRelease,
-    owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
+    owned_normalize::UsageInventoryPolicy, owned_release::StagedOwnedRelease,
 };
 use serde::Serialize;
 use serde_json::{Value, json};
+use source_groups::Context;
 use std::{
     collections::BTreeSet,
     fs,
@@ -144,7 +143,9 @@ fn deferred(inventory: &Value, p: &Value) -> Value {
     assert_eq!(preserved, 20);
     inverse["evidence"] = p["prior_inventory"]["evidence"].clone();
     assert_eq!(
-        json!(digest(&inverse)),
+        json!(digest(&crate::manual_direct::restore_prior_destinations(
+            &inverse
+        ))),
         p["prior_inventory"]["canonical_sha256"],
         "whole prior inventory inverse, including all other rows and destinations"
     );
@@ -434,42 +435,6 @@ fn actual_positive(output: &Output, xml: &[u8], f: &Value) {
         ]
     );
 }
-fn attribute(
-    xml: &[u8],
-    f: &Value,
-    group: bool,
-    name: &str,
-    value: Option<&str>,
-) -> (Vec<u8>, Value) {
-    let frame = frame(xml, f);
-    let imported = positive::instance(xml);
-    let e = SourceProjectEvidence::collect(&imported, SourceEvidenceLimits::default()).unwrap();
-    let ordinal = if group { frame.group } else { frame.gems[0] };
-    let row = &e.rows()[ordinal];
-    let (range, bytes) = if let Some(a) = row.attribute(name) {
-        let range = a.range();
-        if let Some(v) = value {
-            (range, v.as_bytes().to_vec())
-        } else {
-            let range = range.start.checked_sub(name.len() + 2).unwrap()..range.end + 1;
-            assert_eq!(
-                &xml[range.clone()],
-                format!("{name}=\"{}\"", a.raw()).as_bytes()
-            );
-            (range, vec![])
-        }
-    } else {
-        let value = value.unwrap();
-        let rr = row.occurrence().range();
-        let end = rr.start + xml[rr].iter().position(|b| *b == b'>').unwrap();
-        let insert = if xml[end - 1] == b'/' { end - 1 } else { end };
-        (insert..insert, format!(" {name}=\"{value}\"").into_bytes())
-    };
-    let changed = source_groups::splice(xml, range.clone(), &bytes);
-    assert_eq!(self::frame(&changed, f).gems, frame.gems);
-    let proof = json!({"source_ordinal":ordinal,"attribute":name,"group_attribute":group,"new":value,"original_range":[range.start,range.end],"replacement":String::from_utf8(bytes).unwrap(),"before":sha(xml),"after":sha(&changed),"other_bytes_exact":true});
-    (changed, proof)
-}
 fn publish_control(
     prior: &StagedOwnedRelease,
     out: &Path,
@@ -482,71 +447,6 @@ fn publish_control(
     let package = out.join("package");
     assert_eq!(family::publish(&input, &package), json!(staged.receipt()));
     (package, staged)
-}
-struct Context<'a> {
-    before_path: &'a Path,
-    before: &'a StagedOwnedRelease,
-    next_path: &'a Path,
-    next: &'a StagedOwnedRelease,
-    out: &'a Path,
-}
-impl Context<'_> {
-    fn execute(&self, name: &str, xml: &[u8]) -> (Output, Output, PathBuf) {
-        let directory = self.out.join(name);
-        fs::create_dir_all(&directory).unwrap();
-        let source = directory.join("source.xml");
-        fs::write(&source, xml).unwrap();
-        let old = directory.join("counterfactual");
-        let new = directory.join("reviewed");
-        let repeated = directory.join("repeated");
-        release::normalize(self.before_path, &source, 5, &old);
-        release::normalize(self.next_path, &source, 5, &new);
-        release::normalize(self.next_path, &source, 5, &repeated);
-        let before = checked_output(&old, self.before_path, 5, self.before, xml);
-        let after = checked_output(&new, self.next_path, 5, self.next, xml);
-        assert_eq!(
-            after,
-            checked_output(&repeated, self.next_path, 5, self.next, xml),
-            "independent fresh normalization"
-        );
-        assert_eq!(fs::read(&source).unwrap(), xml);
-        (before, after, directory)
-    }
-    fn negative(&self, name: &str, xml: &[u8], proof: &Value) -> Value {
-        let (before, after, directory) = self.execute(name, xml);
-        assert_eq!(usage(&before)["completion"]["kind"], "pending");
-        assert_eq!(usage(&after)["completion"]["kind"], "pending");
-        assert_eq!(
-            before, after,
-            "unproved input retains the entire draft, sidecar, diagnostics and allocator"
-        );
-        write(directory.join("derivation.json"), proof);
-        json!({"name":name,"usage":"pending","whole_checked_output_equal":true,"fresh_repeat":true})
-    }
-    fn source_refusal(&self, name: &str, xml: &[u8], proof: &Value) -> Value {
-        let (before, after, directory) = self.execute(name, xml);
-        assert_eq!(
-            before, after,
-            "unknown sources gain no authority from inventory declarations"
-        );
-        for collection in ["gems", "skills", "supports"] {
-            assert_eq!(after.draft["draft"][collection]["members"], json!([]));
-        }
-        assert_eq!(
-            usage(&after),
-            &json!({"members":[],"completion":{"kind":"complete"}})
-        );
-        let generated =
-            &after.draft["draft"]["skill_presets"]["members"][0]["intent"]["generated_inputs"];
-        assert_eq!(generated["members"], json!([]));
-        assert_eq!(generated["completion"]["kind"], "pending");
-        assert_eq!(
-            generated["completion"]["code"],
-            "generated-skill-inputs-not-converted"
-        );
-        write(directory.join("derivation.json"), proof);
-        json!({"name":name,"physical_materialization":"none","usage":"complete_empty_no_target","generated_source_inventory":"pending","whole_checked_output_equal":true,"fresh_repeat":true})
-    }
 }
 pub fn run_controls() {
     let prior_path =
@@ -625,7 +525,8 @@ pub fn run_controls() {
                 Some("unreviewed-provider"),
             ),
         ] {
-            let (changed, p) = attribute(&xml, &f, group, name, value);
+            let (changed, p) =
+                source_groups::attribute(&xml, f["skill_id"].as_str().unwrap(), group, name, value);
             let name = format!("group-{ordinal}-{label}");
             results.push(if label == "unknown-source" {
                 context.source_refusal(&name, &changed, &p)

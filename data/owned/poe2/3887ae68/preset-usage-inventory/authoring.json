@@ -101,12 +101,12 @@
       "bytes": 1042270
     },
     "evidence.json": {
-      "sha256": "622d1da0c6aea1cf3df76d04bec82a1aa69e8600d392a1e1963978980e48926d",
-      "bytes": 234561
+      "sha256": "2a9897dac5f853b9fc16b53e1c2518cbd1bd9c8cc5a2b2b92bc2f77a4a94529f",
+      "bytes": 252676
     },
     "inventory.json": {
-      "sha256": "a2a21cd1079e100f70b2fc7594edf81993cc56abc7bcc9c489e96ea618dc475c",
-      "bytes": 207225
+      "sha256": "71cd079f3dcb82f3d7d138633369a0339c77b80d011cd57559d256f2f179c022",
+      "bytes": 204031
     },
     "companion-additions.json": {
       "sha256": "232a654d548364e0502cb7b8815b3508dfa81e484016d249dc6951d7b5baf080",
@@ -283,5 +283,20 @@
     "reference_or_usage_recipes_changed": false,
     "complete_original_builds": 0,
     "requires_checked_reference_absence_transport": true
+  },
+  "manual_direct_reference_extension": {
+    "families": [
+      "def.0000000000000656",
+      "def.0000000000000657"
+    ],
+    "changed_destination_lists": 50,
+    "preserved_usage_parameter_destinations": 10,
+    "inventory_rows": 25,
+    "inventory_fields": 456,
+    "original_inputs_changed": false,
+    "new_definition_ids": 0,
+    "reference_or_usage_recipes_changed": false,
+    "complete_original_builds": 0,
+    "requires_checked_manual_direct_prefix_and_absence": true
   }
 }

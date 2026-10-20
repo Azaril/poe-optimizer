@@ -206,6 +206,10 @@ jobs:
             runs/owned-nonphysical-skill-source-01/*.json
             runs/owned-incoming-damage-source-01/*.log
             runs/owned-incoming-damage-source-01/*.json
+            runs/owned-movement-speed-source-01/*.log
+            runs/owned-movement-speed-source-01/*.json
+            runs/owned-movement-supplier-census-*/*.log
+            runs/owned-movement-supplier-census-*/*.json
           if-no-files-found: warn
           retention-days: 7
 

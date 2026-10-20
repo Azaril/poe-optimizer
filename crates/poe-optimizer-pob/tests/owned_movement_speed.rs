@@ -471,3 +471,448 @@ assert(build.calcsTab.mainEnv==env and build.calcsTab.mainOutput==output);for k,
 assert(class.ParseRaw==parse and class.BuildModList==mods and class.GetActiveModListForSlotNum==active and build.itemsTab.Load==load and itemLib.formatValue==formatter and itemLib.applyRange==range and modLib.parseMod==parser and upvalue(parse,"getCatalystScalar")==catalyst);result.original_functions_preserved=true
 return result
 "##;
+
+const CENSUS_TEST: &str =
+    "unchanged_original05_movement_supplier_census_preserves_raw_and_filtered_sources";
+const CENSUS_CHILD: &str = "POE_MOVEMENT_SUPPLIER_CENSUS_CHILD";
+const CENSUS_OUTPUT: &str = "POE_OPTIMIZER_MOVEMENT_SUPPLIER_CENSUS_OUTPUT";
+const ORIGINAL05_SHA256: &str = "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089";
+
+/// Source inventory at one fixed normal-load lifecycle, not native closure or parity.
+#[test]
+fn unchanged_original05_movement_supplier_census_preserves_raw_and_filtered_sources() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .canonicalize()
+        .unwrap();
+    let explicit_output = std::env::var_os(CENSUS_OUTPUT).map(PathBuf::from);
+    let child_mode = std::env::var_os(CENSUS_CHILD);
+    let out = if let Some(path) = &explicit_output {
+        path.clone()
+    } else {
+        assert!(
+            child_mode.is_none(),
+            "child requires the parent's exact evidence directory"
+        );
+        let runs = root.join("runs");
+        fs::create_dir_all(&runs).unwrap();
+        tempfile::Builder::new()
+            .prefix("owned-movement-supplier-census-")
+            .tempdir_in(runs)
+            .unwrap()
+            .keep()
+    };
+    assert!(out.is_absolute(), "census evidence path must be absolute");
+    let input = root.join("tests/fixtures/builds/breadth-20260908/build-05.xml");
+    let xml = fs::read_to_string(&input).unwrap();
+    let owned_joins = movement_census_owned_joins(&root);
+    assert_eq!(digest(xml.as_bytes()), ORIGINAL05_SHA256);
+    if let Some(mode) = child_mode {
+        assert!(
+            out.is_dir(),
+            "parent must establish the fresh evidence directory"
+        );
+        assert!(mode == "off" || mode == "on");
+        let enabled = mode == "on";
+        let mut replays = Vec::new();
+        for replay in 1..=2 {
+            let before = |lua: &Lua| {
+                lua.globals().set("movementCensusJit", enabled)?;
+                lua.load("if movementCensusJit then jit.on() else jit.off();jit.flush() end")
+                    .exec()?;
+                Ok(())
+            };
+            let scratch = tempfile::tempdir().unwrap();
+            let result = source::observe_with_build_hook_unwrapped(
+                &root.join("vendor/path-of-building-poe2"),
+                scratch.path(),
+                &xml,
+                None,
+                false,
+                Some(&before),
+                None,
+                Some(&movement_census_observe),
+            )
+            .unwrap();
+            assert_eq!(result["configuration_method_wrappers"], false);
+            assert_eq!(result["original_build_output_available"], true);
+            let observed = json!({
+                "source_hash": result["source_hash"],
+                "xml_sha256": ORIGINAL05_SHA256,
+                "owned_join_evidence": owned_joins,
+                "lifecycle": "fresh VM; normal unchanged XML load; read-only post-load observer",
+                "state": result["additional_observation"],
+                "evidence": {
+                    "manifest_sha256": pinned::manifest_sha256(),
+                    "files": ["src/Classes/ModDB.lua", "src/Classes/ModStore.lua",
+                        "src/Classes/Item.lua", "src/Modules/CalcSetup.lua",
+                        "src/Modules/CalcDefence.lua", "src/Modules/CalcPerform.lua",
+                        "src/Modules/CalcTools.lua", "src/Modules/Data.lua"]
+                        .map(|path| json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})),
+                    "native_parity": false,
+                    "complete_native_supplier_coverage": false,
+                    "whole_build_legality": false
+                }
+            });
+            // Keep each attempt before any comparison; a discrepancy is never overwritten.
+            movement_census_write_new(
+                &out.join(format!(
+                    "jit-{}-fresh-{replay}.json",
+                    if enabled { "on" } else { "off" }
+                )),
+                &serde_json::to_vec_pretty(&observed).unwrap(),
+            );
+            movement_census_check(&observed);
+            replays.push(observed);
+            assert_eq!(fs::read_to_string(&input).unwrap(), xml);
+        }
+        assert_eq!(
+            replays[0], replays[1],
+            "independent fresh ordinary loads diverged"
+        );
+        return;
+    }
+    if explicit_output.is_some() {
+        fs::create_dir(&out)
+            .expect("use a fresh census output directory; never replace earlier evidence");
+    }
+    eprintln!(
+        "retained movement supplier census evidence: {}",
+        out.display()
+    );
+    for mode in ["off", "on"] {
+        let path = out.join(format!("source-jit-{mode}.log"));
+        let log = fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&path)
+            .unwrap();
+        let mut child = Command::new(std::env::current_exe().unwrap())
+            .args(["--exact", CENSUS_TEST, "--nocapture"])
+            .env(CENSUS_CHILD, mode)
+            .env(CENSUS_OUTPUT, &out)
+            .current_dir(root.join("vendor/path-of-building-poe2/src"))
+            .stdout(Stdio::from(log.try_clone().unwrap()))
+            .stderr(Stdio::from(log))
+            .spawn()
+            .unwrap();
+        let started = Instant::now();
+        loop {
+            if let Some(status) = child.try_wait().unwrap() {
+                assert!(status.success(), "source child failed: {}", path.display());
+                break;
+            }
+            if started.elapsed() > Duration::from_secs(240) {
+                child.kill().unwrap();
+                child.wait().unwrap();
+                panic!("source child deadline: {}", path.display());
+            }
+            std::thread::sleep(Duration::from_millis(100));
+        }
+    }
+    let first = fs::read(out.join("jit-off-fresh-1.json")).unwrap();
+    for name in [
+        "jit-off-fresh-2.json",
+        "jit-on-fresh-1.json",
+        "jit-on-fresh-2.json",
+    ] {
+        assert_eq!(
+            first,
+            fs::read(out.join(name)).unwrap(),
+            "fresh/JIT evidence differs: {name}"
+        );
+    }
+    movement_census_write_new(
+        &out.join("validated.json"),
+        &serde_json::to_vec_pretty(&json!({
+            "xml_sha256": ORIGINAL05_SHA256,
+            "observations": 4,
+            "matched_fresh_lifecycle_and_jit": true,
+            "observation_sha256": digest(&first),
+            "observation_bytes": first.len(),
+            "native_coverage": "not established"
+        }))
+        .unwrap(),
+    );
+}
+fn movement_census_owned_joins(root: &Path) -> Json {
+    let base = root.join("data/owned/poe2/3887ae68/movement-speed");
+    let inputs = [
+        (
+            "bindings.json",
+            "4580598b8b4db6f22be3913c25127057fd478cc5c6900baa89da852cc960f8e6",
+        ),
+        (
+            "equipment-penalty.json",
+            "e191d8acc73ebb014c99bd2489d4b2b516dafeb9195c018e6a828a9d72a7e80d",
+        ),
+        (
+            "equipment-penalty-source.json",
+            "6c0cef67702d866854110b8556cbf91b1c4d9d639d12bc16caa03419f20c810e",
+        ),
+    ];
+    let mut values = Vec::new();
+    let mut pins = Vec::new();
+    for (path, expected) in inputs {
+        let bytes = fs::read(base.join(path)).unwrap();
+        assert_eq!(
+            digest(&bytes),
+            expected,
+            "owned join evidence changed: {path}"
+        );
+        values.push(serde_json::from_slice::<Json>(&bytes).unwrap());
+        pins.push(json!({"path":path,"sha256":expected,"bytes":bytes.len()}));
+    }
+    assert_eq!(values[0]["modifier"]["key"], "def.00000000000030e6");
+    assert_eq!(values[0]["contribution"]["key"], "def.00000000000030ff");
+    assert_eq!(
+        values[1]["program"]["effects"][0]["effect"]["stat"]["key"],
+        "def.00000000000033cc"
+    );
+    assert_eq!(
+        values[2]["selected_original05"],
+        json!({
+            "item":19,"base":"Tattered Robe","template":"def.000000000000238c",
+            "slot":"def.0000000000000067","raw":0.03
+        })
+    );
+    json!({"artifacts":pins,"meaning":"exact source-to-authored-channel joins; not complete owner coverage"})
+}
+fn movement_census_write_new(path: &Path, bytes: &[u8]) {
+    use std::io::Write;
+    fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(path)
+        .unwrap()
+        .write_all(bytes)
+        .unwrap();
+}
+fn movement_census_observe(lua: &Lua) -> Result<Json, RuntimeError> {
+    let value: Value = lua
+        .load(MOVEMENT_CENSUS_OBSERVE)
+        .set_name("@owned-movement-supplier-census-observer")
+        .eval()?;
+    Ok(lua.from_value(value)?)
+}
+fn movement_census_check(report: &Json) {
+    let state = &report["state"];
+    assert_eq!(state["recipient"], "Player");
+    assert_eq!(state["mode"], "MAIN");
+    assert_eq!(
+        state["selected"],
+        json!({"items":2,"spec":3,"skills":4,"config":1})
+    );
+    for field in [
+        "main_output_graph_preserved",
+        "source_database_records_preserved",
+        "saved_items_preserved",
+        "saved_selections_preserved",
+        "original_functions_preserved",
+    ] {
+        assert_eq!(state[field], true, "{field}");
+    }
+    let expected = [
+        ("MovementSpeed", "BASE"),
+        ("MovementSpeed", "INC"),
+        ("MovementSpeed", "MORE"),
+        ("MovementSpeed", "OVERRIDE"),
+        ("Condition:IgnoreMovementPenalties", "FLAG"),
+        ("MovementSpeedEqualHighestLinkedPlayers", "FLAG"),
+        ("MovementSpeedCannotBeBelowBase", "FLAG"),
+        ("ActionSpeed", "INC"),
+        ("TemporalChainsActionSpeed", "INC"),
+        ("MinimumActionSpeed", "MAX"),
+        ("MaximumActionSpeedReduction", "MAX"),
+        ("UnaffectedBySlows", "FLAG"),
+    ];
+    let channels = rows(&state["channels"]);
+    assert_eq!(channels.len(), expected.len());
+    let mut retained_but_not_tabulated = 0;
+    for (channel, (name, kind)) in channels.iter().zip(expected) {
+        assert_eq!(channel["name"], name);
+        assert_eq!(channel["kind"], kind);
+        assert_eq!(channel["recipient"], "Player");
+        let raw = rows(&channel["raw"]);
+        let filtered = rows(&channel["tabulated"]);
+        for (ordinal, source) in raw.iter().enumerate() {
+            assert_eq!(source["raw_index"], ordinal + 1);
+            assert_eq!(source["mod"]["name"], name);
+            assert_eq!(source["mod"]["type"], kind);
+            if source["tabulated_count"] == 0 {
+                retained_but_not_tabulated += 1;
+            }
+        }
+        for source in filtered {
+            let index = source["raw_index"].as_u64().unwrap() as usize;
+            assert!((1..=raw.len()).contains(&index));
+            assert_eq!(source["parent_depth"], raw[index - 1]["parent_depth"]);
+            assert_eq!(source["bucket_index"], raw[index - 1]["bucket_index"]);
+        }
+        assert!(channel["aggregate"]["type"].is_string());
+    }
+    assert!(
+        retained_but_not_tabulated > 0,
+        "retain zero/conditional sources rather than only active totals"
+    );
+    let source_row = |channel: usize, item: u64| {
+        let selected = rows(&state["selected_items"])
+            .iter()
+            .find(|v| v["id"] == item)
+            .unwrap();
+        let matching: Vec<_> = rows(&channels[channel]["raw"])
+            .iter()
+            .filter(|v| v["mod"]["source"] == selected["mod_source"])
+            .collect();
+        assert_eq!(matching.len(), 1);
+        matching[0]
+    };
+    let body = source_row(0, 19);
+    assert_eq!(body["mod"]["value"], -0.03);
+    assert_eq!(
+        body["mod"]["tags"],
+        json!([{"type":"Condition","var":"IgnoreMovementPenalties","neg":true}])
+    );
+    assert_eq!(body["tabulated_count"], 1);
+    let boots = source_row(1, 22);
+    assert_eq!(boots["mod"]["value"], 10);
+    assert!(rows(&boots["mod"]["tags"]).is_empty());
+    assert_eq!(boots["tabulated_count"], 1);
+    assert_eq!(
+        state["existing_owned_joins"]["boots_increased"],
+        "def.00000000000030ff"
+    );
+    assert_eq!(
+        state["existing_owned_joins"]["body_base"],
+        "def.00000000000033cc"
+    );
+    assert_eq!(
+        state["action_speed_recomputed"],
+        state["output"]["ActionSpeedMod"]
+    );
+}
+const MOVEMENT_CENSUS_OBSERVE: &str = r##"
+local function original(f,path,line)
+ local i=debug.getinfo(f,"S");local s=i.source:gsub("\\","/")
+ assert(i.what=="Lua" and s:sub(-#path)==path and i.linedefined==line);return f
+end
+assert(jit.status()==movementCensusJit,"requested JIT mode changed during load")
+local store=common.classes.ModStore;local dbclass=common.classes.ModDB
+local methods={Sum=original(store.Sum,"Classes/ModStore.lua",202),More=original(store.More,"Classes/ModStore.lua",261),Flag=original(store.Flag,"Classes/ModStore.lua",281),Override=original(store.Override,"Classes/ModStore.lua",301),Tabulate=original(store.Tabulate,"Classes/ModStore.lua",345),Max=original(store.Max,"Classes/ModStore.lua",369),GetCondition=original(store.GetCondition,"Classes/ModStore.lua",409),EvalMod=original(store.EvalMod,"Classes/ModStore.lua",490),SumPositiveValues=original(store.SumPositiveValues,"Classes/ModStore.lua",228)}
+local internals={SumInternal=original(dbclass.SumInternal,"Classes/ModDB.lua",137),MoreInternal=original(dbclass.MoreInternal,"Classes/ModDB.lua",214),FlagInternal=original(dbclass.FlagInternal,"Classes/ModDB.lua",297),OverrideInternal=original(dbclass.OverrideInternal,"Classes/ModDB.lua",344),TabulateInternal=original(dbclass.TabulateInternal,"Classes/ModDB.lua",438)}
+local actionSpeed=original(calcs.actionSpeedMod,"Modules/CalcPerform.lua",1021)
+local function plain(value,depth,seen)
+ local t=type(value);assert(t=="nil" or t=="number" or t=="string" or t=="boolean" or t=="table","unsupported evidence value "..t)
+ if t~="table" then if t=="number" then assert(value==value and math.abs(value)<math.huge) end;return value end
+ depth=(depth or 0)+1;assert(depth<=16);seen=seen or {};assert(not seen[value],"cyclic evidence value");seen[value]=true
+ local out,n={},0;for k,v in pairs(value) do n=n+1;assert(n<=16384 and (type(k)=="string" or type(k)=="number"));out[k]=plain(v,depth,seen)end;seen[value]=nil;return out
+end
+local function typed(value)return{type=type(value),value=plain(value)}end
+-- Snapshot every reachable table/field without serializing pointers or dropping nested output.
+local function guard(roots)
+ local visited,records,total={},{},0
+ local function walk(t)
+  if type(t)~="table" or visited[t] then return end;visited[t]=true;assert(#records<100000)
+  local r={value=t,meta=getmetatable(t),entries={}};records[#records+1]=r
+  for k,v in pairs(t) do total=total+1;assert(total<=1000000);r.entries[#r.entries+1]={k,v};walk(k);walk(v)end
+ end
+ for _,v in ipairs(roots) do walk(v)end
+ return function()
+  for _,r in ipairs(records)do
+   assert(getmetatable(r.value)==r.meta);local n=0;for _ in pairs(r.value)do n=n+1 end;assert(n==#r.entries)
+   for _,p in ipairs(r.entries)do local actual=rawget(r.value,p[1]);assert(actual==p[2] or (type(actual)=="number" and actual~=actual and p[2]~=p[2]),"source table changed during observation")end
+  end
+ end
+end
+local env=assert(build.calcsTab.mainEnv);local output=assert(build.calcsTab.mainOutput);assert(env.mode=="MAIN")
+local actor=assert(env.player);local db=assert(actor.modDB);assert(db==env.modDB)
+local saved={items=build.itemsTab.activeItemSetId,spec=build.treeTab.activeSpec,skills=build.skillsTab.activeSkillSetId,config=build.configTab.activeConfigSetId}
+local savedGroup=build.mainSocketGroup
+local checkOutput=guard({output})
+local channels={{"MovementSpeed","BASE"},{"MovementSpeed","INC"},{"MovementSpeed","MORE"},{"MovementSpeed","OVERRIDE"},{"Condition:IgnoreMovementPenalties","FLAG"},{"MovementSpeedEqualHighestLinkedPlayers","FLAG"},{"MovementSpeedCannotBeBelowBase","FLAG"},{"ActionSpeed","INC"},{"TemporalChainsActionSpeed","INC"},{"MinimumActionSpeed","MAX"},{"MaximumActionSpeedReduction","MAX"},{"UnaffectedBySlows","FLAG"}}
+local roots,chain,seen={}, {}, {};local current=db
+while current do
+ assert(type(current)=="table" and not seen[current] and #chain<32);seen[current]=true;assert(type(current.mods)=="table")
+ chain[#chain+1]=current
+ roots[#roots+1]=current.conditions;roots[#roots+1]=current.multipliers
+ for _,c in ipairs(channels)do local bucket=current.mods[c[1]];if bucket then roots[#roots+1]=bucket end end
+ current=current.parent
+end
+local layerSnapshots={}
+for _,layer in ipairs(chain)do
+ local s={value=layer,parent=layer.parent,mods=layer.mods,conditions=layer.conditions,multipliers=layer.multipliers,buckets={}}
+ for index,c in ipairs(channels)do s.buckets[index]={name=c[1],value=layer.mods[c[1]]}end
+ layerSnapshots[#layerSnapshots+1]=s
+end
+local checkRecords=guard(roots)
+local result={recipient="Player",mode=env.mode,selected=saved,channels={},database_layers={},selected_items={},selected_groups={},active_skills={},allocated_nodes={},output={},existing_owned_joins={boots_increased="def.00000000000030ff",body_base="def.00000000000033cc"}}
+for depth,layer in ipairs(chain)do result.database_layers[#result.database_layers+1]={parent_depth=depth-1,conditions=plain(layer.conditions),multipliers=plain(layer.multipliers)}end
+local function record(mod)
+ assert(mod.tags==nil,"unexpected named tags field must not be overwritten")
+ local tags,fields={},{};for _,tag in ipairs(mod)do tags[#tags+1]=plain(tag)end
+ for k,v in pairs(mod)do if type(k)=="string" then fields[k]=plain(v) else assert(type(k)=="number" and k>=1 and k<=#mod and k==math.floor(k))end end
+ fields.tags=tags;return fields
+end
+for _,channel in ipairs(channels)do
+ local name,kind=channel[1],channel[2];local row={name=name,kind=kind,recipient="Player",query_configuration="nil",raw={},tabulated={}};local pointers={}
+ for depth,layer in ipairs(chain)do
+  for bucketIndex,mod in ipairs(layer.mods[name] or {})do if mod.type==kind then
+   local index=#row.raw+1;row.raw[index]={raw_index=index,parent_depth=depth-1,bucket_index=bucketIndex,mod=record(mod),tabulated_count=0}
+   pointers[mod]=pointers[mod] or {};pointers[mod][#pointers[mod]+1]=index
+  end end
+ end
+ local used={}
+ for _,entry in ipairs(db:Tabulate(kind,nil,name))do
+  local indices=assert(pointers[entry.mod],"tabulated contribution absent from complete raw parent chain");local count=(used[entry.mod] or 0)+1;used[entry.mod]=count
+  local index=assert(indices[count],"tabulated pointer multiplicity exceeds raw records");local raw=row.raw[index];raw.tabulated_count=raw.tabulated_count+1
+  row.tabulated[#row.tabulated+1]={raw_index=index,parent_depth=raw.parent_depth,bucket_index=raw.bucket_index,value=typed(entry.value)}
+ end
+ if kind=="BASE" or kind=="INC" then row.aggregate=typed(db:Sum(kind,nil,name))
+ elseif kind=="MORE" then row.aggregate=typed(db:More(nil,name))
+ elseif kind=="FLAG" then row.aggregate=typed(db:Flag(nil,name))
+ elseif kind=="OVERRIDE" then row.aggregate=typed(db:Override(nil,name))
+ elseif kind=="MAX" then row.aggregate=typed(db:Max(nil,name)) else error("unexpected channel")end
+ if name=="ActionSpeed" or name=="TemporalChainsActionSpeed" then row.positive_sum=typed(db:SumPositiveValues(kind,nil,name))end
+ result.channels[#result.channels+1]=row
+end
+-- A direct condition value is a separate source path from the Condition:* FLAG inventory.
+result.ignore_movement_penalties_condition=typed(db:GetCondition("IgnoreMovementPenalties",nil))
+result.temporal_chains_effect_cap=typed(data.misc.TemporalChainsEffectCap)
+result.action_speed_recomputed=typed(actionSpeed(actor))
+for _,name in ipairs({"MovementSpeedMod","ActionSpeedMod","EffectiveMovementSpeedMod"})do result.output[name]=typed(output[name])end
+result.party_movement_output=typed(actor.partyMembers and actor.partyMembers.output and actor.partyMembers.output.MovementSpeedMod)
+local itemSlots={};for slot in pairs(actor.itemList)do assert(type(slot)=="string");itemSlots[#itemSlots+1]=slot end;table.sort(itemSlots)
+local itemSnapshots={}
+for _,slot in ipairs(itemSlots)do
+ local item=actor.itemList[slot];assert(type(item)=="table");itemSnapshots[#itemSnapshots+1]={slot=slot,item=item,id=item.id,raw=item.raw,source=item.modSource}
+ result.selected_items[#result.selected_items+1]={slot=slot,id=item.id,base=item.baseName,mod_source=item.modSource,raw=item.raw}
+end
+local gemSources={}
+for groupIndex,group in ipairs(build.skillsTab.socketGroupList)do
+ local row={group=groupIndex,source=typed(group.source),enabled=typed(group.enabled),slot_enabled=typed(group.slotEnabled),slot=typed(group.slot),gems={}}
+ for gemIndex,gem in ipairs(group.gemList)do
+  assert(not gemSources[gem],"one physical source appears in multiple saved group positions")
+  gemSources[gem]={group=groupIndex,gem=gemIndex}
+  row.gems[#row.gems+1]={gem=gemIndex,enabled=typed(gem.enabled),gem_id=typed(gem.gemId),skill_id=typed(gem.skillId),from_item=typed(gem.fromItem),from_node=typed(gem.fromNode),loaded_source_level=typed(gem.level),loaded_source_quality=typed(gem.quality),enable_global1=typed(gem.enableGlobal1),enable_global2=typed(gem.enableGlobal2)}
+ end
+ result.selected_groups[#result.selected_groups+1]=row
+end
+for index,skill in ipairs(actor.activeSkillList)do
+ local effect=assert(skill.activeEffect);local physical=gemSources[effect.srcInstance]
+ result.active_skills[#result.active_skills+1]={index=index,effect_id=typed(effect.grantedEffect and effect.grantedEffect.id),source_resolved=physical~=nil,source=physical and plain(physical),computed_level=typed(effect.level),computed_quality=typed(effect.quality),enabled=typed(skill.enabled),skill_flags=plain(skill.skillFlags)}
+end
+local nodeIds={};for id in pairs(env.allocNodes)do assert(type(id)=="number");nodeIds[#nodeIds+1]=id end;table.sort(nodeIds)
+for _,id in ipairs(nodeIds)do local node=env.allocNodes[id];result.allocated_nodes[#result.allocated_nodes+1]={id=id,name=node.name,stats=plain(node.stats),allocation_mode=typed(node.allocMode)}end
+checkOutput();result.main_output_graph_preserved=true
+checkRecords()
+for _,s in ipairs(layerSnapshots)do
+ assert(s.value.parent==s.parent and s.value.mods==s.mods and s.value.conditions==s.conditions and s.value.multipliers==s.multipliers)
+ for _,b in ipairs(s.buckets)do assert(s.value.mods[b.name]==b.value)end
+end
+result.source_database_records_preserved=true
+for _,s in ipairs(itemSnapshots)do assert(actor.itemList[s.slot]==s.item and s.item.id==s.id and s.item.raw==s.raw and s.item.modSource==s.source)end;result.saved_items_preserved=true
+assert(build.itemsTab.activeItemSetId==saved.items and build.treeTab.activeSpec==saved.spec and build.skillsTab.activeSkillSetId==saved.skills and build.configTab.activeConfigSetId==saved.config and build.mainSocketGroup==savedGroup);result.saved_selections_preserved=true
+assert(build.calcsTab.mainEnv==env and build.calcsTab.mainOutput==output and actor.modDB==db and env.modDB==db)
+for name,f in pairs(methods)do assert(store[name]==f)end;for name,f in pairs(internals)do assert(dbclass[name]==f)end;assert(calcs.actionSpeedMod==actionSpeed);result.original_functions_preserved=true
+return result
+"##;

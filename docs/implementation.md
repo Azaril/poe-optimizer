@@ -9,20 +9,35 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**October 20 work-in-progress backup:** at the user's request, the current
-manual Direct selector adapter and equipment movement-penalty work are being
-committed before finishing their remaining gates. The Direct adapter's 683
+**October 20 work-in-progress backup:** `6f5186bd` and the subsequent test
+compilation fix `d6f3939b` are pushed to GitHub `main`; both full remote hashes
+were independently verified. The manual Direct selector adapter and equipment
+movement-penalty work are backed up before their remaining gates. The Direct adapter's 683
 selected Import tests pass (228 library, 35 Direct dispositions, 377
-normalization and 43 usage inventory). Strict Import lint and all-five unchanged
-publication preservation still need to run for this adapter. The movement
+normalization and 43 usage inventory). Strict all-target Import lint and exact
+all-five unchanged publication preservation also pass. The movement
 ingredient includes the raw fractional-unit correction, authored body-slot
 penalty, source/native controls, and two independently reviewed test-fixture
 corrections. Its Cargo/source/replay gates and full release publication remain
-pending; this backup is not a validated movement release. Resume with those
-checks, then the frozen manual Direct inventory overlay and actual Original05
-movement supplier census. The validated release remains `e8df8bdb…` below,
+pending; this backup is not a validated movement release. The two ordinary
+movement data checks and current-recipe correction/compilation check pass.
+Full extension replay found a stale historical membership-patch binding; all five
+native fixture tests refuse their missing checked-readiness setup. Fix both test
+fixtures without weakening production validation. The two-row manual Direct
+inventory overlay is now applied but awaits publication and real-group controls.
+The actual Original05 movement supplier observer is applied and its source tests
+are running. The validated release remains `e8df8bdb…` below,
 and unchanged complete builds remain **0/5**. Ignored candidate/evidence files
 and the nine protected incoming-critical files are not included in this backup.
+
+**Latest backup scope:** the applied two-row Direct inventory overlay, movement
+supplier observer and CI evidence retention are included in this checkpoint.
+The independently reviewed readiness and historical membership fixture repairs
+remain unapplied in `runs/movement-readiness-fixture-correction-20261020/` and
+`runs/defence-membership-schema-replay-candidate-20261020/`. Resume by applying
+those bounded repairs and rerunning their failed gates, then validate the Direct
+overlay before authoring the movement release. This is a work-in-progress backup,
+not a claim that CI or the remaining native/source tests pass.
 
 **Immediate backup resume point, October 20:** `550d7bf4` is pushed to GitHub
 `main`, with the full remote hash independently verified. That checkpoint includes the
@@ -1791,6 +1806,26 @@ counterexample. They do not establish numerical parity or authorize a Direct
 Import adapter by themselves. The independently reviewed candidate is
 `runs/manual-direct-selector-source-candidate-20261020/` (manifest `01cfcc0a…`).
 
+The private Direct adapter now passes 683 selected Import tests, strict all-target
+lint and unchanged all-five publication against the exact `e8df8bdb…` baseline
+(`runs/owned-manual-direct-selector-preservation-01`). The maintained two-row
+Direct inventory overlay is applied from
+`runs/manual-direct-usage-inventory-candidate-20261020/` (manifest `6782c21b…`).
+It changes 50 destination lists while preserving all ten typed consumers, all
+25 rows and all 456 fields. Publication, the 17 actual-group controls and all
+earlier controls remain required before treating this data checkpoint as validated.
+
+The next tree-Djinn switch audit is retained in
+`runs/tree-djinn-secondary-switch-audit-20261020/`. Twenty-four authenticated
+baseline observations retain both exact Commands despite saved secondary=false;
+their complete raw ExtraSkillStat chains are empty. This is finite input evidence,
+not identity-wide absence authority. Existing nested Skill identities and
+application activation can distinguish a real effect from local Command/minion
+execution, but the current generated usage correspondence targets only the primary
+and neither Command has an authored global application. Do not invent one merely
+to consume an import field. Water's entering Command grant also needs its actual
+tree-root allocation permission checked; Sand already carries that permission.
+
 In parallel, the next native slice is conditional equipment movement penalty.
 The source/profile value `0.03` is a dimensionless fraction, but current owned
 Stat `29ff` incorrectly declares percentage-point unit `0002`. Correct that
@@ -1802,7 +1837,12 @@ the equipment producer. The candidate begins with the body slot and retains
 Partial supplier coverage: it does not prove final MovementSpeed, complete
 equipment coverage or an absent ignore-penalty flag. Source, native unit/value,
 missing/unknown inputs, query independence and repeated/parallel execution checks
-are required before publication. This candidate remains isolated under `runs/`.
+are required before publication. The authored ingredient and tests are applied;
+its current-recipe correction check passes in
+`runs/owned-movement-penalty-recipe-check-01.log`. Full release authoring reuses
+the existing private dependency rebinder, with a temporary test-only registration
+and no new production repair API. Its reviewed candidate is
+`runs/movement-penalty-release-candidate-20261020/`; no publication has run yet.
 
 The parallel non-usage audit confirms the subsequent configuration checkpoint:
 all 42 saved Config leaves in Original05 already have destinations. None of the
@@ -1837,8 +1877,16 @@ ConfigSet proof separate from atomic retirement across every live fallback origi
 Reuse checked scalar/reward/Encounter/usage output correspondence, including exact
 absence guards. Fresh ConfigSet structure alone does not account for custom blocks.
 The 28 installed non-reward inputs are distinct from 563 UI fallback defaults;
-24 still need semantic classification beyond the existing scalar and Encounter
-proofs. Do not install all UI defaults as native assumptions or infer irrelevant
+The 24 controls beyond the existing scalar and Encounter proofs are now classified
+in `runs/configuration-installed-defaults-review-20261020/`: all have mechanical
+consumers, and none has a current matching checked receipt. Seven control children
+of exact parent summons. This identifies responsibility, not complete applicability
+or native coverage. The independently reviewed private collector candidate is
+`runs/configuration-receipt-collector-candidate-20261020/` (manifest `c3d649cc…`);
+it preserves the existing scalar/raw-only/other-adapter order and retains no-origin
+receipts plus checked Encounter absence guards. It remains unapplied and untested,
+and grants no inventory-completion authority. Do not install all UI defaults as
+native assumptions or infer irrelevant
 behavior from hidden controls. Public-normalizer fixtures must exercise absent,
 constructor, authored false/zero/None, Placeholder and duplicate-consumer branches,
 then prove exact all-origin retirement or unchanged refusal on Original05. No

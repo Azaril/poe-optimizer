@@ -7973,5 +7973,576 @@
       }
     },
     "historical_observation_paths_are_runtime_dependencies": false
+  },
+  "manual_direct_field_accounting": {
+    "kind": "checked-authored-direct-reference-field-destinations",
+    "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "prior_inventory": {
+      "path": "data/owned/poe2/3887ae68/preset-usage-inventory/inventory.json",
+      "sha256": "a2a21cd1079e100f70b2fc7594edf81993cc56abc7bcc9c489e96ea618dc475c",
+      "bytes": 207225,
+      "canonical_sha256": "1e57f2d76c269e3f0ace30e66d797b48c05fce7f4593477f8f43ca1e29fa12a9",
+      "evidence": "622d1da0c6aea1cf3df76d04bec82a1aa69e8600d392a1e1963978980e48926d"
+    },
+    "changed_destination_lists": 50,
+    "preserved_usage_parameter_destinations": 10,
+    "inventory_rows": 25,
+    "inventory_fields": 456,
+    "families": [
+      {
+        "source": {
+          "kind": "occurrence",
+          "target": {
+            "kind": "authored_direct",
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000656"
+            },
+            "game_id": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+            "variant_id": "AscendancySummonSandDjinn",
+            "skill_id": "SummonSandDjinnPlayer",
+            "name_spec": "Kelari, the Tainted Sands",
+            "skill": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000322"
+            }
+          }
+        },
+        "gem": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000656"
+        },
+        "primary": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000322"
+        },
+        "skill_id": "SummonSandDjinnPlayer",
+        "selected_group": 215,
+        "selected_primary": 216,
+        "field_count": 26,
+        "role_canonical_sha256": "c81928e6beab1c2b3b58dd50b389722f2560e3ca73e5f7e43037d2e04bdaeae0",
+        "direct_scalar_canonical_sha256": "5e45e79c2ad046de0ab094509e1e46cdaa76e0ecac1a56a893b370f4daa287f9",
+        "raw_parameters": [
+          {
+            "slot": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000322"
+                }
+              },
+              "slot": {
+                "kind": "parameter_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003261"
+              }
+            },
+            "field": "level",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            }
+          },
+          {
+            "slot": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000322"
+                }
+              },
+              "slot": {
+                "kind": "parameter_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003262"
+              }
+            },
+            "field": "quality",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000002"
+            }
+          }
+        ],
+        "disposition_semantics_canonical_sha256": "4542c74c13a0e471926fb48cc834df69a1ba05703b8df86d316651a575a98ae9",
+        "usage_policies_canonical_sha256": "71e2c7cd6c70df3b51784d38016fdf61342b5a8b3f87df4032462b051f5da4c2",
+        "reference_kind": "pob_manual_direct_singleton_minion_actions_v1",
+        "minion_source": "SandDjinn",
+        "source_occurrences": [
+          {
+            "case": 1,
+            "ordinal": 138,
+            "group": 137,
+            "source_marker": null
+          },
+          {
+            "case": 1,
+            "ordinal": 211,
+            "group": 210,
+            "source_marker": "Tree:13289"
+          },
+          {
+            "case": 5,
+            "ordinal": 191,
+            "group": 190,
+            "source_marker": "Tree:13289"
+          },
+          {
+            "case": 5,
+            "ordinal": 198,
+            "group": 197,
+            "source_marker": null
+          },
+          {
+            "case": 5,
+            "ordinal": 209,
+            "group": 208,
+            "source_marker": "Tree:13289"
+          },
+          {
+            "case": 5,
+            "ordinal": 216,
+            "group": 215,
+            "source_marker": null
+          },
+          {
+            "case": 5,
+            "ordinal": 252,
+            "group": 251,
+            "source_marker": "Tree:13289"
+          },
+          {
+            "case": 5,
+            "ordinal": 259,
+            "group": 258,
+            "source_marker": null
+          },
+          {
+            "case": 5,
+            "ordinal": 300,
+            "group": 299,
+            "source_marker": null
+          },
+          {
+            "case": 5,
+            "ordinal": 350,
+            "group": 349,
+            "source_marker": "Tree:13289"
+          },
+          {
+            "case": 5,
+            "ordinal": 364,
+            "group": 363,
+            "source_marker": null
+          },
+          {
+            "case": 5,
+            "ordinal": 417,
+            "group": 416,
+            "source_marker": "Tree:13289"
+          }
+        ],
+        "selected_companions": [
+          {
+            "ordinal": 217,
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000674"
+            },
+            "skill_id": "SupportBiddingPlayerTwo",
+            "role_canonical_sha256": "d9bb776b345cc0660902552e6a05e742ef74a187a9f5ef0f7bf9a958e3ed341d"
+          },
+          {
+            "ordinal": 218,
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000082a"
+            },
+            "skill_id": "SupportMagnifiedAreaPlayer",
+            "role_canonical_sha256": "613f13ca40c88659a45da8d268827bbe848d68f80be1eb0aca48a3b80f7d56ed"
+          },
+          {
+            "ordinal": 219,
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000858"
+            },
+            "skill_id": "SupportMusterPlayer",
+            "role_canonical_sha256": "02b5402525467184aaeee1e48a9cc1c7576b0884a4efa7b1ba529ade1d359415"
+          }
+        ],
+        "constructed_source_effects": [
+          {
+            "effect_id": "SummonSandDjinnPlayer",
+            "resolution": {
+              "kind": "mapped",
+              "value": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000322"
+              }
+            }
+          },
+          {
+            "effect_id": "CommandSandDjinnKnifeThrowPlayer",
+            "resolution": {
+              "kind": "mapped",
+              "value": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000000d8"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "source": {
+          "kind": "occurrence",
+          "target": {
+            "kind": "authored_direct",
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000657"
+            },
+            "game_id": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "variant_id": "AscendancySummonWaterDjinn",
+            "skill_id": "SummonWaterDjinnPlayer",
+            "name_spec": "Navira, the Last Mirage",
+            "skill": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000032c"
+            }
+          }
+        },
+        "gem": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000657"
+        },
+        "primary": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000032c"
+        },
+        "skill_id": "SummonWaterDjinnPlayer",
+        "selected_group": 228,
+        "selected_primary": 229,
+        "field_count": 26,
+        "role_canonical_sha256": "f116999200d1264885b0d11cf2a5e0e766e1ef6c9aaae4f473994169c3d33924",
+        "direct_scalar_canonical_sha256": "8320ee60acd821b7421c1e667c8211949aa0d288a3f3bec5d4fa6040f3965e9d",
+        "raw_parameters": [
+          {
+            "slot": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000032c"
+                }
+              },
+              "slot": {
+                "kind": "parameter_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003263"
+              }
+            },
+            "field": "level",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000295a"
+            }
+          },
+          {
+            "slot": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000032c"
+                }
+              },
+              "slot": {
+                "kind": "parameter_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003264"
+              }
+            },
+            "field": "quality",
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000002"
+            }
+          }
+        ],
+        "disposition_semantics_canonical_sha256": "8c874c9f2f30f55cc210015208a0c158fae11a9d6c7a9121ee87dac390d55539",
+        "usage_policies_canonical_sha256": "61a2dc54da58baf2e739bbdc1e0cb786c8564d4f51139ed4bb96145bb64415a4",
+        "reference_kind": "pob_manual_direct_singleton_minion_actions_v1",
+        "minion_source": "WaterDjinn",
+        "source_occurrences": [
+          {
+            "case": 1,
+            "ordinal": 188,
+            "group": 187,
+            "source_marker": null
+          },
+          {
+            "case": 1,
+            "ordinal": 215,
+            "group": 214,
+            "source_marker": "Tree:32705"
+          },
+          {
+            "case": 5,
+            "ordinal": 227,
+            "group": 226,
+            "source_marker": "Tree:32705"
+          },
+          {
+            "case": 5,
+            "ordinal": 229,
+            "group": 228,
+            "source_marker": null
+          },
+          {
+            "case": 5,
+            "ordinal": 270,
+            "group": 269,
+            "source_marker": "Tree:32705"
+          },
+          {
+            "case": 5,
+            "ordinal": 272,
+            "group": 271,
+            "source_marker": null
+          },
+          {
+            "case": 5,
+            "ordinal": 294,
+            "group": 293,
+            "source_marker": null
+          },
+          {
+            "case": 5,
+            "ordinal": 354,
+            "group": 353,
+            "source_marker": "Tree:32705"
+          },
+          {
+            "case": 5,
+            "ordinal": 357,
+            "group": 356,
+            "source_marker": null
+          },
+          {
+            "case": 5,
+            "ordinal": 421,
+            "group": 420,
+            "source_marker": "Tree:32705"
+          }
+        ],
+        "selected_companions": [
+          {
+            "ordinal": 230,
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000674"
+            },
+            "skill_id": "SupportBiddingPlayerTwo",
+            "role_canonical_sha256": "d9bb776b345cc0660902552e6a05e742ef74a187a9f5ef0f7bf9a958e3ed341d"
+          },
+          {
+            "ordinal": 231,
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000858"
+            },
+            "skill_id": "SupportMusterPlayer",
+            "role_canonical_sha256": "02b5402525467184aaeee1e48a9cc1c7576b0884a4efa7b1ba529ade1d359415"
+          },
+          {
+            "ordinal": 232,
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000006c5"
+            },
+            "skill_id": "SupportChillingIcePlayer",
+            "role_canonical_sha256": "87c360aece30f1f672b864f2ac4bb3c60a99324023eb3a7cbd85cfa36da7db7b"
+          }
+        ],
+        "constructed_source_effects": [
+          {
+            "effect_id": "SummonWaterDjinnPlayer",
+            "resolution": {
+              "kind": "mapped",
+              "value": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000032c"
+              }
+            }
+          },
+          {
+            "effect_id": "CommandWaterDjinnBubblePlayer",
+            "resolution": {
+              "kind": "mapped",
+              "value": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000000d9"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "source_census_unchanged": true,
+    "source_observation_baseline": {
+      "input": "e8df8bdbb4842c637fa18f822f25b32efd332753842a61f464181af2211e062d",
+      "receipt": {
+        "path": "runs/owned-preset-usage-inventory-publication-05/package/release.json",
+        "sha256": "2e78286c1886ee9ca88f2cf23be73df06d8d7d24d673fd908c204b041b55d80f",
+        "bytes": 56401
+      }
+    },
+    "historical_observation_paths_are_runtime_dependencies": false,
+    "source_proofs": [
+      {
+        "path": "data/owned/poe2/3887ae68/preset-reference-selection-source/authoring.json",
+        "sha256": "e1b72a92c6f3213a255631e26b7353a02f9228f2279fb48ba230e8b1d2090699",
+        "bytes": 711
+      },
+      {
+        "path": "data/owned/poe2/3887ae68/secondary-effect-switch-source/authoring.json",
+        "sha256": "7dd2c02757f37c723c8fd4eaebd276e54f666c9c065b238b76a614f3f1c446c9",
+        "bytes": 568
+      },
+      {
+        "path": "crates/poe-optimizer-pob/tests/support/manual_direct_selector.rs",
+        "sha256": "1f0f51fb156648317036dc8eda79f8eea62e2bb9b5cc73a655da1769de60e0cf",
+        "bytes": 19334
+      }
+    ],
+    "limitations": [
+      "Exact manual loader branch and known game/variant/source effect correspondence; generated sources do not inherit Direct authority.",
+      "Nil/1 selectors account only the neutral first-primary prefix; initial-hidden clearing is not admission, and unsupported late-hidden insertion would invalidate this source law.",
+      "Both constructed source effects and every minion MAIN/CALCS reference remain preserved. No fabricated Action or claim that the Command is absent.",
+      "Raw level/quality, count, participation, reporting, every support and every other field remain independent conjunctive consumers.",
+      "No native mechanics, schemas, queries, usage recipes, source fields or original builds change."
+    ],
+    "source_occurrences": 22,
+    "manual_source_occurrences": 11
   }
 }

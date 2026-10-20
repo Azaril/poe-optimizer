@@ -34,13 +34,13 @@
   },
   "publication_authoring": {
     "path": "data/owned/poe2/3887ae68/preset-usage-inventory/authoring.json",
-    "sha256": "3e79a00ce6053ac5dff566e58e4c106764723f958227abcfbf0a967963c2d085",
-    "bytes": 9349
+    "sha256": "3923875b0ae2fd75f7073e5f7a7efd7d42fc582367969c58cc2e304dfd8c1197",
+    "bytes": 9834
   },
   "publication_inventory": {
     "path": "data/owned/poe2/3887ae68/preset-usage-inventory/inventory.json",
-    "sha256": "a2a21cd1079e100f70b2fc7594edf81993cc56abc7bcc9c489e96ea618dc475c",
-    "bytes": 207225
+    "sha256": "71cd079f3dcb82f3d7d138633369a0339c77b80d011cd57559d256f2f179c022",
+    "bytes": 204031
   },
   "source_group_ordinal": 238,
   "source_gem_ordinals": [

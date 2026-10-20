@@ -29,7 +29,7 @@ mod companions;
 mod outputs;
 pub use outputs::{Output, checked_output};
 pub const BEFORE: &str = "b3b7c3810f659e584f23b6dd69b7bdc6b619cc39fcd4f2b9ae259194bf8d7529";
-const AUTHORING: &str = "3e79a00ce6053ac5dff566e58e4c106764723f958227abcfbf0a967963c2d085";
+const AUTHORING: &str = "3923875b0ae2fd75f7073e5f7a7efd7d42fc582367969c58cc2e304dfd8c1197";
 pub fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
@@ -78,6 +78,7 @@ pub fn check() -> Value {
     companions::check();
     crate::primary_counts::check_data();
     crate::skeletal::check_data();
+    crate::manual_direct::check_data();
     authoring
 }
 /// Test-only semantic checks independent of the sealed outer packet bytes.
@@ -211,6 +212,7 @@ fn checked_inventory_successor(
     companions::authenticate(prior);
     crate::primary_counts::authenticate(prior);
     crate::skeletal::authenticate(prior);
+    crate::manual_direct::authenticate(prior);
     let mut inverse = next.input().clone();
     companions::apply(&mut inverse.normalization, added_companions, true);
     crate::primary_counts::apply(&mut inverse.normalization, true);
@@ -388,6 +390,28 @@ pub fn stage_skeletal_inventory_control(
     )
 }
 
+/// Conservative controls use the same checked stage and whole-release inverse.
+pub fn stage_manual_direct_inventory_control(
+    prior: &StagedOwnedRelease,
+    control: crate::manual_direct::InventoryControl,
+) -> StagedOwnedRelease {
+    check();
+    let inventory = crate::manual_direct::controlled_inventory(control);
+    let commitment = digest_owned(
+        "owned-manual-direct-reference-inventory-control-v1",
+        &json!({"authored":authored_identity(),"control":control}),
+        4 * 1024 * 1024,
+    )
+    .unwrap();
+    stage_inventory(
+        prior,
+        inventory,
+        companions::included(&[]),
+        "test-only-manual-direct-reference-inventory",
+        commitment,
+    )
+}
+
 fn stage_inventory(
     prior: &StagedOwnedRelease,
     inventory: UsageInventoryPolicy,
@@ -401,6 +425,7 @@ fn stage_inventory(
     companions::authenticate(prior);
     crate::primary_counts::authenticate(prior);
     crate::skeletal::authenticate(prior);
+    crate::manual_direct::authenticate(prior);
     let mut normalization = old.normalization.clone();
     companions::apply(&mut normalization, &added_companions, false);
     crate::primary_counts::apply(&mut normalization, false);

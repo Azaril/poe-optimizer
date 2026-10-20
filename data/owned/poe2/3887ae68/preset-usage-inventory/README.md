@@ -56,3 +56,9 @@ validated package is `e8df8bdb…`; exact paths, full identity and logs are reta
 in the living [implementation document](../../../../../docs/implementation.md).
 All five unchanged originals remain incomplete. These checks establish source
 accounting and preservation, not full numerical parity.
+
+### Authored Direct field accounting
+
+The two existing manual Direct rows now use the checked reference/input and neutral first-primary selector receipts. Exactly 50 destination lists change; all 52 fields and 10 typed usage consumers remain. The saved manual groups 215 and 228 provide byte-preserving controls. The complete source census still records matching generated groups separately; none inherits manual authority. Both constructed source effects remain, including Command. This accounts source fields, not native admission or mechanics. Initial hidden-list clearing is part of the source proof; a later hidden/list writer is outside its proven boundary.
+
+The existing stage and all-five gate remain the sole publication path. The new explicit real-group test uses `POE_OPTIMIZER_TEST_MANUAL_DIRECT_USAGE_PRIOR`, `POE_OPTIMIZER_TEST_MANUAL_DIRECT_USAGE_NEXT` and `POE_OPTIMIZER_TEST_MANUAL_DIRECT_USAGE_OUTPUT`; it checks exact retirement and independent fresh replay, with malformed selectors, source dispatch, minion references, global switches and conjunctive policy controls. It must pass before this checkpoint is treated as validated.
