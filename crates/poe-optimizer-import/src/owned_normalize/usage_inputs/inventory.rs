@@ -792,7 +792,10 @@ pub(super) fn complete(
     // Prepare every retirement before making the first mutation. A late work
     // limit failure cannot leave an earlier preset or sidecar partly retired.
     let mut retirements = Vec::new();
-    for set_id in sets {
+    // A missing required consumer already prevents this preset's retirement.
+    // Stop its proof work, while retaining the whole source census above and
+    // independent preset checks. The caller still validates draft/origin integrity.
+    'presets: for set_id in sets {
         let Some(preset_id) = skill_input_disposition::unique_link(b, set_id, |link| {
             if let OwnedOriginTarget::SkillPreset(id) = link {
                 Some(*id)
@@ -826,11 +829,15 @@ pub(super) fn complete(
         let set = &b.evidence.rows()[set_id.ordinal() as usize];
         let mut accounted: BTreeSet<_> = [set_id].into();
         let mut accounted_parameters: Vec<&UsageReceipt> = Vec::new();
-        let mut valid = !set.children().is_empty();
+        if set.children().is_empty() {
+            continue 'presets;
+        }
         b.charge(set.children().len())?;
         for group_id in set.children() {
             let group = &b.evidence.rows()[group_id.ordinal() as usize];
-            valid &= !group.children().is_empty();
+            if group.children().is_empty() {
+                continue 'presets;
+            }
             accounted.insert(*group_id);
             let selectors = group_selectors::prove(b, draft, preset, group, receipts)?;
             let mut group_fields = BTreeSet::new();
@@ -935,8 +942,7 @@ pub(super) fn complete(
                     })
                     .collect();
                 if matching.len() != 1 {
-                    valid = false;
-                    continue;
+                    continue 'presets;
                 }
                 let policy = matching[0];
                 b.charge(inputs.len().saturating_add(usages.len()))?;
@@ -955,9 +961,12 @@ pub(super) fn complete(
                     .collect();
                 actual.insert(UsageInventoryFieldSelector::ReferenceDescendants);
                 product(b, &[actual.len(), policy.fields.len().saturating_add(1)])?;
-                valid &= actual
+                if !actual
                     .iter()
-                    .all(|field| policy.fields.iter().any(|row| &row.field == field));
+                    .all(|field| policy.fields.iter().any(|row| &row.field == field))
+                {
+                    continue 'presets;
+                }
                 // Check declared fields as well: an absent field is not a default
                 // unless its real decoder/disposition supplied the receipt.
                 for field in &policy.fields {
@@ -968,14 +977,13 @@ pub(super) fn complete(
                             inputs.len().saturating_add(usages.len()).saturating_add(1),
                         ],
                     )?;
-                    let proved = field_proved(field, &inputs, &usages, selectors.as_ref());
-                    valid &= proved;
-                    if proved
-                        && matches!(
-                            field.field,
-                            UsageInventoryFieldSelector::GroupAttribute { .. }
-                        )
-                    {
+                    if !field_proved(field, &inputs, &usages, selectors.as_ref()) {
+                        continue 'presets;
+                    }
+                    if matches!(
+                        field.field,
+                        UsageInventoryFieldSelector::GroupAttribute { .. }
+                    ) {
                         group_fields.insert(field.field.clone());
                     }
                 }
@@ -992,24 +1000,30 @@ pub(super) fn complete(
                             })
                         })
                     });
-                    valid &= declared;
-                    if declared {
-                        accounted_parameters.push(receipt);
+                    if !declared {
+                        continue 'presets;
                     }
+                    accounted_parameters.push(receipt);
                 }
                 let descendants = descendants(b, row)?;
                 product(b, &[inputs.len(), descendants.len().saturating_add(1)])?;
-                valid &= inputs
+                if !inputs
                     .iter()
-                    .any(|receipt| receipt.descendants == descendants);
+                    .any(|receipt| receipt.descendants == descendants)
+                {
+                    continue 'presets;
+                }
                 accounted.extend(descendants);
                 accounted.insert(*source);
             }
             b.charge(group.attributes().len())?;
-            valid &= group
+            if !group
                 .attributes()
                 .iter()
-                .all(|attribute| group_fields.contains(&group_field(&attribute.origin().name)));
+                .all(|attribute| group_fields.contains(&group_field(&attribute.origin().name)))
+            {
+                continue 'presets;
+            }
         }
         let binding_count = preset.intent.as_ref().map_or_else(
             || {
@@ -1045,7 +1059,7 @@ pub(super) fn complete(
                 accounted_parameters.len().saturating_add(1),
             ],
         )?;
-        valid &= bindings.iter().all(|binding| {
+        if !bindings.iter().all(|binding| {
             matches!(
                 binding.selection.parameters.completion,
                 DraftListCompletion::Complete
@@ -1060,7 +1074,9 @@ pub(super) fn complete(
                             && parameter.slot.to_resolved().as_ref() == Some(&receipt.parameter)
                     })
                 })
-        });
+        }) {
+            continue 'presets;
+        }
         let mut linked = Vec::new();
         b.charge(b.origins.len())?;
         for origin_index in 0..b.origins.len() {
@@ -1068,16 +1084,16 @@ pub(super) fn complete(
             let origin = &b.origins[origin_index];
             if origin.links.contains(&OwnedOriginTarget::Issue(issue)) {
                 if !accounted.contains(&origin.source) || origin.links.len() < 2 {
-                    valid = false;
+                    continue 'presets;
                 }
                 linked.push(origin_index);
             }
         }
-        valid &= !linked.is_empty();
-        if valid {
-            b.charge(linked.len().saturating_add(1))?;
-            retirements.push((index, issue, linked));
+        if linked.is_empty() {
+            continue 'presets;
         }
+        b.charge(linked.len().saturating_add(1))?;
+        retirements.push((index, issue, linked));
     }
     for (index, issue, linked) in retirements {
         for origin in linked {

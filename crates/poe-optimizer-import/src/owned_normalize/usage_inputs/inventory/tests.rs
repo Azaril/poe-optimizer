@@ -124,6 +124,152 @@ fn require_primary_gate(case: &mut Case) {
 }
 
 #[test]
+fn refused_preset_stops_receipt_work_after_the_first_unproved_consumer() {
+    let mut costs = Vec::new();
+    for occurrences in [1, 64] {
+        let source_xml = SOURCE.replacen("<Gem/>", &"<Gem/>".repeat(occurrences), 1);
+        with_case(&source_xml, |b, mut case| {
+            case.rows[0].fields[0]
+                .destinations
+                .push(UsageInventoryDestination::Deferred {
+                    reason: key("another-required-consumer"),
+                });
+            // The whole immutable source has already been checked. Extra tail
+            // rows remain present, but cannot rescue this missing consumer.
+            assert_eq!(skill_source_census::sets(b).unwrap().unwrap().len(), 2);
+            let before = case.draft.clone();
+            let origins = b.origins.clone();
+            let allocator = b.allocator.state();
+            let start = b.work;
+            finish(b, &mut case).unwrap();
+            costs.push(b.work - start);
+            assert_eq!(case.draft, before);
+            assert_eq!(b.origins, origins);
+            assert_eq!(b.allocator.state(), allocator);
+        });
+    }
+    assert_eq!(
+        costs[1] - costs[0],
+        63,
+        "only the existing group-row precharge grows; refused tails do not rescan receipts"
+    );
+}
+
+fn with_two_accountable_presets(test: impl FnOnce(&mut Builder<'_, '_>, Case)) {
+    let source_xml = SOURCE.replace("<Skill><Gem/>", r#"<Skill enabled="true"><Gem/>"#);
+    with_case(&source_xml, |b, mut case| {
+        let source = b
+            .evidence
+            .rows()
+            .iter()
+            .rev()
+            .find(|row| row.occurrence().name() == "Gem")
+            .unwrap()
+            .occurrence()
+            .id();
+        let group = b.evidence.rows()[source.ordinal() as usize]
+            .occurrence()
+            .parent()
+            .unwrap();
+        let set = b.evidence.rows()[group.ordinal() as usize]
+            .occurrence()
+            .parent()
+            .unwrap();
+        let gem_id: GemInstanceId = b.id().unwrap();
+        let skill_id = b.id().unwrap();
+        let preset_id = b.id().unwrap();
+        let mut gem = case.draft.gems.members[0].clone();
+        gem.id = gem_id;
+        let mut skill = case.draft.skills.members[0].clone();
+        skill.id = skill_id;
+        skill.source = DraftAuthoredSkillSource::Gem(gem_id.into());
+        let mut preset = case.draft.skill_presets.members[0].clone();
+        preset.id = preset_id;
+        preset.skills.members = vec![skill_id];
+        let usage = b
+            .closure(source, "usage-preferences-not-converted", vec![])
+            .unwrap();
+        let DraftListCompletion::Pending { id: issue, .. } = usage.completion else {
+            unreachable!()
+        };
+        preset.intent = Some(SkillPresetIntentDraftV1 {
+            schema_version: 1,
+            usage,
+            generated_inputs: super::super::super::complete(vec![]),
+        });
+        for origin in [set, group, source] {
+            b.link(origin, OwnedOriginTarget::SkillPreset(preset_id))
+                .unwrap();
+        }
+        for origin in [set, group] {
+            b.link(origin, OwnedOriginTarget::Issue(issue)).unwrap();
+        }
+        b.link(source, OwnedOriginTarget::Gem(gem_id)).unwrap();
+        b.link(source, OwnedOriginTarget::Skill(skill_id)).unwrap();
+        record_input_disposition(b, source, &preset, &skill, Some(&gem), &mut case.receipts)
+            .unwrap();
+        assert_eq!(case.receipts.inputs.len(), 2);
+        case.draft.gems.members.push(gem);
+        case.draft.skills.members.push(skill);
+        case.presets
+            .insert(set, case.draft.skill_presets.members.len());
+        case.draft.skill_presets.members.push(preset);
+        case.draft.allocator = b.allocator.state();
+        test(b, case);
+    });
+}
+
+#[test]
+fn later_preset_budget_failure_preserves_every_staged_retirement() {
+    let mut cost = 0;
+    with_two_accountable_presets(|b, mut case| {
+        let before = case.draft.clone();
+        let mut expected = before.clone();
+        let mut origins = b.origins.clone();
+        for preset in &mut expected.skill_presets.members {
+            let usage = &mut preset.intent.as_mut().unwrap().usage;
+            let DraftListCompletion::Pending { id: issue, .. } = usage.completion else {
+                unreachable!()
+            };
+            for origin in &mut origins {
+                origin
+                    .links
+                    .retain(|link| *link != OwnedOriginTarget::Issue(issue));
+            }
+            usage.completion = DraftListCompletion::Complete;
+        }
+        let start = b.work;
+        finish(b, &mut case).unwrap();
+        cost = b.work - start;
+        assert_eq!(case.draft, expected);
+        assert_eq!(b.origins, origins);
+    });
+    for exact_budget in [true, false] {
+        with_two_accountable_presets(|b, mut case| {
+            let before = case.draft.clone();
+            let origins = b.origins.clone();
+            let allocator = b.allocator.state();
+            b.limits.max_work = b.work + cost - usize::from(!exact_budget);
+            let result = finish(b, &mut case);
+            if exact_budget {
+                result.unwrap();
+                assert!(case.draft.skill_presets.members.iter().all(|preset| {
+                    matches!(
+                        preset.intent.as_ref().unwrap().usage.completion,
+                        DraftListCompletion::Complete
+                    )
+                }));
+            } else {
+                assert!(matches!(result, Err(NormalizationError::Limit(_))));
+                assert_eq!(case.draft, before);
+                assert_eq!(b.origins, origins);
+            }
+            assert_eq!(b.allocator.state(), allocator);
+        });
+    }
+}
+
+#[test]
 fn only_literal_primary_true_adds_a_field_fact_and_preserves_the_raw_source() {
     for attribute in [
         "",

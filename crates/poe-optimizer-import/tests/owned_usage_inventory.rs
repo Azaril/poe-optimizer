@@ -1555,6 +1555,88 @@ fn group_selection_and_unreviewed_reference_children_remain_pending() {
 }
 
 #[test]
+fn early_refusal_keeps_independent_presets_and_all_other_outputs_exact() {
+    for refused_first in [true, false] {
+        let mut f = inventory::fixture();
+        let refused = format!(
+            "{}{}",
+            GEM.replace(r#"count="1""#, r#"count="broken""#),
+            GEM.repeat(12)
+        );
+        let (first, second) = if refused_first {
+            (refused.as_str(), GEM)
+        } else {
+            (GEM, refused.as_str())
+        };
+        let text = format!(
+            r#"<PathOfBuilding2><Build level="70"/><Skills activeSkillSet="1"><SkillSet id="1"><Skill enabled="true">{first}</Skill></SkillSet><SkillSet id="2"><Skill enabled="true">{second}</Skill></SkillSet></Skills></PathOfBuilding2>"#
+        );
+        let after = f.run(&text, Default::default()).unwrap();
+        assert_eq!(completed(&after), [!refused_first, refused_first]);
+        assert_eq!(after.draft().input().gems.members.len(), 14);
+        assert_eq!(after.draft().input().skills.members.len(), 14);
+        let UsageInputPolicy::PobOccurrenceUsageV3 {
+            inventory: rows, ..
+        } = f.policy.usage_inputs.as_mut().unwrap();
+        *rows = None;
+        inventory::rebind(&mut f);
+        let before = f.run(&text, Default::default()).unwrap();
+        let mut expected = before.draft().input().clone();
+        let index = usize::from(refused_first);
+        let usage = expected.skill_presets.members[index]
+            .usage_preferences
+            .as_mut()
+            .unwrap();
+        let DraftListCompletion::Pending { id: issue, .. } = usage.completion else {
+            unreachable!()
+        };
+        usage.completion = DraftListCompletion::Complete;
+        assert_eq!(&expected, after.draft().input());
+        let mut origins = before.sidecar().origins.clone();
+        for origin in &mut origins {
+            origin
+                .links
+                .retain(|link| *link != OwnedOriginTarget::Issue(issue));
+        }
+        assert_eq!(origins, after.sidecar().origins);
+        assert_eq!(
+            before.sidecar().source_sha256,
+            after.sidecar().source_sha256
+        );
+        assert_eq!(before.sidecar().source_bytes, after.sidecar().source_bytes);
+    }
+}
+
+#[test]
+fn early_refusal_does_not_skip_whole_source_or_policy_validation() {
+    let f = inventory::fixture();
+    let rejected = GEM.replace(r#"count="1""#, r#"count="broken""#);
+    for tail in ["", "<Unknown/>"] {
+        let text = format!(
+            r#"<PathOfBuilding2><Build level="70"/><Skills activeSkillSet="1"><SkillSet id="1"><Skill enabled="true">{rejected}{tail}</Skill></SkillSet><SkillSet id="2"><Skill enabled="true">{GEM}</Skill></SkillSet></Skills></PathOfBuilding2>"#
+        );
+        let result = f.run(&text, Default::default()).unwrap();
+        assert_eq!(completed(&result), [false, tail.is_empty()]);
+    }
+    // Policy compilation checks the entire injected policy, even when source
+    // completion will refuse immediately for a missing count.
+    let mut invalid = inventory::fixture();
+    inventory::inventory(&mut invalid).rows[0]
+        .fields
+        .push(UsageInventoryField {
+            field: UsageInventoryFieldSelector::OccurrenceAttribute {
+                name: "unrecognized-field".into(),
+            },
+            destinations: vec![UsageInventoryDestination::InputDisposition],
+        });
+    inventory::rebind(&mut invalid);
+    assert!(matches!(
+        invalid.run(&xml(&rejected), Default::default()),
+        Err(NormalizationError::Policy(_))
+    ));
+}
+
+#[test]
 fn presets_complete_independently_and_a_late_unknown_row_is_not_dropped() {
     let f = inventory::fixture();
     let unknown = GEM.replace("gemId=\"physical\"", "gemId=\"unknown\"");

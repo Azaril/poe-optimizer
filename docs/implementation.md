@@ -22,6 +22,10 @@ seven secondary-switch source tests pass. Hosted CI exposed a stale compiler
 transition digest in the import-policy receipt; its one-field repair preserves
 all four policy outputs and passes all 16 converter tests. Those follow-up fixes
 were pushed as `afc607d8`; the final lint cleanup and validation record follow it.
+The subsequent group/support checkpoint was pushed as `dba0f661` and verified
+against GitHub `main`. Its 25 focused usage tests now pass, including independent
+source validation for Complete scalar support inputs
+(`runs/owned-support-usage-backup-tests-01.log`).
 This is not a claim that hosted CI or the full
 workspace is green. Ignored `runs/` evidence and nine protected incoming-critical
 work-in-progress files remain local. The reviewed group-selector adapter is now
@@ -1391,9 +1395,15 @@ was incomplete. The existing SupportAssignment path now also requests the same
 independent proof for complete scalar parameters, retaining those values if
 source validation refuses. No second proof implementation or primary allocation
 change was added. The 25-test usage suite includes Complete/Partial equivalence
-and preservation controls; its post-fix run is pending at this backup checkpoint.
-Strict lint and broader normalization regressions must follow before the real
-policy publication.
+and preservation controls; its post-fix run passes in
+`runs/owned-support-usage-backup-tests-01.log`.
+The 39 private normalization checks and 377 normalization integration tests also
+pass (`runs/owned-support-usage-normalize-tests-01.log` and
+`runs/owned-support-usage-integration-tests-01.log`). Strict Import all-target
+lint and the scoped PoB support-source lint also pass
+(`runs/owned-usage-receipts-clippy-03.log` and
+`runs/owned-support-usage-source-clippy-02.log`). The real policy publication
+remains a separate gate.
 
 Then author and validate the real usage-inventory policy in the current package,
 including all remaining source fields and independent consumers. Group 238
@@ -1401,15 +1411,57 @@ including all remaining source fields and independent consumers. Group 238
 must preserve unchanged input builds, exact typed values, all other obligations,
 all 110 queries and fresh-repeat determinism across all five originals. Do not
 stop at synthetic positives or infer whole-preset completion from this group.
-Support receipt and publication candidates are being prepared under
+Support receipt and publication candidates are retained under
 `runs/support-usage-receipt-candidate-20261020/` and
 `runs/owned-usage-inventory-publication-candidate-20261020/`; the support adapter
-is applied and the publication candidate is not yet executed. The candidate uses
+is applied. The first publication run compiled and executed: Originals 1–4
+passed whole-output preservation and fresh-repeat checks, then Original05's
+successor normalization failed with `normalization exceeds work`
+(`runs/owned-usage-inventory-publication-tests-01.log`). The candidate uses
 16 existing policy identities and 337 field declarations; other consumers remain
-explicitly Deferred. It must run at default limits. Accounting currently scans
-receipts against the whole draft even after a preset is known Pending; measure
-the possible work-limit failure, then stop unnecessary per-preset accounting
-without bypassing global source validation or atomic retirement.
+explicitly Deferred. Default limits remain unchanged. The reviewed early-refusal
+fix now stops unnecessary proof work once a preset is known to remain Pending,
+while preserving whole-source validation, independent presets and atomic
+retirement. Its 13 private and 27 public usage tests pass
+(`runs/owned-usage-early-refusal-{private-tests,tests}-01.log`).
+The second all-five run still fails Original05 at the default work limit after
+the first four originals pass. The diagnostic run
+`runs/owned-usage-inventory-work-diagnostic-03.log` locates a 48,860-unit
+all-receipts-by-draft precharge in `inventory::complete`, raising cumulative work
+to 2,004,672 against the unchanged 2,000,000 limit. Temporary caller logging is
+removed. The next correction must charge cheap exact-identity filtering, then
+charge deep validation only for matching receipts, retaining all live checks
+and atomicity. Early refusal alone is not a solution to this measured failure.
+Failed output directories remain evidence, not validated endpoints.
+The next correction is prepared but unapplied under
+`runs/usage-inventory-matched-receipts-candidate-20261020/`; its manifest and
+patch verify, while independent review and Cargo validation remain pending.
+The Git backup checkpoint includes only the tested early-refusal change and its
+resume record. Temporary Cargo targets referring to ignored candidate files
+have been removed; recreate them locally when resuming publication validation.
+Stopping work on an already refused preset does not establish complete-build
+scaling. The present checker conservatively charges every receipt against full
+draft membership before filtering by source; a fully accounted large preset
+still needs measurement and a bounded cleanup of that repeated work.
+
+The authenticated selected-preset audit under
+`runs/selected-usage-next-blockers-20261020/` identifies the next data-only step:
+nine missing support-family rows cover thirteen selected occurrences and thirty-nine
+neutral count/global fields. Their existing physical-support rules, singleton
+construction, resolved Gem inputs and exact authored targets are present.
+Expand the same unshipped packet after its real positive control passes; do not
+introduce a second runtime model or a per-skill importer.
+
+After that, converge private primary completion and final-destination plumbing
+using the existing `InputReceipt` and `InputOutput::Authored`. `AwaitUsage` and
+`AwaitDisposition` currently carry different proof authority: the former
+requires a designated attached usage policy; the latter proves source Action
+correspondence. Frost's Partial empty output inventory prevents blindly replacing
+the former with an Action-requiring policy. Preserve each actual proof scope and
+allocation timing during cleanup. Pain Offering/Frost Bomb requested-count
+recipes remain separately absent. Missing minion Commands, two-effect Djinn
+selection and generated Firebolt dispatch also remain genuine consumer gaps;
+the physical-singleton proof cannot account for them.
 
 ### Native Scenario intent checkpoint, October 20
 
@@ -2534,6 +2586,30 @@ as `0ca256a4`. Coverage and typed channels remain unchanged.
 actual joined producers calculate Player Life 1320; all 101 joined tests, two
 source tests, all-five publication and strict Clippy pass. Supplier and numerical
 domain gaps remain explicit. Pushed as `ba33003d`.
+
+## CI usage-resolution repair (2026-10-20)
+
+Hosted run `39451021127` on `15778b04` exposed three stale Engine expectations
+in `owned_frost_bomb_inputs`, `owned_skill_usage_inputs` and
+`owned_sniper_reservation`. Core deliberately retains Build preferences and exact
+Scenario selections separately; the definition-aware Engine preparation resolves
+their precedence. The tests now inspect both authored layers, the complete
+prepared resolution and replaced-source provenance, then evaluate that same
+plan. Existing numerical and occurrence-isolation assertions remain intact.
+No runtime behavior or compatibility path changes. All eighteen ordinary tests
+pass across those three targets; two existing optional source-evidence tests
+remain intentionally ignored. Strict Clippy passes for all three targets.
+Logs: `runs/owned-usage-resolution-ci-tests-01.log` and
+`runs/owned-usage-resolution-ci-clippy-01.log`.
+The three test repairs were pushed to `main` as `f6dac721` and the remote hash
+was verified. Hosted verification remains separate.
+
+At 16:47 UTC the old run had two passing jobs, four known failed jobs and twelve
+running jobs. The other failures are the transition receipt and unknown-variant
+Import expectation already fixed in `afc607d8`. The `dba0f661` run
+`39458332844` remained queued behind the older run. Running durations were within
+previous successful ranges; public metadata did not expose live target progress.
+No hosted success is claimed and no workflow/run was changed.
 
 ## CI receipt repair (2026-10-15)
 
