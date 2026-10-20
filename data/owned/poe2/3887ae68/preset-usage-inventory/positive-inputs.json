@@ -1,0 +1,73 @@
+{
+  "originals": [
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+      "bytes": 49642
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+      "bytes": 116512
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490",
+      "bytes": 46532
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-04.xml",
+      "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711",
+      "bytes": 46397
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "bytes": 106378
+    }
+  ],
+  "prior_input": "b3b7c3810f659e584f23b6dd69b7bdc6b619cc39fcd4f2b9ae259194bf8d7529",
+  "prior_release": {
+    "path": "runs/owned-construction-cutover-candidate-01/package/release.json",
+    "sha256": "bc1b9fe8d6e4b5c696b1d700a9af38785e2958c9f7276811ebb438172e2f601b",
+    "bytes": 56186
+  },
+  "publication_authoring": {
+    "path": "data/owned/poe2/3887ae68/preset-usage-inventory/authoring.json",
+    "sha256": "b789cb36f7a0e42b263efcc05bfb4615afec021a286cf8e9410c7066da23f6f7",
+    "bytes": 4024
+  },
+  "publication_inventory": {
+    "path": "data/owned/poe2/3887ae68/preset-usage-inventory/inventory.json",
+    "sha256": "99de175282f60d037d0cb330cf4782313ac08522c348e19f31e889a7c744df60",
+    "bytes": 211071
+  },
+  "source_group_ordinal": 238,
+  "source_gem_ordinals": [
+    239,
+    240,
+    241,
+    242
+  ],
+  "source_identities": [
+    [
+      "IceNovaPlayer",
+      "def.00000000000007dd"
+    ],
+    [
+      "SupportEncroachingGroundPlayer",
+      "def.0000000000000740"
+    ],
+    [
+      "SupportMagnifiedAreaPlayerTwo",
+      "def.000000000000082b"
+    ],
+    [
+      "SupportRapidCastingPlayer",
+      "def.00000000000008bf"
+    ]
+  ],
+  "expected_positive_retired_usage_issues": 1,
+  "expected_negative_retired_usage_issues": 0,
+  "scope": "derived test source only; original builds remain immutable and unresolved; no final metric or gameplay closure"
+}

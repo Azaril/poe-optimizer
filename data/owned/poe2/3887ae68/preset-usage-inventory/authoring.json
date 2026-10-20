@@ -1,0 +1,125 @@
+{
+  "kind": "bounded-physical-usage-inventory-candidate",
+  "predecessor": {
+    "path": "runs/owned-construction-cutover-candidate-01/package",
+    "input": "b3b7c3810f659e584f23b6dd69b7bdc6b619cc39fcd4f2b9ae259194bf8d7529",
+    "release": {
+      "sha256": "bc1b9fe8d6e4b5c696b1d700a9af38785e2958c9f7276811ebb438172e2f601b",
+      "bytes": 56186
+    },
+    "artifacts": [
+      {
+        "file": "registry.json",
+        "bytes": 3573021,
+        "sha256": "68385460f203f1b5dd2a7dbe534893e0887db37ef8fc304f52c6b8350d243160"
+      },
+      {
+        "file": "schema.json",
+        "bytes": 32182847,
+        "sha256": "6d4c06bb3311c9b4fddc0c2a7f7f82bc3bcb1dcd6b6605249f0d2b69cbd61ddb"
+      },
+      {
+        "file": "rules.json",
+        "bytes": 17481310,
+        "sha256": "fa6ca3e17f531b2d4db43d84209a96281fca1b678a143bd34fb8368a809250fc"
+      },
+      {
+        "file": "routing.json",
+        "bytes": 17081,
+        "sha256": "cc89bfdd333b320696287f0d8a75e49ef16bdbd2249c9cee34bd09e45feb3a29"
+      },
+      {
+        "file": "manifest.json",
+        "bytes": 1506,
+        "sha256": "751d3cc286014fdc9db79de66706a68ca82e9c543dbbfe204f618a0dc42afb03"
+      },
+      {
+        "file": "mapping.json",
+        "bytes": 3947388,
+        "sha256": "7aae99051a05a2c195fd42acc14aec397813bccd393a9da1499ed223ec50ccae"
+      },
+      {
+        "file": "roles.json",
+        "bytes": 1232722,
+        "sha256": "d2d27aae1adfe4c31229065ba47b282b063f367b849dc6449d7978a807b3d9c0"
+      },
+      {
+        "file": "normalization.json",
+        "bytes": 1864986,
+        "sha256": "8e7ffa5e49dc8594f5fbf3e1da8930b9e068c020a353199d13721dc58a7ced16"
+      },
+      {
+        "file": "rewards.json",
+        "bytes": 28927,
+        "sha256": "4ca70ee3603a21d59d48df142ded270838e5bf6286594548db36dfc3778a1445"
+      },
+      {
+        "file": "items.json",
+        "bytes": 1643386,
+        "sha256": "55821b9514b8e93b242caa0f188fe0b6c899caf3f707c8f2851122d77ec8189e"
+      },
+      {
+        "file": "item-source.json",
+        "bytes": 1412286,
+        "sha256": "3967fefdc180110e1126bce7c0bcf24152ce83531947010624f2eb602cf38cf2"
+      },
+      {
+        "file": "queries-original-01.json",
+        "bytes": 4710,
+        "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+      },
+      {
+        "file": "queries-original-02.json",
+        "bytes": 7130,
+        "sha256": "eb2691aa77552e1729de12621b7564ce45ba78f6f97d0d880f0dfba474b007ca"
+      },
+      {
+        "file": "queries-original-03.json",
+        "bytes": 4710,
+        "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+      },
+      {
+        "file": "queries-original-04.json",
+        "bytes": 4710,
+        "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+      },
+      {
+        "file": "queries-original-05.json",
+        "bytes": 9732,
+        "sha256": "4b520d4204aa9a4124b9a8963af1c7cc445c18218766655cca21686993f69fa0"
+      },
+      {
+        "file": "tree-normalization.json",
+        "bytes": 2101990,
+        "sha256": "bc170c5563b2f977d095c00597d8dea33bab56ae679184f6cfb918c3ef03d7d3"
+      }
+    ]
+  },
+  "files": {
+    "source-census.json": {
+      "sha256": "ebbdfdbe1cd0e0b0f226cfd1d2e1f30bdd0a442ccc9957f144d181a951ea5182",
+      "bytes": 1042270
+    },
+    "evidence.json": {
+      "sha256": "d27294a67b92f732622493e43f6198a2722b39494ee5c08113a4c56f331df0f9",
+      "bytes": 220115
+    },
+    "inventory.json": {
+      "sha256": "99de175282f60d037d0cb330cf4782313ac08522c348e19f31e889a7c744df60",
+      "bytes": 211071
+    }
+  },
+  "expected_selected_issues": [
+    107,
+    118,
+    110,
+    124,
+    5
+  ],
+  "expected_draft_changes": 0,
+  "expected_retired_issues": 0,
+  "no_new_definition_ids": true,
+  "no_queries_changed": true,
+  "no_evaluation_bundle": true,
+  "support_receipt_dependency": "Applied record_support_input_disposition; source test10/10 passed; exact pins and scope in evidence.json. No false/missing/nonneutral support field authority."
+}

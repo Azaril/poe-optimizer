@@ -9,30 +9,21 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**October 20 backup checkpoint:** commit `15778b04` was pushed to GitHub `main`
-and its remote hash verified. This supersedes the earlier push-access blocker.
-The construction migration passes scoped checks and all-five preservation.
-The subsequent secondary-switch adapter passes Direct (26), Gem (11) and
-all 15 usage checks. The last usage test incorrectly expected a
-usage list for an unknown source; it now verifies absent materialization, Pending
-membership and preserved source/draft/origin/allocator state. Its passing rerun is
-in `runs/owned-secondary-global-receipt-tests-03.log`; focused strict Clippy passes
-in `runs/owned-secondary-global-clippy-02.log`. The six group-selector and
-seven secondary-switch source tests pass. Hosted CI exposed a stale compiler
-transition digest in the import-policy receipt; its one-field repair preserves
-all four policy outputs and passes all 16 converter tests. Those follow-up fixes
-were pushed as `afc607d8`; the final lint cleanup and validation record follow it.
-The subsequent group/support checkpoint was pushed as `dba0f661` and verified
-against GitHub `main`. Its 25 focused usage tests now pass, including independent
-source validation for Complete scalar support inputs
-(`runs/owned-support-usage-backup-tests-01.log`).
-This is not a claim that hosted CI or the full
-workspace is green. Ignored `runs/` evidence and nine protected incoming-critical
-work-in-progress files remain local. The reviewed group-selector adapter is now
-applied, with 39 private normalization, 377 normalization integration and 20 usage
-checks passing. Its archived candidate remains under
-`runs/group-selector-receipt-candidate-20261020/`. Current real-build policies
-still have no usage inventory, so this does not retire a supplied-build issue.
+**October 20 backup checkpoint:** `1ba8c7ce` is pushed to GitHub `main` and its
+remote hash is verified. It follows `6f6eae3f`, `f6dac721`, `dba0f661`,
+`afc607d8` and the initial broad backup `15778b04`; push access is working.
+The latest correction removes irrelevant deep receipt charges without raising
+work limits. All 18 private completion and 27 public usage tests, strict Import
+all-target lint, default-limit all-five publication and the real group238
+positive/nonneutral control pass. Earlier normalization and source checks are
+recorded at their checkpoints below.
+
+The maintained 25-row usage packet passes its ordinary census check, all-five
+publication and original group control. Its expansion control exposed an
+additional finite count-companion dependency; that data correction is in
+progress. No original's selected input issue has retired. Hosted CI and complete
+native evaluation remain separate gates. Ignored `runs/` evidence and nine
+protected incoming-critical work-in-progress files remain local.
 
 **Five supplied builds: 0/5 complete native evaluations.** All five import and
 run in pinned PoB. Owned native components work, but unresolved inputs and
@@ -1424,33 +1415,70 @@ fix now stops unnecessary proof work once a preset is known to remain Pending,
 while preserving whole-source validation, independent presets and atomic
 retirement. Its 13 private and 27 public usage tests pass
 (`runs/owned-usage-early-refusal-{private-tests,tests}-01.log`).
-The second all-five run still fails Original05 at the default work limit after
+The second all-five run still failed Original05 at the default work limit after
 the first four originals pass. The diagnostic run
 `runs/owned-usage-inventory-work-diagnostic-03.log` locates a 48,860-unit
 all-receipts-by-draft precharge in `inventory::complete`, raising cumulative work
 to 2,004,672 against the unchanged 2,000,000 limit. Temporary caller logging is
-removed. The next correction must charge cheap exact-identity filtering, then
-charge deep validation only for matching receipts, retaining all live checks
-and atomicity. Early refusal alone is not a solution to this measured failure.
+removed. This identified the need to charge cheap exact-identity filtering, then
+deep validation only for matching receipts, retaining all live checks
+and atomicity. Early refusal alone did not solve this measured failure.
 Failed output directories remain evidence, not validated endpoints.
-The next correction is prepared but unapplied under
-`runs/usage-inventory-matched-receipts-candidate-20261020/`; its manifest and
-patch verify, while independent review and Cargo validation remain pending.
-The Git backup checkpoint includes only the tested early-refusal change and its
-resume record. Temporary Cargo targets referring to ignored candidate files
-have been removed; recreate them locally when resuming publication validation.
+The exact-matching correction from
+`runs/usage-inventory-matched-receipts-candidate-20261020/` is now applied and
+independently reviewed. All receipts pay for identity filtering; only matches
+incur the unchanged live output, origin and membership checks. Matching usage
+binding comparisons retain the compiled 64-parameter bound. All 18 private
+completion and 27 public usage tests pass
+(`runs/owned-usage-matching-{private,public}-tests-01.log`).
+The fourth real publication run passes at default limits:
+`runs/owned-usage-inventory-publication-validation-04/validation.json`, successor
+`593fb1facdc2a85825d3deb090a322978c400431b1742f8b19bdc936fdf69a5c`.
+Every original retains its whole draft/sidecar/report and independently repeated
+output; the package rebuild is byte-identical, all 110 queries remain, selected
+Pending counts remain 107/118/110/124/5 and no supplied build becomes complete.
+The log is `runs/owned-usage-inventory-publication-tests-04.log`.
+The real group238 positive/nonneutral control also passes:
+`runs/owned-ice-nova-group-usage-positive-validation-01/validation.json`.
+Only the derived group's usage inventory and its exact issue links retire;
+all other content and allocation watermarks stay identical. Changing the first
+support count from 1 to 2 keeps usage Pending and preserves the entire output
+between the prior and successor policies. Checked finalization remains Pending.
 Stopping work on an already refused preset does not establish complete-build
-scaling. The present checker conservatively charges every receipt against full
-draft membership before filtering by source; a fully accounted large preset
-still needs measurement and a bounded cleanup of that repeated work.
+scaling. The new complete 16/32-preset controls exclude the removed cubic
+precharge, but identity scans and relevant draft membership checks still have
+quadratic costs. No claim of arbitrary larger-corpus scaling follows.
 
 The authenticated selected-preset audit under
-`runs/selected-usage-next-blockers-20261020/` identifies the next data-only step:
+`runs/selected-usage-next-blockers-20261020/` identified the next data-only step:
 nine missing support-family rows cover thirteen selected occurrences and thirty-nine
 neutral count/global fields. Their existing physical-support rules, singleton
 construction, resolved Gem inputs and exact authored targets are present.
-Expand the same unshipped packet after its real positive control passes; do not
-introduce a second runtime model or a per-skill importer.
+These additions are now applied to the same unshipped maintained packet at
+`data/owned/poe2/3887ae68/preset-usage-inventory/`, with 25 identities and 454
+field declarations. `tests/owned_preset_usage_inventory_cli.rs` is the sole
+maintained target for the packet, all-five publication, original group control
+and the new real-byte support expansion controls. The latter compare the same
+derived input under the full packet and conservative omissions, including each
+of the nine families separately. They test field accounting, not support
+eligibility or gameplay legality. The ordinary packet check, all-five publication
+and original group control pass, as does scoped CLI lint. The 25-row successor is
+`fc0d9af5c0651853142b3f06a94a7eee4f4538d201857bc825da49232ebe0497`
+under `runs/owned-preset-usage-inventory-publication-01/`; selected counts and
+all 110 queries remain unchanged. The temporary Cargo targets are removed.
+
+The first expanded control fails honestly: its inserted `groupCount="1"` lies
+outside the existing physical-support source frame, leaving all sixteen
+supports' scalar inventories Pending. Removing that insertion alone is
+insufficient: the existing Ice Nova count fallback admits only five reviewed
+companion identities. The nine new support families also need explicit
+noncompeting count-companion admission through that existing policy. Their
+complete singleton constructions are available; add the finite tuples as data,
+keep the original source files and runtime source-frame checks unchanged, and
+rerun with no group-header rewrite. Keep both inventory-omission and
+count-companion-refusal controls. Failed evidence:
+`runs/owned-preset-usage-inventory-support-expansion-01/` and
+`runs/owned-preset-usage-inventory-support-expansion-tests-01.log`.
 
 After that, converge private primary completion and final-destination plumbing
 using the existing `InputReceipt` and `InputOutput::Authored`. `AwaitUsage` and
@@ -1462,6 +1490,16 @@ allocation timing during cleanup. Pain Offering/Frost Bomb requested-count
 recipes remain separately absent. Missing minion Commands, two-effect Djinn
 selection and generated Firebolt dispatch also remain genuine consumer gaps;
 the physical-singleton proof cannot account for them.
+The private completion cleanup is prepared, not applied, in
+`runs/primary-input-completion-candidate-20261020/`. Revision 2 retains an exact
+reserved issue ID in the existing prepared result rather than deriving authority
+from a diagnostic code; it preserves the first revision separately. It removes
+the Complete-support fallback, retains narrow flat-primary proof scope and the
+exact live designated usage binding, and adds six producer plus three private
+regression tests. Rustfmt and artifact checks pass; Cargo and actual all-five
+preservation remain pending. Review and validate it after the current data
+checkpoint; do not infer that the missing Pain Offering/Frost Bomb count data
+has been supplied by this code cleanup.
 
 ### Native Scenario intent checkpoint, October 20
 
@@ -2610,6 +2648,11 @@ Import expectation already fixed in `afc607d8`. The `dba0f661` run
 `39458332844` remained queued behind the older run. Running durations were within
 previous successful ranges; public metadata did not expose live target progress.
 No hosted success is claimed and no workflow/run was changed.
+The 17:59 UTC refresh shows five passing jobs, the same six known failures
+across both platforms, and seven running jobs. Ubuntu CLI shards 0, 1 and 2
+have passed; the remaining running jobs are Ubuntu CLI3, four Windows CLI
+shards and both PoB jobs. This snapshot describes the older `15778b04` run,
+not validation of the newer fixes.
 
 ## CI receipt repair (2026-10-15)
 

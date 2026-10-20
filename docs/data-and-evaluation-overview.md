@@ -160,12 +160,16 @@ Archived sources and merely parseable switches provide no such authority.
 The originals still lack complete reference-selection and global-effect
 accounting. Authored/Direct and generated receipts can now account for the exact
 saved primary `true` as a non-restricting source gate after their live input
-checks. This preserves raw intent and adds no native activation flag; other
-values, secondary switches and support receipts gain no such authority.
-Current published policies do not yet use the whole-preset inventory gate.
-This is Import work; it changes no native calculation rule or per-candidate
-evaluation path. See the living implementation plan for validation and the exact
-resume point.
+checks. This preserves raw intent and adds no native activation flag. Other
+field values and consumers need their own evidence; proving one consumer never
+accounts for another.
+The maintained [usage packet](../data/owned/poe2/3887ae68/preset-usage-inventory/README.md)
+now enables this gate with injected field-consumer declarations. All-five
+publication and a real-group positive/nonneutral control pass at default limits.
+The importer charges every receipt's identity scan, then validates only exact
+matches against the live draft. Retirement remains atomic. This is Import work;
+it changes no native calculation rule or per-candidate evaluation path. See the
+living implementation plan for the current data expansion's remaining gate.
 The secondary-switch source tests distinguish complete singleton effects from
 missing declared references and from multiple stat sets. Compiler-derived
 construction facts are now implemented in the existing Import role artifact
@@ -178,8 +182,13 @@ group-selector adapter is applied, with private and public checks passing.
 Both reuse the same physical construction
 predicate and charged role lookup while retaining separate field permissions.
 The applied support receipt uses those facts for exact neutral count/global
-fields. Complete scalar inputs now permit the same independent source proof
-as partial inputs; post-fix validation is tracked in the implementation plan.
+fields. Complete scalar inputs permit the same independent source proof as
+partial inputs. Scalar completion, field-consumer coverage and admission as a
+noncompeting sibling in a count recipe are separate facts. All applicable facts
+must hold; a reviewed support identity in one inventory does not automatically
+extend another policy's finite companion list. Those identities remain injected
+configuration data. The remaining private proof-transport cleanup and current
+data validation are tracked in the implementation plan.
 Source tests alone grant no native execution or import-completion
 authority. Primary-switch semantics and exact occurrence/selector correspondence
 remain separate obligations.

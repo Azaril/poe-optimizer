@@ -53,6 +53,26 @@ changing the saved toggle, infer participation, or account for other values and
 secondary fields. Support accounting and every other usage consumer remain
 separate. The current release's inventory-disabled behavior is unchanged.
 
+The October 20 usage-inventory controls distinguish three live proofs: scalar
+parameter completion, saved-field consumer coverage and noncompeting count
+companions. Their separate authority is intentional; duplicated receipt
+transport is not. The prepared primary-completion cleanup should share the
+existing prepared Gem result and authored receipt, preserve the designated
+live usage binding and carry the exact reserved issue ID. Retire the
+Complete-support re-prove fallback only after producer/liveness tests and
+unchanged all-five output comparisons pass. Do not replace the flat-primary
+proof with full Action correspondence or infer authority from a diagnostic code.
+
+An expanded real-source control also exposed a remaining bounded import gap:
+the physical-support source frame rejects a containing `groupCount`, even
+though the primary count recipe understands that field. This is not a game
+restriction. Broader support-frame admission needs evidence that the extra
+group field leaves the proved scalar/source facts valid, with its actual
+consumers still accounted for separately. Do not loosen the frame merely to
+make a test pass. The immediate data step instead expands the existing reviewed
+count-companion tuples and retains unchanged source rows without a group-header
+rewrite. Keep this broader-frame follow-up visible when validating other builds.
+
 ## Current rule-format cutover (2026-10-07)
 
 The contribution query contract now has one schema3 representation: explicit
