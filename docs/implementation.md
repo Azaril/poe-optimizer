@@ -1856,6 +1856,31 @@ the existing private dependency rebinder, with a temporary test-only registratio
 and no new production repair API. Its reviewed candidate is
 `runs/movement-penalty-release-candidate-20261020/`; no publication has run yet.
 
+The selected-mechanics audit in
+`runs/ignore-movement-coverage-audit-20261020/` supplies the next closure order.
+It is a static positive-declaration audit of the validated `e8df8bdb…` package,
+not a compiled request or a new complete-build claim. Of 57 reached passive
+owners, 45 are Complete; the remaining twelve concern Djinn roots/child unlocks,
+Puppet Master, Archon of Undeath and Command scaling/resource behavior. All 18
+selected Reward owners and the selected Ascendancy are already Complete.
+Reconcile existing evidence before reimplementing those completed responsibilities.
+
+All 43 Partial contribution queries in that package have retained readers on the
+actual Sniper path: 20 Player Life/Spirit/incoming-critical receiver queries,
+19 outgoing-critical/armour queries and four inherited-damage, block or Weakness
+queries. The new movement-immunity query adds another selected dependency.
+Completing a member list does not close Partial selected owner programs: an
+unimplemented owner could still supply a modifier or change a descendant. Keep
+that guard. Catalog-wide query relevance is separate possible debt, but orphan
+query removal would eliminate none of these current blockers. Scoped omitted-effect
+proof remains Proposed, not an approved shortcut to a single known metric.
+
+After input admission, replace the static counts with actual compiled gaps.
+Before then, prioritize existing source/admission/delivery evidence for the nine
+selected Modifier families and eight ItemTemplate owners, then the selected
+Gem/Skill/Actor/Action families and their exact query producers. Do not substitute
+new off-hand arithmetic or unrelated catalog cleanup for these dependencies.
+
 The parallel non-usage audit confirms the subsequent configuration checkpoint:
 all 42 saved Config leaves in Original05 already have destinations. None of the
 four remaining non-usage gates can honestly close by adding another isolated

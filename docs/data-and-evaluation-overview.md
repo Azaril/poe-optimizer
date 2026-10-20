@@ -28,6 +28,16 @@ preserve useful measurements and explicit illegality without altering the input.
 The audit inventories downstream work and unknown full-game behavior families;
 it does not introduce a new execution model or approve pending proposals.
 
+The later October 20 selected-mechanics audit confirms that all 43 incomplete
+contribution queries in the validated package have retained readers on Original05's
+actual graph. Shared Life/Spirit and critical/armour consumers account for most of
+them. Query membership and selected-owner completeness are separate requirements:
+an omitted owner program can introduce a contribution or a descendant, so an empty
+observed PoB channel cannot certify a native false/zero value. The current design
+keeps that conservative gate. Potential catalog-wide query relevance cleanup and
+the proposed finer-grained coverage model remain separate future work; neither
+has been adopted to bypass this build's remaining mechanics.
+
 The accepted [source-construction cutover](owned-source-effect-construction-proposal.md)
 keeps ordered effect observations, unresolved references and separate stat-set
 references in the existing **Import-only** role artifact. These are compiler
