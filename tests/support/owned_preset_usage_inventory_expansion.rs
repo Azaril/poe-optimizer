@@ -552,7 +552,8 @@ pub fn run() {
     let expanded = checked_output(&expanded_dir, &after, 5, &next, &xml);
     let f = actual_records(&baseline, &xml, &expected, true);
     actual_records(&expanded, &xml, &expected, true);
-    let retirement = positive::compare_usage_retirement(&baseline, &expanded, f.group, f.gems[0]);
+    let retirement =
+        positive::compare_usage_retirement(&baseline, &expanded, &[f.group, f.gems[0]]);
     let old_final = selected::finalize_with_definitions(
         &xml,
         &baseline_dir,

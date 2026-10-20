@@ -56,10 +56,10 @@ separate. The current release's inventory-disabled behavior is unchanged.
 The October 20 usage-inventory controls distinguish three live proofs: scalar
 parameter completion, saved-field consumer coverage and noncompeting count
 companions. Their separate authority is intentional; duplicated receipt
-transport is not. The prepared primary-completion cleanup should share the
-existing prepared Gem result and authored receipt, preserve the designated
-live usage binding and carry the exact reserved issue ID. Retire the
-Complete-support re-prove fallback only after producer/liveness tests and
+transport is not. The validated primary-completion cleanup shares the
+existing prepared Gem result and authored receipt, preserves the designated
+live usage binding and carries the exact reserved issue ID. The
+Complete-support re-prove fallback is removed; producer/liveness tests and
 unchanged all-five output comparisons pass. Do not replace the flat-primary
 proof with full Action correspondence or infer authority from a diagnostic code.
 
@@ -87,8 +87,24 @@ adapter emits no group attribution for occurrence-only recipes, while the old
 usage receipt checker required one. The applied correction carries actual group
 participation on the existing private receipt and shares exact source/set
 validation. It preserves contributing-group requirements and rejects
-contradictory links. Full previous-code output comparison remains a cutover gate;
+contradictory links. Full previous-code output comparison passes for all five
+originals using the byte-identical `e355f2db…` package;
 adding redundant origin links merely to satisfy the old checker is not a fix.
+
+Generated source accounting must also distinguish saved-object retention from
+equivalent field meaning after reconstruction. PoB can normalize a saved level
+and replace an item-granted group. Raw provider-level equality alone does not
+prove that object survived. Prove selector/secondary-switch cardinality across
+both routes, while retaining independent level, quality, count and exact-provider
+checks. This is an Import evidence boundary, not a native object-lifecycle rule
+or a reason to add another level-table contract.
+
+Do not infer complete reverse-routing uniqueness from a structurally valid role
+subset or its caller-supplied count. Full catalog reproduction has that authority
+offline. The proposed [explicit candidate observation](owned-generated-catalog-routing-proposal.md)
+keeps this fact in the existing Import artifact, with no runtime catalog scan,
+duplicate role model or native source-object semantics. Retain the omission
+regression and acquisition alias refusals when implementing the chosen boundary.
 
 ## Current rule-format cutover (2026-10-07)
 

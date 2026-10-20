@@ -9,8 +9,8 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**October 20 backup checkpoint:** `8cf6bc6c` is pushed to GitHub `main` and its
-remote hash is verified. It follows `983cee19`, `1ba8c7ce`, `6f6eae3f`, `f6dac721`, `dba0f661`,
+**October 20 backup checkpoint:** `a6b61b3c` is pushed to GitHub `main` and its
+remote hash is verified. It follows `8cf6bc6c`, `983cee19`, `1ba8c7ce`, `6f6eae3f`, `f6dac721`, `dba0f661`,
 `afc607d8` and the initial broad backup `15778b04`; push access is working.
 The earlier receipt-work correction removes irrelevant deep charges without raising
 work limits. All 18 private completion and 27 public usage tests, strict Import
@@ -22,9 +22,14 @@ The maintained 25-row usage packet now passes both ordinary checks, all-five
 publication, the original group control and the expanded support controls.
 Nine inventory omissions, nine count-companion omissions and an unreviewed
 sibling all retain the expected Pending obligations. Strict CLI lint passes.
-The validated successor is `e355f2db…`; the private primary-input completion
-cleanup is applied and under validation, followed by actual Pain Offering/Frost Bomb count
-data. No original's selected input issue has retired. Hosted CI and complete
+The validated successor is `fd869107…`; the private primary-input completion
+cleanup now passes its complete validation scope, including exact all-five
+comparison with the previous code under `e355f2db…`. Pain Offering/Frost
+Bomb count data now passes publication, all 29 count controls, the existing
+group/support controls and strict CLI lint. Eight exact count bindings are
+added across the originals, including two in Original05's selected preset.
+No original's selected input
+issue has retired. Hosted CI and complete
 native evaluation remain separate gates. Ignored `runs/` evidence and nine
 protected incoming-critical work-in-progress files remain local.
 
@@ -150,15 +155,18 @@ buff payloads or Command execution evidence.
 Candidate-bound source and special-branch admission remains blocking, as detailed
 below; no complete build is claimed.
 The latest validated Import package is
-`runs/owned-preset-usage-inventory-publication-02/package` (`e355f2db…`), built
+`runs/owned-preset-usage-inventory-publication-04/package` (`fd869107…`), built
 from the construction cutover `b3b7c381…`. It preserves all five original outputs
-and all 110 queries. The [checkpoint below](#source-construction-cutover-checkpoint-october-20)
+except eight exact added count preferences, with all 110 queries and every other
+draft/sidecar/report value unchanged. The [checkpoint below](#source-construction-cutover-checkpoint-october-20)
 records the source-construction migration and subsequent usage gates.
 Existing support/generated-input proofs feed the whole-preset usage gate.
 The physical-singleton secondary-switch and group-selector adapters pass their
 scoped tests; the injected support inventory and companion data pass real-source
-positive and refusal controls. Apply and validate the reviewed primary-completion
-cleanup next, including comparison with these saved pre-change outputs.
+positive and refusal controls. The primary-completion cleanup also passes its
+producer/liveness tests and exact comparison with saved pre-change outputs.
+The Pain Offering/Frost Bomb count data passes its full scoped gates.
+Continue with generated routing and remaining source-field accounting next.
 This does not close numerical coverage or any original's inventory.
 At the Actor migration checkpoint, the package and portable replay rebuilt
 successfully. Exact inverses authenticated the prior artifacts and allowed only
@@ -1533,14 +1541,15 @@ public format, and retains exact binding checks and charged traversal.
 All 22 private inventory checks, the 10 existing Gem proof checks, 33 public
 usage checks and 377 normalization checks pass. Strict Import all-target lint
 also passes. The CLI packet, actual all-five preservation, group and support
-controls, and strict CLI lint are still running at this backup checkpoint.
-Their sequential run starts with
-`runs/owned-primary-completion-packet-tests-03.log`; do not interpret the backup
-commit as completion of those remaining gates. The maintained publication test now optionally compares
+controls, and strict CLI lint now pass. Logs use the
+`runs/owned-primary-completion-*-03.log` prefix; the support controls completed
+in 207.39 seconds. The maintained publication test now optionally compares
 with a successful previous-code run using
 `POE_OPTIMIZER_TEST_USAGE_INVENTORY_BASELINE`; exact package identity and every
 saved output are authenticated before comparison. Use the successful
 `runs/owned-preset-usage-inventory-publication-02/` baseline for this code cutover.
+The successful `publication-03/previous-code-baseline.json` records byte-identical
+packages and identical complete checked outputs for all five originals.
 Do not infer that this cleanup supplies missing Pain Offering/Frost Bomb count
 data.
 The next data audit confirms the existing requested-count policy can serve both
@@ -1557,25 +1566,84 @@ count-data candidate is under `runs/offering-frost-count-inventory-candidate-202
 The follow-on maintained Rust candidate is frozen and independently reviewed at
 `runs/offering-frost-count-stage-candidate-20261020/` (manifest
 `4dae67ef58d59febf318998a9d132011212e399350426ada40f246843b42a991`).
-It remains unapplied and unexecuted. It folds the two count policies and two
+It is applied and validated. It folds the two count policies and two
 inventory row changes into the current packet/stage, without a parallel
 publisher or compatibility path, and checks exactly eight saved count bindings
 against their real source occurrences while preserving all other output and
-allocation state. Apply only after the current completion cleanup passes.
+allocation state. The CLI run uses
+`runs/owned-primary-count-*-04.log` and publishes to
+`runs/owned-preset-usage-inventory-publication-04/`; this validated package now
+supersedes `e355f2db…` as the current endpoint.
+The ordinary three packet checks and all-five publication pass
+(`fd869107…`): eight exact known count bindings are added, with no allocated IDs
+and complete preservation of all other output. The first isolated-group gate
+found an Ice Nova-specific test expectation, not a producer failure: it required
+the usage issue on both group and Gem, while the flat-primary producer attaches
+it only to the Gem. The shared test comparison now requires explicit exact
+expected origins; Ice Nova/support controls retain both, and the new controls
+require the Gem. Full draft/sidecar/report and allocator inverses remain.
+The corrected controls pass under `owned-primary-count-controls-tests-05.log`
+(106.34 seconds): three exact positives and 26 independent refusals, including
+fresh replays and complete output preservation. Their receipt is
+`runs/owned-preset-usage-inventory-primary-counts-05/validation.json`.
+The successful publication is reused unchanged. Existing group and expanded
+support controls pass against the new package (support: 212.09 seconds), as does
+strict CLI lint. Native mechanics and all five original Pending issue counts
+remain unchanged.
 
 The next generated-source audit is retained under
 `runs/generated-firebolt-dispatch-review-20261020/`. Firebolt has one resolved
 effect and an additional stat-set alias, not two effects. Its generated-input
 receipt already authenticates the exact item provider, inputs and live usage;
-secondary-switch and group-selector consumers still need source-routing
-evidence. Reuse the current generated receipt only after the exact reconstruction
-and catalog/direct route are proved. Shared Djinn construction evidence does not
+secondary-switch and group-selector consumers still need the checked Import
+adapter and catalog authority described below. Reuse the current generated
+receipt with the validated reconstruction and catalog/direct source evidence.
+Shared Djinn construction evidence does not
 by itself establish the same selector behavior. The source-component test
-candidate is separate from native mechanics and remains unexecuted. The frozen
+candidate is separate from native mechanics. The frozen
 candidate at `runs/generated-firebolt-routing-source-candidate-20261020/` has
-passed independent source-span and assertion review; its three added Rust
-source-component tests still require execution. Neither local candidate is
-included in Git while it remains under ignored `runs/`.
+passed independent source-span and assertion review and is applied. A further review
+identified the narrower required proof: selector and secondary-switch meaning
+must remain equivalent when PoB replaces the saved generated group, not just
+when it retains the same object. Level, quality, count and native provider
+correspondence remain independently checked responsibilities.
+The independently reviewed supplemental replacement test is also applied.
+The first fourteen-test run passed eleven tests and exposed three test-host
+failures: the new Lua chunk lacked the existing authenticated export helper's
+lexical binding. Binding `activeSkillGems` to that same `exportActive` function
+fixes the host without changing any extracted source body. The four reviewed
+constructed-selector tests are now also applied; all eighteen source tests pass
+in `runs/generated-routing-and-selection-source-tests-02.log`.
+Strict target lint also passes in
+`runs/generated-routing-and-selection-source-clippy-02.log`. No source-test result itself grants an
+Import receipt, native completion or numerical parity.
+
+Generated catalog uniqueness has one additional contract decision:
+[explicit reverse-routing facts](owned-generated-catalog-routing-proposal.md).
+The loaded role index structurally permits a subset; its caller-supplied count
+cannot prove that an omitted primary would not collide in PoB's reverse map.
+Full offline reproduction already establishes that fact against the actual
+catalog. Prefer carrying the complete compiler-derived candidate observation in
+the existing Import construction artifact rather than requiring the source
+catalog during ordinary loading. This is proposed, not implemented; the owner
+has been prompted for the contract decision. The bounded omission regression
+and strict catalog-target lint pass in
+`runs/generated-catalog-omission-regression-{tests,clippy}-01.log`.
+
+The [remaining-usage audit](../runs/owned-remaining-usage-blockers-20261020/audit.md)
+identifies the next independent path: source-selector accounting over actual
+constructed order and literal secondary-`true` accounting, then the existing
+inventory destinations. Preserve missing skeletal Commands and native Partial
+coverage. Manual Djinn needs two-effect ordering evidence; generated Djinn's
+secondary `nil` requires actual global-effect meaning and cannot be translated
+to generic disabled participation. Existing minion-reference mappings already
+distinguish the Sand unit's MAIN/CALCS actions from a player Command selector.
+The independently reviewed four-test source candidate under
+`runs/constructed-source-selector-candidate-20261020/` reuses the current source
+target, is applied and passes with the other fourteen tests. It leaves
+the strict source-construction predicate unchanged. Reuse these bounded
+selector facts in the existing private Import path next; a source list and
+actual dispatch must not be mistaken for complete native mechanics.
 
 ### Native Scenario intent checkpoint, October 20
 
@@ -2733,6 +2801,16 @@ At 18:08 UTC, the same older run still had five passes, six known failures and
 seven running jobs. The latest pushed `983cee19` run `39472005429` was pending;
 the superseded pending `1ba8c7ce` run was cancelled by the existing workflow.
 No new failure or hosted success was inferred from that queue state.
+The later public review of `a6b61b3c` finds its run `39477231180` pending with
+no jobs started. The older `15778b04` run has six passes, six known failures
+and six running jobs; Ubuntu PoB completed successfully at 18:41:17 UTC.
+No new failure class appeared. Evidence is retained at
+`runs/ci-a6b61b3-public-review-20261020/`; none of these observations establishes
+hosted success for the latest code.
+At 19:07 UTC the old run has seven passes, six known failures and five running
+Windows jobs. Ubuntu CLI3 completed at 18:50:24 UTC, so all four Ubuntu CLI
+shards and Ubuntu PoB have passed. The latest run remains pending; no new
+failure appeared. Snapshot files are retained in the same evidence directory.
 
 ## CI receipt repair (2026-10-15)
 

@@ -15,7 +15,7 @@ use std::{
     ops::Range,
     path::{Path, PathBuf},
 };
-const INPUTS_SHA: &str = "9c29d8ebdd5132ed68a30ef86cc75e98ac5ccef27c51548cec57b999727dc78d";
+const INPUTS_SHA: &str = "5638afbae4bf1896ccd1f034b6c1fc0f8f44ee0edb09d98368f80090ae7de72d";
 const SOURCE_IDS: [&str; 4] = [
     "IceNovaPlayer",
     "SupportEncroachingGroundPlayer",
@@ -303,13 +303,12 @@ fn compare_positive(before: &Output, after: &Output, xml: &[u8]) -> Value {
     actual_records(before, xml, None);
     actual_records(after, xml, None);
     let f = frame(xml);
-    compare_usage_retirement(before, after, f.group, f.gems[0])
+    compare_usage_retirement(before, after, &[f.group, f.gems[0]])
 }
 pub(super) fn compare_usage_retirement(
     before: &Output,
     after: &Output,
-    group: usize,
-    primary: usize,
+    expected_origins: &[usize],
 ) -> Value {
     let old = usage(&before.draft);
     let new = usage(&after.draft);
@@ -335,9 +334,8 @@ pub(super) fn compare_usage_retirement(
         }
     }
     assert_eq!(
-        linked,
-        [group, primary],
-        "exact original group/primary usage provenance"
+        linked, expected_origins,
+        "exact expected source usage provenance"
     );
     assert_eq!(
         sidecar, after.sidecar,

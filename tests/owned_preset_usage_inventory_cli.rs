@@ -114,10 +114,11 @@ fn publish_bounded_usage_inventory_with_all_five_unchanged() {
             checked_output(&repeated, &package, case, &next, &xml),
             "Original{case:02}: independent fresh successor imports preserve all content"
         );
-        assert_eq!(
-            checked_output(&old, &prior_path, case, &prior, &xml),
-            checked_output(&new, &package, case, &next, &xml),
-            "Original{case:02}: exact complete content, no field or issue dropping"
+        let count_changes = primary_counts::compare_additions(
+            &checked_output(&old, &prior_path, case, &prior, &xml),
+            &checked_output(&new, &package, case, &next, &xml),
+            &xml,
+            case,
         );
         if let Some((directory, _, _)) = &baseline {
             assert_eq!(
@@ -155,7 +156,7 @@ fn publish_bounded_usage_inventory_with_all_five_unchanged() {
         );
         assert_eq!(fs::read(&source).unwrap(), xml);
         write(out.join(format!("report-{case:02}.json")), &new_check);
-        cases.push(json!({"original":case,"selected_pending_issues":ni.as_array().unwrap().len(),"whole_draft_inverse":true,"fresh_repeat_identical":true,"retired_issues":0}));
+        cases.push(json!({"original":case,"selected_pending_issues":ni.as_array().unwrap().len(),"whole_draft_inverse":true,"fresh_repeat_identical":true,"retired_issues":0,"requested_count_additions":count_changes}));
     }
     assert_eq!(prior_files, release::inventory(&prior_path));
     let validation = json!({"before":prior.receipt().input,"after":next.receipt().input,"originals":cases,"queries":110,"rebuild_byte_identical":true,"fresh_repeat_identical":true,"complete_original_builds":0,"calculation":"not_run","source_builds_unchanged":true});
@@ -196,4 +197,19 @@ fn real_ice_nova_group_completes_only_its_usage_inventory() {
 #[ignore = "published expanded package; source-byte accounting frame and nine omission controls"]
 fn real_support_expansion_needs_every_added_family() {
     expansion::run();
+}
+
+#[path = "support/owned_preset_usage_inventory_primary_counts.rs"]
+mod primary_counts;
+
+#[test]
+fn primary_count_packet_preserves_existing_guards_and_every_prior_consumer() {
+    family::check();
+    primary_counts::mutation_controls();
+}
+
+#[test]
+#[ignore = "actual published packages; exact source groups and independent count/guard controls"]
+fn real_primary_groups_require_count_and_every_existing_usage_consumer() {
+    primary_counts::run_controls();
 }

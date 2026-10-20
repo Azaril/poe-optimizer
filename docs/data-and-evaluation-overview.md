@@ -177,8 +177,9 @@ construction facts are now implemented in the existing Import role artifact
 under the October 20 approval; current artifacts and dependent fixtures are
 rebuilt, and all-five preservation validation passes. Retired input-policy
 readers are removed. A private secondary-switch accounting adapter is applied and
-passes its focused usage tests and strict linting. All thirteen selector/secondary-switch source
-tests pass; three additional support-consumer controls also pass. The
+passes its focused usage tests and strict linting. The source-component target
+now passes all eighteen tests, including support consumers, generated routing,
+retained/reconstructed group selection and missing-reference selector controls. The
 group-selector adapter is applied, with private and public checks passing.
 Both reuse the same physical construction
 predicate and charged role lookup while retaining separate field permissions.
@@ -189,16 +190,33 @@ noncompeting sibling in a count recipe are separate facts. All applicable facts
 must hold; a reviewed support identity in one inventory does not automatically
 extend another policy's finite companion list. Those identities remain injected
 configuration data. The expanded inventory and count-companion refusal controls
-now pass; the remaining private proof-transport cleanup and primary-input data
-are tracked in the implementation plan.
+now pass. The private proof-transport cleanup now uses one prepared result and
+the existing authored receipt, with an exact reserved issue ID and live usage
+binding. It also records whether the actual adapter contributes group
+provenance; occurrence-only recipes need no fabricated group link. All-five
+comparison against the previous code passes with identical complete outputs
+under the same data package. The Pain Offering/Frost Bomb count data now also
+passes its full scoped validation and is tracked in the implementation plan.
 Source tests alone grant no native execution or import-completion
 authority. Primary-switch semantics and exact occurrence/selector correspondence
 remain separate obligations.
+Generated reverse routing additionally needs a complete catalog observation.
+Structural validation of the supplied role rows cannot prove that an omitted
+row does not share a primary. The proposed
+[compiler-derived candidate fact](owned-generated-catalog-routing-proposal.md)
+would preserve this information in the existing Import-only artifact; the
+alternative requires full catalog reproduction during loading. Neither
+approach belongs in the native evaluator, and neither is implemented yet.
 The existing count policy now also imports Ice Nova's saved count. All-five
 preservation verifies exactly four added bindings across Original05's presets,
 including one in the selected preset, with every other input and unresolved
 obligation unchanged. This adds input transport, not FullDPS aggregation or
 complete numerical coverage.
+Pain Offering and Frost Bomb reuse that same count policy. Eight additional
+bindings are validated across the originals, two in Original05's selected
+preset. The source guards and other consumers remain intact; three isolated
+positive cases and 26 refusal controls pass. This imports saved intent without
+adding a skill-specific native formula or declaring a complete build.
 The review also found an untranslated Sand Djinn on-hit
 Critical Weakness stat: source construction absence cannot stand in for game
 semantics or a false native condition. Exact participation and Enemy delivery

@@ -29,7 +29,7 @@ mod companions;
 mod outputs;
 pub use outputs::{Output, checked_output};
 pub const BEFORE: &str = "b3b7c3810f659e584f23b6dd69b7bdc6b619cc39fcd4f2b9ae259194bf8d7529";
-const AUTHORING: &str = "f3ef42847a761db8aa9d73fe7d3882e9a2d5040bf0fb2c18d1b759260ac60571";
+const AUTHORING: &str = "ad64cac2ede9ffe3f59f5b6f2c9d79d81f05cdf24600772656036751fdad1f3b";
 pub fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
@@ -68,7 +68,7 @@ pub fn check() -> Value {
             .iter()
             .map(|row| row.fields.len())
             .sum::<usize>(),
-        454
+        456
     );
     assert_eq!(
         inventory.evidence.to_string(),
@@ -76,6 +76,7 @@ pub fn check() -> Value {
     );
     check_census();
     companions::check();
+    crate::primary_counts::check_data();
     authoring
 }
 /// Test-only semantic checks independent of the sealed outer packet bytes.
@@ -207,8 +208,10 @@ fn checked_inventory_successor(
     };
     assert_eq!(actual, expected);
     companions::authenticate(prior);
+    crate::primary_counts::authenticate(prior);
     let mut inverse = next.input().clone();
     companions::apply(&mut inverse.normalization, added_companions, true);
+    crate::primary_counts::apply(&mut inverse.normalization, true);
     let Some(UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. }) =
         &mut inverse.normalization.usage_inputs
     else {
@@ -239,7 +242,7 @@ fn checked_inventory_successor(
     assert_eq!(
         &inverse.normalization,
         &prior.input().normalization,
-        "only inventory, exact reviewed companion additions and checked usage commitments differ"
+        "only inventory, exact count appends/companions and checked usage commitments differ"
     );
     assert_eq!(
         inverse.tree.as_ref().unwrap().content,
@@ -338,6 +341,29 @@ pub fn stage_companion_omission_control(
         commitment,
     )
 }
+
+/// Test-only lower-authority field inventories; count recipes remain current.
+pub fn stage_primary_inventory_control(
+    prior: &StagedOwnedRelease,
+    control: crate::primary_counts::InventoryControl,
+) -> StagedOwnedRelease {
+    check();
+    let inventory = crate::primary_counts::controlled_inventory(control);
+    let commitment = digest_owned(
+        "owned-primary-count-inventory-control-v1",
+        &json!({"authored":authored_identity(),"control":control}),
+        4 * 1024 * 1024,
+    )
+    .unwrap();
+    stage_inventory(
+        prior,
+        inventory,
+        companions::included(&[]),
+        "test-only-primary-count-inventory",
+        commitment,
+    )
+}
+
 fn stage_inventory(
     prior: &StagedOwnedRelease,
     inventory: UsageInventoryPolicy,
@@ -349,8 +375,10 @@ fn stage_inventory(
     let old = prior.input();
     let expected = inventory.clone();
     companions::authenticate(prior);
+    crate::primary_counts::authenticate(prior);
     let mut normalization = old.normalization.clone();
     companions::apply(&mut normalization, &added_companions, false);
+    crate::primary_counts::apply(&mut normalization, false);
     let Some(UsageInputPolicy::PobOccurrenceUsageV3 {
         inventory: current, ..
     }) = &mut normalization.usage_inputs
@@ -377,6 +405,7 @@ fn stage_inventory(
     disposition.dependencies = dependencies;
     let mut inverse = normalization.clone();
     companions::apply(&mut inverse, &added_companions, true);
+    crate::primary_counts::apply(&mut inverse, true);
     let Some(UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. }) = &mut inverse.usage_inputs
     else {
         unreachable!()
@@ -401,7 +430,7 @@ fn stage_inventory(
         .clone();
     assert_eq!(
         inverse, old.normalization,
-        "only declared inventory, reviewed companion additions and exact dependency commitments change"
+        "only declared inventory, count appends/companions and exact dependency commitments change"
     );
     let transition = transition_owned_normalization_with_tree_compact(
         SuccessorBundleInput {

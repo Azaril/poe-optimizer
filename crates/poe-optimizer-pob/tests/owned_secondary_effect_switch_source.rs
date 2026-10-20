@@ -1132,3 +1132,497 @@ fn direct_vaal_support_count_probe_is_not_an_actual_active_effect_consumer() {
         }
     }
 }
+
+// Generated-source COMPONENT observations. These additions use the exact saved
+// Firebolt frame and actual source routing functions, not an Import receipt or
+// a complete CalcSetup/evaluator. The host supplies an already-discovered grant;
+// item/tree acquisition, explosion/Thorns factories and support preparation are
+// deliberately outside this bounded route. All original input bytes stay intact.
+fn generated_routing_span(name: &str) -> String {
+    let (path, first, last, digest) = match name {
+        "process" => (
+            "src/Classes/SkillsTab.lua",
+            1242,
+            1322,
+            "8737e8311f6cbef4b9bc10525e28831d00f52e602494a7f2bdfbccee68a33f32",
+        ),
+        "load_group" => (
+            "src/Classes/SkillsTab.lua",
+            308,
+            317,
+            "53649e0303418dd509f1196a2966c10931552643b10470e22f1b96e1e7e5a652",
+        ),
+        "load_gem" => (
+            "src/Classes/SkillsTab.lua",
+            319,
+            361,
+            "bf8f8770f61527ac3443caf0cee485186060dd84b578769002a4b27d57767585",
+        ),
+        "normalized" => (
+            "src/Modules/CalcSetup.lua",
+            667,
+            676,
+            "0204eac6356b36cd8f23799a373653d04332174edc5998d768ed11192fe9c3e4",
+        ),
+        "update" => (
+            "src/Modules/CalcSetup.lua",
+            1690,
+            1734,
+            "0452d3bc3b3318477771421a87aaeeaaab5710c6796c71997e781d0326b20705",
+        ),
+        "cleanup" => (
+            "src/Modules/CalcSetup.lua",
+            1837,
+            1850,
+            "b056255b34bc9c33ff78218fba23683f387d04c6ef619f62fcc41e3444b57d7d",
+        ),
+        "selected" => (
+            "src/Modules/CalcSetup.lua",
+            2141,
+            2154,
+            "2243d1734717c0349251cf1cc02f58019b15c978b2fbb3ca8438d9ea382c190c",
+        ),
+        "export" => (
+            "src/Modules/BuildExportPoE2.lua",
+            137,
+            146,
+            "927943e1709a5670917d3488649afa3c6ee11a72e6b077c6049080e90e8ad1df",
+        ),
+        "wipe" => (
+            "src/Modules/Common.lua",
+            564,
+            572,
+            "eff97e60d9c16582d74b3f1430414f7129e6a805eb5773bbccae840b199209ad",
+        ),
+        "sanitize" => (
+            "src/Modules/Common.lua",
+            321,
+            347,
+            "ad81cfbd6579b726668f7069f9d58dab8ee166ca9243e31fd56a11fb7e3ab682",
+        ),
+        "round" => (
+            "src/Modules/Common.lua",
+            722,
+            728,
+            "90585272c160e302702e5071f1ad55c649b8da02e83ef2d776d89a449250e1f2",
+        ),
+        "validate" => (
+            "src/Modules/CalcTools.lua",
+            60,
+            76,
+            "65f04133f20851a940a03900c9eb401db0baacabe048c97dc418bf4008d55fa7",
+        ),
+        "requirements" => (
+            "src/Modules/CalcTools.lua",
+            152,
+            158,
+            "ea60919f8f7438801f81cdc38f505e068269a99edb2550197a7caa624f45664f",
+        ),
+        _ => panic!("unknown generated routing span"),
+    };
+    static TOOLS: OnceLock<String> = OnceLock::new();
+    let body = if path == "src/Modules/CalcTools.lua" {
+        TOOLS.get_or_init(|| {
+            source::read_verified_text(&root().join("vendor/path-of-building-poe2"), path).unwrap()
+        })
+    } else {
+        &packet().sources[path]
+    };
+    let span = body
+        .lines()
+        .skip(first - 1)
+        .take(last - first + 1)
+        .collect::<Vec<_>>()
+        .join("\n")
+        + "\n";
+    assert_eq!(span.lines().count(), last - first + 1);
+    assert_eq!(hash(span.as_bytes()), digest);
+    span
+}
+
+fn generated_routing_components(jit: bool) -> Lua {
+    let lua = components(jit);
+    let data: Table = lua.globals().get("data").unwrap();
+    let gems = lua.create_table().unwrap();
+    for primary in SINGLETONS {
+        let gem = construct(&lua, primary);
+        gems.set(text(&packet().family(primary)["gem"]["key"]), gem)
+            .unwrap();
+    }
+    data.set("gems", gems).unwrap();
+    // The complete saved source bytes are independently authenticated by packet().
+    // Selecting this occurrence is test setup, never a runtime build-name rule.
+    let original = pinned(&packet().evidence["original"]);
+    let doc = roxmltree::Document::parse(std::str::from_utf8(&original).unwrap()).unwrap();
+    let groups: Vec<_> = doc
+        .descendants()
+        .filter(|n| {
+            n.has_tag_name("Skill")
+                && n.attribute("source") == Some("Item:28:New Item, Ashen Staff")
+                && n.parent()
+                    .is_some_and(|p| p.has_tag_name("SkillSet") && p.attribute("id") == Some("4"))
+        })
+        .collect();
+    assert_eq!(groups.len(), 1);
+    let children: Vec<_> = groups[0].children().filter(|n| n.is_element()).collect();
+    assert_eq!(children.len(), 1);
+    assert!(children[0].has_tag_name("Gem"));
+    assert_eq!(children[0].attribute("skillId"), Some("FireboltPlayer"));
+    for (name, node) in [
+        ("savedGeneratedGroup", groups[0]),
+        ("savedGeneratedGem", children[0]),
+    ] {
+        let attrs = lua.create_table().unwrap();
+        for a in node.attributes() {
+            attrs.set(a.name(), a.value()).unwrap();
+        }
+        lua.globals().set(name, attrs).unwrap();
+    }
+    let support = [
+        "wipe",
+        "sanitize",
+        "round",
+        "validate",
+        "requirements",
+        "process",
+        "normalized",
+    ]
+    .map(generated_routing_span)
+    .join("\n");
+    lua.load(format!(
+        "local m_min,m_max,m_floor=math.min,math.max,math.floor\n\
+         local t_insert,t_remove=table.insert,table.remove\n\
+         local activeSkillGems=exportActive\n\
+         calcLib={{}}\nSkillsTabClass={{}}\n{}\n\
+         function loadGenerated(groupAttributes,gemAttributes)\n\
+         local self=setmetatable({{build={{data=data}}}},{{__index=SkillsTabClass}})\n\
+         local node={{attrib=groupAttributes}}\n{}\n\
+         local child={{attrib=gemAttributes}}\n{}\n\
+         socketGroup.gemList[1]=gemInstance\n\
+         self:ProcessSocketGroup(socketGroup)\nreturn socketGroup,gemInstance end\n\
+         function generatedBuild(groups)\nlocal build={{data=data}}\n\
+         build.skillsTab=setmetatable({{build=build,socketGroupList=groups}},{{__index=SkillsTabClass}})\nreturn build end\n\
+         function updateGenerated(build,grants,mode)\n\
+         local env={{mode=mode,grantedSkills=grants}}\nlocal accelerate={{}}\nlocal tempTable1={{}}\n{}\n{}\nend\nreturn build.skillsTab.socketGroupList end\n\
+         function generatedSelected(group,mode,list,selectedGroup)\n\
+         local env={{mode=mode,mainSocketGroup=selectedGroup,player={{}}}}\nlocal index=1\n\
+         local socketGroupSkillList=list\n{}\nreturn env.player.mainSkill end\n\
+         function generatedExportSelected(group)\n{}\nreturn activeGem\nend\nend",
+        support, generated_routing_span("load_group"), generated_routing_span("load_gem"),
+        generated_routing_span("update"), generated_routing_span("cleanup"),
+        generated_routing_span("selected"), generated_routing_span("export"),
+    )).set_name("@authenticated-generated-routing-components").exec().unwrap();
+    lua.load(r#"
+        function actualGeneratedFrame()
+            return loadGenerated(copyTable(savedGeneratedGroup),copyTable(savedGeneratedGem))
+        end
+        function suppliedGeneratedGrant()
+            -- Host-supplied acquisition result, keyed to this exact source frame.
+            -- This is not proof of item parsing, equipment selection or rolls.
+            return {source=savedGeneratedGroup.source,slotName=savedGeneratedGroup.slot,
+                skillId=savedGeneratedGem.skillId,level=tonumber(savedGeneratedGem.level),
+                nameSpec=savedGeneratedGem.nameSpec,sourceItem={testIdentity='exact-supplier'}}
+        end
+        function observeGenerated(group,row,probe,expected)
+            local active=admitted(group)
+            assert(#active==expected)
+            for _,a in ipairs(active) do
+                assert(a.activeEffect.srcInstance==row)
+                assert(a.activeEffect.grantedEffect==data.skills.FireboltPlayer)
+                a.socketGroup=group
+                local count,enabled=calcs.getActiveSkillCount(a)
+                assert(count==(group.groupCount or row.count) and enabled==true)
+            end
+            for _,mode in ipairs({'MAIN','CALCS'}) do
+                local chosen=generatedSelected(group,mode,active,1)
+                assert(chosen==(expected==1 and active[1] or nil))
+                assert(generatedSelected(group,mode,active,2)==nil)
+            end
+            for _,calculated in ipairs({false,true}) do
+                group.displaySkillList=calculated and active or nil
+                local chosen=generatedExportSelected(group)
+                assert(chosen==(expected==1 and row or nil))
+            end
+            group.displaySkillList=nil
+            if probe then assert(probe.reads==0) end
+            return tostring(#active)..':'..tostring(group.mainActiveSkill)..':'..tostring(group.mainActiveSkillCalcs)
+        end
+    "#).set_name("@explicit-generated-identity-test-host").exec().unwrap();
+    lua
+}
+
+#[test]
+fn actual_saved_generated_singleton_uses_catalog_routing_in_independent_lifecycles() {
+    let mut expected = None;
+    for jit in [false, true] {
+        for _replay in 0..2 {
+            let lua = generated_routing_components(jit);
+            let observed: String = lua.load(r#"
+                local key='Metadata/Items/Gems/SkillGemFirebolt'
+                local candidates=0
+                for id,gem in pairs(allGems) do
+                    if gem.grantedEffectId=='FireboltPlayer' then
+                        candidates=candidates+1;assert(id==key)
+                    end
+                end
+                assert(candidates==1)
+                local g,row=actualGeneratedFrame()
+                local primary=data.skills.FireboltPlayer
+                local gem=data.gems[key]
+                assert(gem.additionalStatSet1=='FireboltExplosionPlayer')
+                assert(#gem.grantedEffectList==1 and gem.grantedEffectList[1]==primary)
+                assert(gem.additionalGrantedEffectId1==nil)
+                assert(row.gemData==gem and row.grantedEffect==nil)
+                assert(row.count==1 and row.level==11 and row.quality==0)
+                assert(row.enableGlobal1==true and row.enableGlobal2==false)
+                row.enableGlobal2=nil
+                local probe=secondaryProbe(row,false)
+                local build=generatedBuild({g})
+                local grant=suppliedGeneratedGrant()
+                local signatures={}
+                -- Standalone CALCS first must not borrow a preceding MAIN update.
+                for _,mode in ipairs({'CALCS','MAIN','CALCS','MAIN'}) do
+                    local groups=updateGenerated(build,{grant},mode)
+                    assert(#groups==1 and groups[1]==g and g.gemList[1]==row)
+                    assert(row.gemData==gem and row.skillId=='FireboltPlayer')
+                    if mode=='MAIN' then assert(g.sourceItem==grant.sourceItem and row.fromItem) end
+                    signatures[#signatures+1]=observeGenerated(g,row,probe,1)
+                end
+                row.count=3
+                observeGenerated(g,row,probe,1) -- Distinguishes catalog from direct fallback count1.
+                g.groupCount=0;observeGenerated(g,row,probe,1)
+                g.groupCount=4;observeGenerated(g,row,probe,1)
+                assert(probe.reads==0)
+                return table.concat(signatures,'|')
+            "#).eval().unwrap();
+            if let Some(expected) = &expected {
+                assert_eq!(&observed, expected);
+            } else {
+                expected = Some(observed);
+            }
+        }
+    }
+}
+
+#[test]
+fn generated_singleton_secondary_and_independent_selectors_survive_zero_one_zero_filters() {
+    for jit in [false, true] {
+        let lua = generated_routing_components(jit);
+        lua.load(r#"
+            for _,main in ipairs({'absent','nil','1'}) do
+                for _,calcs in ipairs({'absent','nil','1'}) do
+                    for _,secondary in ipairs({'absent','nil','false','true'}) do
+                        for _,filter in ipairs({'hidden','disabled','global'}) do
+                            local ga,ra=copyTable(savedGeneratedGroup),copyTable(savedGeneratedGem)
+                            ga.mainActiveSkill=main~='absent' and main or nil
+                            ga.mainActiveSkillCalcs=calcs~='absent' and calcs or nil
+                            ra.enableGlobal2=secondary~='absent' and secondary or nil
+                            local g,row=loadGenerated(ga,ra)
+                            local decoded=row.enableGlobal2
+                            assert(decoded==(secondary=='true'))
+                            row.enableGlobal2=nil
+                            local probe=secondaryProbe(row,decoded)
+                            local primary=data.skills.FireboltPlayer
+                            local oldHidden,oldGlobal=primary.hideFromSideBar,primary.hasGlobalEffect
+                            local build=generatedBuild({g})
+                            updateGenerated(build,{suppliedGeneratedGrant()},'MAIN')
+                            assert(build.skillsTab.socketGroupList[1]==g and g.gemList[1]==row)
+                            for _,closed in ipairs({true,false,true}) do
+                                if filter=='hidden' then primary.hideFromSideBar=closed
+                                elseif filter=='disabled' then row.enabled=not closed
+                                else primary.hasGlobalEffect=true;row.enableGlobal1=not closed end
+                                observeGenerated(g,row,probe,closed and 0 or 1)
+                                assert(g.mainActiveSkill==1 and g.mainActiveSkillCalcs==1)
+                            end
+                            primary.hideFromSideBar,primary.hasGlobalEffect=oldHidden,oldGlobal
+                        end
+                    end
+                end
+            end
+            -- Independent out-of-domain zero controls expose accidental shared selectors.
+            local g,row=actualGeneratedFrame()
+            local active=admitted(g)
+            g.mainActiveSkill=0;g.mainActiveSkillCalcs=1
+            assert(generatedSelected(g,'MAIN',active,1)==nil)
+            assert(generatedSelected(g,'CALCS',active,1)==active[1])
+            assert(generatedExportSelected(g)==nil)
+            g.mainActiveSkill=1;g.mainActiveSkillCalcs=0
+            assert(generatedSelected(g,'MAIN',active,1)==active[1])
+            assert(generatedSelected(g,'CALCS',active,1)==nil)
+            assert(generatedExportSelected(g)==row)
+        "#).exec().unwrap();
+    }
+}
+
+#[test]
+fn generated_routing_counterexamples_preserve_exact_source_and_cardinality_boundaries() {
+    for jit in [false, true] {
+        let lua = generated_routing_components(jit);
+        lua.load(r#"
+            -- The actual constructor replaces unmatched saved groups. A same
+            -- effect output is not a receipt for the old physical source object.
+            for _,field in ipairs({'source','slot','level'}) do
+                local g,row=actualGeneratedFrame()
+                if field=='level' then row.level=12 else g[field]='unmatched-source-control' end
+                local build=generatedBuild({g})
+                local groups=updateGenerated(build,{suppliedGeneratedGrant()},'MAIN')
+                assert(#groups==1 and groups[1]~=g and groups[1].gemList[1]~=row)
+                assert(groups[1].gemList[1].skillId=='FireboltPlayer')
+            end
+            local a,ar=actualGeneratedFrame()
+            local b,br=actualGeneratedFrame()
+            local duplicates=updateGenerated(generatedBuild({a,b}),{suppliedGeneratedGrant()},'MAIN')
+            assert(#duplicates==1)
+            assert(duplicates[1].gemList[1]==ar or duplicates[1].gemList[1]==br)
+            -- Do not claim which duplicate pairs() chooses. Existing Import
+            -- correspondence must refuse this ambiguous saved representation.
+
+            local primary=data.skills.FireboltPlayer
+            local map=data.gemForSkill
+            local savedMap=map[primary]
+            map[primary]=nil
+            local ga,ra=copyTable(savedGeneratedGroup),copyTable(savedGeneratedGem)
+            ra.gemId=nil;ra.variantId=nil;ra.count='3'
+            local g,row=loadGenerated(ga,ra)
+            assert(row.gemData==nil and row.grantedEffect==primary)
+            updateGenerated(generatedBuild({g}),{suppliedGeneratedGrant()},'MAIN')
+            assert(row.gemData==nil and row.grantedEffect==primary)
+            local active=admitted(g)
+            assert(#active==1 and active[1].activeEffect.srcInstance==row)
+            active[1].socketGroup=g
+            local count,enabled=calcs.getActiveSkillCount(active[1])
+            assert(count==1 and enabled==true and row.count==3)
+            map[primary]=savedMap
+
+            -- A second catalog Gem sharing the primary can change the reverse
+            -- route without changing the primary ID. Real constructor used on
+            -- an explicitly synthetic declaration; no new gameplay claim.
+            local alias=copyTable(allGems['Metadata/Items/Gems/SkillGemFirebolt'])
+            alias.variantId='SyntheticFireboltAlias'
+            alias.additionalGrantedEffectId1='IceNovaPlayer'
+            constructGem(alias,'SyntheticFireboltAlias')
+            data.gems.SyntheticFireboltAlias=alias
+            local other=data.skills.IceNovaPlayer
+            other.hasGlobalEffect=true
+            local g,row=actualGeneratedFrame()
+            row.enableGlobal2=nil
+            local probe=secondaryProbe(row,false)
+            updateGenerated(generatedBuild({g}),{suppliedGeneratedGrant()},'MAIN')
+            assert(row.gemData==alias and #alias.grantedEffectList==2)
+            assert(#admitted(g)==1 and probe.reads>0)
+            probe.value=true
+            local active=admitted(g)
+            assert(#active==2 and active[2].activeEffect.srcInstance==row)
+            assert(active[2].activeEffect.grantedEffect==other)
+            g.mainActiveSkill=1;g.mainActiveSkillCalcs=2
+            assert(generatedSelected(g,'MAIN',active,1)==active[1])
+            assert(generatedSelected(g,'CALCS',active,1)==active[2])
+        "#).exec().unwrap();
+    }
+}
+
+#[test]
+fn generated_singleton_selector_neutrality_survives_actual_group_replacement() {
+    let mut expected = None;
+    for jit in [false, true] {
+        for _replay in 0..2 {
+            let lua = generated_routing_components(jit);
+            let observed: String = lua.load(r#"
+                local signatures={}
+                local primary=data.skills.FireboltPlayer
+                local oldHidden=primary.hideFromSideBar
+                for _,main in ipairs({'nil','1'}) do
+                    for _,calcs in ipairs({'nil','1'}) do
+                        for _,secondary in ipairs({'nil','false','true'}) do
+                            local previous={}
+                            for _,replacement in ipairs({false,true}) do
+                                local ga,ra=copyTable(savedGeneratedGroup),copyTable(savedGeneratedGem)
+                                ga.mainActiveSkill=main
+                                ga.mainActiveSkillCalcs=calcs
+                                ra.enableGlobal2=secondary
+                                -- Exact level12 is only a source matching control:
+                                -- the host supplies level11, so the real update
+                                -- must replace this saved group. No native level,
+                                -- quality, count or participation claim follows.
+                                if replacement then ra.level='12' end
+                                local savedGroup,savedRow=loadGenerated(ga,ra)
+                                assert(savedGroup.mainActiveSkill==1 and savedGroup.mainActiveSkillCalcs==1)
+                                local build=generatedBuild({savedGroup})
+                                local grant=suppliedGeneratedGrant()
+                                local groups=updateGenerated(build,{grant},'MAIN')
+                                assert(#groups==1)
+                                local group,row=groups[1],groups[1].gemList[1]
+                                assert(#group.gemList==1)
+                                if replacement then
+                                    assert(group~=savedGroup and row~=savedRow)
+                                    assert(group.mainActiveSkill==nil and group.mainActiveSkillCalcs==nil)
+                                    assert(row.enableGlobal2==nil)
+                                else
+                                    assert(group==savedGroup and row==savedRow)
+                                    assert(group.mainActiveSkill==1 and group.mainActiveSkillCalcs==1)
+                                    assert(row.enableGlobal2==(secondary=='true'))
+                                end
+                                -- Preserve the observed state difference in the
+                                -- replay signature. Only the selected-effect
+                                -- meaning, not the objects or raw state, agrees.
+                                signatures[#signatures+1]=table.concat({
+                                    tostring(replacement),main,calcs,secondary,
+                                    tostring(group.mainActiveSkill),tostring(group.mainActiveSkillCalcs),
+                                    tostring(row.enableGlobal2)},':')
+                                assert(group.source==grant.source and group.slot==grant.slotName)
+                                assert(row.gemData==data.gems['Metadata/Items/Gems/SkillGemFirebolt'])
+                                assert(row.grantedEffect==nil)
+                                local originalSecondary=row.enableGlobal2
+                                row.enableGlobal2=nil
+                                local probe=secondaryProbe(row,originalSecondary)
+                                local trace={}
+                                -- This predicate control isolates selection
+                                -- cardinality; it does not model gameplay
+                                -- activation or compare enabled/count values.
+                                for _,closed in ipairs({true,false,true}) do
+                                    primary.hideFromSideBar=closed
+                                    local active=admitted(group)
+                                    local count=closed and 0 or 1
+                                    assert(#active==count)
+                                    for _,skill in ipairs(active) do
+                                        assert(skill.activeEffect.srcInstance==row)
+                                        assert(skill.activeEffect.grantedEffect==primary)
+                                    end
+                                    for _,mode in ipairs({'MAIN','CALCS'}) do
+                                        local chosen=generatedSelected(group,mode,active,1)
+                                        assert(chosen==(count==1 and active[1] or nil))
+                                        assert(generatedSelected(group,mode,active,2)==nil)
+                                        trace[#trace+1]=mode..':'..tostring(chosen and chosen.activeEffect.grantedEffect.id)
+                                    end
+                                    for _,calculated in ipairs({false,true}) do
+                                        group.displaySkillList=calculated and active or nil
+                                        assert(generatedExportSelected(group)==(count==1 and row or nil))
+                                        trace[#trace+1]='export:'..tostring(calculated)..':'..tostring(count)
+                                    end
+                                    group.displaySkillList=nil
+                                    assert(probe.reads==0)
+                                end
+                                primary.hideFromSideBar=oldHidden
+                                if replacement then
+                                    assert(table.concat(trace,'|')==table.concat(previous,'|'))
+                                else
+                                    previous=trace
+                                end
+                                signatures[#signatures+1]=table.concat(trace,'|')
+                            end
+                        end
+                    end
+                end
+                return table.concat(signatures,'\n')
+            "#).eval().unwrap();
+            if let Some(expected) = &expected {
+                assert_eq!(&observed, expected);
+            } else {
+                expected = Some(observed);
+            }
+        }
+    }
+}
+
+#[path = "support/constructed_source_selector.rs"]
+mod constructed_source_selector;

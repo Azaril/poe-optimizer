@@ -1,0 +1,1327 @@
+{
+  "kind": "primary-requested-count-source-evidence",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+    "bytes": 217603
+  },
+  "archives": [
+    {
+      "file": "data/owned/poe2/3887ae68/reporting-inclusion/SkillsTab.lua.gz",
+      "source": {
+        "path": "src/Classes/SkillsTab.lua",
+        "bytes": 69652,
+        "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+      },
+      "raw_bytes": 69652,
+      "compressed_bytes": 14532,
+      "compressed_sha256": "ba6c03535d271f8293588cc1ddc1e59ee6f46cc26e9336257d0d91bbd52558e2"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/configuration-enemy-speed-inputs/CalcDefence.lua.gz",
+      "source": {
+        "path": "src/Modules/CalcDefence.lua",
+        "bytes": 239878,
+        "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+      },
+      "raw_bytes": 239878,
+      "compressed_bytes": 39593,
+      "compressed_sha256": "9e232710732a7223b87b7174c7bd8a0531309675b76c605e07df55b0f72d6bf3"
+    },
+    {
+      "file": "data/owned/poe2/3887ae68/reporting-inclusion/Calcs.lua.gz",
+      "source": {
+        "path": "src/Modules/Calcs.lua",
+        "bytes": 35868,
+        "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+      },
+      "raw_bytes": 35868,
+      "compressed_bytes": 8318,
+      "compressed_sha256": "7b90df1e4e63d65e14be2d272fc7800fc3a512c1e8380c6c277ee25f510bc1f6"
+    }
+  ],
+  "spans": [
+    {
+      "file": "src/Classes/SkillsTab.lua",
+      "first": 303,
+      "last": 405,
+      "meaning": "load saved group/occurrence counts and independent reporting",
+      "sha256": "5e34bdfe94c3d4446ba85edbe1dc5d8c6cd5a1ab063e076a5aeedadf2555b9b6",
+      "text": "function SkillsTabClass:LoadSkill(node, skillSetId)\n\tif node.elem ~= \"Skill\" then\n\t\treturn\n\tend\n\n\tlocal socketGroup = { }\n\tsocketGroup.enabled = node.attrib.active == \"true\" or node.attrib.enabled == \"true\"\n\tsocketGroup.includeInFullDPS = node.attrib.includeInFullDPS and node.attrib.includeInFullDPS == \"true\"\n\tsocketGroup.groupCount = tonumber(node.attrib.groupCount)\n\tsocketGroup.label = node.attrib.label\n\tsocketGroup.slot = node.attrib.slot\n\tsocketGroup.source = node.attrib.source\n\tsocketGroup.mainActiveSkill = tonumber(node.attrib.mainActiveSkill) or 1\n\tsocketGroup.mainActiveSkillCalcs = tonumber(node.attrib.mainActiveSkillCalcs) or 1\n\tsocketGroup.gemList = { }\n\tfor _, child in ipairs(node) do\n\t\tlocal gemInstance = { }\n\t\tgemInstance.nameSpec = sanitiseText(child.attrib.nameSpec or \"\")\n\t\tif child.attrib.gemId then\n\t\t\tlocal gemData\n\t\t\tlocal possibleVariants = self.build.data.gemsByGameId[child.attrib.gemId]\n\t\t\tif possibleVariants then\n\t\t\t\t-- If it is a known gem, try to determine which variant is used\n\t\t\t\tif child.attrib.variantId and possibleVariants[child.attrib.variantId] then\n\t\t\t\t\t-- New save format from 3.23 that stores the specific variation (transfiguration)\n\t\t\t\t\tgemData = possibleVariants[child.attrib.variantId]\n\t\t\t\telse\n\t\t\t\t\t-- If a gem has changed names between updates, assumed it's the first gem in the list\n\t\t\t\t\tfor _, variant in pairs(possibleVariants) do\n\t\t\t\t\t\tgemData = variant\n\t\t\t\t\t\tbreak\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\t\tif gemData then\n\t\t\t\tgemInstance.gemId = gemData.id\n\t\t\t\tgemInstance.skillId = gemData.grantedEffectId\n\t\t\t\tif gemData.nameSpec then\n\t\t\t\t\tgemInstance.nameSpec = gemData.nameSpec\n\t\t\t\tend\n\t\t\tend\n\t\telseif child.attrib.skillId then\n\t\t\tlocal grantedEffect = self.build.data.skills[child.attrib.skillId]\n\t\t\tif grantedEffect then\n\t\t\t\tgemInstance.gemId = self.build.data.gemForSkill[grantedEffect]\n\t\t\t\tgemInstance.skillId = grantedEffect.id\n\t\t\t\tgemInstance.nameSpec = grantedEffect.name\n\t\t\tend\n\t\tend\n\t\tgemInstance.level = tonumber(child.attrib.level)\n\t\tgemInstance.quality = tonumber(child.attrib.quality)\n\t\t-- Optional author note for the PoE2 .build export (Shift+Right-Click on the gem to set).\n\t\tgemInstance.note = child.attrib.note\n\t\tgemInstance.enabled = not child.attrib.enabled and true or child.attrib.enabled == \"true\"\n\t\tgemInstance.enableGlobal1 = not child.attrib.enableGlobal1 or child.attrib.enableGlobal1 == \"true\"\n\t\tgemInstance.enableGlobal2 = child.attrib.enableGlobal2 == \"true\"\n\t\tgemInstance.count = tonumber(child.attrib.count) or 1\n\t\tgemInstance.statSet = { index = tonumber(child.attrib.statSetIndex) or 1 }\n\t\tgemInstance.statSetCalcs = { index = tonumber(child.attrib.statSetIndexCalcs) or 1 }\n\t\tgemInstance.skillPart = tonumber(child.attrib.skillPart)\n\t\tgemInstance.skillPartCalcs = tonumber(child.attrib.skillPartCalcs)\n\t\tgemInstance.skillStageCount = tonumber(child.attrib.skillStageCount)\n\t\tgemInstance.skillStageCountCalcs = tonumber(child.attrib.skillStageCountCalcs)\n\t\tgemInstance.skillMineCount = tonumber(child.attrib.skillMineCount)\n\t\tgemInstance.skillMineCountCalcs = tonumber(child.attrib.skillMineCountCalcs)\n\t\tgemInstance.skillMinion = child.attrib.skillMinion\n\t\tgemInstance.skillMinionCalcs = child.attrib.skillMinionCalcs\n\t\tgemInstance.skillMinionItemSet = tonumber(child.attrib.skillMinionItemSet)\n\t\tgemInstance.skillMinionItemSetCalcs = tonumber(child.attrib.skillMinionItemSetCalcs)\n\t\tgemInstance.skillMinionSkill = tonumber(child.attrib.skillMinionSkill)\n\t\tgemInstance.skillMinionSkillCalcs = tonumber(child.attrib.skillMinionSkillCalcs)\n\t\tgemInstance.corrupted = child.attrib.corrupted == \"true\"\n\t\tgemInstance.corruptLevel = tonumber(child.attrib.corruptLevel) or 0\n\t\tgemInstance.statSet = { }\n\t\tgemInstance.statSetCalcs = { }\n\t\tgemInstance.skillMinionSkillStatSetIndexLookup = { }\n\t\tgemInstance.skillMinionSkillStatSetIndexLookupCalcs = { }\n\t\tfor _, child in ipairs(child) do\n\t\t\tif child.elem == \"StatSetIndex\" and child.attrib.grantedEffect then\n\t\t\t\tgemInstance.statSet[child.attrib.grantedEffect] = tonumber(child.attrib.index)\n\t\t\telseif child.elem == \"StatSetCalcsIndex\" and child.attrib.grantedEffect then\n\t\t\t\tgemInstance.statSetCalcs[child.attrib.grantedEffect] = tonumber(child.attrib.index)\n\t\t\telseif child.elem == \"MinionSkillIndexLookup\" and child.attrib.grantedEffect then\n\t\t\t\tgemInstance.skillMinionSkillStatSetIndexLookup[child.attrib.grantedEffect] = { }\n\t\t\t\tfor _, map in ipairs(child) do\n\t\t\t\t\tgemInstance.skillMinionSkillStatSetIndexLookup[child.attrib.grantedEffect][tonumber(map.attrib.skillIndex)] = tonumber(map.attrib.statSetIndex)\n\t\t\t\tend\n\t\t\telseif child.elem == \"MinionSkillIndexLookupCalcs\" and child.attrib.grantedEffect then\n\t\t\t\tgemInstance.skillMinionSkillStatSetIndexLookupCalcs[child.attrib.grantedEffect] = { }\n\t\t\t\tfor _, map in ipairs(child) do\n\t\t\t\t\tgemInstance.skillMinionSkillStatSetIndexLookupCalcs[child.attrib.grantedEffect][tonumber(map.attrib.skillIndex)] = tonumber(map.attrib.statSetIndex)\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\n\t\tt_insert(socketGroup.gemList, gemInstance)\n\tend\n\tif node.attrib.skillPart and socketGroup.gemList[1] then\n\t\tsocketGroup.gemList[1].skillPart = tonumber(node.attrib.skillPart)\n\tend\n\tself:ProcessSocketGroup(socketGroup)\n\tt_insert(self.skillSets[skillSetId].socketGroupList, socketGroup)\nend\n"
+    },
+    {
+      "file": "src/Modules/CalcDefence.lua",
+      "first": 147,
+      "last": 173,
+      "meaning": "matching source count and independent enabled return",
+      "sha256": "253223a938d72e7432b7143b71bdc9b657d45e592d755e3773535418c873ce48",
+      "text": "-- Return the gem count of the specified skill and it's enabled status\n---@param activeSkill table\nfunction calcs.getActiveSkillCount(activeSkill)\n\tif not activeSkill.socketGroup then\n\t\treturn 1, true\n\telseif activeSkill.socketGroup.groupCount then\n\t\treturn activeSkill.socketGroup.groupCount, true\n\telse\n\t\tlocal gemList = activeSkill.socketGroup.gemList\n\t\tfor _, gemData in pairs(gemList) do\n\t\t\tif gemData.gemData then\n\t\t\t\tif gemData.gemData.vaalGem then\n\t\t\t\t\tif activeSkill.activeEffect.grantedEffect == gemData.gemData.grantedEffectList[1] then\n\t\t\t\t\t\treturn gemData.count or 1,  gemData.enableGlobal1 == true\n\t\t\t\t\telseif activeSkill.activeEffect.grantedEffect == gemData.gemData.grantedEffectList[2] then\n\t\t\t\t\t\treturn gemData.count or 1,  gemData.enableGlobal2 == true\n\t\t\t\t\tend\n\t\t\t\telse\n\t\t\t\t\tif (activeSkill.activeEffect.grantedEffect == gemData.gemData.grantedEffect and not gemData.gemData.grantedEffect.support) or isValueInArray(gemData.gemData.additionalGrantedEffects, activeSkill.activeEffect.grantedEffect) then\n\t\t\t\t\t\treturn gemData.count or 1, true\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\n\treturn 1, true\nend\n"
+    },
+    {
+      "file": "src/Modules/CalcDefence.lua",
+      "first": 279,
+      "last": 291,
+      "meaning": "reservation consumer is conditional; no universal reservation/population inference",
+      "sha256": "3e81e87cc5a4b003bcf48c140d287be89ae57e367850fef9a06d43342c67e8d4",
+      "text": "\t\t\t\t\tend\n\t\t\t\tend\n\t\t\t\tif activeSkill.activeMineCount then\n\t\t\t\t\tvalues.reservedFlat = values.reservedFlat * activeSkill.activeMineCount\n\t\t\t\t\tvalues.reservedPercent = values.reservedPercent * activeSkill.activeMineCount\n\t\t\t\tend\n\t\t\t\tif activeSkill.skillTypes[SkillType.MultipleReservation] or isTotemAndAncestralBond then\n\t\t\t\t\tlocal activeSkillCount, enabled = calcs.getActiveSkillCount(activeSkill)\n\t\t\t\t\tvalues.count = activeSkillCount\n\t\t\t\t\tlocal minionFreeSpiritCount = skillModList:Sum(\"BASE\", skillCfg, \"MinionFreeSpiritCount\")\n\t\t\t\t\tvalues.reservedFlat = values.reservedFlat * m_max(activeSkillCount - minionFreeSpiritCount, 0)\n\t\t\t\tend\n\t\t\t\t\t-- Blood Sacrament increases reservation per stage channelled\n"
+    },
+    {
+      "file": "src/Modules/Calcs.lua",
+      "first": 153,
+      "last": 179,
+      "meaning": "full DPS accumulation consumes count separately",
+      "sha256": "ceefba5497ee2e596a987c044291ec0a6d242b97d09e95466468755541446622",
+      "text": "\tend\n\treturn captured\nend\n\nlocal mergeStatsSpec = {\n\t{ key = \"BleedDPS\", target = \"bleedDPS\", mode = \"max\" },\n\t{ key = \"CorruptingBloodDPS\", target = \"corruptingBloodDPS\", mode = \"max\" },\n\t{ key = \"IgniteDPS\", target = \"igniteDPS\", mode = \"max\" },\n\t{ key = \"BurningGroundDPS\", target = \"burningGroundDPS\", mode = \"max\" },\n\t{ key = \"PoisonDPS\", target = \"poisonDPS\", mode = \"max\" },\n\t{ key = \"CausticGroundDPS\", target = \"causticGroundDPS\", mode = \"max\" },\n\t{ key = \"ImpaleDPS\", target = \"impaleDPS\", mode = \"add\", scaled = true },\n\t{ key = \"DecayDPS\", target = \"decayDPS\", mode = \"add\" },\n\t{ key = \"CullMultiplier\", target = \"cullingMulti\", mode = \"cull\" },\n}\n\n-- Merge one captured calc pass into the Full DPS totals\nlocal function mergeFullDPSPass(fullDPS, sources, pass)\n\tfor _, actor in ipairs(pass.actors) do\n\t\tlocal out = actor.out\n\t\tif out.TotalDPS and out.TotalDPS > 0 then\n\t\t\tt_insert(fullDPS.skills, { name = actor.name, dps = out.TotalDPS, count = actor.count, trigger = actor.trigger, skillPart = actor.skillPart })\n\t\t\tfullDPS.combinedDPS = fullDPS.combinedDPS + out.TotalDPS * actor.count\n\t\tend\n\t\tfor _, stat in ipairs(mergeStatsSpec) do\n\t\t\tlocal value = out[stat.key]\n\t\t\tif value then\n"
+    },
+    {
+      "file": "src/Modules/Calcs.lua",
+      "first": 286,
+      "last": 316,
+      "meaning": "full DPS inclusion, enablement and count remain distinct",
+      "sha256": "676e8b1897036cd0cdea5a7327a18fb6842626c63d129f165859377735a21ac5",
+      "text": "\t}\n\n\n\tlocal sources = { }\n\n\tfor _, activeSkill in ipairs(fullEnv.player.activeSkillList) do\n\t\tif activeSkill.socketGroup and activeSkill.socketGroup.includeInFullDPS then\n\t\t\tlocal uuid = cacheStore and cacheSkillUUID(activeSkill, fullEnv)\n\t\t\tlocal canCacheSkill = not (activeSkill.triggeredBy or activeSkill.skillData.triggered)\n\t\t\tlocal cachedPasses\n\t\t\tif canCacheSkill and surfaceSame and activeSkill.baseSkillModList then\n\t\t\t\tlocal ref = cacheStore.refs[uuid]\n\t\t\t\tif ref and cacheStore.snapshots[uuid] and modListsEqual(ref, activeSkill.baseSkillModList) then\n\t\t\t\t\tcachedPasses = cacheStore.snapshots[uuid]\n\t\t\t\tend\n\t\t\tend\n\t\t\tlocal activeSkillCount, enabled\n\t\t\tif not cachedPasses then\n\t\t\t\tactiveSkillCount, enabled = calcs.getActiveSkillCount(activeSkill)\n\t\t\tend\n\t\t\tif cachedPasses then\n\t\t\t\t-- This skill's own mod list and the coupling surface are unchanged since the\n\t\t\t\t-- capture pass, so its results cannot have changed: merge the cached passes\n\t\t\t\tfor _, pass in ipairs(cachedPasses) do\n\t\t\t\t\tmergeFullDPSPass(fullDPS, sources, pass)\n\t\t\t\tend\n\t\t\telseif enabled then\n\t\t\t\tlocal ownRef\n\t\t\t\tif canCacheSkill and cacheStore and fullDPSCache.capture and activeSkill.baseSkillModList then\n\t\t\t\t\t-- Reference the skill's pre-perform mod list for later input diffing\n\t\t\t\t\townRef = { }\n"
+    }
+  ],
+  "count_schema": {
+    "kind": "usage_policy",
+    "value": {
+      "id": {
+        "kind": "usage_policy",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000326a"
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "targets": [
+            "skill"
+          ],
+          "declarations": {
+            "parameters": {
+              "members": [
+                {
+                  "declaration": {
+                    "kind": "usage_policy",
+                    "definition": {
+                      "kind": "usage_policy",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000326a"
+                    }
+                  },
+                  "slot": {
+                    "kind": "parameter_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000326b"
+                  }
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "choices": {
+              "members": [],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "grants": {
+              "members": [],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "actors": {
+              "members": [],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "skill_grants": {
+              "members": [],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "outputs": {
+              "members": [],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "sockets": {
+              "members": [],
+              "closure": {
+                "kind": "complete"
+              }
+            }
+          },
+          "scenario_skill_applicability": null
+        }
+      }
+    }
+  },
+  "count_parameter": {
+    "kind": "parameter",
+    "value": {
+      "id": {
+        "declaration": {
+          "kind": "usage_policy",
+          "definition": {
+            "kind": "usage_policy",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000326a"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000326b"
+        }
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "value": {
+            "kind": "integer",
+            "value": {
+              "minimum": 0,
+              "maximum": 4
+            }
+          },
+          "presence": "required_once",
+          "sites": [
+            "usage_policy_parameter"
+          ]
+        }
+      }
+    }
+  },
+  "historical_observations": {
+    "offering": {
+      "files": [
+        {
+          "path": "runs/owned-offering-occurrence-inputs-01/source-jit-off.json",
+          "sha256": "558f4bbb87d80502093792a7536833a62aad645d98ffb60391d31b64d3a7421a",
+          "bytes": 3055579
+        },
+        {
+          "path": "runs/owned-offering-occurrence-inputs-01/source-jit-on.json",
+          "sha256": "558f4bbb87d80502093792a7536833a62aad645d98ffb60391d31b64d3a7421a",
+          "bytes": 3055579
+        }
+      ],
+      "observations": [
+        {
+          "name": "original",
+          "source_ordinal": 221,
+          "saved_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "count": "1",
+            "enableGlobal1": "true",
+            "enableGlobal2": "true",
+            "enabled": "true",
+            "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+            "level": "20",
+            "nameSpec": "Pain Offering",
+            "quality": "0",
+            "skillId": "PainOfferingPlayer",
+            "variantId": "PainOffering"
+          },
+          "saved_group_attributes": {
+            "enabled": "true",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "mainActiveSkillCalcs": "nil"
+          },
+          "vaal_gem": false,
+          "source_methods_preserved": true,
+          "modes": {
+            "CALCS": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 1,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": false,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ],
+            "MAIN": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 1,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": false,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "count-three",
+          "source_ordinal": 221,
+          "saved_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "count": "3",
+            "enableGlobal1": "true",
+            "enableGlobal2": "true",
+            "enabled": "true",
+            "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+            "level": "20",
+            "nameSpec": "Pain Offering",
+            "quality": "0",
+            "skillId": "PainOfferingPlayer",
+            "variantId": "PainOffering"
+          },
+          "saved_group_attributes": {
+            "enabled": "true",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "mainActiveSkillCalcs": "nil"
+          },
+          "vaal_gem": false,
+          "source_methods_preserved": true,
+          "modes": {
+            "CALCS": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 3,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": false,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ],
+            "MAIN": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 3,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": false,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "group-four",
+          "source_ordinal": 221,
+          "saved_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "count": "3",
+            "enableGlobal1": "true",
+            "enableGlobal2": "true",
+            "enabled": "true",
+            "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+            "level": "20",
+            "nameSpec": "Pain Offering",
+            "quality": "0",
+            "skillId": "PainOfferingPlayer",
+            "variantId": "PainOffering"
+          },
+          "saved_group_attributes": {
+            "enabled": "true",
+            "groupCount": "4",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "mainActiveSkillCalcs": "nil"
+          },
+          "vaal_gem": false,
+          "source_methods_preserved": true,
+          "modes": {
+            "CALCS": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 4,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": false,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ],
+            "MAIN": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 4,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": false,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "group-zero",
+          "source_ordinal": 221,
+          "saved_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "count": "3",
+            "enableGlobal1": "true",
+            "enableGlobal2": "true",
+            "enabled": "true",
+            "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+            "level": "20",
+            "nameSpec": "Pain Offering",
+            "quality": "0",
+            "skillId": "PainOfferingPlayer",
+            "variantId": "PainOffering"
+          },
+          "saved_group_attributes": {
+            "enabled": "true",
+            "groupCount": "0",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "mainActiveSkillCalcs": "nil"
+          },
+          "vaal_gem": false,
+          "source_methods_preserved": true,
+          "modes": {
+            "CALCS": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 0,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": false,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ],
+            "MAIN": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 0,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": false,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "full-dps-one",
+          "source_ordinal": 221,
+          "saved_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "count": "1",
+            "enableGlobal1": "true",
+            "enableGlobal2": "true",
+            "enabled": "true",
+            "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+            "level": "20",
+            "nameSpec": "Pain Offering",
+            "quality": "0",
+            "skillId": "PainOfferingPlayer",
+            "variantId": "PainOffering"
+          },
+          "saved_group_attributes": {
+            "enabled": "true",
+            "includeInFullDPS": "true",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "mainActiveSkillCalcs": "nil"
+          },
+          "vaal_gem": false,
+          "source_methods_preserved": true,
+          "modes": {
+            "CALCS": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 1,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": true,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ],
+            "MAIN": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 1,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": true,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "full-dps-three",
+          "source_ordinal": 221,
+          "saved_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "count": "3",
+            "enableGlobal1": "true",
+            "enableGlobal2": "true",
+            "enabled": "true",
+            "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+            "level": "20",
+            "nameSpec": "Pain Offering",
+            "quality": "0",
+            "skillId": "PainOfferingPlayer",
+            "variantId": "PainOffering"
+          },
+          "saved_group_attributes": {
+            "enabled": "true",
+            "includeInFullDPS": "true",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "mainActiveSkillCalcs": "nil"
+          },
+          "vaal_gem": false,
+          "source_methods_preserved": true,
+          "modes": {
+            "CALCS": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 3,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": true,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ],
+            "MAIN": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 3,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": true,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "full-dps-group-four",
+          "source_ordinal": 221,
+          "saved_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "count": "3",
+            "enableGlobal1": "true",
+            "enableGlobal2": "true",
+            "enabled": "true",
+            "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+            "level": "20",
+            "nameSpec": "Pain Offering",
+            "quality": "0",
+            "skillId": "PainOfferingPlayer",
+            "variantId": "PainOffering"
+          },
+          "saved_group_attributes": {
+            "enabled": "true",
+            "groupCount": "4",
+            "includeInFullDPS": "true",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "mainActiveSkillCalcs": "nil"
+          },
+          "vaal_gem": false,
+          "source_methods_preserved": true,
+          "modes": {
+            "CALCS": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 4,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": true,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ],
+            "MAIN": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 4,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": true,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "full-dps-group-zero",
+          "source_ordinal": 221,
+          "saved_attributes": {
+            "corruptLevel": "0",
+            "corrupted": "false",
+            "count": "3",
+            "enableGlobal1": "true",
+            "enableGlobal2": "true",
+            "enabled": "true",
+            "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+            "level": "20",
+            "nameSpec": "Pain Offering",
+            "quality": "0",
+            "skillId": "PainOfferingPlayer",
+            "variantId": "PainOffering"
+          },
+          "saved_group_attributes": {
+            "enabled": "true",
+            "groupCount": "0",
+            "includeInFullDPS": "true",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "mainActiveSkillCalcs": "nil"
+          },
+          "vaal_gem": false,
+          "source_methods_preserved": true,
+          "modes": {
+            "CALCS": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 0,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": true,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ],
+            "MAIN": [
+              {
+                "effect": "PainOfferingPlayer",
+                "physical_source": true,
+                "count": 0,
+                "count_enabled": true,
+                "global_field": "enableGlobal1",
+                "global_value": true,
+                "full_dps_group_included": true,
+                "reservation_guard_inputs": {
+                  "ancestral_bond": false,
+                  "has_reservation": false,
+                  "multiple_reservation": false,
+                  "reservation_becomes_cost": false,
+                  "summons_totem": false,
+                  "supported_by_autoexertion": false
+                },
+                "umbral_guard_inputs": {
+                  "attached_minion": false,
+                  "buff_value": 0,
+                  "flag": false,
+                  "minion_data": false,
+                  "variant_id": "PainOffering"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "scope": "executed1/3 and group4/0; no universal gameplay maximum or number-of-Actors claim"
+    },
+    "frost": {
+      "files": [
+        {
+          "path": "runs/owned-frost-bomb-usage-source-01/source-jit-off.json",
+          "sha256": "5c6afc8d9f48b826e2c26f0e289c1276f57c86eee4ff6654ef303ed7167c2e65",
+          "bytes": 11285477
+        },
+        {
+          "path": "runs/owned-frost-bomb-usage-source-01/source-jit-on.json",
+          "sha256": "5c6afc8d9f48b826e2c26f0e289c1276f57c86eee4ff6654ef303ed7167c2e65",
+          "bytes": 11285477
+        }
+      ],
+      "declared_count_domain": [
+        1
+      ],
+      "observations": [
+        {
+          "name": "original-04",
+          "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+          "xml_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711",
+          "source_methods_preserved": true,
+          "selected": [
+            {
+              "source_ordinal": 119,
+              "physical_id": "Metadata/Items/Gems/SkillGemFrostBomb",
+              "attributes": {
+                "corruptLevel": "0",
+                "corrupted": "nil",
+                "count": "1",
+                "enableGlobal1": "true",
+                "enableGlobal2": "true",
+                "enabled": "true",
+                "gemId": "Metadata/Items/Gems/SkillGemFrostBomb",
+                "level": "18",
+                "nameSpec": "Frost Bomb",
+                "quality": "0",
+                "skillId": "FrostBombPlayer",
+                "variantId": "FrostBomb"
+              },
+              "group": 5,
+              "group_attributes": {
+                "enabled": "true",
+                "includeInFullDPS": "nil",
+                "label": "",
+                "mainActiveSkill": "nil",
+                "mainActiveSkillCalcs": "nil"
+              },
+              "modes": {
+                "MAIN": [
+                  {
+                    "effect": "FrostBombPlayer",
+                    "count": 1,
+                    "count_enabled": true,
+                    "has_global_effect": true,
+                    "physical_source": true
+                  }
+                ],
+                "CALCS": [
+                  {
+                    "effect": "FrostBombPlayer",
+                    "count": 1,
+                    "count_enabled": true,
+                    "has_global_effect": true,
+                    "physical_source": true
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "original-05",
+          "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+          "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+          "source_methods_preserved": true,
+          "selected": [
+            {
+              "source_ordinal": 234,
+              "physical_id": "Metadata/Items/Gems/SkillGemFrostBomb",
+              "attributes": {
+                "corruptLevel": "0",
+                "corrupted": "false",
+                "count": "1",
+                "enableGlobal1": "true",
+                "enableGlobal2": "true",
+                "enabled": "true",
+                "gemId": "Metadata/Items/Gems/SkillGemFrostBomb",
+                "level": "20",
+                "nameSpec": "Frost Bomb",
+                "quality": "0",
+                "skillId": "FrostBombPlayer",
+                "variantId": "FrostBomb"
+              },
+              "group": 10,
+              "group_attributes": {
+                "enabled": "true",
+                "includeInFullDPS": "nil",
+                "label": "",
+                "mainActiveSkill": "nil",
+                "mainActiveSkillCalcs": "nil"
+              },
+              "modes": {
+                "MAIN": [
+                  {
+                    "effect": "FrostBombPlayer",
+                    "count": 1,
+                    "count_enabled": true,
+                    "has_global_effect": true,
+                    "physical_source": true
+                  }
+                ],
+                "CALCS": [
+                  {
+                    "effect": "FrostBombPlayer",
+                    "count": 1,
+                    "count_enabled": true,
+                    "has_global_effect": true,
+                    "physical_source": true
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "scope": "source-executed count1 only; no broader Frost execution/parity claim; first-load cache bug remains separately classified"
+    }
+  },
+  "shared_count_template": {
+    "policy": {
+      "kind": "usage_policy",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000326a"
+    },
+    "parameters": [
+      {
+        "slot": {
+          "declaration": {
+            "kind": "usage_policy",
+            "definition": {
+              "kind": "usage_policy",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000326a"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000326b"
+          }
+        },
+        "source": {
+          "kind": "containing_group_override",
+          "group": {
+            "id": "ice-nova-groupcount",
+            "codec": {
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "whitespace": "exact",
+              "codec": {
+                "kind": "integer",
+                "value": {
+                  "syntax": "integer"
+                }
+              }
+            },
+            "tiers": [
+              {
+                "selectors": [
+                  {
+                    "lane": "attribute",
+                    "name": "groupCount"
+                  }
+                ],
+                "duplicates": "reject"
+              }
+            ],
+            "missing": {
+              "kind": "pending"
+            }
+          },
+          "occurrence": {
+            "id": "ice-nova-count",
+            "codec": {
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "whitespace": "exact",
+              "codec": {
+                "kind": "integer",
+                "value": {
+                  "syntax": "integer"
+                }
+              }
+            },
+            "tiers": [
+              {
+                "selectors": [
+                  {
+                    "lane": "attribute",
+                    "name": "count"
+                  }
+                ],
+                "duplicates": "reject"
+              }
+            ],
+            "missing": {
+              "kind": "pending"
+            }
+          },
+          "fallback_admission": {
+            "kind": "unique_reviewed_primary",
+            "companions": [
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000740"
+                },
+                "game_id": "Metadata/Items/Gem/SupportGemSuffuse",
+                "variant_id": "EncroachingGroundSupport",
+                "skill_id": "SupportEncroachingGroundPlayer",
+                "name_spec": "Encroaching Ground"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000082b"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                "variant_id": "MagnifiedAreaSupportTwo",
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "name_spec": "Magnified Area II"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000008bf"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                "variant_id": "RapidCastingSupport",
+                "skill_id": "SupportRapidCastingPlayer",
+                "name_spec": "Rapid Casting I"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000008c1"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemArcaneTempoTwo",
+                "variant_id": "RapidCastingSupportTwo",
+                "skill_id": "SupportRapidCastingPlayerTwo",
+                "name_spec": "Rapid Casting II"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000065a"
+                },
+                "game_id": "Metadata/Items/Gem/SupportGemAstralProjection",
+                "variant_id": "AstralProjectionSupport",
+                "skill_id": "SupportAstralProjectionPlayer",
+                "name_spec": "Astral Projection"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000080a"
+                },
+                "game_id": "Metadata/Items/Gem/SupportGemLastGasp",
+                "variant_id": "LastGaspSupport",
+                "skill_id": "SupportLastGaspPlayer",
+                "name_spec": "Last Gasp"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000674"
+                },
+                "game_id": "Metadata/Items/Gem/SupportGemBiddingTwo",
+                "variant_id": "BiddingSupportTwo",
+                "skill_id": "SupportBiddingPlayerTwo",
+                "name_spec": "Bidding II"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000082a"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemMagnifiedEffect",
+                "variant_id": "MagnifiedAreaSupport",
+                "skill_id": "SupportMagnifiedAreaPlayer",
+                "name_spec": "Magnified Area I"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000858"
+                },
+                "game_id": "Metadata/Items/Gem/SupportGemMuster",
+                "variant_id": "MusterSupport",
+                "skill_id": "SupportMusterPlayer",
+                "name_spec": "Muster"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000008a4"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemPersistence",
+                "variant_id": "ProlongedDurationSupport",
+                "skill_id": "ProlongedDurationSupportPlayer",
+                "name_spec": "Prolonged Duration I"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000006c5"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemFrostNexus",
+                "variant_id": "ChillingIceSupport",
+                "skill_id": "SupportChillingIcePlayer",
+                "name_spec": "Frost Nexus"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000092e"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemSpellEcho",
+                "variant_id": "SpellEchoSupport",
+                "skill_id": "SupportSpellEchoPlayer",
+                "name_spec": "Spell Echo"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000007f2"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemOverabundance",
+                "variant_id": "IncreaseLimitSupport",
+                "skill_id": "SupportIncreaseLimitPlayer",
+                "name_spec": "Overabundance I"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000090c"
+                },
+                "game_id": "Metadata/Items/Gem/SupportGemExpedite",
+                "variant_id": "ShortFuseSupport",
+                "skill_id": "SupportShortFusePlayer",
+                "name_spec": "Short Fuse I"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "runtime_prerequisites": {
+    "primary_completion_revision2": {
+      "path": "runs/primary-input-completion-candidate-20261020/manifest.json",
+      "sha256": "4c3b06885e28a9ec9dd546fe0bf79765c11578daae7702ff3162d40f45c99ea1",
+      "bytes": 6116
+    },
+    "existing_physical_singleton_secondary_receipt": true,
+    "existing_group_selector_and_support_receipts": true
+  },
+  "source_grammar_limitations": {
+    "ordinary_groupCount_requires_separate_intrinsic_proof": true,
+    "unknown_missing_duplicate_or_unreviewed_consumers_stay_pending": true
+  }
+}

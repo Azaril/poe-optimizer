@@ -1603,3 +1603,79 @@ fn historical_role_pin_subset_rejects_missing_changed_and_foreign_contexts() {
         ));
     }
 }
+
+/// Structural role validation is not full-catalog reproduction. In particular,
+/// a surviving row cannot infer reverse-route uniqueness from its neighbors.
+#[test]
+fn structurally_valid_role_subset_cannot_prove_reverse_primary_uniqueness() {
+    let mut source = data();
+    add_skill(&mut source, "other-effect", Some(false));
+    add_gem(
+        &mut source,
+        "colliding-gem-key",
+        "external-colliding",
+        "v-c",
+        "active-effect",
+    );
+    let additional = IndexedIdentityReference {
+        index: 1,
+        id: "other-effect".into(),
+    };
+    source
+        .gem_declarations
+        .last_mut()
+        .unwrap()
+        .identity
+        .additional_effects = vec![additional.clone()];
+    let alias = source.gems.last_mut().unwrap();
+    alias.declared_additional_effects = vec![additional.clone()];
+    alias.constructed_additional_effects = vec![additional];
+    alias.additional_effects = vec!["other-effect".into()];
+    alias.effect_list = vec!["active-effect".into(), "other-effect".into()];
+    source.missing_references = source.expected_missing_references();
+
+    let catalog = SkillIdentityCatalog::new(source.clone()).unwrap();
+    let compiled = compile(source, AbsentSupportPolicy::NonSupport);
+    let (schema, mapping, input) = assemble(&compiled);
+    let full = OwnedSkillRoleIndex::new(input.clone(), &mapping, &schema, limits()).unwrap();
+    verify_owned_skill_catalog_reproduction(&catalog, &full, &mapping, limits()).unwrap();
+
+    let candidates = |index: &OwnedSkillRoleIndex| {
+        index
+            .input()
+            .roles
+            .iter()
+            .filter(|row| observed(row).primary.effect_id == "active-effect")
+            .count()
+    };
+    assert_eq!(candidates(&full), 2);
+    let target = gem_id(&compiled, "external-active", "v-b");
+    let alias = gem_id(&compiled, "external-colliding", "v-c");
+    let target_row = full.role(&target).unwrap().clone();
+    assert_eq!(observed(&target_row).resolved_effects.len(), 1);
+    assert_eq!(
+        observed(full.role(&alias).unwrap()).resolved_effects.len(),
+        2
+    );
+
+    let mut subset = input.clone();
+    subset.roles.retain(|row| row.gem != alias);
+    subset.compilation.gem_count = subset.roles.len();
+    // The source pin, catalog commitment, schema, mapping and surviving row
+    // stay unchanged; structural loading has no independent catalog census.
+    assert_eq!(
+        subset.compilation.catalog_digest,
+        input.compilation.catalog_digest
+    );
+    assert_eq!(subset.compilation.source, input.compilation.source);
+    assert_eq!(subset.mapping, input.mapping);
+    assert_eq!(subset.definitions, input.definitions);
+    let subset = OwnedSkillRoleIndex::new(subset, &mapping, &schema, limits()).unwrap();
+    assert_eq!(subset.role(&target), Some(&target_row));
+    assert_eq!(candidates(&subset), 1);
+    assert_ne!(subset.identity(), full.identity());
+    assert!(matches!(
+        verify_owned_skill_catalog_reproduction(&catalog, &subset, &mapping, limits()),
+        Err(SkillCatalogError::ReproductionMismatch)
+    ));
+}

@@ -1,5 +1,5 @@
 {
-  "evidence": "d27294a67b92f732622493e43f6198a2722b39494ee5c08113a4c56f331df0f9",
+  "evidence": "cd7c8c9523bfaec1944bbc033f51f8156631d66b499fde49e78d188122aa6dc4",
   "rows": [
     {
       "source": {
@@ -21,8 +21,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "group-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             },
             {
               "kind": "usage_parameter",
@@ -61,13 +60,49 @@
         {
           "field": {
             "kind": "group_attribute",
-            "name": "includeInFullDPS"
+            "name": "groupCount"
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "group-field-consumers-not-yet-reviewed"
-            },
+              "kind": "usage_parameter",
+              "policy": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000326a"
+              },
+              "parameter": {
+                "declaration": {
+                  "kind": "usage_policy",
+                  "definition": {
+                    "kind": "usage_policy",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000326a"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000326b"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "field": {
+            "kind": "group_attribute",
+            "name": "includeInFullDPS"
+          },
+          "destinations": [
             {
               "kind": "usage_parameter",
               "policy": {
@@ -109,8 +144,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "group-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -121,8 +155,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "group-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -133,8 +166,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "group-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -145,8 +177,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -157,8 +188,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -169,8 +199,36 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "usage_parameter",
+              "policy": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000326a"
+              },
+              "parameter": {
+                "declaration": {
+                  "kind": "usage_policy",
+                  "definition": {
+                    "kind": "usage_policy",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000326a"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000326b"
+                }
+              }
             }
           ]
         },
@@ -181,8 +239,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             },
             {
               "kind": "usage_parameter",
@@ -225,8 +282,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             },
             {
               "kind": "usage_parameter",
@@ -269,8 +325,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -281,8 +336,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -293,8 +347,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -305,8 +358,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -317,8 +369,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -329,8 +380,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -341,8 +391,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -352,8 +401,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "exact-source-reference-accounting-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         }
@@ -379,8 +427,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "group-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             },
             {
               "kind": "usage_parameter",
@@ -419,13 +466,49 @@
         {
           "field": {
             "kind": "group_attribute",
-            "name": "includeInFullDPS"
+            "name": "groupCount"
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "group-field-consumers-not-yet-reviewed"
-            },
+              "kind": "usage_parameter",
+              "policy": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000326a"
+              },
+              "parameter": {
+                "declaration": {
+                  "kind": "usage_policy",
+                  "definition": {
+                    "kind": "usage_policy",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000326a"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000326b"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "field": {
+            "kind": "group_attribute",
+            "name": "includeInFullDPS"
+          },
+          "destinations": [
             {
               "kind": "usage_parameter",
               "policy": {
@@ -467,8 +550,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "group-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -479,8 +561,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "group-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -491,8 +572,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "group-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -503,8 +583,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -515,8 +594,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -527,8 +605,36 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "usage_parameter",
+              "policy": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000326a"
+              },
+              "parameter": {
+                "declaration": {
+                  "kind": "usage_policy",
+                  "definition": {
+                    "kind": "usage_policy",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000326a"
+                  }
+                },
+                "slot": {
+                  "kind": "parameter_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000326b"
+                }
+              }
             }
           ]
         },
@@ -539,8 +645,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             },
             {
               "kind": "usage_parameter",
@@ -583,8 +688,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             },
             {
               "kind": "usage_parameter",
@@ -627,8 +731,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -639,8 +742,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -651,8 +753,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -663,8 +764,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -675,8 +775,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -687,8 +786,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -699,8 +797,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "source-field-consumers-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         },
@@ -710,8 +807,7 @@
           },
           "destinations": [
             {
-              "kind": "deferred",
-              "reason": "exact-source-reference-accounting-not-yet-reviewed"
+              "kind": "input_disposition"
             }
           ]
         }

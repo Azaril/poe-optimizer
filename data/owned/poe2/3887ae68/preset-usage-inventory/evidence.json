@@ -299,7 +299,7 @@
           "key": "def.000000000000086b"
         }
       },
-      "scope": "deferred",
+      "scope": "checked-primary-input-and-typed-usage-consumers",
       "lexical_identity_candidates": [
         {
           "case": 5,
@@ -320,7 +320,7 @@
           "selected": false
         }
       ],
-      "field_count": 18
+      "field_count": 19
     },
     {
       "source": {
@@ -334,7 +334,7 @@
           "key": "def.0000000000000797"
         }
       },
-      "scope": "deferred",
+      "scope": "checked-primary-input-and-typed-usage-consumers",
       "lexical_identity_candidates": [
         {
           "case": 4,
@@ -367,7 +367,7 @@
           "selected": false
         }
       ],
-      "field_count": 18
+      "field_count": 19
     },
     {
       "source": {
@@ -7513,5 +7513,26 @@
         "authority": "Existing PhysicalSupportInputProof + exact live SupportAssignment/preset/origin checks + complete singleton source construction. Exact raw spelling must still pass the Rust receipt; decoded census is not independent authority."
       }
     ]
+  },
+  "primary_requested_counts": {
+    "inputs": {
+      "file": "primary-count-inputs.json",
+      "sha256": "a673b98a809897a1d5f8f0363613de0604e5840210538573877a9cab725bb182",
+      "bytes": 171579
+    },
+    "source": {
+      "file": "primary-count-source.json",
+      "sha256": "65b5e8f3eaea794e243bd0000d4640bf4953943a237ff5e6a0c3a290a43ce464",
+      "bytes": 55226
+    },
+    "fields_only": true,
+    "whole_builds_completed": 0,
+    "source_executed_frost_count_domain": [
+      1
+    ],
+    "intrinsic_count_guards_unchanged": true,
+    "group_parent_grammar_unchanged": true,
+    "native_count_mechanics_added": false,
+    "scope": "Existing private receipts remain necessary; declaring a field consumer cannot itself certify a source."
   }
 }

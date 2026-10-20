@@ -101,16 +101,24 @@
       "bytes": 1042270
     },
     "evidence.json": {
-      "sha256": "d27294a67b92f732622493e43f6198a2722b39494ee5c08113a4c56f331df0f9",
-      "bytes": 220115
+      "sha256": "cd7c8c9523bfaec1944bbc033f51f8156631d66b499fde49e78d188122aa6dc4",
+      "bytes": 220941
     },
     "inventory.json": {
-      "sha256": "99de175282f60d037d0cb330cf4782313ac08522c348e19f31e889a7c744df60",
-      "bytes": 211071
+      "sha256": "694649eb8fca5d96e16067c965039667d96d04e6770d003531bbd1d8ea6010af",
+      "bytes": 213211
     },
     "companion-additions.json": {
       "sha256": "232a654d548364e0502cb7b8815b3508dfa81e484016d249dc6951d7b5baf080",
       "bytes": 46993
+    },
+    "primary-count-inputs.json": {
+      "sha256": "a673b98a809897a1d5f8f0363613de0604e5840210538573877a9cab725bb182",
+      "bytes": 171579
+    },
+    "primary-count-source.json": {
+      "sha256": "65b5e8f3eaea794e243bd0000d4640bf4953943a237ff5e6a0c3a290a43ce464",
+      "bytes": 55226
     }
   },
   "expected_selected_issues": [
@@ -120,7 +128,7 @@
     124,
     5
   ],
-  "expected_draft_changes": 0,
+  "expected_draft_changes": 8,
   "expected_retired_issues": 0,
   "no_new_definition_ids": true,
   "no_queries_changed": true,
@@ -135,5 +143,128 @@
     "complete_construction_facts_required": true,
     "source_group_grammar_changed": false,
     "native_mechanics_added": false
+  },
+  "primary_count_extension": {
+    "physical_usage_rows": 2,
+    "appended_existing_policies": 2,
+    "expected_saved_occurrences": [
+      0,
+      0,
+      0,
+      1,
+      7
+    ],
+    "expected_selected_occurrences": [
+      0,
+      0,
+      0,
+      1,
+      2
+    ],
+    "inventory_rows": 25,
+    "inventory_fields": 456,
+    "guards_changed": false,
+    "parent_grammar_changed": false,
+    "definitions_changed": false,
+    "native_count_mechanics_added": false,
+    "gameplay_count_maximum_claimed": false,
+    "complete_original_builds": 0,
+    "source_observation_baseline": {
+      "path": "runs/owned-preset-usage-inventory-publication-02/package/",
+      "input": "e355f2db6ad73810c417006e288a847bede2f9a195f1df471f53fdcd4e95eafb",
+      "release": {
+        "path": "runs/owned-preset-usage-inventory-publication-02/package/release.json",
+        "sha256": "860da0cde826977c3a8e819c9cea4bc13138c0838f133ac9650c7e7b76791680",
+        "bytes": 56401
+      },
+      "artifacts": [
+        {
+          "file": "registry.json",
+          "bytes": 3573021,
+          "sha256": "68385460f203f1b5dd2a7dbe534893e0887db37ef8fc304f52c6b8350d243160"
+        },
+        {
+          "file": "schema.json",
+          "bytes": 32182847,
+          "sha256": "6d4c06bb3311c9b4fddc0c2a7f7f82bc3bcb1dcd6b6605249f0d2b69cbd61ddb"
+        },
+        {
+          "file": "rules.json",
+          "bytes": 17481310,
+          "sha256": "fa6ca3e17f531b2d4db43d84209a96281fca1b678a143bd34fb8368a809250fc"
+        },
+        {
+          "file": "routing.json",
+          "bytes": 17081,
+          "sha256": "cc89bfdd333b320696287f0d8a75e49ef16bdbd2249c9cee34bd09e45feb3a29"
+        },
+        {
+          "file": "manifest.json",
+          "bytes": 1506,
+          "sha256": "751d3cc286014fdc9db79de66706a68ca82e9c543dbbfe204f618a0dc42afb03"
+        },
+        {
+          "file": "mapping.json",
+          "bytes": 3947388,
+          "sha256": "7aae99051a05a2c195fd42acc14aec397813bccd393a9da1499ed223ec50ccae"
+        },
+        {
+          "file": "roles.json",
+          "bytes": 1232722,
+          "sha256": "d2d27aae1adfe4c31229065ba47b282b063f367b849dc6449d7978a807b3d9c0"
+        },
+        {
+          "file": "normalization.json",
+          "bytes": 1964673,
+          "sha256": "9daf119b6fc44619b271afc4b4021280e860d17c56e9a10cb826dbf710ed5135"
+        },
+        {
+          "file": "rewards.json",
+          "bytes": 28927,
+          "sha256": "4ca70ee3603a21d59d48df142ded270838e5bf6286594548db36dfc3778a1445"
+        },
+        {
+          "file": "items.json",
+          "bytes": 1643386,
+          "sha256": "55821b9514b8e93b242caa0f188fe0b6c899caf3f707c8f2851122d77ec8189e"
+        },
+        {
+          "file": "item-source.json",
+          "bytes": 1412286,
+          "sha256": "3967fefdc180110e1126bce7c0bcf24152ce83531947010624f2eb602cf38cf2"
+        },
+        {
+          "file": "queries-original-01.json",
+          "bytes": 4710,
+          "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+        },
+        {
+          "file": "queries-original-02.json",
+          "bytes": 7130,
+          "sha256": "eb2691aa77552e1729de12621b7564ce45ba78f6f97d0d880f0dfba474b007ca"
+        },
+        {
+          "file": "queries-original-03.json",
+          "bytes": 4710,
+          "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+        },
+        {
+          "file": "queries-original-04.json",
+          "bytes": 4710,
+          "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+        },
+        {
+          "file": "queries-original-05.json",
+          "bytes": 9732,
+          "sha256": "4b520d4204aa9a4124b9a8963af1c7cc445c18218766655cca21686993f69fa0"
+        },
+        {
+          "file": "tree-normalization.json",
+          "bytes": 2101990,
+          "sha256": "66c86fc73643f99dc2966a86477b30f673e9cb4f794a4173f7fab87676e14de5"
+        }
+      ]
+    },
+    "historical_observation_paths_are_runtime_dependencies": false
   }
 }
