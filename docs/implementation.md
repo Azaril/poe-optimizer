@@ -9,16 +9,22 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**October 20 backup checkpoint:** the owner requested an immediate Git backup.
+**October 20 backup checkpoint:** commit `15778b04` was pushed to GitHub `main`
+and its remote hash verified. This supersedes the earlier push-access blocker.
 The construction migration passes scoped checks and all-five preservation.
 The subsequent secondary-switch adapter compiles; Direct (26), Gem (11) and
-existing usage (12) checks pass. Three new usage tests stopped in synthetic
-fixture setup because an effect alias was marked Exact; the fixture now uses the
-existing `ReviewedAlias` contract, with rerun pending. The sixth joined
-group-selector source test is written/reviewed but unexecuted. This is a work
-checkpoint, not a claim that the full workspace or hosted CI is green. The next
-group-selector implementation exists only as an unapplied local candidate under
-`runs/`; it has no production authority.
+14 of 15 usage checks pass. The remaining usage test incorrectly expected a
+usage list for an unknown source; it now verifies absent materialization, Pending
+membership and preserved source/draft/origin/allocator state. Its rerun is in
+`runs/owned-secondary-global-receipt-tests-03.log`. The six group-selector and
+seven secondary-switch source tests pass. Hosted CI exposed a stale compiler
+transition digest in the import-policy receipt; its one-field repair preserves
+all four policy outputs and passes all 16 converter tests. These follow-up fixes
+are included in the next backup. This is not a claim that hosted CI or the full
+workspace is green. Ignored `runs/` evidence and nine protected incoming-critical
+work-in-progress files remain local. The next group-selector implementation is
+only an unapplied, uncompiled candidate under
+`runs/group-selector-receipt-candidate-20261020/`; it has no production authority.
 
 **Five supplied builds: 0/5 complete native evaluations.** All five import and
 run in pinned PoB. Owned native components work, but unresolved inputs and
@@ -148,8 +154,8 @@ preserved. The validated package is
 [checkpoint below](#source-construction-cutover-checkpoint-october-20) records
 evidence and remaining work. Existing support/generated-input proofs feed the
 whole-preset usage gate. The private physical-singleton secondary-switch adapter
-is applied and undergoing focused tests; the joined default group-selector source
-test is written but unexecuted. Finish those gates before publishing additional
+is applied and undergoing its final focused rerun; the joined default
+group-selector source test passes. Finish the adapter gate before publishing additional
 usage accounting. This does not close numerical coverage or any original's
 inventory.
 At the Actor migration checkpoint, the package and portable replay rebuilt
@@ -1315,7 +1321,8 @@ The superseded
 authenticated historical observations remain retained, as recorded in
 [the cleanup ledger](legacy-retirement.md#current-physical-usage-transport-cleanup-2026-10-06).
 The reviewed private secondary-switch adapter is now applied; finish its focused
-tests and the new group-selector source proof before further field accounting. Use
+rerun and scoped lint checks before further field accounting. The group-selector
+source proof passes; review and validate the unapplied candidate next. Use
 the audit's explicit source/consumer dependencies to retire complete-request
 blockers. Static census and source evidence can proceed in parallel; actual-plan
 reconciliation remains downstream of honest admission. Support-generated Skill
@@ -1333,18 +1340,25 @@ eligible calls; the candidate now uses charged binary search over the existing
 immutable sorted rows. That revision is prepared and reviewed:
 the static same-identity lookup estimate is 8,514 work units, with a public
 normalizer budget regression against 1,024 unrelated roles. These are not yet
-executed runtime measurements. Focused validation is running in
-`runs/owned-secondary-global-receipt-tests-01.log`; no new field responsibility is
+executed runtime measurements. The first fixture setup failures were repaired;
+the second run passes 14/15 usage tests. The remaining test's incorrect expectation
+for an unknown source is repaired, with the focused rerun in
+`runs/owned-secondary-global-receipt-tests-03.log`; no new field responsibility is
 published in a real build policy yet.
 
 The next bounded source proof is group-selector neutrality for zero or one
 possible active effect. Original05 group 238 (Ice Nova source 239) has literal
 `nil` MAIN/CALCS selectors, one construction-complete physical active singleton
-and three singleton supports. A joined Rust/mlua source test is in progress for
+and three singleton supports. A joined Rust/mlua source test passes for
 zero → one → zero admission, independent MAIN/CALCS and fresh/cached exporter
-paths. The test is written and independently reviewed, but not yet executed.
-If it passes, an existing private input receipt can account for exact
-default selectors after checking the whole physical group. This is not positive
+paths. All six selector and seven secondary-switch source tests pass in
+`runs/owned-selector-source-tests-01.log`. Windows linking emitted an existing
+`LIBCMT` conflict warning; it did not fail these tests. The candidate under
+`runs/group-selector-receipt-candidate-20261020/` is independently prepared and
+rustfmt-parsed, but unapplied and uncompiled. It uses an existing private input
+receipt to account for exact default selectors after checking the whole physical
+group. Support companions retain their separate count/global obligations.
+This is not positive
 admission, native execution or whole-preset completion; additional/missing
 effects, another active row and any present generated-source attribute remain
 outside the proposed domain. No public contract change is proposed for this step.

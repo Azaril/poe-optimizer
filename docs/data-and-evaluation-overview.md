@@ -172,7 +172,9 @@ construction facts are now implemented in the existing Import role artifact
 under the October 20 approval; current artifacts and dependent fixtures are
 rebuilt, and all-five preservation validation passes. Retired input-policy
 readers are removed. A private secondary-switch accounting adapter is applied and
-undergoing focused validation. Source tests alone grant no native execution or import-completion
+undergoing its final focused rerun. All thirteen selector/secondary-switch source
+tests pass; the next group-selector adapter remains an unapplied local candidate.
+Source tests alone grant no native execution or import-completion
 authority. Primary-switch semantics and exact occurrence/selector correspondence
 remain separate obligations.
 The existing count policy now also imports Ice Nova's saved count. All-five

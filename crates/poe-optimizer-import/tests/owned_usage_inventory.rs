@@ -9,10 +9,12 @@ mod fixture;
 mod inventory;
 use fixture::{GEM, xml};
 use poe_optimizer_core::owned_draft::*;
-use poe_optimizer_import::owned_normalize::*;
 use poe_optimizer_core::{owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
-use poe_optimizer_import::{owned_mapping::*, owned_reward_policy::OwnedRewardPolicy, owned_skill_catalog::*};
+use poe_optimizer_import::owned_normalize::*;
+use poe_optimizer_import::{
+    owned_mapping::*, owned_reward_policy::OwnedRewardPolicy, owned_skill_catalog::*,
+};
 
 fn completed(result: &NormalizedImport) -> Vec<bool> {
     result
@@ -149,7 +151,11 @@ fn singleton_secondary_fixture(
 ) -> fixture::Fixture {
     let mut f = inventory::fixture();
     let mut roles = f.base.roles.input().clone();
-    let row = roles.roles.iter_mut().find(|row| row.gem == f.base.gem).unwrap();
+    let row = roles
+        .roles
+        .iter_mut()
+        .find(|row| row.gem == f.base.gem)
+        .unwrap();
     let OwnedPrimarySkill::Known(primary) = &row.primary else {
         unreachable!()
     };
@@ -169,9 +175,10 @@ fn singleton_secondary_fixture(
         resolved_additional_effects: vec![],
         resolved_effects: vec![effect],
         display_order: None,
-        additional_stat_sets: vec![
-            OwnedSourceStatSetReference { index: 1, id: "separate-stat-set".into() },
-        ],
+        additional_stat_sets: vec![OwnedSourceStatSetReference {
+            index: 1,
+            id: "separate-stat-set".into(),
+        }],
         missing_references: vec![],
     };
     mutation(&mut construction);
@@ -191,25 +198,35 @@ fn singleton_secondary_fixture(
         },
     });
     f.base.mapping = OwnedMappingIndex::new(
-        mapping, &f.base.registry, &f.base.schema, Default::default()
-    ).unwrap();
+        mapping,
+        &f.base.registry,
+        &f.base.schema,
+        Default::default(),
+    )
+    .unwrap();
     roles.mapping = *f.base.mapping.identity();
-    f.base.roles = OwnedSkillRoleIndex::new(
-        roles, &f.base.mapping, &f.base.schema, Default::default()
-    ).unwrap();
+    f.base.roles =
+        OwnedSkillRoleIndex::new(roles, &f.base.mapping, &f.base.schema, Default::default())
+            .unwrap();
     let mut rewards = f.rewards.input().clone();
     rewards.mapping = *f.base.mapping.identity();
-    f.rewards = OwnedRewardPolicy::new(
-        rewards, &f.base.mapping, &f.base.schema, Default::default()
-    ).unwrap();
+    f.rewards =
+        OwnedRewardPolicy::new(rewards, &f.base.mapping, &f.base.schema, Default::default())
+            .unwrap();
     let UsageInputPolicy::PobOccurrenceUsageV3 { roles, .. } =
         f.policy.usage_inputs.as_mut().unwrap();
     *roles = *f.base.roles.identity();
-    inventory::inventory(&mut f).rows[0].fields.iter_mut().find(|field| {
-        matches!(&field.field,
+    inventory::inventory(&mut f).rows[0]
+        .fields
+        .iter_mut()
+        .find(|field| {
+            matches!(&field.field,
             UsageInventoryFieldSelector::OccurrenceAttribute { name }
             if name == "enableGlobal2")
-    }).unwrap().destinations.push(UsageInventoryDestination::InputDisposition);
+        })
+        .unwrap()
+        .destinations
+        .push(UsageInventoryDestination::InputDisposition);
     inventory::rebind(&mut f);
     f
 }
@@ -219,30 +236,77 @@ fn exact_physical_singleton_secondary_fact_preserves_all_other_consumers() {
     let mut f = singleton_secondary_fixture(|_| {});
     for token in ["true", "false"] {
         let text = xml(&GEM.replace(
-            r#"enableGlobal2="true""#, &format!(r#"enableGlobal2="{token}""#),
+            r#"enableGlobal2="true""#,
+            &format!(r#"enableGlobal2="{token}""#),
         ));
         let result = f.run(&text, Default::default()).unwrap();
         assert_eq!(completed(&result), [true], "{token}");
-        assert_eq!(result.draft().input().skill_presets.members[0]
-            .usage_preferences.as_ref().unwrap().members[0].parameters.members.len(), 3);
+        assert_eq!(
+            result.draft().input().skill_presets.members[0]
+                .usage_preferences
+                .as_ref()
+                .unwrap()
+                .members[0]
+                .parameters
+                .members
+                .len(),
+            3
+        );
     }
     for token in ["nil", "", " true", "true ", "TRUE", "1", "tr&#117;e"] {
         let text = xml(&GEM.replace(
-            r#"enableGlobal2="true""#, &format!(r#"enableGlobal2="{token}""#),
+            r#"enableGlobal2="true""#,
+            &format!(r#"enableGlobal2="{token}""#),
         ));
-        assert_eq!(completed(&f.run(&text, Default::default()).unwrap()), [false], "{token}");
+        assert_eq!(
+            completed(&f.run(&text, Default::default()).unwrap()),
+            [false],
+            "{token}"
+        );
     }
     for text in [
         xml(&GEM.replace(r#" enableGlobal2="true""#, "")),
         xml(&GEM.replace(r#"count="1""#, r#"count="bad""#)),
         xml(&GEM.replace(r#"quality="0""#, r#"quality="bad""#)),
         xml(&GEM.replace(r#"skillId="effect""#, r#"skillId="another-effect""#)),
-        xml(&GEM.replace(r#"variantId="variant""#, r#"variantId="other-variant""#)),
     ] {
-        assert_eq!(completed(&f.run(&text, Default::default()).unwrap()), [false]);
+        assert_eq!(
+            completed(&f.run(&text, Default::default()).unwrap()),
+            [false]
+        );
     }
+    // An unknown exact Gem selector is refused before physical materialization
+    // and before a usage list exists. Absence must not authorize an empty
+    // completion or discard the unresolved source's membership obligations.
+    let text = xml(&GEM.replace(r#"variantId="variant""#, r#"variantId="other-variant""#));
+    let mut unknown = singleton_secondary_fixture(|_| {});
+    let after = unknown.run(&text, Default::default()).unwrap();
+    assert!(after.draft().input().gems.members.is_empty());
+    assert!(after.draft().input().skills.members.is_empty());
+    let preset = &after.draft().input().skill_presets.members[0];
+    assert!(preset.usage_preferences.is_none());
+    assert!(matches!(
+        preset.skills.completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    let decoded = poe_optimizer_import::decode_build(text.as_bytes()).unwrap();
+    assert_eq!(decoded.xml, text, "the unknown source is retained verbatim");
+    assert_eq!(after.sidecar().source_sha256, decoded.sha256);
+    assert_eq!(after.sidecar().source_bytes, text.len());
+    let UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. } =
+        unknown.policy.usage_inputs.as_mut().unwrap();
+    *inventory = None;
+    inventory::rebind(&mut unknown);
+    let before = unknown.run(&text, Default::default()).unwrap();
+    assert_eq!(after.draft().input(), before.draft().input());
+    assert_eq!(after.sidecar().origins, before.sidecar().origins);
+    assert_eq!(after.allocator_after(), before.allocator_after());
+
     inventory::defer(&mut f, "enableGlobal2");
-    assert_eq!(completed(&f.run(&xml(GEM), Default::default()).unwrap()), [false]);
+    assert_eq!(
+        completed(&f.run(&xml(GEM), Default::default()).unwrap()),
+        [false]
+    );
 }
 
 #[test]
@@ -252,13 +316,22 @@ fn unavailable_construction_cannot_mint_a_secondary_field_fact() {
         &f.base.roles.role(&f.base.gem).unwrap().construction,
         OwnedGemSourceConstruction::Unavailable
     ));
-    inventory::inventory(&mut f).rows[0].fields.iter_mut().find(|field| {
-        matches!(&field.field,
+    inventory::inventory(&mut f).rows[0]
+        .fields
+        .iter_mut()
+        .find(|field| {
+            matches!(&field.field,
             UsageInventoryFieldSelector::OccurrenceAttribute { name }
             if name == "enableGlobal2")
-    }).unwrap().destinations.push(UsageInventoryDestination::InputDisposition);
+        })
+        .unwrap()
+        .destinations
+        .push(UsageInventoryDestination::InputDisposition);
     inventory::rebind(&mut f);
-    assert_eq!(completed(&f.run(&xml(GEM), Default::default()).unwrap()), [false]);
+    assert_eq!(
+        completed(&f.run(&xml(GEM), Default::default()).unwrap()),
+        [false]
+    );
 }
 
 #[test]
@@ -268,19 +341,27 @@ fn constructed_or_reordered_effects_cannot_borrow_singleton_authority() {
             match mode {
                 0 => {
                     let extra = OwnedIndexedSourceEffectReference {
-                        index: 1, effect: facts.primary.clone(),
+                        index: 1,
+                        effect: facts.primary.clone(),
                     };
                     facts.declared_additional_effects.push(extra.clone());
                     facts.constructed_additional_effects.push(extra);
-                    facts.resolved_additional_effects.push(facts.primary.clone());
+                    facts
+                        .resolved_additional_effects
+                        .push(facts.primary.clone());
                     facts.resolved_effects.push(facts.primary.clone());
                 }
                 1 => {
-                    facts.constructed_additional_effects.push(OwnedIndexedSourceEffectReference {
-                        index: 3, effect: facts.primary.clone(),
-                    });
+                    facts
+                        .constructed_additional_effects
+                        .push(OwnedIndexedSourceEffectReference {
+                            index: 3,
+                            effect: facts.primary.clone(),
+                        });
                 }
-                2 => facts.resolved_additional_effects.push(facts.primary.clone()),
+                2 => facts
+                    .resolved_additional_effects
+                    .push(facts.primary.clone()),
                 3 => facts.display_order = Some(vec![1, 1]),
                 4 => {
                     // Valid typed Missing: no source mapping exists, yet the
@@ -297,19 +378,31 @@ fn constructed_or_reordered_effects_cannot_borrow_singleton_authority() {
                     facts.missing_references = [
                         OwnedMissingSourceEffectKind::DeclaredAdditionalEffect,
                         OwnedMissingSourceEffectKind::ConstructedAdditionalEffect,
-                    ].into_iter().map(|kind| OwnedMissingSourceEffect {
-                        kind, index: Some(1), effect_id: "missing-command".into(),
-                    }).collect();
+                    ]
+                    .into_iter()
+                    .map(|kind| OwnedMissingSourceEffect {
+                        kind,
+                        index: Some(1),
+                        effect_id: "missing-command".into(),
+                    })
+                    .collect();
                     assert_eq!(facts.resolved_effects, [facts.primary.clone()]);
                 }
                 _ => {
                     facts.resolved_effects[0].effect_id = "effect-alias".into();
-                    assert_eq!(facts.resolved_effects[0].resolution, facts.primary.resolution);
+                    assert_eq!(
+                        facts.resolved_effects[0].resolution,
+                        facts.primary.resolution
+                    );
                     assert_ne!(facts.resolved_effects[0].effect_id, facts.primary.effect_id);
                 }
             }
         });
-        assert_eq!(completed(&f.run(&xml(GEM), Default::default()).unwrap()), [false], "mode {mode}");
+        assert_eq!(
+            completed(&f.run(&xml(GEM), Default::default()).unwrap()),
+            [false],
+            "mode {mode}"
+        );
     }
 }
 
@@ -318,18 +411,24 @@ fn add_unrelated_role_rows(f: &mut fixture::Fixture, count: usize) {
     let mut mapping = f.base.mapping.input().clone();
     let mut roles = f.base.roles.input().clone();
     for index in 0..count {
-        let gem = f.base.registry.allocate_definition::<GemDefinition>().unwrap();
+        let gem = f
+            .base
+            .registry
+            .allocate_definition::<GemDefinition>()
+            .unwrap();
         let subject = SchemaSubject::Definition(DefinitionAddress::Gem(gem.clone()));
-        schema.definitions.push(DefinitionDescriptor::Gem(DefinitionEntry {
-            id: gem.clone(),
-            schema: SchemaState::Unmapped {
-                gaps: vec![SchemaGap {
-                    subject: subject.clone(),
-                    facet: SchemaFacet::InputSchema,
-                    code: actions::key("unrelated-source-unreviewed"),
-                }],
-            },
-        }));
+        schema
+            .definitions
+            .push(DefinitionDescriptor::Gem(DefinitionEntry {
+                id: gem.clone(),
+                schema: SchemaState::Unmapped {
+                    gaps: vec![SchemaGap {
+                        subject: subject.clone(),
+                        facet: SchemaFacet::InputSchema,
+                        code: actions::key("unrelated-source-unreviewed"),
+                    }],
+                },
+            }));
         mapping.entries.push(MappingEntry {
             source: ExternalSelector::Definition(ExternalOwnerSelector::Gem {
                 game_id: SourceComponent::Text(format!("unrelated-{index}")),
@@ -342,8 +441,12 @@ fn add_unrelated_role_rows(f: &mut fixture::Fixture, count: usize) {
         });
         roles.roles.push(OwnedGemRoleRow {
             gem,
-            primary: OwnedPrimarySkill::Unmapped { issue: actions::key("unknown-primary") },
-            role: OwnedGemRole::Unmapped { issue: actions::key("unknown-role") },
+            primary: OwnedPrimarySkill::Unmapped {
+                issue: actions::key("unknown-primary"),
+            },
+            role: OwnedGemRole::Unmapped {
+                issue: actions::key("unknown-role"),
+            },
             materialization: OwnedGemMaterialization::Unmapped {
                 issue: actions::key("unknown-materialization"),
             },
@@ -356,13 +459,17 @@ fn add_unrelated_role_rows(f: &mut fixture::Fixture, count: usize) {
     mapping.definitions = definitions.clone();
     mapping.registry = f.base.registry.identity().unwrap();
     f.base.mapping = OwnedMappingIndex::new(
-        mapping, &f.base.registry, &f.base.schema, Default::default()
-    ).unwrap();
+        mapping,
+        &f.base.registry,
+        &f.base.schema,
+        Default::default(),
+    )
+    .unwrap();
     roles.definitions = definitions.clone();
     roles.mapping = *f.base.mapping.identity();
-    f.base.roles = OwnedSkillRoleIndex::new(
-        roles, &f.base.mapping, &f.base.schema, Default::default()
-    ).unwrap();
+    f.base.roles =
+        OwnedSkillRoleIndex::new(roles, &f.base.mapping, &f.base.schema, Default::default())
+            .unwrap();
     let GemQualityPolicy::Attributes(quality) = &mut f.policy.gem_quality else {
         unreachable!()
     };
@@ -370,7 +477,10 @@ fn add_unrelated_role_rows(f: &mut fixture::Fixture, count: usize) {
     f.policy.gem_inputs.as_mut().unwrap().definitions = definitions.clone();
     let scalar = gem_inventory_scalar_inputs_identity(&f.policy, Default::default()).unwrap();
     let UsageInputPolicy::PobOccurrenceUsageV3 {
-        definitions: bound, roles, scalar_inputs, ..
+        definitions: bound,
+        roles,
+        scalar_inputs,
+        ..
     } = f.policy.usage_inputs.as_mut().unwrap();
     *bound = definitions.clone();
     *roles = *f.base.roles.identity();
@@ -378,9 +488,9 @@ fn add_unrelated_role_rows(f: &mut fixture::Fixture, count: usize) {
     let mut rewards = f.rewards.input().clone();
     rewards.definitions = definitions;
     rewards.mapping = *f.base.mapping.identity();
-    f.rewards = OwnedRewardPolicy::new(
-        rewards, &f.base.mapping, &f.base.schema, Default::default()
-    ).unwrap();
+    f.rewards =
+        OwnedRewardPolicy::new(rewards, &f.base.mapping, &f.base.schema, Default::default())
+            .unwrap();
     inventory::rebind(f);
 }
 
@@ -394,28 +504,45 @@ fn unrelated_catalog_rows_do_not_consume_linear_receipt_work() {
     assert!(small.run(&text, Default::default()).is_ok());
     while passing - failing > 1 {
         let middle = failing + (passing - failing) / 2;
-        match small.run(&text, NormalizationLimits {
-            max_work: middle, ..Default::default()
-        }) {
+        match small.run(
+            &text,
+            NormalizationLimits {
+                max_work: middle,
+                ..Default::default()
+            },
+        ) {
             Ok(result) => {
                 assert_eq!(completed(&result), [true]);
                 passing = middle;
             }
-            Err(NormalizationError::Limit(kind))
-                if kind == "work" || kind.ends_with(" work") => failing = middle,
+            Err(NormalizationError::Limit(kind)) if kind == "work" || kind.ends_with(" work") => {
+                failing = middle
+            }
             Err(error) => panic!("unexpected budget failure: {error:?}"),
         }
     }
-    let baseline = small.run(&text, NormalizationLimits {
-        max_work: passing, ..Default::default()
-    }).unwrap();
+    let baseline = small
+        .run(
+            &text,
+            NormalizationLimits {
+                max_work: passing,
+                ..Default::default()
+            },
+        )
+        .unwrap();
     let mut large = singleton_secondary_fixture(|_| {});
     add_unrelated_role_rows(&mut large, 1024);
     // A fixed small allowance admits the extra indexed comparisons; a scan
     // charge of catalog size times identity bytes exceeds this allowance.
-    let after = large.run(&text, NormalizationLimits {
-        max_work: passing + 2048, ..Default::default()
-    }).unwrap();
+    let after = large
+        .run(
+            &text,
+            NormalizationLimits {
+                max_work: passing + 2048,
+                ..Default::default()
+            },
+        )
+        .unwrap();
     assert_eq!(completed(&after), [true]);
     assert_eq!(baseline.draft().input(), after.draft().input());
 }

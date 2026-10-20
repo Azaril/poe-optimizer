@@ -69,7 +69,10 @@ pub(super) fn physical_secondary_global_is_unconsumed(
         && facts.resolved_additional_effects.is_empty()
         && facts.missing_references.is_empty()
         && facts.resolved_effects.as_slice() == std::slice::from_ref(&facts.primary)
-        && facts.display_order.as_deref().is_none_or(|order| order == [1])
+        && facts
+            .display_order
+            .as_deref()
+            .is_none_or(|order| order == [1])
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

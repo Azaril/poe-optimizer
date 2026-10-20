@@ -314,7 +314,11 @@ pub(in crate::owned_normalize) fn record_input_disposition(
     // disposition succeeds. Restrict the new source fact to the physical branch;
     // Direct and generated occurrences have different loader dispatch.
     let physical_secondary = if let UsageInventorySource::Physical { gem } = &identity {
-        let gem_identity_work = gem.namespace().game().as_str().len()
+        let gem_identity_work = gem
+            .namespace()
+            .game()
+            .as_str()
+            .len()
             .saturating_add(gem.namespace().version().as_str().len())
             .saturating_add(gem.key().as_str().len());
         let roles = b.roles;
@@ -338,7 +342,11 @@ pub(in crate::owned_normalize) fn record_input_disposition(
         }
         let comparison_work = role.map_or(0, |role| {
             let primary_work = match &role.primary {
-                OwnedPrimarySkill::Known(primary) => primary.namespace().game().as_str().len()
+                OwnedPrimarySkill::Known(primary) => primary
+                    .namespace()
+                    .game()
+                    .as_str()
+                    .len()
                     .saturating_add(primary.namespace().version().as_str().len())
                     .saturating_add(primary.key().as_str().len())
                     .saturating_mul(2),
@@ -347,7 +355,8 @@ pub(in crate::owned_normalize) fn record_input_disposition(
             let OwnedGemSourceConstruction::Observed(facts) = &role.construction else {
                 return primary_work;
             };
-            primary_work.saturating_add(facts.game_id.len())
+            primary_work
+                .saturating_add(facts.game_id.len())
                 .saturating_add(facts.variant_id.len())
                 .saturating_add(facts.primary.effect_id.len().saturating_mul(2))
         });
