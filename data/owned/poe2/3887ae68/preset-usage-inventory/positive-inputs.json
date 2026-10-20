@@ -34,8 +34,8 @@
   },
   "publication_authoring": {
     "path": "data/owned/poe2/3887ae68/preset-usage-inventory/authoring.json",
-    "sha256": "b789cb36f7a0e42b263efcc05bfb4615afec021a286cf8e9410c7066da23f6f7",
-    "bytes": 4024
+    "sha256": "f3ef42847a761db8aa9d73fe7d3882e9a2d5040bf0fb2c18d1b759260ac60571",
+    "bytes": 4492
   },
   "publication_inventory": {
     "path": "data/owned/poe2/3887ae68/preset-usage-inventory/inventory.json",

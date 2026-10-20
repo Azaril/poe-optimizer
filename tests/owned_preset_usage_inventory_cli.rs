@@ -20,6 +20,34 @@ use std::{fs, path::PathBuf};
 fn checked_packet_preserves_the_complete_saved_source_census() {
     family::check();
 }
+
+#[test]
+fn companion_evidence_cannot_drop_or_relabel_source_construction() {
+    family::check();
+    let original = family::read(family::data().join("companion-additions.json"));
+    for field in [
+        "missing_references",
+        "declared_additional_effects",
+        "constructed_additional_effects",
+        "resolved_additional_effects",
+        "additional_stat_sets",
+    ] {
+        let mut changed = original.clone();
+        changed["additions"][0]["role"]["construction"]["value"][field] =
+            json!(["unreviewed source reference"]);
+        assert!(
+            std::panic::catch_unwind(|| family::check_companion_evidence(&changed)).is_err(),
+            "{field}"
+        );
+    }
+    let mut changed = original.clone();
+    changed["additions"][0]["companion"]["skill_id"] = json!("IceNovaPlayer");
+    assert!(std::panic::catch_unwind(|| family::check_companion_evidence(&changed)).is_err());
+    let mut changed = original.clone();
+    changed["additions"][0]["role"]["role"]["value"] = json!("skill_use");
+    assert!(std::panic::catch_unwind(|| family::check_companion_evidence(&changed)).is_err());
+}
+
 #[test]
 #[ignore = "explicit immutable predecessor/output paths; all five originals and independent repeats"]
 fn publish_bounded_usage_inventory_with_all_five_unchanged() {

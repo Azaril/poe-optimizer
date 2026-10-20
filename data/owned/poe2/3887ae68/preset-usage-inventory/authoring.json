@@ -107,6 +107,10 @@
     "inventory.json": {
       "sha256": "99de175282f60d037d0cb330cf4782313ac08522c348e19f31e889a7c744df60",
       "bytes": 211071
+    },
+    "companion-additions.json": {
+      "sha256": "232a654d548364e0502cb7b8815b3508dfa81e484016d249dc6951d7b5baf080",
+      "bytes": 46993
     }
   },
   "expected_selected_issues": [
@@ -121,5 +125,15 @@
   "no_new_definition_ids": true,
   "no_queries_changed": true,
   "no_evaluation_bundle": true,
-  "support_receipt_dependency": "Applied record_support_input_disposition; source test10/10 passed; exact pins and scope in evidence.json. No false/missing/nonneutral support field authority."
+  "support_receipt_dependency": "Applied record_support_input_disposition; source test10/10 passed; exact pins and scope in evidence.json. No false/missing/nonneutral support field authority.",
+  "count_companion_extension": {
+    "target": "def.00000000000007dd",
+    "policy": "def.000000000000326a",
+    "parameter": "def.000000000000326b",
+    "existing": 5,
+    "appended": 9,
+    "complete_construction_facts_required": true,
+    "source_group_grammar_changed": false,
+    "native_mechanics_added": false
+  }
 }

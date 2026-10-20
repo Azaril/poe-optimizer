@@ -94,27 +94,12 @@ fn expanded_source(original: &[u8]) -> (Vec<u8>, Vec<String>, Value) {
     let base_rows = base_evidence.rows();
     let group = &base_rows[base_frame.group];
     assert!(group.attribute("groupCount").is_none());
-    let header =
-        group.occurrence().range().start..base_rows[base_frame.gems[0]].occurrence().range().start;
-    let relative_end = base[header.clone()]
-        .iter()
-        .position(|b| *b == b'>')
-        .unwrap();
-    assert!(
-        base[header.start + relative_end + 1..header.end]
-            .iter()
-            .all(u8::is_ascii_whitespace)
-    );
-    let insertion = header.start + relative_end;
     let after_last = base_rows[*base_frame.gems.last().unwrap()]
         .occurrence()
         .range()
         .end;
-    let inserted_attribute = b" groupCount=\"1\"";
     let mut derived = Vec::new();
-    derived.extend_from_slice(&base[..insertion]);
-    derived.extend_from_slice(inserted_attribute);
-    derived.extend_from_slice(&base[insertion..after_last]);
+    derived.extend_from_slice(&base[..after_last]);
     let copied_start = derived.len();
     let mut expected = vec![
         "def.00000000000007dd".to_owned(),
@@ -173,13 +158,18 @@ fn expanded_source(original: &[u8]) -> (Vec<u8>, Vec<String>, Value) {
     let derived_evidence =
         SourceProjectEvidence::collect(&derived_instance, SourceEvidenceLimits::default()).unwrap();
     let derived_rows = derived_evidence.rows();
-    assert_eq!(
+    assert!(
         derived_rows[derived_frame.group]
             .attribute("groupCount")
-            .unwrap()
-            .raw(),
-        "1"
+            .is_none()
     );
+    let actual_group = &derived_rows[derived_frame.group];
+    assert_eq!(actual_group.attributes().len(), group.attributes().len());
+    for attribute in group.attributes() {
+        let actual = actual_group.attribute(&attribute.origin().name).unwrap();
+        assert_eq!(actual.raw(), attribute.raw());
+        assert_eq!(actual.decoded().unwrap(), attribute.decoded().unwrap());
+    }
     for (i, &ordinal) in derived_frame.gems.iter().enumerate() {
         let actual = derived_rows[ordinal].occurrence().range();
         let original_slice = if i < 4 {
@@ -194,15 +184,14 @@ fn expanded_source(original: &[u8]) -> (Vec<u8>, Vec<String>, Value) {
     }
     let mut inverse = derived.clone();
     inverse.drain(copied_start..copied_end);
-    inverse.drain(insertion..insertion + inserted_attribute.len());
     assert_eq!(
         inverse, base,
-        "only recorded attribute and exact copied elements added"
+        "only exact copied Gem elements added; group attributes unchanged"
     );
     let proof = json!({
         "kind":"test_only_regrouped_import_accounting","base":base_proof,
         "original_sha256":sha(original),"derived_sha256":sha(&derived),"derived_bytes":derived.len(),
-        "group_edit":{"base_position":insertion,"inserted":" groupCount=\"1\""},
+        "group_attributes_unchanged":true,"group_count_inserted":false,
         "copied_elements":segments,"copied_occurrences":13,"distinct_added_families":9,
         "all_gem_bytes_unchanged":true,"outside_skills_unchanged":true,
         "support_eligibility_checked":false,"native_execution":"not_run","production_import_rewrite":false
@@ -210,7 +199,7 @@ fn expanded_source(original: &[u8]) -> (Vec<u8>, Vec<String>, Value) {
     (derived, expected, proof)
 }
 
-fn actual_records(output: &Output, xml: &[u8], expected: &[String]) -> Frame {
+fn actual_records(output: &Output, xml: &[u8], expected: &[String], count_complete: bool) -> Frame {
     let f = frame(xml, 17);
     let draft = &output.draft;
     let sidecar = &output.sidecar;
@@ -283,7 +272,29 @@ fn actual_records(output: &Output, xml: &[u8], expected: &[String]) -> Frame {
             selection["target"]["value"]["value"]["slot"]["value"]["slot"]["key"],
             "def.000000000000327e"
         );
-        assert_eq!(selection["parameters"]["completion"]["kind"], "complete");
+        if !count_complete && selection["policy"]["value"]["key"] == "def.000000000000326a" {
+            assert_eq!(selection["parameters"]["members"], json!([]));
+            assert_eq!(selection["parameters"]["completion"]["kind"], "pending");
+            assert_eq!(
+                selection["parameters"]["completion"]["code"],
+                "usage-parameters-not-converted"
+            );
+            let issue = &selection["parameters"]["completion"]["id"];
+            let origin = sidecar["origins"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|r| r["source"]["ordinal"] == f.gems[0])
+                .unwrap();
+            assert!(
+                origin["links"]
+                    .as_array()
+                    .unwrap()
+                    .contains(&json!({"kind":"issue","value":issue}))
+            );
+        } else {
+            assert_eq!(selection["parameters"]["completion"]["kind"], "complete");
+        }
     }
     assert_eq!(
         policies,
@@ -311,6 +322,193 @@ fn publish_control(
     let actual = release::load(&package);
     assert_eq!(actual.input(), staged.input());
     (package, actual)
+}
+
+fn preserve_unaffected_records(before: &Output, after: &Output, xml: &[u8]) {
+    let f = frame(xml, 17);
+    // A refused count conversion legitimately allocates a new issue, shifting
+    // later local IDs. Compare exact source-linked records after independently
+    // checking their identities/relations in actual_records; do not erase IDs
+    // from the complete draft and pretend to have a whole-output inverse.
+    for ordinal in f.gems {
+        let mut records = Vec::new();
+        for output in [before, after] {
+            let id = preservation::link(&output.sidecar, ordinal, "gem");
+            let mut record = preservation::member(&output.draft, "gems", &id).clone();
+            assert_eq!(record["id"], id);
+            record.as_object_mut().unwrap().remove("id");
+            records.push(record);
+        }
+        assert_eq!(
+            records[0], records[1],
+            "all exact physical input fields retained"
+        );
+    }
+    for policy in ["def.000000000000332b", "def.000000000000338e"] {
+        let parameters: Vec<_> = [before, after]
+            .into_iter()
+            .map(|output| {
+                let matches: Vec<_> = positive::usage(&output.draft)["members"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .filter(|r| r["selection"]["policy"]["value"]["key"] == policy)
+                    .collect();
+                assert_eq!(matches.len(), 1);
+                matches[0]["selection"]["parameters"].clone()
+            })
+            .collect();
+        assert_eq!(
+            parameters[0], parameters[1],
+            "independent participation/reporting retained"
+        );
+    }
+    let mut codes = before.report["issue_codes"].clone();
+    for code in [
+        "usage-parameters-not-converted",
+        "usage-preferences-not-converted",
+    ] {
+        assert!(codes.get(code).is_none());
+        codes[code] = json!(1);
+    }
+    assert_eq!(codes, after.report["issue_codes"]);
+    assert_eq!(
+        after.report["issue_count"].as_u64().unwrap(),
+        before.report["issue_count"].as_u64().unwrap() + 2
+    );
+    let source_rows = |output: &Output| {
+        output.sidecar["origins"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|r| r["source"].clone())
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(
+        source_rows(before),
+        source_rows(after),
+        "no origin or source identity omitted"
+    );
+}
+
+fn unknown_sibling_control(
+    original: &[u8],
+    base: &[u8],
+    next: &StagedOwnedRelease,
+    package: &std::path::Path,
+    out: &std::path::Path,
+) -> Value {
+    let packet = read(data().join("companion-additions.json"));
+    let control = &packet["unknown_sibling_control"];
+    let ordinal = control["source"]["ordinal"].as_u64().unwrap() as usize;
+    let source_instance = positive::instance(original);
+    let source =
+        SourceProjectEvidence::collect(&source_instance, SourceEvidenceLimits::default()).unwrap();
+    let row = &source.rows()[ordinal];
+    assert_eq!(row.occurrence().name(), "Gem");
+    assert!(row.children().is_empty());
+    assert_eq!(
+        row.attributes().len(),
+        control["source"]["attributes"].as_array().unwrap().len()
+    );
+    for expected in control["source"]["attributes"].as_array().unwrap() {
+        assert_eq!(
+            row.attribute(expected["name"].as_str().unwrap())
+                .unwrap()
+                .decoded()
+                .unwrap(),
+            expected["decoded"].as_str().unwrap()
+        );
+    }
+    let f = frame(base, 17);
+    let base_instance = positive::instance(base);
+    let evidence =
+        SourceProjectEvidence::collect(&base_instance, SourceEvidenceLimits::default()).unwrap();
+    let position = evidence.rows()[*f.gems.last().unwrap()]
+        .occurrence()
+        .range()
+        .end;
+    let range = row.occurrence().range();
+    let mut xml = base[..position].to_vec();
+    xml.extend_from_slice(&original[range.clone()]);
+    xml.extend_from_slice(&base[position..]);
+    let mut inverse = xml.clone();
+    inverse.drain(position..position + range.len());
+    assert_eq!(
+        inverse, base,
+        "only one exact unreviewed sibling byte range added"
+    );
+    let expanded = frame(&xml, 18);
+    let expanded_instance = positive::instance(&xml);
+    let expanded_evidence =
+        SourceProjectEvidence::collect(&expanded_instance, SourceEvidenceLimits::default())
+            .unwrap();
+    assert!(
+        expanded_evidence.rows()[expanded.group]
+            .attribute("groupCount")
+            .is_none()
+    );
+    assert_eq!(
+        &xml[expanded_evidence.rows()[*expanded.gems.last().unwrap()]
+            .occurrence()
+            .range()],
+        &original[range.clone()]
+    );
+    let directory = out.join("unreviewed-sibling");
+    fs::create_dir_all(&directory).unwrap();
+    let path = directory.join("source.xml");
+    fs::write(&path, &xml).unwrap();
+    let output = directory.join("output");
+    let repeated = directory.join("repeated");
+    release::normalize(package, &path, 5, &output);
+    release::normalize(package, &path, 5, &repeated);
+    let actual = checked_output(&output, package, 5, next, &xml);
+    assert_eq!(actual, checked_output(&repeated, package, 5, next, &xml));
+    let gem = preservation::link(&actual.sidecar, *expanded.gems.last().unwrap(), "gem");
+    let record = preservation::member(&actual.draft, "gems", &gem);
+    assert_eq!(
+        record["definition"],
+        json!({"kind":"known","value":control["role"]["gem"]})
+    );
+    let count: Vec<_> = positive::usage(&actual.draft)["members"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|r| r["selection"]["policy"]["value"]["key"] == "def.000000000000326a")
+        .collect();
+    assert_eq!(count.len(), 1);
+    let parameters = &count[0]["selection"]["parameters"];
+    assert_eq!(parameters["members"], json!([]));
+    assert_eq!(parameters["completion"]["kind"], "pending");
+    assert_eq!(
+        parameters["completion"]["code"],
+        "usage-parameters-not-converted"
+    );
+    assert_eq!(
+        positive::usage(&actual.draft)["completion"]["kind"],
+        "pending"
+    );
+    let primary_origin = actual.sidecar["origins"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|r| r["source"]["ordinal"] == expanded.gems[0])
+        .unwrap();
+    assert!(
+        primary_origin["links"]
+            .as_array()
+            .unwrap()
+            .contains(&json!({"kind":"issue","value":parameters["completion"]["id"]}))
+    );
+    assert_eq!(fs::read(path).unwrap(), xml);
+    json!({
+        "original_ordinal":ordinal,"original_range":[range.start,range.end],
+        "inserted_sha256":sha(&original[range]),"derived_sha256":sha(&xml),
+        "known_but_unreviewed_companion":control["role"]["gem"],
+        "count_parameters":"pending","usage":"pending","fresh_repeat_identical":true,
+        "all_original_and_existing_gem_bytes_unchanged":true,"group_attributes_unchanged":true,
+        "other_pending_input_proofs_are_not_claimed_complete":true
+    })
 }
 
 pub fn run() {
@@ -352,8 +550,8 @@ pub fn run() {
     release::normalize(&after, &source, 5, &expanded_dir);
     let baseline = checked_output(&baseline_dir, &baseline_package, 5, &baseline_release, &xml);
     let expanded = checked_output(&expanded_dir, &after, 5, &next, &xml);
-    let f = actual_records(&baseline, &xml, &expected);
-    actual_records(&expanded, &xml, &expected);
+    let f = actual_records(&baseline, &xml, &expected, true);
+    actual_records(&expanded, &xml, &expected, true);
     let retirement = positive::compare_usage_retirement(&baseline, &expanded, f.group, f.gems[0]);
     let old_final = selected::finalize_with_definitions(
         &xml,
@@ -383,16 +581,16 @@ pub fn run() {
     assert_eq!(old_issues, new_issues);
     assert!(!new_issues.as_array().unwrap().is_empty());
     let mut controls = Vec::new();
-    for key in keys {
+    for key in &keys {
         let (package, staged) = publish_control(
             &prior,
-            std::slice::from_ref(&key),
+            std::slice::from_ref(key),
             &out.join(format!("omit-{key}")),
         );
         let directory = out.join(format!("output-without-{key}"));
         release::normalize(&package, &source, 5, &directory);
         let actual = checked_output(&directory, &package, 5, &staged, &xml);
-        actual_records(&actual, &xml, &expected);
+        actual_records(&actual, &xml, &expected, true);
         assert_eq!(
             positive::usage(&actual.draft)["completion"]["kind"],
             "pending"
@@ -404,6 +602,36 @@ pub fn run() {
         controls.push(json!({"omitted_family":key,"usage":"pending","full_output_inverse":true}));
     }
     assert_eq!(controls.len(), 9);
+    let mut companion_controls = Vec::new();
+    for key in &keys {
+        let directory = out.join(format!("companion-control-{key}"));
+        fs::create_dir_all(&directory).unwrap();
+        let staged = family::stage_companion_omission_control(&prior, std::slice::from_ref(key));
+        let input = directory.join("input.json");
+        write(&input, staged.input());
+        let package = directory.join("package");
+        assert_eq!(family::publish(&input, &package), json!(staged.receipt()));
+        let loaded = release::load(&package);
+        assert_eq!(loaded.input(), staged.input());
+        let output = directory.join("output");
+        let repeated = directory.join("repeated");
+        release::normalize(&package, &source, 5, &output);
+        release::normalize(&package, &source, 5, &repeated);
+        let actual = checked_output(&output, &package, 5, &loaded, &xml);
+        assert_eq!(
+            actual,
+            checked_output(&repeated, &package, 5, &loaded, &xml)
+        );
+        actual_records(&actual, &xml, &expected, false);
+        assert_eq!(
+            positive::usage(&actual.draft)["completion"]["kind"],
+            "pending"
+        );
+        preserve_unaffected_records(&expanded, &actual, &xml);
+        companion_controls.push(json!({"omitted_companion":key,"inventory_rows":25,"count_parameters":"pending","usage":"pending","fresh_repeat_identical":true,"all_source_bytes_unchanged":true}));
+    }
+    assert_eq!(companion_controls.len(), 9);
+    let unknown_control = unknown_sibling_control(&original, &xml, &next, &after, &out);
     assert_eq!(fs::read(&source).unwrap(), xml);
     assert_eq!(fs::read(original_path).unwrap(), original);
     assert_eq!(release::inventory(&before), before_files);
@@ -413,7 +641,8 @@ pub fn run() {
         out.join("validation.json"),
         &json!({
             "authored_input":next.receipt().input,"baseline_rows":16,"expanded_rows":25,
-            "exact_copied_new_occurrences":13,"retirement":retirement,"omission_controls":controls,
+            "exact_copied_new_occurrences":13,"retirement":retirement,"inventory_omission_controls":controls,
+            "companion_omission_controls":companion_controls,"unreviewed_sibling_control":unknown_control,
             "default_limits":true,"original_five_unchanged":true,"same_source_for_all_policies":true,
             "support_eligibility_checked":false,"calculation":"not_run","whole_build_finalization":"pending"
         }),

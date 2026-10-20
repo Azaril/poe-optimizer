@@ -8,7 +8,7 @@ use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
     decode_build,
     owned_normalize::{
-        GemInventoryPolicy, UsageInputPolicy, UsageInventoryPolicy,
+        GemInventoryPolicy, UsageGroupCompanion, UsageInputPolicy, UsageInventoryPolicy,
         configuration_disposition_dependencies, usage_inputs_identity,
     },
     owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
@@ -23,11 +23,13 @@ use std::{
     path::{Path, PathBuf},
     process::Command,
 };
+#[path = "owned_preset_usage_inventory_companions.rs"]
+mod companions;
 #[path = "owned_preset_usage_inventory_outputs.rs"]
 mod outputs;
 pub use outputs::{Output, checked_output};
 pub const BEFORE: &str = "b3b7c3810f659e584f23b6dd69b7bdc6b619cc39fcd4f2b9ae259194bf8d7529";
-const AUTHORING: &str = "b789cb36f7a0e42b263efcc05bfb4615afec021a286cf8e9410c7066da23f6f7";
+const AUTHORING: &str = "f3ef42847a761db8aa9d73fe7d3882e9a2d5040bf0fb2c18d1b759260ac60571";
 pub fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
@@ -73,7 +75,12 @@ pub fn check() -> Value {
         sha(&fs::read(data().join("evidence.json")).unwrap())
     );
     check_census();
+    companions::check();
     authoring
+}
+/// Test-only semantic checks independent of the sealed outer packet bytes.
+pub fn check_companion_evidence(packet: &Value) {
+    companions::check_packet(packet);
 }
 pub fn checked_predecessor(prior: &Path) -> Value {
     let bytes = fs::read(data().join("authoring.json")).unwrap();
@@ -170,6 +177,7 @@ pub fn checked_successor(prior: &StagedOwnedRelease, next: &StagedOwnedRelease) 
         prior,
         next,
         &inventory,
+        &companions::included(&[]),
         "bounded-preset-usage-field-accounting",
         authored_identity(),
     );
@@ -178,6 +186,7 @@ fn checked_inventory_successor(
     prior: &StagedOwnedRelease,
     next: &StagedOwnedRelease,
     expected: &UsageInventoryPolicy,
+    added_companions: &[UsageGroupCompanion],
     provenance_kind: &str,
     authoring: OwnedContentDigest,
 ) {
@@ -197,7 +206,9 @@ fn checked_inventory_successor(
         panic!("published checked inventory")
     };
     assert_eq!(actual, expected);
+    companions::authenticate(prior);
     let mut inverse = next.input().clone();
+    companions::apply(&mut inverse.normalization, added_companions, true);
     let Some(UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. }) =
         &mut inverse.normalization.usage_inputs
     else {
@@ -228,7 +239,7 @@ fn checked_inventory_successor(
     assert_eq!(
         &inverse.normalization,
         &prior.input().normalization,
-        "only inventory and checked usage commitments differ"
+        "only inventory, exact reviewed companion additions and checked usage commitments differ"
     );
     assert_eq!(
         inverse.tree.as_ref().unwrap().content,
@@ -250,6 +261,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     stage_inventory(
         prior,
         inventory,
+        companions::included(&[]),
         "bounded-preset-usage-field-accounting",
         authored_identity(),
     )
@@ -297,20 +309,48 @@ pub fn stage_omission_control(
     stage_inventory(
         prior,
         inventory,
+        companions::included(&[]),
         "test-only-preset-usage-inventory-omission",
+        commitment,
+    )
+}
+/// Test-only source-consumer refusal; the complete 25-row field inventory stays intact.
+pub fn stage_companion_omission_control(
+    prior: &StagedOwnedRelease,
+    omitted: &[String],
+) -> StagedOwnedRelease {
+    check();
+    assert!(!omitted.is_empty());
+    let additions = companions::included(omitted);
+    assert_eq!(additions.len() + omitted.len(), 9);
+    let inventory = serde_json::from_value(read(data().join("inventory.json"))).unwrap();
+    let commitment = digest_owned(
+        "owned-usage-count-companion-omission-control-v1",
+        &json!({"authored":authored_identity(),"omitted":omitted}),
+        4 * 1024 * 1024,
+    )
+    .unwrap();
+    stage_inventory(
+        prior,
+        inventory,
+        additions,
+        "test-only-usage-count-companion-omission",
         commitment,
     )
 }
 fn stage_inventory(
     prior: &StagedOwnedRelease,
     inventory: UsageInventoryPolicy,
+    added_companions: Vec<UsageGroupCompanion>,
     provenance_kind: &str,
     authoring: OwnedContentDigest,
 ) -> StagedOwnedRelease {
     assert_eq!(prior.receipt().input.to_string(), BEFORE);
     let old = prior.input();
     let expected = inventory.clone();
+    companions::authenticate(prior);
     let mut normalization = old.normalization.clone();
+    companions::apply(&mut normalization, &added_companions, false);
     let Some(UsageInputPolicy::PobOccurrenceUsageV3 {
         inventory: current, ..
     }) = &mut normalization.usage_inputs
@@ -336,6 +376,7 @@ fn stage_inventory(
     assert_eq!(dependency_inverse, disposition.dependencies);
     disposition.dependencies = dependencies;
     let mut inverse = normalization.clone();
+    companions::apply(&mut inverse, &added_companions, true);
     let Some(UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. }) = &mut inverse.usage_inputs
     else {
         unreachable!()
@@ -360,7 +401,7 @@ fn stage_inventory(
         .clone();
     assert_eq!(
         inverse, old.normalization,
-        "only declared inventory and exact dependency commitments change"
+        "only declared inventory, reviewed companion additions and exact dependency commitments change"
     );
     let transition = transition_owned_normalization_with_tree_compact(
         SuccessorBundleInput {
@@ -394,7 +435,14 @@ fn stage_inventory(
         authoring_input: authoring,
     });
     let next = assemble_owned_release(full, Default::default()).unwrap();
-    checked_inventory_successor(prior, &next, &expected, provenance_kind, authoring);
+    checked_inventory_successor(
+        prior,
+        &next,
+        &expected,
+        &added_companions,
+        provenance_kind,
+        authoring,
+    );
     next
 }
 pub fn publish(input: &Path, out: &Path) -> Value {

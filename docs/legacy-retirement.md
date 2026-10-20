@@ -71,7 +71,15 @@ group field leaves the proved scalar/source facts valid, with its actual
 consumers still accounted for separately. Do not loosen the frame merely to
 make a test pass. The immediate data step instead expands the existing reviewed
 count-companion tuples and retains unchanged source rows without a group-header
-rewrite. Keep this broader-frame follow-up visible when validating other builds.
+rewrite; that correction and its refusal controls now pass. Keep this broader-frame
+follow-up visible when validating other builds.
+
+The flat-primary compiler also requires literal `count` and `enableGlobal2`
+guards. These are current proof restrictions, not game limits or consequences of
+the native count schema. Preserve them in the next unchanged-build data step;
+then investigate replacing redundant guards with checked evidence from the actual
+consumer, keeping intrinsic source validity and every usage destination separate.
+Do not add a second primary proof or per-skill runtime exceptions to expand them.
 
 ## Current rule-format cutover (2026-10-07)
 

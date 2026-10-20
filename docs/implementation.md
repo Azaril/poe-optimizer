@@ -9,8 +9,8 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**October 20 backup checkpoint:** `1ba8c7ce` is pushed to GitHub `main` and its
-remote hash is verified. It follows `6f6eae3f`, `f6dac721`, `dba0f661`,
+**October 20 backup checkpoint:** `983cee19` is pushed to GitHub `main` and its
+remote hash is verified. It follows `1ba8c7ce`, `6f6eae3f`, `f6dac721`, `dba0f661`,
 `afc607d8` and the initial broad backup `15778b04`; push access is working.
 The latest correction removes irrelevant deep receipt charges without raising
 work limits. All 18 private completion and 27 public usage tests, strict Import
@@ -18,10 +18,13 @@ all-target lint, default-limit all-five publication and the real group238
 positive/nonneutral control pass. Earlier normalization and source checks are
 recorded at their checkpoints below.
 
-The maintained 25-row usage packet passes its ordinary census check, all-five
-publication and original group control. Its expansion control exposed an
-additional finite count-companion dependency; that data correction is in
-progress. No original's selected input issue has retired. Hosted CI and complete
+The maintained 25-row usage packet now passes both ordinary checks, all-five
+publication, the original group control and the expanded support controls.
+Nine inventory omissions, nine count-companion omissions and an unreviewed
+sibling all retain the expected Pending obligations. Strict CLI lint passes.
+The validated successor is `e355f2db…`; the next step is the reviewed private
+primary-input completion cleanup, then actual Pain Offering/Frost Bomb count
+data. No original's selected input issue has retired. Hosted CI and complete
 native evaluation remain separate gates. Ignored `runs/` evidence and nine
 protected incoming-critical work-in-progress files remain local.
 
@@ -146,18 +149,17 @@ gaps preserved. The six remaining passive candidates require missing
 buff payloads or Command execution evidence.
 Candidate-bound source and special-branch admission remains blocking, as detailed
 below; no complete build is claimed.
-The latest Import checkpoint preserves source construction in the existing role
-artifact and removes obsolete input-policy readers, with all five originals
-preserved. The validated package is
-`runs/owned-construction-cutover-candidate-01/package` (`b3b7c381…`); its
-[checkpoint below](#source-construction-cutover-checkpoint-october-20) records
-evidence and remaining work. Existing support/generated-input proofs feed the
-whole-preset usage gate. The private physical-singleton secondary-switch adapter
-is applied and passes focused tests and strict linting; the joined default
-group-selector source test passes. The group-selector adapter passes private
-normalization and public integration tests. Validate the support extension before publishing additional
-usage accounting. This does not close numerical coverage or any original's
-inventory.
+The latest validated Import package is
+`runs/owned-preset-usage-inventory-publication-02/package` (`e355f2db…`), built
+from the construction cutover `b3b7c381…`. It preserves all five original outputs
+and all 110 queries. The [checkpoint below](#source-construction-cutover-checkpoint-october-20)
+records the source-construction migration and subsequent usage gates.
+Existing support/generated-input proofs feed the whole-preset usage gate.
+The physical-singleton secondary-switch and group-selector adapters pass their
+scoped tests; the injected support inventory and companion data pass real-source
+positive and refusal controls. Apply and validate the reviewed primary-completion
+cleanup next, including comparison with these saved pre-change outputs.
+This does not close numerical coverage or any original's inventory.
 At the Actor migration checkpoint, the package and portable replay rebuilt
 successfully. Exact inverses authenticated the prior artifacts and allowed only
 declared format/role edits, checked dependency commitments and one provenance row.
@@ -1467,18 +1469,37 @@ and original group control pass, as does scoped CLI lint. The 25-row successor i
 under `runs/owned-preset-usage-inventory-publication-01/`; selected counts and
 all 110 queries remain unchanged. The temporary Cargo targets are removed.
 
-The first expanded control fails honestly: its inserted `groupCount="1"` lies
+The first expanded control failed honestly: its inserted `groupCount="1"` lay
 outside the existing physical-support source frame, leaving all sixteen
 supports' scalar inventories Pending. Removing that insertion alone is
 insufficient: the existing Ice Nova count fallback admits only five reviewed
 companion identities. The nine new support families also need explicit
 noncompeting count-companion admission through that existing policy. Their
 complete singleton constructions are available; add the finite tuples as data,
-keep the original source files and runtime source-frame checks unchanged, and
-rerun with no group-header rewrite. Keep both inventory-omission and
-count-companion-refusal controls. Failed evidence:
+keeping original source files and runtime source-frame checks unchanged.
+The correction removes the group-header rewrite and retains both
+inventory-omission and count-companion-refusal controls. Failed evidence:
 `runs/owned-preset-usage-inventory-support-expansion-01/` and
 `runs/owned-preset-usage-inventory-support-expansion-tests-01.log`.
+
+The reviewed correction is applied and all gates pass at default limits.
+`companion-additions.json` appends nine exact singleton Support tuples to the
+existing five count companions. Tests authenticate current compiler roles and
+the complete source consumer; they preserve all thirteen copied Gem byte ranges
+and the unchanged group header. Both ordinary checks pass, including malformed
+construction/identity controls. All-five publication produces
+`e355f2db6ad73810c417006e288a847bede2f9a195f1df471f53fdcd4e95eafb`
+in `runs/owned-preset-usage-inventory-publication-02/`: full output preservation,
+independent fresh repeats, byte-identical rebuild, all 110 queries and unchanged
+selected Pending counts. The original group control passes under
+`runs/owned-preset-usage-inventory-group-positive-02/`. The expanded control
+passes under `runs/owned-preset-usage-inventory-support-expansion-02/`:
+all nine inventory omissions preserve the entire unresolved output; all nine
+companion omissions and the known-but-unreviewed sibling preserve Pending count
+and usage obligations with independent repeated output checks. This validates
+import accounting, not support eligibility or native execution.
+Logs: `runs/owned-preset-usage-inventory-{packet,publication,group,support-expansion}-tests-02.log`
+and `runs/owned-preset-usage-inventory-clippy-02.log`.
 
 After that, converge private primary completion and final-destination plumbing
 using the existing `InputReceipt` and `InputOutput::Authored`. `AwaitUsage` and
@@ -1500,6 +1521,13 @@ regression tests. Rustfmt and artifact checks pass; Cargo and actual all-five
 preservation remain pending. Review and validate it after the current data
 checkpoint; do not infer that the missing Pain Offering/Frost Bomb count data
 has been supplied by this code cleanup.
+The next data audit confirms the existing requested-count policy can serve both
+sources, but the current flat-primary proof still requires literal count guards
+and rejects a containing `groupCount`. Keep those limits explicit: Pain's
+occurrence guard admits 1/3, Frost's admits 1; the generic numeric schema's 0–4
+domain does not broaden that source proof or establish gameplay limits.
+Retain the guards for the unchanged-build checkpoint and track their replacement
+with checked consumer evidence as import breadth/cleanup work.
 
 ### Native Scenario intent checkpoint, October 20
 
@@ -2653,6 +2681,10 @@ across both platforms, and seven running jobs. Ubuntu CLI shards 0, 1 and 2
 have passed; the remaining running jobs are Ubuntu CLI3, four Windows CLI
 shards and both PoB jobs. This snapshot describes the older `15778b04` run,
 not validation of the newer fixes.
+At 18:08 UTC, the same older run still had five passes, six known failures and
+seven running jobs. The latest pushed `983cee19` run `39472005429` was pending;
+the superseded pending `1ba8c7ce` run was cancelled by the existing workflow.
+No new failure or hosted success was inferred from that queue state.
 
 ## CI receipt repair (2026-10-15)
 

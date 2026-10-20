@@ -169,7 +169,8 @@ publication and a real-group positive/nonneutral control pass at default limits.
 The importer charges every receipt's identity scan, then validates only exact
 matches against the live draft. Retirement remains atomic. This is Import work;
 it changes no native calculation rule or per-candidate evaluation path. See the
-living implementation plan for the current data expansion's remaining gate.
+living implementation plan for the validated package and remaining primary-input
+work.
 The secondary-switch source tests distinguish complete singleton effects from
 missing declared references and from multiple stat sets. Compiler-derived
 construction facts are now implemented in the existing Import role artifact
@@ -187,8 +188,9 @@ partial inputs. Scalar completion, field-consumer coverage and admission as a
 noncompeting sibling in a count recipe are separate facts. All applicable facts
 must hold; a reviewed support identity in one inventory does not automatically
 extend another policy's finite companion list. Those identities remain injected
-configuration data. The remaining private proof-transport cleanup and current
-data validation are tracked in the implementation plan.
+configuration data. The expanded inventory and count-companion refusal controls
+now pass; the remaining private proof-transport cleanup and primary-input data
+are tracked in the implementation plan.
 Source tests alone grant no native execution or import-completion
 authority. Primary-switch semantics and exact occurrence/selector correspondence
 remain separate obligations.
