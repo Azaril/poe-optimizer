@@ -1,19 +1,7 @@
 use super::*;
 use crate::owned_normalize::source_shape::{fresh_config_sets, value};
 
-pub(in crate::owned_normalize) struct AdapterReceipts<'a> {
-    pub encounters: &'a BTreeMap<SourceOccurrenceId, encounter::ProvenEncounter>,
-    pub levels: &'a BTreeMap<SourceOccurrenceId, enemy_level::ProvenEnemyLevel>,
-    pub inputs: &'a BTreeMap<SourceOccurrenceId, configuration_inputs::ProvenConfigurationInputs>,
-    pub usage: &'a BTreeMap<SourceOccurrenceId, usage_inputs::ProvenConfigurationUsage>,
-    pub usage_policy: Option<&'a usage_inputs::CompiledUsageInputs<'a>>,
-    pub rewards: &'a BTreeMap<
-        SourceOccurrenceId,
-        configuration_reward_inventory::ProvenConfigurationRewards,
-    >,
-}
-
-fn configuration_issue(
+pub(super) fn configuration_issue(
     links: &[OwnedOriginTarget],
     scenario: ScenarioPresetId,
     choices: &[ChoicePresetDraft],
@@ -50,7 +38,7 @@ fn configuration_issue(
         .then_some((*id, choice))
 }
 
-fn lane(row: &SourceEvidenceRow<'_>) -> Option<ValueLane> {
+pub(super) fn lane(row: &SourceEvidenceRow<'_>) -> Option<ValueLane> {
     match (
         row.occurrence().name(),
         value(row, "number").is_some(),
@@ -123,7 +111,7 @@ fn branch_proven(
     b: &mut Builder<'_, '_>,
     origin: SourceOccurrenceId,
     scenario: &ScenarioPresetDraft,
-    encounter: Option<&encounter::ProvenEncounter>,
+    receipts: &receipts::ScopeReceipts<'_>,
     selector: &ValueSelector,
     recipe: &ValueRecipe,
     absent: &BTreeSet<String>,
@@ -134,11 +122,11 @@ fn branch_proven(
     else {
         return Ok(false);
     };
-    let Some(encounter) = encounter else {
+    if !receipts.has_encounter_proof() {
         return Ok(false);
-    };
+    }
     b.charge(absent.len())?;
-    if !encounter.proves_branch(scope, scenario, absent) {
+    if !receipts.proves_encounter_branch(scope, scenario.id, absent) {
         return Ok(false);
     }
     let evidence = b.evidence;
@@ -175,7 +163,7 @@ fn branch_proven(
 
 pub(in crate::owned_normalize) fn account(
     b: &mut Builder<'_, '_>,
-    draft: &DraftSessionInput,
+    draft: &mut DraftSessionInput,
     policy: Option<&CompiledConfigurationDispositions>,
     adapters: AdapterReceipts<'_>,
 ) -> Result<()> {
@@ -188,6 +176,7 @@ pub(in crate::owned_normalize) fn account(
     let Some(scopes) = fresh_config_sets(b)? else {
         return Ok(());
     };
+    let mut retirements = Vec::new();
     for scope in scopes {
         b.charge(
             b.origins[scope.ordinal() as usize]
@@ -213,14 +202,9 @@ pub(in crate::owned_normalize) fn account(
         else {
             continue;
         };
-        let mut receipts = configuration_inputs::checked_receipts(
-            b,
-            scope,
-            scenario,
-            adapters.inputs.get(&scope),
-        )?;
+        let receipts = receipts::ScalarReceipts::collect(b, scope, scenario, choice, &adapters)?;
         // Existing raw-only projection authority still uses this common owner.
-        for receipt in &receipts {
+        for receipt in receipts.iter() {
             b.charge(policy.map_or(0, |p| p.rules.len()))?;
             let governed = policy.is_some_and(|p| {
                 p.rules
@@ -260,31 +244,7 @@ pub(in crate::owned_normalize) fn account(
         let Some(policy) = policy else {
             continue;
         };
-        receipts.extend(usage_inputs::checked_configuration_receipts(
-            b,
-            scope,
-            scenario,
-            adapters.usage.get(&scope),
-        )?);
-        receipts.extend(configuration_reward_inventory::checked_receipts(
-            b,
-            scope,
-            choice,
-            draft,
-            adapters.rewards.get(&scope),
-        )?);
-        receipts.extend(enemy_level::checked_receipts(
-            b,
-            scope,
-            scenario,
-            adapters.levels.get(&scope),
-        )?);
-        receipts.extend(encounter::checked_receipts(
-            b,
-            scope,
-            scenario,
-            adapters.encounters.get(&scope),
-        )?);
+        let receipts = receipts.finish(b, draft, &adapters)?;
         let evidence = b.evidence;
         let children = evidence.rows()[scope.ordinal() as usize].children();
         b.charge(children.len().saturating_mul(policy.rules.len()))?;
@@ -317,7 +277,7 @@ pub(in crate::owned_normalize) fn account(
                                 b,
                                 *origin,
                                 scenario,
-                                adapters.encounters.get(&scope),
+                                &receipts,
                                 &rule.selector,
                                 recipe,
                                 absent,
@@ -327,12 +287,8 @@ pub(in crate::owned_normalize) fn account(
                         }
                         CompiledDestination::Adapter(control) => {
                             b.charge(receipts.len())?;
-                            let mut matches = receipts.iter().filter(|r| {
-                                r.scope == scope
-                                    && r.origin == Some(*origin)
-                                    && r.selector.as_ref() == Some(&rule.selector)
-                                    && &r.control == control
-                            });
+                            let mut matches =
+                                receipts.matching_leaf(scope, *origin, &rule.selector, control);
                             if let Some(receipt) = matches.next() {
                                 if matches.next().is_some() {
                                     admitted = false;
@@ -376,7 +332,24 @@ pub(in crate::owned_normalize) fn account(
                 }
             }
         }
+        if let Some(inventory) = &policy.inventory
+            && let Some(proof) = inventory::prepare(
+                b,
+                draft,
+                inventory::Scope {
+                    source: scope,
+                    scenario,
+                    choice,
+                    issue,
+                },
+                inventory,
+                &receipts,
+            )?
+        {
+            retirements.push(proof);
+        }
     }
+    inventory::commit(b, draft, retirements)?;
     Ok(())
 }
 

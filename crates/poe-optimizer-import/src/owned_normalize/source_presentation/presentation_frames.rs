@@ -161,6 +161,19 @@ fn empty_party(row: &SourceEvidenceRow<'_>) -> bool {
         && value(row, "ShowAdvanceTools").is_none_or(|v| boolean(Some(v)))
 }
 
+fn import_preferences(row: &SourceEvidenceRow<'_>) -> bool {
+    // ImportTab.Load:556-574 uses non-notifying selection/SetText and stores
+    // remembered import preferences. The shared flag law excludes party export
+    // because CalcPerform:1221 reads it. No future import or network action is
+    // performed here, and no existing party payload is classified by this proof.
+    plain_row(row, crate::root_admission::IMPORT_ATTRIBUTES, true)
+        && crate::root_admission::import_flags(
+            value(row, "useGeneratedItemText"),
+            value(row, "exportParty"),
+        )
+        .is_ok()
+}
+
 pub(super) fn collect(
     b: &mut Builder<'_, '_>,
     calcs_sections: bool,
@@ -168,12 +181,14 @@ pub(super) fn collect(
     empty_notes: bool,
     cached_build_buffs_enabled: bool,
     empty_party_enabled: bool,
+    import_preferences_enabled: bool,
 ) -> Result<Vec<(SourceOccurrenceId, OwnedDefinitionKey)>> {
     if !calcs_sections
         && !tree_view_enabled
         && !empty_notes
         && !cached_build_buffs_enabled
         && !empty_party_enabled
+        && !import_preferences_enabled
     {
         return Ok(vec![]);
     }
@@ -196,6 +211,7 @@ pub(super) fn collect(
             || (name == "Notes" && empty_notes)
             || (name == "Build" && cached_build_buffs_enabled)
             || (name == "Party" && empty_party_enabled)
+            || (name == "Import" && import_preferences_enabled)
         {
             let frame = frames.entry(name).or_insert((*source, 0));
             frame.1 = frame.1.saturating_add(1);
@@ -217,6 +233,9 @@ pub(super) fn collect(
             "Build" => result.extend(cached_build_buffs(b, source)?),
             "Party" if empty_party(row) => {
                 result.push((source, key("source-empty-party")));
+            }
+            "Import" if import_preferences(row) => {
+                result.push((source, key("source-import-preferences")));
             }
             "Calcs" => result.extend(sections(b, source)?),
             "TreeView" if tree_view(row) => {

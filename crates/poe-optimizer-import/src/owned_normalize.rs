@@ -67,9 +67,12 @@ mod usage_inputs;
 pub use character_reward_inventory::CharacterRewardInventoryPolicy;
 pub(crate) use configuration_dispositions::rebind as rebind_configuration_dispositions;
 pub use configuration_dispositions::{
-    ConfigurationAdapterControl, ConfigurationDestination, ConfigurationDispositionDependencies,
-    ConfigurationDispositionPolicy, ConfigurationDispositionRule, ConfigurationResponsibility,
-    configuration_disposition_dependencies,
+    ConfigurationAdapterControl, ConfigurationCensusClosure, ConfigurationDestination,
+    ConfigurationDispositionDependencies, ConfigurationDispositionPolicy,
+    ConfigurationDispositionRule, ConfigurationInventoryControl, ConfigurationInventoryDisposition,
+    ConfigurationInventoryPolicy, ConfigurationResponsibility, ConfigurationSourceCensus,
+    ConfigurationSourceState, configuration_disposition_dependencies,
+    configuration_inventory_census_identity,
 };
 pub use configuration_inputs::{
     ConfigurationDefaultInput, ConfigurationInputTarget, ConfigurationInputsPolicy,
@@ -2419,7 +2422,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     }
     configuration_dispositions::account(
         &mut b,
-        &draft,
+        &mut draft,
         configuration_dispositions.as_ref(),
         configuration_dispositions::AdapterReceipts {
             encounters: &config_encounters,

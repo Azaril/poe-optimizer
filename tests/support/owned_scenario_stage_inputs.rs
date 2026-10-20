@@ -1169,6 +1169,7 @@ impl Fixture {
             inventory: None,
         });
         policy.configuration_dispositions = Some(ConfigurationDispositionPolicy {
+            inventory: None,
             mapping_source: *mapping.source_identity(),
             catalogue_evidence: *mapping.identity(),
             constructor_evidence: *rewards.identity(),

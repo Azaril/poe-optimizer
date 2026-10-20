@@ -9,20 +9,37 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Current Git backup:** the October 20 checkpoint following `2b6179c8` adds
+**Current Git backup:** `30e84063` is pushed to `main`; its full remote hash
+was verified equal to local HEAD. This October 20 checkpoint adds
 the tested positive-input seal repair, completed real-group and historical replay
-results, and updated resume notes. The preceding commit was pushed to `main`
-and its full remote hash verified equal to local HEAD; the new backup's commit
-and push receipt are available in Git history. It is a work-in-progress backup,
+results, and updated resume notes. It is a work-in-progress backup,
 not a fully validated successor release. Ignored candidate/evidence files
 and the nine protected incoming-critical files remain local.
 
+**Immediate backup checkpoint (October 20):** the current reviewed working tree
+is being saved separately on `codex/backup-2026-10-20` while `main` remains at
+`30e84063`. This includes the applied Water allocation, configuration inventory
+and Boolean transport, Import presentation, scoped lint repairs and these resume
+notes. It is deliberately an unfinished checkpoint: the latest public Import
+batch has 393 passing tests, two failures and one ignored test. The failures are
+the independent-set Boolean origin accounting expectation and the Import
+presentation disabled-policy sidecar schema expectation (12 versus 18). Preserve
+the full assertions while diagnosing both. The corrected Water publication
+harness compiles, but publication and the real configuration Partial gate have
+not run. Cargo is idle and no temporary publication hook remains installed.
+An indexed configuration census/receipt implementation is being prepared under
+ignored `runs/` to remove quadratic work without raising limits or relaxing
+validation; it is not applied or part of this checkpoint. Ignored build outputs,
+candidate evidence and the nine protected incoming-critical files remain local.
+
 **Validated data baseline:**
-`runs/owned-preset-usage-inventory-publication-07/package`, input
-`32a6f01b04397ce857af5101e2a9e9f4fa40ed847ef4ea8733e9ae770186f53a`.
-The 25-row packet preserves all five originals and all 110 queries. All five
-real-group control suites now pass, including Manual Direct and the repaired
-Ice Nova/support-expansion fixtures. No selected
+`runs/owned-movement-penalty-publication-01/package`, input
+`c8705bf69798b7215053a95462ffb8e87dbc9ad36f4f52ed0df7be946609c300`.
+The movement successor preserves the validated Direct packet, all five originals
+and all 110 queries. Its full artifact rebuild and fresh import replays are
+byte-identical. All five Direct real-group control suites passed before this
+recipe-only successor, including Manual Direct and repaired Ice Nova/support
+expansion. No selected
 Original05 input obligation has retired; the current five obligations and
 remaining native mechanics are detailed below.
 
@@ -59,17 +76,38 @@ authenticated seal and run its existing pin checks in the ordinary packet test.
 The full raw/semantic inverse preserves every other pin, source and assertion.
 Runtime reruns now verify the repair without changing any behavioral assertion.
 
-**Resume in this order:** fix the scoped CLI lint failure at
-`tests/owned_movement_speed_penalty_native.rs:91` (`collapsible_if`), rerun the
-scoped CLI/PoB lint gates, then author the movement package against the validated
-Direct successor. All five shared Engine helper targets now pass: 63 tests
-(`runs/owned-movement-shared-engine-tests-01.log`). CLI lint stopped on that
-style error (`runs/owned-movement-replay-cli-clippy-01.log`); the following PoB
-lint command did not run. The temporary authoring hook was removed before this
-backup, restoring exact original bytes. For authoring, reinstall it only in the
-Import library's existing `usage_inputs/inventory/tests.rs` child and remove it
-after execution; never commit it. Original bytes are saved in the movement
-candidate directory as `root-tests-before-hook-20261020.bin`.
+**Resume in this order:** validate the applied Water Command allocation packet,
+configuration inventory/Boolean transport and Import presentation family, then
+publish Water against the actual validated movement package. All five shared
+Engine helper targets pass: 63 tests
+(`runs/owned-movement-shared-engine-tests-01.log`). Scoped CLI and PoB lint now
+pass (`runs/owned-movement-replay-cli-clippy-03.log` and
+`runs/owned-movement-pob-clippy-02.log`) after collapsing the nested test condition
+and removing two unnecessary Copy-value clones in the historical fixture helper.
+Movement publication `01` passes in 40.10 seconds after compilation
+(`runs/owned-movement-publication-01.log`); its temporary hook was removed by
+restoring exact original bytes. Release SHA-256 is
+`7466ee16be2ebb7756417db090af1403f6b9c56a693563e4fc8d045774c4ef12`,
+validation SHA-256 `a8b94e3891978e3280d1132a02f09a6f7a1379a2bd9c17c51f7038267748e1e1`.
+It changes 486 unit references without numeric changes, adds two Stats and the
+source-backed body penalty program with a Partial contribution query; all
+other release content has an exact dependency inverse. This gate executes no
+native metrics and retires no whole input issue.
+
+Water is reauthored against that actual successor in
+`runs/water-command-allocation-current-candidate-01` (manifest `0395532f…`).
+Its five maintained files are applied: only Grant32bb gains Allocation as an
+additional provider role; no identifiers or numerical rules are added. The
+prepared temporary publication harness is
+`runs/owned-water-command-release-harness-02` (manifest `8487ea29…`). It retains
+all before/after outputs and refuses validation if any import delta needs review.
+All four binder controls pass (`runs/owned-water-command-binder-tests-01.log`).
+The first temporary harness compilation found a moved-value error in its schema
+inverse assignment; harness 02 fixes that ownership error and compiles. The
+regression batch then stopped at the two failures recorded above in
+`runs/owned-configuration-import-tests-02.log`, before publication. Diagnose those
+failures and rerun the affected checks before the publication and real Partial
+gate. No Command numerical execution is claimed.
 Historical replay `04` now passes:
 two ordinary tests, one explicit offline ignore, 751.03 seconds
 (`runs/owned-extension-replay-04.log`). The test-only supplied-policy repair is
@@ -81,10 +119,9 @@ The original two-million limit, full equality/duplicate checks and atomic
 retirement remain intact. The diagnostic edits are removed.
 The item-defence supplied-policy fixture repair authenticates the whole historical
 recipe and both old policies before changing only transitive commitments; production
-validation is unchanged. Finish the remaining lint gates
-before authoring the movement release against the validated successor. Attempt
+validation is unchanged. Attempt
 `06` is retained as failed evidence, not a release. The configuration inventory
-and movement authoring candidates remain unapplied/unpublished; their evidence,
+and Boolean transport changes are applied but awaiting runtime validation; their evidence,
 remaining prerequisites and selected-mechanics follow-up are recorded below.
 No hosted-green or complete-build claim is made.
 
@@ -1941,10 +1978,10 @@ explicit `import_preferences` family to the current source-presentation policy,
 shares that law, and accounts only a proven whole Import origin before fallback.
 It refuses exportParty=true, unknown fields, children, duplicates and malformed
 frames; it neither completes configuration nor changes native ownership. It is
-unapplied and no current policy opts in. Evidence and candidate:
+applied but awaiting runtime validation, and no current policy opts in. Evidence and candidate:
 `runs/configuration-external-origins-review-20261020/` (audit `227963a6…`),
 `runs/import-presentation-candidate-20261020/` (manifest `89d983f8…`).
-The current PoB census remains incomplete. The candidate is unapplied and untested;
+The current PoB census remains incomplete. The combined candidate is applied but untested;
 its fixture census supplies no authority for a real build. Do not install all UI
 defaults as native assumptions or infer irrelevant
 behavior from hidden controls. Public-normalizer fixtures must exercise absent,
@@ -1962,7 +1999,7 @@ will not implement repeat mechanics or complete any inventory. Three cooldown
 bypasses and seven child switches need Boolean constructor transport in the existing
 Scenario-intent adapter, which currently accepts only numeric saved values. The
 combined candidate adds this transport with existing value/default types and
-checks the live typed intent before issuing source receipts; it remains unapplied.
+checks the live typed intent before issuing source receipts; runtime validation is pending.
 Preserve
 exact parent/child applicability; global Player flags are not a substitute.
 For these child switches, false suppresses the Config producer rather than writing
@@ -1993,6 +2030,20 @@ delivery. Reuse the existing equipment receivers and contribution graph where
 possible, preserving local consumption, grouping and scaling. Do not close an owner
 because the current observed modifier value happens to be neutral or already emitted
 by its direct path. Candidate authoring and source controls are still in progress.
+
+The subsequent nine-owner audit confirms none can honestly become Complete by
+deleting stale labels. It preserves the actual 9 equipment uses, 8 physical Items,
+13 physical Modifiers and 15 use occurrences. Prioritize the existing Charm
+local-capacity consumer, then its bounded scalar/admission certificate. Shared
+late grouped slot-copy behavior advances movement, Life, resistance and Flask
+rate; early per-record Amulet copying cannot substitute for that grouped step.
+Spirit separately lacks the equipment-Spirit exclusion gate, Spell damage needs
+exact Action-qualified delivery, and item Firebolt needs final generated-source
+property preparation. Evidence:
+`runs/selected-modifier-closure-review-20261020/README.md`, audit SHA-256
+`e76f655d4f121e7dc7af7b9f5a581e7eb0fbec8430c07c17602cd7a2990bee9b`.
+These are definition-domain gaps, not a claim that every branch activates in the
+unchanged build; any supported-domain closure needs an explicit checked boundary.
 
 ### Native Scenario intent checkpoint, October 20
 

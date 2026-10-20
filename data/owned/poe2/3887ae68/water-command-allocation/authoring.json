@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "scope": "Only entering Grant32bb admits Allocation roots already supplying Water Skill032c; no activation, output, action choice, input or numerical coverage is added.",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "bytes": 217603,
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "predecessor": {
+    "path": "runs/owned-movement-penalty-publication-01/package/release.json",
+    "bytes": 56615,
+    "sha256": "7466ee16be2ebb7756417db090af1403f6b9c56a693563e4fc8d045774c4ef12",
+    "input": "c8705bf69798b7215053a95462ffb8e87dbc9ad36f4f52ed0df7be946609c300",
+    "definitions": {
+      "game": "poe2",
+      "release": "pob-3887ae68-scenario-stage-inputs-v1",
+      "schema_version": 7,
+      "content_sha256": "44a898537105d2896055a1b122c82c1c8ab5419bf064eb16934b0bcd59295119",
+      "semantics_version": "owned-mechanics-skill-inputs-v1"
+    }
+  },
+  "sources": [
+    {
+      "source": "src/TreeData/0_5/tree.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/empty-passive-socket-intrinsics/tree.lua.gz",
+        "bytes": 388551,
+        "sha256": "150e3945838287aa50ada2f2ef998fb50c84471b38a5e4f17e4eb06b34553acb"
+      },
+      "body": {
+        "bytes": 2620112,
+        "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+      },
+      "witnesses": [
+        "[32705]={",
+        "name=\"Barya of Navira\"",
+        "[1]=\"Grants Skill: Navira, the Last Mirage\""
+      ]
+    },
+    {
+      "source": "src/Data/Gems.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Data_Gems.lua.gz",
+        "bytes": 47092,
+        "sha256": "d082011371b93f4748dd05f961418559a60b54806a49b93fa0eb2d613e95bbf8"
+      },
+      "body": {
+        "bytes": 513395,
+        "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+      },
+      "witnesses": [
+        "[\"Metadata/Items/Gems/SkillGemAscendancySummonWaterDjinn\"] = {",
+        "grantedEffectId = \"SummonWaterDjinnPlayer\"",
+        "additionalGrantedEffectId1 = \"CommandWaterDjinnBubblePlayer\""
+      ]
+    },
+    {
+      "source": "src/Modules/CalcSetup.lua",
+      "archive": {
+        "path": "data/owned/poe2/3887ae68/support-structural-inventories/sources/src_Modules_CalcSetup.lua.gz",
+        "bytes": 21399,
+        "sha256": "cdefa2fbbb4a15befdc728fd549902f4032c1cdf0b52c3070dc356f0a45e718f"
+      },
+      "body": {
+        "bytes": 100609,
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      },
+      "witnesses": [
+        "grantedSkill.sourceNode = node",
+        "source = grantedSkill.source",
+        "activeGemInstance.gemId = data.gemForSkill[data.skills[grantedSkill.skillId]]",
+        "for index, grantedEffect in ipairs(grantedEffectList) do"
+      ]
+    }
+  ],
+  "original": {
+    "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+    "bytes": 106378,
+    "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+  },
+  "prior_packets": [
+    {
+      "path": "data/owned/poe2/3887ae68/djinn-tree-grants/bindings.json",
+      "bytes": 5944,
+      "sha256": "780c278e35c29ac1aa5eeba9cf1028396334af0dba1a25bc7d828aa8c4113aaa"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/djinn-actions/bindings.json",
+      "bytes": 48063,
+      "sha256": "d0f1c4308dd0567d1e1d6910eac5bde023e465a31a8a86d4a45f064def51407c"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/sand-preparation/corrections.json",
+      "bytes": 2931,
+      "sha256": "1c65ac208ee99aa9dabc42ecfb93d3f56e275eb6bb15f82ca0137b4b628e28eb"
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "dependencies.json",
+      "bytes": 43558,
+      "sha256": "5fc1daaa7db6644106e6ce615bcebef668449324f35ce2dd610ba24e0987d468"
+    },
+    {
+      "name": "migration.json",
+      "bytes": 2330,
+      "sha256": "72a66b51f5132f7e6cddb184243e841d9b24b11d47086eeac2b7193100318a0d"
+    }
+  ]
+}

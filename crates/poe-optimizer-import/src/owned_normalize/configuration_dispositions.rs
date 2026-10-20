@@ -4,8 +4,16 @@
 //! A leaf receipt never completes a configuration or scenario inventory.
 use super::*;
 mod accounting;
+mod inventory;
+mod receipts;
+pub use inventory::{
+    ConfigurationCensusClosure, ConfigurationInventoryControl, ConfigurationInventoryDisposition,
+    ConfigurationInventoryPolicy, ConfigurationSourceCensus,
+    configuration_inventory_census_identity,
+};
 
-pub(super) use accounting::{AdapterReceipts, account};
+pub(super) use accounting::account;
+pub(super) use receipts::AdapterReceipts;
 
 /// Produced only after an adapter checks its actual typed output and scope.
 pub(super) struct CheckedConfigurationReceipt {
@@ -21,8 +29,9 @@ pub(super) struct CheckedConfigurationReceipt {
     pub(super) source_only: Option<OwnedDefinitionKey>,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub(super) enum ConfigurationSourceState {
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ConfigurationSourceState {
     Authored,
     AuthoredNone,
     Placeholder,
@@ -106,7 +115,8 @@ pub struct ConfigurationDispositionRule {
 
 /// Reviewed import data. Evidence digests are authenticated by offline publication;
 /// normalization verifies their source/adapter bindings and actual correspondence.
-/// Rows are a partial census and do not carry a complete-inventory permission.
+/// Leaf rows are a partial census. Only the separate source-bound inventory
+/// policy can request its strictly checked, bounded completion domain.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ConfigurationDispositionPolicy {
@@ -115,6 +125,9 @@ pub struct ConfigurationDispositionPolicy {
     pub constructor_evidence: OwnedContentDigest,
     pub dependencies: ConfigurationDispositionDependencies,
     pub rules: Vec<ConfigurationDispositionRule>,
+    /// Absent means no inventory authority, not an obsolete wire format.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub inventory: Option<ConfigurationInventoryPolicy>,
 }
 
 fn component<T: Serialize>(
@@ -192,6 +205,7 @@ pub(super) struct CompiledRule {
 }
 pub(super) struct CompiledConfigurationDispositions {
     rules: Vec<CompiledRule>,
+    inventory: Option<inventory::CompiledInventory>,
     work: usize,
 }
 
@@ -337,5 +351,10 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             destinations,
         });
     }
-    Ok(Some(CompiledConfigurationDispositions { rules, work }))
+    let inventory = inventory::compile(p, policy, definitions, limits, &mut work)?;
+    Ok(Some(CompiledConfigurationDispositions {
+        rules,
+        inventory,
+        work,
+    }))
 }

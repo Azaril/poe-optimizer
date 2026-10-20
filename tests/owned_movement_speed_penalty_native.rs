@@ -88,16 +88,16 @@ impl World {
             if let DefinitionDescriptor::EquipmentSlot(_) = definition {
                 continue;
             }
-            if let DefinitionDescriptor::Stat(e) = &mut definition {
-                if e.id.key().as_str() == packet::RAW {
-                    let SchemaState::Known(s) = &mut e.schema else {
-                        panic!()
-                    };
-                    s.value = ComputedValueType::Quantity {
-                        unit: UnitDefId::parse(e.id.namespace().clone(), "def.0000000000000001")
-                            .unwrap(),
-                    };
-                }
+            if let DefinitionDescriptor::Stat(e) = &mut definition
+                && e.id.key().as_str() == packet::RAW
+            {
+                let SchemaState::Known(s) = &mut e.schema else {
+                    panic!()
+                };
+                s.value = ComputedValueType::Quantity {
+                    unit: UnitDefId::parse(e.id.namespace().clone(), "def.0000000000000001")
+                        .unwrap(),
+                };
             }
             f.schema.definitions.push(rebound(&definition));
         }

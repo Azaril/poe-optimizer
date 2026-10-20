@@ -111,6 +111,7 @@ fn accounting(a: &Artifacts, p: &mut NormalizationPolicy) {
     let input = row(p).clone();
     let parameters = &input.parameters;
     p.configuration_dispositions = Some(ConfigurationDispositionPolicy {
+        inventory: None,
         mapping_source: *a.mapping.source_identity(),
         catalogue_evidence: *a.mapping.identity(),
         constructor_evidence: *a.rewards.identity(),
@@ -604,3 +605,6 @@ fn declared_shared_projections_cannot_be_accounted_by_only_one_destination() {
 
 #[path = "owned_configuration_usage_scalar.rs"]
 mod scalar_tests;
+
+#[path = "owned_configuration_usage_intents_boolean.rs"]
+mod boolean_constructor_tests;

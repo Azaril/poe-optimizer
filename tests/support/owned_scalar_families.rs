@@ -290,9 +290,9 @@ fn current_defence_fixture_inputs(
         .is_err()
     );
     let mut next_source = old_source.clone();
-    next_source.item_lines = next_lines.identity().clone();
+    next_source.item_lines = *next_lines.identity();
     let mut source_inverse = next_source.clone();
-    source_inverse.item_lines = old_source.item_lines.clone();
+    source_inverse.item_lines = old_source.item_lines;
     assert_eq!(source_inverse, old_source, "whole item source inverse");
     ItemSourceLayoutPolicy::new(
         next_source.clone(),
