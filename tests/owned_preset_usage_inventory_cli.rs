@@ -19,6 +19,8 @@ use std::{fs, path::PathBuf};
 #[test]
 fn checked_packet_preserves_the_complete_saved_source_census() {
     family::check();
+    // Keep the portable control seals checked by ordinary CI as the packet evolves.
+    positive::inputs();
 }
 
 #[test]

@@ -97,7 +97,11 @@ model can carry typed Boolean parameters, but its Import adapter still needs
 Boolean constructor transport. Parent-qualified child controls additionally need
 exact supplier-path applicability: the current final-edge match is not an ancestor
 proof, and Partial coverage does not stop known matching intents from applying.
-No such child-control rows are admitted on that weaker evidence. The implementation
+No such child-control rows are admitted on that weaker evidence. An exact child
+relation declared by its immediate parent Skill can already prove that parent;
+the unresolved case is a shared Actor-owned child relation reachable from different
+summoning Skills. Review actual relation ownership before extending the public
+model. The implementation
 plan tracks transport and supplier-path proof separately.
 The owner also accepted
 [requirement assessment alongside metric reports](owned-requirement-assessment-proposal.md).
