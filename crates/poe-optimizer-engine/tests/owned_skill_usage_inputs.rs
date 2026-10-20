@@ -39,7 +39,11 @@ fn activation(report: &OwnedEffectsReport, index: usize) -> &EffectValue {
 fn composed_real_usage_policy_controls_existing_offering_delivery() {
     let mut world = World::new(&[Offering::at_final_level(22)], [(0., 1.), (25., 1.)]);
     let request = world.request();
-    assert_eq!(request.scenario().input().usage, vec![usage(0, true)]);
+    assert_eq!(
+        request.build().input().usage_preferences,
+        vec![usage(0, true)]
+    );
+    assert!(request.scenario().input().usage.is_empty());
     assert!(
         !request.build().input().choices.iter().any(|choice| choice
             .choice
@@ -49,7 +53,19 @@ fn composed_real_usage_policy_controls_existing_offering_delivery() {
             .as_str()
             == "fixture.pain-offering.active")
     );
-    let enabled = world.evaluate();
+    let plan = world.compile();
+    assert_eq!(
+        plan.usage_resolution(),
+        &OwnedUsageResolution {
+            selections: vec![ResolvedUsageSelection {
+                selection: usage(0, true),
+                source: UsageSelectionSource::Preset { index: 0 },
+                replaced: vec![],
+            }],
+            intents: vec![],
+        }
+    );
+    let enabled = plan.evaluate(&mut plan.new_scratch()).unwrap();
     check(&enabled, [62., 77.]);
     assert_eq!(
         activation(&enabled, 0),
@@ -64,10 +80,28 @@ fn composed_real_usage_policy_controls_existing_offering_delivery() {
             RuleOrigin::EffectApplication { source: ConcreteEntity::Skill(source), recipient: ConcreteEntity::Actor(target), .. }
             if **source == offering_target(0) && *target == actor(recipient)));
     }
-    // Whole-record scenario replacement passes through Core composition before
-    // the same native program and effect-application engine execute.
+    // Core preserves both input layers; definition-aware preparation applies the
+    // whole-record Scenario override before the same native programs execute.
     world.component.intrinsic.f.scenario.usage = vec![usage(0, false)];
-    let disabled = world.evaluate();
+    let request = world.request();
+    assert_eq!(
+        request.build().input().usage_preferences,
+        vec![usage(0, true)]
+    );
+    assert_eq!(request.scenario().input().usage, vec![usage(0, false)]);
+    let plan = world.compile();
+    assert_eq!(
+        plan.usage_resolution(),
+        &OwnedUsageResolution {
+            selections: vec![ResolvedUsageSelection {
+                selection: usage(0, false),
+                source: UsageSelectionSource::ExactScenario { index: 0 },
+                replaced: vec![UsageSelectionSource::Preset { index: 0 }],
+            }],
+            intents: vec![],
+        }
+    );
+    let disabled = plan.evaluate(&mut plan.new_scratch()).unwrap();
     assert_eq!(
         activation(&disabled, 0),
         &EffectValue::Known {

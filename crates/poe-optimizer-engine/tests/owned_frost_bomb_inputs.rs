@@ -551,16 +551,62 @@ fn check(report: &OwnedEffectsReport, expected: [bool; 2]) {
 #[test]
 fn authored_frost_usage_and_synthetic_consumer_keep_two_physical_copies_independent() {
     let mut world = World::new([Some(true), Some(false)], true);
-    assert_eq!(world.request().scenario().input().usage, world.preferences);
-    check(&world.evaluate(), [true, false]);
+    let request = world.request();
+    assert_eq!(request.build().input().usage_preferences, world.preferences);
+    assert!(request.scenario().input().usage.is_empty());
+    let plan = world.plan();
+    assert_eq!(
+        plan.usage_resolution(),
+        &OwnedUsageResolution {
+            selections: world
+                .preferences
+                .iter()
+                .enumerate()
+                .map(|(index, selection)| ResolvedUsageSelection {
+                    selection: selection.clone(),
+                    source: UsageSelectionSource::Preset { index },
+                    replaced: vec![],
+                })
+                .collect(),
+            intents: vec![],
+        }
+    );
+    check(
+        &plan.evaluate(&mut plan.new_scratch()).unwrap(),
+        [true, false],
+    );
     world.preferences = vec![usage(0, false), usage(1, true)];
     check(&world.evaluate(), [false, true]);
     world.f.scenario.usage = vec![usage(0, true)];
+    let request = world.request();
     assert_eq!(
-        world.request().scenario().input().usage,
-        vec![usage(0, true), usage(1, true)]
+        request.build().input().usage_preferences,
+        vec![usage(0, false), usage(1, true)]
     );
-    check(&world.evaluate(), [true, true]);
+    assert_eq!(request.scenario().input().usage, vec![usage(0, true)]);
+    let plan = world.plan();
+    assert_eq!(
+        plan.usage_resolution(),
+        &OwnedUsageResolution {
+            selections: vec![
+                ResolvedUsageSelection {
+                    selection: usage(0, true),
+                    source: UsageSelectionSource::ExactScenario { index: 0 },
+                    replaced: vec![UsageSelectionSource::Preset { index: 0 }],
+                },
+                ResolvedUsageSelection {
+                    selection: usage(1, true),
+                    source: UsageSelectionSource::Preset { index: 1 },
+                    replaced: vec![],
+                },
+            ],
+            intents: vec![],
+        }
+    );
+    check(
+        &plan.evaluate(&mut plan.new_scratch()).unwrap(),
+        [true, true],
+    );
 }
 
 #[test]

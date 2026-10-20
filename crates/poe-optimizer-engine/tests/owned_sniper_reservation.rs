@@ -394,7 +394,32 @@ fn producer(report: &OwnedEffectsReport, index: usize) -> &BoundEffectResult {
 #[test]
 fn actual_base_and_authored_consumer_use_composed_counts_for_independent_occurrences() {
     let mut w = World::new([1, 40], [Some(1), Some(3)], synthetic_inputs());
-    let r = w.evaluate();
+    let request = w.request();
+    assert_eq!(
+        request.build().input().usage_preferences,
+        vec![usage(0, 1), usage(1, 3)]
+    );
+    assert!(request.scenario().input().usage.is_empty());
+    let plan = w.plan();
+    assert_eq!(
+        plan.usage_resolution(),
+        &OwnedUsageResolution {
+            selections: vec![
+                ResolvedUsageSelection {
+                    selection: usage(0, 1),
+                    source: UsageSelectionSource::Preset { index: 0 },
+                    replaced: vec![],
+                },
+                ResolvedUsageSelection {
+                    selection: usage(1, 3),
+                    source: UsageSelectionSource::Preset { index: 1 },
+                    replaced: vec![],
+                },
+            ],
+            intents: vec![],
+        }
+    );
+    let r = plan.evaluate(&mut plan.new_scratch()).unwrap();
     assert!(r.gaps.is_empty(), "{:?}", r.gaps);
     assert!(r.values.iter().any(|row| row.key
         == PlanValueKey::Stat {
@@ -424,11 +449,32 @@ fn actual_base_and_authored_consumer_use_composed_counts_for_independent_occurre
         );
     }
     w.inner.f.scenario.usage = vec![usage(0, 4)];
+    let request = w.request();
     assert_eq!(
-        w.request().scenario().input().usage,
-        vec![usage(0, 4), usage(1, 3)]
+        request.build().input().usage_preferences,
+        vec![usage(0, 1), usage(1, 3)]
     );
-    let r = w.evaluate();
+    assert_eq!(request.scenario().input().usage, vec![usage(0, 4)]);
+    let plan = w.plan();
+    assert_eq!(
+        plan.usage_resolution(),
+        &OwnedUsageResolution {
+            selections: vec![
+                ResolvedUsageSelection {
+                    selection: usage(0, 4),
+                    source: UsageSelectionSource::ExactScenario { index: 0 },
+                    replaced: vec![UsageSelectionSource::Preset { index: 0 }],
+                },
+                ResolvedUsageSelection {
+                    selection: usage(1, 3),
+                    source: UsageSelectionSource::Preset { index: 1 },
+                    replaced: vec![],
+                },
+            ],
+            intents: vec![],
+        }
+    );
+    let r = plan.evaluate(&mut plan.new_scratch()).unwrap();
     assert_eq!(
         [amount(&r, 0, "counted_flat"), amount(&r, 1, "counted_flat")],
         [360., 78.]
