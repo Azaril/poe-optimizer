@@ -1983,7 +1983,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             gem_inputs.as_ref(),
             gem_inventory.as_ref(),
         )?;
-        let (parameters, support_input_proof) = parameters.into_support_proof();
+        let (parameters, mut support_input_proof) = parameters.into_support_proof();
         // Keep legacy level/issue allocation before Skill creation. Additive
         // proofs finish only after their real preset destination is established.
         let level = b.level(Some(row), s, &recipes[1])?;
@@ -2029,6 +2029,28 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 }
             }
             Some(AuthoredGemRole::SupportAssignment) => {
+                // Complete scalar declarations do not prove the source frame,
+                // but they must not prevent its independent support proof.
+                // Preserve the scalar results and every primary deferred path.
+                if usage_inventory_enabled
+                    && support_input_proof.is_none()
+                    && let gem_inputs::GemParameters::Resolved(values) = &parameters
+                    && matches!(values.completion, DraftListCompletion::Complete)
+                    && let Some(inventory) = gem_inventory.as_ref()
+                    && let Some(gem_inventory::GemInventoryProof::PhysicalSupport(proof)) =
+                        inventory.prove(
+                            &mut b,
+                            gem_inventory::GemInventoryContext {
+                                row,
+                                group,
+                                gem: &gem_definition,
+                                quality: &quality,
+                                parameters: &values.members,
+                            },
+                        )?
+                {
+                    support_input_proof = Some(proof);
+                }
                 support_rows.push((
                     s,
                     group_id,

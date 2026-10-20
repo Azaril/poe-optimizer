@@ -25,27 +25,82 @@ pub(super) fn exact_primary_global_gate_is_neutral(
         && attribute.decoded().ok() == Some("true")
 }
 
-/// Reviewed indexed-consumer fact for an already-proved physical SkillUse.
-/// Complete source construction is necessary here: a resolved singleton can
-/// still retain a missing Command, a constructor addition or a reordered effect.
-/// Compare source references, not only native Skill IDs (stat-set aliases may
-/// map to the same Skill). Multiple stat sets and lazy global metadata do not
-/// create an index two.
-///
-/// This does not prove execution, participation, count, reference selection or
-/// numerical coverage. It retains the raw field and grants no support, Direct
-/// or generated-source authority. Runtime role binding is not independent source
-/// authentication: offline publication must reproduce the construction facts.
-/// The caller charges bounded source-field/string comparisons before calling.
-pub(super) fn physical_secondary_global_is_unconsumed(
+/// Shared bounded source-role lookup for private field receipts. Role package
+/// construction sorts this immutable slice and rejects duplicate Gem identities.
+/// This preserves the secondary receipt's existing charges exactly, including
+/// the conservative four source-name scans and unavailable-role precharge.
+/// No caller gets a permission, source proof or field fact merely from lookup.
+pub(super) fn charged_source_role<'a>(
+    b: &mut Builder<'_, '_>,
+    roles: &'a OwnedSkillRoleIndex,
+    row: &SourceEvidenceRow<'_>,
+    gem: &GemDefId,
+) -> Result<Option<&'a OwnedGemRoleRow>> {
+    let gem_identity_work = gem
+        .namespace()
+        .game()
+        .as_str()
+        .len()
+        .saturating_add(gem.namespace().version().as_str().len())
+        .saturating_add(gem.key().as_str().len());
+    let rows = &roles.input().roles;
+    let (mut lower, mut upper) = (0, rows.len());
+    let mut role = None;
+    while lower < upper {
+        b.charge(gem_identity_work.saturating_add(1))?;
+        let middle = lower + (upper - lower) / 2;
+        match rows[middle].gem.cmp(gem) {
+            std::cmp::Ordering::Less => lower = middle + 1,
+            std::cmp::Ordering::Greater => upper = middle,
+            std::cmp::Ordering::Equal => {
+                role = Some(&rows[middle]);
+                break;
+            }
+        }
+    }
+    let comparison_work = role.map_or(0, |role| {
+        let primary_work = match &role.primary {
+            OwnedPrimarySkill::Known(primary) => primary
+                .namespace()
+                .game()
+                .as_str()
+                .len()
+                .saturating_add(primary.namespace().version().as_str().len())
+                .saturating_add(primary.key().as_str().len())
+                .saturating_mul(2),
+            OwnedPrimarySkill::Unmapped { .. } => 0,
+        };
+        let OwnedGemSourceConstruction::Observed(facts) = &role.construction else {
+            return primary_work;
+        };
+        primary_work
+            .saturating_add(facts.game_id.len())
+            .saturating_add(facts.variant_id.len())
+            .saturating_add(facts.primary.effect_id.len().saturating_mul(2))
+    });
+    b.charge(
+        row.attributes()
+            .len()
+            .saturating_mul(65)
+            .saturating_add(gem_identity_work)
+            .saturating_add(comparison_work)
+            .saturating_add(8),
+    )?;
+    Ok(role)
+}
+
+/// Source construction and identity only, with no role-specific field authority.
+/// Multiple stat sets and lazy global metadata do not create a second effect.
+/// A resolved singleton is insufficient if the full construction still records
+/// an additional or missing reference, late addition, or display permutation.
+/// The caller must first perform the charged role lookup; offline publication
+/// independently reproduces the immutable construction facts from its catalog.
+pub(super) fn physical_source_is_singleton(
     row: &SourceEvidenceRow<'_>,
     gem: &GemDefId,
     role: &OwnedGemRoleRow,
 ) -> bool {
-    if &role.gem != gem
-        || role.materialization != OwnedGemMaterialization::Physical
-        || role.role != OwnedGemRole::Known(AuthoredGemRole::SkillUse)
-    {
+    if &role.gem != gem || role.materialization != OwnedGemMaterialization::Physical {
         return false;
     }
     let (OwnedPrimarySkill::Known(primary), OwnedGemSourceConstruction::Observed(facts)) =
@@ -53,13 +108,7 @@ pub(super) fn physical_secondary_global_is_unconsumed(
     else {
         return false;
     };
-    let Some(attribute) = row.attribute("enableGlobal2") else {
-        return false;
-    };
-    let exact_boolean = matches!(attribute.raw(), "true" | "false")
-        && attribute.decoded().ok() == Some(attribute.raw());
-    exact_boolean
-        && source_shape::value(row, "gemId") == Some(facts.game_id.as_str())
+    source_shape::value(row, "gemId") == Some(facts.game_id.as_str())
         && source_shape::value(row, "variantId") == Some(facts.variant_id.as_str())
         && source_shape::value(row, "skillId") == Some(facts.primary.effect_id.as_str())
         && matches!(&facts.primary.resolution,
@@ -75,6 +124,26 @@ pub(super) fn physical_secondary_global_is_unconsumed(
             .is_none_or(|order| order == [1])
 }
 
+/// Reviewed unread secondary source switch for an already-proved physical
+/// SkillUse. Sharing its source predicate does not extend this authority to
+/// SupportAssignment, Direct or generated occurrences. Only exact literal
+/// true/false is accepted; this proves no execution, participation, count,
+/// reference selection, numerical coverage or native effect.
+pub(super) fn physical_secondary_global_is_unconsumed(
+    row: &SourceEvidenceRow<'_>,
+    gem: &GemDefId,
+    role: &OwnedGemRoleRow,
+) -> bool {
+    if role.role != OwnedGemRole::Known(AuthoredGemRole::SkillUse) {
+        return false;
+    }
+    let Some(attribute) = row.attribute("enableGlobal2") else {
+        return false;
+    };
+    matches!(attribute.raw(), "true" | "false")
+        && attribute.decoded().ok() == Some(attribute.raw())
+        && physical_source_is_singleton(row, gem, role)
+}
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DeferredSourceUsageInput {

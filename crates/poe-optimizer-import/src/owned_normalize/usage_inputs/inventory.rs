@@ -2,6 +2,7 @@
 //! Receipts are private, attempt-local, and checked against the current draft.
 use super::*;
 use poe_optimizer_core::owned_preset_intent::PresetApplicability;
+mod group_selectors;
 #[cfg(test)]
 mod tests;
 
@@ -49,8 +50,12 @@ pub enum UsageInventoryDestination {
     /// Authored/Direct and generated receipts also include the checked literal
     /// primary-true source gate, without enabling an effect. Exact physical
     /// singleton construction can additionally account for the unread secondary
-    /// source switch; Direct/generated dispatch is not covered. Support receipt
-    /// scope is unchanged. Other deferred usage and group selection are excluded.
+    /// source switch; Direct/generated dispatch is not covered. A checked physical
+    /// SupportAssignment with complete singleton construction may account count=1
+    /// and enableGlobal1=enableGlobal2=true only when raw and decoded text agree.
+    /// Final whole-group accounting may additionally prove
+    /// nil/1 selectors for one physical singleton SkillUse with only checked
+    /// singleton support companions. Other deferred usage remains excluded.
     InputDisposition,
     UsageParameter {
         policy: UsagePolicyDefId,
@@ -314,61 +319,8 @@ pub(in crate::owned_normalize) fn record_input_disposition(
     // disposition succeeds. Restrict the new source fact to the physical branch;
     // Direct and generated occurrences have different loader dispatch.
     let physical_secondary = if let UsageInventorySource::Physical { gem } = &identity {
-        let gem_identity_work = gem
-            .namespace()
-            .game()
-            .as_str()
-            .len()
-            .saturating_add(gem.namespace().version().as_str().len())
-            .saturating_add(gem.key().as_str().len());
         let roles = b.roles;
-        // Role construction sorts this immutable slice and rejects duplicate
-        // Gem identities. Charge each bounded comparison before performing it;
-        // unrelated catalog rows do not impose linear work on each receipt.
-        let rows = &roles.input().roles;
-        let (mut lower, mut upper) = (0, rows.len());
-        let mut role = None;
-        while lower < upper {
-            b.charge(gem_identity_work.saturating_add(1))?;
-            let middle = lower + (upper - lower) / 2;
-            match rows[middle].gem.cmp(gem) {
-                std::cmp::Ordering::Less => lower = middle + 1,
-                std::cmp::Ordering::Greater => upper = middle,
-                std::cmp::Ordering::Equal => {
-                    role = Some(&rows[middle]);
-                    break;
-                }
-            }
-        }
-        let comparison_work = role.map_or(0, |role| {
-            let primary_work = match &role.primary {
-                OwnedPrimarySkill::Known(primary) => primary
-                    .namespace()
-                    .game()
-                    .as_str()
-                    .len()
-                    .saturating_add(primary.namespace().version().as_str().len())
-                    .saturating_add(primary.key().as_str().len())
-                    .saturating_mul(2),
-                OwnedPrimarySkill::Unmapped { .. } => 0,
-            };
-            let OwnedGemSourceConstruction::Observed(facts) = &role.construction else {
-                return primary_work;
-            };
-            primary_work
-                .saturating_add(facts.game_id.len())
-                .saturating_add(facts.variant_id.len())
-                .saturating_add(facts.primary.effect_id.len().saturating_mul(2))
-        });
-        b.charge(
-            row.attributes()
-                .len()
-                // Four bounded plain-name scans, including their name bytes.
-                .saturating_mul(65)
-                .saturating_add(gem_identity_work)
-                .saturating_add(comparison_work)
-                .saturating_add(8),
-        )?;
+        let role = skill_input_disposition::charged_source_role(b, roles, row, gem)?;
         role.is_some_and(|role| {
             skill_input_disposition::physical_secondary_global_is_unconsumed(row, gem, role)
         })
@@ -464,11 +416,37 @@ pub(in crate::owned_normalize) fn record_support_input_disposition(
                 .saturating_add(1),
         ],
     )?;
+    // A physical support's neutral saved usage fields have no admitted active
+    // receiver only within the complete singleton source-construction domain.
+    // Additional/missing effects may have their own count and indexed gates.
+    // Keep this separate from SkillUse secondary-switch authority.
+    let roles = b.roles;
+    let role = skill_input_disposition::charged_source_role(b, roles, row, proof.gem())?;
+    b.charge(row.attributes().len().saturating_mul(65).saturating_add(8))?;
+    let neutral_support_usage = role.is_some_and(|role| {
+        role.role == OwnedGemRole::Known(AuthoredGemRole::SupportAssignment)
+            && skill_input_disposition::physical_source_is_singleton(row, proof.gem(), role)
+            && [
+                ("count", "1"),
+                ("enableGlobal1", "true"),
+                ("enableGlobal2", "true"),
+            ]
+            .into_iter()
+            .all(|(name, value)| {
+                row.attribute(name).is_some_and(|attribute| {
+                    attribute.raw() == value && attribute.decoded().ok() == Some(value)
+                })
+            })
+    });
     let mut fields: BTreeSet<_> = row
         .attributes()
         .iter()
         .map(|attribute| attribute.origin().name.as_str())
-        .filter(|name| proof.occurrence_attributes().contains(name))
+        .filter(|name| {
+            proof.occurrence_attributes().contains(name)
+                || neutral_support_usage
+                    && matches!(*name, "count" | "enableGlobal1" | "enableGlobal2")
+        })
         .map(occurrence_field)
         .collect();
     fields.extend(
@@ -764,15 +742,17 @@ fn field_proved(
     field: &UsageInventoryField,
     inputs: &[&InputReceipt],
     usages: &[&UsageReceipt],
+    selectors: Option<&group_selectors::GroupSelectors>,
 ) -> bool {
     field
         .destinations
         .iter()
         .all(|destination| match destination {
             UsageInventoryDestination::Deferred { .. } => false,
-            UsageInventoryDestination::InputDisposition => inputs
-                .iter()
-                .any(|receipt| receipt.fields.contains(&field.field)),
+            UsageInventoryDestination::InputDisposition => inputs.iter().any(|receipt| {
+                receipt.fields.contains(&field.field)
+                    || selectors.is_some_and(|proof| proof.proves(receipt, &field.field))
+            }),
             UsageInventoryDestination::UsageParameter { policy, parameter } => {
                 usages.iter().any(|receipt| {
                     receipt.binding.selection.policy.to_resolved().as_ref() == Some(policy)
@@ -852,6 +832,7 @@ pub(super) fn complete(
             let group = &b.evidence.rows()[group_id.ordinal() as usize];
             valid &= !group.children().is_empty();
             accounted.insert(*group_id);
+            let selectors = group_selectors::prove(b, draft, preset, group, receipts)?;
             let mut group_fields = BTreeSet::new();
             b.charge(group.children().len())?;
             for source in group.children() {
@@ -987,7 +968,7 @@ pub(super) fn complete(
                             inputs.len().saturating_add(usages.len()).saturating_add(1),
                         ],
                     )?;
-                    let proved = field_proved(field, &inputs, &usages);
+                    let proved = field_proved(field, &inputs, &usages, selectors.as_ref());
                     valid &= proved;
                     if proved
                         && matches!(

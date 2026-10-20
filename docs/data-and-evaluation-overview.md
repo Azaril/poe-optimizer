@@ -172,8 +172,14 @@ construction facts are now implemented in the existing Import role artifact
 under the October 20 approval; current artifacts and dependent fixtures are
 rebuilt, and all-five preservation validation passes. Retired input-policy
 readers are removed. A private secondary-switch accounting adapter is applied and
-undergoing its final focused rerun. All thirteen selector/secondary-switch source
-tests pass; the next group-selector adapter remains an unapplied local candidate.
+passes its focused usage tests and strict linting. All thirteen selector/secondary-switch source
+tests pass; three additional support-consumer controls also pass. The
+group-selector adapter is applied, with private and public checks passing.
+Both reuse the same physical construction
+predicate and charged role lookup while retaining separate field permissions.
+The applied support receipt uses those facts for exact neutral count/global
+fields. Complete scalar inputs now permit the same independent source proof
+as partial inputs; post-fix validation is tracked in the implementation plan.
 Source tests alone grant no native execution or import-completion
 authority. Primary-switch semantics and exact occurrence/selector correspondence
 remain separate obligations.

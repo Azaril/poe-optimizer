@@ -777,3 +777,358 @@ fn exact_true_primary_is_non_restricting_but_other_admission_gates_and_counts_re
         }
     }
 }
+
+const SINGLE_SUPPORT: &str = "SupportRapidCastingPlayer";
+const CHILD_SUPPORT: &str = "SupportCorruptingCryPlayer";
+const SUPPORT_CHILD: &str = "TriggeredCorruptingCryPlayer";
+
+fn catalog_row<'a>(collection: &'a Json, field: &str, value: &str) -> &'a Json {
+    let rows = collection
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|row| row[field] == value)
+        .collect::<Vec<_>>();
+    assert_eq!(rows.len(), 1, "exact catalog join: {field}={value}");
+    rows[0]
+}
+
+/// Additional real declarations come from the SAME already authenticated
+/// catalog/manifest. The old packet is unchanged; these are component anchors,
+/// not an assertion that their complete effects or receiving rules execute.
+fn support_components(jit: bool) -> Lua {
+    let lua = components(jit);
+    let p = packet();
+    let mut definitions = p.boundary("mod_helpers");
+    definitions.push_str(
+        "\nlocal mod,flag,skill=makeSkillMod,makeFlagMod,makeSkillDataMod\nlocal skills=data.skills\n",
+    );
+    for id in [SINGLE_SUPPORT, CHILD_SUPPORT, SUPPORT_CHILD] {
+        let row = catalog_row(&p.catalog["skills"], "id", id);
+        let declaration = p.catalog["skill_declarations"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|candidate| candidate["index"] == row["winning_declaration"])
+            .collect::<Vec<_>>();
+        assert_eq!(declaration.len(), 1);
+        let declaration = declaration[0];
+        assert_eq!(declaration["id"], id);
+        assert_eq!(declaration["identity"]["support"], row["support"]);
+        let pin = &declaration["source"];
+        // This API validates the complete source bytes against the manifest
+        // whose identity packet() authenticated, before taking the exact slice.
+        let body = source::read_verified_text(
+            &root().join("vendor/path-of-building-poe2"),
+            text(&pin["path"]),
+        )
+        .unwrap();
+        let first = pin["line"].as_u64().unwrap() as usize;
+        let last = pin["end_line"].as_u64().unwrap() as usize;
+        let declaration = body
+            .lines()
+            .skip(first - 1)
+            .take(last - first + 1)
+            .collect::<Vec<_>>()
+            .join("\n")
+            + "\n";
+        assert_eq!(declaration.lines().count(), last - first + 1);
+        assert_eq!(hash(declaration.as_bytes()), text(&pin["sha256"]));
+        definitions.push_str(&declaration);
+        definitions.push_str(&format!(
+            "\nskills['{id}'].id='{id}';skills['{id}'].modSource='Skill:{id}'\n"
+        ));
+    }
+    lua.load(definitions)
+        .set_name("@authenticated-support-declarations")
+        .exec()
+        .unwrap();
+    for id in [SINGLE_SUPPORT, CHILD_SUPPORT, SUPPORT_CHILD] {
+        assert_eq!(
+            effect(&lua, id).get::<Option<bool>>("support").unwrap(),
+            catalog_row(&p.catalog["skills"], "id", id)["support"].as_bool()
+        );
+    }
+    // Only reads of the saved usage fields are intercepted. Identity, enabled
+    // state and source construction remain ordinary tables. This instrumentation
+    // neither constructs an active effect nor decides which source owns it.
+    lua.load(
+        r#"
+        function supportUsageProbe(row, count, primary, secondary)
+            local probe = {
+                count = count, enableGlobal1 = primary, enableGlobal2 = secondary,
+                countReads = 0, primaryReads = 0, secondaryReads = 0
+            }
+            setmetatable(row, { __index = function(_, key)
+                if key == "count" then
+                    probe.countReads = probe.countReads + 1
+                    return probe.count
+                elseif key == "enableGlobal1" then
+                    probe.primaryReads = probe.primaryReads + 1
+                    return probe.enableGlobal1
+                elseif key == "enableGlobal2" then
+                    probe.secondaryReads = probe.secondaryReads + 1
+                    return probe.enableGlobal2
+                end
+            end })
+            return probe
+        end
+        "#,
+    )
+    .exec()
+    .unwrap();
+    lua
+}
+
+fn construct_catalog_support(lua: &Lua, id: &str) -> (Table, Table) {
+    let p = packet();
+    let row = catalog_row(&p.catalog["gems"], "primary_effect_id", id);
+    let declaration = p.catalog["gem_declarations"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|candidate| candidate["index"] == row["winning_declaration"])
+        .collect::<Vec<_>>();
+    assert_eq!(declaration.len(), 1);
+    assert_eq!(declaration[0]["key"], row["key"]);
+    p.declaration(declaration[0]);
+    let raw: Table = lua
+        .globals()
+        .get::<Table>("allGems")
+        .unwrap()
+        .get(text(&row["key"]))
+        .unwrap();
+    assert_eq!(raw.get::<String>("grantedEffectId").unwrap(), id);
+    assert_eq!(raw.get::<String>("gameId").unwrap(), text(&row["game_id"]));
+    assert_eq!(
+        raw.get::<String>("variantId").unwrap(),
+        text(&row["variant_id"])
+    );
+    let gem = copy(lua, &raw);
+    lua.globals()
+        .get::<Function>("constructGem")
+        .unwrap()
+        .call::<()>((gem.clone(), text(&row["key"])))
+        .unwrap();
+    let ids = gem
+        .get::<Table>("grantedEffectList")
+        .unwrap()
+        .sequence_values::<Table>()
+        .map(|entry| entry.unwrap().get::<String>("id").unwrap())
+        .collect::<Vec<_>>();
+    assert_eq!(json!(ids), row["effect_list"]);
+    (raw, gem)
+}
+
+fn support_occurrence(
+    lua: &Lua,
+    gem: &Table,
+    count: i64,
+    primary: Option<bool>,
+    secondary: Option<bool>,
+) -> (Table, Table) {
+    let row = lua.create_table().unwrap();
+    row.set("gemData", gem.clone()).unwrap();
+    row.set("enabled", true).unwrap();
+    let probe = lua
+        .globals()
+        .get::<Function>("supportUsageProbe")
+        .unwrap()
+        .call((row.clone(), count, primary, secondary))
+        .unwrap();
+    (row, probe)
+}
+
+fn usage_reads(probe: &Table) -> (u32, u32, u32) {
+    (
+        probe.get("countReads").unwrap(),
+        probe.get("primaryReads").unwrap(),
+        probe.get("secondaryReads").unwrap(),
+    )
+}
+
+/// Feed the actual identity tables returned by the authenticated admission loop
+/// to the actual count function. The synthetic body does not prepare modifiers,
+/// validate compatibility, retain supports, or establish gameplay triggers.
+fn admitted_source_counts(
+    lua: &Lua,
+    group: &Table,
+) -> Vec<(String, *const std::ffi::c_void, i64, bool)> {
+    let active: Table = lua
+        .globals()
+        .get::<Function>("admitted")
+        .unwrap()
+        .call(group.clone())
+        .unwrap();
+    let count = lua
+        .globals()
+        .get::<Table>("calcs")
+        .unwrap()
+        .get::<Function>("getActiveSkillCount")
+        .unwrap();
+    active
+        .sequence_values::<Table>()
+        .map(|active| {
+            let active = active.unwrap();
+            active.set("socketGroup", group.clone()).unwrap();
+            let effect: Table = active.get("activeEffect").unwrap();
+            let source: Table = effect.get("srcInstance").unwrap();
+            let granted: Table = effect.get("grantedEffect").unwrap();
+            let (count, enabled) = count.call::<(i64, bool)>(active).unwrap();
+            (
+                granted.get("id").unwrap(),
+                source.to_pointer(),
+                count,
+                enabled,
+            )
+        })
+        .collect()
+}
+
+#[test]
+fn singleton_support_usage_fields_cannot_donate_to_a_distinct_admitted_receiver() {
+    for jit in [false, true] {
+        let lua = support_components(jit);
+        let (raw, gem) = construct_catalog_support(&lua, SINGLE_SUPPORT);
+        let support = effect(&lua, SINGLE_SUPPORT);
+        assert!(singleton_candidate(&raw, &gem, &support));
+        let receiver_gem = construct(&lua, "IceNovaPlayer");
+        let receiver_effect = effect(&lua, "IceNovaPlayer");
+        assert_ne!(support.to_pointer(), receiver_effect.to_pointer());
+        let (receiver, _) = occurrence(&lua, &receiver_gem, Some(true));
+        receiver.set("count", 7).unwrap();
+        for vaal in [false, true] {
+            gem.set("vaalGem", vaal).unwrap(); // Synthetic branch control.
+            for metadata in [None, Some(false), Some(true)] {
+                set_global_metadata(&lua, &support, metadata);
+                for primary in [None, Some(false), Some(true)] {
+                    for secondary in [None, Some(false), Some(true)] {
+                        for receiver_first in [false, true] {
+                            let (one, one_probe) =
+                                support_occurrence(&lua, &gem, 13, primary, secondary);
+                            let (two, two_probe) =
+                                support_occurrence(&lua, &gem, 17, primary, secondary);
+                            assert_ne!(one.to_pointer(), two.to_pointer());
+                            let group = group(&lua, &receiver);
+                            let rows = if receiver_first {
+                                [receiver.clone(), one.clone(), two.clone()]
+                            } else {
+                                [two.clone(), one.clone(), receiver.clone()]
+                            };
+                            group
+                                .set("gemList", lua.create_sequence_from(rows).unwrap())
+                                .unwrap();
+                            assert_eq!(
+                                admitted_source_counts(&lua, &group),
+                                [("IceNovaPlayer".into(), receiver.to_pointer(), 7, true)]
+                            );
+                            assert_eq!(export_count(&lua, &group, &receiver), 1);
+                            for row in [&one, &two] {
+                                let only_support = group_with_rows(&lua, [row.clone()]);
+                                assert!(admitted_source_counts(&lua, &only_support).is_empty());
+                                assert_eq!(export_count(&lua, &only_support, row), 0);
+                                let shown = visibility(&lua, &only_support);
+                                assert_eq!((shown.0, shown.1), (false, false));
+                                assert_ne!(shown.2, Some(true));
+                            }
+                            assert_eq!(usage_reads(&one_probe), (0, 0, 0));
+                            assert_eq!(usage_reads(&two_probe), (0, 0, 0));
+                            group.set("groupCount", 5).unwrap();
+                            assert_eq!(
+                                admitted_source_counts(&lua, &group),
+                                [("IceNovaPlayer".into(), receiver.to_pointer(), 5, true)]
+                            );
+                            assert_eq!(usage_reads(&one_probe), (0, 0, 0));
+                            assert_eq!(usage_reads(&two_probe), (0, 0, 0));
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn group_with_rows<const N: usize>(lua: &Lua, rows: [Table; N]) -> Table {
+    let group = lua.create_table().unwrap();
+    group
+        .set("gemList", lua.create_sequence_from(rows).unwrap())
+        .unwrap();
+    group
+}
+
+#[test]
+fn a_real_support_child_has_its_own_source_count_and_secondary_gate() {
+    for jit in [false, true] {
+        let lua = support_components(jit);
+        let (raw, gem) = construct_catalog_support(&lua, CHILD_SUPPORT);
+        assert!(!singleton_candidate(
+            &raw,
+            &gem,
+            &effect(&lua, CHILD_SUPPORT)
+        ));
+        let child = effect(&lua, SUPPORT_CHILD);
+        assert_ne!(child.get::<Option<bool>>("support").unwrap(), Some(true));
+        assert_ne!(
+            child.get::<Option<bool>>("hideFromSideBar").unwrap(),
+            Some(true)
+        );
+        // The child declaration is real. Synthetic metadata exercises the exact
+        // indexed gate; it makes no claim that the real Cry initializes it.
+        set_global_metadata(&lua, &child, Some(true));
+        let receiver_gem = construct(&lua, "IceNovaPlayer");
+        let (receiver, _) = occurrence(&lua, &receiver_gem, Some(true));
+        receiver.set("count", 7).unwrap();
+        for secondary in [false, true] {
+            let (source, probe) = support_occurrence(&lua, &gem, 13, Some(false), Some(secondary));
+            let group = group_with_rows(&lua, [source.clone(), receiver.clone()]);
+            let mut expected = Vec::new();
+            if secondary {
+                expected.push((SUPPORT_CHILD.into(), source.to_pointer(), 13, true));
+            }
+            expected.push(("IceNovaPlayer".into(), receiver.to_pointer(), 7, true));
+            assert_eq!(admitted_source_counts(&lua, &group), expected);
+            let (count, primary, secondary_reads) = usage_reads(&probe);
+            assert_eq!(primary, 0, "support primary is excluded before its gate");
+            assert_eq!(count, u32::from(secondary));
+            assert!(secondary_reads > 0, "positive observer access control");
+        }
+        // No metadata-derived gate is needed for the real additional-effect
+        // count relation. This is still construction identity, not eligibility
+        // to trigger, prepared level, or calculated damage.
+        child.set("hasGlobalEffect", Value::Nil).unwrap();
+        let (source, probe) = support_occurrence(&lua, &gem, 19, Some(false), Some(false));
+        let group = group_with_rows(&lua, [receiver.clone(), source.clone()]);
+        assert_eq!(
+            admitted_source_counts(&lua, &group),
+            [
+                ("IceNovaPlayer".into(), receiver.to_pointer(), 7, true),
+                (SUPPORT_CHILD.into(), source.to_pointer(), 19, true),
+            ]
+        );
+        assert_eq!(usage_reads(&probe), (1, 0, 0));
+    }
+}
+
+#[test]
+fn direct_vaal_support_count_probe_is_not_an_actual_active_effect_consumer() {
+    for jit in [false, true] {
+        let lua = support_components(jit);
+        let (_, gem) = construct_catalog_support(&lua, SINGLE_SUPPORT);
+        let support = effect(&lua, SINGLE_SUPPORT);
+        for primary in [false, true] {
+            gem.set("vaalGem", true).unwrap(); // Deliberate synthetic trap.
+            let (row, probe) = support_occurrence(&lua, &gem, 23, Some(primary), Some(false));
+            let group = group_with_rows(&lua, [row.clone()]);
+            assert!(admitted_source_counts(&lua, &group).is_empty());
+            assert_eq!(usage_reads(&probe), (0, 0, 0));
+            // An arbitrary direct helper query bypasses admission and DOES
+            // consult the Vaal primary. A zero-read assertion must use the
+            // actual constructed receiver instead of this manufactured input.
+            assert_eq!(count_for(&lua, &group, &support), (23, primary));
+            assert_eq!(usage_reads(&probe), (1, 1, 0));
+            gem.set("vaalGem", false).unwrap();
+            assert_eq!(count_for(&lua, &group, &support), (1, true));
+            assert_eq!(usage_reads(&probe), (1, 1, 0));
+        }
+    }
+}

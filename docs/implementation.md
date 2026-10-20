@@ -12,19 +12,23 @@ what actually runs. Older checkpoint reports are preserved in
 **October 20 backup checkpoint:** commit `15778b04` was pushed to GitHub `main`
 and its remote hash verified. This supersedes the earlier push-access blocker.
 The construction migration passes scoped checks and all-five preservation.
-The subsequent secondary-switch adapter compiles; Direct (26), Gem (11) and
-14 of 15 usage checks pass. The remaining usage test incorrectly expected a
+The subsequent secondary-switch adapter passes Direct (26), Gem (11) and
+all 15 usage checks. The last usage test incorrectly expected a
 usage list for an unknown source; it now verifies absent materialization, Pending
-membership and preserved source/draft/origin/allocator state. Its rerun is in
-`runs/owned-secondary-global-receipt-tests-03.log`. The six group-selector and
+membership and preserved source/draft/origin/allocator state. Its passing rerun is
+in `runs/owned-secondary-global-receipt-tests-03.log`; focused strict Clippy passes
+in `runs/owned-secondary-global-clippy-02.log`. The six group-selector and
 seven secondary-switch source tests pass. Hosted CI exposed a stale compiler
 transition digest in the import-policy receipt; its one-field repair preserves
-all four policy outputs and passes all 16 converter tests. These follow-up fixes
-are included in the next backup. This is not a claim that hosted CI or the full
+all four policy outputs and passes all 16 converter tests. Those follow-up fixes
+were pushed as `afc607d8`; the final lint cleanup and validation record follow it.
+This is not a claim that hosted CI or the full
 workspace is green. Ignored `runs/` evidence and nine protected incoming-critical
-work-in-progress files remain local. The next group-selector implementation is
-only an unapplied, uncompiled candidate under
-`runs/group-selector-receipt-candidate-20261020/`; it has no production authority.
+work-in-progress files remain local. The reviewed group-selector adapter is now
+applied, with 39 private normalization, 377 normalization integration and 20 usage
+checks passing. Its archived candidate remains under
+`runs/group-selector-receipt-candidate-20261020/`. Current real-build policies
+still have no usage inventory, so this does not retire a supplied-build issue.
 
 **Five supplied builds: 0/5 complete native evaluations.** All five import and
 run in pinned PoB. Owned native components work, but unresolved inputs and
@@ -154,8 +158,9 @@ preserved. The validated package is
 [checkpoint below](#source-construction-cutover-checkpoint-october-20) records
 evidence and remaining work. Existing support/generated-input proofs feed the
 whole-preset usage gate. The private physical-singleton secondary-switch adapter
-is applied and undergoing its final focused rerun; the joined default
-group-selector source test passes. Finish the adapter gate before publishing additional
+is applied and passes focused tests and strict linting; the joined default
+group-selector source test passes. The group-selector adapter passes private
+normalization and public integration tests. Validate the support extension before publishing additional
 usage accounting. This does not close numerical coverage or any original's
 inventory.
 At the Actor migration checkpoint, the package and portable replay rebuilt
@@ -1320,16 +1325,17 @@ The superseded
 `owned_usage_transport_cutover` test and its exclusive helper are removed; their
 authenticated historical observations remain retained, as recorded in
 [the cleanup ledger](legacy-retirement.md#current-physical-usage-transport-cleanup-2026-10-06).
-The reviewed private secondary-switch adapter is now applied; finish its focused
-rerun and scoped lint checks before further field accounting. The group-selector
-source proof passes; review and validate the unapplied candidate next. Use
+The reviewed private secondary-switch adapter is now applied, with its focused
+tests and strict lint checks passing. The group-selector source proof passes;
+the applied adapter's public integration checks pass. The support extension and
+actual policy publication are the next gates. Use
 the audit's explicit source/consumer dependencies to retire complete-request
 blockers. Static census and source evidence can proceed in parallel; actual-plan
 reconciliation remains downstream of honest admission. Support-generated Skill
 execution and resource-obligation signature/kind/quantum refinement remain open
 proposals, not newly approved contracts.
 
-The physical-singleton secondary-switch receipt is **applied, validation running**.
+The physical-singleton secondary-switch receipt is **applied, focused validation passing**.
 Its reviewed candidate is retained under
 `runs/secondary-global-receipt-candidate-20261020/`; original files are retained
 under `runs/secondary-global-receipt-originals-20261020/`. Its source-backed domain
@@ -1340,10 +1346,10 @@ eligible calls; the candidate now uses charged binary search over the existing
 immutable sorted rows. That revision is prepared and reviewed:
 the static same-identity lookup estimate is 8,514 work units, with a public
 normalizer budget regression against 1,024 unrelated roles. These are not yet
-executed runtime measurements. The first fixture setup failures were repaired;
-the second run passes 14/15 usage tests. The remaining test's incorrect expectation
-for an unknown source is repaired, with the focused rerun in
-`runs/owned-secondary-global-receipt-tests-03.log`; no new field responsibility is
+executed runtime measurements. The fixture setup failures and an incorrect test
+expectation for an unknown source were repaired. All 15 usage tests pass in
+`runs/owned-secondary-global-receipt-tests-03.log`, and focused strict Clippy
+passes in `runs/owned-secondary-global-clippy-02.log`; no new field responsibility is
 published in a real build policy yet.
 
 The next bounded source proof is group-selector neutrality for zero or one
@@ -1353,15 +1359,57 @@ and three singleton supports. A joined Rust/mlua source test passes for
 zero → one → zero admission, independent MAIN/CALCS and fresh/cached exporter
 paths. All six selector and seven secondary-switch source tests pass in
 `runs/owned-selector-source-tests-01.log`. Windows linking emitted an existing
-`LIBCMT` conflict warning; it did not fail these tests. The candidate under
-`runs/group-selector-receipt-candidate-20261020/` is independently prepared and
-rustfmt-parsed, but unapplied and uncompiled. It uses an existing private input
+`LIBCMT` conflict warning; it did not fail these tests. The reviewed adapter under
+`runs/group-selector-receipt-candidate-20261020/` is applied. All 39 private
+normalization tests pass in `runs/owned-group-selector-normalize-tests-01.log`;
+377 normalization and 20 usage integration tests pass in
+`runs/owned-group-selector-integration-tests-01.log`.
+It shares the existing charged source-role lookup and singleton construction
+predicate with the secondary-switch adapter; role-specific field permissions
+remain separate. It uses an existing private input
 receipt to account for exact default selectors after checking the whole physical
 group. Support companions retain their separate count/global obligations.
 This is not positive
 admission, native execution or whole-preset completion; additional/missing
 effects, another active row and any present generated-source attribute remain
 outside the proposed domain. No public contract change is proposed for this step.
+
+**Next actual-build step:** Original05's selected preset contains 16 physical
+support occurrences across 12 Gem definitions. All have observed singleton
+construction and saved `count=1`, `enableGlobal1=true`, `enableGlobal2=true`.
+The current support input receipt intentionally omits these three fields, leaving
+48 separate field obligations. Extend that existing private receipt only after
+the actual source consumers prove non-consumption for a complete singleton
+support. An arbitrary direct query to PoB's count helper is insufficient:
+a synthetic Vaal support can read its count even though no active effect was
+admitted. Additional active children are a separate, explicitly excluded case.
+Three new source-component controls are applied to the existing secondary-switch
+test target. All ten tests pass in `runs/owned-support-usage-source-tests-01.log`;
+the sealed source packet is unchanged. Four positive tests exposed a producer
+coupling: source proof was requested only when the scalar parameter inventory
+was incomplete. The existing SupportAssignment path now also requests the same
+independent proof for complete scalar parameters, retaining those values if
+source validation refuses. No second proof implementation or primary allocation
+change was added. The 25-test usage suite includes Complete/Partial equivalence
+and preservation controls; its post-fix run is pending at this backup checkpoint.
+Strict lint and broader normalization regressions must follow before the real
+policy publication.
+
+Then author and validate the real usage-inventory policy in the current package,
+including all remaining source fields and independent consumers. Group 238
+(Ice Nova 239 and supports 240–242) is the first real joined case. The publication
+must preserve unchanged input builds, exact typed values, all other obligations,
+all 110 queries and fresh-repeat determinism across all five originals. Do not
+stop at synthetic positives or infer whole-preset completion from this group.
+Support receipt and publication candidates are being prepared under
+`runs/support-usage-receipt-candidate-20261020/` and
+`runs/owned-usage-inventory-publication-candidate-20261020/`; the support adapter
+is applied and the publication candidate is not yet executed. The candidate uses
+16 existing policy identities and 337 field declarations; other consumers remain
+explicitly Deferred. It must run at default limits. Accounting currently scans
+receipts against the whole draft even after a preset is known Pending; measure
+the possible work-limit failure, then stop unnecessary per-preset accounting
+without bypassing global source validation or atomic retirement.
 
 ### Native Scenario intent checkpoint, October 20
 
