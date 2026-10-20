@@ -46,7 +46,8 @@ pub fn checked_plan_with_stages(
             OWNED_RULE_OPERATIONS_V22,
             OWNED_RULE_OPERATIONS_V23,
             OWNED_RULE_OPERATIONS_V25,
-            OWNED_RULE_OPERATIONS_V27
+            OWNED_RULE_OPERATIONS_V27,
+            OWNED_RULE_OPERATIONS_V28
         ]
         .contains(&rules_input.operations_version.as_str())
     );
@@ -327,14 +328,7 @@ pub fn checked_plan_with_stages(
     let request = OwnedEvaluationRequest::new(
         BuildSpec::new(build, input_limits).unwrap(),
         ScenarioSpec::new(scenario.clone(), input_limits).unwrap(),
-        QuerySpec::new(
-            QueryInput {
-                game_version: namespace.clone(),
-                requests: vec![],
-            },
-            input_limits,
-        )
-        .unwrap(),
+        QuerySpec::new(f.queries.clone(), input_limits).unwrap(),
         input_limits,
     )
     .unwrap();

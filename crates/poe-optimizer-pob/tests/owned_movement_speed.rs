@@ -544,11 +544,11 @@ fn unchanged_original05_movement_supplier_census_preserves_raw_and_filtered_sour
                 "state": result["additional_observation"],
                 "evidence": {
                     "manifest_sha256": pinned::manifest_sha256(),
-                    "files": ["src/Classes/ModDB.lua", "src/Classes/ModStore.lua",
+                    "files": (["src/Classes/ModDB.lua", "src/Classes/ModStore.lua",
                         "src/Classes/Item.lua", "src/Modules/CalcSetup.lua",
                         "src/Modules/CalcDefence.lua", "src/Modules/CalcPerform.lua",
                         "src/Modules/CalcTools.lua", "src/Modules/Data.lua"]
-                        .map(|path| json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})),
+                        .map(|path| json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()}))),
                     "native_parity": false,
                     "complete_native_supplier_coverage": false,
                     "whole_build_legality": false
@@ -792,6 +792,7 @@ fn movement_census_check(report: &Json) {
     );
 }
 const MOVEMENT_CENSUS_OBSERVE: &str = r##"
+local calcs=require("Modules.CalcBase")
 local function original(f,path,line)
  local i=debug.getinfo(f,"S");local s=i.source:gsub("\\","/")
  assert(i.what=="Lua" and s:sub(-#path)==path and i.linedefined==line);return f

@@ -18,10 +18,13 @@ use poe_optimizer_import::{
     owned_item_lines::{LocatedItemModifier, OwnedItemLinePolicy},
     owned_item_source::ItemSourceLayoutPolicy,
     owned_recipe::{OwnedRecipeInput, assemble_owned_recipe},
-    owned_recipe_membership_patch::{RecipeMembershipPatch, RecipeMembershipPatchInput},
+    owned_recipe_membership_patch::{
+        RecipeMembershipPatch, RecipeMembershipPatchBindings, RecipeMembershipPatchInput,
+    },
     owned_source::SourceProjectEvidence,
 };
 use serde_json::Value;
+use sha2::{Digest, Sha256};
 use std::{
     collections::{BTreeMap, BTreeSet},
     fs,
@@ -55,6 +58,144 @@ fn publish(cwd: &Path, prior: &Path, authored: &Path, patch: &Path, output: &Pat
         .arg(output)
         .output()
         .unwrap()
+}
+
+/// Replay this historical membership payload against the reviewed unit-only
+/// successor. The complete historical predecessor is authenticated before any
+/// binding is replaced; neither the payload nor historical evidence is edited.
+fn current_defence_membership_patch(cwd: &Path, prior: &Path, authored: &Path) -> PathBuf {
+    let raw = fs::read(authored).unwrap();
+    assert_eq!(raw.len(), 201_219);
+    assert_eq!(
+        format!("{:x}", Sha256::digest(&raw)),
+        "283ccbb93a2b2325dee9866b0a193e10f4db4762a5a2555b85e02376a054c64f"
+    );
+    let historical: RecipeMembershipPatchInput = serde_json::from_slice(&raw).unwrap();
+    let current_input = recipe(prior);
+    let current = assemble_owned_recipe(current_input.clone(), Default::default()).unwrap();
+    let current_bindings = RecipeMembershipPatchBindings::from_recipe(&current);
+    assert_eq!(current_bindings.registry, historical.before.registry);
+    assert_ne!(current_bindings.definitions, historical.before.definitions);
+
+    const RAW: &str = "def.00000000000029ff";
+    const FRACTION: &str = "def.0000000000000001";
+    const HISTORICAL_PERCENT: &str = "def.0000000000000002";
+    let mut inverse = serde_json::to_value(&current_input).unwrap();
+    let original = inverse.clone();
+    let mut unit_paths = Vec::new();
+    for (i, definition) in inverse["schema"]["definitions"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .enumerate()
+    {
+        if definition["value"]["id"]["key"] == RAW {
+            unit_paths.push(format!(
+                "/schema/definitions/{i}/value/schema/value/value/value/unit/key"
+            ));
+        }
+    }
+    assert_eq!(unit_paths.len(), 1, "exact raw penalty declaration");
+    let mut owners = BTreeSet::new();
+    for (oi, owner) in inverse["rules"]["owners"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .enumerate()
+    {
+        for (pi, program) in owner["programs"]["members"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .enumerate()
+        {
+            if !serde_json::to_string(program).unwrap().contains(RAW) {
+                continue;
+            }
+            assert_eq!(owner["owner"]["value"]["kind"], "item_template");
+            assert!(
+                owners.insert(
+                    owner["owner"]["value"]["value"]["key"]
+                        .as_str()
+                        .unwrap()
+                        .to_owned()
+                )
+            );
+            assert_eq!(program["id"], "raw-base-defence-profile");
+            assert_eq!(program["reads"], serde_json::json!([]));
+            let effects: Vec<_> = program["effects"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .filter(|effect| effect["effect"]["stat"]["key"] == RAW)
+                .collect();
+            assert_eq!(effects.len(), 1);
+            let effect = effects[0];
+            assert!(effect["when"].is_null());
+            assert_eq!(effect["effect"]["kind"], "derive");
+            assert_eq!(effect["effect"]["entity"], "current");
+            let node = effect["effect"]["value"].as_str().unwrap();
+            let nodes: Vec<_> = program["nodes"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .enumerate()
+                .filter(|(_, value)| value["id"] == node)
+                .collect();
+            assert_eq!(nodes.len(), 1);
+            let (ni, value) = nodes[0];
+            assert_eq!(value["expression"]["kind"], "literal");
+            assert_eq!(value["expression"]["value"]["kind"], "quantity");
+            unit_paths.push(format!(
+                "/rules/owners/{oi}/programs/members/{pi}/nodes/{ni}/expression/value/value/unit/key"
+            ));
+        }
+    }
+    assert_eq!(owners.len(), 485);
+    assert_eq!(unit_paths.len(), 486);
+    for path in &unit_paths {
+        let unit = inverse.pointer_mut(path).unwrap();
+        assert_eq!(*unit, FRACTION);
+        *unit = serde_json::json!(HISTORICAL_PERCENT);
+    }
+    // Only these constituent commitments depend on the corrected schema.
+    for constituent in ["rules", "routing"] {
+        assert_eq!(
+            inverse[constituent]["definitions"],
+            serde_json::to_value(&current_bindings.definitions).unwrap()
+        );
+        inverse[constituent]["definitions"] =
+            serde_json::to_value(&historical.before.definitions).unwrap();
+    }
+    let historical_input: OwnedRecipeInput = serde_json::from_value(inverse.clone()).unwrap();
+    let historical_recipe = assemble_owned_recipe(historical_input, Default::default()).unwrap();
+    assert_eq!(
+        RecipeMembershipPatchBindings::from_recipe(&historical_recipe),
+        historical.before,
+        "the complete predecessor must match the sealed historical recipe"
+    );
+    for path in &unit_paths {
+        *inverse.pointer_mut(path).unwrap() = serde_json::json!(FRACTION);
+    }
+    for constituent in ["rules", "routing"] {
+        inverse[constituent]["definitions"] = original[constituent]["definitions"].clone();
+    }
+    assert_eq!(inverse, original, "whole recipe metadata inverse");
+    let restored: OwnedRecipeInput = serde_json::from_value(inverse).unwrap();
+    assert_eq!(
+        serde_json::to_vec(&restored).unwrap(),
+        serde_json::to_vec(&current_input).unwrap(),
+        "all numerical values and other recipe fields are preserved"
+    );
+
+    let mut rebound = historical.clone();
+    rebound.before = current_bindings;
+    let mut restored = rebound.clone();
+    restored.before = historical.before.clone();
+    assert_eq!(restored, historical, "whole membership request inverse");
+    let path = cwd.join("item-defence-inputs-current-membership.json");
+    fs::write(&path, serde_json::to_vec(&rebound).unwrap()).unwrap();
+    path
 }
 
 pub(super) fn modifier_id(family: &Value) -> ModifierDefId {
@@ -628,7 +769,12 @@ pub(super) fn check_scalar_publication(
     let authored = data().join(folder);
     let authored_before = bundle(&authored);
     let prior_before = bundle(prior);
-    let patch = authored.join("membership-patch.json");
+    let authored_patch = authored.join("membership-patch.json");
+    let patch = if folder == "item-defence-inputs" {
+        current_defence_membership_patch(cwd, prior, &authored_patch)
+    } else {
+        authored_patch
+    };
     let output = cwd.join(format!("{stem}-successor"));
     let report = success(publish(cwd, prior, &authored, &patch, &output));
     assert_eq!(report["extension"]["allocated_entries"], allocations);

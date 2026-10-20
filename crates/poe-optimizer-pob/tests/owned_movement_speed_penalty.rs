@@ -175,7 +175,7 @@ local function probe(name,raw,amount,change)
  if change then local b={};for k,v in pairs(item.base)do b[k]=v end;local a={};for k,v in pairs(b.armour)do a[k]=v end;a.MovementPenalty=amount;b.armour=a;item.base=b end
  mods(item);local list=active(item,1,false);local records={}
  for _,m in ipairs(list)do if m.name=="MovementSpeed"and m.type=="BASE"then local tags={};for _,t in ipairs(m)do local c={};for k,v in pairs(t)do c[k]=v end;tags[#tags+1]=c end;records[#records+1]={value=m.value,tags=tags};assert(m.source==item.modSource)end end
- local db=new("ModDB");add(db,list);db.conditions.IgnoreMovementPenalties=false;local no=sum(db,"BASE",nil,"MovementSpeed");db.conditions.IgnoreMovementPenalties=true;local yes=sum(db,"BASE",nil,"MovementSpeed")
+ local db=new("ModDB"):ModDB();add(db,list);db.conditions.IgnoreMovementPenalties=false;local no=sum(db,"BASE",nil,"MovementSpeed");db.conditions.IgnoreMovementPenalties=true;local yes=sum(db,"BASE",nil,"MovementSpeed")
  result.cases[#result.cases+1]={name=name,raw=item.base.armour.MovementPenalty,records=records,unignored=no,ignored=yes}
 end
 probe("actual-selected-source",selected.raw,nil,false)

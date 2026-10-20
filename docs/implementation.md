@@ -22,22 +22,34 @@ corrections. Its Cargo/source/replay gates and full release publication remain
 pending; this backup is not a validated movement release. The two ordinary
 movement data checks and current-recipe correction/compilation check pass.
 Full extension replay found a stale historical membership-patch binding; all five
-native fixture tests refuse their missing checked-readiness setup. Fix both test
-fixtures without weakening production validation. The two-row manual Direct
-inventory overlay is now applied but awaits publication and real-group controls.
-The actual Original05 movement supplier observer is applied and its source tests
-are running. The validated release remains `e8df8bdb…` below,
+native fixture tests refused their missing checked-readiness setup. Both bounded
+fixture repairs are now applied without changing production validation. All five
+native movement tests pass, including explicit unavailable outcome for Partial
+contributors and fresh/reused/Rayon equivalence; thirteen related campaign/critical
+tests pass. The full extension replay and remaining shared-helper gates are pending.
+The two-row manual Direct inventory overlay passes five ordinary checks after
+rebuilding a stale local executable whose copied source timestamps concealed the
+new helper. Its all-five publication attempt `06` preserved originals 01–04 but
+hit the default normalization work limit on original 05. That attempt is not a
+validated publication. Diagnose its charged work rather than increasing limits;
+the real-group controls still require a successful publication.
+The actual Original05 movement supplier observer and conditional Item construction
+now pass all three source tests (`runs/owned-movement-source-tests-03.log`). The
+observer preserves the loaded state and produces identical evidence in four fresh
+runs (JIT on/off, two each); this establishes source behavior, not complete native
+movement coverage. The validated release remains `e8df8bdb…` below,
 and unchanged complete builds remain **0/5**. Ignored candidate/evidence files
 and the nine protected incoming-critical files are not included in this backup.
 
-**Latest backup scope:** the applied two-row Direct inventory overlay, movement
-supplier observer and CI evidence retention are included in this checkpoint.
-The independently reviewed readiness and historical membership fixture repairs
-remain unapplied in `runs/movement-readiness-fixture-correction-20261020/` and
-`runs/defence-membership-schema-replay-candidate-20261020/`. Resume by applying
-those bounded repairs and rerunning their failed gates, then validate the Direct
-overlay before authoring the movement release. This is a work-in-progress backup,
-not a claim that CI or the remaining native/source tests pass.
+**Latest backup:** `c84e66f3` is pushed to GitHub `main`, with its full remote hash
+verified. It includes the two-row Direct inventory overlay, movement supplier
+observer and CI evidence retention. The subsequent independently reviewed readiness
+and historical membership fixture repairs are applied from
+`runs/movement-readiness-fixture-correction-20261020/` and
+`runs/defence-membership-schema-replay-candidate-20261020/`. Resume with their
+native/replay gates, then validate the Direct overlay before authoring the movement
+release. The source observer fixes and fixture repairs are newer than that backup.
+No hosted-green or complete-build claim is made.
 
 **Immediate backup resume point, October 20:** `550d7bf4` is pushed to GitHub
 `main`, with the full remote hash independently verified. That checkpoint includes the
@@ -1850,9 +1862,10 @@ four remaining non-usage gates can honestly close by adding another isolated
 numeric input. Reuse the accepted complete constructor/default census and the
 existing configuration adapters' checked receipts. Current partial-row accounting
 intentionally has no permission to complete owner inventories. Begin with the
-selected ConfigSet423, while preserving the thirteen fallback origins outside
-its individual leaves (Build, TimelessData, Tree, Skills, archived generated
-Firebolt, Config/ConfigSet, Items, Calcs and Import). Each still needs its actual
+selected ConfigSet423, while preserving all thirteen linked fallback origins:
+the Config/ConfigSet pair and eleven outside the Config subtree (Build,
+TimelessData, Tree, Skills, archived generated Firebolt, Items, Calcs and Import).
+Each still needs its actual
 selection, search, export or configuration responsibility established.
 
 The existing default-input rows do not cover every source-installed default:
@@ -1876,7 +1889,7 @@ complete control/branch census and one scoped receipt collector; keep local
 ConfigSet proof separate from atomic retirement across every live fallback origin.
 Reuse checked scalar/reward/Encounter/usage output correspondence, including exact
 absence guards. Fresh ConfigSet structure alone does not account for custom blocks.
-The 28 installed non-reward inputs are distinct from 563 UI fallback defaults;
+The 28 installed non-reward inputs are distinct from 563 UI fallback defaults.
 The 24 controls beyond the existing scalar and Encounter proofs are now classified
 in `runs/configuration-installed-defaults-review-20261020/`: all have mechanical
 consumers, and none has a current matching checked receipt. Seven control children

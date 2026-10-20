@@ -2,6 +2,10 @@
 #[allow(dead_code)]
 #[path = "../crates/poe-optimizer-engine/tests/support/owned_plan_fixture.rs"]
 mod base;
+use base as support;
+#[allow(dead_code)]
+#[path = "../crates/poe-optimizer-engine/tests/support/owned_empty_support_contribution_fixture.rs"]
+mod checked_empty_support;
 #[allow(dead_code)]
 #[path = "support/owned_movement_speed_penalty.rs"]
 mod packet;
@@ -9,10 +13,8 @@ use base::*;
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,
 };
-use poe_optimizer_data::{
-    owned_routing::OwnedActionRouting, owned_schema::OwnedDefinitionSchemaPackage,
-};
-use poe_optimizer_engine::{owned_plan::*, owned_rules::CompiledRulePackage};
+use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
+use poe_optimizer_engine::owned_plan::*;
 use rayon::prelude::*;
 use serde::{Serialize, de::DeserializeOwned};
 use serde_json::Value;
@@ -54,6 +56,30 @@ impl World {
         let p = packet::consumer();
         let d = packet::dependencies();
         let mut f = Fixture::new();
+        // This equipment-only component has no Skill or support occurrences.
+        // Remove the base fixture's unused Action scaffold before using the
+        // existing checked empty-support stage/readiness construction.
+        f.schema
+            .definitions
+            .retain(|row| !matches!(row, DefinitionDescriptor::Skill(_)));
+        f.schema
+            .slots
+            .retain(|row| !matches!(row, SlotDescriptor::ActionOutput(_)));
+        f.owners.retain(|row| {
+            !matches!(
+                row.owner,
+                SchemaSubject::Definition(DefinitionAddress::Skill(_))
+                    | SchemaSubject::Slot(SlotAddress::ActionOutput(_))
+            )
+        });
+        f.schema
+            .definitions
+            .push(DefinitionDescriptor::Unit(DefinitionEntry {
+                id: def("percent"),
+                schema: SchemaState::Known(UnitSchema {
+                    dimension: UnitDimension::PercentagePoints,
+                }),
+            }));
         for owner in &mut f.owners {
             owner.programs = DeclaredSet::complete(vec![])
         }
@@ -80,6 +106,22 @@ impl World {
         f.owners.push(DefinitionRules {
             owner: rebound(&p.owner),
             programs: DeclaredSet::complete(vec![rebound(&p.program)]),
+        });
+        f.schema
+            .definitions
+            .push(DefinitionDescriptor::Metric(DefinitionEntry {
+                id: def("fixture-player-query"),
+                schema: SchemaState::Known(MetricSchema {
+                    targets: vec![MetricTargetKind::Actor],
+                    unit: def("def.0000000000000001"),
+                    actor_roles: vec![MetricActorRole::Player],
+                    provider_roles: vec![ProviderRole::Character],
+                }),
+            }));
+        f.queries.requests.push(MetricRequest {
+            id: QueryId::new("fixture-player-query").unwrap(),
+            metric: def("fixture-player-query"),
+            target: MetricTarget::Actor(ActorKey::Player),
         });
         let mut query: ContributionQuery = rebound(&p.query);
         query.groups[0].members = DeclaredSet::complete(vec![]);
@@ -167,11 +209,10 @@ impl World {
                 order: None,
             });
     }
-    fn plan(&self) -> OwnedEffectPlan<OwnedDefinitionSchemaPackage> {
+    fn plan(&self) -> OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage> {
         let f = &self.f;
-        let schema = Arc::new(
-            OwnedDefinitionSchemaPackage::new(f.schema.clone(), Default::default()).unwrap(),
-        );
+        let schema =
+            OwnedDefinitionSchemaPackage::new(f.schema.clone(), Default::default()).unwrap();
         let rules = RulePackageInput {
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: ns(),
@@ -187,35 +228,32 @@ impl World {
             existing_actor_rules: Some(DeclaredSet::complete(vec![self.application.clone()])),
             support_discovery: Some(assignment_only_domains(&f.owners)),
         };
-        let rules = Arc::new(
-            CompiledRulePackage::compile(&rules, schema.as_ref(), Default::default()).unwrap(),
-        );
-        let routing = Arc::new(
-            OwnedActionRouting::new(
-                ActionRoutingInput {
-                    schema_version: OWNED_ACTION_ROUTING_VERSION,
-                    namespace: ns(),
-                    release: key("routing"),
-                    definitions: schema.identity().clone(),
-                    outputs: f.routes.clone(),
-                },
-                schema.as_ref(),
-                Default::default(),
-            )
-            .unwrap(),
-        );
-        OwnedEffectPlan::compile(
-            Arc::new(f.request()),
-            schema,
-            rules,
-            routing,
-            Default::default(),
+        let routing = ActionRoutingInput {
+            schema_version: OWNED_ACTION_ROUTING_VERSION,
+            namespace: ns(),
+            release: key("routing"),
+            definitions: schema.identity().clone(),
+            outputs: f.routes.clone(),
+        };
+        checked_empty_support::checked_plan(f, rules, routing, Default::default()).unwrap_or_else(
+            |error| {
+                let bindings = poe_optimizer_core::owned_binding::bind_owned_request(
+                    &schema,
+                    &f.request(),
+                    Default::default(),
+                )
+                .unwrap();
+                panic!("{error:?}; request bindings: {:?}", bindings.issues())
+            },
         )
-        .unwrap()
     }
     fn report(&self) -> OwnedEffectsReport {
         let p = self.plan();
-        p.evaluate(&mut p.new_scratch()).unwrap()
+        let report = p.evaluate(&mut p.new_scratch()).unwrap();
+        let SupportEffectsOutcome::Evaluated { effects } = report.outcome else {
+            panic!("explicitly empty support domain must finish this component");
+        };
+        effects
     }
 }
 fn result(r: &OwnedEffectsReport) -> &EffectValue {
@@ -288,9 +326,28 @@ fn unknown_condition_and_missing_profile_are_not_neutral_and_empty_slots_are_laz
 fn authored_partial_supplier_inventory_stays_unavailable_instead_of_assuming_false() {
     let mut w = World::new();
     w.query = rebound(&packet::consumer().query);
-    let r = w.report();
-    assert!(matches!(result(&r), EffectValue::Unresolved { .. }));
-    assert!(!r.gaps.is_empty());
+    let plan = w.plan();
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert!(
+        matches!(
+            report.outcome,
+            SupportEffectsOutcome::Unavailable {
+                cause: EffectValue::Unresolved {
+                    reason: PlanGapReason::IncompleteContributors,
+                    ..
+                },
+                ..
+            }
+        ),
+        "incomplete membership must refuse execution: {:?}",
+        report.outcome
+    );
+    assert!(
+        report
+            .gaps
+            .iter()
+            .any(|gap| gap.reason == PlanGapReason::IncompleteContributors)
+    );
 }
 #[test]
 fn only_exact_active_body_occupancy_contributes_and_ambiguity_is_unavailable() {
@@ -375,9 +432,16 @@ fn query_choice_fresh_reused_and_parallel_scratch_preserve_exact_component() {
     let a = World::new();
     let expected = a.report();
     let mut b = World::new();
+    assert_eq!(a.f.queries.requests.len(), 1);
     b.f.queries.requests.clear();
+    assert!(b.f.queries.requests.is_empty());
     assert_eq!(result(&b.report()), result(&expected));
     let plans = [Arc::new(a.plan()), Arc::new(b.plan())];
+    assert_ne!(
+        plans[0].identity(),
+        plans[1].identity(),
+        "nonempty and empty requests remain distinct"
+    );
     let reports: Vec<_> = plans
         .iter()
         .map(|p| p.evaluate(&mut p.new_scratch()).unwrap())

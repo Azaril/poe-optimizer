@@ -79,3 +79,16 @@ remains 0/5. `validation.json` contains the seven-line census and exact changes;
 `equipment-penalty.json` adds only a shared-Player body-slot contribution. It reads the exact selected item's raw fraction `29ff` and presence `2a02`, then uses the checked Boolean immunity channel `33cb` to emit signed dimensionless BASE channel `33cc`. Empty body slots and known absent penalties yield zero; unknown profiles and incomplete immunity contributors remain unavailable. The source's raw 0.03 is dimensionless and is negated without rescaling. Existing raw profile schema and literal units are corrected together; raw numbers are unchanged.
 
 The immunity membership remains Partial. The shared owner remains Partial. Off-hand/shield penalties, modifier contributions, final movement/action-speed composition and complete game legality remain separate. Finite native tests explicitly close only their synthetic contributor domain. No item name or example identity selects runtime behavior.
+
+The October 20 source tests execute original Item construction and ModDB filtering
+with JIT enabled and disabled. Independent fresh loads agree on the selected raw
+fraction, its signed contribution, an altered private base, zero and an absent
+penalty field. The unchanged Original05 census separately retains all nine raw
+records across twelve movement/action-speed channels, including seven conditional
+records omitted from the active totals. It authenticates original methods and
+checks that observation leaves the loaded calculation and databases unchanged.
+Evidence is retained in `runs/owned-movement-supplier-census-source-03/` and
+`runs/owned-movement-source-tests-03.log`. The two active contributions explain
+PoB's 1.067 movement multiplier; they do not establish complete native supplier
+coverage. In particular, an empty observed immunity channel cannot close Partial
+rule owners or justify treating an unknown immunity as false.
