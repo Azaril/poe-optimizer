@@ -49,15 +49,23 @@ in the [implementation plan](implementation.md).
 The exact `true` gate uses one shared private helper with explicit field
 authority. Authored physical/Direct receipts can request primary and secondary;
 generated receipts still request primary only. The expanded authored adapter
-passes its Import regression suites; strict all-target lint and real-packet
-preservation checks remain in the implementation resume point. It removes a
-redundant source restriction without introducing
+passes its Import regression suites, strict all-target lint and exact all-five
+previous-code preservation. It removes a redundant source restriction without introducing
 a PoB-shaped native Boolean. It does not authorize changing the saved toggle,
 infer participation or account for unsupported values. Support accounting and
 every other usage consumer remain separate. The stricter construction predicate
 still owns unread-secondary and support proofs; the new primary selector checks
 the actual constructed list and retains missing references. These are different
 proof obligations, not legacy/current implementations of the same behavior.
+
+The subsequent absence-accounting change replaces discarded reference metadata
+with one private checked result retained by the existing physical/Direct path.
+It does not add a parallel resolver, another import model, or native defaults.
+Generated paths explicitly keep only their existing descendant scope. The change
+passes focused Import regressions, strict lint and exact all-five preservation.
+The real skeletal inventory destinations are now updated in the existing packet;
+ordinary checks pass, while publication and explicit real-group controls remain
+due. This checkpoint does not claim complete build coverage.
 
 The October 20 usage-inventory controls distinguish three live proofs: scalar
 parameter completion, saved-field consumer coverage and noncompeting count

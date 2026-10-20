@@ -7,7 +7,10 @@ use poe_optimizer_import::{
 };
 
 pub fn fixture() -> fixture::Fixture {
-    let mut f = fixture::Fixture::new();
+    from_fixture(fixture::Fixture::new())
+}
+
+pub fn from_fixture(mut f: fixture::Fixture) -> fixture::Fixture {
     let row = f.row().clone();
     let policy = f
         .base
@@ -250,9 +253,14 @@ pub fn rebind(f: &mut fixture::Fixture) {
     *roles = *f.base.roles.identity();
     *scalar_inputs = scalar;
     *usage_inputs = usage;
-    let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
+    let (SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
         definitions, roles, ..
-    } = &mut primary_dispositions[0].reference_action
+    }
+    | SourceActionCorrespondenceInput::PobPhysicalSingletonMinionActionsV1 {
+        definitions,
+        roles,
+        ..
+    }) = &mut primary_dispositions[0].reference_action
     else {
         unreachable!()
     };

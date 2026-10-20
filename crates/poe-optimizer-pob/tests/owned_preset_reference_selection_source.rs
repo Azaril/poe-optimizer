@@ -775,3 +775,6 @@ fn zero_or_one_candidate_selectors_are_equivalent_across_matched_filter_transiti
         // participation, effect readiness, numerical results or whole-build parity.
     }
 }
+
+#[path = "support/manual_direct_selector.rs"]
+mod manual_direct_selector;

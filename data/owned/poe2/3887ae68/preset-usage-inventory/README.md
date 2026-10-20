@@ -22,3 +22,31 @@ The sealed primary-count delta appends the existing requested-count policy to Pa
 Existing decoded count guards and the intrinsic parent grammar remain unchanged. The injected0–4 numeric domain is transport coverage, not a gameplay maximum; guard-disallowed occurrence counts and unsupported group-count source frames remain Pending. An explicit group override can transport a known count while intrinsic usage completion is still refused. Replacing redundant literal guards with checked consumer evidence and broadening the parent proof are separate remaining breadth work.
 
 The all-five gate authenticates exactly eight new count selections (one in Original04 and seven in Original05), including two in Original05's selected preset, then requires a complete inverse of every other output and exact allocator state. The group220/233 controls retain their raw source bytes, compare identical count data under Deferred versus reviewed field inventories, and require only exact usage-issue retirement. Independent malformed, missing, guard, override, omitted-consumer and unknown-companion controls remain diagnostic. No native count calculation, reservation/population interpretation or whole-build acceptance is added.
+
+
+### Four skeletal physical-reference inventories
+
+The current packet also replaces exactly 93 deferred destination lists on the
+four existing physical rows 0011, 0914, 0917 and 0918. All 25 rows, 456 field
+selectors and 20 typed destinations on those four rows remain; count, enablement
+and reporting recipes and every other row are unchanged. The byte-sealed
+evidence records the complete prior inventory inverse and exact current
+construction/reference/usage joins. Both unresolved Command references per
+family remain source observations and are not granted native coverage.
+
+This step requires the separately validated private reference-absence receipt.
+Missing legacy headers stay declared fields; they are accounted for only by
+the successful source/reference producer. Exact authored global true and
+constructed-primary selector receipts have separate, narrow responsibilities.
+The packet adds no runtime build special cases, mechanics, schema, rules or
+queries.
+
+The existing publication test remains the single all-five publisher. The
+additional ignored real-group test uses unchanged group bytes from Original05
+groups 210, 205, 212 and 223, compares against the same recipes with the former
+deferred destinations, and requires exact whole-output inverses and fresh
+repeats. Selector, secondary flag, profile and independent-consumer refusals retain
+Pending usage. Unknown group sources create no physical records or usage
+targets and keep generated-source accounting Pending. Successful usage accounting leaves finalization
+incomplete and runs no native evaluation. Candidate authoring is not evidence
+that these executable gates have passed; retain their actual validation logs.

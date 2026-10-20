@@ -9,8 +9,19 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**October 20 backup checkpoint:** `4aa10b6e` is pushed to GitHub `main` and its
-remote hash is verified. It follows `a6b61b3c`, `8cf6bc6c`, `983cee19`, `1ba8c7ce`, `6f6eae3f`, `f6dac721`, `dba0f661`,
+**Immediate backup resume point, October 20:** this checkpoint includes the
+checked reference-absence implementation, the four skeletal inventory rows and
+the manual Direct source-selection tests. The 713 selected Import tests, strict
+Import lint, unchanged all-five preservation, four ordinary inventory checks and
+all ten source-selection tests pass. The changed skeletal packet still needs
+publication, the explicit real-group controls and scoped CLI/PoB lint. Continue
+those gates before claiming a new validated data release. The last validated
+release remains `fd869107…`; complete unchanged builds remain **0/5**. Ignored
+candidate work and the nine protected incoming-critical files are excluded from
+this Git backup.
+
+**October 20 backup checkpoint:** `00d3c62a` is pushed to GitHub `main` and its
+remote hash is verified. It follows `4aa10b6e`, `a6b61b3c`, `8cf6bc6c`, `983cee19`, `1ba8c7ce`, `6f6eae3f`, `f6dac721`, `dba0f661`,
 `afc607d8` and the initial broad backup `15778b04`; push access is working.
 The earlier receipt-work correction removes irrelevant deep charges without raising
 work limits. All 18 private completion and 27 public usage tests, strict Import
@@ -1672,16 +1683,36 @@ The Import library passes all 224 tests in
 adding the declaration changes neither source data nor production behavior.
 The corrected public suites pass all 28 Direct, 377 normalization and 39 usage
 tests in `runs/owned-authored-selector-regression-tests-03.log`. No real inventory
-destinations have changed yet. This is a backup checkpoint: strict Import
-all-target lint and the maintained all-five previous-code comparison still need
-to run for these latest adapters before the real packet is updated. The nineteen
+destinations have changed yet. Strict Import all-target lint now passes in
+`runs/owned-authored-selector-clippy-01.log`. The maintained all-five previous-code
+comparison passes in `runs/owned-authored-gates-preservation-01.log`: the exact
+`fd869107…` package, complete outputs and independent fresh repeats match the
+previous code. Selected issue counts remain 107/118/110/124/5. The nineteen
 source tests and their strict lint already pass. Hosted CI remains a separate gate.
 
-Resume with those remaining checks, then review and apply the ignored private
-reference-absence candidate and the four-row skeletal packet integration
-candidate. Neither candidate is included in this backup; the nine protected
-incoming-critical work-in-progress files also remain local. GitHub `main` was
-verified at `4aa10b6e` immediately before this follow-up backup.
+The private reference-absence candidate has now been independently reviewed and
+applied, along with two actual Direct-producer regression tests. The current
+checks pass 713 tests: Import library 227, normalization 377, usage 43,
+physical/Direct dispositions 11/30 and the three source-action targets 9/8/8.
+The broad log is `runs/owned-reference-absence-regression-01.log`; its sole failure
+was a new unsupported-child assertion expecting no usage list. Existing independent
+projections correctly survive with Pending completion. The corrected usage suite,
+including explicit physical allocator preservation, passes in
+`runs/owned-reference-absence-usage-tests-02.log`. Production code needed no fix.
+Strict all-target Import lint passes in `runs/owned-reference-absence-clippy-01.log`.
+Unchanged all-five preservation passes in
+`runs/owned-reference-absence-preservation-01.log`, including exact package bytes,
+whole outputs, allocator state and independent fresh repeats.
+The reviewed four-row skeletal packet integration is now applied. All four
+ordinary checks pass in `runs/owned-skeletal-inventory-ordinary-01.log`; changed
+packet publication, explicit real-group controls and scoped CLI lint remain due.
+These follow-ups are included in this backup checkpoint; the nine protected
+incoming-critical work-in-progress files remain local. GitHub `main` was
+verified at `4aa10b6e` immediately before this follow-up backup, then verified at
+the new backup `00d3c62a`. A public GitHub snapshot at 19:43 UTC shows run
+`39485418554` for that commit pending with no jobs; the earlier `4aa10b6e` run
+`39481892743` was cancelled without jobs. Neither is hosted test evidence.
+The snapshot is `runs/ci-00d3c62a-public-review-20261020/`.
 
 The real-packet review also found a subsequent absence-accounting blocker.
 Skeletal inventory rows declare `statSetIndex`/`statSetIndexCalcs`, while the
@@ -1694,9 +1725,61 @@ those rows, and neither change closes native numerical coverage.
 The exact follow-up is retained in
 `runs/skeletal-usage-integration-review-20261020/{README.md,audit.json}`. It covers
 21 saved occurrences across Original01 and Original05 and preserves all 25 rows,
-456 fields and 20 existing typed destinations. After the private absence facts
-are transported, update the four existing rows in the same maintained packet;
-do not introduce another publisher or copy the full release into new evidence.
+456 fields and 20 existing typed destinations. The private absence facts now
+reach the four updated rows through the same maintained packet. No additional
+publisher or full-release evidence copy was introduced.
+
+The absence transport retains the same checked reference result through the
+existing physical/Direct path. Six finite facts distinguish absent overwritten
+scalar headers from explicitly permitted missing minion profile/action selectors.
+Both reference contexts and all saved descendants must already be accounted for.
+Final attachment rechecks exact source, parent, descendants and live recipients.
+Missing physical group labels remain a separate presentation fact. Generated
+sources retain only their prior descendant scope; flat primary proofs gain no
+reference absence authority. No native defaults, public contract or game data
+change. Evidence and the independently reviewed candidate are in
+`runs/reference-absence-receipt-candidate-20261020/`; the additional actual Direct
+controls are in `runs/direct-reference-absence-test-candidate-20261020/`.
+
+After the four skeletal rows, review the two authored Direct Djinn groups next.
+Their remaining private gaps are group-selector accounting and exact absent
+manual-source accounting. The source-selection proof must first cover the
+two-effect ordering and late-hidden-primary boundary; do not infer it from a
+catalog role. The bounded investigation is
+`runs/manual-direct-selector-priority-20261020/`. Generated reverse-catalog routing
+remains a separate public proposal and is not authorized by this Direct scope.
+Four source-component tests for that boundary are now applied to the existing
+`owned_preset_reference_selection_source` target. All ten tests in that target
+pass in `runs/owned-manual-direct-selector-source-tests-01.log`; scoped lint
+remains due. They reuse
+authenticated full loader/processor spans, actual saved groups and support
+declarations, with the existing explicit identity-only active-skill factory.
+They check source/effect object identity and retain the deliberate late-hidden
+counterexample. They do not establish numerical parity or authorize a Direct
+Import adapter by themselves. The independently reviewed candidate is
+`runs/manual-direct-selector-source-candidate-20261020/` (manifest `01cfcc0a…`).
+
+The parallel non-usage audit confirms the subsequent configuration checkpoint:
+all 42 saved Config leaves in Original05 already have destinations. None of the
+four remaining non-usage gates can honestly close by adding another isolated
+numeric input. Reuse the accepted complete constructor/default census and the
+existing configuration adapters' checked receipts. Current partial-row accounting
+intentionally has no permission to complete owner inventories. Begin with the
+selected ConfigSet423, while preserving the thirteen fallback origins outside
+its individual leaves (Build, TimelessData, Tree, Skills, archived generated
+Firebolt, Config/ConfigSet, Items, Calcs and Import). Each still needs its actual
+selection, search, export or configuration responsibility established.
+
+The existing default-input rows do not cover every source-installed default:
+the authenticated ordinary-load report also records averaging modes, current
+Mana percentage, conditional states/counts, cooldown bypasses and child
+buff/curse switches. Reuse
+`runs/owned-configuration-inputs-source-01/source-jit-off.json` and its pinned
+source evidence; do not infer defaults from absent XML. Thirty-four transported
+assumptions, an empty exact-usage list and two typed Scenario stage intents are
+still independent incomplete inventories. Dormant intent resolution requires
+the complete composed source census; it does not justify implementing a positive
+support-child mechanic merely to transport that intent.
 
 ### Native Scenario intent checkpoint, October 20
 

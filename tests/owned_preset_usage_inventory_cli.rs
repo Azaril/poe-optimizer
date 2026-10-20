@@ -213,3 +213,20 @@ fn primary_count_packet_preserves_existing_guards_and_every_prior_consumer() {
 fn real_primary_groups_require_count_and_every_existing_usage_consumer() {
     primary_counts::run_controls();
 }
+
+#[path = "support/owned_preset_usage_inventory_skeletal.rs"]
+mod skeletal;
+#[path = "support/owned_preset_usage_inventory_source_groups.rs"]
+mod source_groups;
+
+#[test]
+fn skeletal_inventory_changes_only_checked_destinations_and_keeps_absent_lanes() {
+    family::check();
+    skeletal::mutation_controls();
+}
+
+#[test]
+#[ignore = "published packages; four unchanged raw groups and independent refusal controls"]
+fn real_skeletal_groups_require_every_reference_and_typed_usage_consumer() {
+    skeletal::run_controls();
+}

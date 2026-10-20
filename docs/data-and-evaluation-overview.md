@@ -187,10 +187,21 @@ stricter proof used by supports and unread-secondary accounting: declared missin
 effects remain visible even when the constructed list has only its primary.
 The authored physical/Direct follow-up shares the existing neutral-gate helper;
 generated inputs explicitly retain primary-only authority. These private Import
-changes pass the Import library, Direct, usage and normalization suites; remaining
-lint and real-packet preservation checks are recorded in the living plan. They
-add no native types or rules.
+changes pass the Import library, Direct, usage and normalization suites, strict
+Import lint and exact all-five previous-code preservation. They add no native
+types or rules.
 All paths reuse the charged role lookup and keep separate field permissions.
+The next private Import change, now passing focused regressions, strict Import
+lint and exact all-five preservation, preserves
+the successful reference check through final physical/Direct attachment. This
+lets field accounting distinguish proven absence from an unresolved field:
+overwritten source headers, permitted missing minion selectors and physical
+display labels each have their own authority. The facts belong to the exact
+source occurrence and are rechecked before use. They create no native parameter
+defaults. Generated sources and flat-primary proofs keep their narrower scopes.
+The four skeletal inventory rows now use these checked facts in the existing
+data packet. Ordinary packet checks pass; publication and the explicit real-group
+controls remain due before this becomes the validated release.
 The applied support receipt uses those facts for exact neutral count/global
 fields. Complete scalar inputs permit the same independent source proof as
 partial inputs. Scalar completion, field-consumer coverage and admission as a

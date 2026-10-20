@@ -2132,7 +2132,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     &draft.skill_presets.members[preset],
                     &draft.skills.members[skill],
                     Some(&draft.gems.members[gem]),
-                    usage_inputs::AuthoredInputProof::ReferenceDisposition,
+                    usage_inputs::AuthoredInputProof::ReferenceDisposition(proof.reference()),
                     &mut usage_inventory_receipts,
                 )?;
             }
@@ -2166,7 +2166,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     &draft.skill_presets.members[preset],
                     &draft.skills.members[skill],
                     None,
-                    usage_inputs::AuthoredInputProof::ReferenceDisposition,
+                    usage_inputs::AuthoredInputProof::ReferenceDisposition(proof.reference()),
                     &mut usage_inventory_receipts,
                 )?;
             }

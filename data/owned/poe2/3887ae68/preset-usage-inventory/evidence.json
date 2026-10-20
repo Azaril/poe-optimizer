@@ -381,7 +381,7 @@
           "key": "def.0000000000000011"
         }
       },
-      "scope": "deferred",
+      "scope": "checked-physical-minion-reference-and-typed-usage",
       "lexical_identity_candidates": [
         {
           "case": 1,
@@ -434,7 +434,7 @@
           "key": "def.0000000000000914"
         }
       },
-      "scope": "deferred",
+      "scope": "checked-physical-minion-reference-and-typed-usage",
       "lexical_identity_candidates": [
         {
           "case": 1,
@@ -487,7 +487,7 @@
           "key": "def.0000000000000917"
         }
       },
-      "scope": "deferred",
+      "scope": "checked-physical-minion-reference-and-typed-usage",
       "lexical_identity_candidates": [
         {
           "case": 1,
@@ -528,7 +528,7 @@
           "key": "def.0000000000000918"
         }
       },
-      "scope": "deferred",
+      "scope": "checked-physical-minion-reference-and-typed-usage",
       "lexical_identity_candidates": [
         {
           "case": 1,
@@ -7534,5 +7534,444 @@
     "group_parent_grammar_unchanged": true,
     "native_count_mechanics_added": false,
     "scope": "Existing private receipts remain necessary; declaring a field consumer cannot itself certify a source."
+  },
+  "skeletal_reference_field_accounting": {
+    "kind": "checked-physical-reference-field-destinations",
+    "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "prior_inventory": {
+      "sha256": "694649eb8fca5d96e16067c965039667d96d04e6770d003531bbd1d8ea6010af",
+      "bytes": 213211,
+      "canonical_sha256": "d0e2888de8c6fa0fdb83f3bc0d84ad1f0048a83146aca490395198fafd4889ce",
+      "evidence": "cd7c8c9523bfaec1944bbc033f51f8156631d66b499fde49e78d188122aa6dc4"
+    },
+    "changed_destination_lists": 93,
+    "preserved_usage_parameter_destinations": 20,
+    "inventory_rows": 25,
+    "inventory_fields": 456,
+    "families": [
+      {
+        "gem": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000011"
+        },
+        "primary": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000012"
+        },
+        "skill_id": "SummonSkeletalSnipersPlayer",
+        "selected_group": 210,
+        "selected_primary": 211,
+        "field_count": 24,
+        "construction_canonical_sha256": "003780e4a679f04a734ae8e120b361fb64cccfd37be13f0d57d3ce4b2993fc48",
+        "reference_canonical_sha256": "4e2af086272d44c73a8d3197755858d73ee470383659908145593483f061ace4",
+        "usage_policies_canonical_sha256": "cbb1214f518bbedb5227de56b4bb3d55b718aec9b406c313645cbf026a4b4d1b",
+        "supply": {
+          "declaration": {
+            "kind": "gem",
+            "definition": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000011"
+            }
+          },
+          "slot": {
+            "kind": "skill_grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000016"
+          }
+        },
+        "reference_kind": "pob_physical_singleton_minion_actions_v1",
+        "minion_source": "RaisedSkeletonSniper",
+        "source_occurrences": [
+          {
+            "case": 1,
+            "group": 157,
+            "ordinal": 158
+          },
+          {
+            "case": 5,
+            "group": 192,
+            "ordinal": 193
+          },
+          {
+            "case": 5,
+            "group": 210,
+            "ordinal": 211
+          },
+          {
+            "case": 5,
+            "group": 253,
+            "ordinal": 254
+          },
+          {
+            "case": 5,
+            "group": 309,
+            "ordinal": 310
+          },
+          {
+            "case": 5,
+            "group": 374,
+            "ordinal": 375
+          }
+        ],
+        "selected_companions": [],
+        "declared_missing_references": [
+          {
+            "kind": "declared_additional_effect",
+            "index": 1,
+            "effect_id": "CommandSkeletalSniperPlayer"
+          },
+          {
+            "kind": "constructed_additional_effect",
+            "index": 1,
+            "effect_id": "CommandSkeletalSniperPlayer"
+          }
+        ]
+      },
+      {
+        "gem": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000914"
+        },
+        "primary": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000323"
+        },
+        "skill_id": "SummonSkeletalArsonistsPlayer",
+        "selected_group": 205,
+        "selected_primary": 206,
+        "field_count": 25,
+        "construction_canonical_sha256": "0e99d0116b4e584835cc0b4b2984ec532b5edd6a416a9d363fdfeb055b85647f",
+        "reference_canonical_sha256": "e910fac89eb7a509db1f84c058827748b19445df39add5eb0bc49e0b97fb3320",
+        "usage_policies_canonical_sha256": "f7655186942483fdb13222d89e4cfe245d39760ab783028394716043f171814b",
+        "supply": {
+          "declaration": {
+            "kind": "gem",
+            "definition": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000914"
+            }
+          },
+          "slot": {
+            "kind": "skill_grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003285"
+          }
+        },
+        "reference_kind": "pob_physical_singleton_minion_actions_v1",
+        "minion_source": "RaisedSkeletonArsonist",
+        "source_occurrences": [
+          {
+            "case": 1,
+            "group": 144,
+            "ordinal": 145
+          },
+          {
+            "case": 5,
+            "group": 187,
+            "ordinal": 188
+          },
+          {
+            "case": 5,
+            "group": 205,
+            "ordinal": 206
+          },
+          {
+            "case": 5,
+            "group": 248,
+            "ordinal": 249
+          },
+          {
+            "case": 5,
+            "group": 336,
+            "ordinal": 337
+          },
+          {
+            "case": 5,
+            "group": 402,
+            "ordinal": 403
+          }
+        ],
+        "selected_companions": [
+          {
+            "ordinal": 207,
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000080a"
+            },
+            "skill_id": "SupportLastGaspPlayer"
+          }
+        ],
+        "declared_missing_references": [
+          {
+            "kind": "declared_additional_effect",
+            "index": 1,
+            "effect_id": "CommandSkeletalArsonistPlayer"
+          },
+          {
+            "kind": "constructed_additional_effect",
+            "index": 1,
+            "effect_id": "CommandSkeletalArsonistPlayer"
+          }
+        ]
+      },
+      {
+        "gem": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000917"
+        },
+        "primary": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000326"
+        },
+        "skill_id": "SummonSkeletalFrostMagesPlayer",
+        "selected_group": 212,
+        "selected_primary": 213,
+        "field_count": 24,
+        "construction_canonical_sha256": "7603b3b925fb3a8a174ac97eb1dbc9ab1e202d37b805c1fc979f575422443a44",
+        "reference_canonical_sha256": "b935f2f9d8a7ede1f5cd2b0be32bfe6278e6d01eb566a7bdddafb4cda1ce74c2",
+        "usage_policies_canonical_sha256": "f9b252d496624725599fcd3f714c3c094dcd475d6234c21401c5127fb6a4f419",
+        "supply": {
+          "declaration": {
+            "kind": "gem",
+            "definition": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000917"
+            }
+          },
+          "slot": {
+            "kind": "skill_grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000328f"
+          }
+        },
+        "reference_kind": "pob_physical_singleton_minion_actions_v1",
+        "minion_source": "RaisedSkeletonFrostMage",
+        "source_occurrences": [
+          {
+            "case": 1,
+            "group": 208,
+            "ordinal": 209
+          },
+          {
+            "case": 5,
+            "group": 194,
+            "ordinal": 195
+          },
+          {
+            "case": 5,
+            "group": 212,
+            "ordinal": 213
+          },
+          {
+            "case": 5,
+            "group": 255,
+            "ordinal": 256
+          }
+        ],
+        "selected_companions": [
+          {
+            "ordinal": 214,
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000080a"
+            },
+            "skill_id": "SupportLastGaspPlayer"
+          }
+        ],
+        "declared_missing_references": [
+          {
+            "kind": "declared_additional_effect",
+            "index": 1,
+            "effect_id": "CommandSkeletalFrostMagePlayer"
+          },
+          {
+            "kind": "constructed_additional_effect",
+            "index": 1,
+            "effect_id": "CommandSkeletalFrostMagePlayer"
+          }
+        ]
+      },
+      {
+        "gem": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000918"
+        },
+        "primary": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000327"
+        },
+        "skill_id": "SummonSkeletalReaversPlayer",
+        "selected_group": 223,
+        "selected_primary": 224,
+        "field_count": 24,
+        "construction_canonical_sha256": "c350b7e94ad2b30baf88175e7226e23be65576e893ec5625303334934d06399c",
+        "reference_canonical_sha256": "414c053a86ea36df3fa743e06926b1b838d6db9d5e3bb26aeb65acbbb7fefa1f",
+        "usage_policies_canonical_sha256": "ca8e4cc7536df715d30dc8247329bb99055946916a4e479b1e9736354f012a4f",
+        "supply": {
+          "declaration": {
+            "kind": "gem",
+            "definition": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000918"
+            }
+          },
+          "slot": {
+            "kind": "skill_grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003299"
+          }
+        },
+        "reference_kind": "pob_physical_singleton_minion_actions_v1",
+        "minion_source": "RaisedSkeletonReaver",
+        "source_occurrences": [
+          {
+            "case": 1,
+            "group": 181,
+            "ordinal": 182
+          },
+          {
+            "case": 5,
+            "group": 223,
+            "ordinal": 224
+          },
+          {
+            "case": 5,
+            "group": 266,
+            "ordinal": 267
+          },
+          {
+            "case": 5,
+            "group": 327,
+            "ordinal": 328
+          },
+          {
+            "case": 5,
+            "group": 392,
+            "ordinal": 393
+          }
+        ],
+        "selected_companions": [
+          {
+            "ordinal": 225,
+            "gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000080a"
+            },
+            "skill_id": "SupportLastGaspPlayer"
+          }
+        ],
+        "declared_missing_references": [
+          {
+            "kind": "declared_additional_effect",
+            "index": 1,
+            "effect_id": "CommandSkeletalReaversPlayer"
+          },
+          {
+            "kind": "constructed_additional_effect",
+            "index": 1,
+            "effect_id": "CommandSkeletalReaversPlayer"
+          }
+        ]
+      }
+    ],
+    "source_census_unchanged": true,
+    "source_occurrences": 21,
+    "prerequisites": [
+      "checked full physical input disposition and exact MAIN/CALCS minion correspondence",
+      "exact constructed primary selector receipt retaining missing Command references",
+      "exact authored primary/secondary true receipts; false/nil/missing do not inherit this authority",
+      "source-bound finite absence receipt for overwritten legacy headers, checked profile/selector defaults and physical presentation label"
+    ],
+    "limitations": [
+      "No missing Command is classified absent, supported or mechanically inert.",
+      "No Gem, Skill, Actor, output, rule, Action or metric coverage changes.",
+      "No source fields, declared inventory fields, usage recipes, guards, companion lists or original XML bytes change.",
+      "Four derived source-byte group controls are required; whole originals remain Pending."
+    ],
+    "shared_source_proofs": [
+      "data/owned/poe2/3887ae68/preset-reference-selection-source",
+      "data/owned/poe2/3887ae68/secondary-effect-switch-source"
+    ],
+    "source_observation_baseline": {
+      "input": "fd869107e9c10b00d766cf85dd0d60b20f8205422b9f1a1b167bc148760967ad",
+      "receipt": {
+        "path": "runs/owned-preset-usage-inventory-publication-04/package/release.json",
+        "bytes": 56401,
+        "sha256": "441d079df5e2b8e51faff4a5f436a33e3215b874379cd114b9a8675377f5d77d"
+      }
+    },
+    "historical_observation_paths_are_runtime_dependencies": false
   }
 }

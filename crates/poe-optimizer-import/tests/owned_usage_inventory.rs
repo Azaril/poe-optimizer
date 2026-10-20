@@ -1820,3 +1820,6 @@ fn checked_finalizer_preserves_other_obligations_after_usage_completion() {
 
 #[path = "support/owned_constructed_source_selectors.rs"]
 mod constructed_source_selectors;
+
+#[path = "support/owned_reference_absence_usage.rs"]
+mod reference_absence_usage;

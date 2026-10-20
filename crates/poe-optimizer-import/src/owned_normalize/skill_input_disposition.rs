@@ -306,6 +306,57 @@ impl CompiledDeferredUsage {
         Ok(true)
     }
 }
+/// Same-attempt source reference evidence, not a native input or default.
+/// Only account_reference constructs production values, after both contexts
+/// resolve and every saved descendant/selector is accounted for.
+pub(in crate::owned_normalize) struct CheckedSourceReference {
+    source: SourceOccurrenceId,
+    group: Option<SourceOccurrenceId>,
+    children: Vec<SourceOccurrenceId>,
+    absent: [bool; 6],
+}
+impl CheckedSourceReference {
+    pub(in crate::owned_normalize) fn source(&self) -> SourceOccurrenceId {
+        self.source
+    }
+    pub(in crate::owned_normalize) fn group(&self) -> Option<SourceOccurrenceId> {
+        self.group
+    }
+    pub(in crate::owned_normalize) fn children(&self) -> &[SourceOccurrenceId] {
+        &self.children
+    }
+    pub(in crate::owned_normalize) fn into_children(self) -> Vec<SourceOccurrenceId> {
+        self.children
+    }
+    pub(in crate::owned_normalize) fn absent_fields(&self) -> impl Iterator<Item = &'static str> {
+        [
+            "statSetIndex",
+            "statSetIndexCalcs",
+            "skillMinion",
+            "skillMinionCalcs",
+            "skillMinionSkill",
+            "skillMinionSkillCalcs",
+        ]
+        .into_iter()
+        .zip(self.absent)
+        .filter_map(|(name, proved)| proved.then_some(name))
+    }
+    // Existing private consumer fixtures deliberately do not mint absence facts.
+    #[cfg(test)]
+    pub(in crate::owned_normalize) fn consumer_fixture(
+        source: SourceOccurrenceId,
+        group: Option<SourceOccurrenceId>,
+        children: Vec<SourceOccurrenceId>,
+    ) -> Self {
+        Self {
+            source,
+            group,
+            children,
+            absent: [false; 6],
+        }
+    }
+}
+
 /// Both contexts must cover every saved descendant and every present selector.
 /// The caller separately checks that the target root kind is the expected one.
 pub(super) fn account_reference(
@@ -313,7 +364,11 @@ pub(super) fn account_reference(
     row: &SourceEvidenceRow<'_>,
     mut resolve: impl FnMut(ImportReferenceContext) -> Result<SourceActionInspection>,
     construction_work: usize,
-) -> Result<Option<Vec<SourceOccurrenceId>>> {
+) -> Result<Option<CheckedSourceReference>> {
+    // Root legacy scalar headers are overwritten by the loader independently
+    // of the selected keyed child stat set. Never derive their absence from
+    // report.selection::Absent. Minion facts require their own resolved report.
+    let mut absent = [true, true, false, false, false, false];
     let mut accounted_children = BTreeSet::new();
     let mut accounted_legacy = BTreeSet::new();
     let mut accounted_minion = BTreeSet::new();
@@ -341,6 +396,19 @@ pub(super) fn account_reference(
         }
         accounted_legacy.extend(report.ignored_legacy_attributes);
         if let Some(minion) = report.minion {
+            match context {
+                ImportReferenceContext::Main => absent[2] = true,
+                ImportReferenceContext::Calcs => {
+                    absent[2] = true;
+                    absent[3] = true;
+                }
+            }
+            if matches!(&minion.action_selection, SourceActionSelection::Absent) {
+                absent[match context {
+                    ImportReferenceContext::Main => 4,
+                    ImportReferenceContext::Calcs => 5,
+                }] = true;
+            }
             accounted_minion.extend(minion.actor_attributes);
             match minion.action_selection {
                 SourceActionSelection::Explicit { attribute, .. } => {
@@ -370,6 +438,18 @@ pub(super) fn account_reference(
         return Ok(None);
     }
     for (index, attribute) in row.attributes().iter().enumerate() {
+        // Fold absence collection into the existing charged full-attribute
+        // census. No additional scan or allocation is needed when inventory
+        // accounting is absent. A present nil/invalid field is never absence.
+        match attribute.origin().name.as_str() {
+            "statSetIndex" => absent[0] = false,
+            "statSetIndexCalcs" => absent[1] = false,
+            "skillMinion" => absent[2] = false,
+            "skillMinionCalcs" => absent[3] = false,
+            "skillMinionSkill" => absent[4] = false,
+            "skillMinionSkillCalcs" => absent[5] = false,
+            _ => {}
+        }
         let origin = crate::owned_source::SourceAttributeRef {
             occurrence: row.occurrence().id(),
             index: index as u32,
@@ -389,7 +469,12 @@ pub(super) fn account_reference(
             return Ok(None);
         }
     }
-    Ok(Some(accounted_children.into_iter().collect()))
+    Ok(Some(CheckedSourceReference {
+        source: row.occurrence().id(),
+        group: row.occurrence().parent(),
+        children: accounted_children.into_iter().collect(),
+        absent,
+    }))
 }
 pub(super) fn unique_link<T: Copy>(
     b: &mut Builder<'_, '_>,

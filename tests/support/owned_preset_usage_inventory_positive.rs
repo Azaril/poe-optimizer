@@ -15,7 +15,7 @@ use std::{
     ops::Range,
     path::{Path, PathBuf},
 };
-const INPUTS_SHA: &str = "5638afbae4bf1896ccd1f034b6c1fc0f8f44ee0edb09d98368f80090ae7de72d";
+const INPUTS_SHA: &str = "25f2b48f805b7e67dd13dad529d5a168128452b2410f0b0b0291766acd91c9fa";
 const SOURCE_IDS: [&str; 4] = [
     "IceNovaPlayer",
     "SupportEncroachingGroundPlayer",

@@ -1,6 +1,7 @@
 use super::*;
 mod group_selectors;
 mod primary_completion;
+mod reference_absence;
 
 const SOURCE: &str = r#"<PathOfBuilding2><Skills activeSkillSet="1"><SkillSet id="1"><Skill enabled="true"><Gem/></Skill></SkillSet><SkillSet id="2"><Skill><Gem/></Skill></SkillSet></Skills></PathOfBuilding2>"#;
 
@@ -58,13 +59,20 @@ fn with_case(source_xml: &str, test: impl FnOnce(&mut Builder<'_, '_>, Case)) {
                 quality: DraftQuality::Known { value: None },
             };
             let mut receipts = InventoryReceipts::default();
+            let reference = skill_input_disposition::CheckedSourceReference::consumer_fixture(
+                source,
+                b.evidence.rows()[source.ordinal() as usize]
+                    .occurrence()
+                    .parent(),
+                vec![],
+            );
             record_input_disposition(
                 b,
                 source,
                 &preset,
                 &skill,
                 Some(&gem_record),
-                AuthoredInputProof::ReferenceDisposition,
+                AuthoredInputProof::ReferenceDisposition(&reference),
                 &mut receipts,
             )
             .unwrap();
@@ -224,13 +232,20 @@ fn with_accountable_presets(count: usize, test: impl FnOnce(&mut Builder<'_, '_>
             }
             b.link(source, OwnedOriginTarget::Gem(gem_id)).unwrap();
             b.link(source, OwnedOriginTarget::Skill(skill_id)).unwrap();
+            let reference = skill_input_disposition::CheckedSourceReference::consumer_fixture(
+                source,
+                b.evidence.rows()[source.ordinal() as usize]
+                    .occurrence()
+                    .parent(),
+                vec![],
+            );
             record_input_disposition(
                 b,
                 source,
                 &preset,
                 &skill,
                 Some(&gem),
-                AuthoredInputProof::ReferenceDisposition,
+                AuthoredInputProof::ReferenceDisposition(&reference),
                 &mut case.receipts,
             )
             .unwrap();
@@ -849,13 +864,20 @@ fn group_fields_have_one_actual_owner_but_every_occurrence_still_needs_coverage(
             ] {
                 b.link(source, link).unwrap();
             }
+            let reference = skill_input_disposition::CheckedSourceReference::consumer_fixture(
+                source,
+                b.evidence.rows()[source.ordinal() as usize]
+                    .occurrence()
+                    .parent(),
+                vec![],
+            );
             record_input_disposition(
                 b,
                 source,
                 preset,
                 &skill,
                 Some(&gem),
-                AuthoredInputProof::ReferenceDisposition,
+                AuthoredInputProof::ReferenceDisposition(&reference),
                 &mut case.receipts,
             )
             .unwrap();

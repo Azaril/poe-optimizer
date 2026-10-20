@@ -25,7 +25,8 @@ pub struct PrimaryGemInputDisposition {
     pub deferred_usage: Vec<DeferredGemUsageInput>,
 }
 use super::super::skill_input_disposition::{
-    CompiledDeferredUsage, account_reference, attach_pending_usage, unique_link,
+    CheckedSourceReference, CompiledDeferredUsage, account_reference, attach_pending_usage,
+    unique_link,
 };
 pub use super::super::skill_input_disposition::{
     DeferredSourceUsageField as DeferredGemUsageField,
@@ -44,7 +45,7 @@ pub(in crate::owned_normalize) struct PendingDisposition {
     group: SourceOccurrenceId,
     gem: GemDefId,
     identity: OwnedContentDigest,
-    reference_children: Vec<SourceOccurrenceId>,
+    reference_children: CheckedSourceReference,
 }
 pub(in crate::owned_normalize) struct ProvenDisposition {
     source: SourceOccurrenceId,
@@ -187,6 +188,10 @@ impl CompiledDisposition<'_> {
 }
 
 impl PendingDisposition {
+    pub(in crate::owned_normalize) fn reference(&self) -> &CheckedSourceReference {
+        &self.reference_children
+    }
+
     pub(in crate::owned_normalize) fn attach(
         &self,
         b: &mut Builder<'_, '_>,
@@ -218,7 +223,7 @@ impl PendingDisposition {
             b,
             self.source,
             self.group,
-            &self.reference_children,
+            self.reference_children.children(),
             skill,
             preset,
             Some(*gem),
@@ -537,7 +542,11 @@ pub(super) mod tests {
             group,
             gem,
             identity: "e".repeat(64).parse().unwrap(),
-            reference_children: vec![],
+            reference_children: CheckedSourceReference::consumer_fixture(
+                source,
+                Some(group),
+                vec![],
+            ),
         };
         test(&mut b, pending, skill, preset, other_source);
     }

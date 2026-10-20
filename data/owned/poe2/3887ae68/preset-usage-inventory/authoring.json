@@ -101,12 +101,12 @@
       "bytes": 1042270
     },
     "evidence.json": {
-      "sha256": "cd7c8c9523bfaec1944bbc033f51f8156631d66b499fde49e78d188122aa6dc4",
-      "bytes": 220941
+      "sha256": "622d1da0c6aea1cf3df76d04bec82a1aa69e8600d392a1e1963978980e48926d",
+      "bytes": 234561
     },
     "inventory.json": {
-      "sha256": "694649eb8fca5d96e16067c965039667d96d04e6770d003531bbd1d8ea6010af",
-      "bytes": 213211
+      "sha256": "a2a21cd1079e100f70b2fc7594edf81993cc56abc7bcc9c489e96ea618dc475c",
+      "bytes": 207225
     },
     "companion-additions.json": {
       "sha256": "232a654d548364e0502cb7b8815b3508dfa81e484016d249dc6951d7b5baf080",
@@ -266,5 +266,22 @@
       ]
     },
     "historical_observation_paths_are_runtime_dependencies": false
+  },
+  "skeletal_reference_extension": {
+    "families": [
+      "def.0000000000000011",
+      "def.0000000000000914",
+      "def.0000000000000917",
+      "def.0000000000000918"
+    ],
+    "changed_destination_lists": 93,
+    "preserved_usage_parameter_destinations": 20,
+    "inventory_rows": 25,
+    "inventory_fields": 456,
+    "original_inputs_changed": false,
+    "new_definition_ids": 0,
+    "reference_or_usage_recipes_changed": false,
+    "complete_original_builds": 0,
+    "requires_checked_reference_absence_transport": true
   }
 }

@@ -283,3 +283,191 @@ fn direct_secondary_true_cannot_replace_an_input_reference_or_second_consumer() 
         "raw inputs alone are not a disposition receipt"
     );
 }
+
+fn configured_reference_absence() -> Fixture {
+    let mut f = configured();
+    for name in [
+        "statSetIndex",
+        "statSetIndexCalcs",
+        "skillMinion",
+        "skillMinionCalcs",
+        "skillMinionSkill",
+        "skillMinionSkillCalcs",
+    ] {
+        inventory_mut(&mut f).rows[0]
+            .fields
+            .push(UsageInventoryField {
+                field: UsageInventoryFieldSelector::OccurrenceAttribute { name: name.into() },
+                destinations: vec![UsageInventoryDestination::InputDisposition],
+            });
+    }
+    f
+}
+
+#[test]
+fn direct_checked_reference_accounts_absent_fields_with_only_usage_retirement() {
+    // The first case exercises all six absent fields. The later cases preserve
+    // the distinction between overwritten scalar headers and present selectors.
+    for saved in [
+        "",
+        r#" statSetIndex="nil" statSetIndexCalcs="nil""#,
+        r#" skillMinion="fixture-minion" skillMinionSkill="1" skillMinionSkillCalcs="1""#,
+    ] {
+        let mut f = configured_reference_absence();
+        let text = inventory::xml(&inventory::GEM.replace("/>", &format!("{saved}/>")));
+        let after = run(&f, &text);
+        assert!(usage_complete(&after));
+        assert_eq!(complete(&after), [true]);
+        assert!(after.draft().input().gems.members.is_empty());
+        assert_eq!(
+            values(&after.draft().input().skills.members[0]),
+            [Some(17.0), Some(0.0)]
+        );
+        let again = run(&f, &text);
+        assert_eq!(again.draft().input(), after.draft().input());
+        assert_eq!(again.allocator_after(), after.allocator_after());
+        assert_eq!(
+            serde_json::to_value(again.sidecar()).unwrap(),
+            serde_json::to_value(after.sidecar()).unwrap()
+        );
+
+        let UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. } =
+            f.base.policy.usage_inputs.as_mut().unwrap();
+        *inventory = None;
+        let before = run(&f, &text);
+        assert!(!usage_complete(&before));
+        assert_eq!(complete(&before), [true], "scalar authority is unchanged");
+        let mut expected = before.draft().input().clone();
+        let usage = expected.skill_presets.members[0]
+            .usage_preferences
+            .as_mut()
+            .unwrap();
+        let DraftListCompletion::Pending { id, .. } = usage.completion else {
+            panic!()
+        };
+        assert_eq!(
+            usage.members.len(),
+            1,
+            "the existing requested-count binding is preserved"
+        );
+        assert_eq!(usage.members[0].parameters.members.len(), 1);
+        usage.completion = DraftListCompletion::Complete;
+        assert_eq!(
+            &expected,
+            after.draft().input(),
+            "no native field, query, input or identifier changes"
+        );
+        let mut origins = before.sidecar().origins.clone();
+        let mut removed = 0;
+        for origin in &mut origins {
+            removed += origin
+                .links
+                .iter()
+                .filter(|link| **link == OwnedOriginTarget::Issue(id))
+                .count();
+            origin
+                .links
+                .retain(|link| *link != OwnedOriginTarget::Issue(id));
+        }
+        assert!(removed > 0);
+        assert_eq!(origins, after.sidecar().origins);
+        assert_eq!(before.allocator_after(), after.allocator_after());
+        assert_eq!(
+            decode_build(text.as_bytes()).unwrap().sha256,
+            after.sidecar().source_sha256
+        );
+        assert!(matches!(
+            after.draft().input().choice_presets.members[0]
+                .choices
+                .completion,
+            DraftListCompletion::Pending { .. }
+        ));
+    }
+}
+
+#[test]
+fn direct_absence_receipts_reject_failed_foreign_and_independent_consumers() {
+    for mode in 0..9 {
+        let mut f = configured_reference_absence();
+        let mut gem = inventory::GEM.to_owned();
+        let mut foreign = false;
+        match mode {
+            0 => {
+                let SourceActionCorrespondenceInput::PobManualDirectSingletonMinionActionsV1 { minion, .. } = &mut f.row().reference_action else { panic!() };
+                minion.allow_absent = false;
+            }
+            1 => {
+                let SourceActionCorrespondenceInput::PobManualDirectSingletonMinionActionsV1 { absent_action, .. } = &mut f.row().reference_action else { panic!() };
+                *absent_action = None;
+            }
+            2 => {
+                let SourceActionCorrespondenceInput::PobManualDirectSingletonMinionActionsV1 { actions, .. } = &mut f.row().reference_action else { panic!() };
+                actions[0].absent_stat_set = None;
+            }
+            3 => gem = gem.replace("/>", r#" skillMinionCalcs="unknown-profile"/>"#),
+            4 => gem = gem.replace("/>", r#" skillMinionSkillCalcs="0"/>"#),
+            5 => gem = inventory::with_children("<Unhandled/>"),
+            6 => foreign = true,
+            7 => {
+                let DirectSkillInputPolicy::PobManualDirectSkillV2 { dispositions, .. } = f.base.policy.direct_skill_inputs.as_mut().unwrap();
+                dispositions.clear();
+            }
+            _ => inventory_mut(&mut f).rows[0].fields.iter_mut().find(|field| matches!(&field.field, UsageInventoryFieldSelector::OccurrenceAttribute { name } if name == "skillMinionCalcs")).unwrap().destinations.push(UsageInventoryDestination::Deferred { reason: actions::key("independent-missing-profile-consumer") }),
+        }
+        rebind_usage(&mut f);
+        let text = if foreign {
+            inventory::xml(&gem).replace(
+                r#"<Skill enabled="true">"#,
+                r#"<Skill enabled="true" source="Tree:1">"#,
+            )
+        } else {
+            inventory::xml(&gem)
+        };
+        let result = run(&f, &text);
+        assert!(!usage_complete(&result), "mode {mode}");
+        if mode == 8 {
+            assert_eq!(
+                complete(&result),
+                [true],
+                "independent consumer cannot invalidate proven scalar inputs"
+            );
+        }
+        if foreign {
+            assert!(
+                result.draft().input().skills.members.is_empty(),
+                "foreign generated source cannot borrow a manual Direct disposition"
+            );
+        }
+        assert!(matches!(
+            result.draft().input().choice_presets.members[0]
+                .choices
+                .completion,
+            DraftListCompletion::Pending { .. }
+        ));
+        assert_eq!(
+            decode_build(text.as_bytes()).unwrap().sha256,
+            result.sidecar().source_sha256
+        );
+        // A failed receipt must not retire another obligation or partially edit
+        // the outputs. Compare against the same failed source without inventory.
+        let UsageInputPolicy::PobOccurrenceUsageV3 { inventory, .. } =
+            f.base.policy.usage_inputs.as_mut().unwrap();
+        *inventory = None;
+        let baseline = run(&f, &text);
+        assert_eq!(
+            baseline.draft().input(),
+            result.draft().input(),
+            "mode {mode}"
+        );
+        assert_eq!(
+            baseline.sidecar().origins,
+            result.sidecar().origins,
+            "mode {mode}"
+        );
+        assert_eq!(
+            baseline.allocator_after(),
+            result.allocator_after(),
+            "mode {mode}"
+        );
+    }
+}

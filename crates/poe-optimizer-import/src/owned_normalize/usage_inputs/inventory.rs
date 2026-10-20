@@ -204,7 +204,7 @@ enum AuthoredInputScope {
 /// Existing producers retain different authority. A flat intrinsic proof never
 /// borrows the complete reference correspondence of a disposition.
 pub(in crate::owned_normalize) enum AuthoredInputProof<'a, 'p> {
-    ReferenceDisposition,
+    ReferenceDisposition(&'a skill_input_disposition::CheckedSourceReference),
     PrimaryUsage {
         proof: &'a gem_inventory::PendingPrimaryInventory,
         usage: &'a AttachedPrimaryUsage<'p>,
@@ -334,8 +334,15 @@ pub(in crate::owned_normalize) fn record_input_disposition(
         }
         _ => return Ok(()),
     };
+    let mut reference = None;
     let scope = match proof {
-        AuthoredInputProof::ReferenceDisposition => AuthoredInputScope::ReferenceDisposition,
+        AuthoredInputProof::ReferenceDisposition(proof) => {
+            if proof.source() != source || proof.group() != Some(group_id) {
+                return Ok(());
+            }
+            reference = Some(proof);
+            AuthoredInputScope::ReferenceDisposition
+        }
         AuthoredInputProof::PrimaryUsage { proof, usage } => {
             let UsageInventorySource::Physical { gem } = &identity else {
                 return Ok(());
@@ -445,6 +452,41 @@ pub(in crate::owned_normalize) fn record_input_disposition(
         fields.remove(&group_field("slot"));
     }
     let descendants = descendants(b, row)?;
+    if let Some(reference) = reference {
+        b.charge(reference.children().len().saturating_add(descendants.len()))?;
+        if !reference
+            .children()
+            .iter()
+            .copied()
+            .eq(descendants.iter().copied())
+        {
+            return Ok(());
+        }
+        for name in reference.absent_fields() {
+            // Bind each finite fact to the current immutable exact source;
+            // charge lookup/string allocation before testing or inserting it.
+            b.charge(
+                row.attributes()
+                    .len()
+                    .saturating_add(1)
+                    .saturating_mul(name.len().saturating_add(1)),
+            )?;
+            if row.attribute(name).is_some() {
+                return Ok(());
+            }
+            fields.insert(occurrence_field(name));
+        }
+        if matches!(identity, UsageInventorySource::Physical { .. }) {
+            // Separate physical presentation fact: the successful full source
+            // disposition admits this group grammar; an absent label chooses
+            // source display fallback, never native identity or gameplay input.
+            // Direct/generated and flat PrimaryUsage do not borrow this fact.
+            b.charge(group.attributes().len().saturating_add(1).saturating_mul(6))?;
+            if group.attribute("label").is_none() {
+                fields.insert(group_field("label"));
+            }
+        }
+    }
     fields.insert(UsageInventoryFieldSelector::ReferenceDescendants);
     b.charge(1)?;
     receipts.inputs.push(InputReceipt {

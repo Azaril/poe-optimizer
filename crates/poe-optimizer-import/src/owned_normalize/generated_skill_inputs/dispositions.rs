@@ -777,7 +777,9 @@ pub(in crate::owned_normalize) fn account(
             else {
                 continue;
             };
-            children
+            // Generated accounting intentionally retains only the existing
+            // descendant scope; authored absence facts do not transfer here.
+            children.into_children()
         } else {
             // With no checked topology adapter only actual selector absence is
             // provable. No default Action, Actor or stat-set is invented.
@@ -867,6 +869,7 @@ fn account_archived(
         else {
             continue;
         };
+        let children = children.into_children();
         // The receipt recognizes external syntax only. No live physical or
         // generated output may be relabelled as an unresolved archived row.
         b.charge(children.len().saturating_add(2))?;

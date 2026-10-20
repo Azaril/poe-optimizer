@@ -1,7 +1,8 @@
 //! Reviewed field disposition for a manual, nonphysical source occurrence.
 //! Raw input completeness does not establish usage, support admission or mechanics.
 use super::super::skill_input_disposition::{
-    CompiledDeferredUsage, account_reference, attach_pending_usage, unique_link,
+    CheckedSourceReference, CompiledDeferredUsage, account_reference, attach_pending_usage,
+    unique_link,
 };
 use super::*;
 use crate::owned_source_actions::{
@@ -34,7 +35,7 @@ pub(in crate::owned_normalize) struct PendingDirectDisposition {
     source: SourceOccurrenceId,
     group: SourceOccurrenceId,
     skill: SkillDefId,
-    reference_children: Vec<SourceOccurrenceId>,
+    reference_children: CheckedSourceReference,
     parameters: Vec<ParameterDraft>,
 }
 
@@ -216,7 +217,7 @@ impl CompiledDirectDisposition<'_> {
         b: &mut Builder<'_, '_>,
         row: &SourceEvidenceRow<'_>,
         group: &SourceEvidenceRow<'_>,
-    ) -> Result<Option<Vec<SourceOccurrenceId>>> {
+    ) -> Result<Option<CheckedSourceReference>> {
         b.charge(
             row.attributes()
                 .len()
@@ -259,7 +260,7 @@ impl CompiledDirectDisposition<'_> {
         row: &SourceEvidenceRow<'_>,
         group: &SourceEvidenceRow<'_>,
         parameters: &[ParameterDraft],
-        reference_children: Vec<SourceOccurrenceId>,
+        reference_children: CheckedSourceReference,
     ) -> Result<Option<PendingDirectDisposition>> {
         b.charge(parameters.len())?;
         if parameters.len() != self.input.parameters.len()
@@ -281,6 +282,10 @@ impl CompiledDirectDisposition<'_> {
 }
 
 impl PendingDirectDisposition {
+    pub(in crate::owned_normalize) fn reference(&self) -> &CheckedSourceReference {
+        &self.reference_children
+    }
+
     pub(in crate::owned_normalize) fn attach(
         &self,
         b: &mut Builder<'_, '_>,
@@ -328,7 +333,7 @@ impl PendingDirectDisposition {
             b,
             self.source,
             self.group,
-            &self.reference_children,
+            self.reference_children.children(),
             skill,
             preset,
             None,
