@@ -9,14 +9,16 @@ what actually runs. Older checkpoint reports are preserved in
 
 ## Current state
 
-**Immediate backup resume point, October 20:** this checkpoint includes the
+**Immediate backup resume point, October 20:** `550d7bf4` is pushed to GitHub
+`main`, with the full remote hash independently verified. That checkpoint includes the
 checked reference-absence implementation, the four skeletal inventory rows and
 the manual Direct source-selection tests. The 713 selected Import tests, strict
 Import lint, unchanged all-five preservation, four ordinary inventory checks and
-all ten source-selection tests pass. The changed skeletal packet still needs
-publication, the explicit real-group controls and scoped CLI/PoB lint. Continue
-those gates before claiming a new validated data release. The last validated
-release remains `fd869107…`; complete unchanged builds remain **0/5**. Ignored
+all ten source-selection tests pass. The changed skeletal packet now also passes
+all-five publication at `runs/owned-preset-usage-inventory-publication-05/package`,
+input `e8df8bdbb4842c637fa18f822f25b32efd332753842a61f464181af2211e062d`.
+All four explicit real-group suites and scoped CLI/PoB lint now pass. This is the
+current validated data checkpoint; complete unchanged builds remain **0/5**. Ignored
 candidate work and the nine protected incoming-critical files are excluded from
 this Git backup.
 
@@ -33,7 +35,7 @@ The maintained 25-row usage packet now passes both ordinary checks, all-five
 publication, the original group control and the expanded support controls.
 Nine inventory omissions, nine count-companion omissions and an unreviewed
 sibling all retain the expected Pending obligations. Strict CLI lint passes.
-The validated successor is `fd869107…`; the private primary-input completion
+The preceding validated successor was `fd869107…`; the private primary-input completion
 cleanup now passes its complete validation scope, including exact all-five
 comparison with the previous code under `e355f2db…`. Pain Offering/Frost
 Bomb count data now passes publication, all 29 count controls, the existing
@@ -166,7 +168,7 @@ buff payloads or Command execution evidence.
 Candidate-bound source and special-branch admission remains blocking, as detailed
 below; no complete build is claimed.
 The latest validated Import package is
-`runs/owned-preset-usage-inventory-publication-04/package` (`fd869107…`), built
+`runs/owned-preset-usage-inventory-publication-05/package` (`e8df8bdb…`), built
 from the construction cutover `b3b7c381…`. It preserves all five original outputs
 except eight exact added count preferences, with all 110 queries and every other
 draft/sidecar/report value unchanged. The [checkpoint below](#source-construction-cutover-checkpoint-october-20)
@@ -177,7 +179,10 @@ scoped tests; the injected support inventory and companion data pass real-source
 positive and refusal controls. The primary-completion cleanup also passes its
 producer/liveness tests and exact comparison with saved pre-change outputs.
 The Pain Offering/Frost Bomb count data passes its full scoped gates.
-Continue with generated routing and remaining source-field accounting next.
+The four skeletal rows now also pass publication and all 31 real-group controls.
+Continue with authored Direct Djinn selectors/absent manual source, then generated
+routing and the remaining configuration/default accounting. The generated
+reverse-catalog proposal remains a separate unresolved decision.
 This does not close numerical coverage or any original's inventory.
 At the Actor migration checkpoint, the package and portable replay rebuilt
 successfully. Exact inverses authenticated the prior artifacts and allowed only
@@ -1705,7 +1710,19 @@ Unchanged all-five preservation passes in
 whole outputs, allocator state and independent fresh repeats.
 The reviewed four-row skeletal packet integration is now applied. All four
 ordinary checks pass in `runs/owned-skeletal-inventory-ordinary-01.log`; changed
-packet publication, explicit real-group controls and scoped CLI lint remain due.
+packet publication also passes in `runs/owned-skeletal-inventory-publication-01.log`.
+Its byte-identical rebuilds, all-five whole-output inverses and fresh repeats
+preserve all 110 queries and selected issue counts 107/118/110/124/5. The eight
+earlier count additions remain the only original-build value changes relative
+to the fixed predecessor. All four explicit real-group suites pass in
+`runs/owned-skeletal-real-controls-01.log`: unchanged Ice Nova, prior primary-count
+controls, four skeletal positives with 27 refusals, and expanded support/companion
+controls. The 31 skeletal cases preserve complete outputs and independent fresh
+repeats; unknown source tokens retain generated-source obligations rather than
+creating physical records. Strict scoped CLI and PoB lint pass in
+`runs/owned-skeletal-inventory-clippy-01.log` and
+`runs/owned-manual-direct-selector-source-clippy-01.log`. The current validated
+release is `e8df8bdb…` in `runs/owned-preset-usage-inventory-publication-05/package`.
 These follow-ups are included in this backup checkpoint; the nine protected
 incoming-critical work-in-progress files remain local. GitHub `main` was
 verified at `4aa10b6e` immediately before this follow-up backup, then verified at
@@ -1751,13 +1768,26 @@ remains a separate public proposal and is not authorized by this Direct scope.
 Four source-component tests for that boundary are now applied to the existing
 `owned_preset_reference_selection_source` target. All ten tests in that target
 pass in `runs/owned-manual-direct-selector-source-tests-01.log`; scoped lint
-remains due. They reuse
+also passes. They reuse
 authenticated full loader/processor spans, actual saved groups and support
 declarations, with the existing explicit identity-only active-skill factory.
 They check source/effect object identity and retain the deliberate late-hidden
 counterexample. They do not establish numerical parity or authorize a Direct
 Import adapter by themselves. The independently reviewed candidate is
 `runs/manual-direct-selector-source-candidate-20261020/` (manifest `01cfcc0a…`).
+
+In parallel, the next native slice is conditional equipment movement penalty.
+The source/profile value `0.03` is a dimensionless fraction, but current owned
+Stat `29ff` incorrectly declares percentage-point unit `0002`. Correct that
+metadata to existing unit `0001` without changing raw numbers, prove the full
+inverse, and update the maintained profile assertions. Historical sealed releases
+remain historical evidence; do not rewrite their seals or add a compatibility
+reader. Reuse the existing Actor slot reads and Boolean contribution graph for
+the equipment producer. The candidate begins with the body slot and retains
+Partial supplier coverage: it does not prove final MovementSpeed, complete
+equipment coverage or an absent ignore-penalty flag. Source, native unit/value,
+missing/unknown inputs, query independence and repeated/parallel execution checks
+are required before publication. This candidate remains isolated under `runs/`.
 
 The parallel non-usage audit confirms the subsequent configuration checkpoint:
 all 42 saved Config leaves in Original05 already have destinations. None of the
@@ -2952,6 +2982,12 @@ The old run has eight passes, six unchanged known failures and four running
 Windows jobs; Windows CLI2 completed at 19:14:30 UTC. Evidence is retained at
 `runs/ci-4aa10b6e-public-review-20261020/`. This remains queue/progress evidence,
 not a passing hosted run for the latest code.
+At 20:20 UTC, the latest backup `550d7bf4` has run `39490890433` pending with no
+jobs; the preceding pending `00d3c62a` run was cancelled by normal concurrency.
+The older `15778b04` run has ten passes, six known failures and two Windows CLI
+jobs still running. No new failure class or hosted rerun of the fixes is proven.
+The credential-free public snapshot is
+`runs/ci-550d7bf4-public-review-20261020-201952/`.
 
 ## CI receipt repair (2026-10-15)
 

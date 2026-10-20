@@ -64,8 +64,9 @@ It does not add a parallel resolver, another import model, or native defaults.
 Generated paths explicitly keep only their existing descendant scope. The change
 passes focused Import regressions, strict lint and exact all-five preservation.
 The real skeletal inventory destinations are now updated in the existing packet;
-ordinary checks pass, while publication and explicit real-group controls remain
-due. This checkpoint does not claim complete build coverage.
+ordinary checks, publication, all 31 skeletal controls, retained real-group
+regressions and scoped lint pass. This checkpoint does not claim complete build
+coverage.
 
 The October 20 usage-inventory controls distinguish three live proofs: scalar
 parameter completion, saved-field consumer coverage and noncompeting count

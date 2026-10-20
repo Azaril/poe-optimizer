@@ -200,8 +200,11 @@ display labels each have their own authority. The facts belong to the exact
 source occurrence and are rechecked before use. They create no native parameter
 defaults. Generated sources and flat-primary proofs keep their narrower scopes.
 The four skeletal inventory rows now use these checked facts in the existing
-data packet. Ordinary packet checks pass; publication and the explicit real-group
-controls remain due before this becomes the validated release.
+data packet. Ordinary checks, all-five publication, the four existing real-group
+suites and strict scoped lint pass. Each of the four isolated skeletal groups
+can complete its usage accounting; malformed selectors, missing consumers and
+unresolved source references retain their actual obligations. The whole original
+preset still needs Direct/generated source and other independent input accounting.
 The applied support receipt uses those facts for exact neutral count/global
 fields. Complete scalar inputs permit the same independent source proof as
 partial inputs. Scalar completion, field-consumer coverage and admission as a

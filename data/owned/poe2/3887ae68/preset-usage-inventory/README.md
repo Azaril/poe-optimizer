@@ -48,5 +48,11 @@ deferred destinations, and requires exact whole-output inverses and fresh
 repeats. Selector, secondary flag, profile and independent-consumer refusals retain
 Pending usage. Unknown group sources create no physical records or usage
 targets and keep generated-source accounting Pending. Successful usage accounting leaves finalization
-incomplete and runs no native evaluation. Candidate authoring is not evidence
-that these executable gates have passed; retain their actual validation logs.
+incomplete and runs no native evaluation.
+
+The October 20 checkpoint passes all-five publication/rebuilds, all 31 skeletal
+cases, the existing count/support/group controls and scoped lint. The current
+validated package is `e8df8bdb…`; exact paths, full identity and logs are retained
+in the living [implementation document](../../../../../docs/implementation.md).
+All five unchanged originals remain incomplete. These checks establish source
+accounting and preservation, not full numerical parity.
